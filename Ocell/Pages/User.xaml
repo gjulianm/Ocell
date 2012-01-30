@@ -1,0 +1,59 @@
+﻿<phone:PhoneApplicationPage 
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+	xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:custom="clr-namespace:Ocell.Controls"
+	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
+	x:Class="Ocell.User"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+	FontFamily="{StaticResource PhoneFontFamilyNormal}"
+	FontSize="{StaticResource PhoneFontSizeNormal}"
+	Foreground="{StaticResource PhoneForegroundBrush}"
+	SupportedOrientations="Portrait" Orientation="Portrait"
+	shell:SystemTray.IsVisible="True">
+    
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="False" x:Name="pBar" />
+    </shell:SystemTray.ProgressIndicator>
+
+    <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
+	<Grid x:Name="LayoutRoot" Background="Transparent">
+		<!--Control Pivot-->
+		<controls:Pivot x:Name="pivots" Title="OCELL">
+			<!--Elemento uno de Pivot-->
+			<controls:PivotItem x:Name="pvProfile" Header="profile">
+				<Grid>
+					<Image HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="124" Height="124" x:Name="Avatar"/>
+					<TextBlock x:Name="FullName" Margin="148,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="300" FontSize="32"/>
+					<TextBlock x:Name="ScreenName" Margin="148,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="21.333" FontFamily="Segoe WP SemiLight"/>
+					<HyperlinkButton x:Name="Website" Margin="148,101,0,0" VerticalAlignment="Top" FontFamily="Segoe WP Light" Tap="Website_Tap" HorizontalAlignment="Left"/>
+					
+					<TextBlock x:Name="Biography" Margin="8,148,8,288" TextWrapping="Wrap" FontSize="24" FontFamily="Segoe WP SemiLight"></TextBlock>
+					<StackPanel HorizontalAlignment="Left" Margin="8,0,0,53" Orientation="Vertical" VerticalAlignment="Bottom" Width="112">
+						<TextBlock Margin="0,0,33,0" TextWrapping="Wrap" Text="tweets" FontFamily="Segoe WP Light" FontSize="29.333" d:LayoutOverrides="Width"/>
+						<TextBlock x:Name="Tweets" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" FontFamily="Segoe WP Light"/>
+						<TextBlock TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41"><Run Text="followers"/><LineBreak/><Run/></TextBlock>
+						<TextBlock x:Name="Followers" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" FontFamily="Segoe WP Light"/>
+						<TextBlock TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41" Text="following"/>
+						<TextBlock x:Name="Following" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" FontFamily="Segoe WP Light"/>
+					</StackPanel>
+				</Grid>
+			</controls:PivotItem>
+			<controls:PivotItem x:Name="pvTweets" Header="tweets">
+                <Grid>
+                    <custom:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True" x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" Tag="Tweets" Loaded="ListBox_Loaded"/>
+                </Grid>
+			</controls:PivotItem>
+		</controls:Pivot>
+		
+		
+	</Grid>
+	<phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+</phone:PhoneApplicationPage>

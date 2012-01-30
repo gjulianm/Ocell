@@ -1,0 +1,19 @@
+﻿<!--
+      *********    NO MODIFIQUE ESTE ARCHIVO     *********
+      Este archivo se regenera mediante una herramienta de diseño.
+       Si realiza cambios en este archivo, puede causar errores.
+-->
+<SampleData:SampleDataSource xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.SampleDataSource" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <SampleData:SampleDataSource.Collection>
+    <SampleData:Item ProfileScreenUrl="http://www.adatum.com/" ScreenName="Aaberg, Jesper" />
+    <SampleData:Item ProfileScreenUrl="http://www.adventure-works.com/" ScreenName="Adams, Ellen" />
+    <SampleData:Item ProfileScreenUrl="http://www.adventure-works.com/" ScreenName="Adams, Terry" />
+    <SampleData:Item ProfileScreenUrl="http://www.alpineskihouse.com/" ScreenName="Adams, Terry" />
+    <SampleData:Item ProfileScreenUrl="http://www.baldwinmuseumofscience.com/" ScreenName="Penor, Lori" />
+    <SampleData:Item ProfileScreenUrl="http://www.blueyonderairlines.com/" ScreenName="Pfeiffer, Michael" />
+    <SampleData:Item ProfileScreenUrl="http://www.cpandl.com/" ScreenName="Philips, Carol" />
+    <SampleData:Item ProfileScreenUrl="http://www.cohovineyard.com/" ScreenName="Poe, Toni" />
+    <SampleData:Item ProfileScreenUrl="http://www.cohowinery.com/" ScreenName="Hicks, Cassie" />
+    <SampleData:Item ProfileScreenUrl="http://www.contoso.com/" ScreenName="Argentiero, Luca" />
+  </SampleData:SampleDataSource.Collection>
+</SampleData:SampleDataSource>
