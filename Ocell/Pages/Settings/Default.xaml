@@ -14,13 +14,8 @@
     >
 	
 	<phone:PhoneApplicationPage.Resources>
-		<SampleData:SampleDataSource x:Key="SampleDataSource" d:IsDataSource="True"/>
-		<DataTemplate x:Key="ItemTemplate">
-			<Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">
-				<TextBlock Text="{Binding ScreenName}" Margin="89,26,0,25" HorizontalAlignment="Left" FontFamily="Segoe WP Semibold" FontSize="24" d:LayoutOverrides="Height"/>
-				<Image Margin="8,8,0,0" HorizontalAlignment="Left" Width="64" Height="64" VerticalAlignment="Top" Source="{Binding ProfileScreenUrl}"/>
-			</Grid>
-		</DataTemplate>
+		
+		
 	</phone:PhoneApplicationPage.Resources>
  
     <!--Código de ejemplo que muestra el uso de ApplicationBar-->
@@ -67,7 +62,7 @@
 	</toolkit:TransitionService.NavigationOutTransition>
 
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
-    <Grid x:Name="LayoutRoot" Background="Transparent" DataContext="{Binding Source={StaticResource SampleDataSource}}">
+    <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -83,8 +78,9 @@
             <TextBlock Height="30" HorizontalAlignment="Left" Margin="213,6,0,0" x:Name="txtUser" Text="" VerticalAlignment="Top" />
             <Button Content="Add account" Height="72" Margin="39,286,38,348" x:Name="btnLogin" Width="379" Click="btnLogin_Click" />
             <TextBlock Height="30" Margin="213,6,61,0" x:Name="UserName" VerticalAlignment="Top" Style="{StaticResource PhoneTextAccentStyle}" Foreground="{StaticResource PhoneForegroundBrush}" d:LayoutOverrides="Width" />
-            <ListBox x:Name="Users" Height="232" Margin="8,40,8,0" VerticalAlignment="Top" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}"/>
+            <ListBox x:Name="Users" Height="232" Margin="8,40,8,0" VerticalAlignment="Top" ItemTemplate="{StaticResource AccountsTemplate}"/>
             <TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Accounts" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
+            <TextBlock HorizontalAlignment="Left" Margin="8,0,0,311" TextWrapping="Wrap" Text="To delete an account, tap it on the list." VerticalAlignment="Bottom" Foreground="{StaticResource PhoneSubtleBrush}"/>
         </Grid>
     </Grid>
 

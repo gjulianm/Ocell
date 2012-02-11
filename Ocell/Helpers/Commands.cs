@@ -51,12 +51,13 @@ namespace Ocell.Commands
         public bool CanExecute(object parameter)
         {
             return (parameter is ITweetable) &&
-                Clients.isServiceInit;
+                Config.Accounts.Count > 0 &&
+                DataTransfer.CurrentAccount != null;
         }
 
         public void Execute(object parameter)
         {
-            Clients.Service.Retweet(((ITweetable)parameter).Id, (sts, resp) => {});
+            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).Retweet(((ITweetable)parameter).Id, (sts, resp) => { });
         }
 
         public event EventHandler CanExecuteChanged;
@@ -67,12 +68,13 @@ namespace Ocell.Commands
         public bool CanExecute(object parameter)
         {
             return (parameter is ITweetable) &&
-                Clients.isServiceInit;
+                Config.Accounts.Count > 0 &&
+                DataTransfer.CurrentAccount != null;
         }
 
         public void Execute(object parameter)
         {
-            Clients.Service.FavoriteTweet(((ITweetable)parameter).Id, (sts, resp) => { });
+            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(((ITweetable)parameter).Id, (sts, resp) => { });
         }
 
         public event EventHandler CanExecuteChanged;

@@ -30,4 +30,16 @@ namespace Ocell
                 return 0;
         }
     }
+
+    public class TwitterResourceCompare : IEqualityComparer<TwitterResource>
+    {
+        public bool Equals(TwitterResource a, TwitterResource b)
+        {
+            return (a.User.Key == b.User.Key) && (a.Type == b.Type) && (a.Data == b.Data);
+        }
+        public int GetHashCode(TwitterResource s)
+        {
+            return s.User.Key.GetHashCode() * s.String.GetHashCode();
+        }
+    }
 }

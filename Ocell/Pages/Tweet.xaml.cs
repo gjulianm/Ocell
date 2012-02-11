@@ -86,8 +86,8 @@ namespace Ocell.SPpages
             Replies.Margin = new Thickness(Replies.Margin.Left, ViaDate.Margin.Top + 30,
                 Replies.Margin.Right, Replies.Margin.Bottom);
 
-            if (status.InReplyToStatusId == null)
-                Replies.Visibility = Visibility.Collapsed;
+            if (status.InReplyToStatusId != null)
+                Replies.Visibility = Visibility.Visible;
 
             SName.Text = "@" + status.Author.ScreenName;
             ContentPanel.UpdateLayout();
@@ -142,13 +142,13 @@ namespace Ocell.SPpages
         private void retweetButton_Click(object sender, EventArgs e)
         {
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-            Clients.Service.Retweet(status.Id, (Action<TwitterStatus, TwitterResponse>)receive);
+            ServiceDispatcher.GetCurrentService().Retweet(status.Id, (Action<TwitterStatus, TwitterResponse>)receive);
         }
 
         private void favButton_Click(object sender, EventArgs e)
         {
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-            Clients.Service.FavoriteTweet(status.Id, (Action<TwitterStatus, TwitterResponse>)receive);
+            ServiceDispatcher.GetCurrentService().FavoriteTweet(status.Id, (Action<TwitterStatus, TwitterResponse>)receive);
         }
 
         private void receive(TwitterStatus status, TwitterResponse resp)

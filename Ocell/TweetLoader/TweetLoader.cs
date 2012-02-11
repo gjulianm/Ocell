@@ -12,8 +12,21 @@ namespace Ocell
         private int Loaded;
         private readonly int ToLoad = 1;
         private readonly int Count = 20;
-        public TwitterResource Resource { get; set; }
+	    protected TwitterResource _resource;
+        public TwitterResource Resource 
+        {
+	        get
+	        {
+		        return _resource;
+	        }
+	        set
+	        {
+		        _resource = value;
+		        _srv = ServiceDispatcher.GetService(_resource.User);
+	        }
+	    }
         public ObservableCollection<ITweetable> Source { get; protected set; }
+	    protected TwitterService _srv;
         protected long LastId;
         
         #region Constructors
@@ -23,6 +36,7 @@ namespace Ocell
             Loaded = 0;
             Source = new ObservableCollection<TweetSharp.ITweetable>();
             LastId = 0;
+	        _srv = ServiceDispatcher.GetService(Resource.User);
         }
 
         
@@ -37,8 +51,8 @@ namespace Ocell
         #region Loaders
         public void Load(bool Old = false)
         {
-            if (Clients.Service == null || !Clients.isServiceInit || Resource == null)
-                throw new Exception("Client not initialised.");
+            if (Resource == null || _srv == null)
+                return;
 
             if (Old)
                 LoadOld();
@@ -51,27 +65,27 @@ namespace Ocell
             switch (Resource.Type)
             {
                 case ResourceType.Home:
-                    Clients.Service.ListTweetsOnHomeTimeline(Count, ReceiveTweets);
+                    _srv.ListTweetsOnHomeTimeline(Count, ReceiveTweets);
                     break;
                 case ResourceType.Mentions:
-                    Clients.Service.ListTweetsMentioningMe(Count, ReceiveTweets);
+                    _srv.ListTweetsMentioningMe(Count, ReceiveTweets);
                     break;
                 case ResourceType.Messages:
-                    Clients.Service.ListDirectMessagesReceived(Count, ReceiveMessages);
-                    Clients.Service.ListDirectMessagesSent(Count, ReceiveMessages);
+                    _srv.ListDirectMessagesReceived(Count, ReceiveMessages);
+                    _srv.ListDirectMessagesSent(Count, ReceiveMessages);
                     break;
                 case ResourceType.Favorites:
-                    Clients.Service.ListFavoriteTweets(ReceiveTweets);
+                    _srv.ListFavoriteTweets(ReceiveTweets);
                     break;
                 case ResourceType.List:
-                    Clients.Service.ListTweetsOnList(Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
+                    _srv.ListTweetsOnList(Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
                             Resource.Data.Substring(Resource.Data.IndexOf('/') + 1), ReceiveTweets);
                     break;
                 case ResourceType.Search:
-                    Clients.Service.Search(Resource.Data, 1, 20, ReceiveSearch);
+                    _srv.Search(Resource.Data, 1, 20, ReceiveSearch);
                     break;
                 case ResourceType.Tweets:
-                    Clients.Service.ListTweetsOnSpecifiedUserTimeline(Resource.Data, Count, ReceiveTweets);
+                    _srv.ListTweetsOnSpecifiedUserTimeline(Resource.Data, Count, ReceiveTweets);
                     break;
             }
         }
@@ -87,27 +101,27 @@ namespace Ocell
             switch (Resource.Type)
             {
                 case ResourceType.Home:
-                    Clients.Service.ListTweetsOnHomeTimelineBefore(Last, Count, ReceiveTweets);
+                    _srv.ListTweetsOnHomeTimelineBefore(Last, Count, ReceiveTweets);
                     break;
                 case ResourceType.Mentions:
-                    Clients.Service.ListTweetsMentioningMeBefore(Last, Count, ReceiveTweets);
+                    _srv.ListTweetsMentioningMeBefore(Last, Count, ReceiveTweets);
                     break;
                 case ResourceType.Messages:
-                    Clients.Service.ListDirectMessagesReceivedBefore(Last, Count, ReceiveMessages);
-                    Clients.Service.ListDirectMessagesSentBefore(Last, Count, ReceiveMessages);
+                    _srv.ListDirectMessagesReceivedBefore(Last, Count, ReceiveMessages);
+                    _srv.ListDirectMessagesSentBefore(Last, Count, ReceiveMessages);
                     break;
                 case ResourceType.Favorites:
-                    Clients.Service.ListFavoriteTweets(ReceiveTweets);
+                    _srv.ListFavoriteTweets(ReceiveTweets);
                     break;
                 case ResourceType.List:
-                    Clients.Service.ListTweetsOnListBefore(Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
+                    _srv.ListTweetsOnListBefore(Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
                             Resource.Data.Substring(Resource.Data.IndexOf('/') + 1), Last, ReceiveTweets);
                     break;
                 case ResourceType.Search:
-                    Clients.Service.SearchBefore(Last, Resource.Data, ReceiveSearch);
+                    _srv.SearchBefore(Last, Resource.Data, ReceiveSearch);
                     break;
                 case ResourceType.Tweets:
-                    Clients.Service.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, Last, Count, ReceiveTweets);
+                    _srv.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, Last, Count, ReceiveTweets);
                     break;
             }
         }
@@ -127,7 +141,11 @@ namespace Ocell
         protected void ReceiveTweets(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
         {
             if (statuses == null)
+            {
+                if (Error != null)
+                    Error(response);
                 return;
+            }
             List<ITweetable> list = new List<ITweetable>();
             foreach (var item in statuses)
                 list.Add(item);
@@ -137,7 +155,11 @@ namespace Ocell
         protected void ReceiveMessages(IEnumerable<TwitterDirectMessage> statuses, TwitterResponse response)
         {
             if (statuses == null)
+            {
+                if (Error != null)
+                    Error(response);
                 return;
+            }
             List<ITweetable> list = new List<ITweetable>();
             foreach (var item in statuses)
                 list.Add(item);
@@ -147,7 +169,11 @@ namespace Ocell
         protected void ReceiveSearch(TwitterSearchResult result, TwitterResponse response)
         {
             if (result == null || result.Statuses == null)
+            {
+                if (Error != null)
+                    Error(response);
                 return;
+            }
             List<ITweetable> list = new List<ITweetable>();
             foreach (var item in result.Statuses)
                 list.Add(item);
@@ -166,11 +192,15 @@ namespace Ocell
                 return;
             }
 
+            
+                
+
             foreach (var status in list)
                 if (!Source.Contains(status, comparer))
                     Source.Add(status);
 
-            LastId = list.Last().Id;
+            if (list.Count() != 0)
+                LastId = list.Last().Id;
 
             if (Loaded < ToLoad && list.Count() > 0)
             {
@@ -190,9 +220,19 @@ namespace Ocell
 
         public void SaveToCache()
         {
+            if (Source.Count == 0)
+                return;
+            
             if (Source.First().GetType() == typeof(TwitterStatus))
             {
-                Cacher.SaveToCache(Resource, Source.Cast<TwitterStatus>().Take(30));
+                try
+                {
+                    Cacher.SaveToCache(Resource, Source.OrderByDescending(item => item.Id).Cast<TwitterStatus>().Take(30));
+                }
+                catch (Exception)
+                {
+                    //Do nothing.
+                }
             }
         }
 

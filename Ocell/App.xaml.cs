@@ -59,28 +59,7 @@ namespace Ocell
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
             // Load configuration. 
-            IsolatedStorageSettings config;
-
-            try
-            {
-                config = IsolatedStorageSettings.ApplicationSettings;
-            }
-            catch (Exception x)
-            {
-                Debug.WriteLine(x.ToString());
-                throw;
-            }
-
-            if (!config.Contains("COLUMNS"))
-            {
-                config.Add("COLUMNS", new ObservableCollection<TwitterResource>(){
-                    new TwitterResource{ Type = ResourceType.Home, Data="" },
-                    new TwitterResource{ Type = ResourceType.Mentions, Data="" }});
-            }
-            config.Save();
-
-            DataTransfer.ReplyId = 0;
-            DataTransfer.Text = "";
+            
         }
 
         // Código para ejecutar cuando la aplicación se activa (se trae a primer plano)
@@ -93,12 +72,16 @@ namespace Ocell
         // Este código no se ejecutará cuando la aplicación se cierre
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
+            Config.SaveAccounts();
+            Config.SaveColumns();
         }
 
         // Código para ejecutar cuando la aplicación se cierra (p.ej., al hacer clic en Atrás)
         // Este código no se ejecutará cuando la aplicación se desactive
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
+            Config.SaveAccounts();
+            Config.SaveColumns();
         }
 
         // Código para ejecutar si hay un error de navegación

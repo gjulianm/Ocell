@@ -94,6 +94,8 @@ namespace Ocell.Controls
 
             if (this.Tag != null && this.Tag is string)
                 Loader.Resource = new TwitterResource() { String = this.Tag as string };
+            else if (this.Tag is TwitterResource)
+                Loader.Resource = (TwitterResource)this.Tag;
         }
 
         private void hgroup_CurrentStateChanging(object sender, VisualStateChangedEventArgs e)

@@ -6,11 +6,15 @@ using System.Windows;
 using Hammock;
 using Hammock.Authentication.OAuth;
 using Microsoft.Phone.Controls;
+using System.Linq; 
 
 namespace Ocell.Settings
 {
     public partial class OAuth : PhoneApplicationPage
     {
+        protected string consumerKey = SensitiveData.ConsumerToken;
+        protected string consumerSecret = SensitiveData.ConsumerSecret;
+        
         public OAuth()
         {
             InitializeComponent();
@@ -20,34 +24,6 @@ namespace Ocell.Settings
 
         void OAuth_Loaded(object sender, RoutedEventArgs e)
         {
-            IsolatedStorageSettings config;
-
-            try
-            {
-                config = IsolatedStorageSettings.ApplicationSettings;
-            }
-            catch (Exception x)
-            {
-                Debug.WriteLine(x.ToString());
-                MessageBox.Show("Sorry, an error has happened while loading the configuration.");
-                throw;
-            }
-            
-            string consumerKey;
-            string consumerSecret;
-
-            try
-            {
-                consumerKey = Tokens.consumer_token;
-                consumerSecret = Tokens.consumer_secret;
-            }
-            catch (Exception)
-            {
-                Dispatcher.BeginInvoke(() => { MessageBox.Show("Error loading app credentials."); });
-                NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
-                return;
-            }
-
             string callBackUrl = "http://www.google.es";
 
             // Use Hammock to set up our authentication credentials
@@ -76,17 +52,18 @@ namespace Ocell.Settings
             };
 
             // Get the response from the request
-            client.BeginRequest(request, new RestCallback(TwitterPostCompleted));
+            client.BeginRequest(request, new RestCallback(GetRequestTokenResponse));
         }
 
-        private void TwitterPostCompleted(RestRequest request, RestResponse response, object userstate)
+        private void GetRequestTokenResponse(RestRequest request, RestResponse response, object userstate)
         {
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                Dispatcher.BeginInvoke(() => { MessageBox.Show("Error while authenticating with Twitter");
-                    NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+                Dispatcher.BeginInvoke(() => { 
+                    MessageBox.Show("Error while authenticating with Twitter. Please try again");
+                    NavigationService.GoBack();
                 });
-                return;
+
             }
                         
             var collection = HttpUtility.ParseQueryString(response.Content);
@@ -99,7 +76,14 @@ namespace Ocell.Settings
             Dispatcher.BeginInvoke(() => { wb.Navigate(new Uri("http://api.twitter.com/oauth/authorize?oauth_token=" + request_token)); });
         }
 
+        private string GetQueryString(string Query)
+        {
+            int index = Query.IndexOf("?");
+            if (index > 0)
+                Query = Query.Substring(index).Remove(0, 1);
 
+            return Query;
+        }
 
         private void wb_Navigating(object sender, NavigatingEventArgs e)
         {
@@ -107,93 +91,124 @@ namespace Ocell.Settings
             {
                 // This is the Twitter callback, so cancel the call and manage the tokens.
                 e.Cancel = true;
-                string url = e.Uri.Query;
-                int index = url.IndexOf("?");
-                if (index > 0)
-                    url = url.Substring(index).Remove(0, 1);
+                string url = GetQueryString(e.Uri.Query);
 
                 var collection = HttpUtility.ParseQueryString(url);
 
                 string token = collection["oauth_token"];
                 string verifier = collection["oauth_verifier"];
 
-                string consumerKey;
-                string consumerSecret;
-
-                try
-                {
-                    consumerKey = Tokens.consumer_token;
-                    consumerSecret = Tokens.consumer_secret;
-                }
-                catch (Exception)
-                {
-                    Dispatcher.BeginInvoke(() => { 
-                        MessageBox.Show("Error loading app credentials");
-                        NavigationService.Navigate(new Uri("/MainPage.xaml"));
-                    });
-                    return;
-                }
-
                 if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(verifier))
                 {
                     Dispatcher.BeginInvoke(() => { 
-                        MessageBox.Show("Authentication error");
-                        NavigationService.Navigate(new Uri("/MainPage.xaml"));
+                        MessageBox.Show("Authentication error.");
+                        NavigationService.GoBack();
                     });
                     return;
                 }
 
-                // Use Hammock to set up our authentication credentials
-                OAuthCredentials credentials = new OAuthCredentials()
-                {
-                    Type = OAuthType.RequestToken,
-                    SignatureMethod = OAuthSignatureMethod.HmacSha1,
-                    ParameterHandling = OAuthParameterHandling.HttpAuthorizationHeader,
-                    ConsumerKey = consumerKey,
-                    ConsumerSecret = consumerSecret,
-                    Token = token,
-                    TokenSecret = Tokens.request_secret,
-                    Verifier = verifier,
-                    CallbackUrl = "http://google.es",
-                    Version = "1.0a"
-                };
-
-                // Use Hammock to create a rest client
-                var client = new RestClient
-                {
-                    Authority = "http://api.twitter.com",
-                    Credentials = credentials
-                };
-
-                // Use Hammock to create a request
-                var request = new RestRequest
-                {
-                    Path = "/oauth/access_token/"
-                };
-
-                // Get the response from the request
-                client.BeginRequest(request, new RestCallback(RequestCompleted));
+                GetFullTokens(token, verifier);
             }
+        }
+
+        private void GetFullTokens(string token, string verifier)
+        {
+            // Use Hammock to set up our authentication credentials
+            OAuthCredentials credentials = new OAuthCredentials()
+            {
+                Type = OAuthType.RequestToken,
+                SignatureMethod = OAuthSignatureMethod.HmacSha1,
+                ParameterHandling = OAuthParameterHandling.HttpAuthorizationHeader,
+                ConsumerKey = consumerKey,
+                ConsumerSecret = consumerSecret,
+                Token = token,
+                TokenSecret = Tokens.request_secret,
+                Verifier = verifier,
+                CallbackUrl = "http://google.es",
+                Version = "1.0a"
+            };
+
+            // Use Hammock to create a rest client
+            var client = new RestClient
+            {
+                Authority = "http://api.twitter.com",
+                Credentials = credentials
+            };
+
+            // Use Hammock to create a request
+            var request = new RestRequest
+            {
+                Path = "/oauth/access_token/"
+            };
+
+            // Get the response from the request
+            client.BeginRequest(request, new RestCallback(RequestCompleted));
         }
 
         public void RequestCompleted(RestRequest req, RestResponse response, object userstate)
         {
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                Dispatcher.BeginInvoke(() => { MessageBox.Show("Error while authenticating with Twitter"); });
+                Dispatcher.BeginInvoke(() => { 
+                    MessageBox.Show("Error while authenticating with Twitter");
+                    NavigationService.GoBack();
+                });
                 return;
             }
 
             var collection = HttpUtility.ParseQueryString(response.Content);
             
-            Tokens.user_token = collection["oauth_token"];
-            Tokens.user_secret = collection["oauth_token_secret"];
+            UserToken Token = new UserToken {
+                Key = collection["oauth_token"],
+                Secret = collection["oauth_token_secret"]
+            };
 
-            Clients.Service = new TweetSharp.TwitterService(Tokens.consumer_token, Tokens.consumer_secret, Tokens.user_token, Tokens.user_secret);
-            Clients.isServiceInit = true;
-            Clients.fillScreenName();
+            Token.UserDataFilled += new UserToken.OnUserDataFilled(InsertTokenIntoAccounts);
+            Token.FillUserData();
+            CreateColumns(Token);
+
+           
+        }
+
+        private void CreateColumns(UserToken user)
+        {
+            TwitterResource Home = new TwitterResource { Type = ResourceType.Home, User = user };
+            TwitterResource Mentions = new TwitterResource { Type = ResourceType.Mentions, User = user };
+            Dispatcher.BeginInvoke(() =>
+            {
+                if(!Config.Columns.Contains(Home))
+                    Config.Columns.Add(Home);
+                if(!Config.Columns.Contains(Mentions))
+                    Config.Columns.Add(Mentions);
+                Config.SaveColumns();
+            });
+        }
+
+        private void InsertTokenIntoAccounts(UserToken Token)
+        {
+            CheckIfExistsAndInsert(Token);
 
             Dispatcher.BeginInvoke(() => { NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative)); });
+            return;
+        }
+
+        private static void CheckIfExistsAndInsert(UserToken Token)
+        {
+            foreach (var item in Config.Accounts)
+            {
+                if (item.Key == Token.Key && item.ScreenName == Token.ScreenName)
+                {
+                    if (item.Secret != Token.Secret)
+                    {
+                        Config.Accounts.Remove(item);
+                        Config.Accounts.Add(Token);
+                        Config.SaveAccounts();
+                    }
+                    return;
+                }
+            }
+            Config.Accounts.Add(Token);
+            Config.SaveAccounts();
         }
 
         private void wb_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)

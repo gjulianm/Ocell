@@ -19,6 +19,8 @@ namespace Ocell
         private bool follows;
         private bool selectionChangeFired = false;
         ApplicationBarIconButton followBtn;
+        private TwitterService _srv;
+        private UserToken _account;
         
         public User()
         {
@@ -26,6 +28,8 @@ namespace Ocell
 
             this.Loaded += new RoutedEventHandler(User_Loaded);
             TweetList.SelectionChanged += new SelectionChangedEventHandler(ListBox_SelectionChanged);
+            _account = Config.Accounts.First();
+            _srv = ServiceDispatcher.GetService(_account);
         }
 
         void User_Loaded(object sender, RoutedEventArgs e)
@@ -38,7 +42,7 @@ namespace Ocell
             userName = remove.Replace(userName, "");
 
             Dispatcher.BeginInvoke(() => { pBar.IsVisible = true; pBar.Text = "Retrieving profile..."; });
-            Clients.Service.ListUserProfilesFor(new List<string>{userName}, GetUser);
+            _srv.ListUserProfilesFor(new List<string>{userName}, GetUser);
             pvProfile.DataContext = CurrentUser;
             followBtn = new ApplicationBarIconButton();
             followBtn.Text = "follow";
@@ -83,7 +87,7 @@ namespace Ocell
                 TweetList.Loader.Load();
             });
 
-            Clients.Service.GetFriendshipInfo(Clients.Uid, CurrentUser.Id, GetFriendship);
+            _srv.GetFriendshipInfo((int) _account.Id, CurrentUser.Id, GetFriendship);
         }
 
         private void GetFriendship(TwitterFriendship friendship, TwitterResponse response)
@@ -171,9 +175,9 @@ namespace Ocell
         {
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
             if (follows)
-                Clients.Service.UnfollowUser(CurrentUser.Id, Receive);
+                ServiceDispatcher.GetCurrentService().UnfollowUser(CurrentUser.Id, Receive);
             else
-                Clients.Service.FollowUser(CurrentUser.Id, Receive);
+                ServiceDispatcher.GetCurrentService().FollowUser(CurrentUser.Id, Receive);
         }
 
         private void Receive(TwitterUser user, TwitterResponse response)
@@ -181,7 +185,7 @@ namespace Ocell
             if (response.StatusCode != HttpStatusCode.OK)
                 Dispatcher.BeginInvoke(() => MessageBox.Show("Error :("));
             Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
-            Clients.Service.GetFriendshipInfo(Clients.Uid, CurrentUser.Id, GetFriendship);
+            ServiceDispatcher.GetCurrentService().GetFriendshipInfo((int)DataTransfer.CurrentAccount.Id, CurrentUser.Id, GetFriendship);
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

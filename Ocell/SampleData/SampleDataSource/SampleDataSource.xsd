@@ -18,6 +18,6 @@
   </xs:complexType>
   <xs:complexType name="Item">
     <xs:attribute blend:Format="Dirección URL del sitio web" name="ProfileScreenUrl" type="xs:string" />
-    <xs:attribute blend:Format="Nombre" name="ScreenName" type="xs:string" />
+    <xs:attribute name="ScreenName" type="xs:string" />
   </xs:complexType>
 </xs:schema>

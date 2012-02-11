@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using TweetSharp;
+using System.Linq;
 
 
 
@@ -14,61 +15,51 @@ namespace Ocell.AuxScreens
     public partial class AddColumn : PhoneApplicationPage
     {
         public ObservableCollection<TwitterList> lists;
+        private TwitterService _srv;
         public AddColumn()
         {
             InitializeComponent();
 
             this.Loaded += new RoutedEventHandler(AddColumn_Loaded);
+           
         }
 
         void AddColumn_Loaded(object sender, RoutedEventArgs e)
         {
+            Dispatcher.BeginInvoke(() => { NavigationService.RemoveBackEntry(); });
             LoadLists();
         }
 
         private void CoreList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
-            ObservableCollection<TwitterResource> columns;
             TwitterResource toAdd = new TwitterResource(); 
             ListBoxItem item = e.AddedItems[0] as ListBoxItem;
 
-            if (!config.TryGetValue<ObservableCollection<TwitterResource>>("COLUMNS", out columns))
-            {
-                Dispatcher.BeginInvoke(() => { MessageBox.Show("Error adding column."); });
-                return;
-            }
-            toAdd.String = item.Tag as string;
-            if (!columns.Contains(toAdd))
-            {
-                columns.Add(toAdd);
-                config["COLUMNS"] = columns;
-                config.Save();
+            toAdd.String = DataTransfer.CurrentAccount.ScreenName +";" + (item.Tag as string);
+            toAdd.User = DataTransfer.CurrentAccount;
+            SaveColumn(toAdd);
 
-            } NavigationService.GoBack();
+            NavigationService.GoBack();
         }
 
         private void ListsList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-        	IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
-            ObservableCollection<TwitterResource> columns;
             TwitterResource toAdd;
             TwitterList item = e.AddedItems[0] as TwitterList;
 
-            if (!config.TryGetValue<ObservableCollection<TwitterResource>>("COLUMNS", out columns))
-            {
-                Dispatcher.BeginInvoke(() => { MessageBox.Show("Error adding column."); });
-                return;
-            }
-
-            toAdd = new TwitterResource { Type = ResourceType.List, Data = item.FullName };
-            if (!columns.Contains(toAdd))
-            {
-                columns.Add(toAdd);
-                config["COLUMNS"] = columns;
-                config.Save();
-            }
+            toAdd = new TwitterResource { Type = ResourceType.List, Data = item.FullName, User = DataTransfer.CurrentAccount };
+            SaveColumn(toAdd);
             NavigationService.GoBack();
+        }
+
+        private void SaveColumn(TwitterResource Resource)
+        {
+            TwitterResourceCompare Comp = new TwitterResourceCompare();
+            if (!Config.Columns.Contains(Resource, Comp))
+            {
+                Config.Columns.Add(Resource);
+                Config.SaveColumns();
+            }
         }
 
         private void ApplicationBarIconButton_Click(object sender, EventArgs e)
@@ -78,10 +69,11 @@ namespace Ocell.AuxScreens
 
         private void LoadLists()
         {
-            if (Clients.isServiceInit && Clients.ScreenName != null)
+            _srv = ServiceDispatcher.GetCurrentService();
+            if (_srv != null)
             {
                 Dispatcher.BeginInvoke(() => { pBar.IsVisible = true; });
-                Clients.Service.ListListsFor(Clients.ScreenName, -1, (tlist, resp) =>
+                _srv.ListListsFor(DataTransfer.CurrentAccount.ScreenName, -1, (tlist, resp) =>
                 {
                     if (resp.StatusCode == HttpStatusCode.OK)
                     {

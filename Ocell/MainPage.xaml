@@ -40,6 +40,7 @@
     <phone:PhoneApplicationPage.Resources>
         <local:ResourceToString x:Key="ResourceToString" />
         
+        
     </phone:PhoneApplicationPage.Resources>
 
     <phone:PhoneApplicationPage.FontFamily>
@@ -77,7 +78,7 @@
             </controls:Pivot.HeaderTemplate>
             <controls:Pivot.ItemTemplate>
                 <DataTemplate>
-                    <custom:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" Tag="{Binding String}" Loaded="ListBox_Loaded" SelectionChanged="ListBox_SelectionChanged" />
+                    <custom:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" Tag="{Binding}" Loaded="ListBox_Loaded" SelectionChanged="ListBox_SelectionChanged" />
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>

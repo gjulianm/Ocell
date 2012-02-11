@@ -7,17 +7,18 @@ using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using Ocell.Controls;
 using TweetSharp;
+using System.Linq;
 
 
 namespace Ocell
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        private IsolatedStorageSettings config;
         private ObservableCollection<TwitterResource> pivots;
         private bool selectionChangeFired;
         private Dictionary<string, ExtendedListBox> Lists;
 
+        #region Loaders
         // Constructora
         public MainPage()
         {
@@ -26,63 +27,39 @@ namespace Ocell
             pivots = new ObservableCollection<TwitterResource>();
             Lists = new Dictionary<string, ExtendedListBox>();
 
-            this.Loaded += new RoutedEventHandler(MainPage_Loaded);
+            this.Loaded += new RoutedEventHandler(SetUpPivots);
             pivots.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(pivots_CollectionChanged);
-            MainPivot.SelectionChanged += new SelectionChangedEventHandler(MainPivot_SelectionChanged);
+            MainPivot.SelectionChanged += new SelectionChangedEventHandler(LoadTweetsOnPivot);
+            MainPivot.SelectionChanged += new SelectionChangedEventHandler(RefreshCurrentAccount);
 
-            BindPivots();
-        }
-
-        void BindPivots()
-        {
             MainPivot.DataContext = pivots;
             MainPivot.ItemsSource = pivots;
         }
 
-        void GetPivotsFromConf()
+        void SetUpPivots(object sender, RoutedEventArgs e)
         {
-            config = IsolatedStorageSettings.ApplicationSettings;
-
-            ObservableCollection<TwitterResource> pv;
-
-            if (!config.TryGetValue<ObservableCollection<TwitterResource>>("COLUMNS", out pv))
-                Dispatcher.BeginInvoke(() => MessageBox.Show("Error loading columns."));
-
-            foreach (var pivot in pv)
-                if (!pivots.Contains(pivot))
-                    pivots.Add(pivot);
-        }
-
-        void pivots_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            BindPivots();
-        }
-
-        void MainPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!Clients.isServiceInit)
+            if (Config.Accounts.Count == 0)
             {
-                // The TwitterService object is not initialised. Start it!
-                if (string.IsNullOrWhiteSpace(Tokens.user_token) || string.IsNullOrWhiteSpace(Tokens.user_secret))
-                {
-                    // There are no credentials. Redirect the user.
-                    NavigationService.Navigate(new Uri("/Pages/Settings/OAuth.xaml", UriKind.Relative));
-                    return;
-                }
+                ShowLoginMsg();
+                return;
             }
 
-            Clients.Service = new TweetSharp.TwitterService(Tokens.consumer_token, Tokens.consumer_secret, Tokens.user_token, Tokens.user_secret);
-            Clients.isServiceInit = true;
-            Clients.fillScreenName();
+            DataTransfer.CurrentAccount = Config.Accounts[0];
+            UpdatePivotTitle();
 
             GetPivotsFromConf();
-            BindPivots();
+            
         }
+
         
-        void MainPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        #endregion
+
+        void LoadTweetsOnPivot(object sender, SelectionChangedEventArgs e)
         {
+            if (MainPivot.SelectedItem == null)
+                return;
             ExtendedListBox ListBox;
-            TwitterResource Resource = (TwitterResource) MainPivot.SelectedItem;
+            TwitterResource Resource = (TwitterResource)MainPivot.SelectedItem;
             if (Lists.TryGetValue(Resource.String, out ListBox))
             {
                 Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
@@ -90,28 +67,77 @@ namespace Ocell
             }
         }
 
+        void RefreshCurrentAccount(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] != null)
+            {
+                TwitterResource item = (TwitterResource)e.AddedItems[0];
+                DataTransfer.CurrentAccount = item.User;
+                UpdatePivotTitle();
+            }
+        }
+        void BindPivots()
+        {
+            MainPivot.DataContext = null;
+            MainPivot.ItemsSource = pivots;
+        }
+
+        void ShowLoginMsg()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                MessageBoxResult r = MessageBox.Show("You have to log in with Twitter in order to use Ocell.", "", MessageBoxButton.OKCancel);
+                if (r == MessageBoxResult.OK)
+                    NavigationService.Navigate(new Uri("/Pages/Settings/OAuth.xaml", UriKind.Relative));
+            });
+        }
+
+        void GetPivotsFromConf()
+        {
+            foreach(var pivot in Config.Columns)
+                if(!pivots.Contains(pivot))
+                    pivots.Add(pivot);
+        }
+
+        void UpdatePivotTitle()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                MainPivot.Title = "OCELL";
+                if(DataTransfer.CurrentAccount != null && !string.IsNullOrWhiteSpace(DataTransfer.CurrentAccount.ScreenName))
+                    MainPivot.Title += " - " + DataTransfer.CurrentAccount.ScreenName.ToUpperInvariant();
+            });
+        }
+
+        void pivots_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            BindPivots();
+        }        
+
         private void compose_Click(object sender, System.EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/NewTweet.xaml", UriKind.Relative));
+            if (Config.Accounts.Count == 0)
+                ShowLoginMsg();
+            else
+                NavigationService.Navigate(new Uri("/Pages/NewTweet.xaml", UriKind.Relative));
         }
 
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
             ExtendedListBox list = sender as ExtendedListBox;
-            ResourceToString Converter = new ResourceToString();
             TwitterResource Resource = new TwitterResource();
 
-            if(list==null)
+            if(list == null)
                 return;
 
-            if(list.Tag != null && list.Tag is string)
+            if(list.Tag is TwitterResource)
             {
-                Resource.String = list.Tag as string;
+                Resource = (TwitterResource)list.Tag;
                 list.Bind(Resource);
             }
 
-            if (!Lists.ContainsKey(list.Tag as string))
-                Lists.Add(list.Tag as string, list);
+            if (!Lists.ContainsKey(Resource.String))
+                Lists.Add(Resource.String, list);
 
             list.Compression += new ExtendedListBox.OnCompression(list_Compression);
             list.Loader.Error += new TweetLoader.OnError(Loader_Error);
@@ -152,7 +178,10 @@ namespace Ocell
 
         private void add_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/Columns/ManageColumns.xaml", UriKind.Relative));
+            if (Config.Accounts.Count == 0)
+                ShowLoginMsg();
+            else
+                NavigationService.Navigate(new Uri("/Pages/Columns/ManageColumns.xaml", UriKind.Relative));
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

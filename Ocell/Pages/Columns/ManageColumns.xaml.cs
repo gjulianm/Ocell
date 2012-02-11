@@ -19,42 +19,33 @@ namespace Ocell.AuxScreens
 
         void ManageColumns_Loaded(object sender, RoutedEventArgs e)
         {
-            IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
-
-            ObservableCollection<TwitterResource> list;
-
-            if (!config.TryGetValue<ObservableCollection<TwitterResource>>("COLUMNS", out list))
-            {
-                Dispatcher.BeginInvoke(() => { MessageBox.Show("Error loading columns."); });
-                return;
-            }
-
-            MainList.DataContext = list;
-            MainList.ItemsSource = list;
+            MainList.DataContext = Config.Columns;
+            MainList.ItemsSource = Config.Columns;
         }
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
             Image img = sender as Image;
 
-            ObservableCollection<TwitterResource> list;
+            //Config.Columns.Remove(Config.Columns.First(item => (item.String == (String)img.Tag)));
+            foreach (var item in Config.Columns)
+            {
+                if (item.String == (string)img.Tag)
+                {
+                    Config.Columns.Remove(item);
+                    break;
+                }
+            }
 
-            if (!config.TryGetValue<ObservableCollection<TwitterResource>>("COLUMNS", out list))
-                return;
-            
-            list.Remove(list.Single(item => (item.String == (String)img.Tag)));
+            MainList.DataContext = Config.Columns;
+            MainList.ItemsSource = Config.Columns;
 
-            MainList.DataContext = list;
-            MainList.ItemsSource = list;
-
-            config["COLUMNS"] = list;
-            config.Save();
+            Config.SaveColumns();
         }
 
         private void ApplicationBarIconButton_Click(object sender, System.EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/Columns/AddColumn.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Pages/Columns/SelectAccount.xaml", UriKind.Relative));
         }
 
         private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)

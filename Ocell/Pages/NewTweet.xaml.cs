@@ -8,12 +8,15 @@ using Hammock;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
+using TweetSharp;
+using System.Collections.Generic;
 
 namespace Ocell.SPpages
 {
     public partial class NewTweet : PhoneApplicationPage
     {
         public ApplicationBarIconButton SendButton;
+
         public NewTweet()
         {
             InitializeComponent();
@@ -21,6 +24,14 @@ namespace Ocell.SPpages
             this.Loaded += new RoutedEventHandler(NewTweet_Loaded);
             this.Unloaded += new RoutedEventHandler(NewTweet_Unloaded);
 
+            AccountsList.DataContext = Config.Accounts;
+            AccountsList.ItemsSource = Config.Accounts;
+
+            InitalizeAppBar();
+        }
+
+        private void InitalizeAppBar()
+        {
             // Crappy Application bar design is crap. I have to initialise the buttons here in order to access them later.
             ApplicationBar appBar = new ApplicationBar();
 
@@ -44,17 +55,22 @@ namespace Ocell.SPpages
 
         void NewTweet_Loaded(object sender, RoutedEventArgs e)
         {
+            if (DataTransfer.ReplyingDM)
+                AccountsList.Visibility = Visibility.Collapsed;
             Tweet.Text = DataTransfer.Text==null?"":DataTransfer.Text;
             Tweet.Focus();
             Tweet.SelectionStart = (Tweet.Text.Length - 1)<0?0:(Tweet.Text.Length - 1);
+
+            int Index = Config.Accounts.IndexOf(DataTransfer.CurrentAccount);
+            AccountsList.SelectedIndex = Index;
         }
 
         private void SendButton_Click(object sender, EventArgs e)
         {
 
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-            if(DataTransfer.ReplyingDM)
-                Clients.Service.SendDirectMessage((int)DataTransfer.DM.SenderId, Tweet.Text, (status, response) =>
+            if (DataTransfer.ReplyingDM)
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).SendDirectMessage((int)DataTransfer.DM.SenderId, Tweet.Text, (status, response) =>
                 {
                     if (response.StatusCode == HttpStatusCode.Forbidden)
                         Dispatcher.BeginInvoke(() => MessageBox.Show("That tweet is duplicated."));
@@ -72,22 +88,40 @@ namespace Ocell.SPpages
                         });
                 });
             else
-                Clients.Service.SendTweet(Tweet.Text, DataTransfer.ReplyId, (status, response) =>
+                SendTweet();
+        }
+
+        private void SendTweet()
+        {
+            TwitterService srv;
+
+            if (AccountsList.SelectedItems.Count == 0)
+            {
+                Dispatcher.BeginInvoke(() => MessageBox.Show("You haven't select any account to tweet."));
+                return;
+            }
+            foreach (UserToken Account in AccountsList.SelectedItems.Cast<UserToken>())
+            {
+                srv = ServiceDispatcher.GetService(Account);
+                srv.SendTweet(Tweet.Text, DataTransfer.ReplyId, ReceiveResponse);
+            }
+        }
+
+        private void ReceiveResponse(TwitterStatus status, TwitterResponse response)
+        {
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+                Dispatcher.BeginInvoke(() => MessageBox.Show("That tweet is duplicated."));
+            else if (response.StatusCode != HttpStatusCode.OK)
+                Dispatcher.BeginInvoke(() => MessageBox.Show("An error has occurred."));
+            else
+                Dispatcher.BeginInvoke(() =>
                 {
-                    if (response.StatusCode == HttpStatusCode.Forbidden)
-                        Dispatcher.BeginInvoke(() => MessageBox.Show("That tweet is duplicated."));
-                    else if (response.StatusCode != HttpStatusCode.OK)
-                        Dispatcher.BeginInvoke(() => MessageBox.Show("An error has occurred."));
+                    pBar.IsVisible = false;
+                    DataTransfer.Text = "";
+                    if (NavigationService.CanGoBack)
+                        NavigationService.GoBack();
                     else
-                        Dispatcher.BeginInvoke(() =>
-                        {
-                            pBar.IsVisible = false;
-                            DataTransfer.Text = "";
-                            if (NavigationService.CanGoBack)
-                                NavigationService.GoBack();
-                            else
-                                NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
-                        });
+                        NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
                 });
         }
 
@@ -111,7 +145,8 @@ namespace Ocell.SPpages
                 SendButton.IsEnabled = false;
             });
 
-            RestRequest req = Clients.Service.PrepareEchoRequest();
+            TwitterService srv = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+            RestRequest req = srv.PrepareEchoRequest();
             RestClient client = new RestClient { Authority = "http://api.twitpic.com/", VersionPath = "1" };
 
             req.AddFile("media", e.OriginalFileName, e.ChosenPhoto);
@@ -160,6 +195,36 @@ namespace Ocell.SPpages
                    SendButton.IsEnabled = (Tweet.Text.Length <= 140);
                    Count.Text = (140 - Tweet.Text.Length).ToString();
             });
+        }
+
+        private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            Image img = sender as Image;
+
+            if(img == null)
+                return;
+
+            UpdateOpacity(img);
+        }
+
+        private void UpdateOpacity(Image img)
+        {
+            if (img.Opacity == 0.75)
+                img.Opacity = 1;
+            else
+                img.Opacity = 0.75;
+
+            img.UpdateLayout();
+        }
+
+        private void Image_Loaded(object sender, RoutedEventArgs e)
+        {
+            Image img = sender as Image;
+            if (img == null || (img.Tag as UserToken) == null)
+                return;
+
+            if ((img.Tag as UserToken) == DataTransfer.CurrentAccount)
+                UpdateOpacity(img);
         }
 
 

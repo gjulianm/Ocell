@@ -56,7 +56,7 @@ namespace Ocell
                 return;
             }
             
-            Clients.Service.GetTweet((long)status.InReplyToStatusId, ReceiveTweet);
+           ServiceDispatcher.GetCurrentService().GetTweet((long)status.InReplyToStatusId, ReceiveTweet);
         }
         
         private void ReceiveTweet(TwitterStatus status, TwitterResponse response)

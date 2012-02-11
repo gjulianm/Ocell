@@ -58,14 +58,36 @@ namespace Ocell
                 return "error";
 
             string str = (value as string).ToLowerInvariant();
+            int posSemicolon = str.IndexOf(';');
+            string user = str.Substring(0, Math.Max(0, posSemicolon));
             int posPoints = str.IndexOf(':');
             int posSlash = str.IndexOf('/');
-            int whereToCut = Math.Max(posPoints, posSlash) + 1 ;
-            if (whereToCut == 0)
-                return str;
-            else
-                return str.Substring(whereToCut);
+            int whereToCut = Math.Max(Math.Max(posPoints, posSlash), posSemicolon) + 1 ;
+            return str.Substring(whereToCut);
 
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class ToColumn : IValueConverter
+    {
+        public object Convert(object value, Type targeType, object parameter, CultureInfo culture)
+        {
+            if (value == null || !(value is string))
+                return "error";
+
+            string str = (value as string);
+            int posSemicolon = str.IndexOf(';');
+            string user = str.Substring(0, Math.Max(0, posSemicolon));
+            int posPoints = str.IndexOf(':');
+            int posSlash = str.IndexOf('/');
+            int whereToCut = Math.Max(Math.Max(posPoints, posSlash), posSemicolon) + 1;
+            str = user + ": " + str.Substring(whereToCut);
+            return str;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
