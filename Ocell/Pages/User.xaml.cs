@@ -83,7 +83,7 @@ namespace Ocell
                 pBar.IsVisible = false;
                 pBar.Text = "";
 
-                TweetList.Bind(new TwitterResource { Data = CurrentUser.ScreenName, Type = ResourceType.Tweets });
+                TweetList.Bind(new TwitterResource { Data = CurrentUser.ScreenName, Type = ResourceType.Tweets, User = DataTransfer.CurrentAccount });
                 TweetList.Loader.Load();
             });
 
