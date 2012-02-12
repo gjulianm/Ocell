@@ -12,6 +12,7 @@ namespace Ocell
         private int Loaded;
         private readonly int ToLoad = 1;
         private readonly int Count = 20;
+        public bool Cached { get; set; }
 	    protected TwitterResource _resource;
         public TwitterResource Resource 
         {
@@ -36,6 +37,7 @@ namespace Ocell
             Loaded = 0;
             Source = new ObservableCollection<TweetSharp.ITweetable>();
             LastId = 0;
+            Cached = true;
 	        _srv = ServiceDispatcher.GetService(Resource.User);
         }
 
@@ -45,6 +47,7 @@ namespace Ocell
             Loaded = 0;
             Source = new ObservableCollection<TweetSharp.ITweetable>();
             LastId = 0;
+            Cached = true;
         }
         #endregion
 
@@ -192,9 +195,6 @@ namespace Ocell
                 return;
             }
 
-            
-                
-
             foreach (var status in list)
                 if (!Source.Contains(status, comparer))
                     Source.Add(status);
@@ -220,6 +220,9 @@ namespace Ocell
 
         public void SaveToCache()
         {
+            if (!Cached)
+                return;
+            
             if (Source.Count == 0)
                 return;
             

@@ -28,6 +28,7 @@ namespace Ocell
 
             this.Loaded += new RoutedEventHandler(User_Loaded);
             TweetList.SelectionChanged += new SelectionChangedEventHandler(ListBox_SelectionChanged);
+            TweetList.Loader.Cached = false;
             _account = Config.Accounts.First();
             _srv = ServiceDispatcher.GetService(_account);
         }
