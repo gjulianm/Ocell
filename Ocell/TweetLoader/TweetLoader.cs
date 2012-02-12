@@ -130,6 +130,9 @@ namespace Ocell
         }
         public void LoadCache()
         {
+            if (!Cached)
+                return;
+
             TweetEqualityComparer comparer = new TweetEqualityComparer();
             foreach (var item in Cacher.GetFromCache(Resource))
                 if (!Source.Contains(item, comparer))
