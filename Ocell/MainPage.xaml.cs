@@ -196,7 +196,6 @@ namespace Ocell
                 Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
                 ListBox.Loader.LoadIntermediate();
             }
-			
 		}
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
