@@ -8,7 +8,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:local="clr-namespace:Ocell" 
     xmlns:custom="clr-namespace:Ocell.Controls"
-    xmlns:anim="clr-namespace:Clarity.Phone.Controls"
 	x:Class="Ocell.MainPage" 
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
     SupportedOrientations="Portrait"  Orientation="Portrait"
@@ -60,8 +59,7 @@
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton x:Name="compose" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="Compose" Click="compose_Click" />
             <shell:ApplicationBarIconButton x:Name="add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="Add column" Click="add_Click"/>
-            <shell:ApplicationBarIconButton x:Name="FillOld" IconUri="/Images/Icons_White/appbar.refresh.rest.png" Text="refresh tweets" CLick="Fill_Click" />
-    </shell:ApplicationBar>
+        </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 
     <shell:SystemTray.ProgressIndicator>
