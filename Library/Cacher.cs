@@ -49,10 +49,10 @@ namespace Ocell.Library
             return Strings;
         }
 
-        private static void SaveContentsIn(string filename, IEnumerable<string> strings)
+        private static void SaveContentsIn(string filename, IEnumerable<string> strings, System.IO.FileMode Mode)
         {
             IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
-            IsolatedStorageFileStream File = Storage.OpenFile(filename, System.IO.FileMode.Create);
+            IsolatedStorageFileStream File = Storage.OpenFile(filename, Mode);
             char separator = char.MaxValue;
             System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
 
@@ -70,20 +70,30 @@ namespace Ocell.Library
 
         public static void SaveToCache(TwitterResource Resource, IEnumerable<TwitterStatus> List)
         {
+            _saveToCache(Resource, List, System.IO.FileMode.Create);
+        }
+
+        private static void _saveToCache(TwitterResource Resource, IEnumerable<TwitterStatus> List, System.IO.FileMode Mode)
+        {
             IsolatedStorageSettings Config = IsolatedStorageSettings.ApplicationSettings;
             string Key = GetCacheName(Resource);
             List<string> Strings = new List<string>();
-            
+
 
             foreach (ITweetable Item in List)
                 Strings.Add(Item.RawSource);
             try
             {
-                SaveContentsIn(Key, Strings);
+                SaveContentsIn(Key, Strings, Mode);
             }
             catch (Exception)
             {
             }
+        }
+
+        public static void AppendToCache(TwitterResource Resource, IEnumerable<TwitterStatus> List)
+        {
+            _saveToCache(Resource, List, System.IO.FileMode.Append);
         }
 
         public static IEnumerable<TwitterStatus> GetFromCache(TwitterResource Resource)

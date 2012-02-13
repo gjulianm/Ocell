@@ -129,7 +129,7 @@ namespace Ocell
         public void LoadCache()
         {
             TweetEqualityComparer comparer = new TweetEqualityComparer();
-            foreach (var item in Cacher.GetFromCache(Resource))
+            foreach (var item in Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id))
                 if (!Source.Contains(item, comparer))
                     Source.Add(item);
 
