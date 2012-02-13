@@ -128,6 +128,26 @@ namespace Ocell
                     break;
             }
         }
+        
+        public void LoadIntermediate()
+        {
+        	int i;
+        	ITweetable Item, NextItem;
+        	TimeSpan DateDifference;
+        	TimeSpan MaxDifference = new TimeSpan();
+        	
+        	OrderSource();
+        	for(i=0; i<Source.Count; i++)
+        	{
+        		Item = Source[i];
+        		NextItem = Source[i+1];
+        		
+        		DateDifference = Item.Created - NextItem.Created;
+        		if(DateDifference > MaxDifference)
+        			LoadOld(Item.Id);
+        	}
+        }
+        
         public void LoadCache()
         {
             if (!Cached)
@@ -201,6 +221,8 @@ namespace Ocell
             foreach (var status in list)
                 if (!Source.Contains(status, comparer))
                     Source.Add(status);
+                    
+            OrderSource();
 
             if (list.Count() != 0)
                 LastId = list.Last().Id;
@@ -241,6 +263,11 @@ namespace Ocell
                 }
             }
         }
+
+		protected void OrderSource()
+		{
+			Source = new ObservableCollection<ITweetable>(Source.OrderByDescending(item => item.Id));
+		}
 
         #region Events
         public delegate void OnLoadFinished();

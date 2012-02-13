@@ -184,6 +184,21 @@ namespace Ocell
                 NavigationService.Navigate(new Uri("/Pages/Columns/ManageColumns.xaml", UriKind.Relative));
         }
 
+		private void Fill_Click(object sender, EventArgs e)
+		{
+			if(MainPivot.SelectedItem == null || !(MainPivot.SelectedItem is TwitterResource))
+				return;
+				
+            ExtendedListBox ListBox;
+            TwitterResource Resource = (TwitterResource)MainPivot.SelectedItem;
+            if (Lists.TryGetValue(Resource.String, out ListBox))
+            {
+                Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
+                ListBox.Loader.LoadIntermediate();
+            }
+			
+		}
+
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!selectionChangeFired)
