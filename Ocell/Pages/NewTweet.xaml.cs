@@ -10,6 +10,7 @@ using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using TweetSharp;
 using System.Collections.Generic;
+using Ocell.Library;
 
 namespace Ocell.SPpages
 {
@@ -152,10 +153,10 @@ namespace Ocell.SPpages
             req.AddFile("media", e.OriginalFileName, e.ChosenPhoto);
             req.AddField("key", "1abb1622666934158f4c2047f0822d0a");
             req.AddField("message", Tweet.Text);
-            req.AddField("consumer_token", Tokens.consumer_token);
-            req.AddField("consumer_secret", Tokens.consumer_secret);
-            req.AddField("oauth_token", Tokens.user_token);
-            req.AddField("oauth_secret", Tokens.user_secret);
+            req.AddField("consumer_token", SensitiveData.ConsumerToken);
+            req.AddField("consumer_secret", SensitiveData.ConsumerSecret);
+            req.AddField("oauth_token", DataTransfer.CurrentAccount.Key);
+            req.AddField("oauth_secret", DataTransfer.CurrentAccount.Secret);
             req.Path = "upload.xml";
             //req.Method = Hammock.Web.WebMethod.Post;
 

@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using System.Linq;
+using Ocell.Library;
 
 namespace Ocell.Settings
 {

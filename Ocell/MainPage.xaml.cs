@@ -8,7 +8,7 @@ using Microsoft.Phone.Controls;
 using Ocell.Controls;
 using TweetSharp;
 using System.Linq;
-
+using Ocell.Library;
 
 namespace Ocell
 {
@@ -28,12 +28,19 @@ namespace Ocell
             Lists = new Dictionary<string, ExtendedListBox>();
 
             this.Loaded += new RoutedEventHandler(SetUpPivots);
+            this.Loaded += new RoutedEventHandler(CreateTile);
+            
             pivots.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(pivots_CollectionChanged);
             MainPivot.SelectionChanged += new SelectionChangedEventHandler(LoadTweetsOnPivot);
             MainPivot.SelectionChanged += new SelectionChangedEventHandler(RefreshCurrentAccount);
 
             MainPivot.DataContext = pivots;
             MainPivot.ItemsSource = pivots;
+        }
+
+        void CreateTile(object sender, RoutedEventArgs e)
+        {
+
         }
 
         void SetUpPivots(object sender, RoutedEventArgs e)

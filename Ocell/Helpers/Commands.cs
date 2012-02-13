@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using Microsoft.Phone.Controls;
 using TweetSharp;
+using Ocell.Library;
 
 namespace Ocell.Commands
 {

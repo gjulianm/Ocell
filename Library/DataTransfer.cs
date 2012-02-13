@@ -1,5 +1,5 @@
 ﻿
-namespace Ocell
+namespace Ocell.Library
 {
     public static class DataTransfer
     {

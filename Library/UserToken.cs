@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using TweetSharp;
 
-namespace Ocell
+namespace Ocell.Library
 {
     public class UserToken
     {

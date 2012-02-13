@@ -13,9 +13,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO.IsolatedStorage;
-using Ocell.Library;
 
-namespace Ocell
+namespace Ocell.Library
 {
     public static class Config
     {

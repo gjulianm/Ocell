@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using TweetSharp;
-namespace Ocell
+
+namespace Ocell.Library
 {
     public static class Cacher
     {

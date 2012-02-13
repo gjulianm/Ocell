@@ -11,6 +11,8 @@ using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using Ocell.Controls;
 using TweetSharp;
+using Ocell.Library;
+
 namespace Ocell
 {
     public partial class User : PhoneApplicationPage

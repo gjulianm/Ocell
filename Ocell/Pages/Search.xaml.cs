@@ -3,6 +3,8 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using TweetSharp;
+using Ocell.Library;
+
 namespace Ocell.Pages
 {
     public partial class Search : PhoneApplicationPage

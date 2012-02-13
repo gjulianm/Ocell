@@ -6,7 +6,8 @@ using System.Windows;
 using Hammock;
 using Hammock.Authentication.OAuth;
 using Microsoft.Phone.Controls;
-using System.Linq; 
+using System.Linq;
+using Ocell.Library;
 
 namespace Ocell.Settings
 {
@@ -14,6 +15,8 @@ namespace Ocell.Settings
     {
         protected string consumerKey = SensitiveData.ConsumerToken;
         protected string consumerSecret = SensitiveData.ConsumerSecret;
+        private string _requestToken;
+        private string _requestSecret;
         
         public OAuth()
         {
@@ -70,8 +73,8 @@ namespace Ocell.Settings
             string request_token = collection["oauth_token"];
             string token_secret = collection["oauth_token_secret"];
             
-            Tokens.request_token = request_token;
-            Tokens.request_secret = token_secret;
+            _requestToken = request_token;
+            _requestSecret = token_secret;
 
             Dispatcher.BeginInvoke(() => { wb.Navigate(new Uri("http://api.twitter.com/oauth/authorize?oauth_token=" + request_token)); });
         }
@@ -122,7 +125,7 @@ namespace Ocell.Settings
                 ConsumerKey = consumerKey,
                 ConsumerSecret = consumerSecret,
                 Token = token,
-                TokenSecret = Tokens.request_secret,
+                TokenSecret = _requestSecret,
                 Verifier = verifier,
                 CallbackUrl = "http://google.es",
                 Version = "1.0a"
