@@ -13,6 +13,7 @@ namespace Ocell
         private int Loaded;
         private readonly int ToLoad = 1;
         private readonly int Count = 20;
+        public bool Cached { get; set; }
 	    protected TwitterResource _resource;
         public TwitterResource Resource 
         {
@@ -37,6 +38,7 @@ namespace Ocell
             Loaded = 0;
             Source = new ObservableCollection<TweetSharp.ITweetable>();
             LastId = 0;
+            Cached = true;
 	        _srv = ServiceDispatcher.GetService(Resource.User);
         }
 
@@ -46,6 +48,7 @@ namespace Ocell
             Loaded = 0;
             Source = new ObservableCollection<TweetSharp.ITweetable>();
             LastId = 0;
+            Cached = true;
         }
         #endregion
 
@@ -126,8 +129,31 @@ namespace Ocell
                     break;
             }
         }
+        
+        public void LoadIntermediate()
+        {
+        	int i;
+        	ITweetable Item, NextItem;
+        	TimeSpan DateDifference;
+        	TimeSpan MaxDifference = new TimeSpan();
+        	
+        	OrderSource();
+        	for(i=0; i<Source.Count; i++)
+        	{
+        		Item = Source[i];
+        		NextItem = Source[i+1];
+        		
+        		DateDifference = Item.Created - NextItem.Created;
+        		if(DateDifference > MaxDifference)
+        			LoadOld(Item.Id);
+        	}
+        }
+        
         public void LoadCache()
         {
+            if (!Cached)
+                return;
+
             TweetEqualityComparer comparer = new TweetEqualityComparer();
             foreach (var item in Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id))
                 if (!Source.Contains(item, comparer))
@@ -193,12 +219,11 @@ namespace Ocell
                 return;
             }
 
-            
-                
-
             foreach (var status in list)
                 if (!Source.Contains(status, comparer))
                     Source.Add(status);
+                    
+            OrderSource();
 
             if (list.Count() != 0)
                 LastId = list.Last().Id;
@@ -221,6 +246,9 @@ namespace Ocell
 
         public void SaveToCache()
         {
+            if (!Cached)
+                return;
+            
             if (Source.Count == 0)
                 return;
             
@@ -236,6 +264,11 @@ namespace Ocell
                 }
             }
         }
+
+		protected void OrderSource()
+		{
+			Source = new ObservableCollection<ITweetable>(Source.OrderByDescending(item => item.Id));
+		}
 
         #region Events
         public delegate void OnLoadFinished();

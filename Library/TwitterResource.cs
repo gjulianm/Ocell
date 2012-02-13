@@ -63,7 +63,8 @@ namespace Ocell.Library
                     User = new UserToken();
 
                 int SemiColonIndex = value.IndexOf(';');
-                User.ScreenName = value.Substring(0, SemiColonIndex);
+                if (SemiColonIndex != -1)
+                    User.ScreenName = value.Substring(0, SemiColonIndex);
                 value = value.Substring(SemiColonIndex + 1);
                 if (!value.Contains(":"))
                 {

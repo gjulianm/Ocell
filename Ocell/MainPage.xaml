@@ -60,7 +60,8 @@
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton x:Name="compose" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="Compose" Click="compose_Click" />
             <shell:ApplicationBarIconButton x:Name="add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="Add column" Click="add_Click"/>
-        </shell:ApplicationBar>
+            <shell:ApplicationBarIconButton x:Name="FillOld" IconUri="/Images/Icons_White/appbar.refresh.rest.png" Text="refresh tweets" CLick="Fill_Click" />
+    </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 
     <shell:SystemTray.ProgressIndicator>

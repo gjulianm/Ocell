@@ -30,6 +30,7 @@ namespace Ocell
 
             this.Loaded += new RoutedEventHandler(User_Loaded);
             TweetList.SelectionChanged += new SelectionChangedEventHandler(ListBox_SelectionChanged);
+            TweetList.Loader.Cached = false;
             _account = Config.Accounts.First();
             _srv = ServiceDispatcher.GetService(_account);
         }
@@ -85,7 +86,7 @@ namespace Ocell
                 pBar.IsVisible = false;
                 pBar.Text = "";
 
-                TweetList.Bind(new TwitterResource { Data = CurrentUser.ScreenName, Type = ResourceType.Tweets });
+                TweetList.Bind(new TwitterResource { Data = CurrentUser.ScreenName, Type = ResourceType.Tweets, User = DataTransfer.CurrentAccount });
                 TweetList.Loader.Load();
             });
 
