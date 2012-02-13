@@ -22,6 +22,51 @@ namespace Ocell
             return Key;
         }
 
+        private static IEnumerable<string> ReadContentsOf(string filename)
+        {
+            IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
+            IsolatedStorageFileStream File = Storage.OpenFile(filename, System.IO.FileMode.OpenOrCreate);
+            char separator = char.MaxValue;
+            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+            List<string> Strings = new List<string>();
+
+            string contents;
+            byte[] bytes= new byte[File.Length];
+            string line = "";
+            int NewlineIndex;
+
+            File.Read(bytes, 0, (int)File.Length);
+            contents = new string(encoding.GetChars(bytes));
+
+            while ((NewlineIndex = contents.IndexOf(separator)) != -1)
+            {
+                line = contents.Substring(0, NewlineIndex);
+                contents = contents.Substring(NewlineIndex + 1);
+                Strings.Add(line);
+            }
+
+            return Strings;
+        }
+
+        private static void SaveContentsIn(string filename, IEnumerable<string> strings)
+        {
+            IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
+            IsolatedStorageFileStream File = Storage.OpenFile(filename, System.IO.FileMode.Create);
+            char separator = char.MaxValue;
+            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+
+            string contents = "";
+            byte[] bytes;
+
+
+            foreach (var str in strings)
+                contents += str + separator;
+
+            bytes = encoding.GetBytes(contents);
+            File.Write(bytes, 0, bytes.Length);
+            File.Close();
+        }
+
         public static void SaveToCache(TwitterResource Resource, IEnumerable<TwitterStatus> List)
         {
             IsolatedStorageSettings Config = IsolatedStorageSettings.ApplicationSettings;
@@ -29,15 +74,11 @@ namespace Ocell
             List<string> Strings = new List<string>();
             
 
-            if (Config.Contains(Key))
-                Config.Remove(Key);
-
             foreach (ITweetable Item in List)
                 Strings.Add(Item.RawSource);
             try
             {
-                Config.Add(Key, Strings);
-                Config.Save();
+                SaveContentsIn(Key, Strings);
             }
             catch (Exception)
             {
@@ -54,8 +95,7 @@ namespace Ocell
 
             try 
             {
-                if(!Config.TryGetValue<List<string>>(Key, out Strings))
-                    return List;
+                Strings = new List<string>(ReadContentsOf(Key));
             }
             catch(Exception)
             {
