@@ -47,6 +47,7 @@
     <Reference Include="ICSharpCode.SharpZipLib.WindowsPhone">
       <HintPath>..\Ocell\Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Phone" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Ocell\Assemblies\Newtonsoft.Json.dll</HintPath>
     </Reference>

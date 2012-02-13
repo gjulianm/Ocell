@@ -82,6 +82,8 @@ namespace ScheduledAgent
                 if (status.CreatedDate > LastChecked)
                     NewMentions.Add(status);
             }
+
+            UpdateTileData();
         }
 
         protected void UpdateTileData()

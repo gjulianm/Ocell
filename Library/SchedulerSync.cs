@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.IO.IsolatedStorage;
 using System.Text;
+using Microsoft.Phone.Scheduler;
 
 namespace Ocell.Library
 {
@@ -48,6 +49,39 @@ namespace Ocell.Library
                 Date = DateTime.Now;
 
             return Date;
+        }
+
+        public static  void StartPeriodicAgent()
+        {
+            string periodicTaskName = "OcellPeriodicTask";
+            var periodicTask = ScheduledActionService.Find(periodicTaskName) as PeriodicTask;
+
+            if (periodicTask != null)
+            {
+                RemoveAgent(periodicTaskName);
+            }
+
+            periodicTask = new PeriodicTask(periodicTaskName);
+            periodicTask.Description = "Retrieve tweets for the first user.";
+
+            try
+            {
+                ScheduledActionService.Add(periodicTask);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private static void RemoveAgent(string name)
+        {
+            try
+            {
+                ScheduledActionService.Remove(name);
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }
