@@ -65,8 +65,14 @@ namespace Ocell.Library
                 int SemiColonIndex = value.IndexOf(';');
                 if (SemiColonIndex != -1)
                     User.ScreenName = value.Substring(0, SemiColonIndex);
-                value = value.Substring(SemiColonIndex + 1);
-                if (!value.Contains(":"))
+            	
+            	if((SemiColonIndex+1) <= value.Length)
+                	value = value.Substring(SemiColonIndex + 1);
+                
+                int ColonIndex = value.IndexOf(':');
+                ColonIndex = Math.Min(ColonIndex + 1, value.Length);
+                
+                if (ColonIndex == -1)
                 {
                     if (value == "Favorites")
                         Type = ResourceType.Favorites;
@@ -80,17 +86,17 @@ namespace Ocell.Library
                 else if (value.Contains("List:"))
                 {
                     Type = ResourceType.List;
-                    Data = value.Substring(value.IndexOf(':') + 1);
+                    Data = value.Substring(ColonIndex);
                 }
                 else if (value.Contains("Search:"))
                 {
                     Type = ResourceType.Search;
-                    Data = value.Substring(value.IndexOf(':') + 1);
+                    Data = value.Substring(ColonIndex);
                 }
                 else if (value.Contains("Tweets:"))
                 {
                     Type = ResourceType.Tweets;
-                    Data = value.Substring(value.IndexOf(':') + 1);
+                    Data = value.Substring(ColonIndex);
                 }
                 else
                     Type = ResourceType.Home;

@@ -12,13 +12,67 @@ namespace Ocell.Settings
     public partial class Default : PhoneApplicationPage
     {
         private bool _selectionChangeFired;
+        private int _ProgramaticallyFiredChange = 0;
         public Default()
         {
             InitializeComponent();
 
             this.Loaded += new RoutedEventHandler(Default_Loaded);
             Users.SelectionChanged += new SelectionChangedEventHandler(Users_SelectionChanged);
+            Accounts_Not.SelectionChanged += new SelectionChangedEventHandler(Accounts_Not_SelectionChanged);
+            MessagesPicker.SelectionChanged += new SelectionChangedEventHandler(MessagesPicker_SelectionChanged);
+            MentionsPicker.SelectionChanged += new SelectionChangedEventHandler(MentionsPicker_SelectionChanged);
             _selectionChangeFired = false;
+        }
+
+        void MentionsPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UserToken User = Accounts_Not.SelectedItem as UserToken;
+            if (User == null)
+                return;
+
+            if (_ProgramaticallyFiredChange > 0)
+            {
+                _ProgramaticallyFiredChange--;
+                return;
+            }
+
+            Config.Accounts.Remove(User);
+            User.Preferences.MentionsPreferences = (NotificationType) MentionsPicker.SelectedIndex;
+            Config.Accounts.Add(User);
+        }
+
+        void MessagesPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UserToken User = Accounts_Not.SelectedItem as UserToken;
+            if (User == null)
+                return;
+
+            if (_ProgramaticallyFiredChange > 0)
+            {
+                _ProgramaticallyFiredChange--;
+                return;
+            }
+
+            Config.Accounts.Remove(User);
+            User.Preferences.MessagesPreferences = (NotificationType)MessagesPicker.SelectedIndex;
+            Config.Accounts.Add(User);
+            Config.SaveAccounts();
+        }
+
+        void Accounts_Not_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems == null || e.AddedItems.Count == 0)
+                return;
+
+            UserToken User = Accounts_Not.SelectedItem as UserToken;
+
+            if (User != null)
+            {
+                _ProgramaticallyFiredChange += 2;
+                MentionsPicker.SelectedIndex = (int)User.Preferences.MentionsPreferences;
+                MessagesPicker.SelectedIndex = (int)User.Preferences.MessagesPreferences;
+            }
         }
 
         void Users_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -50,14 +104,18 @@ namespace Ocell.Settings
         {
             if (Config.Columns.Count == 0 || Account == null)
                 return;
-            foreach (var item in Config.Columns.Where(item => { return item.User == Account; }))
-                Config.Columns.Remove(item);
+            foreach (var item in Config.Columns)
+            {
+            	if(item.User == Account)
+                	Config.Columns.Remove(item);
+            }
             Config.SaveColumns();
         }
 
         void Default_Loaded(object sender, RoutedEventArgs e)
         {
             BindAccounts();
+            Accounts_Not.SelectedIndex = 0;
         }
 
         private void BindAccounts()
@@ -66,6 +124,9 @@ namespace Ocell.Settings
             {
                 Users.DataContext = Config.Accounts;
                 Users.ItemsSource = Config.Accounts;
+
+                Accounts_Not.DataContext = Config.Accounts;
+                Accounts_Not.ItemsSource = Config.Accounts;
             }
         }
 

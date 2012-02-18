@@ -12,7 +12,7 @@ namespace Ocell
     {
         private int Loaded;
         private readonly int ToLoad = 1;
-        private readonly int Count = 20;
+        private readonly int Count = 25;
         public bool Cached { get; set; }
 	    protected TwitterResource _resource;
         public TwitterResource Resource 
@@ -204,6 +204,9 @@ namespace Ocell
                     Error(response);
                 return;
             }
+            
+            if(Source == null)
+            	Source = new ObservableCollection<ITweetable>();
 
             foreach (var status in list)
                 if (!Source.Contains(status, comparer))
