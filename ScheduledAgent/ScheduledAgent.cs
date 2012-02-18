@@ -13,6 +13,7 @@ namespace ScheduledAgent
     {
         private static volatile bool _classInitialized;
         private List<TwitterStatus> NewMentions;
+        private List<TwitterDirectMessage> NewMessages;
         private int PendingCalls;
 
         /// <remarks>
@@ -31,6 +32,7 @@ namespace ScheduledAgent
             }
 
             NewMentions = new List<TwitterStatus>();
+            NewMessages = new List<TwitterDirectMessage>();
             PendingCalls = 0;
         }
 
@@ -62,8 +64,9 @@ namespace ScheduledAgent
         protected void GetMentionsFor(UserToken User)
         {
             TwitterService Service = ServiceDispatcher.GetService(User);
-            PendingCalls++;
+            PendingCalls += 2;
             Service.ListTweetsMentioningMe(ReceiveTweets);
+            Service.ListDirectMessagesReceived(ReceiveMessages);
         }
 
         protected void ReceiveTweets(IEnumerable<TwitterStatus> Statuses, TwitterResponse Response)
@@ -86,28 +89,32 @@ namespace ScheduledAgent
             UpdateTileData();
         }
 
+        protected void ReceiveMessages(IEnumerable<TwitterDirectMessage> Messages, TwitterResponse Response)
+        {
+            PendingCalls--;
+            if (Response.StatusCode != System.Net.HttpStatusCode.OK || Messages == null)
+            {
+                UpdateTileData();
+                return;
+            }
+
+            DateTime LastChecked = SchedulerSync.GetLastCheckDate();
+
+            foreach (TwitterDirectMessage status in Messages)
+            {
+                if (status.CreatedDate > LastChecked)
+                    NewMessages.Add(status);
+            }
+
+            UpdateTileData();
+        }
+
         protected void UpdateTileData()
         {
             if (PendingCalls > 0)
                 return;
 
-            ShellTile MainTile = ShellTile.ActiveTiles.First();
-
-            if (MainTile != null && NewMentions.Count > 0)
-            {
-                string BackText;
-
-                if(NewMentions.Count == 1)
-                    BackText = "New mention by " + NewMentions[0].Author.ScreenName;
-                else
-                    BackText = NewMentions.Count.ToString() + " new mentions";
-
-                MainTile.Update(new StandardTileData
-                {
-                    Count = NewMentions.Count,
-                    BackContent = BackText
-                });
-            }
+            Ocell.Library.TileManager.UpdateTile(NewMentions, NewMessages);
 
             NotifyComplete();
         }

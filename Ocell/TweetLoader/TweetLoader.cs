@@ -136,7 +136,12 @@ namespace Ocell
                 return;
 
             TweetEqualityComparer comparer = new TweetEqualityComparer();
-            foreach (var item in Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id))
+            IEnumerable<TwitterStatus> CacheList = Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id);
+
+            if (!DecisionMaker.ShouldLoadCache(ref CacheList))
+                return;
+
+            foreach (var item in CacheList)
                 if (!Source.Contains(item, comparer))
                     Source.Add(item);
 

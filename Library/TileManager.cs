@@ -1,0 +1,53 @@
+﻿using System;
+using System.Net;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Ink;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
+using System.Collections.Generic;
+using System.Linq;
+using TweetSharp;
+using Microsoft.Phone.Shell;
+
+namespace Ocell.Library
+{
+    public static class TileManager
+    {
+        public static void UpdateTile(IEnumerable<TwitterStatus> Statuses, IEnumerable<TwitterDirectMessage> Messages)
+        {
+            string StatusesStr, MessagesStr;
+            int count = 0;
+
+            if (Statuses != null)
+                count += Statuses.Count();
+            if (Messages != null)
+                count += Statuses.Count();
+
+            if (Statuses == null || Statuses.Count() == 0)
+                StatusesStr = "";
+            else if (Statuses.Count() == 1)
+                StatusesStr = "@" + Statuses.First().Author.ScreenName + " mentioned you";
+            else
+                StatusesStr = Statuses.Count().ToString() + " new mentions";
+
+            if (Messages == null || Messages.Count() == 0)
+                MessagesStr = "";
+            else if (Messages.Count() == 1)
+                MessagesStr = "@" + Messages.First().Author.ScreenName + " mentioned you";
+            else
+                MessagesStr = Messages.Count().ToString() + " new mentions";
+
+            StandardTileData TileData = new StandardTileData
+            {
+                BackContent = StatusesStr + Environment.NewLine + MessagesStr,
+                Count = count,
+            };
+
+            ShellTile.ActiveTiles.First().Update(TileData);
+        }
+    }
+}
