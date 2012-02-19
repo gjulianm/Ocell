@@ -41,8 +41,9 @@ namespace Ocell
 
         void CreateTile(object sender, RoutedEventArgs e)
         {
-            SchedulerSync.WriteLastCheckDate(DateTime.Now);
+            SchedulerSync.WriteLastCheckDate(DateTime.Now.AddHours(-1));
             SchedulerSync.StartPeriodicAgent();
+            TileManager.UpdateTile(null, null); // Updating with null means it will clear the tile.
         }       
 
         void SetUpPivots(object sender, RoutedEventArgs e)

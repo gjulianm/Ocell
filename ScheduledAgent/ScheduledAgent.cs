@@ -12,8 +12,8 @@ namespace ScheduledAgent
     public class ScheduledAgent : ScheduledTaskAgent
     {
         private static volatile bool _classInitialized;
-        private List<TwitterStatus> NewMentions;
-        private List<TwitterDirectMessage> NewMessages;
+        private List<TwitterStatus> TileNewMentions;
+        private List<TwitterDirectMessage> TileNewMessages;
         private int PendingCalls;
 
         /// <remarks>
@@ -31,8 +31,8 @@ namespace ScheduledAgent
                 });
             }
 
-            NewMentions = new List<TwitterStatus>();
-            NewMessages = new List<TwitterDirectMessage>();
+            TileNewMentions = new List<TwitterStatus>();
+            TileNewMessages = new List<TwitterDirectMessage>();
             PendingCalls = 0;
         }
 
@@ -59,22 +59,45 @@ namespace ScheduledAgent
         {
             foreach (UserToken User in Config.Accounts)
                 GetMentionsFor(User);
+
+            if (PendingCalls == 0)
+                NotifyComplete();
         }
 
         protected void GetMentionsFor(UserToken User)
         {
             TwitterService Service = ServiceDispatcher.GetService(User);
-            PendingCalls += 2;
-            Service.ListTweetsMentioningMe(ReceiveTweets);
-            Service.ListDirectMessagesReceived(ReceiveMessages);
+
+            if (User.Preferences.MentionsPreferences == NotificationType.Tile)
+            {
+                PendingCalls++;
+                Service.ListTweetsMentioningMe(ReceiveTweetsToTile);
+            }
+            else if (User.Preferences.MentionsPreferences == NotificationType.TileAndToast)
+            {
+                PendingCalls++;
+                Service.ListTweetsMentioningMe(ReceiveTweetsToToast);
+            }
+
+            if (User.Preferences.MessagesPreferences == NotificationType.Tile)
+            {
+                PendingCalls++;
+                Service.ListDirectMessagesReceived(ReceiveMessagesToTile);
+            }
+            else if (User.Preferences.MentionsPreferences == NotificationType.TileAndToast)
+            {
+                PendingCalls++;
+                Service.ListDirectMessagesReceived(ReceiveMessagesToToast);
+            }
+            
         }
 
-        protected void ReceiveTweets(IEnumerable<TwitterStatus> Statuses, TwitterResponse Response)
+        protected void ReceiveTweetsToTile(IEnumerable<TwitterStatus> Statuses, TwitterResponse Response)
         {
             PendingCalls--;
             if (Response.StatusCode != System.Net.HttpStatusCode.OK || Statuses == null)
             {  
-                UpdateTileData();
+                ProcessNotifications();
                 return;
             }
 
@@ -83,18 +106,51 @@ namespace ScheduledAgent
             foreach (TwitterStatus status in Statuses)
             {
                 if (status.CreatedDate > LastChecked)
-                    NewMentions.Add(status);
+                    TileNewMentions.Add(status);
             }
 
-            UpdateTileData();
+            ProcessNotifications();
         }
 
-        protected void ReceiveMessages(IEnumerable<TwitterDirectMessage> Messages, TwitterResponse Response)
+        protected void ReceiveTweetsToToast(IEnumerable<TwitterStatus> Statuses, TwitterResponse Response)
+        {
+            if (Statuses != null && Statuses.Count() > 0)
+            {
+                DateTime LastChecked = SchedulerSync.GetLastCheckDate();
+                int newMentions = 0;
+
+                foreach (TwitterStatus status in Statuses)
+                {
+                    if (status.CreatedDate > LastChecked)
+                        newMentions++;
+                }
+
+                ShellToast Toast = new ShellToast();
+                Toast.Title = "Ocell";
+                Toast.NavigationUri = new Uri("/MainPage.xaml", UriKind.Relative);
+
+                if (newMentions > 0)
+                {
+                    string UserName = Statuses.First().InReplyToScreenName;
+
+                    if (newMentions == 1)
+                        Toast.Content = "@" + Statuses.First().Author.ScreenName + " mentioned you (@" + UserName + ")";
+                    else
+                        Toast.Content = "@" + UserName + " has " + newMentions + " new mentions";
+
+                    Toast.Show();
+                }
+            }
+
+            ReceiveTweetsToTile(Statuses, Response);
+        }
+
+        protected void ReceiveMessagesToTile(IEnumerable<TwitterDirectMessage> Messages, TwitterResponse Response)
         {
             PendingCalls--;
             if (Response.StatusCode != System.Net.HttpStatusCode.OK || Messages == null)
             {
-                UpdateTileData();
+                ProcessNotifications();
                 return;
             }
 
@@ -103,18 +159,52 @@ namespace ScheduledAgent
             foreach (TwitterDirectMessage status in Messages)
             {
                 if (status.CreatedDate > LastChecked)
-                    NewMessages.Add(status);
+                    TileNewMessages.Add(status);
             }
 
-            UpdateTileData();
+            ProcessNotifications();
         }
 
-        protected void UpdateTileData()
+        protected void ReceiveMessagesToToast(IEnumerable<TwitterDirectMessage> Messages, TwitterResponse Response)
+        {
+            if (Messages != null && Messages.Count() > 0)
+            {
+                DateTime LastChecked = SchedulerSync.GetLastCheckDate();
+
+                int newMessages = 0;
+
+                foreach (TwitterDirectMessage status in Messages)
+                {
+                    if (status.CreatedDate > LastChecked)
+                        newMessages++;
+                }
+
+
+                ShellToast Toast = new ShellToast();
+                Toast.Title = "Ocell";
+                Toast.NavigationUri = new Uri("/MainPage.xaml", UriKind.Relative);
+
+                if (newMessages > 0)
+                {
+                    string UserName = Messages.First().RecipientScreenName;
+
+                    if (newMessages == 1)
+                        Toast.Content = "@" + Messages.First().Author.ScreenName + " sent a DM to @" + UserName;
+                    else
+                        Toast.Content = "@" + UserName + " has " + newMessages + " new messages";
+
+                    Toast.Show();
+                }
+            }
+            ReceiveMessagesToTile(Messages, Response);
+        }
+
+        protected void ProcessNotifications()
         {
             if (PendingCalls > 0)
                 return;
 
-            Ocell.Library.TileManager.UpdateTile(NewMentions, NewMessages);
+            Ocell.Library.TileManager.UpdateTile(TileNewMentions, TileNewMessages);
 
             NotifyComplete();
         }

@@ -13,6 +13,7 @@ namespace Ocell.Settings
     {
         private bool _selectionChangeFired;
         private int _ProgramaticallyFiredChange = 0;
+
         public Default()
         {
             InitializeComponent();
@@ -27,8 +28,8 @@ namespace Ocell.Settings
 
         void MentionsPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UserToken User = Accounts_Not.SelectedItem as UserToken;
-            if (User == null)
+            int SelectedIndex = Accounts_Not.SelectedIndex;
+            if (SelectedIndex == -1)
                 return;
 
             if (_ProgramaticallyFiredChange > 0)
@@ -37,15 +38,15 @@ namespace Ocell.Settings
                 return;
             }
 
-            Config.Accounts.Remove(User);
-            User.Preferences.MentionsPreferences = (NotificationType) MentionsPicker.SelectedIndex;
-            Config.Accounts.Add(User);
+            Config.Accounts[SelectedIndex].Preferences.MentionsPreferences = (NotificationType)MentionsPicker.SelectedIndex;
+            Config.SaveAccounts();
+            BindAccounts();
         }
 
         void MessagesPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UserToken User = Accounts_Not.SelectedItem as UserToken;
-            if (User == null)
+            int SelectedIndex = Accounts_Not.SelectedIndex;
+            if (SelectedIndex == -1)
                 return;
 
             if (_ProgramaticallyFiredChange > 0)
@@ -54,24 +55,30 @@ namespace Ocell.Settings
                 return;
             }
 
-            Config.Accounts.Remove(User);
-            User.Preferences.MessagesPreferences = (NotificationType)MessagesPicker.SelectedIndex;
-            Config.Accounts.Add(User);
+            Config.Accounts[SelectedIndex].Preferences.MessagesPreferences = (NotificationType)MessagesPicker.SelectedIndex;
             Config.SaveAccounts();
+            BindAccounts();
         }
 
         void Accounts_Not_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems == null || e.AddedItems.Count == 0)
+           if (e.AddedItems == null || e.AddedItems.Count == 0)
                 return;
 
-            UserToken User = Accounts_Not.SelectedItem as UserToken;
+            UserToken User = e.AddedItems[0] as UserToken;
 
             if (User != null)
             {
-                _ProgramaticallyFiredChange += 2;
-                MentionsPicker.SelectedIndex = (int)User.Preferences.MentionsPreferences;
-                MessagesPicker.SelectedIndex = (int)User.Preferences.MessagesPreferences;
+                if (MentionsPicker.SelectedIndex != (int)User.Preferences.MentionsPreferences)
+                {
+                    _ProgramaticallyFiredChange++;
+                    MentionsPicker.SelectedIndex = (int)User.Preferences.MentionsPreferences;
+                }
+                if (MessagesPicker.SelectedIndex != (int)User.Preferences.MessagesPreferences)
+                {
+                    _ProgramaticallyFiredChange++;
+                    MessagesPicker.SelectedIndex = (int)User.Preferences.MessagesPreferences;
+                }
             }
         }
 
@@ -115,7 +122,7 @@ namespace Ocell.Settings
         void Default_Loaded(object sender, RoutedEventArgs e)
         {
             BindAccounts();
-            Accounts_Not.SelectedIndex = 0;
+            //Accounts_Not.SelectedIndex = 0;
         }
 
         private void BindAccounts()
@@ -124,7 +131,7 @@ namespace Ocell.Settings
             {
                 Users.DataContext = Config.Accounts;
                 Users.ItemsSource = Config.Accounts;
-
+                
                 Accounts_Not.DataContext = Config.Accounts;
                 Accounts_Not.ItemsSource = Config.Accounts;
             }

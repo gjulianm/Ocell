@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.IO.IsolatedStorage;
 using System.Text;
 using Microsoft.Phone.Scheduler;
+using Microsoft.Phone.Shell;
 
 namespace Ocell.Library
 {
@@ -43,6 +44,7 @@ namespace Ocell.Library
             DateTime Date;
 
             File.Read(bytes, 0, (int)File.Length);
+            File.Close();
             DateStr = new string(Encoding.GetChars(bytes));
 
             if (!DateTime.TryParse(DateStr, out Date))
@@ -51,7 +53,7 @@ namespace Ocell.Library
             return Date;
         }
 
-        public static  void StartPeriodicAgent()
+        public static void StartPeriodicAgent()
         {
             string periodicTaskName = "OcellPeriodicTask";
             var periodicTask = ScheduledActionService.Find(periodicTaskName) as PeriodicTask;
@@ -64,9 +66,12 @@ namespace Ocell.Library
             periodicTask = new PeriodicTask(periodicTaskName);
             periodicTask.Description = "Retrieve tweets for the first user.";
 
+            
+
             try
             {
                 ScheduledActionService.Add(periodicTask);
+                ScheduledActionService.LaunchForTest(periodicTaskName, TimeSpan.FromSeconds(100));
             }
             catch (Exception)
             {

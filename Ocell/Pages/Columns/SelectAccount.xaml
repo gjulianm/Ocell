@@ -11,7 +11,9 @@
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
 	Orientation="Portrait"
-	shell:SystemTray.IsVisible="True">
+	shell:SystemTray.IsVisible="True"
+	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    >
 
 	<!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
 	<Grid x:Name="LayoutRoot" Background="Transparent">
@@ -29,7 +31,7 @@
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 		<Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
 			<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Select one account"/><Run Text=":"/></TextBlock>
-			<ListBox x:Name="AccountsList" Margin="8,55,8,8" ItemTemplate="{StaticResource AccountsTemplate}"/>
+			<ListBox x:Name="AccountsList" Margin="8,55,8,8" ItemTemplate="{StaticResource AccountsTemplate}" toolkit:TiltEffect.IsTiltEnabled="True"/>
 		</Grid>
 	</Grid>
 </phone:PhoneApplicationPage>

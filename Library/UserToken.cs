@@ -19,7 +19,8 @@ namespace Ocell.Library
         public string ScreenName { get; set; }
         public int? Id { get; set; }
         public string AvatarUrl { get; set; }
-
+        public NotificationPreferences Preferences;
+        
         public void FillUserData()
         {
             if (!(string.IsNullOrWhiteSpace(ScreenName) || string.IsNullOrWhiteSpace(AvatarUrl) || Id == null))

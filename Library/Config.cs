@@ -17,7 +17,10 @@ using System.IO.IsolatedStorage;
 namespace Ocell.Library
 {
     public static class Config
-    {
+    {    
+    	private static readonly string AccountsKey = "ACCOUNTS";
+    	private static readonly string ColumnsKey ="COLUMNS";
+    	
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
 
@@ -25,36 +28,11 @@ namespace Ocell.Library
         {
             get
             {
-                if (_accounts != null)
-                    return _accounts;
-
-                IsolatedStorageSettings conf = IsolatedStorageSettings.ApplicationSettings;
-
-                if (!conf.TryGetValue<List<UserToken>>("ACCOUNTS", out _accounts))
-                {
-                    _accounts = new List<UserToken>();
-                    conf.Add("ACCOUNTS", _accounts);
-                    conf.Save();
-                }
-
-                if (_accounts == null)
-                    _accounts = new List<UserToken>();
-
-                return _accounts;
+                return GenericGetFromConfig<List<UserToken>>(AccountsKey, ref _accounts);
             }
             set
             {
-                if (value == null)
-                    return;
-                
-                IsolatedStorageSettings conf = IsolatedStorageSettings.ApplicationSettings;
-                
-                _accounts = value;
-                if (conf.Contains("ACCOUNTS"))
-                    conf["ACCOUNTS"] = value;
-                else
-                    conf.Add("ACCOUNTS", value);
-                conf.Save();
+                GenericSaveToConfig< List<UserToken>>(AccountsKey, ref _accounts, value);
             }
         }
 
@@ -62,38 +40,55 @@ namespace Ocell.Library
         {
             get
             {
-                IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
-
-                if (!config.TryGetValue<ObservableCollection<TwitterResource>>("COLUMNS", out _columns))
-                {
-                    _columns = new ObservableCollection<TwitterResource>();
-                    config.Add("COLUMNS", _columns);
-                    config.Save();
-                }
-
-                if (_columns == null)
-                    _columns = new ObservableCollection<TwitterResource>();
-
-                return _columns;
+            	return GenericGetFromConfig<ObservableCollection<TwitterResource>>(ColumnsKey, ref _columns);
             }
             set
             {
-                IsolatedStorageSettings conf = IsolatedStorageSettings.ApplicationSettings;
-
-                try
-                {
-                    _columns = value;
-                    if (conf.Contains("COLUMNS"))
-                        conf["COLUMNS"] = value;
-                    else
-                        conf.Add("COLUMNS", value);
-                    conf.Save();
-                }
-                catch (Exception)
-                {
-                }
+                
+    			GenericSaveToConfig<ObservableCollection<TwitterResource>>(ColumnsKey, ref _columns, value);
             }
         }
+        
+        private static T GenericGetFromConfig<T>(string Key, ref T element) where T: new()
+        {
+        	if(element != null)
+				return element;
+		
+			IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
+
+			if (!config.TryGetValue<T>(Key, out element))
+			{
+				element = new T();
+				config.Add(Key, element);
+				config.Save();
+			}
+
+			if (element == null)
+				element = new T();
+
+			return element;
+        }
+
+        private static void GenericSaveToConfig<T>(string Key, ref T element, T value) where T : new()
+		{
+			if(value == null)
+				return;
+		
+			IsolatedStorageSettings conf = IsolatedStorageSettings.ApplicationSettings;
+
+			try
+			{
+				element = value;
+				if (conf.Contains(Key))
+					conf[Key] = value;
+				else
+					conf.Add(Key, value);
+				conf.Save();
+			}
+			catch (Exception)
+			{
+			}
+		}
 
         public static void SaveAccounts()
         {

@@ -160,10 +160,16 @@ namespace Ocell.Settings
             }
 
             var collection = HttpUtility.ParseQueryString(response.Content);
-            
-            UserToken Token = new UserToken {
+
+            UserToken Token = new UserToken
+            {
                 Key = collection["oauth_token"],
-                Secret = collection["oauth_token_secret"]
+                Secret = collection["oauth_token_secret"],
+                Preferences = new NotificationPreferences
+                {
+                    MentionsPreferences = NotificationType.None,
+                    MessagesPreferences = NotificationType.None
+                }
             };
 
             Token.UserDataFilled += new UserToken.OnUserDataFilled(InsertTokenIntoAccounts);

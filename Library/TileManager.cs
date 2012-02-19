@@ -25,25 +25,28 @@ namespace Ocell.Library
             if (Statuses != null)
                 count += Statuses.Count();
             if (Messages != null)
-                count += Statuses.Count();
+                count += Messages.Count();
 
             if (Statuses == null || Statuses.Count() == 0)
                 StatusesStr = "";
             else if (Statuses.Count() == 1)
-                StatusesStr = "@" + Statuses.First().Author.ScreenName + " mentioned you";
+                StatusesStr = Statuses.First().Author.ScreenName + " mentioned you";
             else
                 StatusesStr = Statuses.Count().ToString() + " new mentions";
 
             if (Messages == null || Messages.Count() == 0)
                 MessagesStr = "";
             else if (Messages.Count() == 1)
-                MessagesStr = "@" + Messages.First().Author.ScreenName + " mentioned you";
+                MessagesStr = Messages.First().Author.ScreenName + " mentioned you";
             else
                 MessagesStr = Messages.Count().ToString() + " new mentions";
 
+            if (StatusesStr.Length > 0 && MessagesStr.Length > 0)
+                StatusesStr += Environment.NewLine;
+
             StandardTileData TileData = new StandardTileData
             {
-                BackContent = StatusesStr + Environment.NewLine + MessagesStr,
+                BackContent = StatusesStr + MessagesStr,
                 Count = count,
             };
 
