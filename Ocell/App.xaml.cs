@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Ocell.Library;
 
 
 namespace Ocell

@@ -20,9 +20,11 @@ namespace Ocell.Library
     {    
     	private static readonly string AccountsKey = "ACCOUNTS";
     	private static readonly string ColumnsKey ="COLUMNS";
+        private static readonly string FollowMsg = "FOLLOWMSG";
     	
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
+        private static bool? _FollowMessageShown;
 
         public static List<UserToken> Accounts
         {
@@ -56,17 +58,40 @@ namespace Ocell.Library
 		
 			IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
 
-			if (!config.TryGetValue<T>(Key, out element))
-			{
-				element = new T();
-				config.Add(Key, element);
-				config.Save();
-			}
+            try
+            {
+                if (!config.TryGetValue<T>(Key, out element))
+                {
+                    element = new T();
+                    config.Add(Key, element);
+                    config.Save();
+                }
+            }
+            catch (InvalidCastException)
+            {
+                config.Remove(Key);
+            }
+            catch (Exception)
+            {
+            }
 
 			if (element == null)
 				element = new T();
 
 			return element;
+        }
+
+        public static bool? FollowMessageShown
+        {
+            get
+            {
+                return GenericGetFromConfig<bool?>(FollowMsg, ref _FollowMessageShown);
+            }
+            set
+            {
+                GenericSaveToConfig<bool?>(FollowMsg, ref _FollowMessageShown, value);
+            }
+
         }
 
         private static void GenericSaveToConfig<T>(string Key, ref T element, T value) where T : new()

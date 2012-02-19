@@ -30,6 +30,7 @@ namespace Ocell
 
             this.Loaded += new RoutedEventHandler(SetUpPivots);
             this.Loaded += new RoutedEventHandler(CreateTile);
+            this.Loaded += new RoutedEventHandler(ShowFollowMessage);
             
             pivots.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(pivots_CollectionChanged);
             MainPivot.SelectionChanged += new SelectionChangedEventHandler(LoadTweetsOnPivot);
@@ -39,9 +40,27 @@ namespace Ocell
             MainPivot.ItemsSource = pivots;
         }
 
+        void ShowFollowMessage(object sender, RoutedEventArgs e)
+        {
+            if (Config.FollowMessageShown == false)
+            {
+                Dispatcher.BeginInvoke(() =>
+                    {
+                        MessageBoxResult Result = MessageBox.Show("Do you want to follow @OcellApp on Twitter to receive the lastest updates?", "", MessageBoxButton.OKCancel);
+                        if (Result == MessageBoxResult.OK)
+                            ServiceDispatcher.GetDefaultService().FollowUser("OcellApp", DummyReceiveFollow);
+                    });
+                Config.FollowMessageShown = true;
+            }
+        }
+
+        void DummyReceiveFollow(TwitterUser User, TwitterResponse Response)
+        {
+        }
+
         void CreateTile(object sender, RoutedEventArgs e)
         {
-            SchedulerSync.WriteLastCheckDate(DateTime.Now.AddHours(-1));
+            SchedulerSync.WriteLastCheckDate(DateTime.Now.ToUniversalTime());
             SchedulerSync.StartPeriodicAgent();
             TileManager.UpdateTile(null, null); // Updating with null means it will clear the tile.
         }       

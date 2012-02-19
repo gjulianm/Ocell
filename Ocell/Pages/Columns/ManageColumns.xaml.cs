@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Phone.Controls;
+using Ocell.Library;
 
 namespace Ocell.AuxScreens
 {

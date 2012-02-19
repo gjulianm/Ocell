@@ -48,7 +48,7 @@ namespace Ocell.Library
             DateStr = new string(Encoding.GetChars(bytes));
 
             if (!DateTime.TryParse(DateStr, out Date))
-                Date = DateTime.Now;
+                Date = DateTime.Now.ToUniversalTime();
 
             return Date;
         }

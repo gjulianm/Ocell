@@ -46,7 +46,7 @@ namespace Ocell.Library
                 return true;
 
             AverageTimeBetweenTweets = GetAvgTimeBetweenTweets(ref List);
-            CurrentDifference = DateTime.Now - List.First().CreatedDate;
+            CurrentDifference = DateTime.Now.ToUniversalTime() - List.First().CreatedDate;
 
             return (int)CurrentDifference.TotalSeconds < MaxTimesDifference * AverageTimeBetweenTweets;
  
