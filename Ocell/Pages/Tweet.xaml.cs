@@ -7,6 +7,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Tasks;
 using TweetSharp;
 using Ocell.Library;
+using System.Linq;
 
 
 namespace Ocell.SPpages
@@ -24,7 +25,7 @@ namespace Ocell.SPpages
 
         void Tweet_Loaded(object sender, RoutedEventArgs e)
         {
-            RemoveHTML conv = new RemoveHTML();
+            
             if (DataTransfer.Status == null)
             {
                 Dispatcher.BeginInvoke(() => MessageBox.Show("Error loading the tweet. Sorry :("));
@@ -32,66 +33,165 @@ namespace Ocell.SPpages
                 return;
             }
 
-            status = DataTransfer.Status;
+            if(DataTransfer.Status.RetweetedStatus != null)
+                status = DataTransfer.Status.RetweetedStatus;
+            else
+                status = DataTransfer.Status;
 
-            RelativeDateTimeConverter dc = new RelativeDateTimeConverter();
+            SetBindings();
+            CreateText(status);
+            AdjustMargins();
+            SetVisibilityOfRepliesAndImages();
+            SetUsername();
 
-            var paragraph = new Paragraph();
-            var runs = new List<Inline>();
+            ContentPanel.UpdateLayout();
+        }
 
-            Text.Blocks.Clear();
-
-            foreach (var word in status.Text.Split(' '))
-            {
-                Uri uri;
-
-                if (string.IsNullOrWhiteSpace(word))
-                    continue;
-
-                if (Uri.TryCreate(word, UriKind.Absolute, out uri) ||
-                   (word.StartsWith("www.") && Uri.TryCreate("http://" + word, UriKind.Absolute, out uri)) ||
-                    word[0]=='#' || word[0] == '@')
-                {
-                    var link = new Hyperlink();
-                    link.Inlines.Add(new Run() { Text = word });  
-                    link.FontWeight = FontWeights.Bold;
-                    link.TextDecorations = null;
-                    link.TargetName = word;
-                    link.Click += new RoutedEventHandler(link_Click);
-
-                    runs.Add(link);
-                }
-                else
-                {
-                    runs.Add(new Run() { Text = word });
-                }
-
-                runs.Add(new Run() { Text = " " });
-            }
-
-            foreach (var run in runs)
-                paragraph.Inlines.Add(run);
-            
-            Text.Blocks.Add(paragraph);
-
-            Text.UpdateLayout();
-
+        private void SetBindings()
+        {
             ContentPanel.DataContext = status;
+            ImagesList.DataContext = status.Entities.Media;
+            ImagesList.ItemsSource = status.Entities.Media.Where(item => item.MediaType == TwitterMediaType.Photo);
+        }
+
+        private void SetUsername()
+        {
+            string RTByText = "";
+            if (DataTransfer.Status.RetweetedStatus != null)
+                RTByText = " (RT by @" + DataTransfer.Status.Author.ScreenName + ")";
+
+            SName.Text = "@" + status.Author.ScreenName + RTByText;
+        }
+
+        private void SetVisibilityOfRepliesAndImages()
+        {
+            if (status.InReplyToStatusId != null)
+                Replies.Visibility = Visibility.Visible;
+
+            if (status.Entities.Media.Count != 0)
+                ImagesText.Visibility = Visibility.Visible;
+        }
+
+        private void AdjustMargins()
+        {
+            RemoveHTML conv = new RemoveHTML();
+            RelativeDateTimeConverter dc = new RelativeDateTimeConverter();
 
             ViaDate.Margin = new Thickness(ViaDate.Margin.Left, Text.ActualHeight + Text.Margin.Top + 10,
                 ViaDate.Margin.Right, ViaDate.Margin.Bottom);
             ViaDate.Text = (string)dc.Convert(status.CreatedDate, null, null, null) + " via " +
                 conv.Convert(status.Source, null, null, null);
 
-
             Replies.Margin = new Thickness(Replies.Margin.Left, ViaDate.Margin.Top + 30,
                 Replies.Margin.Right, Replies.Margin.Bottom);
+        }
 
-            if (status.InReplyToStatusId != null)
-                Replies.Visibility = Visibility.Visible;
+        private void CreateText(ITweetable Status)
+        {
+            var paragraph = new Paragraph();
+            var runs = new List<Inline>();
 
-            SName.Text = "@" + status.Author.ScreenName;
-            ContentPanel.UpdateLayout();
+            Text.Blocks.Clear();
+
+            string TweetText = Status.Text;
+            string PreviousText;
+            int i = 0;
+
+            foreach (var Entity in status.Entities)
+            {
+                if (Entity.StartIndex > i)
+                {
+                    PreviousText = TweetText.Substring(i, Entity.StartIndex - i);
+                    runs.Add(new Run { Text = HttpUtility.HtmlDecode(PreviousText) });
+                }
+
+                i = Entity.EndIndex;
+
+                switch (Entity.EntityType)
+                {
+                    case TwitterEntityType.HashTag:
+                        runs.Add(CreateHashtagLink((TwitterHashTag)Entity));
+                        break;
+
+                    case TwitterEntityType.Mention:
+                        runs.Add(CreateMentionLink((TwitterMention)Entity));
+                        break;
+
+                    case TwitterEntityType.Url:
+                        runs.Add(CreateUrlLink((TwitterUrl)Entity));
+                        break;
+                    case TwitterEntityType.Media:
+                        runs.Add(CreateMediaLink((TwitterMedia)Entity));
+                        break;
+                }
+            }
+
+            if (i < TweetText.Length)
+                runs.Add(new Run{
+                    Text = HttpUtility.HtmlDecode(TweetText.Substring(i))
+                });
+
+            foreach (var run in runs)
+                paragraph.Inlines.Add(run);
+
+            Text.Blocks.Add(paragraph);
+
+            Text.UpdateLayout();
+        }
+
+        Inline CreateHashtagLink(TwitterHashTag Hashtag)
+        {
+            var link = new Hyperlink();
+            link.Inlines.Add(new Run() { Text = "#" + Hashtag.Text });
+            link.FontWeight = FontWeights.Bold;
+            link.TextDecorations = null;
+            link.TargetName = "#" + Hashtag.Text;
+            link.Click += new RoutedEventHandler(link_Click);
+
+            return link;
+        }
+
+        Inline CreateMentionLink(TwitterMention Mention)
+        {
+            var link = new Hyperlink();
+            link.Inlines.Add(new Run() { Text = "@" + Mention.ScreenName });
+            link.FontWeight = FontWeights.Bold;
+            link.TextDecorations = null;
+            link.TargetName = "@" + Mention.ScreenName;
+            link.Click += new RoutedEventHandler(link_Click);
+
+            return link;
+        }
+
+        Inline CreateUrlLink(TwitterUrl URL)
+        {
+            var link = new Hyperlink();
+            link.Inlines.Add(new Run() { Text = TweetTextConverter.TrimUrl(URL.Value) });
+            link.FontWeight = FontWeights.Bold;
+            link.TextDecorations = null;
+            link.TargetName = URL.ExpandedValue;
+            link.Click += new RoutedEventHandler(link_Click);
+
+            return link;
+        }
+
+        Inline CreateMediaLink(TwitterMedia Media)
+        {
+            var link = new Hyperlink();
+            link.Inlines.Add(new Run() { Text = Media.DisplayUrl });
+            link.FontWeight = FontWeights.Bold;
+            link.TextDecorations = null;
+            link.TargetName = Media.ExpandedUrl;
+            link.Click += new RoutedEventHandler(link_Click);
+
+            return link;
+        }
+
+        private void ImageClick(object sender, EventArgs e)
+        {
+            System.Windows.Controls.Image Img = sender as System.Windows.Controls.Image;
+            if(Img != null)
+                NavigationService.Navigate(new Uri("/Pages/ImageView.xaml?img=" + Img.Tag.ToString(), UriKind.Relative));
         }
 
         void link_Click(object sender, RoutedEventArgs e)

@@ -72,7 +72,7 @@ namespace Ocell.Library
                 int ColonIndex = value.IndexOf(':');
                 ColonIndex = Math.Min(ColonIndex + 1, value.Length);
                 
-                if (ColonIndex == -1)
+                if (ColonIndex == 0)
                 {
                     if (value == "Favorites")
                         Type = ResourceType.Favorites;

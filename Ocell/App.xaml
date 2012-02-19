@@ -21,6 +21,11 @@
         <commands:ReplyAllCommand x:Key="ReplyAllCommand"/>
         <commands:ReplyCommand x:Key="ReplyCommand"/>
         <commands:RetweetCommand x:Key="RetweetCommand"/>
+		<local:TweetTextConverter x:Key="TweetTextConverter"/>
+		<local:SizeConverter x:Key="SizeConverter"/>
+        <local:AvatarConverter x:Key="AvatarConverter"/>
+        <local:ScreenNameConverter x:Key="ScreenNameConverter"/>
+        <local:MarginConverter x:Key="MarginConverter"/>
 
             <DataTemplate x:Key="TweetTemplate">
             <Grid Width="456" Margin="0,3,0,12" Tag="{Binding Id}" VerticalAlignment="Top">
@@ -29,9 +34,10 @@
                     <ColumnDefinition Width="0.389*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="Date" Text="{Binding CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}" VerticalAlignment="Top" Margin="0,5.753,8,0" Foreground="#FF707070" Grid.Column="1" HorizontalAlignment="Right" UseLayoutRounding="False" FontFamily="Segoe WP Light"/>
-                <Image x:Name="Avatar" Source="{Binding Author.ProfileImageUrl, FallbackValue='/Images/BirdGray.png'}" HorizontalAlignment="Left" Width="64" Margin="8,14" d:LayoutOverrides="HorizontalAlignment, Height" Height="64" UseLayoutRounding="False" VerticalAlignment="Top"/>
-                <TextBlock x:Name="Text" Text="{Binding Text}" Margin="86,32.356,8,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Grid.ColumnSpan="2" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight"/>
-                <TextBlock x:Name="Name" Margin="86,0,0,0" TextWrapping="Wrap" Text="{Binding Author.ScreenName}" VerticalAlignment="Top" FontSize="24" UseLayoutRounding="False" HorizontalAlignment="Left" Width="258"/>
+                <Image x:Name="Avatar" Source="{Binding Converter={StaticResource AvatarConverter}, ConverterParameter=false}" HorizontalAlignment="Left" Width="{Binding Converter={StaticResource SizeConverter}}" Margin="{Binding Converter={StaticResource MarginConverter}}" d:LayoutOverrides="HorizontalAlignment, Height" Height="{Binding Converter={StaticResource SizeConverter}}" UseLayoutRounding="False" VerticalAlignment="Top"/>
+                <Image x:Name="RetweetedAvatar" Source="{Binding Converter={StaticResource AvatarConverter}, ConverterParameter=true}" HorizontalAlignment="Left" Width="30" Margin="8,54,0,0" d:LayoutOverrides="HorizontalAlignment, Height" Height="30" UseLayoutRounding="False" VerticalAlignment="Top"/>
+				<TextBlock x:Name="Text" Text="{Binding Converter={StaticResource TweetTextConverter}}" Margin="86,32.356,8,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Grid.ColumnSpan="2" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight"/>
+                <TextBlock x:Name="Name" Margin="86,0,0,0" TextWrapping="Wrap" Text="{Binding Converter={StaticResource ScreenNameConverter}}" VerticalAlignment="Top" FontSize="24" UseLayoutRounding="False" HorizontalAlignment="Left" Width="258"/>
                 <toolkit:ContextMenuService.ContextMenu>
                     <toolkit:ContextMenu Name="ContextMenu">
                         <toolkit:MenuItem Header="reply" Command="{StaticResource ReplyCommand}" CommandParameter="{Binding}" />

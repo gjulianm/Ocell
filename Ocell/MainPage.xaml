@@ -37,7 +37,6 @@
     </toolkit:TransitionService.NavigationOutTransition>
 
     <phone:PhoneApplicationPage.Resources>
-        <local:ResourceToString x:Key="ResourceToString" />
         
         
     </phone:PhoneApplicationPage.Resources>

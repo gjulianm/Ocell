@@ -55,8 +55,7 @@ namespace Ocell.AuxScreens
 
         private void SaveColumn(TwitterResource Resource)
         {
-            TwitterResourceCompare Comp = new TwitterResourceCompare();
-            if (!Config.Columns.Contains(Resource, Comp))
+            if (!Config.Columns.Contains(Resource))
             {
                 Config.Columns.Add(Resource);
                 Config.SaveColumns();

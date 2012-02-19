@@ -37,7 +37,6 @@
 	    </toolkit:NavigationOutTransition>
 	</toolkit:TransitionService.NavigationOutTransition>
 	<phone:PhoneApplicationPage.Resources>
-        <local:ResourceToString x:Key="ResourceToString"/>
 		<DataTemplate x:Key="ItemTemplate">
 			<Grid Height="40" Width="450">
                 <TextBlock Text="{Binding String, Converter={StaticResource ToColumnConverter}}" FontSize="26.667" HorizontalAlignment="Left" Margin="0,0,0,5" d:LayoutOverrides="Height"/>

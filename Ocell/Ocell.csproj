@@ -92,12 +92,20 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Config.cs" />
+    <Compile Include="Helpers\ValueConverters\AvatarImageManager.cs" />
     <Compile Include="Helpers\ValueConverters\FirstToUpper.cs" />
     <Compile Include="Helpers\ValueConverters\ListConverter.cs" />
     <Compile Include="Helpers\ValueConverters\RelativeDateTimeConverter.cs" />
     <Compile Include="Helpers\ValueConverters\ToColumn.cs" />
+    <Compile Include="Helpers\ValueConverters\TweetTextConverter.cs" />
     <Compile Include="Pages\Columns\SelectAccount.xaml.cs">
       <DependentUpon>SelectAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ImageView.xaml.cs">
+      <DependentUpon>ImageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SampleData\SampleDataSource1\SampleDataSource1.xaml.cs">
+      <DependentUpon>SampleDataSource1.xaml</DependentUpon>
     </Compile>
     <Compile Include="SampleData\SampleDataSource\SampleDataSource.xaml.cs">
       <DependentUpon>SampleDataSource.xaml</DependentUpon>
@@ -169,6 +177,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\ImageView.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\NewTweet.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -197,6 +209,10 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SampleData\SampleDataSource1\SampleDataSource1.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SampleData\SampleDataSource\SampleDataSource.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
@@ -207,6 +223,7 @@
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />
     <DesignTimeOnly Include="SampleData\SampleDataSource\SampleDataSource.xsd" />
+    <DesignTimeOnly Include="SampleData\SampleDataSource1\SampleDataSource1.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\ApplicationIcon.png">
@@ -219,6 +236,11 @@
     <Content Include="Assemblies\Hammock.WindowsPhone.dll" />
     <Content Include="Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll" />
     <Content Include="Assemblies\Newtonsoft.Json.dll" />
+    <Resource Include="SampleData\SampleDataSource1\SampleDataSource1_Files\image01.png" />
+    <Resource Include="SampleData\SampleDataSource1\SampleDataSource1_Files\image02.png" />
+    <Resource Include="SampleData\SampleDataSource1\SampleDataSource1_Files\image03.png" />
+    <Resource Include="SampleData\SampleDataSource1\SampleDataSource1_Files\image04.png" />
+    <Resource Include="SampleData\SampleDataSource1\SampleDataSource1_Files\image05.png" />
     <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\image01.png" />
     <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\image02.png" />
     <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\image03.png" />
