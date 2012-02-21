@@ -183,7 +183,10 @@ namespace Ocell
         void Loader_Error(TwitterResponse response)
         {
             Dispatcher.BeginInvoke(() => {
-                MessageBox.Show("Error loading tweets: " + response.StatusDescription);
+                if (response.RateLimitStatus.RemainingHits == 0)
+                    MessageBox.Show("Woops! You have spent the limit of calls to Twitter. You'll have to wait until " + response.RateLimitStatus.ResetTime.ToString("H:mm"));
+                else
+                    MessageBox.Show("Error loading tweets: " + response.StatusDescription);
                 pBar.IsVisible = false;
             });
         }

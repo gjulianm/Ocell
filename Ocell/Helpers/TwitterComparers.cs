@@ -8,14 +8,18 @@ namespace Ocell
     {
         public bool Equals(ITweetable s1, ITweetable s2)
         {
-            if (s1.Id == s2.Id)
-                return true;
-            return false;
+            if (s1 == null || s2 == null)
+                return false;
+
+            return (s1.Id == s2.Id);
         }
 
         public int GetHashCode(ITweetable s)
         {
-            return s.Id.GetHashCode();
+            if (s != null)
+                return s.Id.GetHashCode();
+            else
+                return 0;
         }
     }
 

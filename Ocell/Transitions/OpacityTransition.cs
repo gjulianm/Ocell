@@ -89,4 +89,26 @@ namespace Ocell.Transitions
         }
         #endregion
     }
+
+    public class OpacityTransitionElement : TransitionElement
+    {
+        public override ITransition GetTransition(UIElement element)
+        {
+            Storyboard myStoryboard = CreateStoryboard(0.0, 1.0);
+            Storyboard.SetTarget(myStoryboard, element);
+            return new OpacityTransition(myStoryboard);
+        }
+
+        private Storyboard CreateStoryboard(double from, double to)
+        {
+            Storyboard result = new Storyboard();
+            DoubleAnimation animation = new DoubleAnimation();
+            animation.From = from;
+            animation.To = to;
+            animation.Duration = new Duration(TimeSpan.FromMilliseconds(250));
+            Storyboard.SetTargetProperty(animation, new PropertyPath(UIElement.OpacityProperty));
+            result.Children.Add(animation);
+            return result;
+        }
+    }
 }

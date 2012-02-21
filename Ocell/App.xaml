@@ -10,6 +10,9 @@
     mc:Ignorable="d"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+    xmlns:tr="clr-namespace:Ocell.Transitions"
+    xmlns:delay="clr-namespace:Delay;assembly=PhonePerformance"
     >
 
     <!--Recursos de la aplicación-->
@@ -28,7 +31,8 @@
         <local:MarginConverter x:Key="MarginConverter"/>
 
             <DataTemplate x:Key="TweetTemplate">
-            <Grid Width="456" Margin="0,3,0,12" Tag="{Binding Id}" VerticalAlignment="Top">
+            <Grid Width="456" Margin="0,3,0,12" Tag="{Binding Id}" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache">
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.611*"/>
                     <ColumnDefinition Width="0.389*"/>
@@ -48,8 +52,10 @@
                 </toolkit:ContextMenuService.ContextMenu>
             </Grid>
         </DataTemplate>
-		
-		<DataTemplate x:Key="AccountsTemplate">
+
+        
+
+        <DataTemplate x:Key="AccountsTemplate">
 			<Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">
 				<TextBlock Text="{Binding ScreenName}" Margin="89,21,8,21" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="24"/>
 				<Image Margin="8,8,0,0" HorizontalAlignment="Left" Width="64" Height="64" VerticalAlignment="Top" Source="{Binding AvatarUrl}"/>

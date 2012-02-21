@@ -37,7 +37,11 @@ namespace Ocell.Library
         {
             int AverageTimeBetweenTweets;
             TimeSpan CurrentDifference;
-            int MaxTimesDifference = 3;
+            /*
+             * Supposing we get ~20 tweets per time, this is an acceptable value
+             *  so the user does not lose too much tweets.
+             */
+            int MaxTimesDifference = 20;
 
             if(List == null || List.Count() == 0)
                 return false;

@@ -13,7 +13,7 @@ using System.Text;
 using Microsoft.Phone.Scheduler;
 using Microsoft.Phone.Shell;
 
-namespace Ocell.Library
+namespace Ocell
 {
     public static class SchedulerSync
     {
@@ -66,12 +66,9 @@ namespace Ocell.Library
             periodicTask = new PeriodicTask(periodicTaskName);
             periodicTask.Description = "Retrieve tweets for the first user.";
 
-            
-
             try
             {
                 ScheduledActionService.Add(periodicTask);
-                ScheduledActionService.LaunchForTest(periodicTaskName, TimeSpan.FromSeconds(100));
             }
             catch (Exception)
             {

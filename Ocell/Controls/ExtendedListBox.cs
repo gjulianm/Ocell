@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using TweetSharp;
 using Ocell.Library;
+using TweetSharp;
 
 namespace Ocell.Controls
 {
     public class ExtendedListBox : ListBox
     {
         // Compression states: Thanks to http://blogs.msdn.com/b/slmperf/archive/2011/06/30/windows-phone-mango-change-listbox-how-to-detect-compression-end-of-scroll-states.aspx
-        
+
         protected bool _isBouncy = false;
         protected bool bound = false;
         private bool alreadyHookedScrollEvents = false;
         public TweetLoader Loader;
+        protected ObservableCollection<ITweetable> _Items;
 
         public ExtendedListBox()
         {
@@ -29,30 +32,51 @@ namespace Ocell.Controls
             Loader.LoadFinished += new TweetLoader.OnLoadFinished(PopulateItemsSource);
             Loader.PartialLoad += new TweetLoader.OnPartialLoad(PopulateItemsSource);
             Loader.CacheLoad += new TweetLoader.OnCacheLoad(PopulateItemsSource);
+            _Items = new ObservableCollection<ITweetable>();
+            ItemsSource = _Items;
         }
 
         void ExtendedListBox_Unloaded(object sender, RoutedEventArgs e)
         {
             Loader.SaveToCache();
+            _Items.Clear();
         }
-        
+
+        private void UnsafePopulateItemsSource()
+        {
+            TweetEqualityComparer Comparer = new TweetEqualityComparer();
+            int loaded = 0;
+
+            foreach (var item in Loader.Source)
+            {
+                if (!_Items.Contains(item, Comparer))
+                {
+                    if (_Items.Count == 0 || _Items[0].CreatedDate > item.CreatedDate)
+                        _Items.Add(item);
+                    else
+                        _Items.Insert(0, item);
+                    loaded++;
+                }
+                if (loaded >= 2)
+                {
+                    Thread.Sleep(10);
+                    loaded = 0;
+                }
+            }
+            
+        }
+
         protected void PopulateItemsSource()
         {
             Dispatcher.BeginInvoke(() =>
             {
-                TweetEqualityComparer Comparer = new TweetEqualityComparer();
-
-                ObservableCollection<ITweetable> source = ItemsSource as ObservableCollection<ITweetable>;
-                ObservableCollection<ITweetable> newSource = new ObservableCollection<ITweetable>(Loader.Source); 
-                
-                if (source != null)
+                try
                 {
-                    foreach (var item in source)
-                        if (!newSource.Contains(item, Comparer))
-                            newSource.Add(item);
+                    UnsafePopulateItemsSource();
                 }
-
-                this.ItemsSource = newSource.OrderByDescending(item => item.Id);
+                catch (Exception)
+                {
+                }
             });
         }
 
@@ -131,7 +155,7 @@ namespace Ocell.Controls
             else if (e.NewState.Name == "CompressionBottom")
             {
                 _isBouncy = true;
-                if(Compression!=null)
+                if (Compression != null)
                     Compression(this, new CompressionEventArgs(CompressionType.Bottom));
             }
             else if (e.NewState.Name == "NoVerticalCompression")

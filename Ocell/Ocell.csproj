@@ -68,6 +68,9 @@
       <HintPath>..\packages\WindowsPhoneEssentials.Testing.0.7.2.88\lib\SL4-WindowsPhone71\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.3.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
+    <Reference Include="PhonePerformance">
+      <HintPath>Assemblies\PhonePerformance.dll</HintPath>
+    </Reference>
     <Reference Include="SilverlightSerializer.WP7">
       <HintPath>..\packages\WindowsPhoneEssentials.0.7.2.88\lib\SL4-WindowsPhone71\SilverlightSerializer.WP7.dll</HintPath>
     </Reference>
@@ -103,6 +106,8 @@
     <Compile Include="Pages\ImageView.xaml.cs">
       <DependentUpon>ImageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SchedulerSync.cs" />
+    <Compile Include="Transitions\Behaviours.cs" />
     <Compile Include="Transitions\OpacityTransition.cs" />
     <Compile Include="TweetLoader\TweetLoader.cs" />
     <Compile Include="Controls\ExtendedListBox.cs" />

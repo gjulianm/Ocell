@@ -16,7 +16,10 @@ namespace Ocell
     {
         public static string TrimUrl(string url)
         {
+            if (url == null)
+                return "";
             url = url.Replace("http://", "");
+            url = url.Replace("https://", "");
             if (url.Length > 25)
             {
                 int SlashIndex = url.IndexOf('/');

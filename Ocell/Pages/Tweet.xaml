@@ -93,7 +93,7 @@
         	<Grid Height="99" Margin="8,0,116,0" VerticalAlignment="Top" Tap="Grid_Tap" toolkit:TiltEffect.IsTiltEnabled="True">
         		<Image x:Name="Avatar" HorizontalAlignment="Left" Margin="0,8,0,0" Width="85" RenderTransformOrigin="0.475,0.52" Source="{Binding Author.ProfileImageUrl}"/>
         		<TextBlock x:Name="FName" Margin="94,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" FontSize="32" HorizontalAlignment="Left" Text="{Binding Author.Name}" Width="238"/>
-        		<TextBlock x:Name="SName" Margin="94,42,0,17" TextWrapping="Wrap" HorizontalAlignment="Left" Text="" FontSize="21.333" FontFamily="Segoe WP SemiLight"/>
+        		<TextBlock x:Name="SName" Margin="94,42,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" Text="" FontSize="21.333" FontFamily="Segoe WP SemiLight"/>
         	</Grid>
         	<TextBlock x:Name="ViaDate" HorizontalAlignment="Right" Margin="0,426,16,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="18.667" Foreground="#FFABABAB" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP Light"/>
         	<RichTextBox x:Name="Text" TextWrapping="Wrap" HorizontalAlignment="Left" Width="440" FontSize="29.333" VerticalAlignment="Top" Margin="1,110,0,0" IsReadOnly="True" FontFamily="Segoe WP SemiLight" />

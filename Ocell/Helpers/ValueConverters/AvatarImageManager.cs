@@ -63,7 +63,12 @@ namespace Ocell
                 return "";
 
             if (!(value is TwitterStatus))
-                return ((ITweetable)value).Author.ProfileImageUrl;
+            {
+                if ((string)parameter == "false")
+                    return ((ITweetable)value).Author.ProfileImageUrl;
+                else
+                    return "";
+            }
 
             TwitterStatus Status = value as TwitterStatus;
 

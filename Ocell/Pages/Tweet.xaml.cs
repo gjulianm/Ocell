@@ -166,7 +166,7 @@ namespace Ocell.SPpages
         Inline CreateUrlLink(TwitterUrl URL)
         {
             var link = new Hyperlink();
-            link.Inlines.Add(new Run() { Text = TweetTextConverter.TrimUrl(URL.Value) });
+            link.Inlines.Add(new Run() { Text = TweetTextConverter.TrimUrl(URL.ExpandedValue) });
             link.FontWeight = FontWeights.Bold;
             link.TextDecorations = null;
             link.TargetName = URL.ExpandedValue;
