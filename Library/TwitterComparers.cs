@@ -2,7 +2,7 @@
 using TweetSharp;
 using Ocell.Library;
 
-namespace Ocell
+namespace Ocell.Library
 {
     public class TweetEqualityComparer : IEqualityComparer<ITweetable>
     {
@@ -15,6 +15,25 @@ namespace Ocell
         }
 
         public int GetHashCode(ITweetable s)
+        {
+            if (s != null)
+                return s.Id.GetHashCode();
+            else
+                return 0;
+        }
+    }
+
+    public class TwitterStatusEqualityComparer : IEqualityComparer<TwitterStatus>
+    {
+        public bool Equals(TwitterStatus s1, TwitterStatus s2)
+        {
+            if (s1 == null || s2 == null)
+                return false;
+
+            return (s1.Id == s2.Id);
+        }
+
+        public int GetHashCode(TwitterStatus s)
         {
             if (s != null)
                 return s.Id.GetHashCode();
