@@ -36,7 +36,7 @@ namespace Ocell.Library
         public static bool ShouldLoadCache(ref IEnumerable<TwitterStatus> List)
         {
             int AverageTimeBetweenTweets;
-            TimeSpan CurrentDifference;
+            int CurrentDifference;
             /*
              * Supposing we get ~20 tweets per time, this is an acceptable value
              *  so the user does not lose too much tweets.
@@ -50,9 +50,9 @@ namespace Ocell.Library
                 return true;
 
             AverageTimeBetweenTweets = GetAvgTimeBetweenTweets(ref List);
-            CurrentDifference = DateTime.Now.ToUniversalTime() - List.First().CreatedDate;
+            CurrentDifference = (int)Math.Abs((DateTime.Now.ToUniversalTime() - List.First().CreatedDate).TotalSeconds);
 
-            return (int)CurrentDifference.TotalSeconds < MaxTimesDifference * AverageTimeBetweenTweets;
+            return CurrentDifference < MaxTimesDifference * AverageTimeBetweenTweets;
  
         }
     }

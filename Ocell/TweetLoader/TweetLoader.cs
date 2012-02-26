@@ -196,6 +196,16 @@ namespace Ocell
 
         protected void GenericReceive(IEnumerable<ITweetable> list, TwitterResponse response)
         {
+        	try
+        	{
+        		UnsafeGenericReceive(list, response);
+        	}
+        	catch (Exception)
+        	{
+        	}
+        }
+        private void UnsafeGenericReceive(IEnumerable<ITweetable> list, TwitterResponse response)
+        {
             TweetEqualityComparer comparer = new TweetEqualityComparer();
             
             if (list == null || response.StatusCode != HttpStatusCode.OK)
