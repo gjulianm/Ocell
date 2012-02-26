@@ -42,7 +42,7 @@ namespace Ocell
 
         void ShowFollowMessage(object sender, RoutedEventArgs e)
         {
-            if (Config.FollowMessageShown == false)
+            if ((Config.FollowMessageShown == false || Config.FollowMessageShown == null) && ServiceDispatcher.CanGetServices)
             {
                 Dispatcher.BeginInvoke(() =>
                     {

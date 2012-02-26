@@ -51,5 +51,13 @@ namespace Ocell.Library
         {
             return GetService(DataTransfer.CurrentAccount);
         }
+
+        public static bool CanGetServices
+        {
+            get
+            {
+                return Config.Accounts.Count > 0;
+            }
+        }
     }
 }
