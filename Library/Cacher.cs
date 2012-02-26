@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using TweetSharp;
+using System.Linq;
 
 namespace Ocell.Library
 {
@@ -27,45 +28,32 @@ namespace Ocell.Library
         {
             IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
             IsolatedStorageFileStream File = Storage.OpenFile(filename, System.IO.FileMode.OpenOrCreate);
-            char separator = char.MaxValue;
-            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-            List<string> Strings = new List<string>();
-
-            string contents;
-            byte[] bytes= new byte[File.Length];
-            string line = "";
-            int NewlineIndex;
-
-            File.Read(bytes, 0, (int)File.Length);
-            contents = new string(encoding.GetChars(bytes));
-
-            while ((NewlineIndex = contents.IndexOf(separator)) != -1)
+            IEnumerable<string> List;
+            try
             {
-                line = contents.Substring(0, NewlineIndex);
-                contents = contents.Substring(NewlineIndex + 1);
-                Strings.Add(line);
+                List = new List<string>(File.ReadLines());
+                File.Close();
+                return List;
             }
-
-            return Strings;
+            catch (Exception)
+            {
+                return new List<string>();
+            }
         }
 
         private static void SaveContentsIn(string filename, IEnumerable<string> strings, System.IO.FileMode Mode)
         {
             IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
-            IsolatedStorageFileStream File = Storage.OpenFile(filename, Mode);
-            char separator = char.MaxValue;
-            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-
-            string contents = "";
-            byte[] bytes;
-
-
-            foreach (var str in strings)
-                contents += str + separator;
-
-            bytes = encoding.GetBytes(contents);
-            File.Write(bytes, 0, bytes.Length);
-            File.Close();
+            try
+            {
+                IsolatedStorageFileStream File = Storage.OpenFile(filename, Mode);
+                File.WriteLines(strings);
+                File.Close();
+            }
+            catch (Exception)
+            {
+                return;
+            }
         }
 
         public static void SaveToCache(TwitterResource Resource, IEnumerable<TwitterStatus> List)
@@ -93,7 +81,10 @@ namespace Ocell.Library
 
         public static void AppendToCache(TwitterResource Resource, IEnumerable<TwitterStatus> List)
         {
-            _saveToCache(Resource, List, System.IO.FileMode.Append);
+            IEnumerable<TwitterStatus> CurrentCache = GetFromCache(Resource);
+            TwitterStatusEqualityComparer Comparer = new TwitterStatusEqualityComparer();
+            CurrentCache = CurrentCache.Concat(List).OrderBy(item => item.Id).Distinct(Comparer);
+            SaveToCache(Resource, CurrentCache);
         }
 
         public static IEnumerable<TwitterStatus> GetFromCache(TwitterResource Resource)
@@ -103,6 +94,7 @@ namespace Ocell.Library
             List<TwitterStatus> List = new List<TwitterStatus>();
             string Key = GetCacheName(Resource);
             TwitterStatus Item;
+            TwitterService DefaultService = ServiceDispatcher.GetDefaultService();
 
             try 
             {
@@ -115,11 +107,11 @@ namespace Ocell.Library
 
             foreach(string Raw in Strings)
             {
-                Item = ServiceDispatcher.GetDefaultService().Deserialize<TwitterStatus>(Raw);
+                Item = DefaultService.Deserialize<TwitterStatus>(Raw);
                 List.Add(Item);
             }
 
-            return List;
+            return List.OrderByDescending(item => item.Id);
 
         }
     }

@@ -13,39 +13,45 @@ using System.Text;
 using Microsoft.Phone.Scheduler;
 using Microsoft.Phone.Shell;
 
-namespace ScheduledAgent
+namespace Ocell.Library
 {
-    public static class SchedulerSync
+    public static class DateSync
     {
         private const string FileName = "DateFile";
 
         public static void WriteLastCheckDate(DateTime Date)
         {
             IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
-            IsolatedStorageFileStream File = Storage.OpenFile(FileName, System.IO.FileMode.Create);
-            UTF8Encoding Encoding = new UTF8Encoding();
-            string DateStr;
-            byte[] bytes;
-
-            DateStr = Date.ToString("s");
-            bytes = Encoding.GetBytes(DateStr);
-
-            File.Write(bytes, 0, bytes.Length);
-            File.Close();
+            IsolatedStorageFileStream File;
+            try
+            {
+                 File = Storage.OpenFile(FileName, System.IO.FileMode.Create);
+                 File.WriteLine(Date.ToString("s"));
+                 File.Close();
+            }
+            catch (IsolatedStorageException)
+            {
+                return;
+            }
         }
 
         public static DateTime GetLastCheckDate()
         {
             IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
-            IsolatedStorageFileStream File = Storage.OpenFile(FileName, System.IO.FileMode.OpenOrCreate);
-            UTF8Encoding Encoding = new UTF8Encoding();
+            IsolatedStorageFileStream File;
             string DateStr;
-            byte[] bytes = new byte[File.Length];
-            DateTime Date;
 
-            File.Read(bytes, 0, (int)File.Length);
-            File.Close();
-            DateStr = new string(Encoding.GetChars(bytes));
+            try
+            {
+                 File= Storage.OpenFile(FileName, System.IO.FileMode.OpenOrCreate);
+                 DateStr = File.ReadLine();
+            }
+            catch (Exception)
+            {
+                return DateTime.Now.ToUniversalTime();
+            }
+
+            DateTime Date;
 
             if (!DateTime.TryParse(DateStr, out Date))
                 Date = DateTime.Now.ToUniversalTime();
