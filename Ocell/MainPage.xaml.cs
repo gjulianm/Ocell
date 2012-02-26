@@ -28,9 +28,7 @@ namespace Ocell
             pivots = new ObservableCollection<TwitterResource>();
             Lists = new Dictionary<string, ExtendedListBox>();
 
-            this.Loaded += new RoutedEventHandler(SetUpPivots);
-            this.Loaded += new RoutedEventHandler(CreateTile);
-            this.Loaded += new RoutedEventHandler(ShowFollowMessage);
+            this.Loaded += new RoutedEventHandler(CallLoadFunctions);
             
             pivots.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(pivots_CollectionChanged);
             MainPivot.SelectionChanged += new SelectionChangedEventHandler(LoadTweetsOnPivot);
@@ -40,7 +38,15 @@ namespace Ocell
             MainPivot.ItemsSource = pivots;
         }
 
-        void ShowFollowMessage(object sender, RoutedEventArgs e)
+        void CallLoadFunctions(object sender, RoutedEventArgs e)
+        {
+            SetUpPivots();
+            CreateTile();
+            ShowFollowMessage();
+            LittleWatson.CheckForPreviousException();
+        }
+
+        void ShowFollowMessage()
         {
             if ((Config.FollowMessageShown == false || Config.FollowMessageShown == null) && ServiceDispatcher.CanGetServices)
             {
@@ -58,14 +64,14 @@ namespace Ocell
         {
         }
 
-        void CreateTile(object sender, RoutedEventArgs e)
+        void CreateTile()
         {
             SchedulerSync.WriteLastCheckDate(DateTime.Now.ToUniversalTime());
             SchedulerSync.StartPeriodicAgent();
             TileManager.UpdateTile(null, null); // Updating with null means it will clear the tile.
         }       
 
-        void SetUpPivots(object sender, RoutedEventArgs e)
+        void SetUpPivots()
         {
             if (Config.Accounts.Count == 0)
             {
