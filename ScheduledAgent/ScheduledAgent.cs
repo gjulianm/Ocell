@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System;
 using Microsoft.Phone.Shell;
 using System.Linq;
+using System.Threading;
 
 namespace ScheduledAgent
 {
@@ -15,6 +16,7 @@ namespace ScheduledAgent
         private List<TwitterStatus> TileNewMentions;
         private List<TwitterDirectMessage> TileNewMessages;
         private int PendingCalls;
+        private bool execEnded;
 
         /// <remarks>
         /// Constructor de ScheduledAgent que inicializa el controlador UnhandledException
@@ -34,6 +36,7 @@ namespace ScheduledAgent
             TileNewMentions = new List<TwitterStatus>();
             TileNewMessages = new List<TwitterDirectMessage>();
             PendingCalls = 0;
+            execEnded = false;
         }
 
         /// Código para ejecutar en excepciones no controladas
@@ -61,7 +64,17 @@ namespace ScheduledAgent
                 GetMentionsFor(User);
 
             if (PendingCalls == 0)
+            {
                 NotifyComplete();
+            }
+            else
+            {
+                while (!execEnded)
+                {
+                    Thread.Sleep(100);
+                }
+                NotifyComplete();
+            }
         }
 
         protected void GetMentionsFor(UserToken User)
@@ -71,23 +84,23 @@ namespace ScheduledAgent
             if (User.Preferences.MentionsPreferences == NotificationType.Tile)
             {
                 PendingCalls++;
-                Service.ListTweetsMentioningMe(ReceiveTweetsToTile);
+                Service.ListTweetsMentioningMe(10, ReceiveTweetsToTile);
             }
             else if (User.Preferences.MentionsPreferences == NotificationType.TileAndToast)
             {
                 PendingCalls++;
-                Service.ListTweetsMentioningMe(ReceiveTweetsToToast);
+                Service.ListTweetsMentioningMe(10, ReceiveTweetsToToast);
             }
 
             if (User.Preferences.MessagesPreferences == NotificationType.Tile)
             {
                 PendingCalls++;
-                Service.ListDirectMessagesReceived(ReceiveMessagesToTile);
+                Service.ListDirectMessagesReceived(10, ReceiveMessagesToTile);
             }
             else if (User.Preferences.MentionsPreferences == NotificationType.TileAndToast)
             {
                 PendingCalls++;
-                Service.ListDirectMessagesReceived(ReceiveMessagesToToast);
+                Service.ListDirectMessagesReceived(10, ReceiveMessagesToToast);
             }
             
         }
@@ -101,7 +114,7 @@ namespace ScheduledAgent
                 return;
             }
 
-            DateTime LastChecked = SchedulerSync.GetLastCheckDate();
+            DateTime LastChecked = DateSync.GetLastCheckDate();
 
             foreach (TwitterStatus status in Statuses)
             {
@@ -116,7 +129,7 @@ namespace ScheduledAgent
         {
             if (Statuses != null && Statuses.Count() > 0)
             {
-                DateTime LastChecked = SchedulerSync.GetLastCheckDate();
+                DateTime LastChecked = DateSync.GetLastCheckDate();
                 int newMentions = 0;
 
                 foreach (TwitterStatus status in Statuses)
@@ -154,7 +167,7 @@ namespace ScheduledAgent
                 return;
             }
 
-            DateTime LastChecked = SchedulerSync.GetLastCheckDate();
+            DateTime LastChecked = DateSync.GetLastCheckDate();
 
             foreach (TwitterDirectMessage status in Messages)
             {
@@ -169,7 +182,7 @@ namespace ScheduledAgent
         {
             if (Messages != null && Messages.Count() > 0)
             {
-                DateTime LastChecked = SchedulerSync.GetLastCheckDate();
+                DateTime LastChecked = DateSync.GetLastCheckDate();
 
                 int newMessages = 0;
 
@@ -206,7 +219,12 @@ namespace ScheduledAgent
 
             Ocell.Library.TileManager.UpdateTile(TileNewMentions, TileNewMessages);
 
-            NotifyComplete();
+            InternalNotifyComplete();
+        }
+        
+        protected void InternalNotifyComplete()
+        {
+        	execEnded = true;
         }
     }
 }
