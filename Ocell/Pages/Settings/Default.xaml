@@ -2,7 +2,7 @@
     x:Class="Ocell.Settings.Default"
     SupportedOrientations="Portrait" Orientation="Portrait"
     d:DesignHeight="768" d:DesignWidth="480"
-    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.IsVisible="True" CacheMode="BitmapCache"
     mc:Ignorable="d"
 	xmlns:custom="clr-namespace:Ocell.Controls"
 	>

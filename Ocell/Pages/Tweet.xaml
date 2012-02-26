@@ -6,11 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.SampleDataSource1" 
+
     x:Class="Ocell.SPpages.Tweet"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
-    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.IsVisible="True" CacheMode="BitmapCache"
     >
 	<phone:PhoneApplicationPage.Resources>
 		<DataTemplate x:Key="ImagesListTemplate">

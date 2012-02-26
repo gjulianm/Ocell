@@ -11,8 +11,9 @@
 	x:Class="Ocell.MainPage" 
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
     SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.IsVisible="True" CacheMode="BitmapCache"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+
     >
 
     <toolkit:TransitionService.NavigationInTransition>
@@ -66,7 +67,7 @@
     </shell:SystemTray.ProgressIndicator>
 
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Background="Transparent" CacheMode="BitmapCache">
         <!--Control Pivot-->
         <controls:Pivot Title="OCELL" x:Name="MainPivot" Loaded="MainPivot_Loaded">
             <controls:Pivot.HeaderTemplate>

@@ -10,7 +10,7 @@
     x:Class="Ocell.SPpages.NewTweet"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
-    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.IsVisible="True" CacheMode="BitmapCache"
     >
 	<phone:PhoneApplicationPage.Resources>
 		<DataTemplate x:Key="HZAccountsList">

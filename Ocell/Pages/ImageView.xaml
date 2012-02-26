@@ -11,7 +11,7 @@
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
 	Orientation="Portrait"
-	shell:SystemTray.IsVisible="True">
+	shell:SystemTray.IsVisible="True" CacheMode="BitmapCache">
 
 	<!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
 	<Grid x:Name="LayoutRoot" Background="Transparent">
