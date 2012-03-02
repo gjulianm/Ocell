@@ -49,7 +49,18 @@ namespace Ocell.Controls
         void ExtendedListBox_Unloaded(object sender, RoutedEventArgs e)
         {
             Loader.SaveToCache();
-            _Items.Clear();
+        }
+
+        private int GetInsertPositionFor(ITweetable item)
+        {
+            int i;
+            for (i = 0; i < _Items.Count; i++)
+            {
+                if (_Items[i].Id < item.Id)
+                    return i;
+            }
+
+            return i;
         }
 
         private void UnsafePopulateItemsSource()
@@ -61,8 +72,15 @@ namespace Ocell.Controls
             {
                 if (!_Items.Contains(item, Comparer))
                 {
-                    if (_Items.Count == 0 || _Items[0].CreatedDate > item.CreatedDate)
+                    if (_Items.Count == 0)
                         _Items.Add(item);
+                    else if(_Items[0].Id > item.Id)
+                    {
+                        if (item.Id < _Items[_Items.Count - 1].Id)
+                            _Items.Add(item);
+                        else
+                            _Items.Insert(GetInsertPositionFor(item), item);
+                    }
                     else
                         _Items.Insert(0, item);
                     loaded++;

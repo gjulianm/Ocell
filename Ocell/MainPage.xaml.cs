@@ -42,7 +42,6 @@ namespace Ocell
 
             SetUpPivots();
         }
-
         private void ChangeBackgroundIfLightTheme()
         {
             bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
