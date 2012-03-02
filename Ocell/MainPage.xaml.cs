@@ -10,6 +10,8 @@ using TweetSharp;
 using System.Linq;
 using Ocell.Library;
 using Microsoft.Phone.Scheduler;
+using Microsoft.Phone.Shell;
+using System.Windows.Media;
 
 namespace Ocell
 {
@@ -28,6 +30,8 @@ namespace Ocell
             pivots = new ObservableCollection<TwitterResource>();
             Lists = new Dictionary<string, ExtendedListBox>();
 
+            ChangeBackgroundIfLightTheme();
+
             this.Loaded += new RoutedEventHandler(CallLoadFunctions);
             
             pivots.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(pivots_CollectionChanged);
@@ -36,6 +40,15 @@ namespace Ocell
 
             MainPivot.DataContext = pivots;
             MainPivot.ItemsSource = pivots;
+        }
+
+        private void ChangeBackgroundIfLightTheme()
+        {
+            bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
+            if (!isDarkTheme)
+            {
+                LayoutRoot.Background = new SolidColorBrush(Colors.Transparent);
+            }
         }
 
         void CallLoadFunctions(object sender, RoutedEventArgs e)
