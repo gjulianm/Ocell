@@ -11,21 +11,24 @@
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
 	Orientation="Portrait"
-	shell:SystemTray.IsVisible="True" CacheMode="BitmapCache">
+	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache">
 
 	<shell:SystemTray.ProgressIndicator>
 		<shell:ProgressIndicator IsIndeterminate="True" IsVisible="False" x:Name="pBar" />
 	</shell:SystemTray.ProgressIndicator>	
 	
 	<!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
-	<Grid x:Name="LayoutRoot" Background="Transparent">
+	<Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
+		<Grid.Background>
+    		<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
+    	</Grid.Background>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		
 		<!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
-		<StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+		<StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,64,0,28">
 			<TextBlock x:Name="ApplicationTitle" Text="OCELL" Style="{StaticResource PhoneTextNormalStyle}"/>
 			<TextBlock x:Name="PageTitle" Text="conversation" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
 		</StackPanel>

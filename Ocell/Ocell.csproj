@@ -107,6 +107,7 @@
       <DependentUpon>ImageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SchedulerSync.cs" />
+    <Compile Include="ThemeFunctions.cs" />
     <Compile Include="Transitions\Behaviours.cs" />
     <Compile Include="Transitions\OpacityTransition.cs" />
     <Compile Include="TweetLoader\TweetLoader.cs" />

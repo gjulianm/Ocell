@@ -11,9 +11,8 @@
 	x:Class="Ocell.MainPage" 
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
     SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="True" CacheMode="BitmapCache"
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-	shell:SystemTray.Opacity="0.0"
     >
 
     <toolkit:TransitionService.NavigationInTransition>

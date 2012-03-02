@@ -25,12 +25,10 @@ namespace Ocell
         // Constructora
         public MainPage()
         {
-            InitializeComponent();
+            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             pivots = new ObservableCollection<TwitterResource>();
             Lists = new Dictionary<string, ExtendedListBox>();
-
-            ChangeBackgroundIfLightTheme();
 
             this.Loaded += new RoutedEventHandler(CallLoadFunctions);
             pivots.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(pivots_CollectionChanged);
@@ -42,14 +40,7 @@ namespace Ocell
 
             SetUpPivots();
         }
-        private void ChangeBackgroundIfLightTheme()
-        {
-            bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
-            if (!isDarkTheme)
-            {
-                LayoutRoot.Background = new SolidColorBrush(Colors.Transparent);
-            }
-        }
+        
 
         void CallLoadFunctions(object sender, RoutedEventArgs e)
         {

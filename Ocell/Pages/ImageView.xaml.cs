@@ -18,7 +18,7 @@ namespace Ocell
     {
         public ImageView()
         {
-            InitializeComponent();
+            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(ImageView_Loaded);
         }

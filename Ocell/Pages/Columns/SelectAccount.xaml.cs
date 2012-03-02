@@ -18,7 +18,7 @@ namespace Ocell
     {
         public SelectAccount()
         {
-            InitializeComponent();
+            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(SelectAccount_Loaded);
         }

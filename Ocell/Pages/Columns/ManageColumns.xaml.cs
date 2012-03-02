@@ -13,7 +13,7 @@ namespace Ocell.AuxScreens
     {
         public ManageColumns()
         {
-            InitializeComponent();
+            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(ManageColumns_Loaded);
         }

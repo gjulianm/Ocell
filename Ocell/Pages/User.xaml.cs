@@ -26,7 +26,7 @@ namespace Ocell
         
         public User()
         {
-            InitializeComponent();
+            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(User_Loaded);
             TweetList.SelectionChanged += new SelectionChangedEventHandler(ListBox_SelectionChanged);

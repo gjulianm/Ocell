@@ -19,7 +19,7 @@ namespace Ocell.AuxScreens
         private TwitterService _srv;
         public AddColumn()
         {
-            InitializeComponent();
+            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(AddColumn_Loaded);
            

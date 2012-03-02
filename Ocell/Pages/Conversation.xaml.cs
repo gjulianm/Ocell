@@ -18,7 +18,7 @@ namespace Ocell
         
         public Conversation()
         {
-            InitializeComponent();
+            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
             
             this.Loaded += new RoutedEventHandler(Conversation_Loaded);
             

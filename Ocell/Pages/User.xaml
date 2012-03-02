@@ -14,16 +14,19 @@
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
 	SupportedOrientations="Portrait" Orientation="Portrait"
-	shell:SystemTray.IsVisible="True" CacheMode="BitmapCache">
+	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache">
     
     <shell:SystemTray.ProgressIndicator>
         <shell:ProgressIndicator IsIndeterminate="True" IsVisible="False" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
 
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
-	<Grid x:Name="LayoutRoot" Background="Transparent">
+	<Grid x:Name="LayoutRoot" Margin="0,-32,0,0" >
+		<Grid.Background>
+    		<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
+    	</Grid.Background>
 		<!--Control Pivot-->
-		<controls:Pivot x:Name="pivots" Title="OCELL">
+		<controls:Pivot x:Name="pivots" Title="OCELL" Margin="0,64,0,0">
 			<!--Elemento uno de Pivot-->
 			<controls:PivotItem x:Name="pvProfile" Header="profile">
 				<Grid>

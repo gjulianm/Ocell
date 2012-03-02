@@ -16,7 +16,8 @@ namespace Ocell.Settings
 
         public Default()
         {
-            InitializeComponent();
+            InitializeComponent(); 
+            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(Default_Loaded);
             Users.SelectionChanged += new SelectionChangedEventHandler(Users_SelectionChanged);

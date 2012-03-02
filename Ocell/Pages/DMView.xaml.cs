@@ -16,7 +16,7 @@ namespace Ocell.Pages
 
         public DMView()
         {
-            InitializeComponent();
+            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(Tweet_Loaded); 
         }

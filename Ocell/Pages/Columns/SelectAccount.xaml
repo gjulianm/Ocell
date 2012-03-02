@@ -5,31 +5,34 @@
 	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
+	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="799.6300048828125"
 	x:Class="Ocell.SelectAccount"
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
 	Orientation="Portrait"
-	shell:SystemTray.IsVisible="True" CacheMode="BitmapCache"
+	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     >
 
 	<!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
-	<Grid x:Name="LayoutRoot" Background="Transparent">
+	<Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
+		<Grid.Background>
+    		<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
+    	</Grid.Background>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
+			<RowDefinition/>
 		</Grid.RowDefinitions>
 		
 		<!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
-		<StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+		<StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,64,0,29">
 			<TextBlock x:Name="ApplicationTitle" Text="OCELL" Style="{StaticResource PhoneTextNormalStyle}"/>
 			<TextBlock x:Name="PageTitle" Text="Accounts" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
 		</StackPanel>
 
 		<!--ContentPanel: coloque aquí el contenido adicional-->
-		<Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+		<Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,-1,12,1">
 			<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Select one account"/><Run Text=":"/></TextBlock>
 			<ListBox x:Name="AccountsList" Margin="8,55,8,8" ItemTemplate="{StaticResource AccountsTemplate}" toolkit:TiltEffect.IsTiltEnabled="True"/>
 		</Grid>

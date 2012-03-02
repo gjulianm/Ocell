@@ -16,6 +16,8 @@ namespace Ocell
         public bool Cached { get; set; }
         private int RequestsInProgress;
 	    protected TwitterResource _resource;
+        private static DateTime RateResetTime;
+
         public TwitterResource Resource 
         {
 	        get
@@ -55,6 +57,16 @@ namespace Ocell
             LastId = 0;
             Cached = true;
             RequestsInProgress = 0;
+            if (RateResetTime == null)
+                RateResetTime = DateTime.MinValue;
+
+            Error += new OnError(CheckForRateLimit);
+        }
+
+        void CheckForRateLimit(TwitterResponse response)
+        {
+            if (response.RateLimitStatus.RemainingHits <= 0)
+                RateResetTime = response.RateLimitStatus.ResetTime;
         }
         #endregion
 
@@ -65,11 +77,14 @@ namespace Ocell
         #region Loaders
         public void Load(bool Old = false)
         {
-            if (Resource == null || _srv == null)
+            if (Resource == null || _srv == null ||
+                RequestsInProgress >= 2 ||
+                RateResetTime > DateTime.Now)
+            {
+                if (LoadFinished != null)
+                    LoadFinished();
                 return;
-
-            if (RequestsInProgress >= 2)
-                return;
+            }
 
             RequestsInProgress++;
 

@@ -20,7 +20,7 @@ namespace Ocell.SPpages
 
         public NewTweet()
         {
-            InitializeComponent();
+            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(NewTweet_Loaded);
             this.Unloaded += new RoutedEventHandler(NewTweet_Unloaded);
