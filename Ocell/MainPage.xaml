@@ -13,7 +13,7 @@
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True" CacheMode="BitmapCache"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-
+	shell:SystemTray.Opacity="0.0"
     >
 
     <toolkit:TransitionService.NavigationInTransition>
@@ -67,9 +67,12 @@
     </shell:SystemTray.ProgressIndicator>
 
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
-    <Grid x:Name="LayoutRoot" Background="Transparent" CacheMode="BitmapCache">
+    <Grid x:Name="LayoutRoot" CacheMode="BitmapCache" Margin="0,-32,0,0">
+    	<Grid.Background>
+    		<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
+    	</Grid.Background>
         <!--Control Pivot-->
-        <controls:Pivot Title="OCELL" x:Name="MainPivot" Loaded="MainPivot_Loaded">
+        <controls:Pivot Title="OCELL" x:Name="MainPivot" Loaded="MainPivot_Loaded" Background="{x:Null}" Margin="0,50,0,0">
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding String, Converter={StaticResource ListConverter}, FallbackValue=error}" />

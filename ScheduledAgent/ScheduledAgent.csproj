@@ -58,9 +58,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="mscorlib.extensions" />
-    <Reference Include="TweetSharp.WindowsPhone.Mango">
-      <HintPath>..\Ocell\Assemblies\TweetSharp.WindowsPhone.Mango.dll</HintPath>
-    </Reference>
+    <Reference Include="TweetSharp.WindowsPhone.Mango, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ScheduledAgent.cs" />
