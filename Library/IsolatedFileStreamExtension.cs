@@ -18,10 +18,10 @@ using System.Linq;
 
 namespace Ocell.Library
 {
-	public static class IsolatedFileStreamExtension
-	{		
-		public static IEnumerable<string> ReadLines(this IsolatedStorageFileStream File)
-		{
+    public static class IsolatedFileStreamExtension
+    {		
+	    public static IEnumerable<string> ReadLines(this IsolatedStorageFileStream File)
+	    {
             char separator = char.MaxValue;
             System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
             List<string> Strings = new List<string>();
@@ -42,17 +42,17 @@ namespace Ocell.Library
             }
         }
 		
-		public static string ReadLine(this IsolatedStorageFileStream File)
-		{
-			IEnumerable<string> Lines = File.ReadLines();
-			if(Lines != null && Lines.Count() != 0)
-				return Lines.First();
+	    public static string ReadLine(this IsolatedStorageFileStream File)
+	    {
+		    IEnumerable<string> Lines = File.ReadLines();
+		    if(Lines != null && Lines.Count() != 0)
+			    return Lines.First();
             return "";
-		}
+	    }
 		
-		public static void WriteLines(this IsolatedStorageFileStream File, IEnumerable<string> Lines)
-		{
-			char separator = char.MaxValue;
+	    public static void WriteLines(this IsolatedStorageFileStream File, IEnumerable<string> Lines)
+	    {
+		    char separator = char.MaxValue;
             System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
 
             string contents = "";
@@ -63,13 +63,13 @@ namespace Ocell.Library
 
             bytes = encoding.GetBytes(contents);
             File.Write(bytes, 0, bytes.Length);
-    	}
+        }
     	
-    	public static void WriteLine(this IsolatedStorageFileStream File, string Line)
-    	{
-    		List<string> Lines = new List<string>();
-    		Lines.Add(Line);
-    		File.WriteLines(Lines);
-    	}
+        public static void WriteLine(this IsolatedStorageFileStream File, string Line)
+        {
+    	    List<string> Lines = new List<string>();
+    	    Lines.Add(Line);
+    	    File.WriteLines(Lines);
+        }
     }
 }
