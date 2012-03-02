@@ -33,13 +33,14 @@ namespace Ocell
             ChangeBackgroundIfLightTheme();
 
             this.Loaded += new RoutedEventHandler(CallLoadFunctions);
-            
             pivots.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(pivots_CollectionChanged);
             MainPivot.SelectionChanged += new SelectionChangedEventHandler(LoadTweetsOnPivot);
             MainPivot.SelectionChanged += new SelectionChangedEventHandler(RefreshCurrentAccount);
 
             MainPivot.DataContext = pivots;
             MainPivot.ItemsSource = pivots;
+
+            SetUpPivots();
         }
 
         private void ChangeBackgroundIfLightTheme()
@@ -53,7 +54,6 @@ namespace Ocell
 
         void CallLoadFunctions(object sender, RoutedEventArgs e)
         {
-            SetUpPivots();
             CreateTile();
             ShowFollowMessage();
             LittleWatson.CheckForPreviousException();
@@ -82,7 +82,7 @@ namespace Ocell
             SchedulerSync.WriteLastCheckDate(DateTime.Now.ToUniversalTime());
             SchedulerSync.StartPeriodicAgent();
             TileManager.UpdateTile(null, null); // Updating with null means it will clear the tile.
-        }       
+        }
 
         void SetUpPivots()
         {
@@ -98,7 +98,7 @@ namespace Ocell
             GetPivotsFromConf();
         }
 
-        
+
         #endregion
 
         void LoadTweetsOnPivot(object sender, SelectionChangedEventArgs e)
@@ -141,8 +141,8 @@ namespace Ocell
 
         void GetPivotsFromConf()
         {
-            foreach(var pivot in Config.Columns)
-                if(!pivots.Contains(pivot))
+            foreach (var pivot in Config.Columns)
+                if (!pivots.Contains(pivot))
                     pivots.Add(pivot);
         }
 
@@ -151,7 +151,7 @@ namespace Ocell
             Dispatcher.BeginInvoke(() =>
             {
                 MainPivot.Title = "OCELL";
-                if(DataTransfer.CurrentAccount != null && !string.IsNullOrWhiteSpace(DataTransfer.CurrentAccount.ScreenName))
+                if (DataTransfer.CurrentAccount != null && !string.IsNullOrWhiteSpace(DataTransfer.CurrentAccount.ScreenName))
                     MainPivot.Title += " - " + DataTransfer.CurrentAccount.ScreenName.ToUpperInvariant();
             });
         }
@@ -159,7 +159,7 @@ namespace Ocell
         void pivots_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             BindPivots();
-        }        
+        }
 
         private void compose_Click(object sender, System.EventArgs e)
         {
@@ -174,10 +174,10 @@ namespace Ocell
             ExtendedListBox list = sender as ExtendedListBox;
             TwitterResource Resource = new TwitterResource();
 
-            if(list == null)
+            if (list == null)
                 return;
 
-            if(list.Tag is TwitterResource)
+            if (list.Tag is TwitterResource)
             {
                 Resource = (TwitterResource)list.Tag;
                 list.Bind(Resource);
@@ -190,7 +190,8 @@ namespace Ocell
             list.Loader.Error += new TweetLoader.OnError(Loader_Error);
             list.Loader.LoadFinished += new TweetLoader.OnLoadFinished(Loader_LoadFinished);
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-            list.Loader.LoadCache();
+
+            list.Loader.LoadCacheAsync();
             list.Loader.Load();
         }
 
@@ -201,7 +202,8 @@ namespace Ocell
 
         void Loader_Error(TwitterResponse response)
         {
-            Dispatcher.BeginInvoke(() => {
+            Dispatcher.BeginInvoke(() =>
+            {
                 if (response.RateLimitStatus.RemainingHits == 0)
                     MessageBox.Show("Woops! You have spent the limit of calls to Twitter. You'll have to wait until " + response.RateLimitStatus.ResetTime.ToString("H:mm"));
                 else

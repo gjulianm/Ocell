@@ -34,6 +34,16 @@ namespace Ocell.Controls
             Loader.CacheLoad += new TweetLoader.OnCacheLoad(PopulateItemsSource);
             _Items = new ObservableCollection<ITweetable>();
             ItemsSource = _Items;
+
+            
+        }
+
+        private void SetTag()
+        {
+            if (this.Tag != null && this.Tag is string)
+                Loader.Resource = new TwitterResource() { String = this.Tag as string };
+            else if (this.Tag is TwitterResource)
+                Loader.Resource = (TwitterResource)this.Tag;
         }
 
         void ExtendedListBox_Unloaded(object sender, RoutedEventArgs e)
@@ -117,10 +127,7 @@ namespace Ocell.Controls
                 }
             }
 
-            if (this.Tag != null && this.Tag is string)
-                Loader.Resource = new TwitterResource() { String = this.Tag as string };
-            else if (this.Tag is TwitterResource)
-                Loader.Resource = (TwitterResource)this.Tag;
+            SetTag();
         }
 
         private void hgroup_CurrentStateChanging(object sender, VisualStateChangedEventArgs e)

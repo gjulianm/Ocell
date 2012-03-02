@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using TweetSharp;
 using Ocell.Library;
-
+using System.Threading;
 namespace Ocell
 {
     public class TweetLoader
@@ -14,6 +14,7 @@ namespace Ocell
         private readonly int ToLoad = 1;
         private readonly int Count = 25;
         public bool Cached { get; set; }
+        private int RequestsInProgress;
 	    protected TwitterResource _resource;
         public TwitterResource Resource 
         {
@@ -32,14 +33,18 @@ namespace Ocell
         protected long LastId;
         
         #region Constructors
-        public TweetLoader(TwitterResource resource)
+        public TweetLoader(TwitterResource resource) : this()
         {
             Resource = resource;
-            Loaded = 0;
-            Source = new ObservableCollection<TweetSharp.ITweetable>();
-            LastId = 0;
-            Cached = true;
 	        _srv = ServiceDispatcher.GetService(Resource.User);
+
+            LoadCacheAsync();
+        }
+
+        public void LoadCacheAsync()
+        {
+            Thread LoaderThread = new Thread(new ThreadStart(LoadCache));
+            LoaderThread.Start();
         }
 
         
@@ -49,14 +54,24 @@ namespace Ocell
             Source = new ObservableCollection<TweetSharp.ITweetable>();
             LastId = 0;
             Cached = true;
+            RequestsInProgress = 0;
         }
         #endregion
+
+        protected void ReceiveCallback(IAsyncResult result)
+        {
+        }
 
         #region Loaders
         public void Load(bool Old = false)
         {
             if (Resource == null || _srv == null)
                 return;
+
+            if (RequestsInProgress >= 2)
+                return;
+
+            RequestsInProgress++;
 
             if (Old)
                 LoadOld();
@@ -132,7 +147,7 @@ namespace Ocell
         
         public void LoadCache()
         {
-            if (!Cached)
+            if (!Cached || Resource == null || Resource.User == null)
                 return;
 
             TweetEqualityComparer comparer = new TweetEqualityComparer();
@@ -153,6 +168,7 @@ namespace Ocell
         #region Specific Receivers
         protected void ReceiveTweets(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
         {
+            RequestsInProgress--;
             if (statuses == null)
             {
                 if (Error != null)
@@ -167,6 +183,7 @@ namespace Ocell
 
         protected void ReceiveMessages(IEnumerable<TwitterDirectMessage> statuses, TwitterResponse response)
         {
+            RequestsInProgress--;
             if (statuses == null)
             {
                 if (Error != null)
@@ -181,6 +198,7 @@ namespace Ocell
 
         protected void ReceiveSearch(TwitterSearchResult result, TwitterResponse response)
         {
+            RequestsInProgress--;
             if (result == null || result.Statuses == null)
             {
                 if (Error != null)
@@ -268,6 +286,8 @@ namespace Ocell
 		{
 			Source = new ObservableCollection<ITweetable>(Source.OrderByDescending(item => item.Id));
 		}
+
+     
 
         #region Events
         public delegate void OnLoadFinished();

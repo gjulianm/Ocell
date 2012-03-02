@@ -39,7 +39,7 @@ namespace Ocell.Library
             int CurrentDifference;
             /*
              * Supposing we get ~20 tweets per time, this is an acceptable value
-             *  so the user does not lose too much tweets.
+             *  so the user does not lose too many tweets.
              */
             int MaxTimesDifference = 20;
 
