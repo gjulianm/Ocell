@@ -27,3 +27,6 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 SensitiveData.cs
 .DS_Store
+Ocell/Assemblies/PhonePerformance*
+Ocell/PerformanceLogs/*
+GAC_Microsoft.Phone.Interop_v7_0_0_0_cneutral_1.dll
