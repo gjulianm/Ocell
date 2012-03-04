@@ -18,7 +18,17 @@ namespace Ocell.Commands
         {
             ITweetable tweet = (ITweetable)parameter;
             DataTransfer.Text = "@" + tweet.Author.ScreenName + " ";
-            DataTransfer.ReplyId = tweet.Id;
+            if (parameter is TwitterStatus)
+            {
+                DataTransfer.ReplyId = tweet.Id;
+                DataTransfer.ReplyingDM = false;
+            }
+            else if (parameter is TwitterDirectMessage)
+            {
+                DataTransfer.DMDestinationId = (parameter as TwitterDirectMessage).SenderId;
+                DataTransfer.ReplyingDM = true;
+            }
+
             PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
             Deployment.Current.Dispatcher.BeginInvoke(() => service.Navigate(new Uri("/Pages/NewTweet.xaml", UriKind.Relative)));
         }
@@ -30,7 +40,7 @@ namespace Ocell.Commands
     {
         public bool CanExecute(object parameter)
         {
-            return parameter is ITweetable;
+            return parameter is TwitterStatus;
         }
 
         public void Execute(object parameter)
@@ -51,7 +61,7 @@ namespace Ocell.Commands
     {
         public bool CanExecute(object parameter)
         {
-            return (parameter is ITweetable) &&
+            return (parameter is TwitterStatus) &&
                 Config.Accounts.Count > 0 &&
                 DataTransfer.CurrentAccount != null;
         }
@@ -68,7 +78,7 @@ namespace Ocell.Commands
     {
         public bool CanExecute(object parameter)
         {
-            return (parameter is ITweetable) &&
+            return (parameter is TwitterStatus) &&
                 Config.Accounts.Count > 0 &&
                 DataTransfer.CurrentAccount != null;
         }
