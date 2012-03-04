@@ -81,7 +81,7 @@
             </controls:Pivot.HeaderTemplate>
             <controls:Pivot.ItemTemplate>
                 <DataTemplate>
-                    <custom:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" Tag="{Binding}" Loaded="ListBox_Loaded" SelectionChanged="ListBox_SelectionChanged"/>
+                    <custom:ExtendedListBox ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" Tag="{Binding}" Loaded="ListBox_Loaded" SelectionChanged="ListBox_SelectionChanged"/>
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>

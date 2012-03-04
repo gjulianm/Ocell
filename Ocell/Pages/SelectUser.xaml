@@ -8,7 +8,7 @@
     xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.Accounts" xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit" 
     xmlns:SampleData1="clr-namespace:Expression.Blend.SampleData.Users" 
     x:Class="Ocell.Pages.SelectUser"
-    SupportedOrientations="Portrait" Orientation="Portrait"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="193" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True"
 	shell:SystemTray.Opacity="0">

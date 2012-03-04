@@ -13,7 +13,7 @@
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
-	SupportedOrientations="Portrait" Orientation="Portrait"
+	SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
 	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache">
     
     <shell:SystemTray.ProgressIndicator>
@@ -48,7 +48,7 @@
 			</controls:PivotItem>
 			<controls:PivotItem x:Name="pvTweets" Header="tweets">
                 <Grid>
-                    <custom:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True" x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" Tag="Tweets" Loaded="ListBox_Loaded"/>
+                    <custom:ExtendedListBox ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" Tag="Tweets" Loaded="ListBox_Loaded"/>
                 </Grid>
 			</controls:PivotItem>
 		</controls:Pivot>
