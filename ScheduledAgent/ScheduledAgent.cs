@@ -65,6 +65,14 @@ namespace ScheduledAgent
             foreach (UserToken User in Config.Accounts)
                 GetMentionsFor(User);
 
+            foreach (ITweetableTask Task in Config.TweetTasks)
+            {
+                PendingCalls++;
+                Task.Completed +=new EventHandler(OnTaskCompleted);
+                Task.Error += new EventHandler(Task_Error);
+                Task.Execute();
+            }
+
             if (PendingCalls == 0)
             {
                 NotifyComplete();
@@ -77,6 +85,21 @@ namespace ScheduledAgent
                 }
                 NotifyComplete();
             }
+        }
+
+        void Task_Error(object sender, EventArgs e)
+        {
+            PendingCalls--;
+            if (PendingCalls <= 0)
+                InternalNotifyComplete();
+        }
+
+        protected void OnTaskCompleted(object sender, EventArgs e)
+        {
+            PendingCalls--;
+            Config.TweetTasks.Remove((ITweetableTask)sender);
+            Config.SaveTasks();
+
         }
 
         protected void GetMentionsFor(UserToken User)
