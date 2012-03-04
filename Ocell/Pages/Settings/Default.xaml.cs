@@ -123,7 +123,8 @@ namespace Ocell.Settings
         void Default_Loaded(object sender, RoutedEventArgs e)
         {
             BindAccounts();
-            Accounts_Not.SelectedIndex = 0;
+            if(Config.Accounts != null && Config.Accounts.Count > 0)
+                Accounts_Not.SelectedIndex = 0;
         }
 
         private void BindAccounts()
