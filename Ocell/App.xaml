@@ -31,8 +31,10 @@
         <local:MarginConverter x:Key="MarginConverter"/>
 
             <DataTemplate x:Key="TweetTemplate">
-            <Grid Width="456" Margin="0,3,0,12" Tag="{Binding Id}" VerticalAlignment="Top" Opacity="1.0" CacheMode="BitmapCache">
-
+            <Grid HorizontalAlignment="Stretch" Margin="0,3,0,12" Tag="{Binding Id}" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache">
+                <i:Interaction.Behaviors>
+                    <tr:OnLoadedOpacityTransitionBehavior/>
+                </i:Interaction.Behaviors>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.611*"/>
                     <ColumnDefinition Width="0.389*"/>

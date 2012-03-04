@@ -41,9 +41,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hammock.WindowsPhone">
-      <HintPath>..\Ocell\Assemblies\Hammock.WindowsPhone.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib.WindowsPhone">
       <HintPath>..\Ocell\Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll</HintPath>
     </Reference>
@@ -75,9 +72,16 @@
     <Compile Include="SensitiveData.cs" />
     <Compile Include="ServiceDispatcher.cs" />
     <Compile Include="TileManager.cs" />
+    <Compile Include="TweetTask.cs" />
     <Compile Include="TwitterComparers.cs" />
     <Compile Include="TwitterResource.cs" />
     <Compile Include="UserToken.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">
+      <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
+      <Name>Hammock.WindowsPhone</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />

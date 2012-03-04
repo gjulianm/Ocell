@@ -54,7 +54,6 @@
     <CodeAnalysisRuleSet>ExtendedDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hammock.WindowsPhone, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="ICSharpCode.SharpZipLib.WindowsPhone, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Expression.Interactions" />
     <Reference Include="Microsoft.Phone" />
@@ -103,8 +102,14 @@
     <Compile Include="Pages\Columns\SelectAccount.xaml.cs">
       <DependentUpon>SelectAccount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\EnterSearch.xaml.cs">
+      <DependentUpon>EnterSearch.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ImageView.xaml.cs">
       <DependentUpon>ImageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SelectUser.xaml.cs">
+      <DependentUpon>SelectUser.xaml</DependentUpon>
     </Compile>
     <Compile Include="SchedulerSync.cs" />
     <Compile Include="ThemeFunctions.cs" />
@@ -176,6 +181,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\EnterSearch.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\ImageView.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
@@ -185,6 +194,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Search.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SelectUser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -265,12 +278,12 @@
     <EmbeddedResource Include="Images\Icons_White\appbar.feature.camera.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Images\Icons_White\appbar.feature.email.rest.png">
+    <Content Include="Images\Icons_White\appbar.feature.email.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Images\Icons_White\appbar.feature.search.rest.png">
+    </Content>
+    <Content Include="Images\Icons_White\appbar.feature.search.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    </Content>
     <EmbeddedResource Include="Images\Icons_White\appbar.feature.settings.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -286,9 +299,9 @@
     <EmbeddedResource Include="Images\Icons_White\appbar.new.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Images\Icons_White\appbar.next.rest.png">
+    <Content Include="Images\Icons_White\appbar.next.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    </Content>
     <EmbeddedResource Include="Images\Icons_White\appbar.overflowdots.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -346,6 +359,10 @@
     <Folder Include="Tiles\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">
+      <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
+      <Name>Hammock.WindowsPhone</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</Project>
       <Name>Library</Name>

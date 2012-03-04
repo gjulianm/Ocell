@@ -11,5 +11,6 @@ namespace Ocell.Library
         public static TweetSharp.TwitterDirectMessage DM;
         public static bool ReplyingDM;
         public static UserToken CurrentAccount;
+        public static long DMDestinationId;
     }
 }
