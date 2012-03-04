@@ -57,50 +57,61 @@ namespace Ocell.Library
             }
             set
             {
-                Data = "";
-                
-                if (User == null)
-                    User = new UserToken();
-
-                int SemiColonIndex = value.IndexOf(';');
-                if (SemiColonIndex != -1)
-                    User.ScreenName = value.Substring(0, SemiColonIndex);
-            	
-            	if((SemiColonIndex+1) <= value.Length)
-                	value = value.Substring(SemiColonIndex + 1);
-                
-                int ColonIndex = value.IndexOf(':');
-                ColonIndex = Math.Min(ColonIndex + 1, value.Length);
-                
-                if (ColonIndex == 0)
+                try
                 {
-                    if (value == "Favorites")
-                        Type = ResourceType.Favorites;
-                    else if (value == "Home")
-                        Type = ResourceType.Home;
-                    else if (value == "Mentions")
-                        Type = ResourceType.Mentions;
-                    else if (value == "Messages")
-                        Type = ResourceType.Messages;
+                    UnsafeSetString(value);
                 }
-                else if (value.Contains("List:"))
+                catch (Exception)
                 {
-                    Type = ResourceType.List;
-                    Data = value.Substring(ColonIndex);
                 }
-                else if (value.Contains("Search:"))
-                {
-                    Type = ResourceType.Search;
-                    Data = value.Substring(ColonIndex);
-                }
-                else if (value.Contains("Tweets:"))
-                {
-                    Type = ResourceType.Tweets;
-                    Data = value.Substring(ColonIndex);
-                }
-                else
-                    Type = ResourceType.Home;
             }
+        }
+
+        private void UnsafeSetString(string value)
+        {
+            Data = "";
+
+            if (User == null)
+                User = new UserToken();
+
+            int SemiColonIndex = value.IndexOf(';');
+            if (SemiColonIndex != -1)
+                User.ScreenName = value.Substring(0, SemiColonIndex);
+
+            if ((SemiColonIndex + 1) <= value.Length)
+                value = value.Substring(SemiColonIndex + 1);
+
+            int ColonIndex = value.IndexOf(':');
+            ColonIndex = Math.Min(ColonIndex + 1, value.Length);
+
+            if (ColonIndex == 0)
+            {
+                if (value == "Favorites")
+                    Type = ResourceType.Favorites;
+                else if (value == "Home")
+                    Type = ResourceType.Home;
+                else if (value == "Mentions")
+                    Type = ResourceType.Mentions;
+                else if (value == "Messages")
+                    Type = ResourceType.Messages;
+            }
+            else if (value.Contains("List:"))
+            {
+                Type = ResourceType.List;
+                Data = value.Substring(ColonIndex);
+            }
+            else if (value.Contains("Search:"))
+            {
+                Type = ResourceType.Search;
+                Data = value.Substring(ColonIndex);
+            }
+            else if (value.Contains("Tweets:"))
+            {
+                Type = ResourceType.Tweets;
+                Data = value.Substring(ColonIndex);
+            }
+            else
+                Type = ResourceType.Home;
         }
 
         public static bool operator==(TwitterResource r1, TwitterResource r2)
