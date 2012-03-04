@@ -64,14 +64,29 @@ namespace Ocell.Settings
             {
                 Dispatcher.BeginInvoke(() => { 
                     MessageBox.Show("Error while authenticating with Twitter. Please try again");
-                    NavigationService.GoBack();
+                    if(NavigationService.CanGoBack)
+                        NavigationService.GoBack();
                 });
 
             }
-                        
-            var collection = HttpUtility.ParseQueryString(response.Content);
-            string request_token = collection["oauth_token"];
-            string token_secret = collection["oauth_token_secret"];
+
+            string request_token ="";
+            string token_secret ="";
+            try
+            {
+                var collection = HttpUtility.ParseQueryString(response.Content);
+                request_token = collection["oauth_token"];
+                token_secret = collection["oauth_token_secret"];
+            }
+            catch (Exception)
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    MessageBox.Show("Error while authenticating with Twitter. Please try again");
+                    if (NavigationService.CanGoBack)
+                        NavigationService.GoBack();
+                });
+            }
             
             _requestToken = request_token;
             _requestSecret = token_secret;
@@ -105,7 +120,8 @@ namespace Ocell.Settings
                 {
                     Dispatcher.BeginInvoke(() => { 
                         MessageBox.Show("Authentication error.");
-                        NavigationService.GoBack();
+                        if(NavigationService.CanGoBack)
+                            NavigationService.GoBack();
                     });
                     return;
                 }
@@ -154,7 +170,8 @@ namespace Ocell.Settings
             {
                 Dispatcher.BeginInvoke(() => { 
                     MessageBox.Show("Error while authenticating with Twitter");
-                    NavigationService.GoBack();
+                    if (NavigationService.CanGoBack)
+                        NavigationService.GoBack();
                 });
                 return;
             }
