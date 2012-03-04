@@ -249,5 +249,15 @@ namespace Ocell
             MainPivot.DataContext = pivots;
             MainPivot.ItemsSource = pivots;
         }
+
+        private void send_DM_Click(object sender, System.EventArgs e)
+        {
+        	NavigationService.Navigate(new Uri("/Pages/SelectUser.xaml", UriKind.Relative));
+        }
+
+        private void SearchBtn_Click(object sender, System.EventArgs e)
+        {
+        	NavigationService.Navigate(new Uri("/Pages/EnterSearch.xaml", UriKind.Relative));
+        }
     }
 }

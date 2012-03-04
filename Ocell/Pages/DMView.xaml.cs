@@ -114,9 +114,9 @@ namespace Ocell.Pages
 
         private void replyButton_Click(object sender, EventArgs e)
         {
-            DataTransfer.ReplyId = status.Id;
             DataTransfer.Text = "";
             DataTransfer.ReplyingDM = true;
+            DataTransfer.DMDestinationId = status.SenderId;
 
             NavigationService.Navigate(new Uri("/Pages/NewTweet.xaml", UriKind.Relative));
         }

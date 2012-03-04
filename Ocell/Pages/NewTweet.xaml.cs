@@ -16,6 +16,7 @@ namespace Ocell.SPpages
 {
     public partial class NewTweet : PhoneApplicationPage
     {
+        protected bool SendingDM;
         public ApplicationBarIconButton SendButton;
 
         public NewTweet()
@@ -27,6 +28,11 @@ namespace Ocell.SPpages
 
             AccountsList.DataContext = Config.Accounts;
             AccountsList.ItemsSource = Config.Accounts;
+
+            SendingDM = DataTransfer.ReplyingDM;
+
+            if (DataTransfer.DMDestinationId == null)
+                DataTransfer.DMDestinationId = DataTransfer.DM.SenderId;
 
             InitalizeAppBar();
         }
@@ -56,11 +62,21 @@ namespace Ocell.SPpages
 
         void NewTweet_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataTransfer.ReplyingDM)
+            if (SendingDM)
+            {
                 AccountsList.Visibility = Visibility.Collapsed;
-            Tweet.Text = DataTransfer.Text==null?"":DataTransfer.Text;
+                TextBlockAccounts.Visibility = Visibility.Collapsed;
+            }
+
+            string RemoveBack;
+            if (NavigationContext.QueryString.TryGetValue("removeBack", out RemoveBack) || RemoveBack == "1")
+            {
+                NavigationService.RemoveBackEntry();
+            }
+
+            Tweet.Text = DataTransfer.Text == null ? "" : DataTransfer.Text;
+            Tweet.SelectionStart = (Tweet.Text.Length - 1) < 0 ? 0 : (Tweet.Text.Length - 1);
             Tweet.Focus();
-            Tweet.SelectionStart = (Tweet.Text.Length - 1)<0?0:(Tweet.Text.Length - 1);
 
             int Index = Config.Accounts.IndexOf(DataTransfer.CurrentAccount);
             AccountsList.SelectedIndex = Index;
@@ -70,32 +86,89 @@ namespace Ocell.SPpages
         {
 
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
+            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                TryBackgroundSend();
+                return;
+            }
+
             if (DataTransfer.ReplyingDM)
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).SendDirectMessage((int)DataTransfer.DM.SenderId, Tweet.Text, (status, response) =>
+            {
+                TwitterService Service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+                Dispatcher.BeginInvoke(() =>
                 {
-                    if (response.StatusCode == HttpStatusCode.Forbidden)
-                        Dispatcher.BeginInvoke(() => MessageBox.Show("That tweet is duplicated."));
-                    else if (response.StatusCode != HttpStatusCode.OK)
-                        Dispatcher.BeginInvoke(() => MessageBox.Show("An error has occurred."));
-                    else
-                        Dispatcher.BeginInvoke(() =>
-                        {
-                            pBar.IsVisible = false;
-                            DataTransfer.Text = "";
-                            if (NavigationService.CanGoBack)
-                                NavigationService.GoBack();
-                            else
-                                NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
-                        });
+                    pBar.Text = "Sending message...";
                 });
+                Service.SendDirectMessage((int)DataTransfer.DMDestinationId, Tweet.Text, ReceiveDM);
+            }
             else
                 SendTweet();
+        }
+
+        private void TryBackgroundSend()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                MessageBoxResult Result;
+                Result = MessageBox.Show("Seems that you're not connected to the Internet. Do you want to automatically send this tweet later?", "", MessageBoxButton.OKCancel);
+                if (Result == MessageBoxResult.OK)
+                {
+                    CreateTweetTask();
+                }
+            });
+        }
+
+        private void ReceiveDM(TwitterDirectMessage DM, TwitterResponse response)
+        {
+            Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+                Dispatcher.BeginInvoke(() => MessageBox.Show("That tweet is duplicated."));
+            else if (response.StatusCode != HttpStatusCode.OK)
+                Dispatcher.BeginInvoke(() => MessageBox.Show("An error has occurred."));
+            else
+                Dispatcher.BeginInvoke(() =>
+                {
+                    DataTransfer.Text = "";
+                    if (NavigationService.CanGoBack)
+                        NavigationService.GoBack();
+                    else
+                        NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+                });
+        }
+
+        private void CreateTweetTask()
+        {
+            ITweetableTask Task;
+
+            if (SendingDM)
+            {
+                Task = new TwitterDMTask
+                {
+                    DestinationID = DataTransfer.DMDestinationId,
+                    Text = Tweet.Text
+                };
+            }
+            else
+            {
+                Task = new TwitterStatusTask
+                {
+                    InReplyTo = DataTransfer.ReplyId,
+                    Text = Tweet.Text
+                };
+            }
+
+            Task.Accounts = AccountsList.SelectedItems.Cast<UserToken>();
+            Config.TweetTasks.Add(Task);
+            Config.SaveTasks();
         }
 
         private void SendTweet()
         {
             TwitterService srv;
-
+            Dispatcher.BeginInvoke(() =>
+            {
+                pBar.Text = "Sending tweet...";
+            });
             if (AccountsList.SelectedItems.Count == 0)
             {
                 Dispatcher.BeginInvoke(() => MessageBox.Show("You haven't select any account to tweet."));
@@ -110,10 +183,11 @@ namespace Ocell.SPpages
 
         private void ReceiveResponse(TwitterStatus status, TwitterResponse response)
         {
+            pBar.IsVisible = false;
             if (response.StatusCode == HttpStatusCode.Forbidden)
                 Dispatcher.BeginInvoke(() => MessageBox.Show("That tweet is duplicated."));
             else if (response.StatusCode != HttpStatusCode.OK)
-                Dispatcher.BeginInvoke(() => MessageBox.Show("An error has occurred."));
+                Dispatcher.BeginInvoke(() => MessageBox.Show("Ooops. An error has ocurred, try again."));
             else
                 Dispatcher.BeginInvoke(() =>
                 {
@@ -160,7 +234,7 @@ namespace Ocell.SPpages
             req.Path = "upload.xml";
             //req.Method = Hammock.Web.WebMethod.Post;
 
-            client.BeginRequest(req, (RestCallback) uploadCompleted);
+            client.BeginRequest(req, (RestCallback)uploadCompleted);
         }
 
         private void uploadCompleted(RestRequest request, RestResponse response, object userstate)
@@ -192,9 +266,10 @@ namespace Ocell.SPpages
 
         private void Tweet_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Dispatcher.BeginInvoke(() => {
-                   SendButton.IsEnabled = (Tweet.Text.Length <= 140);
-                   Count.Text = (140 - Tweet.Text.Length).ToString();
+            Dispatcher.BeginInvoke(() =>
+            {
+                SendButton.IsEnabled = (Tweet.Text.Length <= 140);
+                Count.Text = (140 - Tweet.Text.Length).ToString();
             });
         }
 
@@ -202,7 +277,7 @@ namespace Ocell.SPpages
         {
             Image img = sender as Image;
 
-            if(img == null)
+            if (img == null)
                 return;
 
             UpdateOpacity(img);
