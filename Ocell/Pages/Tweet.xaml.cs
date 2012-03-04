@@ -262,7 +262,7 @@ namespace Ocell.SPpages
         private void quoteButton_Click(object sender, EventArgs e)
         {
             DataTransfer.ReplyId = 0;
-            DataTransfer.Text = "\"@" + status.Text + "\"";
+            DataTransfer.Text = "RT @" + status.User.ScreenName + " " + status.Text;
 
             NavigationService.Navigate(new Uri("/Pages/NewTweet.xaml", UriKind.Relative));
         }
