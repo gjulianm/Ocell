@@ -29,9 +29,9 @@ namespace Ocell.Controls
             Loader = new TweetLoader();
             this.Loaded += new RoutedEventHandler(ListBox_Loaded);
             this.Unloaded += new RoutedEventHandler(ExtendedListBox_Unloaded);
-            Loader.LoadFinished += new TweetLoader.OnLoadFinished(PopulateItemsSource);
-            Loader.PartialLoad += new TweetLoader.OnPartialLoad(PopulateItemsSource);
-            Loader.CacheLoad += new TweetLoader.OnCacheLoad(PopulateItemsSource);
+            Loader.LoadFinished += new EventHandler(PopulateItemsSource);
+            Loader.PartialLoad += new EventHandler(PopulateItemsSource);
+            Loader.CacheLoad += new EventHandler(PopulateItemsSource);
             _Items = new ObservableCollection<ITweetable>();
             ItemsSource = _Items;
 
@@ -94,7 +94,7 @@ namespace Ocell.Controls
             
         }
 
-        protected void PopulateItemsSource()
+        protected void PopulateItemsSource(object sender, EventArgs e)
         {
             Dispatcher.BeginInvoke(() =>
             {
