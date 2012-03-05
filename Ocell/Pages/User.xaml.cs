@@ -31,7 +31,9 @@ namespace Ocell
             this.Loaded += new RoutedEventHandler(User_Loaded);
             TweetList.SelectionChanged += new SelectionChangedEventHandler(ListBox_SelectionChanged);
             TweetList.Loader.Cached = false;
-            _account = Config.Accounts.First();
+            _account = Config.Accounts.FirstOrDefault();
+            if (_account == null)
+                NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
             _srv = ServiceDispatcher.GetService(_account);
         }
 
@@ -140,9 +142,9 @@ namespace Ocell
 
             list.Compression += new ExtendedListBox.OnCompression(list_Compression);
             list.Loader.Error += new TweetLoader.OnError(Loader_Error);
-            list.Loader.LoadFinished += new TweetLoader.OnLoadFinished(Loader_LoadFinished);
+            list.Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
         }
-        void Loader_LoadFinished()
+        void Loader_LoadFinished(object sender, EventArgs e)
         {
             Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
         }

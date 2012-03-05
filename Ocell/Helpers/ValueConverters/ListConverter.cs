@@ -19,10 +19,11 @@ namespace Ocell
 
             string str = (value as string).ToLowerInvariant();
             int posSemicolon = str.IndexOf(';');
-            string user = str.Substring(0, Math.Max(0, posSemicolon));
             int posPoints = str.IndexOf(':');
             int posSlash = str.IndexOf('/');
+
             int whereToCut = Math.Max(Math.Max(posPoints, posSlash), posSemicolon) + 1;
+
             return str.Substring(whereToCut);
 
         }

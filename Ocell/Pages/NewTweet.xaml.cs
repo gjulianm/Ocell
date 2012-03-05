@@ -31,7 +31,7 @@ namespace Ocell.SPpages
 
             SendingDM = DataTransfer.ReplyingDM;
 
-            if (DataTransfer.DMDestinationId == null)
+            if (DataTransfer.DMDestinationId == 0 && DataTransfer.DM != null)
                 DataTransfer.DMDestinationId = DataTransfer.DM.SenderId;
 
             InitalizeAppBar();

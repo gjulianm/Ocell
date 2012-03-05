@@ -32,3 +32,7 @@ Ocell/PerformanceLogs/*
 GAC_Microsoft.Phone.Interop_v7_0_0_0_cneutral_1.dll
 
 hammock/
+
+Ocell/SampleData/Accounts/Accounts.xaml
+
+Ocell/SampleData/Users/Users.xaml

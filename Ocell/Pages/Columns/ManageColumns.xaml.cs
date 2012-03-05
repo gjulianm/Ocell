@@ -29,7 +29,6 @@ namespace Ocell.AuxScreens
         {
             Image img = sender as Image;
 
-            //Config.Columns.Remove(Config.Columns.First(item => (item.String == (String)img.Tag)));
             foreach (var item in Config.Columns)
             {
                 if (item.String == (string)img.Tag)
