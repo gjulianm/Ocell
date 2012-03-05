@@ -113,9 +113,9 @@
     </Compile>
     <Compile Include="SchedulerSync.cs" />
     <Compile Include="ThemeFunctions.cs" />
+    <Compile Include="Tiles\SecondaryTiles.cs" />
     <Compile Include="Transitions\Behaviours.cs" />
     <Compile Include="Transitions\OpacityTransition.cs" />
-    <Compile Include="TweetLoader\TweetLoader.cs" />
     <Compile Include="Controls\ExtendedListBox.cs" />
     <Compile Include="Helpers\Commands.cs" />
     <Compile Include="Helpers\StatusConverter.cs" />
@@ -278,6 +278,8 @@
     <EmbeddedResource Include="Images\Icons_White\appbar.feature.camera.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <Content Include="Images\ColumnTile.png" />
+    <Content Include="Images\ComposeTile.png" />
     <Content Include="Images\Icons_White\appbar.feature.email.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -356,7 +358,6 @@
     <Folder Include="Client\" />
     <Folder Include="Images\Icons_Black\" />
     <Folder Include="Multi\" />
-    <Folder Include="Tiles\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">

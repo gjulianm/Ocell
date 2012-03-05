@@ -72,6 +72,7 @@
     <Compile Include="SensitiveData.cs" />
     <Compile Include="ServiceDispatcher.cs" />
     <Compile Include="TileManager.cs" />
+    <Compile Include="TweetLoader.cs" />
     <Compile Include="TweetTask.cs" />
     <Compile Include="TwitterComparers.cs" />
     <Compile Include="TwitterResource.cs" />
