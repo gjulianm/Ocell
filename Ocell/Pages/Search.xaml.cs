@@ -25,7 +25,7 @@ namespace Ocell.Pages
                     NavigationService.GoBack();
 
             Dispatcher.BeginInvoke(() => PTitle.Text = query);
-            TweetList.Loader.Resource = new TwitterResource { Type = ResourceType.Search, Data = query };
+            TweetList.Loader.Resource = new TwitterResource { Type = ResourceType.Search, Data = query, User = Config.Accounts[0] };
             TweetList.Compression += new Controls.ExtendedListBox.OnCompression(TweetList_Compression);
             TweetList.Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);

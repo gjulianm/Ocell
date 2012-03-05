@@ -96,6 +96,7 @@
     <Compile Include="Helpers\ValueConverters\AvatarImageManager.cs" />
     <Compile Include="Helpers\ValueConverters\FirstToUpper.cs" />
     <Compile Include="Helpers\ValueConverters\ListConverter.cs" />
+    <Compile Include="Helpers\ValueConverters\ProtectedConverter.cs" />
     <Compile Include="Helpers\ValueConverters\RelativeDateTimeConverter.cs" />
     <Compile Include="Helpers\ValueConverters\ToColumn.cs" />
     <Compile Include="Helpers\ValueConverters\TweetTextConverter.cs" />
