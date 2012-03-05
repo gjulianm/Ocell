@@ -54,6 +54,7 @@
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
             <shell:ApplicationBar.MenuItems>
+            	<shell:ApplicationBarMenuItem x:Name="pinToStart" Text="pin column to start" Click="pinToStart_Click"/>
                 <shell:ApplicationBarMenuItem x:Name="menuItem1" Text="settings" Click="menuItem1_Click" />
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton x:Name="compose" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="Compose" Click="compose_Click" />

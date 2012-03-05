@@ -7,6 +7,7 @@ using System;
 using Microsoft.Phone.Shell;
 using System.Linq;
 using System.Threading;
+using System.Web;
 
 namespace ScheduledAgent
 {
@@ -68,9 +69,15 @@ namespace ScheduledAgent
             foreach (ITweetableTask Task in Config.TweetTasks)
             {
                 PendingCalls++;
-                Task.Completed +=new EventHandler(OnTaskCompleted);
+                Task.Completed += new EventHandler(OnTaskCompleted);
                 Task.Error += new EventHandler(Task_Error);
                 Task.Execute();
+            }
+
+            if (Config.BackgroundLoadColumns == true)
+            {
+                foreach (var column in FindColumnsToUpdate())
+                    UpdateColumn(column);
             }
 
             if (PendingCalls == 0)
@@ -127,14 +134,15 @@ namespace ScheduledAgent
                 PendingCalls++;
                 Service.ListDirectMessagesReceived(10, ReceiveMessagesToToast);
             }
-            
+
         }
 
         protected void ReceiveTweetsToTile(IEnumerable<TwitterStatus> Statuses, TwitterResponse Response)
         {
-            PendingCalls--;
+
             if (Response.StatusCode != System.Net.HttpStatusCode.OK || Statuses == null)
-            {  
+            {
+                PendingCalls--;
                 ProcessNotifications();
                 return;
             }
@@ -146,7 +154,7 @@ namespace ScheduledAgent
                 if (status.CreatedDate > LastChecked)
                     TileNewMentions.Add(status);
             }
-
+            PendingCalls--;
             ProcessNotifications();
         }
 
@@ -185,9 +193,10 @@ namespace ScheduledAgent
 
         protected void ReceiveMessagesToTile(IEnumerable<TwitterDirectMessage> Messages, TwitterResponse Response)
         {
-            PendingCalls--;
+
             if (Response.StatusCode != System.Net.HttpStatusCode.OK || Messages == null)
             {
+                PendingCalls--;
                 ProcessNotifications();
                 return;
             }
@@ -199,7 +208,7 @@ namespace ScheduledAgent
                 if (status.CreatedDate > LastChecked)
                     TileNewMessages.Add(status);
             }
-
+            PendingCalls--;
             ProcessNotifications();
         }
 
@@ -246,10 +255,72 @@ namespace ScheduledAgent
 
             InternalNotifyComplete();
         }
-        
+
         protected void InternalNotifyComplete()
         {
-        	execEnded = true;
+            execEnded = true;
+        }
+
+        protected void UpdateColumn(TwitterResource Resource)
+        {
+            PendingCalls++;
+            TweetLoader Loader = new TweetLoader(Resource);
+            Loader.Cached = false;
+            Loader.TweetsToLoadPerRequest = 1;
+            Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
+            Loader.Error += new TweetLoader.OnError(Loader_Error);
+            Loader.Load();
+        }
+
+        void Loader_Error(TwitterResponse response)
+        {
+            PendingCalls--;
+            if (PendingCalls <= 0)
+                InternalNotifyComplete();
+        }
+
+        void Loader_LoadFinished(object sender, EventArgs e)
+        {
+            TweetLoader Loader = sender as TweetLoader;
+            if (Loader != null && Loader.Source.Count > 0)
+            {
+                string TileString = Uri.EscapeDataString(Loader.Resource.String);
+                ITweetable Tweet = Loader.Source[0];
+                ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault(item => item.NavigationUri.ToString().Contains(TileString));
+
+                if (Tile != null)
+                {
+                    StandardTileData TileData = new StandardTileData
+                    {
+                        BackContent = Tweet.Text,
+                        BackTitle = Tweet.Author.ScreenName
+                    };
+                    Tile.Update(TileData);
+                }
+            }
+            PendingCalls--;
+            if (PendingCalls <= 0)
+                InternalNotifyComplete();
+        }
+
+        private IEnumerable<TwitterResource> FindColumnsToUpdate()
+        {
+            string column;
+            string url;
+            int paramIndex;
+            TwitterResource Resource;
+            foreach (var tile in ShellTile.ActiveTiles)
+            {
+                url = tile.NavigationUri.ToString();
+                paramIndex = url.IndexOf("column=");
+                if (paramIndex != -1)
+                {
+                    column = Uri.UnescapeDataString(url.Substring(url.IndexOf("=") + 1));
+                    Resource = Config.Columns.FirstOrDefault(item => item.String == column);
+                    if (Resource != null && Resource.String == column)
+                        yield return Resource;
+                }
+            }
         }
     }
 }

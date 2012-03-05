@@ -47,6 +47,17 @@ namespace Ocell
             CreateTile();
             ShowFollowMessage();
             LittleWatson.CheckForPreviousException();
+
+            string Column;
+            if (NavigationContext.QueryString.TryGetValue("column", out Column))
+                NavigateToColumn(Uri.UnescapeDataString(Column));
+        }
+
+        void NavigateToColumn(string Column)
+        {
+            TwitterResource Resource = pivots.First(item => item.String == Column);
+            if (Resource != null)
+                MainPivot.SelectedItem = Resource;
         }
 
         void ShowFollowMessage()
@@ -178,14 +189,14 @@ namespace Ocell
 
             list.Compression += new ExtendedListBox.OnCompression(list_Compression);
             list.Loader.Error += new TweetLoader.OnError(Loader_Error);
-            list.Loader.LoadFinished += new TweetLoader.OnLoadFinished(Loader_LoadFinished);
+            list.Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
 
             list.Loader.LoadCacheAsync();
             list.Loader.Load();
         }
 
-        void Loader_LoadFinished()
+        void Loader_LoadFinished(object sender, EventArgs e)
         {
             Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
         }
@@ -258,6 +269,14 @@ namespace Ocell
         private void SearchBtn_Click(object sender, System.EventArgs e)
         {
         	NavigationService.Navigate(new Uri("/Pages/EnterSearch.xaml", UriKind.Relative));
+        }
+
+        private void pinToStart_Click(object sender, System.EventArgs e)
+        {
+            if(SecondaryTiles.ColumnTileIsCreated((TwitterResource)MainPivot.SelectedItem))
+                Dispatcher.BeginInvoke(() => MessageBox.Show("This column is already pinned."));
+            else
+             SecondaryTiles.CreateColumnTile((TwitterResource)MainPivot.SelectedItem);
         }
     }
 }

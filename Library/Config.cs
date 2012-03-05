@@ -11,11 +11,25 @@ namespace Ocell.Library
         private static readonly string ColumnsKey = "COLUMNS";
         private static readonly string FollowMsg = "FOLLOWMSG";
         private static readonly string TweetTasksKey = "TWEETTASKS";
+        private static readonly string BGLoadColumns = "BGLOADCOLUMNS";
 
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
         private static bool? _FollowMessageShown;
         private static List<ITweetableTask> _TweetTasks;
+        private static bool? _BackgroundLoadColumns;
+
+        public static bool? BackgroundLoadColumns
+        {
+            get
+            {
+                return GenericGetFromConfig<bool?>(BGLoadColumns, ref _BackgroundLoadColumns);
+            }
+            set
+            {
+                GenericSaveToConfig<bool?>(BGLoadColumns, ref _BackgroundLoadColumns, value);
+            }
+        }
 
         public static List<ITweetableTask> TweetTasks
         {

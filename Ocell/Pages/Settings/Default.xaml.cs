@@ -123,6 +123,10 @@ namespace Ocell.Settings
         void Default_Loaded(object sender, RoutedEventArgs e)
         {
             BindAccounts();
+
+            ColumnUpdate.IsChecked = Config.BackgroundLoadColumns;
+            ComposePin.IsEnabled = !SecondaryTiles.ComposeTileIsCreated();
+
             if(Config.Accounts != null && Config.Accounts.Count > 0)
                 Accounts_Not.SelectedIndex = 0;
         }
@@ -146,6 +150,16 @@ namespace Ocell.Settings
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/Pages/Settings/OAuth.xaml", UriKind.Relative));
+        }
+
+        private void ComposePin_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SecondaryTiles.CreateComposeTile();
+        }
+
+        private void ColumnUpdate_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            Config.BackgroundLoadColumns = ColumnUpdate.IsChecked;
         }
     }
 }

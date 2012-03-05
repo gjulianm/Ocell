@@ -27,7 +27,7 @@ namespace Ocell.Pages
             Dispatcher.BeginInvoke(() => PTitle.Text = query);
             TweetList.Loader.Resource = new TwitterResource { Type = ResourceType.Search, Data = query };
             TweetList.Compression += new Controls.ExtendedListBox.OnCompression(TweetList_Compression);
-            TweetList.Loader.LoadFinished += new TweetLoader.OnLoadFinished(Loader_LoadFinished);
+            TweetList.Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
             TweetList.Loader.Load();
         }
@@ -41,7 +41,7 @@ namespace Ocell.Pages
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
         }
 
-        void Loader_LoadFinished()
+        void Loader_LoadFinished(object sender, EventArgs e)
         {
             Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
         }
