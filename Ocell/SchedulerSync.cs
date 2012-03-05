@@ -69,7 +69,6 @@ namespace Ocell
             try
             {
                 ScheduledActionService.Add(periodicTask);
-                ScheduledActionService.LaunchForTest(periodicTaskName, TimeSpan.FromSeconds(15));
             }
             catch (Exception)
             {

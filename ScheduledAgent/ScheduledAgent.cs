@@ -48,8 +48,6 @@ namespace ScheduledAgent
                 // Se ha producido una excepción no controlada; interrumpir el depurador
                 System.Diagnostics.Debugger.Break();
             }
-
-            LittleWatson.ReportException(e.ExceptionObject, "Ocell ScheduledAgent Error");
         }
 
         /// <summary>
