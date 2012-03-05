@@ -12,12 +12,26 @@ namespace Ocell.Library
         private static readonly string FollowMsg = "FOLLOWMSG";
         private static readonly string TweetTasksKey = "TWEETTASKS";
         private static readonly string BGLoadColumns = "BGLOADCOLUMNS";
+        private static readonly string ProtectedAccountsKey = "PROTECTEDACC";
 
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
         private static bool? _FollowMessageShown;
         private static List<ITweetableTask> _TweetTasks;
         private static bool? _BackgroundLoadColumns;
+        private static List<UserToken> _protectedAccounts;
+
+        public static List<UserToken> ProtectedAccounts
+        {
+            get
+            {
+                return GenericGetFromConfig<List<UserToken>>(ProtectedAccountsKey, ref _protectedAccounts);
+            }
+            set
+            {
+                GenericSaveToConfig<List<UserToken>>(ProtectedAccountsKey, ref _protectedAccounts, value);
+            }
+        }
 
         public static bool? BackgroundLoadColumns
         {
@@ -145,6 +159,11 @@ namespace Ocell.Library
         public static void SaveTasks()
         {
             TweetTasks = _TweetTasks;
+        }
+
+        public static void SaveProtectedAccounts()
+        {
+            ProtectedAccounts = _protectedAccounts;
         }
     }
 }

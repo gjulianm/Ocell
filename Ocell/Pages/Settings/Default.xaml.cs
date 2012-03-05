@@ -161,5 +161,24 @@ namespace Ocell.Settings
         {
             Config.BackgroundLoadColumns = ColumnUpdate.IsChecked;
         }
+
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                MenuItem Item = sender as MenuItem;
+                ProtectedConverter Converter = new ProtectedConverter();
+                UserToken User;
+                if (Item != null)
+                {
+                    User = Item.CommandParameter as UserToken;
+                    if (User != null)
+                        Item.Header = Converter.Convert(User, null, null, null);
+                }
+                BindAccounts();
+                Users.UpdateLayout();
+            });
+        }
     }
 }

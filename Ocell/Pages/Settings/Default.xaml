@@ -10,7 +10,20 @@
 		<DataTemplate x:Key="DataTemplate1">
 			<Grid/>
 		</DataTemplate>
-	</phone:PhoneApplicationPage.Resources>
+
+        <DataTemplate x:Key="AccountsContextTemplate">
+            <Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">
+                <TextBlock Text="{Binding ScreenName}" Margin="89,21,8,21" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="24"/>
+                <Image Margin="8,8,0,0" HorizontalAlignment="Left" Width="64" Height="64" VerticalAlignment="Top" Source="{Binding AvatarUrl}"/>
+                <toolkit:ContextMenuService.ContextMenu>
+                    <toolkit:ContextMenu Name="ContextMenu2">
+                        <toolkit:MenuItem Header="delete" Command="{StaticResource DeleteCommand}" CommandParameter="{Binding}" Click="MenuItem_Click" />
+                        <toolkit:MenuItem Header="{Binding Converter={StaticResource ProtectedConverter}}" Command="{StaticResource ProtectCommand}" CommandParameter="{Binding}"  Click="MenuItem_Click" />
+                    </toolkit:ContextMenu>
+                </toolkit:ContextMenuService.ContextMenu>
+            </Grid>
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
  
     <!--Código de ejemplo que muestra el uso de ApplicationBar-->
     <!--<phone:PhoneApplicationPage.ApplicationBar>
@@ -65,10 +78,9 @@
 				<Grid Height="608" Margin="0,-9,0,0">
 					<Button Content="Add account" Height="72" Margin="35,286,34,250" x:Name="btnLogin" Width="379" Click="btnLogin_Click" />
 					<TextBlock Height="30" Margin="213,6,-119,0" x:Name="UserName" VerticalAlignment="Top" Style="{StaticResource PhoneTextAccentStyle}" Foreground="{StaticResource PhoneForegroundBrush}" d:LayoutOverrides="Width" />
-					<ListBox x:Name="Users" toolkit:TiltEffect.IsTiltEnabled="True" Margin="8,40,8,0"  Height="232" VerticalAlignment="Top" ItemTemplate="{StaticResource AccountsTemplate}"/>
+					<ListBox x:Name="Users" toolkit:TiltEffect.IsTiltEnabled="True" Margin="8,40,8,0"  Height="232" VerticalAlignment="Top" ItemTemplate="{StaticResource AccountsContextTemplate}"/>
 					<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Accounts" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
-					<TextBlock HorizontalAlignment="Left" Margin="8,0,0,223" TextWrapping="Wrap" Text="To delete an account, tap it on the list." VerticalAlignment="Bottom" Foreground="{StaticResource PhoneSubtleBrush}"/>
-				</Grid>
+			    </Grid>
 			</controls:PivotItem>
 			<controls:PivotItem Header="notifications" Margin="12,8,12,0">
 				<Grid>

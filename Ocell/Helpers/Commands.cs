@@ -90,4 +90,54 @@ namespace Ocell.Commands
 
         public event EventHandler CanExecuteChanged;
     }
+
+    public class DeleteCommand : ICommand
+    {
+        public bool CanExecute(object parameter)
+        {
+            return (parameter is UserToken);
+        }
+
+        public void Execute(object parameter)
+        {
+            UserToken User = parameter as UserToken;
+            if (User != null)
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    MessageBoxResult Result;
+                    Result = MessageBox.Show("Are you sure you want to delete the account @" + User.ScreenName, "", MessageBoxButton.OKCancel);
+                    if (Result == MessageBoxResult.OK)
+                    {
+                        Config.Accounts.Remove(User);
+                        Config.SaveAccounts();
+                        PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
+                        if (service.CanGoBack)
+                            service.GoBack();
+                    }
+                });
+        }
+
+        public event EventHandler CanExecuteChanged;
+    }
+
+    public class ProtectCommand : ICommand
+    {
+        public bool CanExecute(object parameter)
+        {
+            return (parameter is UserToken);
+        }
+
+        public void Execute(object parameter)
+        {
+            try
+            {
+                ProtectedAccounts.SwitchAccountState(parameter as UserToken);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public event EventHandler CanExecuteChanged;
+    }
 }

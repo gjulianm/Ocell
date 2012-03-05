@@ -29,6 +29,9 @@
         <local:AvatarConverter x:Key="AvatarConverter"/>
         <local:ScreenNameConverter x:Key="ScreenNameConverter"/>
         <local:MarginConverter x:Key="MarginConverter"/>
+        <commands:DeleteCommand x:Key="DeleteCommand" />
+        <commands:ProtectCommand x:Key="ProtectCommand" />
+        <local:ProtectedConverter x:Key="ProtectedConverter"/>
 
             <DataTemplate x:Key="TweetTemplate">
             <Grid HorizontalAlignment="Stretch" Margin="0,3,0,12" Tag="{Binding Id}" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache">
@@ -60,12 +63,14 @@
         </Style>
 
 
+        
+
         <DataTemplate x:Key="AccountsTemplate">
-			<Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">
-				<TextBlock Text="{Binding ScreenName}" Margin="89,21,8,21" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="24"/>
-				<Image Margin="8,8,0,0" HorizontalAlignment="Left" Width="64" Height="64" VerticalAlignment="Top" Source="{Binding AvatarUrl}"/>
-			</Grid>
-		</DataTemplate>
+            <Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">
+                <TextBlock Text="{Binding ScreenName}" Margin="89,21,8,21" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="24"/>
+                <Image Margin="8,8,0,0" HorizontalAlignment="Left" Width="64" Height="64" VerticalAlignment="Top" Source="{Binding AvatarUrl}"/>
+            </Grid>
+        </DataTemplate>
 
         <Style TargetType="ScrollViewer">
             <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>

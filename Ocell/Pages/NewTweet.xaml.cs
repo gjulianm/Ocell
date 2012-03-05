@@ -82,15 +82,36 @@ namespace Ocell.SPpages
             AccountsList.SelectedIndex = Index;
         }
 
+        private bool CheckProtectedAccounts()
+        {
+            UserToken User;
+            foreach (var item in AccountsList.SelectedItems)
+            {
+                User = item as UserToken;
+                if (User != null && ProtectedAccounts.IsProtected(User))
+                {
+                        MessageBoxResult Result;
+                        Result = MessageBox.Show("Are you sure you want to tweet from the protected account @" + User.ScreenName + "?", "", MessageBoxButton.OKCancel);
+                        if (Result != MessageBoxResult.OK)
+                            return false;
+                }
+            }
+
+            return true;
+        }
+
         private void SendButton_Click(object sender, EventArgs e)
         {
+            if (!CheckProtectedAccounts())
+                return;
 
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
             {
                 TryBackgroundSend();
                 return;
             }
+
+            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
 
             if (DataTransfer.ReplyingDM)
             {
