@@ -20,6 +20,7 @@ namespace Ocell
         private ObservableCollection<TwitterResource> pivots;
         private bool selectionChangeFired;
         private Dictionary<string, ExtendedListBox> Lists;
+        private DateTime LastErrorTime;
 
         #region Loaders
         // Constructora
@@ -37,6 +38,8 @@ namespace Ocell
 
             MainPivot.DataContext = pivots;
             MainPivot.ItemsSource = pivots;
+
+            LastErrorTime = DateTime.MinValue;
 
             SetUpPivots();
         }
@@ -203,14 +206,18 @@ namespace Ocell
 
         void Loader_Error(TwitterResponse response)
         {
-            Dispatcher.BeginInvoke(() =>
+            if (response != null && response.StatusCode != System.Net.HttpStatusCode.OK && LastErrorTime.AddSeconds(10) < DateTime.Now)
             {
-                if (response.RateLimitStatus.RemainingHits == 0)
-                    MessageBox.Show("Woops! You have spent the limit of calls to Twitter. You'll have to wait until " + response.RateLimitStatus.ResetTime.ToString("H:mm"));
-                else
-                    MessageBox.Show("Error loading tweets: " + response.StatusDescription);
-                pBar.IsVisible = false;
-            });
+                LastErrorTime = DateTime.Now;
+                Dispatcher.BeginInvoke(() =>
+                {
+                    if (response.RateLimitStatus.RemainingHits == 0)
+                        MessageBox.Show("Woops! You have spent the limit of calls to Twitter. You'll have to wait until " + response.RateLimitStatus.ResetTime.ToString("H:mm"));
+                    else
+                        MessageBox.Show("Error loading tweets: " + response.StatusDescription);
+                    pBar.IsVisible = false;
+                });
+            }
         }
 
         void list_Compression(object sender, CompressionEventArgs e)
