@@ -100,6 +100,7 @@
     <Compile Include="Helpers\ValueConverters\RelativeDateTimeConverter.cs" />
     <Compile Include="Helpers\ValueConverters\ToColumn.cs" />
     <Compile Include="Helpers\ValueConverters\TweetTextConverter.cs" />
+    <Compile Include="LittleWatson.cs" />
     <Compile Include="Pages\Columns\SelectAccount.xaml.cs">
       <DependentUpon>SelectAccount.xaml</DependentUpon>
     </Compile>

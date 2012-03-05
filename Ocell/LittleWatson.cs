@@ -12,7 +12,7 @@ using System.IO.IsolatedStorage;
 using System.IO;
 using Microsoft.Phone.Tasks;
 
-namespace Ocell.Library
+namespace Ocell
 {
     /// <summary>
     /// This class was made by Andy Pennel https://blogs.msdn.com/b/andypennell/archive/2010/11/01/error-reporting-on-windows-phone-7.aspx?Redirected=true
