@@ -21,6 +21,7 @@ namespace Ocell
         private bool selectionChangeFired;
         private Dictionary<string, ExtendedListBox> Lists;
         private DateTime LastErrorTime;
+        private DateTime LastReloadTime;
 
         #region Loaders
         // Constructora
@@ -33,17 +34,26 @@ namespace Ocell
 
             this.Loaded += new RoutedEventHandler(CallLoadFunctions);
             pivots.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(pivots_CollectionChanged);
-            MainPivot.SelectionChanged += new SelectionChangedEventHandler(LoadTweetsOnPivot);
-            MainPivot.SelectionChanged += new SelectionChangedEventHandler(RefreshCurrentAccount);
+            MainPivot.SelectionChanged += new SelectionChangedEventHandler(PivotSelectionChanged);
 
             MainPivot.DataContext = pivots;
             MainPivot.ItemsSource = pivots;
 
             LastErrorTime = DateTime.MinValue;
+            LastReloadTime = DateTime.MinValue;
 
             SetUpPivots();
         }
-        
+
+        private void PivotSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DateTime.Now > LastReloadTime.AddSeconds(25))
+            {
+                LoadTweetsOnPivots();
+                LastReloadTime = DateTime.Now;
+            }
+            RefreshCurrentAccount(e);
+        }
 
         void CallLoadFunctions(object sender, RoutedEventArgs e)
         {
@@ -105,7 +115,7 @@ namespace Ocell
 
         #endregion
 
-        void LoadTweetsOnPivot(object sender, SelectionChangedEventArgs e)
+        private void LoadTweetsOnPivots()
         {
             if (MainPivot.SelectedItem == null)
                 return;
@@ -118,7 +128,7 @@ namespace Ocell
             }
         }
 
-        void RefreshCurrentAccount(object sender, SelectionChangedEventArgs e)
+        private void RefreshCurrentAccount(SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] != null)
             {
@@ -214,7 +224,7 @@ namespace Ocell
                     if (response.RateLimitStatus.RemainingHits == 0)
                         MessageBox.Show("Woops! You have spent the limit of calls to Twitter. You'll have to wait until " + response.RateLimitStatus.ResetTime.ToString("H:mm"));
                     else
-                        MessageBox.Show("Error loading tweets: " + response.StatusDescription);
+                        MessageBox.Show("We couldn't load the tweets: " + response.StatusDescription);
                     pBar.IsVisible = false;
                 });
             }

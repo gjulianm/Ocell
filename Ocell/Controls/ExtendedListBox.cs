@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Ocell.Library;
 using TweetSharp;
+using System.Windows.Data;
 
 namespace Ocell.Controls
 {
@@ -23,6 +24,7 @@ namespace Ocell.Controls
         private bool alreadyHookedScrollEvents = false;
         public TweetLoader Loader;
         protected ObservableCollection<ITweetable> _Items;
+        protected CollectionViewSource _ViewSource;
 
         public ExtendedListBox()
         {
@@ -33,9 +35,17 @@ namespace Ocell.Controls
             Loader.PartialLoad += new EventHandler(PopulateItemsSource);
             Loader.CacheLoad += new EventHandler(PopulateItemsSource);
             _Items = new ObservableCollection<ITweetable>();
-            ItemsSource = _Items;
+            _ViewSource = new CollectionViewSource();
+            SetupCollectionViewSource();
+        }
 
-            
+        private void SetupCollectionViewSource()
+        {
+            _ViewSource.Source = _Items;
+            ItemsSource = _ViewSource.View;
+            System.ComponentModel.SortDescription Sorter = new System.ComponentModel.SortDescription();
+            Sorter.PropertyName = "Id";
+            Sorter.Direction = System.ComponentModel.ListSortDirection.Descending;
         }
 
         private void SetTag()
@@ -83,6 +93,8 @@ namespace Ocell.Controls
                     }
                     else
                         _Items.Insert(0, item);
+
+                    _Items.Add(item);
                     loaded++;
                 }
                 if (loaded >= 2)
