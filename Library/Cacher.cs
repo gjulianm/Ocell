@@ -107,8 +107,14 @@ namespace Ocell.Library
 
             foreach(string Raw in Strings)
             {
-                Item = DefaultService.Deserialize<TwitterStatus>(Raw);
-                List.Add(Item);
+            	try
+            	{
+                	Item = DefaultService.Deserialize<TwitterStatus>(Raw);
+                	List.Add(Item);
+                }
+                catch(Exception)
+                {
+                }
             }
 
             return List.OrderByDescending(item => item.Id);
