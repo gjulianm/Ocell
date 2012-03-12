@@ -49,9 +49,12 @@ namespace Ocell.SPpages
 
         private void SetBindings()
         {
-            ContentPanel.DataContext = status;
-            ImagesList.DataContext = status.Entities.Media;
-            ImagesList.ItemsSource = status.Entities.Media.Where(item => item.MediaType == TwitterMediaType.Photo);
+            if (status != null)
+            {
+                ContentPanel.DataContext = status;
+                ImagesList.DataContext = status.Entities.Media;
+                ImagesList.ItemsSource = status.Entities.Media.Where(item => item.MediaType == TwitterMediaType.Photo);
+            }
         }
 
         private void SetUsername()
