@@ -110,7 +110,18 @@ namespace Ocell.Settings
 
         void RemoveColumnsAssociatedWith(UserToken Account)
         {
-            if (Config.Columns.Count == 0 || Account == null)
+           try
+           {
+           		UnsafeRemoveColumnsAssociatedWith(Account);
+           }
+           catch(Exception)
+           { 
+           }
+        }
+        
+        void UnsafeRemoveColumnsAssociatedWith(UserToken Account)
+        {
+        	 if (Config.Columns.Count == 0 || Account == null)
                 return;
             foreach (var item in Config.Columns)
             {
@@ -118,7 +129,7 @@ namespace Ocell.Settings
                 	Config.Columns.Remove(item);
             }
             Config.SaveColumns();
-        }
+		}
 
         void Default_Loaded(object sender, RoutedEventArgs e)
         {
