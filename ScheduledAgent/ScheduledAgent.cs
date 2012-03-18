@@ -64,6 +64,9 @@ namespace ScheduledAgent
             foreach (UserToken User in Config.Accounts)
                 GetMentionsFor(User);
 
+
+            Config.Dispose();
+
             foreach (ITweetableTask Task in Config.TweetTasks)
             {
                 PendingCalls++;
@@ -77,6 +80,8 @@ namespace ScheduledAgent
                 foreach (var column in FindColumnsToUpdate())
                     UpdateColumn(column);
             }
+
+            Config.Dispose();
 
             if (PendingCalls == 0)
             {
@@ -137,7 +142,6 @@ namespace ScheduledAgent
 
         protected void ReceiveTweetsToTile(IEnumerable<TwitterStatus> Statuses, TwitterResponse Response)
         {
-
             if (Response.StatusCode != System.Net.HttpStatusCode.OK || Statuses == null)
             {
                 PendingCalls--;
@@ -262,7 +266,7 @@ namespace ScheduledAgent
         protected void UpdateColumn(TwitterResource Resource)
         {
             PendingCalls++;
-            TweetLoader Loader = new TweetLoader(Resource);
+            TweetLoader Loader = new TweetLoader(Resource, false);
             Loader.Cached = false;
             Loader.TweetsToLoadPerRequest = 1;
             Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
@@ -272,6 +276,7 @@ namespace ScheduledAgent
 
         void Loader_Error(TwitterResponse response)
         {
+            ServiceDispatcher.Dispose();
             PendingCalls--;
             if (PendingCalls <= 0)
                 InternalNotifyComplete();
@@ -286,11 +291,13 @@ namespace ScheduledAgent
                 ITweetable Tweet = Loader.Source[0];
                 ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault(item => item.NavigationUri.ToString().Contains(TileString));
 
+                Loader.Dispose();
+
                 if (Tile != null)
                 {
                     StandardTileData TileData = new StandardTileData
                     {
-                        BackContent = Tweet.Text,
+                        BackContent = RemoveMention(Tweet.Text),
                         BackTitle = Tweet.Author.ScreenName
                     };
                     Tile.Update(TileData);
@@ -319,6 +326,13 @@ namespace ScheduledAgent
                         yield return Resource;
                 }
             }
+        }
+
+        private string RemoveMention(string Tweet)
+        {
+            if (Tweet[0] == '@')
+                Tweet = Tweet.Remove(0, Tweet.IndexOf(' ') + 1);
+            return Tweet;
         }
     }
 }
