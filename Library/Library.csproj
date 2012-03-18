@@ -54,9 +54,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="mscorlib.extensions" />
-    <Reference Include="TweetSharp.WindowsPhone.Mango">
-      <HintPath>..\Ocell\Assemblies\TweetSharp.WindowsPhone.Mango.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cacher.cs" />
@@ -82,6 +79,10 @@
     <ProjectReference Include="..\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">
       <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
       <Name>Hammock.WindowsPhone</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
+      <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
+      <Name>TweetSharp.WindowsPhone.Mango</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />

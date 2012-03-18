@@ -55,7 +55,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="mscorlib.extensions" />
-    <Reference Include="TweetSharp.WindowsPhone.Mango, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ScheduledAgent.cs" />
@@ -69,6 +68,10 @@
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</Project>
       <Name>Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
+      <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
+      <Name>TweetSharp.WindowsPhone.Mango</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />

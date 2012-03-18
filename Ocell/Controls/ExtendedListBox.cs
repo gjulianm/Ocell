@@ -33,9 +33,7 @@ namespace Ocell.Controls
             Loader.PartialLoad += new EventHandler(PopulateItemsSource);
             Loader.CacheLoad += new EventHandler(PopulateItemsSource);
             _Items = new ObservableCollection<ITweetable>();
-            ItemsSource = _Items;
-
-            
+            ItemsSource = _Items;            
         }
 
         private void SetTag()
@@ -51,16 +49,18 @@ namespace Ocell.Controls
             Loader.SaveToCache();
         }
 
-        private int GetInsertPositionFor(ITweetable item)
+        protected void PopulateItemsSource(object sender, EventArgs e)
         {
-            int i;
-            for (i = 0; i < _Items.Count; i++)
+            Dispatcher.BeginInvoke(() =>
             {
-                if (_Items[i].Id < item.Id)
-                    return i;
-            }
-
-            return i;
+                try
+                {
+                    UnsafePopulateItemsSource();
+                }
+                catch (Exception)
+                {
+                }
+            });
         }
 
         private void UnsafePopulateItemsSource()
@@ -94,28 +94,28 @@ namespace Ocell.Controls
             
         }
 
-        protected void PopulateItemsSource(object sender, EventArgs e)
+        private int GetInsertPositionFor(ITweetable item)
         {
-            Dispatcher.BeginInvoke(() =>
+            int i;
+            for (i = 0; i < _Items.Count; i++)
             {
-                try
-                {
-                    UnsafePopulateItemsSource();
-                }
-                catch (Exception)
-                {
-                }
-            });
-        }
+                if (_Items[i].Id < item.Id)
+                    return i;
+            }
 
-        public delegate void OnCompression(object sender, CompressionEventArgs e);
-        public event OnCompression Compression;
+            return i;
+        }
 
         public void Bind(TwitterResource Resource)
         {
             Loader.Resource = Resource;
             bound = true;
         }
+
+        public delegate void OnCompression(object sender, CompressionEventArgs e);
+        public event OnCompression Compression;
+
+        
 
         #region Scroll Events
         private void ListBox_Loaded(object sender, RoutedEventArgs e)

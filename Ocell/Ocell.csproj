@@ -81,7 +81,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="mscorlib.extensions" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="TweetSharp.WindowsPhone.Mango, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="WindowsPhoneEssentials">
       <HintPath>..\packages\WindowsPhoneEssentials.0.7.2.88\lib\SL4-WindowsPhone71\WindowsPhoneEssentials.dll</HintPath>
     </Reference>
@@ -93,6 +92,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\LoaderButton.cs" />
     <Compile Include="Helpers\ValueConverters\AvatarImageManager.cs" />
     <Compile Include="Helpers\ValueConverters\FirstToUpper.cs" />
     <Compile Include="Helpers\ValueConverters\ListConverter.cs" />
@@ -112,6 +112,12 @@
     </Compile>
     <Compile Include="Pages\SelectUser.xaml.cs">
       <DependentUpon>SelectUser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Topics.xaml.cs">
+      <DependentUpon>Topics.xaml</DependentUpon>
     </Compile>
     <Compile Include="SchedulerSync.cs" />
     <Compile Include="ThemeFunctions.cs" />
@@ -203,6 +209,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Settings\About.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\Settings\Default.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -212,6 +222,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Columns\SelectAccount.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Topics.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -225,6 +239,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Ocell_2012_03_18_19_41_51.sap" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />
@@ -243,10 +258,11 @@
     <Content Include="Assemblies\Hammock.WindowsPhone.dll" />
     <Content Include="Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll" />
     <Content Include="Assemblies\Newtonsoft.Json.dll" />
+    <Resource Include="Pages\Settings\OcellIcon200.png" />
     <Resource Include="Toolkit.Content\ie.png" />
-    <EmbeddedResource Include="Images\Icons_White\appbar.add.rest.png">
+    <Content Include="Images\Icons_White\appbar.add.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    </Content>
     <EmbeddedResource Include="Images\Icons_White\appbar.back.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -373,6 +389,10 @@
     <ProjectReference Include="..\ScheduledAgent\ScheduledAgent.csproj">
       <Project>{A6840CCC-134F-43B5-AB3D-3284BC385FE1}</Project>
       <Name>ScheduledAgent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
+      <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
+      <Name>TweetSharp.WindowsPhone.Mango</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />

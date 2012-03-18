@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduledAgent", "Scheduled
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hammock.WindowsPhone", "hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj", "{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TweetSharp.WindowsPhone.Mango", "tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj", "{51554319-87B7-4D38-9DDA-8F771FDA70FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ClientProfiles|Any CPU = ClientProfiles|Any CPU
@@ -187,6 +189,42 @@ Global
 		{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}.Staging|Mixed Platforms.Build.0 = ClientProfiles|Any CPU
 		{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}.Staging|PHP 5.3.ActiveCfg = ClientProfiles|Any CPU
 		{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}.Staging|x86.ActiveCfg = ClientProfiles|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.ClientProfiles|Any CPU.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.ClientProfiles|Any CPU.Build.0 = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.ClientProfiles|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.ClientProfiles|Mixed Platforms.Build.0 = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.ClientProfiles|PHP 5.3.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.ClientProfiles|x86.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Debug|PHP 5.3.ActiveCfg = Debug|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Local|Any CPU.Build.0 = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Local|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Local|Mixed Platforms.Build.0 = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Local|PHP 5.3.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Local|x86.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Production|Any CPU.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Production|Any CPU.Build.0 = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Production|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Production|Mixed Platforms.Build.0 = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Production|PHP 5.3.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Production|x86.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Release|PHP 5.3.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Release|x86.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Staging|Any CPU.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Staging|Any CPU.Build.0 = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Staging|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Staging|Mixed Platforms.Build.0 = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Staging|PHP 5.3.ActiveCfg = Release|Any CPU
+		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Staging|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
