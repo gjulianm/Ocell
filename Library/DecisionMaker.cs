@@ -21,7 +21,7 @@ namespace Ocell.Library
             int i;
             double sum = 0;
             TimeSpan Difference;
-            const int TweetsToAnalyze = 30;
+            const int TweetsToAnalyze = 3; // Way faster.
             int upperLimit = Math.Min(TweetsToAnalyze, Tweets.Count()) - 1;
 
             for (i = 0; i < upperLimit; i++)
