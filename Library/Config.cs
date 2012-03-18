@@ -5,7 +5,7 @@ using System.IO.IsolatedStorage;
 
 namespace Ocell.Library
 {
-    public static class Config
+    public static class Config 
     {
         private static readonly string AccountsKey = "ACCOUNTS";
         private static readonly string ColumnsKey = "COLUMNS";
@@ -164,6 +164,16 @@ namespace Ocell.Library
         public static void SaveProtectedAccounts()
         {
             ProtectedAccounts = _protectedAccounts;
+        }
+
+        public static void Dispose()
+        {
+            _accounts = null;
+            _BackgroundLoadColumns = null;
+            _columns = null;
+            _FollowMessageShown = null;
+            _protectedAccounts = null;
+            _TweetTasks = null;
         }
     }
 }
