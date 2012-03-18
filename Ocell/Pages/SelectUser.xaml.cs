@@ -40,9 +40,12 @@ namespace Ocell.Pages
 
         void UserFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Source.View.Filter = new Predicate<object>(item => (item != null)
-                && (item is TwitterUser) 
-                && (item as TwitterUser).ScreenName.ToLowerInvariant().Contains(UserFilter.Text.ToLowerInvariant()));
+            if (Source != null && Source.View != null && UserFilter != null)
+            {
+                Source.View.Filter = new Predicate<object>(item => (item != null)
+                    && (item is TwitterUser)
+                    && (item as TwitterUser).ScreenName.ToLowerInvariant().Contains(UserFilter.Text.ToLowerInvariant()));
+            }
         }
 
         void UserList_SelectionChanged(object sender, SelectionChangedEventArgs e)
