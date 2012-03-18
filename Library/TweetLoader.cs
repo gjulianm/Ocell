@@ -9,38 +9,44 @@ using System.Threading;
 
 namespace Ocell.Library
 {
-    public class TweetLoader
+    public class TweetLoader : IDisposable
     {
         private int Loaded;
         private readonly int ToLoad = 1;
         public int TweetsToLoadPerRequest { get; set; }
         public bool Cached { get; set; }
         private int RequestsInProgress;
-	    protected TwitterResource _resource;
+        protected TwitterResource _resource;
         private static DateTime RateResetTime;
 
-        public TwitterResource Resource 
+        public TwitterResource Resource
         {
-	        get
-	        {
-		        return _resource;
-	        }
-	        set
-	        {
-		        _resource = value;
-		        _srv = ServiceDispatcher.GetService(_resource.User);
-	        }
-	    }
+            get
+            {
+                return _resource;
+            }
+            set
+            {
+                _resource = value;
+                _srv = ServiceDispatcher.GetService(_resource.User);
+            }
+        }
         public ObservableCollection<ITweetable> Source { get; protected set; }
-	    protected TwitterService _srv;
+        protected TwitterService _srv;
         protected long LastId;
-        
+
         #region Constructors
-        public TweetLoader(TwitterResource resource) : this()
+        public TweetLoader(TwitterResource resource, bool cached)
+            : this()
         {
             Resource = resource;
-	        _srv = ServiceDispatcher.GetService(Resource.User);
+            _srv = ServiceDispatcher.GetService(resource.User);
+            Cached = cached;
+        }
 
+        public TweetLoader(TwitterResource resource)
+            : this(resource, true)
+        {
             LoadCacheAsync();
         }
 
@@ -131,8 +137,8 @@ namespace Ocell.Library
             {
                 return;
             }
-            if(Last == 0)
-            	Last = LastId;
+            if (Last == 0)
+                Last = LastId;
             switch (Resource.Type)
             {
                 case ResourceType.Home:
@@ -160,7 +166,7 @@ namespace Ocell.Library
                     break;
             }
         }
-        
+
         public void LoadCache()
         {
             if (!Cached || Resource == null || Resource.User == null)
@@ -172,11 +178,12 @@ namespace Ocell.Library
             if (!DecisionMaker.ShouldLoadCache(ref CacheList))
                 return;
 
+
             foreach (var item in CacheList)
                 if (!Source.Contains(item, comparer))
                     Source.Add(item);
 
-            if(CacheLoad != null)
+            if (CacheLoad != null)
                 CacheLoad(this, new EventArgs());
         }
         #endregion
@@ -225,37 +232,37 @@ namespace Ocell.Library
             foreach (var item in result.Statuses)
                 list.Add(item);
             GenericReceive((IEnumerable<ITweetable>)list, response);
-        } 
+        }
         #endregion
 
         protected void GenericReceive(IEnumerable<ITweetable> list, TwitterResponse response)
         {
-        	try
-        	{
-        		UnsafeGenericReceive(list, response);
-        	}
-        	catch (Exception)
-        	{
-        	}
+            try
+            {
+                UnsafeGenericReceive(list, response);
+            }
+            catch (Exception)
+            {
+            }
         }
         private void UnsafeGenericReceive(IEnumerable<ITweetable> list, TwitterResponse response)
         {
             TweetEqualityComparer comparer = new TweetEqualityComparer();
-            
+
             if (list == null || response.StatusCode != HttpStatusCode.OK)
             {
                 if (Error != null)
                     Error(response);
                 return;
             }
-            
-            if(Source == null)
-            	Source = new ObservableCollection<ITweetable>();
+
+            if (Source == null)
+                Source = new ObservableCollection<ITweetable>();
 
             foreach (var status in list)
                 if (!Source.Contains(status, comparer))
                     Source.Add(status);
-                    
+
             OrderSource();
 
             if (list.Count() != 0)
@@ -281,10 +288,10 @@ namespace Ocell.Library
         {
             if (!Cached)
                 return;
-            
+
             if (Source.Count == 0)
                 return;
-            
+
             if (Source.First().GetType() == typeof(TwitterStatus))
             {
                 try
@@ -298,12 +305,15 @@ namespace Ocell.Library
             }
         }
 
-		protected void OrderSource()
-		{
-			Source = new ObservableCollection<ITweetable>(Source.OrderByDescending(item => item.Id));
-		}
+        protected void OrderSource()
+        {
+            Source = new ObservableCollection<ITweetable>(Source.OrderByDescending(item => item.Id));
+        }
 
-     
+        public void Dispose()
+        {
+            Source.Clear();
+        }
 
         #region Events
         public event EventHandler LoadFinished;
@@ -315,6 +325,6 @@ namespace Ocell.Library
 
         public event EventHandler CacheLoad;
         #endregion
-    } 
-        
+    }
+
 }
