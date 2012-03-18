@@ -56,6 +56,7 @@ namespace Ocell
                 NavigateToColumn(Uri.UnescapeDataString(Column));
         }
 
+
         void NavigateToColumn(string Column)
         {
             TwitterResource Resource = pivots.First(item => item.String == Column);
@@ -285,5 +286,15 @@ namespace Ocell
             else
              SecondaryTiles.CreateColumnTile((TwitterResource)MainPivot.SelectedItem);
         }
+
+        private void about_Click(object sender, System.EventArgs e)
+        {
+        	NavigationService.Navigate(new Uri("/Pages/Settings/About.xaml", UriKind.Relative));
+        }
+
+        private void Trending_Click(object sender, System.EventArgs e)
+        {
+        	NavigationService.Navigate(new Uri("/Pages/Topics.xaml", UriKind.Relative));
+		}
     }
 }

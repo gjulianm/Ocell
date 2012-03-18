@@ -1,0 +1,74 @@
+﻿<phone:PhoneApplicationPage 
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="185"
+	x:Class="Ocell.About"
+	FontFamily="{StaticResource PhoneFontFamilyNormal}"
+	FontSize="{StaticResource PhoneFontSizeNormal}"
+	Foreground="{StaticResource PhoneForegroundBrush}"
+	Orientation="Portrait"
+	shell:SystemTray.IsVisible="True"
+	shell:SystemTray.Opacity="0.0">
+
+	<!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
+	<Grid x:Name="LayoutRoot" Margin="0,-24,0,0">
+		<Grid.Background>
+			<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
+		</Grid.Background>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Grid Margin="12,64,0,0" Grid.Row="1">
+<!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
+			<StackPanel x:Name="TitlePanel" Grid.Row="0" Height="116" VerticalAlignment="Top">
+				<TextBlock x:Name="ApplicationTitle" Text="OCELL" Style="{StaticResource PhoneTextNormalStyle}"/>
+				<TextBlock x:Name="PageTitle" Text="About" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+			</StackPanel>
+
+		<!--ContentPanel: coloque aquí el contenido adicional-->
+			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
+				<Image Height="128" Margin="156,8,172,0" Source="OcellIcon200.png" Stretch="Fill" VerticalAlignment="Top"/>
+				<RichTextBox Margin="8,148,8,0" VerticalAlignment="Top" Height="436">
+					<Paragraph><Run Text="Ocell is a open source (ASL) twitter client for Windows Phon"/><Run Text="e, developed by "/><Hyperlink NavigateUri="/Pages/User.xaml?user=gjulianm"><Run Text="Guillermo Julián">
+								<Run.Foreground>
+									<SolidColorBrush Color="White">
+										<SolidColorBrush.RelativeTransform>
+											<MatrixTransform Matrix="Identity"/>
+										</SolidColorBrush.RelativeTransform>
+										<SolidColorBrush.Transform>
+											<MatrixTransform Matrix="Identity"/>
+										</SolidColorBrush.Transform>
+									</SolidColorBrush>
+								</Run.Foreground>
+							</Run></Hyperlink><Run Text=". You can follow "/><Hyperlink NavigateUri="/Pages/User.xaml?user=OcellApp"><Run Text="@OcellApp">
+								<Run.Foreground>
+									<SolidColorBrush Color="White">
+										<SolidColorBrush.RelativeTransform>
+											<MatrixTransform Matrix="Identity"/>
+										</SolidColorBrush.RelativeTransform>
+										<SolidColorBrush.Transform>
+											<MatrixTransform Matrix="Identity"/>
+										</SolidColorBrush.Transform>
+									</SolidColorBrush>
+								</Run.Foreground>
+							</Run><Run Text=" "/></Hyperlink><Run Text="on Twitter to receive the lastest updates about Ocell."/></Paragraph>
+					<Paragraph><Run/></Paragraph>
+					<Paragraph><Run FontWeight="Bold" Text="Tips:"/></Paragraph>
+					<Paragraph><Run Text="   - Pin your favourite columns to the start screen with the &quot;Pin to start&quot; button in the main page."/></Paragraph>
+					<Paragraph><Run/></Paragraph>
+					<Paragraph><Run Text="   - To protect accounts go to Settings -&gt; Accounts, tap and hold one account and choose &quot;Protect&quot;. Never tweet from the wrong account again!"/></Paragraph>
+					<Paragraph><Run/></Paragraph>
+				</RichTextBox>
+			</Grid>
+		</Grid>
+		
+		<!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
+
+		<!--ContentPanel: coloque aquí el contenido adicional-->
+	</Grid>
+</phone:PhoneApplicationPage>

@@ -55,7 +55,9 @@
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
             <shell:ApplicationBar.MenuItems>
             	<shell:ApplicationBarMenuItem x:Name="pinToStart" Text="pin column to start" Click="pinToStart_Click"/>
+            	<shell:ApplicationBarMenuItem x:Name="Trending" Text="trending topics" Click="Trending_Click"/>
                 <shell:ApplicationBarMenuItem x:Name="menuItem1" Text="settings" Click="menuItem1_Click" />
+                <shell:ApplicationBarMenuItem x:Name="about" Text="about" Click="about_Click"/>
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton x:Name="compose" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="Compose" Click="compose_Click" />
             <shell:ApplicationBarIconButton x:Name="add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="Add column" Click="add_Click"/>
@@ -83,6 +85,7 @@
             <controls:Pivot.ItemTemplate>
                 <DataTemplate>
                     <custom:ExtendedListBox ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" Tag="{Binding}" Loaded="ListBox_Loaded" SelectionChanged="ListBox_SelectionChanged"/>
+					
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>
