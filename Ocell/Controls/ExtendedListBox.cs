@@ -46,6 +46,7 @@ namespace Ocell.Controls
             System.ComponentModel.SortDescription Sorter = new System.ComponentModel.SortDescription();
             Sorter.PropertyName = "Id";
             Sorter.Direction = System.ComponentModel.ListSortDirection.Descending;
+            _ViewSource.SortDescriptions.Add(Sorter);
         }
 
         private void SetTag()
@@ -82,7 +83,7 @@ namespace Ocell.Controls
             {
                 if (!_Items.Contains(item, Comparer))
                 {
-                    if (_Items.Count == 0)
+                    /*if (_Items.Count == 0)
                         _Items.Add(item);
                     else if(_Items[0].Id > item.Id)
                     {
@@ -93,7 +94,7 @@ namespace Ocell.Controls
                     }
                     else
                         _Items.Insert(0, item);
-
+                    */
                     _Items.Add(item);
                     loaded++;
                 }
@@ -104,6 +105,7 @@ namespace Ocell.Controls
                 }
             }
             
+
         }
 
         protected void PopulateItemsSource(object sender, EventArgs e)
