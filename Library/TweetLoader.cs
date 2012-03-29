@@ -15,6 +15,7 @@ namespace Ocell.Library
         private readonly int ToLoad = 1;
         public int TweetsToLoadPerRequest { get; set; }
         public bool Cached { get; set; }
+        public bool Threaded { get; set; }
         private int RequestsInProgress;
 	    protected TwitterResource _resource;
         private static DateTime RateResetTime;
@@ -51,6 +52,7 @@ namespace Ocell.Library
             Source = new ObservableCollection<TweetSharp.ITweetable>();
             LastId = 0;
             Cached = true;
+            Threaded = false;
             RequestsInProgress = 0;
             if (RateResetTime == null)
                 RateResetTime = DateTime.MinValue;
@@ -77,6 +79,25 @@ namespace Ocell.Library
 
         #region Loaders
         public void Load(bool Old = false)
+        {
+            if (Resource == null || _srv == null ||
+                RequestsInProgress >= 2 ||
+                RateResetTime > DateTime.Now)
+            {
+                if (LoadFinished != null)
+                    LoadFinished(this, new EventArgs());
+                return;
+            }
+
+            RequestsInProgress++;
+
+            if (Old)
+                LoadOld();
+            else
+                LoadNew();
+        }
+
+        protected void InternalLoad(bool Old = false)
         {
             if (Resource == null || _srv == null ||
                 RequestsInProgress >= 2 ||
