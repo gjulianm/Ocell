@@ -18,26 +18,28 @@ namespace Ocell.Library
             return copy;
         }
 
-        private static string GetCacheName(TwitterResource Resource)
+        private static string GetCacheName(TwitterResource resource)
         {
-            string Key = "Cache" + RemoveSymbols(Resource.String);
+            string Key = "Cache" + RemoveSymbols(resource.String);
             return Key;
         }
 
         private static IEnumerable<string> ReadContentsOf(string filename)
         {
-            IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
-            IsolatedStorageFileStream File = Storage.OpenFile(filename, System.IO.FileMode.OpenOrCreate);
-            IEnumerable<string> List;
-            try
+            IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
+            using (IsolatedStorageFileStream file = storage.OpenFile(filename, System.IO.FileMode.OpenOrCreate))
             {
-                List = new List<string>(File.ReadLines());
-                File.Close();
-                return List;
-            }
-            catch (Exception)
-            {
-                return new List<string>();
+                IEnumerable<string> List;
+                try
+                {
+                    List = new List<string>(file.ReadLines());
+                    file.Close();
+                    return List;
+                }
+                catch (Exception)
+                {
+                    return new List<string>();
+                }
             }
         }
 

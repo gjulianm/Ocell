@@ -18,9 +18,9 @@ namespace Ocell.Controls
     {
         // Compression states: Thanks to http://blogs.msdn.com/b/slmperf/archive/2011/06/30/windows-phone-mango-change-listbox-how-to-detect-compression-end-of-scroll-states.aspx
 
-        protected bool _isBouncy = false;
-        protected bool bound = false;
-        private bool alreadyHookedScrollEvents = false;
+        private bool _isBouncy = false;
+        private bool _bound = false;
+        private bool _alreadyHookedScrollEvents = false;
         public TweetLoader Loader;
         protected ObservableCollection<ITweetable> _Items;
 
@@ -109,7 +109,7 @@ namespace Ocell.Controls
         public void Bind(TwitterResource Resource)
         {
             Loader.Resource = Resource;
-            bound = true;
+            _bound = true;
         }
 
         public delegate void OnCompression(object sender, CompressionEventArgs e);
@@ -122,10 +122,10 @@ namespace Ocell.Controls
         {
             ScrollBar sb = null;
             ScrollViewer sv = null;
-            if (alreadyHookedScrollEvents)
+            if (_alreadyHookedScrollEvents)
                 return;
 
-            alreadyHookedScrollEvents = true;
+            _alreadyHookedScrollEvents = true;
             this.AddHandler(ExtendedListBox.ManipulationCompletedEvent, (EventHandler<ManipulationCompletedEventArgs>)LB_ManipulationCompleted, true);
             sb = (ScrollBar)FindElementRecursive(this, typeof(ScrollBar));
             sv = (ScrollViewer)FindElementRecursive(this, typeof(ScrollViewer));

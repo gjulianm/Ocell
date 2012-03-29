@@ -18,24 +18,24 @@ namespace Ocell.SPpages
     {
         protected bool SendingDM;
         public ApplicationBarIconButton SendButton;
-        private IEnumerable<TwitterUser> Users;
-        protected bool isWritingUser;
-        private string TweetText;
-        private TwitterService Service;
+        private IEnumerable<TwitterUser> _users;
+        private bool _isWritingUser;
+        private string _tweetText;
+        private TwitterService _service;
 
         public NewTweet()
         {
             InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
-            this.Loaded += new RoutedEventHandler(NewTweet_Loaded);
-            this.Unloaded += new RoutedEventHandler(NewTweet_Unloaded);
+            Loaded += NewTweet_Loaded;
+            Unloaded += NewTweet_Unloaded;
 
             AccountsList.DataContext = Config.Accounts;
             AccountsList.ItemsSource = Config.Accounts;
 
             SendingDM = DataTransfer.ReplyingDM;
 
-            isWritingUser = false;
+            _isWritingUser = false;
 
             if (DataTransfer.DMDestinationId == 0 && DataTransfer.DM != null)
                 DataTransfer.DMDestinationId = DataTransfer.DM.SenderId;
@@ -53,10 +53,10 @@ namespace Ocell.SPpages
             SendButton.Text = "send";
             appBar.Buttons.Add(SendButton);
 
-            ApplicationBarIconButton AddPhotoButton = new ApplicationBarIconButton(new Uri("/Images/Icons_White/appbar.feature.camera.rest.png", UriKind.Relative));
-            AddPhotoButton.Click += new EventHandler(AddPhotoButton_Click);
-            AddPhotoButton.Text = "add photo";
-            appBar.Buttons.Add(AddPhotoButton);
+            ApplicationBarIconButton addPhotoButton = new ApplicationBarIconButton(new Uri("/Images/Icons_White/appbar.feature.camera.rest.png", UriKind.Relative));
+            addPhotoButton.Click += new EventHandler(AddPhotoButton_Click);
+            addPhotoButton.Text = "add photo";
+            appBar.Buttons.Add(addPhotoButton);
 
             ApplicationBar = appBar;
         }
@@ -90,19 +90,19 @@ namespace Ocell.SPpages
             
 
             if (DataTransfer.CurrentAccount == null)
-                Service = ServiceDispatcher.GetDefaultService();
+                _service = ServiceDispatcher.GetDefaultService();
             else
-                Service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+                _service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
 
-            Service.ListFriends(0, ReceiveFriends);
+            _service.ListFriends(0, ReceiveFriends);
         }
 
         private void ReceiveFriends(TwitterCursorList<TwitterUser> list, TwitterResponse Response)
         {
             if (list != null && Response.StatusCode == HttpStatusCode.OK)
             {
-                if (Users == null)
-                    Users = list;
+                if (_users == null)
+                    _users = list;
             }
         }
 
@@ -190,7 +190,7 @@ namespace Ocell.SPpages
             {
                 Task = new TwitterDMTask
                 {
-                    DestinationID = DataTransfer.DMDestinationId,
+                    DestinationId = DataTransfer.DMDestinationId,
                     Text = Tweet.Text
                 };
             }
@@ -323,41 +323,41 @@ namespace Ocell.SPpages
         private void CheckAutocompleteUser()
         {
             if (Tweet.Text.Length > 0 && Tweet.Text.Last() == '@')
-                isWritingUser = true;
+                _isWritingUser = true;
 
-            if (isWritingUser)
+            if (_isWritingUser)
                 UpdateAutocomplete();
         }
 
         private void UpdateAutocomplete()
         {
-            if (TweetText == Tweet.Text)
+            if (_tweetText == Tweet.Text)
                 return;
 
-            TweetText = Tweet.Text;
+            _tweetText = Tweet.Text;
 
-            if (TweetText.LastIndexOf(' ') > TweetText.LastIndexOf('@'))
+            if (_tweetText.LastIndexOf(' ') > _tweetText.LastIndexOf('@'))
             {
-                isWritingUser = false;
-                if (Tweet.SelectionStart < TweetText.Length)
+                _isWritingUser = false;
+                if (Tweet.SelectionStart < _tweetText.Length)
                 {
-                    TweetText = TweetText.Remove(Tweet.SelectionStart);
-                    Tweet.Text = TweetText;
+                    _tweetText = _tweetText.Remove(Tweet.SelectionStart);
+                    Tweet.Text = _tweetText;
                 }
                 return;
             }
-            if (Tweet.SelectionStart < TweetText.Length)
+            if (Tweet.SelectionStart < _tweetText.Length)
             {
-                TweetText = TweetText.Remove(Tweet.SelectionStart);
+                _tweetText = _tweetText.Remove(Tweet.SelectionStart);
             }
 
-            string Written = TweetText.Substring(Tweet.Text.LastIndexOf('@') + 1);
+            string Written = _tweetText.Substring(Tweet.Text.LastIndexOf('@') + 1);
             string first;
-            if (Users == null)
+            if (_users == null)
                 first = "";
             else
         	{
-        		TwitterUser FirstUser = Users.FirstOrDefault(item => item != null && item.ScreenName.IndexOf(Written) == 0);
+        		TwitterUser FirstUser = _users.FirstOrDefault(item => item != null && item.ScreenName.IndexOf(Written) == 0);
                 if (FirstUser != null)
                     first = FirstUser.ScreenName;
                 else
@@ -366,17 +366,17 @@ namespace Ocell.SPpages
 
             if (Written.Length >= first.Length)
             {
-                Tweet.Text = TweetText;
-                Tweet.SelectionStart = TweetText.Length;
+                Tweet.Text = _tweetText;
+                Tweet.SelectionStart = _tweetText.Length;
                 return;
             }
         	
         	int selectStart;
-            selectStart = TweetText.Length - 1;
+            selectStart = _tweetText.Length - 1;
         	first = first.Substring(Math.Min(Written.Length , first.Length - 1));
-            TweetText = TweetText.Insert(Tweet.SelectionStart, first);
-            Tweet.Text = TweetText;
-            Tweet.SelectionStart = Math.Min(selectStart + 1, TweetText.Length - 1);
+            _tweetText = _tweetText.Insert(Tweet.SelectionStart, first);
+            Tweet.Text = _tweetText;
+            Tweet.SelectionStart = Math.Min(selectStart + 1, _tweetText.Length - 1);
         	Tweet.SelectionLength = 0;
         }
 

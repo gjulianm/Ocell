@@ -19,14 +19,14 @@ namespace Ocell.Library
     {
         private const string FileName = "DateFile";
 
-        public static void WriteLastCheckDate(DateTime Date)
+        public static void WriteLastCheckDate(DateTime date)
         {
-            IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
+            IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
             IsolatedStorageFileStream File;
             try
             {
-                 File = Storage.OpenFile(FileName, System.IO.FileMode.Create);
-                 File.WriteLine(Date.ToString("s"));
+                 File = storage.OpenFile(FileName, System.IO.FileMode.Create);
+                 File.WriteLine(date.ToString("s"));
                  File.Close();
             }
             catch (IsolatedStorageException)
@@ -37,26 +37,25 @@ namespace Ocell.Library
 
         public static DateTime GetLastCheckDate()
         {
-            IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
-            IsolatedStorageFileStream File;
-            string DateStr;
+            IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
+            string dateStr;
 
             try
             {
-                 File= Storage.OpenFile(FileName, System.IO.FileMode.OpenOrCreate);
-                 DateStr = File.ReadLine();
+                IsolatedStorageFileStream File = storage.OpenFile(FileName, System.IO.FileMode.OpenOrCreate);
+                dateStr = File.ReadLine();
             }
             catch (Exception)
             {
                 return DateTime.Now.ToUniversalTime();
             }
 
-            DateTime Date;
+            DateTime date;
 
-            if (!DateTime.TryParse(DateStr, out Date))
-                Date = DateTime.Now.ToUniversalTime();
+            if (!DateTime.TryParse(dateStr, out date))
+                date = DateTime.Now.ToUniversalTime();
 
-            return Date;
+            return date;
         }
     }
 }

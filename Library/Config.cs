@@ -7,18 +7,18 @@ namespace Ocell.Library
 {
     public static class Config 
     {
-        private static readonly string AccountsKey = "ACCOUNTS";
-        private static readonly string ColumnsKey = "COLUMNS";
-        private static readonly string FollowMsg = "FOLLOWMSG";
-        private static readonly string TweetTasksKey = "TWEETTASKS";
-        private static readonly string BGLoadColumns = "BGLOADCOLUMNS";
-        private static readonly string ProtectedAccountsKey = "PROTECTEDACC";
+        private const string AccountsKey = "ACCOUNTS";
+        private const string ColumnsKey = "COLUMNS";
+        private const string FollowMsg = "FOLLOWMSG";
+        private const string TweetTasksKey = "TWEETTASKS";
+        private const string BGLoadColumns = "BGLOADCOLUMNS";
+        private const string ProtectedAccountsKey = "PROTECTEDACC";
 
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
-        private static bool? _FollowMessageShown;
-        private static List<ITweetableTask> _TweetTasks;
-        private static bool? _BackgroundLoadColumns;
+        private static bool? _followMessageShown;
+        private static List<ITweetableTask> _tweetTasks;
+        private static bool? _backgroundLoadColumns;
         private static List<UserToken> _protectedAccounts;
 
         public static List<UserToken> ProtectedAccounts
@@ -37,11 +37,11 @@ namespace Ocell.Library
         {
             get
             {
-                return GenericGetFromConfig<bool?>(BGLoadColumns, ref _BackgroundLoadColumns);
+                return GenericGetFromConfig<bool?>(BGLoadColumns, ref _backgroundLoadColumns);
             }
             set
             {
-                GenericSaveToConfig<bool?>(BGLoadColumns, ref _BackgroundLoadColumns, value);
+                GenericSaveToConfig<bool?>(BGLoadColumns, ref _backgroundLoadColumns, value);
             }
         }
 
@@ -49,11 +49,11 @@ namespace Ocell.Library
         {
             get
             {
-                return GenericGetFromConfig<List<ITweetableTask>>(TweetTasksKey, ref _TweetTasks);
+                return GenericGetFromConfig<List<ITweetableTask>>(TweetTasksKey, ref _tweetTasks);
             }
             set
             {
-                GenericSaveToConfig<List<ITweetableTask>>(TweetTasksKey, ref _TweetTasks, value);
+                GenericSaveToConfig<List<ITweetableTask>>(TweetTasksKey, ref _tweetTasks, value);
             }
         }
 
@@ -82,7 +82,7 @@ namespace Ocell.Library
             }
         }
 
-        private static T GenericGetFromConfig<T>(string Key, ref T element) where T : new()
+        private static T GenericGetFromConfig<T>(string key, ref T element) where T : new()
         {
             if (element != null)
                 return element;
@@ -91,16 +91,16 @@ namespace Ocell.Library
 
             try
             {
-                if (!config.TryGetValue<T>(Key, out element))
+                if (!config.TryGetValue<T>(key, out element))
                 {
                     element = new T();
-                    config.Add(Key, element);
+                    config.Add(key, element);
                     config.Save();
                 }
             }
             catch (InvalidCastException)
             {
-                config.Remove(Key);
+                config.Remove(key);
             }
             catch (Exception)
             {
@@ -116,11 +116,11 @@ namespace Ocell.Library
         {
             get
             {
-                return GenericGetFromConfig<bool?>(FollowMsg, ref _FollowMessageShown);
+                return GenericGetFromConfig<bool?>(FollowMsg, ref _followMessageShown);
             }
             set
             {
-                GenericSaveToConfig<bool?>(FollowMsg, ref _FollowMessageShown, value);
+                GenericSaveToConfig<bool?>(FollowMsg, ref _followMessageShown, value);
             }
 
         }
@@ -158,7 +158,7 @@ namespace Ocell.Library
 
         public static void SaveTasks()
         {
-            TweetTasks = _TweetTasks;
+            TweetTasks = _tweetTasks;
         }
 
         public static void SaveProtectedAccounts()
@@ -169,11 +169,11 @@ namespace Ocell.Library
         public static void Dispose()
         {
             _accounts = null;
-            _BackgroundLoadColumns = null;
+            _backgroundLoadColumns = null;
             _columns = null;
-            _FollowMessageShown = null;
+            _followMessageShown = null;
             _protectedAccounts = null;
-            _TweetTasks = null;
+            _tweetTasks = null;
         }
     }
 }
