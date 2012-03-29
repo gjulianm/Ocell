@@ -204,7 +204,7 @@ namespace Ocell.SPpages
 
         private void ReceiveResponse(TwitterStatus status, TwitterResponse response)
         {
-            pBar.IsVisible = false;
+            Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
             if (response.StatusCode == HttpStatusCode.Forbidden)
                 Dispatcher.BeginInvoke(() => MessageBox.Show("That tweet is duplicated."));
             else if (response.StatusCode != HttpStatusCode.OK)
