@@ -25,6 +25,7 @@ namespace Ocell.Controls
         public TweetLoader Loader;
         protected ObservableCollection<ITweetable> _Items;
         protected CollectionViewSource _ViewSource;
+        private Collection<Predicate<ITweetable>> _filters;
 
         public ExtendedListBox()
         {
@@ -36,6 +37,7 @@ namespace Ocell.Controls
             Loader.CacheLoad += new EventHandler(PopulateItemsSource);
             _Items = new ObservableCollection<ITweetable>();
             _ViewSource = new CollectionViewSource();
+            _filters = new Collection<Predicate<ITweetable>>();
             SetupCollectionViewSource();
         }
 
@@ -46,7 +48,22 @@ namespace Ocell.Controls
             System.ComponentModel.SortDescription Sorter = new System.ComponentModel.SortDescription();
             Sorter.PropertyName = "Id";
             Sorter.Direction = System.ComponentModel.ListSortDirection.Descending;
+            _ViewSource.View.Filter = Filter;
             _ViewSource.SortDescriptions.Add(Sorter);
+        }
+
+        private bool Filter(object parameter)
+        {
+            if (!(parameter is ITweetable))
+                return false;
+
+            foreach (var pred in _filters)
+            {
+                if(pred.Invoke(parameter as ITweetable) == false)
+                    return false;
+            }
+
+            return true;
         }
 
         private void SetTag()
@@ -129,6 +146,28 @@ namespace Ocell.Controls
         {
             Loader.Resource = Resource;
             bound = true;
+        }
+
+        public void AddFilter(Predicate<ITweetable> predicate)
+        {
+            if (!_filters.Contains(predicate))
+                _filters.Add(predicate);
+        }
+
+        public void RemoveFilter(Predicate<ITweetable> predicate)
+        {
+            try
+            {
+                _filters.Remove(predicate);
+            }
+            catch
+            {
+            }
+        }
+
+        public void ClearFilters()
+        {
+            _filters.Clear();
         }
 
         #region Scroll Events

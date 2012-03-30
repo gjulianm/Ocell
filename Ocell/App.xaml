@@ -24,6 +24,8 @@
         <commands:ReplyAllCommand x:Key="ReplyAllCommand"/>
         <commands:ReplyCommand x:Key="ReplyCommand"/>
         <commands:RetweetCommand x:Key="RetweetCommand"/>
+        <local:IncludeExcludeConverter x:Key="IncludeExcludeConverter" />
+        <local:FilterTypeConverter x:Key="FilterTypeConverter" />
 		<local:TweetTextConverter x:Key="TweetTextConverter"/>
 		<local:SizeConverter x:Key="SizeConverter"/>
         <local:AvatarConverter x:Key="AvatarConverter"/>

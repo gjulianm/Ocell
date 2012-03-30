@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO.IsolatedStorage;
+using TweetSharp;
 
 namespace Ocell.Library
 {
@@ -13,6 +14,7 @@ namespace Ocell.Library
         private static readonly string TweetTasksKey = "TWEETTASKS";
         private static readonly string BGLoadColumns = "BGLOADCOLUMNS";
         private static readonly string ProtectedAccountsKey = "PROTECTEDACC";
+        private static readonly string FiltersKey = "FILTERS";
 
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
@@ -20,6 +22,19 @@ namespace Ocell.Library
         private static List<ITweetableTask> _TweetTasks;
         private static bool? _BackgroundLoadColumns;
         private static List<UserToken> _protectedAccounts;
+        private static List<ColumnFilter> _filters;
+
+        public static List<ColumnFilter> Filters
+        {
+            get
+            {
+                return GenericGetFromConfig<List<ColumnFilter>>(FiltersKey, ref _filters);
+            }
+            set
+            {
+                GenericSaveToConfig<List<ColumnFilter>>(FiltersKey, ref _filters, value);
+            }
+        }
 
         public static List<UserToken> ProtectedAccounts
         {
@@ -82,6 +97,19 @@ namespace Ocell.Library
             }
         }
 
+        public static bool? FollowMessageShown
+        {
+            get
+            {
+                return GenericGetFromConfig<bool?>(FollowMsg, ref _FollowMessageShown);
+            }
+            set
+            {
+                GenericSaveToConfig<bool?>(FollowMsg, ref _FollowMessageShown, value);
+            }
+
+        }
+
         private static T GenericGetFromConfig<T>(string Key, ref T element) where T : new()
         {
             if (element != null)
@@ -110,19 +138,6 @@ namespace Ocell.Library
                 element = new T();
 
             return element;
-        }
-
-        public static bool? FollowMessageShown
-        {
-            get
-            {
-                return GenericGetFromConfig<bool?>(FollowMsg, ref _FollowMessageShown);
-            }
-            set
-            {
-                GenericSaveToConfig<bool?>(FollowMsg, ref _FollowMessageShown, value);
-            }
-
         }
 
         private static void GenericSaveToConfig<T>(string Key, ref T element, T value) where T : new()
@@ -164,6 +179,11 @@ namespace Ocell.Library
         public static void SaveProtectedAccounts()
         {
             ProtectedAccounts = _protectedAccounts;
+        }
+
+        public static void SaveFilters()
+        {
+            Filters = _filters;
         }
     }
 }
