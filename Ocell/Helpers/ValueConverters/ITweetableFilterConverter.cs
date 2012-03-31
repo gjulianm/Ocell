@@ -22,7 +22,7 @@ namespace Ocell
             if (what == IncludeOrExclude.Include)
                 return "does not contain";
             else
-                return "contain";
+                return "contains";
 
         }
 

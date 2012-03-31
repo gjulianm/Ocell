@@ -35,7 +35,7 @@ namespace Ocell.Library
             if(item == null)
                 return false;
 
-            bool result = item.Author.ScreenName.Contains(Filter);
+            bool result = item.Author.ScreenName.ToLowerInvariant().Contains(Filter.ToLowerInvariant());
 
             if (Inclusion == IncludeOrExclude.Exclude)
                 return !result;
@@ -45,7 +45,7 @@ namespace Ocell.Library
 
         public override bool Equals(object obj)
         {
-            return (obj != null) && (obj as UserFilter != null) && ((obj as UserFilter).Filter == Filter);
+            return (obj != null) && (obj as UserFilter != null) && ((obj as UserFilter).Filter.ToLowerInvariant() == Filter.ToLowerInvariant());
         }
 
         public override int GetHashCode()
@@ -70,9 +70,9 @@ namespace Ocell.Library
             bool result;
 
             if (item is TwitterStatus)
-                result = (item as TwitterStatus).Source.Contains(Filter);
+                result = (item as TwitterStatus).Source.ToLowerInvariant().Contains(Filter.ToLowerInvariant());
             else if (item is TwitterSearchStatus)
-                result = (item as TwitterSearchStatus).Source.Contains(Filter);
+                result = (item as TwitterSearchStatus).Source.ToLowerInvariant().Contains(Filter.ToLowerInvariant());
             else
                 result = false;
 
@@ -84,7 +84,7 @@ namespace Ocell.Library
 
         public override bool Equals(object obj)
         {
-            return (obj != null) && (obj as SourceFilter != null) && ((obj as SourceFilter).Filter == Filter);
+            return (obj != null) && (obj as SourceFilter != null) && ((obj as SourceFilter).Filter.ToLowerInvariant() == Filter.ToLowerInvariant());
         }
 
         public override int GetHashCode()
@@ -106,7 +106,7 @@ namespace Ocell.Library
             if (item == null)
                 return false;
 
-            bool result = item.Text.Contains(Filter);
+            bool result = item.Text.ToLowerInvariant().Contains(Filter.ToLowerInvariant());
 
             if (Inclusion == IncludeOrExclude.Exclude)
                 return !result;
@@ -116,7 +116,7 @@ namespace Ocell.Library
 
         public override bool Equals(object obj)
         {
-            return (obj != null) && (obj as TextFilter != null) && ((obj as TextFilter).Filter == Filter);
+            return (obj != null) && (obj as TextFilter != null) && ((obj as TextFilter).Filter.ToLowerInvariant() == Filter.ToLowerInvariant());
         }
 
         public override int GetHashCode()

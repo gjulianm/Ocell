@@ -200,6 +200,8 @@ namespace Ocell
             if (!Lists.ContainsKey(Resource.String))
                 Lists.Add(Resource.String, list);
 
+            FilterManager.SetupFilter(list);
+
             list.Compression += new ExtendedListBox.OnCompression(list_Compression);
             list.Loader.Error += new TweetLoader.OnError(Loader_Error);
             list.Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
@@ -294,6 +296,14 @@ namespace Ocell
                 Dispatcher.BeginInvoke(() => MessageBox.Show("This column is already pinned."));
             else
              SecondaryTiles.CreateColumnTile((TwitterResource)MainPivot.SelectedItem);
+        }
+
+        private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
+        {
+            DataTransfer.cFilter = Config.Filters.FirstOrDefault(item => item.Resource == ((TwitterResource)MainPivot.SelectedItem));
+            if (DataTransfer.cFilter == null)
+                DataTransfer.cFilter = new ColumnFilter { Resource = (TwitterResource)MainPivot.SelectedItem };
+            NavigationService.Navigate(new Uri("/Pages/Filters.xaml", UriKind.Relative));
         }
     }
 }

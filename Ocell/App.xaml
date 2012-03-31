@@ -19,11 +19,12 @@
     <Application.Resources>
     	<local:ListConverter x:Key="ListConverter"/>
         <local:RelativeDateTimeConverter x:Key="RelativeDateTimeConverter"/>
-		<local:ToColumn x:Key="ToColumnConverter"/>
+		
 		<commands:FavoriteCommand x:Key="FavoriteCommand" />
         <commands:ReplyAllCommand x:Key="ReplyAllCommand"/>
         <commands:ReplyCommand x:Key="ReplyCommand"/>
         <commands:RetweetCommand x:Key="RetweetCommand"/>
+        <local:ToColumn x:Key="ToColumnConverter" />
         <local:IncludeExcludeConverter x:Key="IncludeExcludeConverter" />
         <local:FilterTypeConverter x:Key="FilterTypeConverter" />
 		<local:TweetTextConverter x:Key="TweetTextConverter"/>

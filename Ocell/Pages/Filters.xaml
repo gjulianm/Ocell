@@ -7,18 +7,20 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.SampleDataSource"
 	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="185"
+	 xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
 	x:Class="Ocell.Filters"
 	Orientation="Portrait"
 	shell:SystemTray.IsVisible="True"
-	shell:SystemTray.Opacity="0">
+	shell:SystemTray.Opacity="0"
+	xmlns:commands="clr-namespace:Ocell.Commands">
 
 	<phone:PhoneApplicationPage.Resources>
 		<DataTemplate x:Key="ItemTemplate">
-			<Grid Height="138" Width="444">
-				<TextBlock Text="{Binding Inclusion, Converter={StaticResource IncludeExcludeConverter}}" VerticalAlignment="Bottom" Margin="8,0,8,41"/>
-				<TextBlock Text="{Binding Filter}" Margin="32,39,8,0" FontWeight="Bold" VerticalAlignment="Top"/>
-				<TextBlock Text="{Binding Converter={StaticResource FilterTypeConverter}}" Margin="32,0,8,10" VerticalAlignment="Bottom" FontWeight="Bold"/>
-				<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Filter tweets where" VerticalAlignment="Top"/>
+			<Grid Height="138" Width="444" Tap="Grid_Tap" Hold="Grid_Hold">
+				<TextBlock x:Name="inclusion" Text="{Binding Inclusion, Converter={StaticResource IncludeExcludeConverter}}" VerticalAlignment="Bottom" Margin="8,0,8,41"/>
+				<TextBlock x:Name="source" Text="{Binding Converter={StaticResource FilterTypeConverter}}" Margin="32,39,8,0" FontWeight="Bold" VerticalAlignment="Top"/>
+				<TextBlock x:Name="filter" Text="{Binding Filter}" Margin="32,0,8,10" VerticalAlignment="Bottom" FontWeight="Bold"/>
+				<TextBlock x:Name="text" HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Don't show tweets where" VerticalAlignment="Top"/>
 			</Grid>
 		</DataTemplate>
 	</phone:PhoneApplicationPage.Resources>
@@ -50,7 +52,8 @@
 
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
-				<ListBox Margin="8,8,8,80" DataContext="{Binding}" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}"/>
+				<ListBox x:Name="FilterList" toolkit:TiltEffect.IsTiltEnabled="True" Margin="8,8,8,40" DataContext="{Binding}" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}"/>
+				<TextBlock HorizontalAlignment="Left" Margin="8,0,0,8" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Tap a filter to modify"/><Run Text=" it"/><Run Text=", tap &amp; hold to delete"/></TextBlock>
 			</Grid>
 		</Grid>
 		
@@ -60,6 +63,9 @@
 	</Grid>
 	
 	<phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True"/>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+        	<shell:ApplicationBarIconButton x:Name="add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="add new" Click="add_Click"/>
+        	<shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.save.rest.png" Text="save" Click="ApplicationBarIconButton_Click"/>
+        </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>

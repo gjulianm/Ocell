@@ -15,6 +15,7 @@ namespace Ocell.Library
         private static readonly string BGLoadColumns = "BGLOADCOLUMNS";
         private static readonly string ProtectedAccountsKey = "PROTECTEDACC";
         private static readonly string FiltersKey = "FILTERS";
+        private static readonly string GlobalFilterKey = "GLOBALFILTER";
 
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
@@ -23,6 +24,7 @@ namespace Ocell.Library
         private static bool? _BackgroundLoadColumns;
         private static List<UserToken> _protectedAccounts;
         private static List<ColumnFilter> _filters;
+        private static GlobalFilter _globalFilter;
 
         public static List<ColumnFilter> Filters
         {
@@ -108,6 +110,18 @@ namespace Ocell.Library
                 GenericSaveToConfig<bool?>(FollowMsg, ref _FollowMessageShown, value);
             }
 
+        }
+
+        public static GlobalFilter FilterGlobal
+        {
+            get
+            {
+                return GenericGetFromConfig<GlobalFilter>(GlobalFilterKey, ref _globalFilter);
+            }
+            set
+            {
+                GenericSaveToConfig<GlobalFilter>(GlobalFilterKey, ref _globalFilter, value);
+            }
         }
 
         private static T GenericGetFromConfig<T>(string Key, ref T element) where T : new()

@@ -7,12 +7,18 @@ using System.Collections.ObjectModel;
 
 namespace Ocell.Library
 {
-    public class ColumnFilter
+    public class GlobalFilter
     {
         private Collection<ITweetableFilter> _predicates;
-        public TwitterResource Resource { get; set; }
+        public Collection<ITweetableFilter> Predicates
+        {
+            get
+            {
+                return _predicates;
+            }
+        }
 
-        public ColumnFilter()
+        public GlobalFilter()
         {
             _predicates = new Collection<ITweetableFilter>();
         }
@@ -31,14 +37,66 @@ namespace Ocell.Library
             return true;
         }
 
-        public override bool Equals(object obj)
+        public Predicate<object> Predicate
         {
-            return Resource.Equals(obj);
+            get
+            {
+                return new Predicate<object>(Evaluate);
+            }
         }
 
-        public override int GetHashCode()
+        public void AddFilter(ITweetableFilter predicate)
         {
-            return Resource.GetHashCode();
+            if(!_predicates.Contains(predicate))
+                _predicates.Add(predicate);
+        }
+
+        public void RemoveFilter(ITweetableFilter predicate)
+        {
+            try
+            {
+                _predicates.Remove(predicate);
+            }
+            catch
+            {
+            }
+        }
+    }
+
+    public class ColumnFilter
+    {
+        private Collection<ITweetableFilter> _predicates;
+        public TwitterResource Resource { get; set; }
+        public GlobalFilter Global { get; set; }
+        public Collection<ITweetableFilter> Predicates
+        {
+            get
+            {
+                return _predicates;
+            }
+        }
+
+        public ColumnFilter()
+        {
+            _predicates = new Collection<ITweetableFilter>();
+        }
+
+        public bool Evaluate(object item)
+        {
+            ITweetable tweet = item as ITweetable;
+            
+            if(item == null)
+                return false;
+
+            foreach(var filter in _predicates)
+                if(filter.Evaluate(tweet) == false)
+                    return false;
+
+            if (Global != null)
+                if (Global.Evaluate(item) == false)
+                    return false;
+
+            return true;
         }
 
         public Predicate<object> Predicate
