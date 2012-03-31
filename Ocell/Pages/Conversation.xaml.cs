@@ -37,7 +37,8 @@ namespace Ocell
                 Source.Clear();
 
             LastStatus = DataTransfer.Status;
-            Source.Add(LastStatus);
+            if(!Source.Contains(DataTransfer.Status))
+            	Source.Add(LastStatus);
             CList.ItemsSource = Source;
 
             MoreConversation();
@@ -51,13 +52,13 @@ namespace Ocell
         private void MoreConversation()
         {
             TwitterStatus status = Source.Last();
-            if(status.InReplyToStatusId == null)
+            if(status != null && status.InReplyToStatusId == null)
             {
                 EndLoad();
                 return;
             }
-            
-           ServiceDispatcher.GetCurrentService().GetTweet((long)status.InReplyToStatusId, ReceiveTweet);
+            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
+            ServiceDispatcher.GetCurrentService().GetTweet((long)status.InReplyToStatusId, ReceiveTweet);
         }
         
         private void ReceiveTweet(TwitterStatus status, TwitterResponse response)

@@ -59,7 +59,7 @@
                 <shell:ApplicationBarMenuItem Text="filter this column" Click="ApplicationBarMenuItem_Click"/>
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton x:Name="compose" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="Compose" Click="compose_Click" />
-            <shell:ApplicationBarIconButton x:Name="add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="Add column" Click="add_Click"/>
+            <shell:ApplicationBarIconButton x:Name="add" IconUri="/Images/Icons_White/appbar.column.rest.png" Text="columns" Click="add_Click"/>
             <shell:ApplicationBarIconButton x:Name="send_DM" IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="send DM" Click="send_DM_Click"/>
             <shell:ApplicationBarIconButton x:Name="SearchBtn" IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="search" Click="SearchBtn_Click"/>
         </shell:ApplicationBar>
