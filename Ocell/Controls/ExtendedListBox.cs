@@ -149,7 +149,7 @@ namespace Ocell.Controls
 
         public void LoadIntermediate(LoadMoreTweetable trigger)
         {
-            Loader.LoadFrom(trigger.Id - 1);
+            Loader.LoadFrom(trigger.Id + 1);
         }
 
         public void RemoveLoadMore()

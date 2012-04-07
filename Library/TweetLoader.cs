@@ -315,24 +315,24 @@ namespace Ocell.Library
             if (Source == null || !Source.Any())
                 return;
 
-            ITweetable olderTweet;
-            ITweetable newerTweet;
+            ITweetable olderTweetReceived;
+            ITweetable nextTweet;
 
-            try
-            {
-                olderTweet = Source.OrderByDescending(item => item.Id).ElementAt(0);
-                newerTweet = received.OrderBy(item => item.Id).ElementAt(0);
-            }
-            catch
-            {
+            olderTweetReceived = received.OrderBy(item => item.Id).FirstOrDefault();
+
+            if (olderTweetReceived == null)
                 return;
-            }
+
+            nextTweet = Source.FirstOrDefault(item => item.Id < olderTweetReceived.Id);
+
+            if (nextTweet == null)
+                return;            
 
             int avgTime = DecisionMaker.GetAvgTimeBetweenTweets(Source);
-            TimeSpan diff = newerTweet.CreatedDate - olderTweet.CreatedDate;
+            TimeSpan diff = olderTweetReceived.CreatedDate - nextTweet.CreatedDate;
 
             if (diff.TotalSeconds > 4 * avgTime)
-                Source.Add(new LoadMoreTweetable { Id = newerTweet.Id + 1 });
+                Source.Add(new LoadMoreTweetable { Id = olderTweetReceived.Id - 1 });
         }
 
         public void SaveToCache()
