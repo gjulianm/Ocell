@@ -56,7 +56,15 @@ namespace Ocell
         public static void StartPeriodicAgent()
         {
             string periodicTaskName = "OcellPeriodicTask";
-            var periodicTask = ScheduledActionService.Find(periodicTaskName) as PeriodicTask;
+            PeriodicTask periodicTask = null;
+
+            try
+            {
+                 periodicTask = ScheduledActionService.Find(periodicTaskName) as PeriodicTask;
+            }
+            catch (Exception)
+            {
+            }
 
             if (periodicTask != null)
             {

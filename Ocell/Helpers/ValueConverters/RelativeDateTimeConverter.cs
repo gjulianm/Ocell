@@ -40,6 +40,10 @@ namespace Ocell
                 dateTime = DateTime.Parse((string)value);
             else
                 dateTime = (DateTime)value;
+
+            if (dateTime == DateTime.MinValue)
+                return "";
+
             var difference = DateTime.UtcNow - dateTime.ToUniversalTime();
 
             return thresholds.First(t => difference.TotalSeconds < t.Key).Value(difference);

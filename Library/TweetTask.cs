@@ -36,19 +36,18 @@ namespace Ocell.Library
         private void UnsafeExecute()
         {
             PendingCalls = 0;
-            TwitterService Service;
-            foreach (UserToken User in Accounts)
+            foreach (var user in Accounts)
             {
-                Service = ServiceDispatcher.GetService(User);
-                Service.SendTweet(Text, InReplyTo, ReceiveResponse);
+                TwitterService service = ServiceDispatcher.GetService(user);
+                service.SendTweet(Text, InReplyTo, ReceiveResponse);
                 PendingCalls++;
             }
         }
 
-        protected void ReceiveResponse(TwitterStatus Status, TwitterResponse Response)
+        protected void ReceiveResponse(TwitterStatus status, TwitterResponse response)
         {
             PendingCalls--;
-            if (Response.StatusCode == HttpStatusCode.OK && PendingCalls == 0)
+            if (response.StatusCode == HttpStatusCode.OK && PendingCalls == 0)
             {
                 if (Completed != null)
                     Completed(this, null);
@@ -67,7 +66,7 @@ namespace Ocell.Library
     public class TwitterDMTask : ITweetableTask
     {
         public string Text { get; set; }
-        public long DestinationID { get; set; }
+        public long DestinationId { get; set; }
         public IEnumerable<UserToken> Accounts { get; set; }
 
         protected int PendingCalls;
@@ -86,19 +85,18 @@ namespace Ocell.Library
         private void UnsafeExecute()
         {
             PendingCalls = 0;
-            TwitterService Service;
-            foreach (UserToken User in Accounts)
+            foreach (UserToken user in Accounts)
             {
-                Service = ServiceDispatcher.GetService(User);
-                Service.SendDirectMessage((int)DestinationID, Text, ReceiveResponse);
+                TwitterService service = ServiceDispatcher.GetService(user);
+                service.SendDirectMessage((int)DestinationId, Text, ReceiveResponse);
                 PendingCalls++;
             }
         }
 
-        protected void ReceiveResponse(TwitterDirectMessage Status, TwitterResponse Response)
+        protected void ReceiveResponse(TwitterDirectMessage status, TwitterResponse response)
         {
             PendingCalls--;
-            if (Response.StatusCode == HttpStatusCode.OK && PendingCalls == 0)
+            if (response.StatusCode == HttpStatusCode.OK && PendingCalls == 0)
             {
                 if (Completed != null)
                     Completed(this, null);

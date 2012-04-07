@@ -121,8 +121,11 @@
     <Compile Include="Pages\SelectUser.xaml.cs">
       <DependentUpon>SelectUser.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SampleData\SampleDataSource\SampleDataSource.xaml.cs">
-      <DependentUpon>SampleDataSource.xaml</DependentUpon>
+    <Compile Include="Pages\Settings\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Topics.xaml.cs">
+      <DependentUpon>Topics.xaml</DependentUpon>
     </Compile>
     <Compile Include="SchedulerSync.cs" />
     <Compile Include="ThemeFunctions.cs" />
@@ -222,6 +225,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Settings\About.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\Settings\Default.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -231,6 +238,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Columns\SelectAccount.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Topics.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -248,6 +259,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Ocell_2012_03_18_19_41_51.sap" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />
@@ -267,6 +279,7 @@
     <Content Include="Assemblies\Hammock.WindowsPhone.dll" />
     <Content Include="Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll" />
     <Content Include="Assemblies\Newtonsoft.Json.dll" />
+    <Resource Include="Pages\Settings\OcellIcon200.png" />
     <Resource Include="Toolkit.Content\ie.png" />
     <Content Include="Images\Icons_White\appbar.add.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

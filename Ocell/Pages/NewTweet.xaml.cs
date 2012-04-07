@@ -18,18 +18,24 @@ namespace Ocell.SPpages
     {
         protected bool SendingDM;
         public ApplicationBarIconButton SendButton;
+        private IEnumerable<TwitterUser> _users;
+        private bool _isWritingUser;
+        private string _tweetText;
+        private TwitterService _service;
 
         public NewTweet()
         {
             InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
-            this.Loaded += new RoutedEventHandler(NewTweet_Loaded);
-            this.Unloaded += new RoutedEventHandler(NewTweet_Unloaded);
+            Loaded += NewTweet_Loaded;
+            Unloaded += NewTweet_Unloaded;
 
             AccountsList.DataContext = Config.Accounts;
             AccountsList.ItemsSource = Config.Accounts;
 
             SendingDM = DataTransfer.ReplyingDM;
+
+            _isWritingUser = false;
 
             if (DataTransfer.DMDestinationId == 0 && DataTransfer.DM != null)
                 DataTransfer.DMDestinationId = DataTransfer.DM.SenderId;
@@ -47,10 +53,10 @@ namespace Ocell.SPpages
             SendButton.Text = "send";
             appBar.Buttons.Add(SendButton);
 
-            ApplicationBarIconButton AddPhotoButton = new ApplicationBarIconButton(new Uri("/Images/Icons_White/appbar.feature.camera.rest.png", UriKind.Relative));
-            AddPhotoButton.Click += new EventHandler(AddPhotoButton_Click);
-            AddPhotoButton.Text = "add photo";
-            appBar.Buttons.Add(AddPhotoButton);
+            ApplicationBarIconButton addPhotoButton = new ApplicationBarIconButton(new Uri("/Images/Icons_White/appbar.feature.camera.rest.png", UriKind.Relative));
+            addPhotoButton.Click += new EventHandler(AddPhotoButton_Click);
+            addPhotoButton.Text = "add photo";
+            appBar.Buttons.Add(addPhotoButton);
 
             ApplicationBar = appBar;
         }
@@ -80,6 +86,24 @@ namespace Ocell.SPpages
 
             int Index = Config.Accounts.IndexOf(DataTransfer.CurrentAccount);
             AccountsList.SelectedIndex = Index;
+
+            
+
+            if (DataTransfer.CurrentAccount == null)
+                _service = ServiceDispatcher.GetDefaultService();
+            else
+                _service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+
+            _service.ListFriends(0, ReceiveFriends);
+        }
+
+        private void ReceiveFriends(TwitterCursorList<TwitterUser> list, TwitterResponse Response)
+        {
+            if (list != null && Response.StatusCode == HttpStatusCode.OK)
+            {
+                if (_users == null)
+                    _users = list;
+            }
         }
 
         private bool CheckProtectedAccounts()
@@ -149,6 +173,7 @@ namespace Ocell.SPpages
             else
                 Dispatcher.BeginInvoke(() =>
                 {
+                	Tweet.Text = "";
                     DataTransfer.Text = "";
                     if (NavigationService.CanGoBack)
                         NavigationService.GoBack();
@@ -165,7 +190,7 @@ namespace Ocell.SPpages
             {
                 Task = new TwitterDMTask
                 {
-                    DestinationID = DataTransfer.DMDestinationId,
+                    DestinationId = DataTransfer.DMDestinationId,
                     Text = Tweet.Text
                 };
             }
@@ -212,7 +237,7 @@ namespace Ocell.SPpages
             else
                 Dispatcher.BeginInvoke(() =>
                 {
-                    pBar.IsVisible = false;
+                	Tweet.Text = "";
                     DataTransfer.Text = "";
                     if (NavigationService.CanGoBack)
                         NavigationService.GoBack();
@@ -287,11 +312,72 @@ namespace Ocell.SPpages
 
         private void Tweet_TextChanged(object sender, TextChangedEventArgs e)
         {
+            CheckAutocompleteUser();
             Dispatcher.BeginInvoke(() =>
             {
                 SendButton.IsEnabled = (Tweet.Text.Length <= 140);
                 Count.Text = (140 - Tweet.Text.Length).ToString();
             });
+        }
+
+        private void CheckAutocompleteUser()
+        {
+            if (Tweet.Text.Length > 0 && Tweet.Text.Last() == '@')
+                _isWritingUser = true;
+
+            if (_isWritingUser)
+                UpdateAutocomplete();
+        }
+
+        private void UpdateAutocomplete()
+        {
+            if (_tweetText == Tweet.Text)
+                return;
+
+            _tweetText = Tweet.Text;
+
+            if (_tweetText.LastIndexOf(' ') > _tweetText.LastIndexOf('@'))
+            {
+                _isWritingUser = false;
+                if (Tweet.SelectionStart < _tweetText.Length)
+                {
+                    _tweetText = _tweetText.Remove(Tweet.SelectionStart);
+                    Tweet.Text = _tweetText;
+                }
+                return;
+            }
+            if (Tweet.SelectionStart < _tweetText.Length)
+            {
+                _tweetText = _tweetText.Remove(Tweet.SelectionStart);
+            }
+
+            string Written = _tweetText.Substring(Tweet.Text.LastIndexOf('@') + 1);
+            string first;
+            if (_users == null)
+                first = "";
+            else
+        	{
+        		TwitterUser FirstUser = _users.FirstOrDefault(item => item != null && item.ScreenName.IndexOf(Written) == 0);
+                if (FirstUser != null)
+                    first = FirstUser.ScreenName;
+                else
+                    first = ""; 
+        	}
+
+            if (Written.Length >= first.Length)
+            {
+                Tweet.Text = _tweetText;
+                Tweet.SelectionStart = _tweetText.Length;
+                return;
+            }
+        	
+        	int selectStart;
+            selectStart = _tweetText.Length - 1;
+        	first = first.Substring(Math.Min(Written.Length , first.Length - 1));
+            _tweetText = _tweetText.Insert(Tweet.SelectionStart, first);
+            Tweet.Text = _tweetText;
+            Tweet.SelectionStart = Math.Min(selectStart + 1, _tweetText.Length - 1);
+        	Tweet.SelectionLength = 0;
         }
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)

@@ -49,12 +49,16 @@ namespace Ocell
             Dispatcher.BeginInvoke(() => { pBar.IsVisible = true; pBar.Text = "Retrieving profile..."; });
             _srv.ListUserProfilesFor(new List<string>{userName}, GetUser);
             pvProfile.DataContext = CurrentUser;
-            followBtn = new ApplicationBarIconButton();
-            followBtn.Text = "follow";
-            followBtn.IconUri = new Uri("/Images/Icons_White/appbar.minus.rest.png", UriKind.Relative);
-            followBtn.Click +=new EventHandler(followBtn_Click);
+            if(followBtn == null)
+            {
+            	followBtn = new ApplicationBarIconButton();
+            	followBtn.Text = "follow";
+            	followBtn.IconUri = new Uri("/Images/Icons_White/appbar.minus.rest.png", UriKind.Relative);
+            	followBtn.Click +=new EventHandler(followBtn_Click);
+                ApplicationBar.Buttons.Add(followBtn);
+            }
 
-            ApplicationBar.Buttons.Add(followBtn);
+            
         }
 
         void GetUser(IEnumerable<TwitterUser> user, TwitterResponse response)

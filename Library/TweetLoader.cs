@@ -9,10 +9,10 @@ using System.Threading;
 
 namespace Ocell.Library
 {
-    public class TweetLoader
+    public class TweetLoader : IDisposable
     {
         private int _loaded;
-        private readonly int _toLoad = 1;
+        private const int ToLoad = 1;
         public int TweetsToLoadPerRequest { get; set; }
         public bool Cached { get; set; }
         public bool ActivateLoadMoreButton { get; set; }
@@ -29,7 +29,7 @@ namespace Ocell.Library
             set
             {
                 _resource = value;
-                _srv = ServiceDispatcher.GetService(_resource.User);
+                Srv = ServiceDispatcher.GetService(_resource.User);
             }
         }
         public ObservableCollection<ITweetable> Source { get; protected set; }
@@ -37,12 +37,17 @@ namespace Ocell.Library
         protected long LastId;
 
         #region Constructors
-        public TweetLoader(TwitterResource resource)
+        public TweetLoader(TwitterResource resource, bool cached)
             : this()
         {
             Resource = resource;
-            _srv = ServiceDispatcher.GetService(Resource.User);
+            Srv = ServiceDispatcher.GetService(resource.User);
+            Cached = cached;
+        }
 
+        public TweetLoader(TwitterResource resource)
+            : this(resource, true)
+        {
             LoadCacheAsync();
         }
 
@@ -70,8 +75,8 @@ namespace Ocell.Library
 
         public void LoadCacheAsync()
         {
-            Thread LoaderThread = new Thread(new ThreadStart(LoadCache));
-            LoaderThread.Start();
+            Thread loaderThread = new Thread(new ThreadStart(LoadCache));
+            loaderThread.Start();
         }
 
         protected void ReceiveCallback(IAsyncResult result)
@@ -127,31 +132,31 @@ namespace Ocell.Library
             switch (Resource.Type)
             {
                 case ResourceType.Home:
-                    _srv.ListTweetsOnHomeTimeline(TweetsToLoadPerRequest, ReceiveTweets);
+                    Srv.ListTweetsOnHomeTimeline(TweetsToLoadPerRequest, ReceiveTweets);
                     break;
                 case ResourceType.Mentions:
-                    _srv.ListTweetsMentioningMe(TweetsToLoadPerRequest, ReceiveTweets);
+                    Srv.ListTweetsMentioningMe(TweetsToLoadPerRequest, ReceiveTweets);
                     break;
                 case ResourceType.Messages:
-                    _srv.ListDirectMessagesReceived(TweetsToLoadPerRequest, ReceiveMessages);
-                    _srv.ListDirectMessagesSent(TweetsToLoadPerRequest, ReceiveMessages);
+                    Srv.ListDirectMessagesReceived(TweetsToLoadPerRequest, ReceiveMessages);
+                    Srv.ListDirectMessagesSent(TweetsToLoadPerRequest, ReceiveMessages);
                     break;
                 case ResourceType.Favorites:
-                    _srv.ListFavoriteTweets(ReceiveTweets);
+                    Srv.ListFavoriteTweets(ReceiveTweets);
                     break;
                 case ResourceType.List:
-                    _srv.ListTweetsOnList(Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
+                    Srv.ListTweetsOnList(Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
                             Resource.Data.Substring(Resource.Data.IndexOf('/') + 1), ReceiveTweets);
                     break;
                 case ResourceType.Search:
-                    _srv.Search(Resource.Data, 1, 20, ReceiveSearch);
+                    Srv.Search(Resource.Data, 1, 20, ReceiveSearch);
                     break;
                 case ResourceType.Tweets:
-                    _srv.ListTweetsOnSpecifiedUserTimeline(Resource.Data, TweetsToLoadPerRequest, ReceiveTweets);
+                    Srv.ListTweetsOnSpecifiedUserTimeline(Resource.Data, TweetsToLoadPerRequest, ReceiveTweets);
                     break;
             }
         }
-        protected void LoadOld(long Last = 0)
+        protected void LoadOld(long last = 0)
         {
             _loaded++;
 
@@ -164,43 +169,44 @@ namespace Ocell.Library
             switch (Resource.Type)
             {
                 case ResourceType.Home:
-                    _srv.ListTweetsOnHomeTimelineBefore(Last, TweetsToLoadPerRequest, ReceiveTweets);
+                    Srv.ListTweetsOnHomeTimelineBefore(last, TweetsToLoadPerRequest, ReceiveTweets);
                     break;
                 case ResourceType.Mentions:
-                    _srv.ListTweetsMentioningMeBefore(Last, TweetsToLoadPerRequest, ReceiveTweets);
+                    Srv.ListTweetsMentioningMeBefore(last, TweetsToLoadPerRequest, ReceiveTweets);
                     break;
                 case ResourceType.Messages:
-                    _srv.ListDirectMessagesReceivedBefore(Last, TweetsToLoadPerRequest, ReceiveMessages);
-                    _srv.ListDirectMessagesSentBefore(Last, TweetsToLoadPerRequest, ReceiveMessages);
+                    Srv.ListDirectMessagesReceivedBefore(last, TweetsToLoadPerRequest, ReceiveMessages);
+                    Srv.ListDirectMessagesSentBefore(last, TweetsToLoadPerRequest, ReceiveMessages);
                     break;
                 case ResourceType.Favorites:
-                    _srv.ListFavoriteTweets(ReceiveTweets);
+                    Srv.ListFavoriteTweets(ReceiveTweets);
                     break;
                 case ResourceType.List:
-                    _srv.ListTweetsOnListBefore(Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
-                            Resource.Data.Substring(Resource.Data.IndexOf('/') + 1), Last, ReceiveTweets);
+                    Srv.ListTweetsOnListBefore(Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
+                            Resource.Data.Substring(Resource.Data.IndexOf('/') + 1), last, ReceiveTweets);
                     break;
                 case ResourceType.Search:
-                    _srv.SearchBefore(Last, Resource.Data, ReceiveSearch);
+                    Srv.SearchBefore(last, Resource.Data, ReceiveSearch);
                     break;
                 case ResourceType.Tweets:
-                    _srv.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, Last, TweetsToLoadPerRequest, ReceiveTweets);
+                    Srv.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, last, TweetsToLoadPerRequest, ReceiveTweets);
                     break;
             }
         }
 
         public void LoadCache()
         {
-            if (!Cached || Resource == null || Resource.User == null)
+            if (!Cached || Resource.User == null)
                 return;
 
             TweetEqualityComparer comparer = new TweetEqualityComparer();
-            IEnumerable<TwitterStatus> CacheList = Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id);
+            IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id);
 
-            if (!DecisionMaker.ShouldLoadCache(ref CacheList))
+            if (!DecisionMaker.ShouldLoadCache(ref cacheList))
                 return;
 
-            foreach (var item in CacheList)
+
+            foreach (var item in cacheList)
                 if (!Source.Contains(item, comparer))
                     Source.Add(item);
 
@@ -282,12 +288,12 @@ namespace Ocell.Library
 
             OrderSource();
 
-            if (list.Count() != 0)
+            if (list.Any())
                 LastId = list.Last().Id;
 
             if (_loaded < _toLoad && list.Count() > 0)
             {
-                LoadOld(list.Last().Id);
+                LoadOld(LastId);
                 if (PartialLoad != null)
                     PartialLoad(this, new EventArgs());
             }
@@ -355,6 +361,10 @@ namespace Ocell.Library
             Source = new ObservableCollection<ITweetable>(Source.OrderByDescending(item => item.Id));
         }
 
+        public void Dispose()
+        {
+            Source.Clear();
+        }
 
         public void RemoveLoadMore()
         {

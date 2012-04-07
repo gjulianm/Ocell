@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace Ocell.Library
 {
-    public static class ServiceDispatcher
+    public static class ServiceDispatcher 
     {
         private static Dictionary<string, TwitterService> _list;
         
@@ -58,6 +58,11 @@ namespace Ocell.Library
             {
                 return Config.Accounts.Count > 0;
             }
+        }
+
+        public static void Dispose()
+        {
+            _list.Clear();
         }
     }
 }

@@ -62,5 +62,16 @@ namespace Ocell.Pages
             else
                 selectionChangeFired = false;
         }
+
+        private void Add_Click(object sender, System.EventArgs e)
+        {
+            if (!Config.Columns.Contains(TweetList.Loader.Resource))
+            {
+                Config.Columns.Add(TweetList.Loader.Resource);
+                Dispatcher.BeginInvoke(() => MessageBox.Show("Search column added!"));
+            }
+            else
+                Dispatcher.BeginInvoke(() => MessageBox.Show("This search is already added."));
+        }
     }
 }
