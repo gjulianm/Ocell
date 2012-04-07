@@ -93,6 +93,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\FilterManager.cs" />
+    <Compile Include="Helpers\TemplateSelector.cs" />
     <Compile Include="Helpers\ValueConverters\AvatarImageManager.cs" />
     <Compile Include="Helpers\ValueConverters\FirstToUpper.cs" />
     <Compile Include="Helpers\ValueConverters\ITweetableFilterConverter.cs" />
@@ -305,6 +306,9 @@
     </EmbeddedResource>
     <Content Include="Images\ColumnTile.png" />
     <Content Include="Images\ComposeTile.png" />
+    <EmbeddedResource Include="Images\Icons_White\appbar.columns.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="Images\Icons_White\appbar.feature.email.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -380,9 +384,7 @@
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Client\" />
     <Folder Include="Images\Icons_Black\" />
-    <Folder Include="Multi\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">
