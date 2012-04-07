@@ -36,14 +36,21 @@ namespace Ocell
     {
         public object Convert(object value, Type targeType, object parameter, CultureInfo culture)
         {
-            if (value is UserFilter)
-                return "user";
-            else if (value is SourceFilter)
-                return "source";
-            else if (value is TextInfo)
-                return "tweet text";
-            else
-                return "unknown";
+            ITweetableFilter filter = value as ITweetableFilter;
+            if (filter != null)
+            {
+                switch (filter.Type)
+                {
+                    case FilterType.User:
+                        return "user";
+                    case FilterType.Text:
+                        return "tweet text";
+                    case FilterType.Source:
+                        return "source";
+                }
+            }
+
+            return "unknown";
 
         }
 
