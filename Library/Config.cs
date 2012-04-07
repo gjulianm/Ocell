@@ -24,7 +24,7 @@ namespace Ocell.Library
         private static bool? _BackgroundLoadColumns;
         private static List<UserToken> _protectedAccounts;
         private static List<ColumnFilter> _filters;
-        private static GlobalFilter _globalFilter;
+        private static ColumnFilter _globalFilter;
 
         public static List<ColumnFilter> Filters
         {
@@ -112,15 +112,15 @@ namespace Ocell.Library
 
         }
 
-        public static GlobalFilter FilterGlobal
+        public static ColumnFilter FilterGlobal
         {
             get
             {
-                return GenericGetFromConfig<GlobalFilter>(GlobalFilterKey, ref _globalFilter);
+                return GenericGetFromConfig<ColumnFilter>(GlobalFilterKey, ref _globalFilter);
             }
             set
             {
-                GenericSaveToConfig<GlobalFilter>(GlobalFilterKey, ref _globalFilter, value);
+                GenericSaveToConfig<ColumnFilter>(GlobalFilterKey, ref _globalFilter, value);
             }
         }
 
@@ -172,6 +172,7 @@ namespace Ocell.Library
             }
             catch (Exception)
             {
+                throw;
             }
         }
 

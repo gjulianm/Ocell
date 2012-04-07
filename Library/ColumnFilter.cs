@@ -7,68 +7,13 @@ using System.Collections.ObjectModel;
 
 namespace Ocell.Library
 {
-    public class GlobalFilter
+
+    public class ColumnFilter 
     {
-        private Collection<ITweetableFilter> _predicates;
-        public Collection<ITweetableFilter> Predicates
-        {
-            get
-            {
-                return _predicates;
-            }
-        }
-
-        public GlobalFilter()
-        {
-            _predicates = new Collection<ITweetableFilter>();
-        }
-
-        public bool Evaluate(object item)
-        {
-            ITweetable tweet = item as ITweetable;
-            
-            if(item == null)
-                return false;
-
-            foreach(var filter in _predicates)
-                if(filter.Evaluate(tweet) == false)
-                    return false;
-
-            return true;
-        }
-
-        public Predicate<object> Predicate
-        {
-            get
-            {
-                return new Predicate<object>(Evaluate);
-            }
-        }
-
-        public void AddFilter(ITweetableFilter predicate)
-        {
-            if(!_predicates.Contains(predicate))
-                _predicates.Add(predicate);
-        }
-
-        public void RemoveFilter(ITweetableFilter predicate)
-        {
-            try
-            {
-                _predicates.Remove(predicate);
-            }
-            catch
-            {
-            }
-        }
-    }
-
-    public class ColumnFilter
-    {
-        private Collection<ITweetableFilter> _predicates;
+        private List<ITweetableFilter> _predicates;
         public TwitterResource Resource { get; set; }
-        public GlobalFilter Global { get; set; }
-        public Collection<ITweetableFilter> Predicates
+        public ColumnFilter Global { get; set; }
+        public List<ITweetableFilter> Predicates
         {
             get
             {
@@ -78,7 +23,7 @@ namespace Ocell.Library
 
         public ColumnFilter()
         {
-            _predicates = new Collection<ITweetableFilter>();
+            _predicates = new List<ITweetableFilter>();
         }
 
         public bool Evaluate(object item)
@@ -99,12 +44,9 @@ namespace Ocell.Library
             return true;
         }
 
-        public Predicate<object> Predicate
+        public Predicate<object> getPredicate()
         {
-            get
-            {
-                return new Predicate<object>(Evaluate);
-            }
+             return new Predicate<object>(Evaluate);
         }
 
         public void AddFilter(ITweetableFilter predicate)
