@@ -5,7 +5,7 @@ namespace Ocell.Library
     public struct TwitterResource
     {        
         public ResourceType Type { get; set;}
-        public UserToken User { get; set;}
+        public UserToken User { get; set; }
         private string _data;
         public string Data
         {
@@ -25,11 +25,15 @@ namespace Ocell.Library
         {
             get
             {
-                string value = User.ScreenName + ";";
+                string value; 
+                if(User != null)
+                    value = User.ScreenName + ";";
+                else
+                    value = ";";
                 switch (Type)
                 {
                     case ResourceType.Favorites:
-                        value+="Favorites";
+                        value += "Favorites";
                         break;
                     case ResourceType.Home:
                         value += "Home";

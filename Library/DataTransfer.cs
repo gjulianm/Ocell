@@ -12,5 +12,7 @@ namespace Ocell.Library
         public static bool ReplyingDM;
         public static UserToken CurrentAccount;
         public static long DMDestinationId;
+        public static ITweetableFilter Filter;
+        public static ColumnFilter cFilter;
     }
 }

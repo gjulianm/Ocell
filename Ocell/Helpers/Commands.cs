@@ -140,4 +140,38 @@ namespace Ocell.Commands
 
         public event EventHandler CanExecuteChanged;
     }
+
+    public class ModifyFilterCommand : ICommand
+    {
+        public bool CanExecute(object parameter)
+        {
+            return parameter is ITweetableFilter;
+        }
+
+        public void Execute(object parameter)
+        {
+            DataTransfer.Filter = parameter as ITweetableFilter;
+            PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
+            service.Navigate(new Uri("/Pages/ManageFilter.xaml", UriKind.Relative));
+        }
+
+        public event EventHandler CanExecuteChanged;
+    }
+
+    public class RemoveFilterCommand : ICommand
+    {
+        public bool CanExecute(object parameter)
+        {
+            return parameter is ITweetableFilter;
+        }
+
+        public void Execute(object parameter)
+        {
+            DataTransfer.cFilter.RemoveFilter(parameter as ITweetableFilter);
+            PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
+            service.Navigate(new Uri("/Pages/Filters.xaml", UriKind.Relative));
+        }
+
+        public event EventHandler CanExecuteChanged;
+    }
 }

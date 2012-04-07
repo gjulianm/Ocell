@@ -38,3 +38,12 @@ Ocell/SampleData/Accounts/Accounts.xaml
 Ocell/SampleData/Users/Users.xaml
 
 tweetsharp/
+<<<<<<< HEAD
+=======
+
+Ocell/SampleData/SampleDataSource/SampleDataSource.xaml
+
+Ocell/SampleData/SampleDataSource/SampleDataSource.xaml.cs
+
+Ocell/SampleData/SampleDataSource/SampleDataSource.xsd
+>>>>>>> feature/collectionviewsource
