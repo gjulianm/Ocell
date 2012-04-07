@@ -10,55 +10,43 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using TweetSharp;
 
+using System.Reflection;
+using System.Runtime.Serialization;
+
 namespace Ocell.Library
 {
     public enum IncludeOrExclude
     { Include, Exclude };
 
-    public interface ITweetableFilter
+    public enum FilterType
     {
-        string Filter { get; set; }
-        IncludeOrExclude Inclusion { get; set; }
-        bool Evaluate(ITweetable item);
-    }
+        User, Source, Text
+    };
 
-    public class UserFilter : ITweetableFilter
-    {
-        public string Filter { get; set; }
-        public IncludeOrExclude Inclusion {get; set;}
-        
-        public bool Evaluate(ITweetable item)
-        {
-            if(Filter == null)
-                Filter = "";
-
-            if(item == null)
-                return false;
-
-            bool result = item.Author.ScreenName.ToLowerInvariant().Contains(Filter.ToLowerInvariant());
-
-            if (Inclusion == IncludeOrExclude.Exclude)
-                return !result;
-            else
-                return result;
-        }
-
-        public override bool Equals(object obj)
-        {
-            return (obj != null) && (obj as UserFilter != null) && ((obj as UserFilter).Filter.ToLowerInvariant() == Filter.ToLowerInvariant());
-        }
-
-        public override int GetHashCode()
-        {
-            return Filter.GetHashCode() ^ (int)Inclusion;
-        }
-    }
-
-    public class SourceFilter : ITweetableFilter
+    public class ITweetableFilter
     {
         public string Filter { get; set; }
         public IncludeOrExclude Inclusion { get; set; }
-
+        public FilterType Type { get; set; }
+        private string getStringToCheck(ITweetable item)
+        {
+            switch (Type)
+            {
+                case FilterType.Source:
+                    if (item is TwitterStatus)
+                        return (item as TwitterStatus).Source.ToLowerInvariant();
+                    else if (item is TwitterSearchStatus)
+                        return (item as TwitterSearchStatus).Source.ToLowerInvariant();
+                    else
+                        return "";
+                case FilterType.Text:
+                    return item.Text.ToLowerInvariant();
+                case FilterType.User:
+                    return item.Author.ScreenName.ToLowerInvariant();
+                default:
+                    return "";
+            }
+        }
         public bool Evaluate(ITweetable item)
         {
             if (Filter == null)
@@ -67,14 +55,9 @@ namespace Ocell.Library
             if (item == null)
                 return false;
 
-            bool result;
-
-            if (item is TwitterStatus)
-                result = (item as TwitterStatus).Source.ToLowerInvariant().Contains(Filter.ToLowerInvariant());
-            else if (item is TwitterSearchStatus)
-                result = (item as TwitterSearchStatus).Source.ToLowerInvariant().Contains(Filter.ToLowerInvariant());
-            else
-                result = false;
+            string whatToCheck = getStringToCheck(item);
+            
+            bool result = whatToCheck.Contains(Filter.ToLowerInvariant());
 
             if (Inclusion == IncludeOrExclude.Exclude)
                 return !result;
@@ -82,46 +65,9 @@ namespace Ocell.Library
                 return result;
         }
 
-        public override bool Equals(object obj)
-        {
-            return (obj != null) && (obj as SourceFilter != null) && ((obj as SourceFilter).Filter.ToLowerInvariant() == Filter.ToLowerInvariant());
-        }
-
         public override int GetHashCode()
         {
-            return Filter.GetHashCode() ^ (int)Inclusion;
-        }
-    }
-
-    public class TextFilter : ITweetableFilter
-    {
-        public string Filter { get; set; }
-        public IncludeOrExclude Inclusion { get; set; }
-
-        public bool Evaluate(ITweetable item)
-        {
-            if (Filter == null)
-                Filter = "";
-
-            if (item == null)
-                return false;
-
-            bool result = item.Text.ToLowerInvariant().Contains(Filter.ToLowerInvariant());
-
-            if (Inclusion == IncludeOrExclude.Exclude)
-                return !result;
-            else
-                return result;
-        }
-
-        public override bool Equals(object obj)
-        {
-            return (obj != null) && (obj as TextFilter != null) && ((obj as TextFilter).Filter.ToLowerInvariant() == Filter.ToLowerInvariant());
-        }
-
-        public override int GetHashCode()
-        {
-            return Filter.GetHashCode() ^ (int)Inclusion;
+            return (int)Inclusion ^ (int)Type ^ Filter.GetHashCode();
         }
     }
 }
