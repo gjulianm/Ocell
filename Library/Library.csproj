@@ -18,8 +18,6 @@
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <Utf8Output>true</Utf8Output>
-    <ExpressionBlendVersion>4.0.30816.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,7 +41,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib.WindowsPhone, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="ICSharpCode.SharpZipLib.WindowsPhone">
       <HintPath>..\Ocell\Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Phone" />
@@ -64,8 +62,6 @@
     <Compile Include="DebugWriter.cs" />
     <Compile Include="DecisionMaker.cs" />
     <Compile Include="IsolatedFileStreamExtension.cs" />
-    <Compile Include="ColumnFilter.cs" />
-    <Compile Include="LoadMoreTweetable.cs" />
     <Compile Include="NotificationPreferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DateSync.cs" />
@@ -73,7 +69,6 @@
     <Compile Include="SensitiveData.cs" />
     <Compile Include="ServiceDispatcher.cs" />
     <Compile Include="TileManager.cs" />
-    <Compile Include="TweetFilter.cs" />
     <Compile Include="TweetLoader.cs" />
     <Compile Include="TweetTask.cs" />
     <Compile Include="TwitterComparers.cs" />

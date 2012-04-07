@@ -12,20 +12,11 @@ namespace Ocell.Library
     public class TweetLoader : IDisposable
     {
         private int _loaded;
-<<<<<<< HEAD
         private const int ToLoad = 1;
         public int TweetsToLoadPerRequest { get; set; }
         public bool Cached { get; set; }
         private int _requestsInProgress;
         private TwitterResource _resource;
-=======
-        private readonly int _toLoad = 1;
-        public int TweetsToLoadPerRequest { get; set; }
-        public bool Cached { get; set; }
-        public bool ActivateLoadMoreButton { get; set; }
-        private int _requestsInProgress;
-        protected TwitterResource _resource;
->>>>>>> feature/collectionviewsource
         private static DateTime _rateResetTime;
 
         public TwitterResource Resource
@@ -37,7 +28,6 @@ namespace Ocell.Library
             set
             {
                 _resource = value;
-<<<<<<< HEAD
                 Srv = ServiceDispatcher.GetService(_resource.User);
             }
         }
@@ -53,21 +43,6 @@ namespace Ocell.Library
             Srv = ServiceDispatcher.GetService(resource.User);
             Cached = cached;
         }
-=======
-                _srv = ServiceDispatcher.GetService(_resource.User);
-            }
-        }
-        public ObservableCollection<ITweetable> Source { get; protected set; }
-        protected TwitterService _srv;
-        protected long LastId;
-
-        #region Constructors
-        public TweetLoader(TwitterResource resource)
-            : this()
-        {
-            Resource = resource;
-            _srv = ServiceDispatcher.GetService(Resource.User);
->>>>>>> feature/collectionviewsource
 
         public TweetLoader(TwitterResource resource)
             : this(resource, true)
@@ -82,23 +57,19 @@ namespace Ocell.Library
             Source = new ObservableCollection<TweetSharp.ITweetable>();
             LastId = 0;
             Cached = true;
-<<<<<<< HEAD
-=======
-            ActivateLoadMoreButton = false;
->>>>>>> feature/collectionviewsource
             _requestsInProgress = 0;
             if (_rateResetTime == null)
                 _rateResetTime = DateTime.MinValue;
 
             Error += new OnError(CheckForRateLimit);
         }
-        #endregion
 
         void CheckForRateLimit(TwitterResponse response)
         {
             if (response.RateLimitStatus.RemainingHits <= 0)
                 _rateResetTime = response.RateLimitStatus.ResetTime;
         }
+        #endregion
 
         public void LoadCacheAsync()
         {
@@ -113,11 +84,7 @@ namespace Ocell.Library
         #region Loaders
         public void Load(bool Old = false)
         {
-<<<<<<< HEAD
             if (Srv == null ||
-=======
-            if (Resource == null || _srv == null ||
->>>>>>> feature/collectionviewsource
                 _requestsInProgress >= 2 ||
                 _rateResetTime > DateTime.Now)
             {
@@ -127,33 +94,6 @@ namespace Ocell.Library
             }
 
             _requestsInProgress++;
-<<<<<<< HEAD
-=======
-
-            if (Old)
-                LoadOld();
-            else
-                LoadNew();
-        }
-
-        public void LoadFrom(long Id)
-        {
-            LoadOld(Id);
-        }
-
-        protected void InternalLoad(bool Old = false)
-        {
-            if (Resource == null || _srv == null ||
-                _requestsInProgress >= 2 ||
-                _rateResetTime > DateTime.Now)
-            {
-                if (LoadFinished != null)
-                    LoadFinished(this, new EventArgs());
-                return;
-            }
-
-            _requestsInProgress++;
->>>>>>> feature/collectionviewsource
 
             if (Old)
                 LoadOld();
@@ -193,22 +133,12 @@ namespace Ocell.Library
         protected void LoadOld(long last = 0)
         {
             _loaded++;
-<<<<<<< HEAD
             if (Source.Count == 0)
             {
                 return;
             }
             if (last == 0)
                 last = LastId;
-=======
-
-            if (!Source.Any())
-                return;
-            
-            if(Last == 0)
-            	Last = Source.Last().Id;
-
->>>>>>> feature/collectionviewsource
             switch (Resource.Type)
             {
                 case ResourceType.Home:
@@ -268,8 +198,10 @@ namespace Ocell.Library
                     Error(response);
                 return;
             }
-
-            GenericReceive(statuses.Cast<ITweetable>(), response);
+            List<ITweetable> list = new List<ITweetable>();
+            foreach (var item in statuses)
+                list.Add(item);
+            GenericReceive((IEnumerable<ITweetable>)list, response);
         }
 
         protected void ReceiveMessages(IEnumerable<TwitterDirectMessage> statuses, TwitterResponse response)
@@ -281,8 +213,10 @@ namespace Ocell.Library
                     Error(response);
                 return;
             }
-
-            GenericReceive(statuses.Cast<ITweetable>(), response);
+            List<ITweetable> list = new List<ITweetable>();
+            foreach (var item in statuses)
+                list.Add(item);
+            GenericReceive((IEnumerable<ITweetable>)list, response);
         }
 
         protected void ReceiveSearch(TwitterSearchResult result, TwitterResponse response)
@@ -294,15 +228,10 @@ namespace Ocell.Library
                     Error(response);
                 return;
             }
-<<<<<<< HEAD
             List<ITweetable> list = new List<ITweetable>();
             foreach (var item in result.Statuses)
                 list.Add(item);
             GenericReceive((IEnumerable<ITweetable>)list, response);
-=======
-
-            GenericReceive(result.Statuses.Cast<ITweetable>(), response);
->>>>>>> feature/collectionviewsource
         }
         #endregion
 
@@ -329,11 +258,6 @@ namespace Ocell.Library
 
             if (Source == null)
                 Source = new ObservableCollection<ITweetable>();
-<<<<<<< HEAD
-=======
-
-            TryAddLoadMoreButton(ref list);
->>>>>>> feature/collectionviewsource
 
             foreach (var status in list)
                 if (!Source.Contains(status, comparer))
@@ -344,11 +268,7 @@ namespace Ocell.Library
             if (list.Any())
                 LastId = list.Last().Id;
 
-<<<<<<< HEAD
             if (_loaded < ToLoad && list.Any())
-=======
-            if (_loaded < _toLoad && list.Count() > 0)
->>>>>>> feature/collectionviewsource
             {
                 LoadOld(LastId);
                 if (PartialLoad != null)
@@ -362,34 +282,6 @@ namespace Ocell.Library
             }
 
             SaveToCache();
-        }
-
-        private void TryAddLoadMoreButton(ref IEnumerable<ITweetable> received)
-        {
-            if (!ActivateLoadMoreButton)
-                return;
-
-            if (Source == null || !Source.Any())
-                return;
-
-            ITweetable olderTweet;
-            ITweetable newerTweet;
-
-            try
-            {
-                olderTweet = Source.OrderByDescending(item => item.Id).ElementAt(0);
-                newerTweet = received.OrderBy(item => item.Id).ElementAt(0);
-            }
-            catch
-            {
-                return;
-            }
-
-            int avgTime = DecisionMaker.GetAvgTimeBetweenTweets(Source);
-            TimeSpan diff = newerTweet.CreatedDate - olderTweet.CreatedDate;
-
-            if (diff.TotalSeconds > 4 * avgTime)
-                Source.Add(new LoadMoreTweetable { Id = newerTweet.Id + 1 });
         }
 
         public void SaveToCache()
@@ -417,23 +309,11 @@ namespace Ocell.Library
         {
             Source = new ObservableCollection<ITweetable>(Source.OrderByDescending(item => item.Id));
         }
-<<<<<<< HEAD
 
         public void Dispose()
         {
             Source.Clear();
         }
-=======
-
-
-        public void RemoveLoadMore()
-        {
-            ITweetable item = Source.FirstOrDefault(e => e is LoadMoreTweetable);
-            if (item != null)
-                Source.Remove(item);
-        }
-
->>>>>>> feature/collectionviewsource
 
         #region Events
         public event EventHandler LoadFinished;

@@ -11,8 +11,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Ocell.Library;
 using TweetSharp;
-using System.Windows.Data;
-using Microsoft.Phone.Controls;
 
 namespace Ocell.Controls
 {
@@ -25,9 +23,6 @@ namespace Ocell.Controls
         private bool _alreadyHookedScrollEvents = false;
         public TweetLoader Loader;
         protected ObservableCollection<ITweetable> _Items;
-        protected CollectionViewSource _ViewSource;
-        private ColumnFilter _filter;
-   
 
         public ExtendedListBox()
         {
@@ -38,22 +33,7 @@ namespace Ocell.Controls
             Loader.PartialLoad += new EventHandler(PopulateItemsSource);
             Loader.CacheLoad += new EventHandler(PopulateItemsSource);
             _Items = new ObservableCollection<ITweetable>();
-<<<<<<< HEAD
             ItemsSource = _Items;            
-=======
-            _ViewSource = new CollectionViewSource();
-            SetupCollectionViewSource();
-        }
-
-        private void SetupCollectionViewSource()
-        {
-            _ViewSource.Source = _Items;
-            ItemsSource = _ViewSource.View;
-            System.ComponentModel.SortDescription Sorter = new System.ComponentModel.SortDescription();
-            Sorter.PropertyName = "Id";
-            Sorter.Direction = System.ComponentModel.ListSortDirection.Descending;
-            _ViewSource.SortDescriptions.Add(Sorter);
->>>>>>> feature/collectionviewsource
         }
 
         private void SetTag()
@@ -83,8 +63,6 @@ namespace Ocell.Controls
             });
         }
 
-        
-
         private void UnsafePopulateItemsSource()
         {
             TweetEqualityComparer Comparer = new TweetEqualityComparer();
@@ -94,7 +72,7 @@ namespace Ocell.Controls
             {
                 if (!_Items.Contains(item, Comparer))
                 {
-                    /*if (_Items.Count == 0)
+                    if (_Items.Count == 0)
                         _Items.Add(item);
                     else if(_Items[0].Id > item.Id)
                     {
@@ -105,8 +83,6 @@ namespace Ocell.Controls
                     }
                     else
                         _Items.Insert(0, item);
-                    */
-                    _Items.Add(item);
                     loaded++;
                 }
                 if (loaded >= 2)
@@ -116,7 +92,6 @@ namespace Ocell.Controls
                 }
             }
             
-
         }
 
         private int GetInsertPositionFor(ITweetable item)
@@ -137,40 +112,10 @@ namespace Ocell.Controls
             _bound = true;
         }
 
-<<<<<<< HEAD
         public delegate void OnCompression(object sender, CompressionEventArgs e);
         public event OnCompression Compression;
 
         
-=======
-        public ColumnFilter Filter
-        {
-            get
-            {
-                return _filter;
-            }
-            set
-            {
-                _filter = value;
-                if (_filter != null)
-                    _ViewSource.View.Filter = _filter.getPredicate();
-            }
-        }
-
-        public void LoadIntermediate(LoadMoreTweetable trigger)
-        {
-            Loader.LoadFrom(trigger.Id - 1);
-        }
-
-        public void RemoveLoadMore()
-        {
-            ITweetable item = _Items.FirstOrDefault(e => e is LoadMoreTweetable);
-            if (item != null)
-                _Items.Remove(item);
-
-            Loader.RemoveLoadMore();
-        }
->>>>>>> feature/collectionviewsource
 
         #region Scroll Events
         private void ListBox_Loaded(object sender, RoutedEventArgs e)

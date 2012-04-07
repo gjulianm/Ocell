@@ -21,7 +21,6 @@ namespace Ocell
         private bool selectionChangeFired;
         private Dictionary<string, ExtendedListBox> Lists;
         private DateTime LastErrorTime;
-        private DateTime LastReloadTime;
 
         #region Loaders
         // Constructora
@@ -34,26 +33,17 @@ namespace Ocell
 
             this.Loaded += new RoutedEventHandler(CallLoadFunctions);
             pivots.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(pivots_CollectionChanged);
-            MainPivot.SelectionChanged += new SelectionChangedEventHandler(PivotSelectionChanged);
+            MainPivot.SelectionChanged += new SelectionChangedEventHandler(LoadTweetsOnPivot);
+            MainPivot.SelectionChanged += new SelectionChangedEventHandler(RefreshCurrentAccount);
 
             MainPivot.DataContext = pivots;
             MainPivot.ItemsSource = pivots;
 
             LastErrorTime = DateTime.MinValue;
-            LastReloadTime = DateTime.MinValue;
 
             SetUpPivots();
         }
-
-        private void PivotSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (DateTime.Now > LastReloadTime.AddSeconds(25))
-            {
-                LoadTweetsOnPivots();
-                LastReloadTime = DateTime.Now;
-            }
-            RefreshCurrentAccount(e);
-        }
+        
 
         void CallLoadFunctions(object sender, RoutedEventArgs e)
         {
@@ -116,7 +106,7 @@ namespace Ocell
 
         #endregion
 
-        private void LoadTweetsOnPivots()
+        void LoadTweetsOnPivot(object sender, SelectionChangedEventArgs e)
         {
             if (MainPivot.SelectedItem == null)
                 return;
@@ -129,7 +119,7 @@ namespace Ocell
             }
         }
 
-        private void RefreshCurrentAccount(SelectionChangedEventArgs e)
+        void RefreshCurrentAccount(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] != null)
             {
@@ -201,14 +191,11 @@ namespace Ocell
             if (!Lists.ContainsKey(Resource.String))
                 Lists.Add(Resource.String, list);
 
-            FilterManager.SetupFilter(list);
-
             list.Compression += new ExtendedListBox.OnCompression(list_Compression);
             list.Loader.Error += new TweetLoader.OnError(Loader_Error);
             list.Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
-            list.Loader.ActivateLoadMoreButton = true;
-
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
+
             list.Loader.LoadCacheAsync();
             list.Loader.Load();
         }
@@ -228,7 +215,7 @@ namespace Ocell
                     if (response.RateLimitStatus.RemainingHits == 0)
                         MessageBox.Show("Woops! You have spent the limit of calls to Twitter. You'll have to wait until " + response.RateLimitStatus.ResetTime.ToString("H:mm"));
                     else
-                        MessageBox.Show("We couldn't load the tweets: " + response.StatusDescription);
+                        MessageBox.Show("Error loading tweets: " + response.StatusDescription);
                     pBar.IsVisible = false;
                 });
             }
@@ -264,24 +251,13 @@ namespace Ocell
             {
                 DataTransfer.Status = e.AddedItems[0] as TwitterStatus;
                 DataTransfer.DM = e.AddedItems[0] as TwitterDirectMessage;
-                ExtendedListBox list = sender as ExtendedListBox;
+                ListBox list = sender as ListBox;
                 selectionChangeFired = true;
-                list.SelectedItem = null;
+                list.SelectedIndex = -1;
                 if (e.AddedItems[0] is TwitterStatus)
                     NavigationService.Navigate(new Uri("/Pages/Tweet.xaml", UriKind.Relative));
-                else if (e.AddedItems[0] is TwitterDirectMessage)
+                else
                     NavigationService.Navigate(new Uri("/Pages/DMView.xaml", UriKind.Relative));
-                else if (e.AddedItems[0] is TwitterSearchStatus)
-                {
-                    DataTransfer.Status = StatusConverter.SearchToStatus(e.AddedItems[0] as TwitterSearchStatus);
-                    NavigationService.Navigate(new Uri("/Pages/Tweet.xaml", UriKind.Relative));
-                }
-                else if (e.AddedItems[0] is LoadMoreTweetable)
-                {
-                    Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-                    list.LoadIntermediate(e.AddedItems[0] as LoadMoreTweetable);
-                    list.RemoveLoadMore();
-                }
             }
             else
                 selectionChangeFired = false;
@@ -311,7 +287,6 @@ namespace Ocell
              SecondaryTiles.CreateColumnTile((TwitterResource)MainPivot.SelectedItem);
         }
 
-<<<<<<< HEAD
         private void about_Click(object sender, System.EventArgs e)
         {
         	NavigationService.Navigate(new Uri("/Pages/Settings/About.xaml", UriKind.Relative));
@@ -321,14 +296,5 @@ namespace Ocell
         {
         	NavigationService.Navigate(new Uri("/Pages/Topics.xaml", UriKind.Relative));
 		}
-=======
-        private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
-        {
-            DataTransfer.cFilter = Config.Filters.FirstOrDefault(item => item.Resource == ((TwitterResource)MainPivot.SelectedItem));
-            if (DataTransfer.cFilter == null)
-                DataTransfer.cFilter = new ColumnFilter { Resource = (TwitterResource)MainPivot.SelectedItem };
-            NavigationService.Navigate(new Uri("/Pages/Filters.xaml", UriKind.Relative));
-        }
->>>>>>> feature/collectionviewsource
     }
 }
