@@ -2,17 +2,29 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO.IsolatedStorage;
+using TweetSharp;
 
 namespace Ocell.Library
 {
     public static class Config 
     {
+<<<<<<< HEAD
         private const string AccountsKey = "ACCOUNTS";
         private const string ColumnsKey = "COLUMNS";
         private const string FollowMsg = "FOLLOWMSG";
         private const string TweetTasksKey = "TWEETTASKS";
         private const string BGLoadColumns = "BGLOADCOLUMNS";
         private const string ProtectedAccountsKey = "PROTECTEDACC";
+=======
+        private static readonly string AccountsKey = "ACCOUNTS";
+        private static readonly string ColumnsKey = "COLUMNS";
+        private static readonly string FollowMsg = "FOLLOWMSG";
+        private static readonly string TweetTasksKey = "TWEETTASKS";
+        private static readonly string BGLoadColumns = "BGLOADCOLUMNS";
+        private static readonly string ProtectedAccountsKey = "PROTECTEDACC";
+        private static readonly string FiltersKey = "FILTERS";
+        private static readonly string GlobalFilterKey = "GLOBALFILTER";
+>>>>>>> feature/collectionviewsource
 
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
@@ -20,6 +32,20 @@ namespace Ocell.Library
         private static List<ITweetableTask> _tweetTasks;
         private static bool? _backgroundLoadColumns;
         private static List<UserToken> _protectedAccounts;
+        private static List<ColumnFilter> _filters;
+        private static ColumnFilter _globalFilter;
+
+        public static List<ColumnFilter> Filters
+        {
+            get
+            {
+                return GenericGetFromConfig<List<ColumnFilter>>(FiltersKey, ref _filters);
+            }
+            set
+            {
+                GenericSaveToConfig<List<ColumnFilter>>(FiltersKey, ref _filters, value);
+            }
+        }
 
         public static List<UserToken> ProtectedAccounts
         {
@@ -82,7 +108,36 @@ namespace Ocell.Library
             }
         }
 
+<<<<<<< HEAD
         private static T GenericGetFromConfig<T>(string key, ref T element) where T : new()
+=======
+        public static bool? FollowMessageShown
+        {
+            get
+            {
+                return GenericGetFromConfig<bool?>(FollowMsg, ref _FollowMessageShown);
+            }
+            set
+            {
+                GenericSaveToConfig<bool?>(FollowMsg, ref _FollowMessageShown, value);
+            }
+
+        }
+
+        public static ColumnFilter FilterGlobal
+        {
+            get
+            {
+                return GenericGetFromConfig<ColumnFilter>(GlobalFilterKey, ref _globalFilter);
+            }
+            set
+            {
+                GenericSaveToConfig<ColumnFilter>(GlobalFilterKey, ref _globalFilter, value);
+            }
+        }
+
+        private static T GenericGetFromConfig<T>(string Key, ref T element) where T : new()
+>>>>>>> feature/collectionviewsource
         {
             if (element != null)
                 return element;
@@ -112,6 +167,7 @@ namespace Ocell.Library
             return element;
         }
 
+<<<<<<< HEAD
         public static bool? FollowMessageShown
         {
             get
@@ -125,6 +181,8 @@ namespace Ocell.Library
 
         }
 
+=======
+>>>>>>> feature/collectionviewsource
         private static void GenericSaveToConfig<T>(string Key, ref T element, T value) where T : new()
         {
             if (value == null)
@@ -143,6 +201,7 @@ namespace Ocell.Library
             }
             catch (Exception)
             {
+                throw;
             }
         }
 
@@ -166,6 +225,7 @@ namespace Ocell.Library
             ProtectedAccounts = _protectedAccounts;
         }
 
+<<<<<<< HEAD
         public static void Dispose()
         {
             _accounts = null;
@@ -174,6 +234,11 @@ namespace Ocell.Library
             _followMessageShown = null;
             _protectedAccounts = null;
             _tweetTasks = null;
+=======
+        public static void SaveFilters()
+        {
+            Filters = _filters;
+>>>>>>> feature/collectionviewsource
         }
     }
 }

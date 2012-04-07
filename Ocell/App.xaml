@@ -17,15 +17,18 @@
 
     <!--Recursos de la aplicación-->
     <Application.Resources>
-    	<local:ListConverter x:Key="ListConverter"/>
+        <local:ListConverter x:Key="ListConverter"/>
         <local:RelativeDateTimeConverter x:Key="RelativeDateTimeConverter"/>
-		<local:ToColumn x:Key="ToColumnConverter"/>
-		<commands:FavoriteCommand x:Key="FavoriteCommand" />
+
+        <commands:FavoriteCommand x:Key="FavoriteCommand" />
         <commands:ReplyAllCommand x:Key="ReplyAllCommand"/>
         <commands:ReplyCommand x:Key="ReplyCommand"/>
         <commands:RetweetCommand x:Key="RetweetCommand"/>
-		<local:TweetTextConverter x:Key="TweetTextConverter"/>
-		<local:SizeConverter x:Key="SizeConverter"/>
+        <local:ToColumn x:Key="ToColumnConverter" />
+        <local:IncludeExcludeConverter x:Key="IncludeExcludeConverter" />
+        <local:FilterTypeConverter x:Key="FilterTypeConverter" />
+        <local:TweetTextConverter x:Key="TweetTextConverter"/>
+        <local:SizeConverter x:Key="SizeConverter"/>
         <local:AvatarConverter x:Key="AvatarConverter"/>
         <local:ScreenNameConverter x:Key="ScreenNameConverter"/>
         <local:MarginConverter x:Key="MarginConverter"/>
@@ -33,29 +36,49 @@
         <commands:ProtectCommand x:Key="ProtectCommand" />
         <local:ProtectedConverter x:Key="ProtectedConverter"/>
 
-            <DataTemplate x:Key="TweetTemplate">
-            <Grid HorizontalAlignment="Stretch" Margin="0,3,0,12" Tag="{Binding Id}" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache">
-                <i:Interaction.Behaviors>
-                    <tr:OnLoadedOpacityTransitionBehavior/>
-                </i:Interaction.Behaviors>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.611*"/>
-                    <ColumnDefinition Width="0.389*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock x:Name="Date" Text="{Binding CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}" VerticalAlignment="Top" Margin="0,5.753,8,0" Foreground="#FF707070" Grid.Column="1" HorizontalAlignment="Right" UseLayoutRounding="False" FontFamily="Segoe WP Light"/>
-                <Image x:Name="Avatar" Source="{Binding Converter={StaticResource AvatarConverter}, ConverterParameter=false}" HorizontalAlignment="Left" Width="{Binding Converter={StaticResource SizeConverter}}" Margin="{Binding Converter={StaticResource MarginConverter}}" d:LayoutOverrides="HorizontalAlignment, Height" Height="{Binding Converter={StaticResource SizeConverter}}" UseLayoutRounding="False" VerticalAlignment="Top"/>
-                <Image x:Name="RetweetedAvatar" Source="{Binding Converter={StaticResource AvatarConverter}, ConverterParameter=true}" HorizontalAlignment="Left" Width="30" Margin="8,54,0,0" d:LayoutOverrides="HorizontalAlignment, Height" Height="30" UseLayoutRounding="False" VerticalAlignment="Top"/>
-				<TextBlock x:Name="Text" Text="{Binding Converter={StaticResource TweetTextConverter}}" Margin="86,32.356,8,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Grid.ColumnSpan="2" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight"/>
-                <TextBlock x:Name="Name" Margin="86,0,0,0" TextWrapping="Wrap" Text="{Binding Converter={StaticResource ScreenNameConverter}}" VerticalAlignment="Top" FontSize="24" UseLayoutRounding="False" HorizontalAlignment="Left" Width="258"/>
-                <toolkit:ContextMenuService.ContextMenu>
-                    <toolkit:ContextMenu Name="ContextMenu">
-                        <toolkit:MenuItem Header="reply" Command="{StaticResource ReplyCommand}" CommandParameter="{Binding}" />
-                        <toolkit:MenuItem Header="reply all" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding}" />
-                        <toolkit:MenuItem Header="retweet" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding}" />
-                        <toolkit:MenuItem Header="favorite" Command="{StaticResource FavoriteCommand}" CommandParameter="{Binding}" />
-                    </toolkit:ContextMenu>
-                </toolkit:ContextMenuService.ContextMenu>
-            </Grid>
+        <DataTemplate x:Key="TweetTemplate">
+            <local:TweetTemplateSelector Content="{Binding}" Margin="0" HorizontalContentAlignment="Stretch" >
+                <local:TweetTemplateSelector.UsualTemplate>
+                    <DataTemplate>
+                        <Grid HorizontalAlignment="Stretch" Tag="{Binding Id}" Margin="0,3,0,12" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache">
+                            <i:Interaction.Behaviors>
+                                <tr:OnLoadedOpacityTransitionBehavior/>
+                            </i:Interaction.Behaviors>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.611*"/>
+                                <ColumnDefinition Width="0.389*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="Date" Text="{Binding CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}" VerticalAlignment="Top" Margin="0,5.753,8,0" Foreground="#FF707070" Grid.Column="1" HorizontalAlignment="Right" UseLayoutRounding="False" FontFamily="Segoe WP Light"/>
+                            <Image x:Name="Avatar" Source="{Binding Converter={StaticResource AvatarConverter}, ConverterParameter=false}" HorizontalAlignment="Left" Width="{Binding Converter={StaticResource SizeConverter}}" Margin="{Binding Converter={StaticResource MarginConverter}}" d:LayoutOverrides="HorizontalAlignment, Height" Height="{Binding Converter={StaticResource SizeConverter}}" UseLayoutRounding="False" VerticalAlignment="Top"/>
+                            <Image x:Name="RetweetedAvatar" Source="{Binding Converter={StaticResource AvatarConverter}, ConverterParameter=true}" HorizontalAlignment="Left" Width="30" Margin="8,54,0,0" d:LayoutOverrides="HorizontalAlignment, Height" Height="30" UseLayoutRounding="False" VerticalAlignment="Top"/>
+                            <TextBlock x:Name="Text" Text="{Binding Converter={StaticResource TweetTextConverter}}" Margin="86,32.356,8,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Grid.ColumnSpan="2" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight"/>
+                            <TextBlock x:Name="Name" Margin="86,0,0,0" TextWrapping="Wrap" Text="{Binding Converter={StaticResource ScreenNameConverter}}" VerticalAlignment="Top" FontSize="24" UseLayoutRounding="False" HorizontalAlignment="Left" Width="258"/>
+                            <toolkit:ContextMenuService.ContextMenu>
+                                <toolkit:ContextMenu Name="ContextMenu">
+                                    <toolkit:MenuItem Header="reply" Command="{StaticResource ReplyCommand}" CommandParameter="{Binding}" />
+                                    <toolkit:MenuItem Header="reply all" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding}" />
+                                    <toolkit:MenuItem Header="retweet" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding}" />
+                                    <toolkit:MenuItem Header="favorite" Command="{StaticResource FavoriteCommand}" CommandParameter="{Binding}" />
+                                </toolkit:ContextMenu>
+                            </toolkit:ContextMenuService.ContextMenu>
+                        </Grid>
+                    </DataTemplate>
+                </local:TweetTemplateSelector.UsualTemplate>
+                <local:TweetTemplateSelector.LoadMoreTemplate>
+                    <DataTemplate>
+                        <Grid HorizontalAlignment="Stretch" Margin="0,3,0,12" Tag="{Binding Id}" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache" Height="53" d:LayoutOverrides="VerticalMargin">
+                            <i:Interaction.Behaviors>
+                                <tr:OnLoadedOpacityTransitionBehavior/>
+                            </i:Interaction.Behaviors>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.611*"/>
+                                <ColumnDefinition Width="0.389*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Foreground="{StaticResource PhoneAccentBrush}" Margin="50,8,78,8" TextWrapping="Wrap" Text="Load more..." FontSize="26.667" FontFamily="Segoe WP SemiLight"/>
+                        </Grid>
+                    </DataTemplate>
+                </local:TweetTemplateSelector.LoadMoreTemplate>
+            </local:TweetTemplateSelector>
         </DataTemplate>
 
         <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
@@ -63,7 +86,7 @@
         </Style>
 
 
-        
+
 
         <DataTemplate x:Key="AccountsTemplate">
             <Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">

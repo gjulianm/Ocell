@@ -26,6 +26,7 @@
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 		<Grid x:Name="ContentPanel" Margin="0,0,12,0" Grid.RowSpan="2">
 			<Image x:Name="BigImage"/>
+			
 		</Grid>
 	</Grid>
 </phone:PhoneApplicationPage>
