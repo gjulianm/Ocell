@@ -94,7 +94,7 @@ namespace Ocell.SPpages
             else
                 _service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
 
-            _service.ListFriends(0, ReceiveFriends);
+            _service.ListFriends(-1, ReceiveFriends);
         }
 
         private void ReceiveFriends(TwitterCursorList<TwitterUser> list, TwitterResponse Response)
@@ -103,6 +103,11 @@ namespace Ocell.SPpages
             {
                 if (_users == null)
                     _users = list;
+                else
+                    _users = _users.Concat(list);
+
+                if (list.NextCursor != 0 && list.NextCursor != null)
+                    _service.ListFriends((long)list.NextCursor, ReceiveFriends);
             }
         }
 
@@ -335,6 +340,15 @@ namespace Ocell.SPpages
                 return;
 
             _tweetText = Tweet.Text;
+
+            if (string.IsNullOrWhiteSpace(_tweetText))
+                return;
+
+            if (_tweetText.IndexOf('@') == -1)
+            {
+                _isWritingUser = false;
+                return;
+            }
 
             if (_tweetText.LastIndexOf(' ') > _tweetText.LastIndexOf('@'))
             {
