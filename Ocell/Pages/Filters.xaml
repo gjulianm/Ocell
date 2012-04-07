@@ -16,7 +16,7 @@
 
 	<phone:PhoneApplicationPage.Resources>
 		<DataTemplate x:Key="ItemTemplate">
-			<Grid Height="138" Width="444" Tap="Grid_Tap" Hold="Grid_Hold">
+			<Grid Height="138" Width="444" Tap="Grid_Tap" Hold="Grid_Hold" toolkit:TiltEffect.IsTiltEnabled="True" Tag="{Binding}">
 				<TextBlock x:Name="inclusion" Text="{Binding Inclusion, Converter={StaticResource IncludeExcludeConverter}}" VerticalAlignment="Bottom" Margin="8,0,8,41"/>
 				<TextBlock x:Name="source" Text="{Binding Converter={StaticResource FilterTypeConverter}}" Margin="32,39,8,0" FontWeight="Bold" VerticalAlignment="Top"/>
 				<TextBlock x:Name="filter" Text="{Binding Filter}" Margin="32,0,8,10" VerticalAlignment="Bottom" FontWeight="Bold"/>
@@ -52,8 +52,8 @@
 
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
-				<ListBox x:Name="FilterList" toolkit:TiltEffect.IsTiltEnabled="True" Margin="8,8,8,40" DataContext="{Binding}" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}"/>
-				<TextBlock HorizontalAlignment="Left" Margin="8,0,0,8" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Tap a filter to modify"/><Run Text=" it"/><Run Text=", tap &amp; hold to delete"/></TextBlock>
+				<ListBox x:Name="FilterList" toolkit:TiltEffect.IsTiltEnabled="True" Margin="8,8,8,44" DataContext="{Binding}" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}" SelectionChanged="FilterList_SelectionChanged"/>
+				<TextBlock HorizontalAlignment="Left" Margin="8,0,0,13" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Tap a filter to modify"/><Run Text=" it"/><Run Text=", tap &amp; hold to delete"/></TextBlock>
 			</Grid>
 		</Grid>
 		

@@ -28,13 +28,17 @@ namespace Ocell
         {
             if (DataTransfer.cFilter == null)
                 DataTransfer.cFilter = new ColumnFilter();
+            FilterList.DataContext = null;
+            FilterList.ItemsSource = null;
             FilterList.DataContext = DataTransfer.cFilter.Predicates;
             FilterList.ItemsSource = DataTransfer.cFilter.Predicates;
+            FilterList.UpdateLayout();
         }
 
         private void add_Click(object sender, System.EventArgs e)
         {
-            DataTransfer.Filter = new UserFilter();
+            DataTransfer.Filter = new ITweetableFilter();
+            DataTransfer.Filter.Type = FilterType.User;
             DataTransfer.Filter.Filter = "";
             DataTransfer.Filter.Inclusion = IncludeOrExclude.Include;
             NavigationService.Navigate(new Uri("/Pages/ManageFilter.xaml", UriKind.Relative));
@@ -42,6 +46,7 @@ namespace Ocell
 
         private void ApplicationBarIconButton_Click(object sender, System.EventArgs e)
         {
+            // Save.
             ColumnFilter ToRemove = Config.Filters.FirstOrDefault(item => item.Resource == DataTransfer.cFilter.Resource);
             if (ToRemove != null)
                 Config.Filters.Remove(ToRemove);
@@ -49,6 +54,42 @@ namespace Ocell
             Config.Filters.Add(DataTransfer.cFilter);
             Config.SaveFilters();
             NavigationService.GoBack();
+        }
+
+        private void Grid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            Grid grid = sender as Grid;
+            if (grid != null && grid.Tag is ITweetableFilter)
+            {
+                DataTransfer.Filter = grid.Tag as ITweetableFilter;
+                NavigationService.Navigate(new Uri("/Pages/ManageFilter.xaml", UriKind.Relative));
+            }
+        }
+
+        private void Grid_Hold(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            Grid grid = sender as Grid;
+            Dispatcher.BeginInvoke(() =>
+            {
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this filter?", "", MessageBoxButton.OKCancel);
+                if (result == MessageBoxResult.OK)
+                {
+                    if (grid != null && grid.Tag is ITweetableFilter)
+                    {
+                        DataTransfer.cFilter.RemoveFilter(grid.Tag as ITweetableFilter);
+                        FilterList.DataContext = null;
+                        FilterList.ItemsSource = null;
+                        FilterList.DataContext = DataTransfer.cFilter.Predicates;
+                        FilterList.ItemsSource = DataTransfer.cFilter.Predicates;
+                    }
+                }
+            });
+        }
+
+        private void FilterList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (FilterList.SelectedIndex != -1)
+                FilterList.SelectedIndex = -1;
         }
     }
 }

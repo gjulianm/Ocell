@@ -13,7 +13,8 @@ namespace Ocell.Pages
         private bool selectionChangeFired = false;
         public Search()
         {
-            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); 
+            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             TweetList.SelectionChanged += new SelectionChangedEventHandler(ListBox_SelectionChanged);
         }

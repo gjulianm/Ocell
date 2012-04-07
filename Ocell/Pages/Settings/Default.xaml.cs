@@ -180,5 +180,11 @@ namespace Ocell.Settings
                 Users.UpdateLayout();
             });
         }
+
+        private void FilterClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DataTransfer.cFilter = Config.FilterGlobal;
+            NavigationService.Navigate(new Uri("/Pages/Filters.xaml", UriKind.Relative));
+        }
     }
 }

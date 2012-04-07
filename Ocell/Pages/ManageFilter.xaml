@@ -39,16 +39,16 @@
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
 				<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Don't show tweets where" VerticalAlignment="Top" FontSize="21.333"/>
-				<toolkit:ListPicker x:Name="Resource" Margin="8,40,116,0" VerticalAlignment="Top">
+				<toolkit:ListPicker x:Name="Resource" Margin="8,41,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="132">
 					<toolkit:ListPickerItem x:Name="user" Content="User"/>
 					<toolkit:ListPickerItem x:Name="source" Content="Source"/>
 					<toolkit:ListPickerItem x:Name="text" Content="Text"/>
 				</toolkit:ListPicker>
-				<toolkit:ListPicker x:Name="Inclusion" Margin="8,0,116,192" VerticalAlignment="Bottom">
+				<toolkit:ListPicker x:Name="Inclusion" Margin="152,41,28,0" VerticalAlignment="Top">
 					<toolkit:ListPickerItem x:Name="exclude" Content="Contains"/>
 					<toolkit:ListPickerItem x:Name="include" Content="Does not contain"/>
 				</toolkit:ListPicker>
-				<TextBox x:Name="FilterText" Margin="0,0,100,64" TextWrapping="Wrap" VerticalAlignment="Bottom"/>
+				<TextBox x:Name="FilterText" Margin="0,202,12,232" TextWrapping="Wrap" d:LayoutOverrides="Height"/>
 			</Grid>
 		</Grid>
 		

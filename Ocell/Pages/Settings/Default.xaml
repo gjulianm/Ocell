@@ -100,11 +100,14 @@
 					</toolkit:ListPicker>
 				</Grid>
 			</controls:PivotItem>
-			<controls:PivotItem Header="tiles">
+			<controls:PivotItem Header="other">
 				<Grid>
-					<toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="Update tiles in the background" Margin="0,8,0,0" VerticalAlignment="Top" Checked="ColumnUpdate_Checked" Unchecked="ColumnUpdate_Checked"/>
-					<TextBlock HorizontalAlignment="Left" Margin="8,235,0,240" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="To add columns tiles, go to the main page and press &quot;pin column to start&quot; in the bottom bar."/><LineBreak/><Run/></TextBlock>
-					<Button x:Name="ComposePin" Content="Pin compose tile to start" HorizontalAlignment="Left" Margin="52,139,0,0" VerticalAlignment="Top" Width="344" Click="ComposePin_Click"/>
+					<toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="Update tiles in the background" Margin="0,48,0,0" VerticalAlignment="Top" Checked="ColumnUpdate_Checked" Unchecked="ColumnUpdate_Checked"/>
+					<TextBlock HorizontalAlignment="Left" Margin="8,275,0,200" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="To add columns tiles, go to the main page and press &quot;pin column to start&quot; in the bottom bar."/><LineBreak/><Run/></TextBlock>
+					<Button x:Name="ComposePin" Content="Pin compose tile to start" HorizontalAlignment="Left" Margin="52,179,0,0" VerticalAlignment="Top" Width="344" Click="ComposePin_Click"/>
+					<TextBlock HorizontalAlignment="Left" Margin="8,15,0,0" TextWrapping="Wrap" Text="Tiles" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24"/>
+					<TextBlock HorizontalAlignment="Left" Margin="8,0,0,192" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" RenderTransformOrigin="0.5,0.507" Text="Global filter"/>
+					<Button x:Name="filter_btn" Content="Edit global filters" HorizontalAlignment="Left" Margin="52,0,0,119" VerticalAlignment="Bottom" Width="344" Click="FilterClick"/>
 				</Grid>
 			</controls:PivotItem>
 		</controls:Pivot>

@@ -41,31 +41,31 @@ namespace Ocell
             if (Filter == null)
                 MessageAndExit("We couldn't load this filter, sorry.");
 
-            if (Filter is UserFilter)
+            if (Filter.Type == FilterType.User)
                 Resource.SelectedIndex = 0;
-            else if (Filter is SourceFilter)
+            else if (Filter.Type == FilterType.Source)
                 Resource.SelectedIndex = 1;
-            else if (Filter is TextFilter)
+            else if (Filter.Type == FilterType.Text)
                 Resource.SelectedIndex = 2;
 
             FilterText.Text = Filter.Filter;
 
             if (Filter.Inclusion == IncludeOrExclude.Include)
-                Inclusion.SelectedIndex = 0;
-            else
                 Inclusion.SelectedIndex = 1;
+            else
+                Inclusion.SelectedIndex = 0;
         }
 
         private void ApplicationBarIconButton_Click(object sender, System.EventArgs e)
         {
-            ITweetableFilter filter;
+            ITweetableFilter filter = new ITweetableFilter();
 
             if (Resource.SelectedIndex == 0)
-                filter = new UserFilter();
+                filter.Type = FilterType.User;
             else if (Resource.SelectedIndex == 1)
-                filter = new SourceFilter();
+                filter.Type = FilterType.Source;
             else if (Resource.SelectedIndex == 2)
-                filter = new TextFilter();
+                filter.Type = FilterType.Text;
             else
             {
                 MessageAndExit("Error saving this filter");
