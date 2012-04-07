@@ -272,6 +272,9 @@ namespace Ocell.Controls
             return null;
         }
         #endregion
+
+        public delegate void OnCompression(object sender, CompressionEventArgs e);
+        public event OnCompression Compression;
     }
 
     public class CompressionEventArgs : EventArgs

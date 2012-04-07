@@ -14,5 +14,6 @@ namespace Ocell.Library
         public static long DMDestinationId;
         public static ITweetableFilter Filter;
         public static ColumnFilter cFilter;
+        public static bool IsGlobalFilter;
     }
 }

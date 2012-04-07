@@ -30,7 +30,7 @@ namespace Ocell
             else
                 listbox.Filter = new ColumnFilter();
 
-            listbox.Filter.Global = Config.FilterGlobal;
+            listbox.Filter.Global = Config.GlobalFilter;
         }
     }
 }

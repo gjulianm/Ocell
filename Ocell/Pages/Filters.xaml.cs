@@ -47,12 +47,19 @@ namespace Ocell
         private void ApplicationBarIconButton_Click(object sender, System.EventArgs e)
         {
             // Save.
-            ColumnFilter ToRemove = Config.Filters.FirstOrDefault(item => item.Resource == DataTransfer.cFilter.Resource);
-            if (ToRemove != null)
-                Config.Filters.Remove(ToRemove);
+            if (!DataTransfer.IsGlobalFilter)
+            {
+                ColumnFilter ToRemove = Config.Filters.FirstOrDefault(item => item.Resource == DataTransfer.cFilter.Resource);
+                if (ToRemove != null)
+                    Config.Filters.Remove(ToRemove);
 
-            Config.Filters.Add(DataTransfer.cFilter);
-            Config.SaveFilters();
+                Config.Filters.Add(DataTransfer.cFilter);
+                Config.SaveFilters();
+            }
+            else
+            {
+                Config.GlobalFilter = DataTransfer.cFilter;
+            }
             NavigationService.GoBack();
         }
 

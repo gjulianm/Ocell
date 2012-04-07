@@ -326,6 +326,7 @@ namespace Ocell
             DataTransfer.cFilter = Config.Filters.FirstOrDefault(item => item.Resource == ((TwitterResource)MainPivot.SelectedItem));
             if (DataTransfer.cFilter == null)
                 DataTransfer.cFilter = new ColumnFilter { Resource = (TwitterResource)MainPivot.SelectedItem };
+            DataTransfer.IsGlobalFilter = false;
             NavigationService.Navigate(new Uri("/Pages/Filters.xaml", UriKind.Relative));
         }
     }

@@ -30,6 +30,9 @@ namespace Ocell.Library
         public FilterType Type { get; set; }
         private string getStringToCheck(ITweetable item)
         {
+            if (item is LoadMoreTweetable)
+                return "";
+
             switch (Type)
             {
                 case FilterType.Source:

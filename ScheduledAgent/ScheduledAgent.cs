@@ -64,7 +64,6 @@ namespace ScheduledAgent
             foreach (UserToken User in Config.Accounts)
                 GetMentionsFor(User);
 
-
             Config.Dispose();
 
             foreach (ITweetableTask Task in Config.TweetTasks)

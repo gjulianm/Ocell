@@ -194,7 +194,8 @@ namespace Ocell.Settings
 
         private void FilterClick(object sender, System.Windows.RoutedEventArgs e)
         {
-            DataTransfer.cFilter = Config.FilterGlobal;
+            DataTransfer.cFilter = Config.GlobalFilter;
+            DataTransfer.IsGlobalFilter = true;
             NavigationService.Navigate(new Uri("/Pages/Filters.xaml", UriKind.Relative));
         }
     }

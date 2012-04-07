@@ -26,6 +26,18 @@ namespace Ocell.Library
         private static List<ColumnFilter> _filters;
         private static ColumnFilter _globalFilter;
 
+        public static ColumnFilter GlobalFilter
+        {
+            get
+            {
+                return GenericGetFromConfig<ColumnFilter>(GlobalFilterKey, ref _globalFilter);
+            }
+            set
+            {
+                GenericSaveToConfig<ColumnFilter>(GlobalFilterKey, ref _globalFilter, value);
+            }
+        }
+
         public static List<ColumnFilter> Filters
         {
             get
