@@ -205,8 +205,9 @@ namespace Ocell
             list.Compression += new ExtendedListBox.OnCompression(list_Compression);
             list.Loader.Error += new TweetLoader.OnError(Loader_Error);
             list.Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
+            list.Loader.ActivateLoadMoreButton = true;
 
+            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
             list.Loader.LoadCacheAsync();
             list.Loader.Load();
         }
@@ -262,13 +263,24 @@ namespace Ocell
             {
                 DataTransfer.Status = e.AddedItems[0] as TwitterStatus;
                 DataTransfer.DM = e.AddedItems[0] as TwitterDirectMessage;
-                ListBox list = sender as ListBox;
+                ExtendedListBox list = sender as ExtendedListBox;
                 selectionChangeFired = true;
-                list.SelectedIndex = -1;
+                list.SelectedItem = null;
                 if (e.AddedItems[0] is TwitterStatus)
                     NavigationService.Navigate(new Uri("/Pages/Tweet.xaml", UriKind.Relative));
-                else
+                else if (e.AddedItems[0] is TwitterDirectMessage)
                     NavigationService.Navigate(new Uri("/Pages/DMView.xaml", UriKind.Relative));
+                else if (e.AddedItems[0] is TwitterSearchStatus)
+                {
+                    DataTransfer.Status = StatusConverter.SearchToStatus(e.AddedItems[0] as TwitterSearchStatus);
+                    NavigationService.Navigate(new Uri("/Pages/Tweet.xaml", UriKind.Relative));
+                }
+                else if (e.AddedItems[0] is LoadMoreTweetable)
+                {
+                    Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
+                    list.LoadIntermediate(e.AddedItems[0] as LoadMoreTweetable);
+                    list.RemoveLoadMore();
+                }
             }
             else
                 selectionChangeFired = false;

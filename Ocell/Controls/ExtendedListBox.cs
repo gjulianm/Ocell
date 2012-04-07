@@ -12,6 +12,7 @@ using System.Windows.Media;
 using Ocell.Library;
 using TweetSharp;
 using System.Windows.Data;
+using Microsoft.Phone.Controls;
 
 namespace Ocell.Controls
 {
@@ -26,7 +27,7 @@ namespace Ocell.Controls
         protected ObservableCollection<ITweetable> _Items;
         protected CollectionViewSource _ViewSource;
         private ColumnFilter _filter;
-        
+   
 
         public ExtendedListBox()
         {
@@ -75,6 +76,8 @@ namespace Ocell.Controls
 
             return i;
         }
+
+        
 
         private void UnsafePopulateItemsSource()
         {
@@ -143,8 +146,22 @@ namespace Ocell.Controls
             {
                 _filter = value;
                 if (_filter != null)
-                    _ViewSource.View.Filter = _filter.Predicate;
+                    _ViewSource.View.Filter = _filter.getPredicate();
             }
+        }
+
+        public void LoadIntermediate(LoadMoreTweetable trigger)
+        {
+            Loader.LoadFrom(trigger.Id - 1);
+        }
+
+        public void RemoveLoadMore()
+        {
+            ITweetable item = _Items.FirstOrDefault(e => e is LoadMoreTweetable);
+            if (item != null)
+                _Items.Remove(item);
+
+            Loader.RemoveLoadMore();
         }
 
         #region Scroll Events

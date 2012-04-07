@@ -11,36 +11,37 @@ namespace Ocell.Library
 {
     public class TweetLoader
     {
-        private int Loaded;
-        private readonly int ToLoad = 1;
+        private int _loaded;
+        private readonly int _toLoad = 1;
         public int TweetsToLoadPerRequest { get; set; }
         public bool Cached { get; set; }
-        public bool Threaded { get; set; }
-        private int RequestsInProgress;
-	    protected TwitterResource _resource;
-        private static DateTime RateResetTime;
+        public bool ActivateLoadMoreButton { get; set; }
+        private int _requestsInProgress;
+        protected TwitterResource _resource;
+        private static DateTime _rateResetTime;
 
-        public TwitterResource Resource 
+        public TwitterResource Resource
         {
-	        get
-	        {
-		        return _resource;
-	        }
-	        set
-	        {
-		        _resource = value;
-		        _srv = ServiceDispatcher.GetService(_resource.User);
-	        }
-	    }
+            get
+            {
+                return _resource;
+            }
+            set
+            {
+                _resource = value;
+                _srv = ServiceDispatcher.GetService(_resource.User);
+            }
+        }
         public ObservableCollection<ITweetable> Source { get; protected set; }
-	    protected TwitterService _srv;
+        protected TwitterService _srv;
         protected long LastId;
-        
+
         #region Constructors
-        public TweetLoader(TwitterResource resource) : this()
+        public TweetLoader(TwitterResource resource)
+            : this()
         {
             Resource = resource;
-	        _srv = ServiceDispatcher.GetService(Resource.User);
+            _srv = ServiceDispatcher.GetService(Resource.User);
 
             LoadCacheAsync();
         }
@@ -48,24 +49,24 @@ namespace Ocell.Library
         public TweetLoader()
         {
             TweetsToLoadPerRequest = 25;
-            Loaded = 0;
+            _loaded = 0;
             Source = new ObservableCollection<TweetSharp.ITweetable>();
             LastId = 0;
             Cached = true;
-            Threaded = false;
-            RequestsInProgress = 0;
-            if (RateResetTime == null)
-                RateResetTime = DateTime.MinValue;
+            ActivateLoadMoreButton = false;
+            _requestsInProgress = 0;
+            if (_rateResetTime == null)
+                _rateResetTime = DateTime.MinValue;
 
             Error += new OnError(CheckForRateLimit);
         }
+        #endregion
 
         void CheckForRateLimit(TwitterResponse response)
         {
             if (response.RateLimitStatus.RemainingHits <= 0)
-                RateResetTime = response.RateLimitStatus.ResetTime;
+                _rateResetTime = response.RateLimitStatus.ResetTime;
         }
-        #endregion
 
         public void LoadCacheAsync()
         {
@@ -81,15 +82,15 @@ namespace Ocell.Library
         public void Load(bool Old = false)
         {
             if (Resource == null || _srv == null ||
-                RequestsInProgress >= 2 ||
-                RateResetTime > DateTime.Now)
+                _requestsInProgress >= 2 ||
+                _rateResetTime > DateTime.Now)
             {
                 if (LoadFinished != null)
                     LoadFinished(this, new EventArgs());
                 return;
             }
 
-            RequestsInProgress++;
+            _requestsInProgress++;
 
             if (Old)
                 LoadOld();
@@ -97,18 +98,23 @@ namespace Ocell.Library
                 LoadNew();
         }
 
+        public void LoadFrom(long Id)
+        {
+            LoadOld(Id);
+        }
+
         protected void InternalLoad(bool Old = false)
         {
             if (Resource == null || _srv == null ||
-                RequestsInProgress >= 2 ||
-                RateResetTime > DateTime.Now)
+                _requestsInProgress >= 2 ||
+                _rateResetTime > DateTime.Now)
             {
                 if (LoadFinished != null)
                     LoadFinished(this, new EventArgs());
                 return;
             }
 
-            RequestsInProgress++;
+            _requestsInProgress++;
 
             if (Old)
                 LoadOld();
@@ -117,7 +123,7 @@ namespace Ocell.Library
         }
         protected void LoadNew()
         {
-            Loaded++;
+            _loaded++;
             switch (Resource.Type)
             {
                 case ResourceType.Home:
@@ -147,13 +153,14 @@ namespace Ocell.Library
         }
         protected void LoadOld(long Last = 0)
         {
-            Loaded++;
-            if (Source.Count == 0)
-            {
+            _loaded++;
+
+            if (!Source.Any())
                 return;
-            }
+            
             if(Last == 0)
-            	Last = LastId;
+            	Last = Source.Last().Id;
+
             switch (Resource.Type)
             {
                 case ResourceType.Home:
@@ -181,7 +188,7 @@ namespace Ocell.Library
                     break;
             }
         }
-        
+
         public void LoadCache()
         {
             if (!Cached || Resource == null || Resource.User == null)
@@ -197,7 +204,7 @@ namespace Ocell.Library
                 if (!Source.Contains(item, comparer))
                     Source.Add(item);
 
-            if(CacheLoad != null)
+            if (CacheLoad != null)
                 CacheLoad(this, new EventArgs());
         }
         #endregion
@@ -205,84 +212,80 @@ namespace Ocell.Library
         #region Specific Receivers
         protected void ReceiveTweets(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
         {
-            RequestsInProgress--;
+            _requestsInProgress--;
             if (statuses == null)
             {
                 if (Error != null)
                     Error(response);
                 return;
             }
-            List<ITweetable> list = new List<ITweetable>();
-            foreach (var item in statuses)
-                list.Add(item);
-            GenericReceive((IEnumerable<ITweetable>)list, response);
+
+            GenericReceive(statuses.Cast<ITweetable>(), response);
         }
 
         protected void ReceiveMessages(IEnumerable<TwitterDirectMessage> statuses, TwitterResponse response)
         {
-            RequestsInProgress--;
+            _requestsInProgress--;
             if (statuses == null)
             {
                 if (Error != null)
                     Error(response);
                 return;
             }
-            List<ITweetable> list = new List<ITweetable>();
-            foreach (var item in statuses)
-                list.Add(item);
-            GenericReceive((IEnumerable<ITweetable>)list, response);
+
+            GenericReceive(statuses.Cast<ITweetable>(), response);
         }
 
         protected void ReceiveSearch(TwitterSearchResult result, TwitterResponse response)
         {
-            RequestsInProgress--;
+            _requestsInProgress--;
             if (result == null || result.Statuses == null)
             {
                 if (Error != null)
                     Error(response);
                 return;
             }
-            List<ITweetable> list = new List<ITweetable>();
-            foreach (var item in result.Statuses)
-                list.Add(item);
-            GenericReceive((IEnumerable<ITweetable>)list, response);
-        } 
+
+            GenericReceive(result.Statuses.Cast<ITweetable>(), response);
+        }
         #endregion
 
         protected void GenericReceive(IEnumerable<ITweetable> list, TwitterResponse response)
         {
-        	try
-        	{
-        		UnsafeGenericReceive(list, response);
-        	}
-        	catch (Exception)
-        	{
-        	}
+            try
+            {
+                UnsafeGenericReceive(list, response);
+            }
+            catch (Exception)
+            {
+            }
         }
         private void UnsafeGenericReceive(IEnumerable<ITweetable> list, TwitterResponse response)
         {
             TweetEqualityComparer comparer = new TweetEqualityComparer();
-            
+
             if (list == null || response.StatusCode != HttpStatusCode.OK)
             {
                 if (Error != null)
                     Error(response);
                 return;
             }
-            
-            if(Source == null)
-            	Source = new ObservableCollection<ITweetable>();
+
+            if (Source == null)
+                Source = new ObservableCollection<ITweetable>();
+
+            TryAddLoadMoreButton(ref list);
 
             foreach (var status in list)
                 if (!Source.Contains(status, comparer))
                     Source.Add(status);
-                    
+
             OrderSource();
 
             if (list.Count() != 0)
                 LastId = list.Last().Id;
 
-            if (Loaded < ToLoad && list.Count() > 0)
+            if (_loaded < _toLoad && list.Count() > 0)
             {
                 LoadOld(list.Last().Id);
                 if (PartialLoad != null)
@@ -290,7 +293,7 @@ namespace Ocell.Library
             }
             else
             {
-                Loaded = 0;
+                _loaded = 0;
                 if (LoadFinished != null)
                     LoadFinished(this, new EventArgs());
             }
@@ -298,14 +301,42 @@ namespace Ocell.Library
             SaveToCache();
         }
 
+        private void TryAddLoadMoreButton(ref IEnumerable<ITweetable> received)
+        {
+            if (!ActivateLoadMoreButton)
+                return;
+
+            if (Source == null || !Source.Any())
+                return;
+
+            ITweetable olderTweet;
+            ITweetable newerTweet;
+
+            try
+            {
+                olderTweet = Source.OrderByDescending(item => item.Id).ElementAt(0);
+                newerTweet = received.OrderBy(item => item.Id).ElementAt(0);
+            }
+            catch
+            {
+                return;
+            }
+
+            int avgTime = DecisionMaker.GetAvgTimeBetweenTweets(Source);
+            TimeSpan diff = newerTweet.CreatedDate - olderTweet.CreatedDate;
+
+            if (diff.TotalSeconds > 4 * avgTime)
+                Source.Add(new LoadMoreTweetable { Id = newerTweet.Id + 1 });
+        }
+
         public void SaveToCache()
         {
             if (!Cached)
                 return;
-            
+
             if (Source.Count == 0)
                 return;
-            
+
             if (Source.First().GetType() == typeof(TwitterStatus))
             {
                 try
@@ -319,12 +350,19 @@ namespace Ocell.Library
             }
         }
 
-		protected void OrderSource()
-		{
-			Source = new ObservableCollection<ITweetable>(Source.OrderByDescending(item => item.Id));
-		}
+        protected void OrderSource()
+        {
+            Source = new ObservableCollection<ITweetable>(Source.OrderByDescending(item => item.Id));
+        }
 
-     
+
+        public void RemoveLoadMore()
+        {
+            ITweetable item = Source.FirstOrDefault(e => e is LoadMoreTweetable);
+            if (item != null)
+                Source.Remove(item);
+        }
+
 
         #region Events
         public event EventHandler LoadFinished;
@@ -336,6 +374,6 @@ namespace Ocell.Library
 
         public event EventHandler CacheLoad;
         #endregion
-    } 
-        
+    }
+
 }
