@@ -8,7 +8,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:custom="clr-namespace:Ocell.Controls"
 	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
-	x:Class="Ocell.User"
+	x:Class="Ocell.Pages.Elements.User"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"
 	FontSize="{StaticResource PhoneFontSizeNormal}"

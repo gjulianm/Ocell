@@ -8,10 +8,10 @@ using Microsoft.Phone.Controls;
 using TweetSharp;
 using System.Linq;
 using Ocell.Library;
+using Ocell.Library.Twitter;
 
 
-
-namespace Ocell.AuxScreens
+namespace Ocell.Pages.Columns
 {
     public partial class AddColumn : PhoneApplicationPage
     {

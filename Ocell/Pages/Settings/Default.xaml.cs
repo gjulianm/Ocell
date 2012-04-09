@@ -6,6 +6,8 @@ using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using System.Linq;
 using Ocell.Library;
+using Ocell.Library.Twitter;
+using Ocell.Library.Notifications;
 
 namespace Ocell.Settings
 {
@@ -160,7 +162,7 @@ namespace Ocell.Settings
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/Settings/OAuth.xaml", UriKind.Relative));
+            NavigationService.Navigate(Uris.LoginPage);
         }
 
         private void ComposePin_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -196,7 +198,7 @@ namespace Ocell.Settings
         {
             DataTransfer.cFilter = Config.GlobalFilter;
             DataTransfer.IsGlobalFilter = true;
-            NavigationService.Navigate(new Uri("/Pages/Filters.xaml", UriKind.Relative));
+            NavigationService.Navigate(Uris.Filters);
         }
     }
 }

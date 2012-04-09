@@ -8,6 +8,7 @@ using System.Windows.Data;
 using Ocell.Library;
 using TweetSharp;
 using System.Net;
+using Ocell.Library.Filtering;
 
 namespace Ocell
 {

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
 using Ocell.Library;
+using Ocell.Library.Twitter;
 
 namespace Ocell
 {

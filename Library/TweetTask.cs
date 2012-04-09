@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Net;
 using TweetSharp;
+using Ocell.Library.Twitter;
 
-namespace Ocell.Library
+namespace Ocell.Library.Tasks
 {
     public interface ITweetableTask
     {

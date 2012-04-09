@@ -1,13 +1,15 @@
-﻿using System.Windows;
-using Microsoft.Phone.Scheduler;
-using TweetSharp;
-using Ocell.Library;
+﻿using System;
 using System.Collections.Generic;
-using System;
-using Microsoft.Phone.Shell;
 using System.Linq;
 using System.Threading;
-using System.Web;
+using System.Windows;
+using Microsoft.Phone.Scheduler;
+using Microsoft.Phone.Shell;
+using Ocell.Library;
+using Ocell.Library.Notifications;
+using Ocell.Library.Tasks;
+using Ocell.Library.Twitter;
+using TweetSharp;
 
 namespace ScheduledAgent
 {
@@ -252,7 +254,7 @@ namespace ScheduledAgent
             if (PendingCalls > 0)
                 return;
 
-            Ocell.Library.TileManager.UpdateTile(TileNewMentions, TileNewMessages);
+            TileManager.UpdateTile(TileNewMentions, TileNewMessages);
 
             InternalNotifyComplete();
         }

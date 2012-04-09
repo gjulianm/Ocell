@@ -10,6 +10,8 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Shell;
 using System.Linq;
+using Ocell.Library.Twitter;
+
 
 namespace Ocell
 {
@@ -25,7 +27,7 @@ namespace Ocell
             return ComposeTile != null;
         }
 
-        public static bool ColumnTileIsCreated(Library.TwitterResource Resource)
+        public static bool ColumnTileIsCreated(TwitterResource Resource)
         {
             ShellTile ColumnTile = ShellTile.ActiveTiles.FirstOrDefault(item => item != null 
                 && !string.IsNullOrWhiteSpace(item.NavigationUri.ToString()) && 
@@ -44,12 +46,12 @@ namespace Ocell
                 BackgroundImage = new Uri("/Images/ComposeTile.png", UriKind.Relative)
             };
 
-            Uri ComposeUri = new Uri("/Pages/NewTweet.xaml", UriKind.Relative);
+            Uri ComposeUri = Uris.WriteTweet;
 
             ShellTile.Create(ComposeUri, ComposeTile);
         }
 
-        private static string GetTitle(Library.TwitterResource Resource)
+        private static string GetTitle(TwitterResource Resource)
         {
             ListConverter Converter = new ListConverter();
 
@@ -59,7 +61,7 @@ namespace Ocell
             return Title;
         }
 
-        public static void CreateColumnTile(Library.TwitterResource Resource)
+        public static void CreateColumnTile(TwitterResource Resource)
         {
             if (Resource == null || ColumnTileIsCreated(Resource))
                 return;

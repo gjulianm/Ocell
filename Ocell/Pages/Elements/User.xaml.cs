@@ -12,8 +12,9 @@ using Microsoft.Phone.Tasks;
 using Ocell.Controls;
 using TweetSharp;
 using Ocell.Library;
+using Ocell.Library.Twitter;
 
-namespace Ocell
+namespace Ocell.Pages.Elements
 {
     public partial class User : PhoneApplicationPage
     {
@@ -26,14 +27,15 @@ namespace Ocell
         
         public User()
         {
-            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); 
+            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(User_Loaded);
             TweetList.SelectionChanged += new SelectionChangedEventHandler(ListBox_SelectionChanged);
             TweetList.Loader.Cached = false;
             _account = Config.Accounts.FirstOrDefault();
             if (_account == null)
-                NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+                NavigationService.Navigate(Uris.MainPage);
             _srv = ServiceDispatcher.GetService(_account);
         }
 
@@ -81,10 +83,12 @@ namespace Ocell
                 FullName.Text = CurrentUser.Name;
                 ScreenName.Text = "@" + CurrentUser.ScreenName;
                 Avatar.Source = new BitmapImage(new Uri(CurrentUser.ProfileImageUrl, UriKind.Absolute));
+
                 if(!string.IsNullOrWhiteSpace(CurrentUser.Url)) {
                     Website.Content = CurrentUser.Url;
                     Website.NavigateUri = new Uri(CurrentUser.Url, UriKind.Absolute);
                 }
+
                 Biography.Text = CurrentUser.Description;
                 Followers.Text = CurrentUser.FollowersCount.ToString();
                 Following.Text = CurrentUser.FriendsCount.ToString();
@@ -206,7 +210,7 @@ namespace Ocell
                 selectionChangeFired = true;
                 list.SelectedIndex = -1;
 
-                NavigationService.Navigate(new Uri("/Pages/Tweet.xaml", UriKind.Relative));
+                NavigationService.Navigate(Uris.ViewTweet);
             }
             else
                 selectionChangeFired = false;

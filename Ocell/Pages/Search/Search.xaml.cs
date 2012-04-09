@@ -4,8 +4,9 @@ using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using TweetSharp;
 using Ocell.Library;
+using Ocell.Library.Twitter;
 
-namespace Ocell.Pages
+namespace Ocell.Pages.Search
 {
     public partial class Search : PhoneApplicationPage
     {
@@ -57,7 +58,7 @@ namespace Ocell.Pages
                 selectionChangeFired = true;
                 list.SelectedIndex = -1;
 
-                NavigationService.Navigate(new Uri("/Pages/Tweet.xaml", UriKind.Relative));
+                NavigationService.Navigate(Uris.ViewTweet);
             }
             else
                 selectionChangeFired = false;

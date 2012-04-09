@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using Ocell.Library;
+using Ocell.Library.Filtering;
+using Ocell.Library.Twitter;
+using Ocell.Library.Twitter.Comparers;
 using TweetSharp;
-using System.Windows.Data;
-using Microsoft.Phone.Controls;
+
 
 namespace Ocell.Controls
 {

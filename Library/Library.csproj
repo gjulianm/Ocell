@@ -58,6 +58,7 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Autocompleter.cs" />
     <Compile Include="Cacher.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DataTransfer.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="TweetTask.cs" />
     <Compile Include="TwitterComparers.cs" />
     <Compile Include="TwitterResource.cs" />
+    <Compile Include="UsernameProvider.cs" />
     <Compile Include="UserToken.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 
-namespace Ocell
+namespace Ocell.Pages.Search
 {
     public partial class EnterSearch : PhoneApplicationPage
     {
@@ -23,7 +23,7 @@ namespace Ocell
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-        	NavigationService.Navigate(new Uri("/Pages/Search.xaml?q=" + SearchQuery.Text, UriKind.Relative));
+        	NavigationService.Navigate(new Uri("/Pages/Search/Search.xaml?q=" + SearchQuery.Text, UriKind.Relative));
         }
     }
 }

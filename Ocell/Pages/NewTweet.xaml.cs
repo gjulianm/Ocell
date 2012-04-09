@@ -11,8 +11,10 @@ using Microsoft.Phone.Tasks;
 using TweetSharp;
 using System.Collections.Generic;
 using Ocell.Library;
+using Ocell.Library.Twitter;
+using Ocell.Library.Tasks;
 
-namespace Ocell.SPpages
+namespace Ocell.Pages
 {
     public partial class NewTweet : PhoneApplicationPage
     {
@@ -183,7 +185,7 @@ namespace Ocell.SPpages
                     if (NavigationService.CanGoBack)
                         NavigationService.GoBack();
                     else
-                        NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+                        NavigationService.Navigate(Uris.MainPage);
                 });
         }
 
@@ -247,7 +249,7 @@ namespace Ocell.SPpages
                     if (NavigationService.CanGoBack)
                         NavigationService.GoBack();
                     else
-                        NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+                        NavigationService.Navigate(Uris.MainPage);
                 });
         }
 

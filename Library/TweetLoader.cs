@@ -6,8 +6,11 @@ using System.Net;
 using TweetSharp;
 using Ocell.Library;
 using System.Threading;
+using Ocell.Library.Twitter;
+using Ocell.Library.Twitter.Comparers;
 
-namespace Ocell.Library
+
+namespace Ocell.Library.Twitter
 {
     public class TweetLoader : IDisposable
     {

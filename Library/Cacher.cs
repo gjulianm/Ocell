@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using TweetSharp;
 using System.Linq;
+using Ocell.Library.Twitter.Comparers;
 
-namespace Ocell.Library
+namespace Ocell.Library.Twitter
 {
     public static class Cacher
     {

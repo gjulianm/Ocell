@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using Microsoft.Phone.Controls;
 
-namespace Ocell
+namespace Ocell.Pages.Elements
 {
     public partial class ImageView : PhoneApplicationPage
     {
@@ -25,9 +25,8 @@ namespace Ocell
                     img = new Uri(url, UriKind.Absolute);
                     BigImage.Source = new BitmapImage { UriSource = img };
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Exception e2 = ex;
                     ShowMessageAndGoBack();
                 }
             }

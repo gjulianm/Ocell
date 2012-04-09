@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Documents;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Tasks;
-using TweetSharp;
 using Ocell.Library;
-using System.Linq;
+using Ocell.Library.Twitter;
+using TweetSharp;
 
 
-namespace Ocell.SPpages
+namespace Ocell.Pages.Elements
 {
     public partial class Tweet : PhoneApplicationPage
     {
@@ -194,7 +195,7 @@ namespace Ocell.SPpages
         {
             System.Windows.Controls.Image Img = sender as System.Windows.Controls.Image;
             if(Img != null)
-                NavigationService.Navigate(new Uri("/Pages/ImageView.xaml?img=" + Img.Tag.ToString(), UriKind.Relative));
+                NavigationService.Navigate(new Uri("/Pages/Elements/ImageView.xaml?img=" + Img.Tag.ToString(), UriKind.Relative));
         }
 
         void link_Click(object sender, RoutedEventArgs e)
@@ -214,11 +215,11 @@ namespace Ocell.SPpages
                 browser.Show();
             }
             else if (link.TargetName[0] == '@')
-                NavigationService.Navigate(new Uri("/Pages/User.xaml?user=" + link.TargetName.Substring(0), UriKind.Relative));
+                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + link.TargetName.Substring(0), UriKind.Relative));
             else if (link.TargetName[0] == '#')
             {
                 DataTransfer.Search = link.TargetName;
-                NavigationService.Navigate(new Uri("/Pages/Search.xaml?q=" + link.TargetName, UriKind.Relative));
+                NavigationService.Navigate(new Uri("/Pages/Search/Search.xaml?q=" + link.TargetName, UriKind.Relative));
             }
               
         }
@@ -228,7 +229,7 @@ namespace Ocell.SPpages
             DataTransfer.ReplyId = status.Id;
             DataTransfer.Text = "@" + status.Author.ScreenName + " ";
             DataTransfer.ReplyingDM = false;
-            NavigationService.Navigate(new Uri("/Pages/NewTweet.xaml", UriKind.Relative));
+            NavigationService.Navigate(Uris.WriteTweet);
         }
 
         private void replyAllButton_Click(object sender, EventArgs e)
@@ -240,7 +241,7 @@ namespace Ocell.SPpages
             foreach (string user in StringManipulator.GetUserNames(status.Text))
                 DataTransfer.Text += "@" + user + " ";
 
-            NavigationService.Navigate(new Uri("/Pages/NewTweet.xaml", UriKind.Relative));
+            NavigationService.Navigate(Uris.WriteTweet);
         }
 
         private void retweetButton_Click(object sender, EventArgs e)
@@ -267,7 +268,7 @@ namespace Ocell.SPpages
             DataTransfer.ReplyId = 0;
             DataTransfer.Text = "RT @" + status.User.ScreenName + " " + status.Text;
 
-            NavigationService.Navigate(new Uri("/Pages/NewTweet.xaml", UriKind.Relative));
+            NavigationService.Navigate(Uris.WriteTweet);
         }
 
         private void shareButton_Click(object sender, EventArgs e)
@@ -283,12 +284,12 @@ namespace Ocell.SPpages
 
         private void Grid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/User.xaml?user=" + status.Author.ScreenName, UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + status.Author.ScreenName, UriKind.Relative));
         }
         
         private void Replies_Tap(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/Conversation.xaml", UriKind.Relative));
+            NavigationService.Navigate(Uris.Conversation);
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Ocell.Library;
+using Ocell.Library.Twitter;
 
 namespace Ocell
 {

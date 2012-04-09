@@ -106,18 +106,19 @@
     <Compile Include="Pages\Columns\SelectAccount.xaml.cs">
       <DependentUpon>SelectAccount.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\EnterSearch.xaml.cs">
+    <Compile Include="Pages\Search\EnterSearch.xaml.cs">
       <DependentUpon>EnterSearch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Filters.xaml.cs">
+    <Compile Include="Pages\Filtering\Filters.xaml.cs">
       <DependentUpon>Filters.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ImageView.xaml.cs">
+    <Compile Include="Pages\Elements\ImageView.xaml.cs">
       <DependentUpon>ImageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ManageFilter.xaml.cs">
+    <Compile Include="Pages\Filtering\ManageFilter.xaml.cs">
       <DependentUpon>ManageFilter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Pages.cs" />
     <Compile Include="Pages\SelectUser.xaml.cs">
       <DependentUpon>SelectUser.xaml</DependentUpon>
     </Compile>
@@ -142,16 +143,16 @@
     <Compile Include="Pages\Columns\ManageColumns.xaml.cs">
       <DependentUpon>ManageColumns.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Conversation.xaml.cs">
+    <Compile Include="Pages\Elements\Conversation.xaml.cs">
       <DependentUpon>Conversation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\DMView.xaml.cs">
+    <Compile Include="Pages\Elements\DMView.xaml.cs">
       <DependentUpon>DMView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\NewTweet.xaml.cs">
       <DependentUpon>NewTweet.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Search.xaml.cs">
+    <Compile Include="Pages\Search\Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings\Default.xaml.cs">
@@ -160,10 +161,10 @@
     <Compile Include="Pages\Settings\OAuth.xaml.cs">
       <DependentUpon>OAuth.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Tweet.xaml.cs">
+    <Compile Include="Pages\Elements\Tweet.xaml.cs">
       <DependentUpon>Tweet.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\User.xaml.cs">
+    <Compile Include="Pages\Elements\User.xaml.cs">
       <DependentUpon>User.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainPage.xaml.cs">
@@ -189,27 +190,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Conversation.xaml">
+    <Page Include="Pages\Elements\Conversation.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\DMView.xaml">
+    <Page Include="Pages\Elements\DMView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\EnterSearch.xaml">
+    <Page Include="Pages\Search\EnterSearch.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Filters.xaml">
+    <Page Include="Pages\Filtering\Filters.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\ImageView.xaml">
+    <Page Include="Pages\Elements\ImageView.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\ManageFilter.xaml">
+    <Page Include="Pages\Filtering\ManageFilter.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -217,7 +218,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Search.xaml">
+    <Page Include="Pages\Search\Search.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -245,11 +246,11 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Tweet.xaml">
+    <Page Include="Pages\Elements\Tweet.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\User.xaml">
+    <Page Include="Pages\Elements\User.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>

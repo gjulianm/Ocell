@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Ocell.Library.Twitter;
 using TweetSharp;
-using System.Collections.ObjectModel;
 
-namespace Ocell.Library
+
+namespace Ocell.Library.Filtering
 {
 
     public class ColumnFilter 

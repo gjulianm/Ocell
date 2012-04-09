@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO.IsolatedStorage;
 using TweetSharp;
+using Ocell.Library.Twitter;
+using Ocell.Library.Filtering;
+using Ocell.Library.Tasks;
+
 
 namespace Ocell.Library
 {

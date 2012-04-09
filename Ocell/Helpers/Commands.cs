@@ -2,8 +2,10 @@
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Phone.Controls;
-using TweetSharp;
 using Ocell.Library;
+using Ocell.Library.Filtering;
+using Ocell.Library.Twitter;
+using TweetSharp;
 
 namespace Ocell.Commands
 {
@@ -30,7 +32,7 @@ namespace Ocell.Commands
             }
 
             PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
-            Deployment.Current.Dispatcher.BeginInvoke(() => service.Navigate(new Uri("/Pages/NewTweet.xaml", UriKind.Relative)));
+            Deployment.Current.Dispatcher.BeginInvoke(() => service.Navigate(Uris.WriteTweet));
         }
 
         public event EventHandler CanExecuteChanged;
@@ -51,7 +53,7 @@ namespace Ocell.Commands
             foreach (string user in StringManipulator.GetUserNames(tweet.Text))
                 DataTransfer.Text += "@" + user + " ";
             PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
-            Deployment.Current.Dispatcher.BeginInvoke(() => service.Navigate(new Uri("/Pages/NewTweet.xaml", UriKind.Relative)));
+            Deployment.Current.Dispatcher.BeginInvoke(() => service.Navigate(Uris.WriteTweet));
         }
 
         public event EventHandler CanExecuteChanged;
@@ -152,7 +154,7 @@ namespace Ocell.Commands
         {
             DataTransfer.Filter = parameter as ITweetableFilter;
             PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
-            service.Navigate(new Uri("/Pages/ManageFilter.xaml", UriKind.Relative));
+            service.Navigate(Uris.SingleFilter);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -169,7 +171,7 @@ namespace Ocell.Commands
         {
             DataTransfer.cFilter.RemoveFilter(parameter as ITweetableFilter);
             PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
-            service.Navigate(new Uri("/Pages/Filters.xaml", UriKind.Relative));
+            service.Navigate(Uris.Filters);
         }
 
         public event EventHandler CanExecuteChanged;

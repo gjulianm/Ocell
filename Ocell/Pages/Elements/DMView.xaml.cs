@@ -8,7 +8,7 @@ using Microsoft.Phone.Tasks;
 using TweetSharp;
 using Ocell.Library;
 
-namespace Ocell.Pages
+namespace Ocell.Pages.Elements
 {
     public partial class DMView : PhoneApplicationPage
     {
@@ -103,11 +103,11 @@ namespace Ocell.Pages
                 browser.Show();
             }
             else if (link.TargetName[0] == '@')
-                NavigationService.Navigate(new Uri("/Pages/User.xaml?user=" + link.TargetName.Substring(0), UriKind.Relative));
+                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + link.TargetName.Substring(0), UriKind.Relative));
             else if (link.TargetName[0] == '#')
             {
                 DataTransfer.Search = link.TargetName;
-                NavigationService.Navigate(new Uri("/Pages/Search.xaml?q=" + link.TargetName, UriKind.Relative));
+                NavigationService.Navigate(new Uri("/Pages/Search/Search.xaml?q=" + link.TargetName, UriKind.Relative));
             }
               
         }
@@ -118,7 +118,7 @@ namespace Ocell.Pages
             DataTransfer.ReplyingDM = true;
             DataTransfer.DMDestinationId = status.SenderId;
 
-            NavigationService.Navigate(new Uri("/Pages/NewTweet.xaml", UriKind.Relative));
+            NavigationService.Navigate(Uris.WriteTweet);
         }
 
       
@@ -145,7 +145,7 @@ namespace Ocell.Pages
 
         private void Grid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/User.xaml?user=" + status.Author.ScreenName, UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + status.Author.ScreenName, UriKind.Relative));
         }
     
     }

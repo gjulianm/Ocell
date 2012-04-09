@@ -8,6 +8,8 @@ using Hammock.Authentication.OAuth;
 using Microsoft.Phone.Controls;
 using System.Linq;
 using Ocell.Library;
+using Ocell.Library.Twitter;
+using Ocell.Library.Notifications;
 
 namespace Ocell.Settings
 {
@@ -214,7 +216,7 @@ namespace Ocell.Settings
         {
             CheckIfExistsAndInsert(Token);
 
-            Dispatcher.BeginInvoke(() => { NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative)); });
+            Dispatcher.BeginInvoke(() => { NavigationService.Navigate(Uris.MainPage); });
             return;
         }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ocell.Library
+namespace Ocell.Library.Twitter
 {
     public struct TwitterResource
     {        

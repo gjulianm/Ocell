@@ -13,7 +13,7 @@ using System.Linq;
 using TweetSharp;
 using Microsoft.Phone.Shell;
 
-namespace Ocell.Library
+namespace Ocell.Library.Notifications
 {
     public static class TileManager
     {

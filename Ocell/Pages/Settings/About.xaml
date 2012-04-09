@@ -6,7 +6,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="185"
-	x:Class="Ocell.About"
+	x:Class="Ocell.Pages.Settings.About"
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
@@ -34,7 +34,10 @@
 			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
 				<Image Height="128" Margin="156,8,172,0" Source="OcellIcon200.png" Stretch="Fill" VerticalAlignment="Top"/>
 				<RichTextBox Margin="8,148,8,0" VerticalAlignment="Top" Height="436">
-					<Paragraph><Run Text="Ocell is a open source (ASL) twitter client for Windows Phon"/><Run Text="e, developed by "/><Hyperlink NavigateUri="/Pages/User.xaml?user=gjulianm"><Run Text="Guillermo Julián">
+                    <Paragraph>
+                        <Run Text="Ocell is a open source (ASL) twitter client for Windows Phon"/>
+                        <Run Text="e, developed by "/>
+                        <Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=gjulianm"><Run Text="Guillermo Julián">
 								<Run.Foreground>
 									<SolidColorBrush Color="White">
 										<SolidColorBrush.RelativeTransform>
@@ -45,7 +48,10 @@
 										</SolidColorBrush.Transform>
 									</SolidColorBrush>
 								</Run.Foreground>
-							</Run></Hyperlink><Run Text=". You can follow "/><Hyperlink NavigateUri="/Pages/User.xaml?user=OcellApp"><Run Text="@OcellApp">
+                            </Run>
+                        </Hyperlink>
+                        <Run Text=". You can follow "/>
+                        <Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=OcellApp"><Run Text="@OcellApp">
 								<Run.Foreground>
 									<SolidColorBrush Color="White">
 										<SolidColorBrush.RelativeTransform>

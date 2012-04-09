@@ -1,4 +1,6 @@
-﻿
+﻿using Ocell.Library.Twitter;
+using Ocell.Library.Filtering;
+
 namespace Ocell.Library
 {
     public static class DataTransfer

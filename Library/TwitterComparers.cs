@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using TweetSharp;
 using Ocell.Library;
+using Ocell.Library.Twitter;
 
-namespace Ocell.Library
+namespace Ocell.Library.Twitter.Comparers
 {
     public class TweetEqualityComparer : IEqualityComparer<ITweetable>
     {

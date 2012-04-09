@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using Ocell.Library;
 
-namespace Ocell.AuxScreens
+namespace Ocell.Pages.Columns
 {
     public partial class ManageColumns : PhoneApplicationPage
     {
@@ -46,12 +46,12 @@ namespace Ocell.AuxScreens
 
         private void ApplicationBarIconButton_Click(object sender, System.EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/Columns/SelectAccount.xaml", UriKind.Relative));
+            NavigationService.Navigate(Uris.SelectUserForColumn);
         }
 
         private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/Settings/Default.xaml", UriKind.Relative));
+            NavigationService.Navigate(Uris.Settings);
         }
 
         private void MainList_SelectionChanged(object sender, SelectionChangedEventArgs e)

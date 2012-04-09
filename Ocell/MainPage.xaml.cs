@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO.IsolatedStorage;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using Ocell.Controls;
-using TweetSharp;
-using System.Linq;
 using Ocell.Library;
-using Microsoft.Phone.Scheduler;
-using Microsoft.Phone.Shell;
-using System.Windows.Media;
+using Ocell.Library.Filtering;
+using Ocell.Library.Notifications;
+using Ocell.Library.Twitter;
+using TweetSharp;
+
 
 namespace Ocell
 {
@@ -150,7 +150,7 @@ namespace Ocell
             {
                 MessageBoxResult r = MessageBox.Show("You have to log in with Twitter in order to use Ocell.", "", MessageBoxButton.OKCancel);
                 if (r == MessageBoxResult.OK)
-                    NavigationService.Navigate(new Uri("/Pages/Settings/OAuth.xaml", UriKind.Relative));
+                    NavigationService.Navigate(Uris.LoginPage);
             });
         }
 
@@ -181,7 +181,7 @@ namespace Ocell
             if (Config.Accounts.Count == 0)
                 ShowLoginMsg();
             else
-                NavigationService.Navigate(new Uri("/Pages/NewTweet.xaml", UriKind.Relative));
+                NavigationService.Navigate(Uris.WriteTweet);
         }
 
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
@@ -247,7 +247,7 @@ namespace Ocell
 
         private void menuItem1_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/Settings/Default.xaml", UriKind.Relative));
+            NavigationService.Navigate(Uris.Settings);
         }
 
         private void add_Click(object sender, EventArgs e)
@@ -255,7 +255,7 @@ namespace Ocell
             if (Config.Accounts.Count == 0)
                 ShowLoginMsg();
             else
-                NavigationService.Navigate(new Uri("/Pages/Columns/ManageColumns.xaml", UriKind.Relative));
+                NavigationService.Navigate(Uris.Columns);
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -268,13 +268,13 @@ namespace Ocell
                 selectionChangeFired = true;
                 list.SelectedItem = null;
                 if (e.AddedItems[0] is TwitterStatus)
-                    NavigationService.Navigate(new Uri("/Pages/Tweet.xaml", UriKind.Relative));
+                    NavigationService.Navigate(Uris.ViewTweet);
                 else if (e.AddedItems[0] is TwitterDirectMessage)
-                    NavigationService.Navigate(new Uri("/Pages/DMView.xaml", UriKind.Relative));
+                    NavigationService.Navigate(Uris.ViewDM);
                 else if (e.AddedItems[0] is TwitterSearchStatus)
                 {
                     DataTransfer.Status = StatusConverter.SearchToStatus(e.AddedItems[0] as TwitterSearchStatus);
-                    NavigationService.Navigate(new Uri("/Pages/Tweet.xaml", UriKind.Relative));
+                    NavigationService.Navigate(Uris.ViewTweet);
                 }
                 else if (e.AddedItems[0] is LoadMoreTweetable)
                 {
@@ -295,12 +295,12 @@ namespace Ocell
 
         private void send_DM_Click(object sender, System.EventArgs e)
         {
-        	NavigationService.Navigate(new Uri("/Pages/SelectUser.xaml", UriKind.Relative));
+        	NavigationService.Navigate(Uris.SelectUserForDM);
         }
 
         private void SearchBtn_Click(object sender, System.EventArgs e)
         {
-        	NavigationService.Navigate(new Uri("/Pages/EnterSearch.xaml", UriKind.Relative));
+        	NavigationService.Navigate(Uris.SearchForm);
         }
 
         private void pinToStart_Click(object sender, System.EventArgs e)
@@ -313,12 +313,12 @@ namespace Ocell
 
         private void about_Click(object sender, System.EventArgs e)
         {
-        	NavigationService.Navigate(new Uri("/Pages/Settings/About.xaml", UriKind.Relative));
+        	NavigationService.Navigate(Uris.About);
         }
 
         private void Trending_Click(object sender, System.EventArgs e)
         {
-        	NavigationService.Navigate(new Uri("/Pages/Topics.xaml", UriKind.Relative));
+        	NavigationService.Navigate(Uris.TrendingTopics);
 		}
 
 		private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
@@ -327,7 +327,7 @@ namespace Ocell
             if (DataTransfer.cFilter == null)
                 DataTransfer.cFilter = new ColumnFilter { Resource = (TwitterResource)MainPivot.SelectedItem };
             DataTransfer.IsGlobalFilter = false;
-            NavigationService.Navigate(new Uri("/Pages/Filters.xaml", UriKind.Relative));
+            NavigationService.Navigate(Uris.Filters);
         }
     }
 }
