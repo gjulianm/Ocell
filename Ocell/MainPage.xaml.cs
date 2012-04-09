@@ -329,5 +329,6 @@ namespace Ocell
             DataTransfer.IsGlobalFilter = false;
             NavigationService.Navigate(Uris.Filters);
         }
+
     }
 }

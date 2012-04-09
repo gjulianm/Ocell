@@ -16,7 +16,7 @@ namespace Ocell.Library
 {
     public static class DecisionMaker
     {
-        private static int GetAvgTimeBetweenTweets(ref IEnumerable<TwitterStatus> tweets)
+        public static int GetAvgTimeBetweenTweets(IEnumerable<TwitterStatus> tweets)
         {
             int i;
             double sum = 0;
@@ -52,6 +52,7 @@ namespace Ocell.Library
 
         public static bool ShouldLoadCache(ref IEnumerable<TwitterStatus> List)
         {
+  
             /*int AverageTimeBetweenTweets;
             int CurrentDifference;
             /*
@@ -65,15 +66,14 @@ namespace Ocell.Library
 
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
                 return true;
-
+             * 
             AverageTimeBetweenTweets = GetAvgTimeBetweenTweets(List);
             CurrentDifference = (int)Math.Abs((DateTime.Now.ToUniversalTime() - List.First().CreatedDate).TotalSeconds);
 
             return CurrentDifference < MaxTimesDifference * AverageTimeBetweenTweets;*/
 
             // ALWAYS load cache.
-            return true;
- 
+            return true; 
         }
     }
 }

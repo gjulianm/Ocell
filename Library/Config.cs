@@ -115,6 +115,31 @@ namespace Ocell.Library
             }
         }
 
+        public static ColumnFilter FilterGlobal
+        {
+            get
+            {
+                return GenericGetFromConfig<ColumnFilter>(GlobalFilterKey, ref _globalFilter);
+            }
+            set
+            {
+                GenericSaveToConfig<ColumnFilter>(GlobalFilterKey, ref _globalFilter, value);
+            }
+        }
+
+
+        public static bool? FollowMessageShown
+        {
+            get
+            {
+                return GenericGetFromConfig<bool?>(FollowMsg, ref _followMessageShown);
+            }
+            set
+            {
+                GenericSaveToConfig<bool?>(FollowMsg, ref _followMessageShown, value);
+            }
+
+        }
         private static T GenericGetFromConfig<T>(string key, ref T element) where T : new()
         {
             if (element != null)
@@ -144,19 +169,7 @@ namespace Ocell.Library
 
             return element;
         }
-
-        public static bool? FollowMessageShown
-        {
-            get
-            {
-                return GenericGetFromConfig<bool?>(FollowMsg, ref _followMessageShown);
-            }
-            set
-            {
-                GenericSaveToConfig<bool?>(FollowMsg, ref _followMessageShown, value);
-            }
-
-        }
+        
 
         private static void GenericSaveToConfig<T>(string Key, ref T element, T value) where T : new()
         {

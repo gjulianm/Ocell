@@ -134,6 +134,8 @@ namespace Ocell.Controls
             _bound = true;
         }
 
+        
+
         public ColumnFilter Filter
         {
             get

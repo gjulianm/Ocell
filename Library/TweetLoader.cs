@@ -89,6 +89,7 @@ namespace Ocell.Library.Twitter
         #region Loaders
         public void Load(bool Old = false)
         {
+
             if (Resource == null || _srv == null ||
                 _requestsInProgress >= 2 ||
                 _rateResetTime > DateTime.Now)
@@ -168,7 +169,6 @@ namespace Ocell.Library.Twitter
             
             if(last == 0)
             	last = Source.Last().Id;
-
             switch (Resource.Type)
             {
                 case ResourceType.Home:
@@ -294,7 +294,8 @@ namespace Ocell.Library.Twitter
             if (list.Any())
                 LastId = list.Last().Id;
 
-            if (_loaded < _toLoad && list.Count() > 0)
+
+            if (_loaded < _toLoad && list.Any())
             {
                 LoadOld(LastId);
                 if (PartialLoad != null)
@@ -375,7 +376,6 @@ namespace Ocell.Library.Twitter
             if (item != null)
                 Source.Remove(item);
         }
-
 
         #region Events
         public event EventHandler LoadFinished;

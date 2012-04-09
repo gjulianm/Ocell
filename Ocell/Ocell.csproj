@@ -92,8 +92,17 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+<<<<<<< HEAD
     <Compile Include="Helpers\FilterManager.cs" />
     <Compile Include="Helpers\TemplateSelector.cs" />
+=======
+<<<<<<< HEAD
+    <Compile Include="Controls\LoaderButton.cs" />
+=======
+    <Compile Include="Helpers\FilterManager.cs" />
+    <Compile Include="Helpers\TemplateSelector.cs" />
+>>>>>>> feature/collectionviewsource
+>>>>>>> 167f43c3c2e58f4e2f3dd6858c88a0757e7ab767
     <Compile Include="Helpers\ValueConverters\AvatarImageManager.cs" />
     <Compile Include="Helpers\ValueConverters\FirstToUpper.cs" />
     <Compile Include="Helpers\ValueConverters\ITweetableFilterConverter.cs" />
@@ -122,11 +131,22 @@
     <Compile Include="Pages\SelectUser.xaml.cs">
       <DependentUpon>SelectUser.xaml</DependentUpon>
     </Compile>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 167f43c3c2e58f4e2f3dd6858c88a0757e7ab767
     <Compile Include="Pages\Settings\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Topics.xaml.cs">
       <DependentUpon>Topics.xaml</DependentUpon>
+<<<<<<< HEAD
+=======
+=======
+    <Compile Include="SampleData\SampleDataSource\SampleDataSource.xaml.cs">
+      <DependentUpon>SampleDataSource.xaml</DependentUpon>
+>>>>>>> feature/collectionviewsource
+>>>>>>> 167f43c3c2e58f4e2f3dd6858c88a0757e7ab767
     </Compile>
     <Compile Include="SchedulerSync.cs" />
     <Compile Include="ThemeFunctions.cs" />
