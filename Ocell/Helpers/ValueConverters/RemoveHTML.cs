@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
 using Ocell.Library;
+using System.Web;
 
 
 namespace Ocell
@@ -16,7 +17,7 @@ namespace Ocell
         {
             string what = value.GetType()=="".GetType()?(string)value:value.ToString();
             Regex exp = new Regex("<[^>]+>");
-            return exp.Replace(what, (target) => { return ""; });
+            return exp.Replace(HttpUtility.HtmlDecode(what), (target) => { return ""; });
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

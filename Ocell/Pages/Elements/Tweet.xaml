@@ -72,7 +72,6 @@
             <shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.reply.rest.png" Text="reply" x:Name="replyButton" Click="replyButton_Click"  />
             <shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.replyall.rest.png" Text="reply all" x:Name="replyAllButton" Click="replyAllButton_Click"/>
             <shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.retweet.rest.png" Text="retweet" x:Name="retweetButton" Click="retweetButton_Click"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.favs.addto.rest.png" Text="favorite" x:Name="favButton" Click="favButton_Click"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
     

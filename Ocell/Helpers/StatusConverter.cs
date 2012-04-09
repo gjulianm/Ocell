@@ -13,6 +13,7 @@ namespace Ocell
                 Source = search.Source,
                 Id = search.Id,
                 CreatedDate = search.CreatedDate,
+                Entities = search.Entities
             };
             return status;
         }

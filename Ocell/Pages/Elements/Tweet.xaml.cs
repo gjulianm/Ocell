@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Documents;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Tasks;
+using Microsoft.Phone.Shell;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using TweetSharp;
@@ -16,12 +17,42 @@ namespace Ocell.Pages.Elements
     public partial class Tweet : PhoneApplicationPage
     {
         public TweetSharp.TwitterStatus status;
+        private bool _favBtnState;
+        private ApplicationBarIconButton _favButton;
 
         public Tweet()
         {
-            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); 
+            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            CreateFavButton();
 
             this.Loaded += new RoutedEventHandler(Tweet_Loaded); 
+        }
+
+        void CreateFavButton()
+        {
+            _favButton = new ApplicationBarIconButton();
+            _favButton.IconUri = new Uri("/Images/Icons_White/appbar.favs.addto.rest.png", UriKind.Relative);
+            _favButton.Click += new EventHandler(favButton_Click);
+            _favButton.Text = "add favorite";
+            _favBtnState = true;
+            ApplicationBar.Buttons.Add(_favButton);
+        }
+
+        void ToggleFavButton()
+        {
+            if (_favBtnState)
+            {
+                _favButton.Text = "remove favorite";
+                _favButton.IconUri = new Uri("/Images/Icons_White/appbar.favs.remove.rest.png", UriKind.Relative);
+                _favBtnState = false;
+            }
+            else
+            {
+                _favButton.Text = "add favorite";
+                _favButton.IconUri = new Uri("/Images/Icons_White/appbar.favs.addto.rest.png", UriKind.Relative);
+                _favBtnState = true;
+            }
         }
 
         void Tweet_Loaded(object sender, RoutedEventArgs e)
@@ -39,6 +70,12 @@ namespace Ocell.Pages.Elements
             else
                 status = DataTransfer.Status;
 
+            if (status.IsFavorited)
+                Dispatcher.BeginInvoke(ToggleFavButton);
+
+            if (status.User == null || status.User.Name == null)
+                FillUser();
+
             SetBindings();
             CreateText(status);
             AdjustMargins();
@@ -48,13 +85,34 @@ namespace Ocell.Pages.Elements
             ContentPanel.UpdateLayout();
         }
 
+        private void FillUser()
+        {
+            ServiceDispatcher.GetDefaultService().GetUserProfileFor(status.Author.ScreenName, ReceiveUser);
+        }
+
+        private void ReceiveUser(TwitterUser user, TwitterResponse response)
+        {
+            if (response.StatusCode != HttpStatusCode.OK)
+                Dispatcher.BeginInvoke(() => MessageBox.Show("Couldn't get the full user profile."));
+            status.User = user;
+            Dispatcher.BeginInvoke(() =>
+            {
+                SetBindings();
+                ContentPanel.UpdateLayout();
+            });
+        }
+
         private void SetBindings()
         {
             if (status != null)
             {
+                ContentPanel.DataContext = null;
                 ContentPanel.DataContext = status;
-                ImagesList.DataContext = status.Entities.Media;
-                ImagesList.ItemsSource = status.Entities.Media.Where(item => item.MediaType == TwitterMediaType.Photo);
+                if (status.Entities != null)
+                {
+                    ImagesList.DataContext = status.Entities.Media;
+                    ImagesList.ItemsSource = status.Entities.Media.Where(item => item.MediaType == TwitterMediaType.Photo);
+                }
             }
         }
 
@@ -253,14 +311,28 @@ namespace Ocell.Pages.Elements
         private void favButton_Click(object sender, EventArgs e)
         {
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-            ServiceDispatcher.GetCurrentService().FavoriteTweet(status.Id, (Action<TwitterStatus, TwitterResponse>)receive);
+            if (_favBtnState)
+            {
+                ServiceDispatcher.GetCurrentService().FavoriteTweet(status.Id, (Action<TwitterStatus, TwitterResponse>)receiveFav);
+            }
+            else
+            {
+                ServiceDispatcher.GetCurrentService().UnfavoriteTweet(status.Id, receiveFav);
+            }
         }
 
         private void receive(TwitterStatus status, TwitterResponse resp)
         {
             if (resp.StatusCode != HttpStatusCode.OK)
                 Dispatcher.BeginInvoke(() => { MessageBox.Show("An error has occurred :("); });
-            Dispatcher.BeginInvoke(() => { pBar.IsVisible = false; });
+            Dispatcher.BeginInvoke(() => { pBar.IsVisible = false; Notificator.ShowMessage("Retweeted!", pBar); });
+        }
+
+        private void receiveFav(TwitterStatus status, TwitterResponse resp)
+        {
+            if (resp.StatusCode != HttpStatusCode.OK)
+                Dispatcher.BeginInvoke(() => { MessageBox.Show("An error has occurred :("); });
+            Dispatcher.BeginInvoke(() => { pBar.IsVisible = false; ToggleFavButton(); Notificator.ShowMessage("Done!", pBar); });
         }
 
         private void quoteButton_Click(object sender, EventArgs e)
