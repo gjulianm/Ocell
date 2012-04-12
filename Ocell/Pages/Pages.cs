@@ -21,7 +21,7 @@ namespace Ocell
         public static Uri ViewTweet = new Uri("/Pages/Elements/Tweet.xaml", UriKind.Relative);
         public static Uri ViewUser = new Uri("/Pages/User.xaml", UriKind.Relative);
         public static Uri Conversation = new Uri("/Pages/Elements/Conversation.xaml", UriKind.Relative);
-        public static Uri SearchForm = new Uri("/Pages/EnterSearch.xaml", UriKind.Relative);
+        public static Uri SearchForm = new Uri("/Pages/Search/EnterSearch.xaml", UriKind.Relative);
         public static Uri About = new Uri("/Pages/Settings/About.xaml", UriKind.Relative);
         public static Uri TrendingTopics = new Uri("/Pages/Topics.xaml", UriKind.Relative);
         public static Uri SelectUserForDM = new Uri("/Pages/SelectUser.xaml", UriKind.Relative);
