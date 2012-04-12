@@ -39,7 +39,7 @@ namespace Ocell.Pages.Columns
             toAdd.String = DataTransfer.CurrentAccount.ScreenName +";" + (item.Tag as string);
             toAdd.User = DataTransfer.CurrentAccount;
             SaveColumn(toAdd);
-
+            DataTransfer.ShouldReloadColumns = true;
             NavigationService.GoBack();
         }
 
@@ -50,6 +50,7 @@ namespace Ocell.Pages.Columns
 
             toAdd = new TwitterResource { Type = ResourceType.List, Data = item.FullName, User = DataTransfer.CurrentAccount };
             SaveColumn(toAdd);
+            DataTransfer.ShouldReloadColumns = true;
             NavigationService.GoBack();
         }
 

@@ -104,14 +104,15 @@
 
         <!--ContentPanel. Colocar aquí el contenido adicional-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,-2,12,2">
-        	<ListBox x:Name="CoreList" Margin="33,51,8,0" Height="117" VerticalAlignment="Top" SelectionChanged="CoreList_SelectionChanged">
+        	<ListBox x:Name="CoreList" Margin="33,51,8,0" Height="157" VerticalAlignment="Top" SelectionChanged="CoreList_SelectionChanged">
         		<ListBoxItem Content="Home" FontSize="29.333" Tag="Home"/>
         		<ListBoxItem Content="Mentions" FontSize="29.333" Tag="Mentions"/>
         		<ListBoxItem Content="Direct Messages" FontSize="29.333" Tag="Messages"/>
+        		<ListBoxItem Content="Favorites" FontSize="29.333" Tag="Favorites"/>
         	</ListBox>
         	<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Core" VerticalAlignment="Top" Width="125" FontSize="32"/>
-        	<TextBlock HorizontalAlignment="Left" Margin="8,197,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" FontSize="32" Height="38"><Run Text="Lists"/><LineBreak/><Run/></TextBlock>
-        	<ListBox x:Name="ListsList" Margin="33,239,8,8" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}" SelectionChanged="ListsList_SelectionChanged" ItemContainerStyle="{StaticResource ListBoxItemStyle1}"/></Grid>
+        	<TextBlock HorizontalAlignment="Left" Margin="8,208,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" FontSize="32" Height="38"><Run Text="Lists"/><LineBreak/><Run/></TextBlock>
+        	<ListBox x:Name="ListsList" Margin="33,256,8,8" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}" SelectionChanged="ListsList_SelectionChanged" ItemContainerStyle="{StaticResource ListBoxItemStyle1}"/></Grid>
     </Grid>
 
     <phone:PhoneApplicationPage.ApplicationBar>
