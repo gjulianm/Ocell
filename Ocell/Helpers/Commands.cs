@@ -70,7 +70,7 @@ namespace Ocell.Commands
 
         public void Execute(object parameter)
         {
-            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).Retweet(((ITweetable)parameter).Id, (sts, resp) => { });
+            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).Retweet(((ITweetable)parameter).Id, (sts, resp) => { Deployment.Current.Dispatcher.BeginInvoke(() => { MessageBox.Show("Retweeted!"); }); });
         }
 
         public event EventHandler CanExecuteChanged;
@@ -87,7 +87,7 @@ namespace Ocell.Commands
 
         public void Execute(object parameter)
         {
-            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(((ITweetable)parameter).Id, (sts, resp) => { });
+            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(((ITweetable)parameter).Id, (sts, resp) => { Deployment.Current.Dispatcher.BeginInvoke(() => { MessageBox.Show("Favorited!"); });  });
         }
 
         public event EventHandler CanExecuteChanged;
