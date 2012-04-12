@@ -22,12 +22,15 @@ namespace Ocell
         private Dictionary<string, ExtendedListBox> Lists;
         private DateTime LastErrorTime;
         private DateTime LastReloadTime;
+        private bool _initialised;
 
         #region Loaders
         // Constructora
         public MainPage()
         {
-            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            _initialised = false;
+            InitializeComponent(); 
+            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             pivots = new ObservableCollection<TwitterResource>();
             Lists = new Dictionary<string, ExtendedListBox>();
@@ -55,8 +58,30 @@ namespace Ocell
             RefreshCurrentAccount(e);
         }
 
+        void ReloadColumns()
+        {
+            foreach (var pivot in Config.Columns)
+                if (!pivots.Contains(pivot))
+                    pivots.Add(pivot);
+            try
+            {
+                foreach (var column in pivots)
+                    if (!Config.Columns.Contains(column))
+                        pivots.Remove(column);
+            }
+            catch
+            {
+            }
+        }
+
         void CallLoadFunctions(object sender, RoutedEventArgs e)
         {
+            if (DataTransfer.ShouldReloadColumns)
+                ReloadColumns();
+
+            if (_initialised)
+                return;
+
             CreateTile();
             ShowFollowMessage();
             LittleWatson.CheckForPreviousException();
@@ -64,12 +89,14 @@ namespace Ocell
             string Column;
             if (NavigationContext.QueryString.TryGetValue("column", out Column))
                 NavigateToColumn(Uri.UnescapeDataString(Column));
+
+            _initialised = true;
         }
 
 
         void NavigateToColumn(string Column)
         {
-            TwitterResource Resource = pivots.First(item => item.String == Column);
+            TwitterResource Resource = pivots.FirstOrDefault(item => item.String == Column);
             if (Resource != null)
                 MainPivot.SelectedItem = Resource;
         }
@@ -198,10 +225,12 @@ namespace Ocell
                 list.Bind(Resource);
             }
 
-            if (!Lists.ContainsKey(Resource.String))
-                Lists.Add(Resource.String, list);
-
             FilterManager.SetupFilter(list);
+
+            if (Lists.ContainsKey(Resource.String))
+                return;
+
+            Lists.Add(Resource.String, list);            
 
             list.Compression += new ExtendedListBox.OnCompression(list_Compression);
             list.Loader.Error += new TweetLoader.OnError(Loader_Error);
@@ -211,6 +240,19 @@ namespace Ocell
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
             list.Loader.LoadCacheAsync();
             list.Loader.Load();
+
+            list.Loaded -= ListBox_Loaded;
+            list.Loaded += new RoutedEventHandler(CheckForFilterUpdate);
+        }
+
+        void CheckForFilterUpdate(object sender, RoutedEventArgs e)
+        {        
+            ExtendedListBox list = sender as ExtendedListBox;
+            if (list != null && ((DataTransfer.ShouldReloadFilters && DataTransfer.cFilter.Resource == list.Loader.Resource) || DataTransfer.IsGlobalFilter))
+            {
+                FilterManager.SetupFilter(list);
+                DataTransfer.ShouldReloadFilters = false;
+            }
         }
 
         void Loader_LoadFinished(object sender, EventArgs e)
@@ -328,6 +370,12 @@ namespace Ocell
                 DataTransfer.cFilter = new ColumnFilter { Resource = (TwitterResource)MainPivot.SelectedItem };
             DataTransfer.IsGlobalFilter = false;
             NavigationService.Navigate(Uris.Filters);
+        }
+
+        protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            DataTransfer.IsGlobalFilter = false;
+            base.OnNavigatedFrom(e);
         }
 
     }

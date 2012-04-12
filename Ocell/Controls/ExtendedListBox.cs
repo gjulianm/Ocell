@@ -158,8 +158,11 @@ namespace Ocell.Controls
         public void RemoveLoadMore()
         {
             ITweetable item = _Items.FirstOrDefault(e => e is LoadMoreTweetable);
-            if (item != null)
+            while (item != null)
+            {
                 _Items.Remove(item);
+                item = _Items.FirstOrDefault(e => e is LoadMoreTweetable);
+            }
 
             Loader.RemoveLoadMore();
         }
