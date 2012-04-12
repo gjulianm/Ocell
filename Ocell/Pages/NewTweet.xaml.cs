@@ -20,10 +20,11 @@ namespace Ocell.Pages
     {
         protected bool SendingDM;
         public ApplicationBarIconButton SendButton;
-        private IEnumerable<TwitterUser> _users;
         private bool _isWritingUser;
         private string _tweetText;
         private TwitterService _service;
+        private UsernameProvider _provider;
+        private Autocompleter _completer;
 
         public NewTweet()
         {
@@ -41,6 +42,8 @@ namespace Ocell.Pages
 
             if (DataTransfer.DMDestinationId == 0 && DataTransfer.DM != null)
                 DataTransfer.DMDestinationId = DataTransfer.DM.SenderId;
+
+            
 
             InitalizeAppBar();
         }
@@ -65,6 +68,11 @@ namespace Ocell.Pages
 
         void NewTweet_Unloaded(object sender, RoutedEventArgs e)
         {
+            if (_provider != null)
+            {
+                _provider.Stop();
+                _provider.Usernames.Clear();
+            }
             DataTransfer.Text = Tweet.Text;
         }
 
@@ -89,28 +97,13 @@ namespace Ocell.Pages
             int Index = Config.Accounts.IndexOf(DataTransfer.CurrentAccount);
             AccountsList.SelectedIndex = Index;
 
-            
-
-            if (DataTransfer.CurrentAccount == null)
-                _service = ServiceDispatcher.GetDefaultService();
-            else
-                _service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
-
-            _service.ListFriends(-1, ReceiveFriends);
-        }
-
-        private void ReceiveFriends(TwitterCursorList<TwitterUser> list, TwitterResponse Response)
-        {
-            if (list != null && Response.StatusCode == HttpStatusCode.OK)
-            {
-                if (_users == null)
-                    _users = list;
-                else
-                    _users = _users.Concat(list);
-
-                if (list.NextCursor != 0 && list.NextCursor != null)
-                    _service.ListFriends((long)list.NextCursor, ReceiveFriends);
-            }
+            _provider = new UsernameProvider();
+            _provider.User = DataTransfer.CurrentAccount;
+            _completer = new Autocompleter();
+            _completer.Textbox = Tweet;
+            _completer.Trigger = '@';
+            _completer.Strings = _provider.Usernames;
+            _provider.Start();
         }
 
         private bool CheckProtectedAccounts()
@@ -319,81 +312,11 @@ namespace Ocell.Pages
 
         private void Tweet_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CheckAutocompleteUser();
             Dispatcher.BeginInvoke(() =>
             {
                 SendButton.IsEnabled = (Tweet.Text.Length <= 140);
                 Count.Text = (140 - Tweet.Text.Length).ToString();
             });
-        }
-
-        private void CheckAutocompleteUser()
-        {
-            if (Tweet.Text.Length > 0 && Tweet.Text.Last() == '@')
-                _isWritingUser = true;
-
-            if (_isWritingUser)
-                UpdateAutocomplete();
-        }
-
-        private void UpdateAutocomplete()
-        {
-            if (_tweetText == Tweet.Text)
-                return;
-
-            _tweetText = Tweet.Text;
-
-            if (string.IsNullOrWhiteSpace(_tweetText))
-                return;
-
-            if (_tweetText.IndexOf('@') == -1)
-            {
-                _isWritingUser = false;
-                return;
-            }
-
-            if (_tweetText.LastIndexOf(' ') > _tweetText.LastIndexOf('@'))
-            {
-                _isWritingUser = false;
-                if (Tweet.SelectionStart < _tweetText.Length)
-                {
-                    _tweetText = _tweetText.Remove(Tweet.SelectionStart);
-                    Tweet.Text = _tweetText;
-                }
-                return;
-            }
-            if (Tweet.SelectionStart < _tweetText.Length)
-            {
-                _tweetText = _tweetText.Remove(Tweet.SelectionStart);
-            }
-
-            string Written = _tweetText.Substring(Tweet.Text.LastIndexOf('@') + 1);
-            string first;
-            if (_users == null)
-                first = "";
-            else
-        	{
-        		TwitterUser FirstUser = _users.FirstOrDefault(item => item != null && item.ScreenName.IndexOf(Written) == 0);
-                if (FirstUser != null)
-                    first = FirstUser.ScreenName;
-                else
-                    first = ""; 
-        	}
-
-            if (Written.Length >= first.Length)
-            {
-                Tweet.Text = _tweetText;
-                Tweet.SelectionStart = _tweetText.Length;
-                return;
-            }
-        	
-        	int selectStart;
-            selectStart = _tweetText.Length - 1;
-        	first = first.Substring(Math.Min(Written.Length , first.Length - 1));
-            _tweetText = _tweetText.Insert(Tweet.SelectionStart, first);
-            Tweet.Text = _tweetText;
-            Tweet.SelectionStart = Math.Min(selectStart + 1, _tweetText.Length - 1);
-        	Tweet.SelectionLength = 0;
         }
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -404,6 +327,12 @@ namespace Ocell.Pages
                 return;
 
             UpdateOpacity(img);
+
+            if (img.Opacity == 1)
+            {
+                _provider.User = img.Tag as UserToken;
+                _provider.Start();
+            }
         }
 
         private void UpdateOpacity(Image img)
@@ -426,6 +355,14 @@ namespace Ocell.Pages
                 UpdateOpacity(img);
         }
 
+        protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            _service = null;
+            _provider.Usernames.Clear();
+            _provider = null;
+            _completer = null;
 
+            base.OnNavigatingFrom(e);
+        }
     }
 }
