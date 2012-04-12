@@ -373,8 +373,12 @@ namespace Ocell.Library.Twitter
         public void RemoveLoadMore()
         {
             ITweetable item = Source.FirstOrDefault(e => e is LoadMoreTweetable);
-            if (item != null)
+            while (item != null)
+            {
                 Source.Remove(item);
+                item = Source.FirstOrDefault(e => e is LoadMoreTweetable);
+            }
+
         }
 
         #region Events
