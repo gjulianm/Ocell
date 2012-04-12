@@ -26,6 +26,11 @@ namespace Ocell.Pages.Search
                 if ((query = DataTransfer.Search) == null)
                     NavigationService.GoBack();
 
+            string fromForm;
+
+            if (NavigationContext.QueryString.TryGetValue("form", out fromForm) && fromForm == "1")
+                NavigationService.RemoveBackEntry();
+
             Dispatcher.BeginInvoke(() => PTitle.Text = query);
             TweetList.Loader.Resource = new TwitterResource { Type = ResourceType.Search, Data = query, User = Config.Accounts[0] };
             TweetList.Compression += new Controls.ExtendedListBox.OnCompression(TweetList_Compression);
@@ -68,6 +73,7 @@ namespace Ocell.Pages.Search
         {
             if (!Config.Columns.Contains(TweetList.Loader.Resource))
             {
+                DataTransfer.ShouldReloadColumns = true;
                 Config.Columns.Add(TweetList.Loader.Resource);
                 Dispatcher.BeginInvoke(() => MessageBox.Show("Search column added!"));
             }
