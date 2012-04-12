@@ -23,6 +23,7 @@ namespace Ocell
                 listbox.Filter = new ColumnFilter();
 
             listbox.Filter.Global = Config.GlobalFilter;
+            listbox.Filter = listbox.Filter; // Force update of filter.
         }
     }
 }
