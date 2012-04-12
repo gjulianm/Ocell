@@ -49,6 +49,7 @@ namespace Ocell.Pages.Filtering
 
                 Config.Filters.Add(DataTransfer.cFilter);
                 Config.SaveFilters();
+                DataTransfer.ShouldReloadFilters = true;
             }
             else
             {
