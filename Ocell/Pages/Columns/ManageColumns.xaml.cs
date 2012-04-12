@@ -34,6 +34,7 @@ namespace Ocell.Pages.Columns
                 if (item.String == (string)img.Tag)
                 {
                     Config.Columns.Remove(item);
+                    DataTransfer.ShouldReloadColumns = true;
                     break;
                 }
             }
