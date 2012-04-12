@@ -187,6 +187,8 @@ namespace Ocell.Pages.Elements
         private void followBtn_Click(object sender, EventArgs e)
         {
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
+            if (CurrentUser == null)
+                return;
             if (follows)
                 ServiceDispatcher.GetCurrentService().UnfollowUser(CurrentUser.Id, Receive);
             else
