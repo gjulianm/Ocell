@@ -92,17 +92,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-<<<<<<< HEAD
     <Compile Include="Helpers\FilterManager.cs" />
     <Compile Include="Helpers\TemplateSelector.cs" />
-=======
-<<<<<<< HEAD
-    <Compile Include="Controls\LoaderButton.cs" />
-=======
-    <Compile Include="Helpers\FilterManager.cs" />
-    <Compile Include="Helpers\TemplateSelector.cs" />
->>>>>>> feature/collectionviewsource
->>>>>>> 167f43c3c2e58f4e2f3dd6858c88a0757e7ab767
     <Compile Include="Helpers\ValueConverters\AvatarImageManager.cs" />
     <Compile Include="Helpers\ValueConverters\FirstToUpper.cs" />
     <Compile Include="Helpers\ValueConverters\ITweetableFilterConverter.cs" />
@@ -112,6 +103,7 @@
     <Compile Include="Helpers\ValueConverters\ToColumn.cs" />
     <Compile Include="Helpers\ValueConverters\TweetTextConverter.cs" />
     <Compile Include="LittleWatson.cs" />
+    <Compile Include="Notificator.cs" />
     <Compile Include="Pages\Columns\SelectAccount.xaml.cs">
       <DependentUpon>SelectAccount.xaml</DependentUpon>
     </Compile>
@@ -131,22 +123,11 @@
     <Compile Include="Pages\SelectUser.xaml.cs">
       <DependentUpon>SelectUser.xaml</DependentUpon>
     </Compile>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 167f43c3c2e58f4e2f3dd6858c88a0757e7ab767
     <Compile Include="Pages\Settings\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Topics.xaml.cs">
       <DependentUpon>Topics.xaml</DependentUpon>
-<<<<<<< HEAD
-=======
-=======
-    <Compile Include="SampleData\SampleDataSource\SampleDataSource.xaml.cs">
-      <DependentUpon>SampleDataSource.xaml</DependentUpon>
->>>>>>> feature/collectionviewsource
->>>>>>> 167f43c3c2e58f4e2f3dd6858c88a0757e7ab767
     </Compile>
     <Compile Include="SchedulerSync.cs" />
     <Compile Include="ThemeFunctions.cs" />
@@ -277,6 +258,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Ocell_2012_03_18_19_41_51.sap" />
+    <None Include="Ocell_2012_04_11_23_33_33.sap" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />
@@ -336,6 +318,9 @@
     <Content Include="Images\ColumnTile.png" />
     <Content Include="Images\ComposeTile.png" />
     <EmbeddedResource Include="Images\Icons_White\appbar.columns.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.favs.remove.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <Content Include="Images\Icons_White\appbar.feature.email.rest.png">
