@@ -22,13 +22,12 @@ namespace Ocell.Controls
         // Compression states: Thanks to http://blogs.msdn.com/b/slmperf/archive/2011/06/30/windows-phone-mango-change-listbox-how-to-detect-compression-end-of-scroll-states.aspx
 
         private bool _isBouncy = false;
-        private bool _bound = false;
         private bool _alreadyHookedScrollEvents = false;
         public TweetLoader Loader;
         protected ObservableCollection<ITweetable> _Items;
         protected CollectionViewSource _ViewSource;
         private ColumnFilter _filter;
-   
+
 
         public ExtendedListBox()
         {
@@ -73,14 +72,14 @@ namespace Ocell.Controls
                 try
                 {
                     UnsafePopulateItemsSource();
-            }
+                }
                 catch (Exception)
                 {
-        }
+                }
             });
         }
 
-        
+
 
         private void UnsafePopulateItemsSource()
         {
@@ -112,7 +111,7 @@ namespace Ocell.Controls
                     loaded = 0;
                 }
             }
-            
+
 
         }
 
@@ -123,18 +122,15 @@ namespace Ocell.Controls
             {
                 if (_Items[i].Id < item.Id)
                     return i;
-                }
+            }
 
             return i;
-                }
+        }
 
         public void Bind(TwitterResource Resource)
         {
             Loader.Resource = Resource;
-            _bound = true;
         }
-
-        
 
         public ColumnFilter Filter
         {
