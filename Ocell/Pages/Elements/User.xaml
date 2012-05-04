@@ -57,6 +57,10 @@
 	</Grid>
 	<phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+        	<shell:ApplicationBar.MenuItems>
+        		<shell:ApplicationBarMenuItem x:Name="blockBtn" Text="block" Click="blockBtn_Click"/>
+        		<shell:ApplicationBarMenuItem x:Name="spamBtn" Text="block &amp; report spam" Click="spamBtn_Click"/>
+        	</shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>
