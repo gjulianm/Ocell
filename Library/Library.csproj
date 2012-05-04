@@ -50,12 +50,14 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Ocell\Assemblies\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="mscorlib.extensions" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Autocompleter.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="TwitterResource.cs" />
     <Compile Include="UsernameProvider.cs" />
     <Compile Include="UserToken.cs" />
+    <Compile Include="Watch.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">

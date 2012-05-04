@@ -67,9 +67,6 @@
       <HintPath>..\packages\WindowsPhoneEssentials.Testing.0.7.2.88\lib\SL4-WindowsPhone71\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.3.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
-    <Reference Include="PhonePerformance">
-      <HintPath>Assemblies\PhonePerformance.dll</HintPath>
-    </Reference>
     <Reference Include="SilverlightSerializer.WP7">
       <HintPath>..\packages\WindowsPhoneEssentials.0.7.2.88\lib\SL4-WindowsPhone71\SilverlightSerializer.WP7.dll</HintPath>
     </Reference>
@@ -291,6 +288,9 @@
     <EmbeddedResource Include="Images\Icons_White\appbar.cancel.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <Content Include="Images\Icons_White\appbar.alarm.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Icons_White\appbar.check.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -362,6 +362,9 @@
     <EmbeddedResource Include="Images\Icons_White\appbar.replyall.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <Content Include="Images\Icons_White\appbar.pin.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Icons_White\appbar.save.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -395,6 +398,9 @@
     <Resource Include="Images\BirdGray.png" />
     <Resource Include="Images\ReplyBtn.png" />
     <Resource Include="Images\RtBtn.png" />
+    <Content Include="Images\Icons_White\appbar.sendmail.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
