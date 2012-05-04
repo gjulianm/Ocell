@@ -76,13 +76,38 @@ namespace Ocell.Pages.Elements
             if (status.User == null || status.User.Name == null)
                 FillUser();
 
+            
+
             SetBindings();
             CreateText(status);
             AdjustMargins();
             SetVisibilityOfRepliesAndImages();
             SetUsername();
+            CheckForRetweets();
+            SetImage();
 
             ContentPanel.UpdateLayout();
+        }
+
+        private void CheckForRetweets()
+        {
+            TwitterService srv = ServiceDispatcher.GetCurrentService();
+            srv.Retweets(status.Id, ReceiveRetweets);
+        }
+
+        private void ReceiveRetweets(IEnumerable<TwitterStatus> rts, TwitterResponse response)
+        {
+            if (rts != null && rts.Any())
+            {
+                var users = new System.Collections.ObjectModel.ObservableCollection<ITweeter>();
+                foreach (var rt in rts)
+                    users.Add(rt.Author);
+
+                Dispatcher.BeginInvoke((() => {RTList.ItemsSource = users;
+                RTList.Visibility = System.Windows.Visibility.Visible;
+                usersText.Visibility = Visibility.Visible;
+                }));
+            }
         }
 
         private void FillUser()
@@ -108,12 +133,56 @@ namespace Ocell.Pages.Elements
             {
                 ContentPanel.DataContext = null;
                 ContentPanel.DataContext = status;
-                if (status.Entities != null)
+            }
+        }
+
+        private void SetImage()
+        {
+            if (status == null)
+                return;
+
+            Uri uriSource = null;
+            Uri gotoUri = null;
+
+            if (status.Entities.Media != null && status.Entities.Media.Any())
+            {
+                var photo = status.Entities.Media.First();
+                gotoUri = new Uri(photo.DisplayUrl, UriKind.Absolute);
+                uriSource = new Uri(photo.MediaUrl, UriKind.Absolute);
+                
+            }
+            else if (status.Entities.Urls != null && status.Entities.Urls.Any())
+            {
+                foreach (var i in status.Entities.Urls)
                 {
-                    ImagesList.DataContext = status.Entities.Media;
-                    ImagesList.ItemsSource = status.Entities.Media.Where(item => item.MediaType == TwitterMediaType.Photo);
+                    if (i.EntityType == TwitterEntityType.Url)
+                    {
+                        var url = i as TwitterUrl;
+                        if (url.ExpandedValue.Contains("http://yfrog.com/"))
+                        { 
+                        }
+                    }
                 }
             }
+
+            if (gotoUri == null || uriSource == null)
+                return;
+
+            Dispatcher.BeginInvoke(() =>
+            {
+                pBar.Text = "Downloading image...";
+                pBar.IsVisible = true;
+            });
+            img.Source = new System.Windows.Media.Imaging.BitmapImage(uriSource);
+            img.ImageOpened += (sender, e) => { Dispatcher.BeginInvoke(() => { pBar.Text = ""; pBar.IsVisible = false; }); };
+            img.Tap += (sender, e) =>
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    var task = new Microsoft.Phone.Tasks.WebBrowserTask { Uri = gotoUri };
+                    task.Show();
+                });
+            };
         }
 
         private void SetUsername()
@@ -131,7 +200,7 @@ namespace Ocell.Pages.Elements
                 Replies.Visibility = Visibility.Visible;
 
             if (status.Entities.Media.Count != 0)
-                ImagesText.Visibility = Visibility.Visible;
+                img.Visibility = Visibility.Visible;
         }
 
         private void AdjustMargins()
@@ -139,13 +208,10 @@ namespace Ocell.Pages.Elements
             RemoveHTML conv = new RemoveHTML();
             RelativeDateTimeConverter dc = new RelativeDateTimeConverter();
 
-            ViaDate.Margin = new Thickness(ViaDate.Margin.Left, Text.ActualHeight + Text.Margin.Top + 10,
-                ViaDate.Margin.Right, ViaDate.Margin.Bottom);
+            SecondBlock.Margin = new Thickness(SecondBlock.Margin.Left, Text.ActualHeight + Text.Margin.Top + 10,
+                SecondBlock.Margin.Right, SecondBlock.Margin.Bottom);
             ViaDate.Text = (string)dc.Convert(status.CreatedDate, null, null, null) + " via " +
                 conv.Convert(status.Source, null, null, null);
-
-            Replies.Margin = new Thickness(Replies.Margin.Left, ViaDate.Margin.Top + 30,
-                Replies.Margin.Right, Replies.Margin.Bottom);
         }
 
         private void CreateText(ITweetable Status)
@@ -362,6 +428,13 @@ namespace Ocell.Pages.Elements
         private void Replies_Tap(object sender, EventArgs e)
         {
             NavigationService.Navigate(Uris.Conversation);
+        }
+
+        private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            var Img = sender as System.Windows.Controls.Image;
+            if(Img != null && Img.Tag is ITweeter)
+                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + (Img.Tag as ITweeter).ScreenName, UriKind.Relative));
         }
     }
 }
