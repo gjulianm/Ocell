@@ -27,13 +27,15 @@ namespace Ocell.Library.Twitter
 
         private static IEnumerable<string> ReadContentsOf(string filename)
         {
+            IEnumerable<string> List = null;
+
             IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
             using (IsolatedStorageFileStream file = storage.OpenFile(filename, System.IO.FileMode.OpenOrCreate))
             {
-                IEnumerable<string> List;
+
                 try
                 {
-                    List = new List<string>(file.ReadLines());
+                    List = new List<string>(file.ReadLines()); // We have to create the list now to avoid reading it when the file is closed.
                     file.Close();
                     return List;
                 }
@@ -42,6 +44,7 @@ namespace Ocell.Library.Twitter
                     return new List<string>();
                 }
             }
+
         }
 
         private static void SaveContentsIn(string filename, IEnumerable<string> strings, System.IO.FileMode Mode)
@@ -71,8 +74,16 @@ namespace Ocell.Library.Twitter
             List<string> Strings = new List<string>();
 
 
-            foreach (ITweetable Item in List)
-                Strings.Add(Item.RawSource);
+            try
+            {
+                foreach (ITweetable Item in List)
+                    Strings.Add(Item.RawSource);
+            }
+            catch (InvalidCastException)
+            {
+                // Just stop adding strings when we encounter a non-TwitterStatus element.
+            }
+
             try
             {
                 SaveContentsIn(Key, Strings, Mode);
@@ -92,36 +103,36 @@ namespace Ocell.Library.Twitter
 
         public static IEnumerable<TwitterStatus> GetFromCache(TwitterResource Resource)
         {
-            IsolatedStorageSettings Config = IsolatedStorageSettings.ApplicationSettings;
-            List<string> Strings;
             List<TwitterStatus> List = new List<TwitterStatus>();
+            IsolatedStorageSettings Config = IsolatedStorageSettings.ApplicationSettings;
+            IEnumerable<string> Strings;
+
             string Key = GetCacheName(Resource);
             TwitterStatus Item;
             TwitterService DefaultService = ServiceDispatcher.GetDefaultService();
 
-            try 
+            try
             {
-                Strings = new List<string>(ReadContentsOf(Key));
+                Strings = ReadContentsOf(Key);
             }
-            catch(Exception)
+            catch (Exception)
             {
-                return List;
+                return new List<TwitterStatus>();
             }
 
-            foreach(string Raw in Strings)
+            foreach (string Raw in Strings)
             {
-            	try
-            	{
-                	Item = DefaultService.Deserialize<TwitterStatus>(Raw);
-                	List.Add(Item);
+                try
+                {
+                    Item = DefaultService.Deserialize<TwitterStatus>(Raw);
+                    List.Add(Item);
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                 }
             }
 
-            return List.OrderByDescending(item => item.Id);
-
+            return List.OrderByDescending(item => item.Id); ;
         }
     }
 }
