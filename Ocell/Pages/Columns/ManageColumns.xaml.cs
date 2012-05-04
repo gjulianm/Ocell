@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using Ocell.Library;
+using Ocell.Library.Twitter;
 
 namespace Ocell.Pages.Columns
 {
@@ -58,6 +59,25 @@ namespace Ocell.Pages.Columns
         private void MainList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             (sender as ListBox).SelectedIndex = -1;
+        }
+
+        private void menuItemClick(object sender, EventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            if (item != null && item.Tag is TwitterResource)
+            {
+                TwitterResource resource = (TwitterResource)item.Tag;
+                try
+                {
+                    Config.Columns.Remove(resource);
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+                Config.SaveColumns();
+                DataTransfer.ShouldReloadColumns = true;
+            }
         }
     }
 }

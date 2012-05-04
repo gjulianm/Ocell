@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
 using Ocell.Library;
+using Ocell.Library.Twitter;
 
 
 namespace Ocell
@@ -14,17 +15,35 @@ namespace Ocell
     {
         public object Convert(object value, Type targeType, object parameter, CultureInfo culture)
         {
-            if (value == null || !(value is string))
+            if (value == null || !(value is TwitterResource))
                 return "error";
 
-            string str = (value as string);
-            int posSemicolon = str.IndexOf(';');
-            string user = str.Substring(0, Math.Max(0, posSemicolon));
-            int posPoints = str.IndexOf(':');
-            int posSlash = str.IndexOf('/');
-            int whereToCut = Math.Max(Math.Max(posPoints, posSlash), posSemicolon) + 1;
-            str = user + ": " + str.Substring(whereToCut);
-            return str;
+            TwitterResource resource = (TwitterResource)value;
+
+            string listName = "";
+            int indexOfSlash = resource.Data.IndexOf('/');
+            if (indexOfSlash != -1)
+                listName = resource.Data.Substring(indexOfSlash + 1);
+
+            switch (resource.Type)
+            {
+                case ResourceType.Search:
+                    return "Search/" + resource.Data;
+                case ResourceType.Tweets:
+                    return "User/@" + resource.Data;
+                case ResourceType.List:
+                    return "List/" + listName;
+                case ResourceType.Favorites:
+                    return "Favorites";
+                case ResourceType.Home:
+                    return "Home";
+                case ResourceType.Mentions:
+                    return "Mentions";
+                case ResourceType.Messages:
+                    return "Direct messages";
+                default:
+                    return "Error";
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

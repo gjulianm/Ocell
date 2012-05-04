@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Ocell" 
+	xmlns:controls="clr-namespace:Ocell.Controls"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -37,10 +38,15 @@
 	    </toolkit:NavigationOutTransition>
 	</toolkit:TransitionService.NavigationOutTransition>
 	<phone:PhoneApplicationPage.Resources>
-		<DataTemplate x:Key="ItemTemplate">
-			<Grid Height="40" Width="450">
-                <TextBlock Text="{Binding String, Converter={StaticResource ToColumnConverter}}" FontSize="26.667" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top"/>
-				<Image HorizontalAlignment="Right" Width="40" Margin="0,0,8,9" Source="/Images/Icons_White/appbar.cancel.rest.png" Tap="Image_Tap" Tag="{Binding String}"/>
+		<DataTemplate x:Key="ItemTemplate" toolkit:TiltEffect.IsTiltEnabled="True">
+			<Grid Height="80" Width="450">
+                <TextBlock Text="{Binding Converter={StaticResource ToColumnConverter}}" FontSize="24" Margin="83,23,0,0" HorizontalAlignment="Left" Width="308" VerticalAlignment="Top"/>
+                <Image HorizontalAlignment="Left" Margin="8,8,0,8" Width="64" Source="{Binding User.AvatarUrl}" Height="64" />
+				<toolkit:ContextMenuService.ContextMenu>
+					<toolkit:ContextMenu>
+						<toolkit:MenuItem Click="menuItemClick" Tag="{Binding}" Header="delete" />
+					</toolkit:ContextMenu>
+				</toolkit:ContextMenuService.ContextMenu>
 			</Grid>
 		</DataTemplate>
 	</phone:PhoneApplicationPage.Resources>
@@ -63,7 +69,8 @@
 
         <!--ContentPanel. Colocar aquí el contenido adicional-->
     		<Grid x:Name="ContentPanel" Margin="8,119,-8,-16" d:LayoutOverrides="VerticalAlignment">
-    			<ListBox x:Name="MainList" ItemTemplate="{StaticResource ItemTemplate}" Margin="8,0,16,8" SelectionChanged="MainList_SelectionChanged"/>
+    			<ListBox x:Name="MainList" ItemTemplate="{StaticResource ItemTemplate}" Margin="8,0,16,8" SelectionChanged="MainList_SelectionChanged"/>			
+				
     		</Grid>
     	</Grid>
 
