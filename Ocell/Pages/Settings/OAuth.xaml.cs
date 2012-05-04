@@ -10,6 +10,7 @@ using System.Linq;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Library.Notifications;
+using System.Text;
 
 namespace Ocell.Settings
 {
@@ -19,7 +20,7 @@ namespace Ocell.Settings
         protected string consumerSecret = SensitiveData.ConsumerSecret;
         private string _requestToken;
         private string _requestSecret;
-        
+
         public OAuth()
         {
             InitializeComponent();
@@ -64,16 +65,17 @@ namespace Ocell.Settings
         {
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                Dispatcher.BeginInvoke(() => { 
+                Dispatcher.BeginInvoke(() =>
+                {
                     MessageBox.Show("Error while authenticating with Twitter. Please try again");
-                    if(NavigationService.CanGoBack)
+                    if (NavigationService.CanGoBack)
                         NavigationService.GoBack();
                 });
 
             }
 
-            string request_token ="";
-            string token_secret ="";
+            string request_token = "";
+            string token_secret = "";
             try
             {
                 var collection = HttpUtility.ParseQueryString(response.Content);
@@ -89,7 +91,7 @@ namespace Ocell.Settings
                         NavigationService.GoBack();
                 });
             }
-            
+
             _requestToken = request_token;
             _requestSecret = token_secret;
 
@@ -120,9 +122,10 @@ namespace Ocell.Settings
 
                 if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(verifier))
                 {
-                    Dispatcher.BeginInvoke(() => { 
+                    Dispatcher.BeginInvoke(() =>
+                    {
                         MessageBox.Show("Authentication error.");
-                        if(NavigationService.CanGoBack)
+                        if (NavigationService.CanGoBack)
                             NavigationService.GoBack();
                     });
                     return;
@@ -159,7 +162,8 @@ namespace Ocell.Settings
             // Use Hammock to create a request
             var request = new RestRequest
             {
-                Path = "/oauth/access_token/"
+                Path = "/oauth/access_token/",
+                DecompressionMethods = Hammock.Silverlight.Compat.DecompressionMethods.None
             };
 
             // Get the response from the request
@@ -170,7 +174,8 @@ namespace Ocell.Settings
         {
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                Dispatcher.BeginInvoke(() => { 
+                Dispatcher.BeginInvoke(() =>
+                {
                     MessageBox.Show("Error while authenticating with Twitter");
                     if (NavigationService.CanGoBack)
                         NavigationService.GoBack();
@@ -179,23 +184,29 @@ namespace Ocell.Settings
             }
 
             var collection = HttpUtility.ParseQueryString(response.Content);
-
-            UserToken Token = new UserToken
+            
+            try
             {
-                Key = collection["oauth_token"],
-                Secret = collection["oauth_token_secret"],
-                Preferences = new NotificationPreferences
+                UserToken Token = new UserToken
                 {
-                    MentionsPreferences = NotificationType.None,
-                    MessagesPreferences = NotificationType.None
-                }
-            };
+                    Key = collection["oauth_token"],
+                    Secret = collection["oauth_token_secret"],
+                    Preferences = new NotificationPreferences
+                    {
+                        MentionsPreferences = NotificationType.None,
+                        MessagesPreferences = NotificationType.None
+                    }
+                };
 
-            Token.UserDataFilled += new UserToken.OnUserDataFilled(InsertTokenIntoAccounts);
-            Token.FillUserData();
-            CreateColumns(Token);
+                Token.UserDataFilled += new UserToken.OnUserDataFilled(InsertTokenIntoAccounts);
+                Token.FillUserData();
 
-           
+                CreateColumns(Token);
+            }
+            catch (Exception)
+            {
+                Dispatcher.BeginInvoke(() => MessageBox.Show("An error ocurred while authenticating with Twitter. Verify your Internet connection or connect with WiFi"));
+            }
         }
 
         private void CreateColumns(UserToken user)
@@ -204,9 +215,9 @@ namespace Ocell.Settings
             TwitterResource Mentions = new TwitterResource { Type = ResourceType.Mentions, User = user };
             Dispatcher.BeginInvoke(() =>
             {
-                if(!Config.Columns.Contains(Home))
+                if (!Config.Columns.Contains(Home))
                     Config.Columns.Add(Home);
-                if(!Config.Columns.Contains(Mentions))
+                if (!Config.Columns.Contains(Mentions))
                     Config.Columns.Add(Mentions);
                 Config.SaveColumns();
             });
@@ -241,7 +252,7 @@ namespace Ocell.Settings
 
         private void wb_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            if(e.Uri.Host.Contains("api.twitter.com"))
+            if (e.Uri.Host.Contains("api.twitter.com"))
                 Dispatcher.BeginInvoke(() =>
                 {
                     txtAuth.Visibility = Visibility.Collapsed;

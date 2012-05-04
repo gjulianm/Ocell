@@ -101,14 +101,17 @@
 				</Grid>
 			</controls:PivotItem>
 			<controls:PivotItem Header="other">
-				<Grid>
-					<toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="Update tiles in the background" Margin="0,48,0,0" VerticalAlignment="Top" Checked="ColumnUpdate_Checked" Unchecked="ColumnUpdate_Checked"/>
-					<TextBlock HorizontalAlignment="Left" Margin="8,275,0,200" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="To add columns tiles, go to the main page and press &quot;pin column to start&quot; in the bottom bar."/><LineBreak/><Run/></TextBlock>
-					<Button x:Name="ComposePin" Content="Pin compose tile to start" HorizontalAlignment="Left" Margin="52,179,0,0" VerticalAlignment="Top" Width="344" Click="ComposePin_Click"/>
-					<TextBlock HorizontalAlignment="Left" Margin="8,15,0,0" TextWrapping="Wrap" Text="Tiles" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24"/>
-					<TextBlock HorizontalAlignment="Left" Margin="8,0,0,192" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" RenderTransformOrigin="0.5,0.507" Text="Global filter"/>
-					<Button x:Name="filter_btn" Content="Edit global filters" HorizontalAlignment="Left" Margin="52,0,0,119" VerticalAlignment="Bottom" Width="344" Click="FilterClick"/>
-				</Grid>
+				<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+					<Grid>
+						<toolkit:ToggleSwitch x:Name="RetweetsInMentions" Header="Show retweets in the mentions column" VerticalAlignment="Top" Checked="RetweetsInMentions_Checked" Unchecked="RetweetsInMentions_Checked"/>
+						<toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="Update tiles in the background" Margin="0,139,0,0" VerticalAlignment="Top" Checked="ColumnUpdate_Checked" Unchecked="ColumnUpdate_Checked"/>
+						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,109" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Height="96" VerticalAlignment="Bottom"><Run Text="To add columns tiles, go to the main page and press &quot;pin column to start&quot; in the bottom bar."/><LineBreak/><Run/></TextBlock>
+						<Button x:Name="ComposePin" Content="Pin compose tile to start" HorizontalAlignment="Left" Margin="52,270,0,0" Width="344" Click="ComposePin_Click" VerticalAlignment="Top"/>
+						<TextBlock HorizontalAlignment="Left" Margin="8,106,0,0" TextWrapping="Wrap" Text="Tiles" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24"/>
+						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,101" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" RenderTransformOrigin="0.5,0.507" Text="Global filter"/>
+						<Button x:Name="filter_btn" Content="Edit global filters" HorizontalAlignment="Left" Margin="52,0,0,28" VerticalAlignment="Bottom" Width="344" Click="FilterClick"/>
+					</Grid>
+				</ScrollViewer>
 			</controls:PivotItem>
 		</controls:Pivot>
 
