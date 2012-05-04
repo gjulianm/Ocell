@@ -58,7 +58,6 @@ namespace Ocell.Pages.Elements
 
         void Tweet_Loaded(object sender, RoutedEventArgs e)
         {
-            
             if (DataTransfer.Status == null)
             {
                 Dispatcher.BeginInvoke(() => MessageBox.Show("Error loading the tweet. Sorry :("));
@@ -76,8 +75,6 @@ namespace Ocell.Pages.Elements
 
             if (status.User == null || status.User.Name == null)
                 FillUser();
-
-            
 
             SetBindings();
             CreateText(status);
@@ -283,13 +280,6 @@ namespace Ocell.Pages.Elements
             item.Tag = "#" + Hashtag.Text;
             menu.Items.Add(item);
             ContextMenuService.SetContextMenu(link, menu);
-
-            GestureListener listener = GestureService.GetGestureListener(link);
-            if (listener != null)
-            {
-                listener.Hold += new EventHandler<GestureEventArgs>(OpenContextMenu);
-               
-            }
 
             return link;
         }
