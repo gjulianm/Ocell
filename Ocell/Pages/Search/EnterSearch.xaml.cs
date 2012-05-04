@@ -23,7 +23,7 @@ namespace Ocell.Pages.Search
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-        	NavigationService.Navigate(new Uri("/Pages/Search/Search.xaml?form=1&q=" + SearchQuery.Text, UriKind.Relative));
+        	NavigationService.Navigate(new Uri("/Pages/Search/Search.xaml?form=1&q=" + Uri.EscapeDataString(SearchQuery.Text), UriKind.Relative));
         }
     }
 }
