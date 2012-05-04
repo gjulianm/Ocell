@@ -68,12 +68,15 @@ namespace ScheduledAgent
 
             Config.Dispose();
 
-            foreach (ITweetableTask Task in Config.TweetTasks)
+            foreach (TwitterStatusTask Task in Config.TweetTasks)
             {
-                PendingCalls++;
-                Task.Completed += new EventHandler(OnTaskCompleted);
-                Task.Error += new EventHandler(Task_Error);
-                Task.Execute();
+                if (Task.Scheduled <= DateTime.Now)
+                {
+                    PendingCalls++;
+                    Task.Completed += new EventHandler(OnTaskCompleted);
+                    Task.Error += new EventHandler(Task_Error);
+                    Task.Execute();
+                }
             }
 
             if (Config.BackgroundLoadColumns == true)
@@ -108,9 +111,10 @@ namespace ScheduledAgent
         protected void OnTaskCompleted(object sender, EventArgs e)
         {
             PendingCalls--;
-            Config.TweetTasks.Remove((ITweetableTask)sender);
+            Config.TweetTasks.Remove((TwitterStatusTask)sender);
             Config.SaveTasks();
-
+            if (PendingCalls <= 0)
+                InternalNotifyComplete();
         }
 
         protected void GetMentionsFor(UserToken User)

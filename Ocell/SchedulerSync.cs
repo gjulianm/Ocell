@@ -61,6 +61,7 @@ namespace Ocell
             try
             {
                  periodicTask = ScheduledActionService.Find(periodicTaskName) as PeriodicTask;
+                 
             }
             catch (Exception)
             {
@@ -72,11 +73,12 @@ namespace Ocell
             }
 
             periodicTask = new PeriodicTask(periodicTaskName);
-            periodicTask.Description = "Retrieve tweets for the first user.";
+            periodicTask.Description = "Updates live tile, sends scheduled tweets.";
 
             try
             {
                 ScheduledActionService.Add(periodicTask);
+                ScheduledActionService.LaunchForTest(periodicTaskName, TimeSpan.FromSeconds(10));
             }
             catch (Exception)
             {

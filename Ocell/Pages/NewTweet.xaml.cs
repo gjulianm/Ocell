@@ -20,11 +20,9 @@ namespace Ocell.Pages
     {
         protected bool SendingDM;
         public ApplicationBarIconButton SendButton;
-        private bool _isWritingUser;
-        private string _tweetText;
-        private TwitterService _service;
         private UsernameProvider _provider;
         private Autocompleter _completer;
+        private bool _isScheduled;
 
         public NewTweet()
         {
@@ -38,12 +36,10 @@ namespace Ocell.Pages
 
             SendingDM = DataTransfer.ReplyingDM;
 
-            _isWritingUser = false;
-
             if (DataTransfer.DMDestinationId == 0 && DataTransfer.DM != null)
                 DataTransfer.DMDestinationId = DataTransfer.DM.SenderId;
 
-            
+            _isScheduled = false;
 
             InitalizeAppBar();
         }
@@ -53,10 +49,16 @@ namespace Ocell.Pages
             // Crappy Application bar design is crap. I have to initialise the buttons here in order to access them later.
             ApplicationBar appBar = new ApplicationBar();
 
-            SendButton = new ApplicationBarIconButton(new Uri("/Images/Icons_White/appbar.check.rest.png", UriKind.Relative));
+            SendButton = new ApplicationBarIconButton(new Uri("/Images/Icons_White/appbar.sendmail.rest.png", UriKind.Relative));
             SendButton.Click += new EventHandler(SendButton_Click);
             SendButton.Text = "send";
             appBar.Buttons.Add(SendButton);
+
+            ApplicationBarIconButton saveButton = new ApplicationBarIconButton();
+            saveButton.IconUri = new Uri("/Images/Icons_White/appbar.save.rest.png", UriKind.Relative);
+            saveButton.Text = "save as draft";
+            saveButton.Click += new EventHandler(saveButton_Click);
+            appBar.Buttons.Add(saveButton);
 
             ApplicationBarIconButton addPhotoButton = new ApplicationBarIconButton(new Uri("/Images/Icons_White/appbar.feature.camera.rest.png", UriKind.Relative));
             addPhotoButton.Click += new EventHandler(AddPhotoButton_Click);
@@ -64,6 +66,11 @@ namespace Ocell.Pages
             appBar.Buttons.Add(addPhotoButton);
 
             ApplicationBar = appBar;
+        }
+
+        void saveButton_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         void NewTweet_Unloaded(object sender, RoutedEventArgs e)
@@ -80,6 +87,7 @@ namespace Ocell.Pages
         {
             if (SendingDM)
             {
+                Scheduled_cb.Visibility = Visibility.Collapsed;
                 AccountsList.Visibility = Visibility.Collapsed;
                 TextBlockAccounts.Visibility = Visibility.Collapsed;
             }
@@ -129,38 +137,70 @@ namespace Ocell.Pages
             if (!CheckProtectedAccounts())
                 return;
 
-            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            if (_isScheduled)
             {
-                TryBackgroundSend();
+                ScheduleTweet();
+            }
+            else
+            {
+
+                Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
+
+                if (DataTransfer.ReplyingDM)
+                {
+                    TwitterService Service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        pBar.Text = "Sending message...";
+                    });
+                    Service.SendDirectMessage((int)DataTransfer.DMDestinationId, Tweet.Text, ReceiveDM);
+                }
+                else
+                    SendTweet();
+            }
+        }
+
+        private void ScheduleTweet()
+        {
+            TwitterStatusTask task = new TwitterStatusTask
+                {
+                    InReplyTo = DataTransfer.ReplyId
+                };
+
+            task.Text = Tweet.Text;
+
+            if (datePicker.Value == null || timePicker.Value == null)
+            {
+                Dispatcher.BeginInvoke(() => MessageBox.Show("Please select a date and time to schedule the tweet."));
                 return;
             }
 
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
+            task.Scheduled = new DateTime(
+                datePicker.Value.Value.Year,
+                datePicker.Value.Value.Month,
+                datePicker.Value.Value.Day,
+                timePicker.Value.Value.Hour,
+                timePicker.Value.Value.Minute,
+                0);
 
-            if (DataTransfer.ReplyingDM)
+            task.Accounts = new List<UserToken>();
+
+            if (AccountsList.SelectedItems.Count == 0)
             {
-                TwitterService Service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
-                Dispatcher.BeginInvoke(() =>
-                {
-                    pBar.Text = "Sending message...";
-                });
-                Service.SendDirectMessage((int)DataTransfer.DMDestinationId, Tweet.Text, ReceiveDM);
+                Dispatcher.BeginInvoke(() => MessageBox.Show("You have to select an account to schedule the tweet."));
+                return;
             }
-            else
-                SendTweet();
-        }
 
-        private void TryBackgroundSend()
-        {
-            Dispatcher.BeginInvoke(() =>
+            foreach (var user in AccountsList.SelectedItems)
             {
-                MessageBoxResult Result;
-                Result = MessageBox.Show("Seems that you're not connected to the Internet. Do you want to automatically send this tweet later?", "", MessageBoxButton.OKCancel);
-                if (Result == MessageBoxResult.OK)
-                {
-                    CreateTweetTask();
-                }
-            });
+                if(user is UserToken)
+                    task.Accounts.Add((UserToken)user);
+            }
+
+            Config.TweetTasks.Add(task);
+            Config.SaveTasks();
+            Dispatcher.BeginInvoke(() => MessageBox.Show("Message scheduled!"));
+            NavigationService.GoBack();
         }
 
         private void ReceiveDM(TwitterDirectMessage DM, TwitterResponse response)
@@ -180,32 +220,6 @@ namespace Ocell.Pages
                     else
                         NavigationService.Navigate(Uris.MainPage);
                 });
-        }
-
-        private void CreateTweetTask()
-        {
-            ITweetableTask Task;
-
-            if (SendingDM)
-            {
-                Task = new TwitterDMTask
-                {
-                    DestinationId = DataTransfer.DMDestinationId,
-                    Text = Tweet.Text
-                };
-            }
-            else
-            {
-                Task = new TwitterStatusTask
-                {
-                    InReplyTo = DataTransfer.ReplyId,
-                    Text = Tweet.Text
-                };
-            }
-
-            Task.Accounts = AccountsList.SelectedItems.Cast<UserToken>();
-            Config.TweetTasks.Add(Task);
-            Config.SaveTasks();
         }
 
         private void SendTweet()
@@ -355,14 +369,28 @@ namespace Ocell.Pages
                 UpdateOpacity(img);
         }
 
-        protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
+        private void Scheduled_cb_Checked(object sender, System.Windows.RoutedEventArgs e)
         {
-            _service = null;
-            _provider.Usernames.Clear();
-            _provider = null;
-            _completer = null;
+            if (Scheduled_cb.IsChecked == true)
+            {
+                ScheduleGrid.Visibility = Visibility.Visible;
+                _isScheduled = true;
+                SendButton.IconUri = new Uri("/Images/Icons_White/appbar.alarm.rest.png", UriKind.Relative);
+                SendButton.Text = "schedule";
+            }
+            else
+            {
+                ScheduleGrid.Visibility = System.Windows.Visibility.Collapsed;
+                _isScheduled = false;
+                SendButton.IconUri = new Uri("/Images/Icons_White/appbar.sendmail.rest.png", UriKind.Relative);
+                SendButton.Text = "send";
+            }
+        }
 
-            base.OnNavigatingFrom(e);
+        private void aboutScheduling_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+        	Dispatcher.BeginInvoke(() => MessageBox.Show("Because of the system's limitations, we can only check your scheduled tweets every half hour, " +
+			", so it's possible that your tweet will not be sent at the exact time you specified. Also, remember that if you have your phone in battery saving mode or turned off, we won't be able to send your tweet."));
         }
     }
 }

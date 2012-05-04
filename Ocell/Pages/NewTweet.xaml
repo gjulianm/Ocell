@@ -97,17 +97,26 @@
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,64,0,28">
             <TextBlock x:Name="ApplicationTitle" Style="{StaticResource PhoneTextNormalStyle}"><Run Text="OCELL"/><Run Text=" - COMPOSE"/></TextBlock>
         </StackPanel>
+        <Grid x:Name="ContentPanel" Margin="12,0,12,0" Grid.Row="1" >
+        	<ScrollViewer d:LayoutOverrides="Width, Height">
+        		<Grid>
+        			<TextBox TextWrapping="Wrap" VerticalAlignment="Top" Height="205" x:Name="Tweet" InputScope="Text" Margin="0,-5,0,0" d:LayoutOverrides="VerticalAlignment" TextChanged="Tweet_TextChanged"/>
+        			<TextBlock Margin="0,-32,10,0" TextWrapping="Wrap" Text="140" VerticalAlignment="Top" Foreground="#FF858585" x:Name="Count" HorizontalAlignment="Right" FontFamily="Segoe WP Light"/>
+        			<ListBox x:Name="AccountsList" SelectionMode="Multiple" Margin="12,236,12,288" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}"/>
+        			<TextBlock x:Name="TextBlockAccounts" HorizontalAlignment="Left" Margin="12,200,0,0" TextWrapping="Wrap" Text="Accounts:" Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top"/>
+        			<CheckBox x:Name="Scheduled_cb" Content="Scheduled?" Margin="8,321,216,0" VerticalAlignment="Top" Checked="Scheduled_cb_Checked" Unchecked="Scheduled_cb_Checked"/>
+        			<Grid x:Name="ScheduleGrid" Margin="8,425,20,0" Height="131" VerticalAlignment="Top" Visibility="Collapsed">
+        				<toolkit:DatePicker x:Name="datePicker" Margin="0,27,0,31" HorizontalAlignment="Left" Width="208" d:LayoutOverrides="Height"/>
+        				<toolkit:TimePicker x:Name="timePicker" HorizontalAlignment="Right" Margin="0,27,0,31" Width="208" d:LayoutOverrides="Height"/>
+        				<TextBlock HorizontalAlignment="Left" Margin="14,0,0,0" TextWrapping="Wrap" Text="Date:" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
+        				<TextBlock Margin="0,0,147,0" TextWrapping="Wrap" Text="Time:" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" HorizontalAlignment="Right" RenderTransformOrigin="0.128,0.422"/>
+        				<TextBlock x:Name="aboutScheduling" HorizontalAlignment="Left" TextWrapping="Wrap" Text="About tweet scheduling..." VerticalAlignment="Bottom" Margin="14,0,0,8" TextDecorations="Underline" Foreground="{StaticResource PhoneAccentBrush}" Tap="aboutScheduling_Tap"/>
+        			</Grid>
+        		</Grid>
+        	</ScrollViewer>
+        </Grid>
 
         <!--ContentPanel. Colocar aquí el contenido adicional-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-        	<Grid.ColumnDefinitions>
-        		<ColumnDefinition Width="0.956*"/>
-        		<ColumnDefinition Width="0.044*"/>
-        	</Grid.ColumnDefinitions>
-        	<TextBox TextWrapping="Wrap" VerticalAlignment="Top" Height="205" x:Name="Tweet" InputScope="Text" Margin="0,-5,0,0" Grid.ColumnSpan="2" d:LayoutOverrides="VerticalAlignment" TextChanged="Tweet_TextChanged"/>
-        	<TextBlock Margin="0,-32,-8,0" TextWrapping="Wrap" Text="140" VerticalAlignment="Top" Foreground="#FF858585" x:Name="Count" HorizontalAlignment="Right" FontFamily="Segoe WP Light"/>
-        	<ListBox x:Name="AccountsList" SelectionMode="Multiple" Margin="12,236,-8,288" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}"/>
-        	<TextBlock x:Name="TextBlockAccounts" HorizontalAlignment="Left" Margin="12,200,0,0" TextWrapping="Wrap" Text="Accounts:" Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top"/></Grid>
     </Grid>
 
 </phone:PhoneApplicationPage>
