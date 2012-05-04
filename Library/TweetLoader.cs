@@ -19,9 +19,11 @@ namespace Ocell.Library.Twitter
         public int TweetsToLoadPerRequest { get; set; }
         public bool Cached { get; set; }
         public bool ActivateLoadMoreButton { get; set; }
+        public bool LoadRetweetsAsMentions { get; set; }
         private int _requestsInProgress;
         protected TwitterResource _resource;
         private static DateTime _rateResetTime;
+        private Mutex _cacheMutex;
 
         public TwitterResource Resource
         {
@@ -63,6 +65,7 @@ namespace Ocell.Library.Twitter
             Cached = true;
             ActivateLoadMoreButton = false;
             _requestsInProgress = 0;
+            _cacheMutex = new Mutex(false, "cacheMutex");
             if (_rateResetTime == null)
                 _rateResetTime = DateTime.MinValue;
 
@@ -76,10 +79,59 @@ namespace Ocell.Library.Twitter
                 _rateResetTime = response.RateLimitStatus.ResetTime;
         }
 
+        private void SaveToCacheThreaded()
+        {
+            ThreadPool.QueueUserWorkItem((threadContext) => SaveToCache());
+        }
         public void LoadCacheAsync()
         {
-            Thread loaderThread = new Thread(new ThreadStart(LoadCache));
-            loaderThread.Start();
+            ThreadPool.QueueUserWorkItem((threadContext) =>
+                {
+                    LoadCache();
+                });
+        }
+        public void SaveToCache()
+        {
+            if (!Cached)
+                return;
+
+            if (Source.Count == 0)
+                return;
+
+            if (Source.First().GetType() == typeof(TwitterStatus))
+            {
+                try
+                {
+                    _cacheMutex.WaitOne();
+                    Cacher.SaveToCache(Resource, Source.OrderByDescending(item => item.Id).Cast<TwitterStatus>().Take(30));
+                    _cacheMutex.ReleaseMutex();
+                }
+                catch (Exception)
+                {
+                    //Do nothing.
+                }
+            }
+        }
+        public void LoadCache()
+        {
+            if (!Cached || Resource.User == null)
+                return;
+
+            TweetEqualityComparer comparer = new TweetEqualityComparer();
+            _cacheMutex.WaitOne();
+            IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id);
+            _cacheMutex.ReleaseMutex();
+
+            if (!DecisionMaker.ShouldLoadCache(ref cacheList))
+                return;
+
+
+            foreach (var item in cacheList)
+                if (!Source.Contains(item, comparer))
+                    Source.Add(item);
+
+            if (CacheLoad != null)
+                CacheLoad(this, new EventArgs());
         }
 
         protected void ReceiveCallback(IAsyncResult result)
@@ -140,8 +192,14 @@ namespace Ocell.Library.Twitter
                     break;
                 case ResourceType.Mentions:
                     _srv.ListTweetsMentioningMe(TweetsToLoadPerRequest, ReceiveTweets);
+                    if (LoadRetweetsAsMentions)
+                    {
+                        _requestsInProgress++;
+                        _srv.ListRetweetsOfMyTweets(TweetsToLoadPerRequest, ReceiveTweets);
+                    }
                     break;
                 case ResourceType.Messages:
+                    _requestsInProgress++;
                     _srv.ListDirectMessagesReceived(TweetsToLoadPerRequest, ReceiveMessages);
                     _srv.ListDirectMessagesSent(TweetsToLoadPerRequest, ReceiveMessages);
                     break;
@@ -156,7 +214,7 @@ namespace Ocell.Library.Twitter
                     _srv.Search(Resource.Data, 1, 20, ReceiveSearch);
                     break;
                 case ResourceType.Tweets:
-                    _srv.ListTweetsOnSpecifiedUserTimeline(Resource.Data, TweetsToLoadPerRequest, ReceiveTweets);
+                    _srv.ListTweetsOnSpecifiedUserTimeline(Resource.Data, TweetsToLoadPerRequest, true, ReceiveTweets);
                     break;
             }
         }
@@ -166,18 +224,24 @@ namespace Ocell.Library.Twitter
 
             if (!Source.Any())
                 return;
-            
-            if(last == 0)
-            	last = Source.Last().Id;
+
+            if (last == 0)
+                last = Source.Last().Id;
             switch (Resource.Type)
             {
                 case ResourceType.Home:
                     _srv.ListTweetsOnHomeTimelineBefore(last, TweetsToLoadPerRequest, ReceiveTweets);
                     break;
                 case ResourceType.Mentions:
-                    _srv.ListTweetsMentioningMeBefore(last, TweetsToLoadPerRequest, ReceiveTweets);
+                    _srv.ListTweetsMentioningMeBefore(last, TweetsToLoadPerRequest,  ReceiveTweets);
+                    if (LoadRetweetsAsMentions)
+                    {
+                        _requestsInProgress++;
+                        _srv.ListRetweetsOfMyTweetsBefore(last, TweetsToLoadPerRequest, ReceiveTweets);
+                    }
                     break;
                 case ResourceType.Messages:
+                    _requestsInProgress++;
                     _srv.ListDirectMessagesReceivedBefore(last, TweetsToLoadPerRequest, ReceiveMessages);
                     _srv.ListDirectMessagesSentBefore(last, TweetsToLoadPerRequest, ReceiveMessages);
                     break;
@@ -192,30 +256,12 @@ namespace Ocell.Library.Twitter
                     _srv.SearchBefore(last, Resource.Data, ReceiveSearch);
                     break;
                 case ResourceType.Tweets:
-                    _srv.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, last, TweetsToLoadPerRequest, ReceiveTweets);
+                    _srv.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, last, true, ReceiveTweets);
                     break;
             }
         }
 
-        public void LoadCache()
-        {
-            if (!Cached || Resource.User == null)
-                return;
 
-            TweetEqualityComparer comparer = new TweetEqualityComparer();
-            IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id);
-
-            if (!DecisionMaker.ShouldLoadCache(ref cacheList))
-                return;
-
-
-            foreach (var item in cacheList)
-                if (!Source.Contains(item, comparer))
-                    Source.Add(item);
-
-            if (CacheLoad != null)
-                CacheLoad(this, new EventArgs());
-        }
         #endregion
 
         #region Specific Receivers
@@ -308,7 +354,7 @@ namespace Ocell.Library.Twitter
                     LoadFinished(this, new EventArgs());
             }
 
-            SaveToCache();
+            SaveToCacheThreaded();
         }
 
         private void TryAddLoadMoreButton(ref IEnumerable<ITweetable> received)
@@ -330,34 +376,13 @@ namespace Ocell.Library.Twitter
             nextTweet = Source.FirstOrDefault(item => item.Id < olderTweetReceived.Id);
 
             if (nextTweet == null)
-                return;            
+                return;
 
             int avgTime = DecisionMaker.GetAvgTimeBetweenTweets(Source);
             TimeSpan diff = olderTweetReceived.CreatedDate - nextTweet.CreatedDate;
 
             if (diff.TotalSeconds > 4 * avgTime)
                 Source.Add(new LoadMoreTweetable { Id = olderTweetReceived.Id - 1 });
-        }
-
-        public void SaveToCache()
-        {
-            if (!Cached)
-                return;
-
-            if (Source.Count == 0)
-                return;
-
-            if (Source.First().GetType() == typeof(TwitterStatus))
-            {
-                try
-                {
-                    Cacher.SaveToCache(Resource, Source.OrderByDescending(item => item.Id).Cast<TwitterStatus>().Take(30));
-                }
-                catch (Exception)
-                {
-                    //Do nothing.
-                }
-            }
         }
 
         protected void OrderSource()

@@ -57,8 +57,9 @@
             	<shell:ApplicationBarMenuItem x:Name="pinToStart" Text="pin column to start" Click="pinToStart_Click"/>
             	<shell:ApplicationBarMenuItem x:Name="Trending" Text="trending topics" Click="Trending_Click"/>
                 <shell:ApplicationBarMenuItem Text="filter this column" Click="ApplicationBarMenuItem_Click"/>
-                <shell:ApplicationBarMenuItem x:Name="about" Text="about" Click="about_Click"/>
                 <shell:ApplicationBarMenuItem x:Name="menuItem1" Text="settings" Click="menuItem1_Click" />
+                <shell:ApplicationBarMenuItem x:Name="myprofile" Text="my profile" Click="myprofile_Click"/>
+                <shell:ApplicationBarMenuItem x:Name="about" Text="about" Click="about_Click"/>
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton x:Name="compose" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="Compose" Click="compose_Click" />
             <shell:ApplicationBarIconButton x:Name="add" IconUri="/Images/Icons_White/appbar.columns.rest.png" Text="columns" Click="add_Click"/>
@@ -80,7 +81,7 @@
         <controls:Pivot Title="OCELL" x:Name="MainPivot" Loaded="MainPivot_Loaded" Background="{x:Null}" Margin="0,50,0,0">
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding String, Converter={StaticResource ListConverter}, FallbackValue=error}" />
+                    <TextBlock Text="{Binding String, Converter={StaticResource ListConverter}, FallbackValue=error}" Tag="{Binding}" Tap="TextBlock_Tap" />
                 </DataTemplate>                
             </controls:Pivot.HeaderTemplate>
             <controls:Pivot.ItemTemplate>

@@ -11,6 +11,8 @@ using Ocell.Library.Filtering;
 using Ocell.Library.Notifications;
 using Ocell.Library.Twitter;
 using TweetSharp;
+using System.Threading;
+using System.Diagnostics;
 
 
 namespace Ocell
@@ -23,13 +25,16 @@ namespace Ocell
         private DateTime LastErrorTime;
         private DateTime LastReloadTime;
         private bool _initialised;
+        private Stopwatch _watch;
 
         #region Loaders
         // Constructora
         public MainPage()
         {
+            _watch = new Stopwatch();
             _initialised = false;
-            InitializeComponent(); 
+            InitializeComponent();
+
             ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             pivots = new ObservableCollection<TwitterResource>();
@@ -82,9 +87,12 @@ namespace Ocell
             if (_initialised)
                 return;
 
-            CreateTile();
-            ShowFollowMessage();
-            LittleWatson.CheckForPreviousException();
+            ThreadPool.QueueUserWorkItem((threadContext) =>
+            {
+                CreateTile();
+                ShowFollowMessage();
+                LittleWatson.CheckForPreviousException();
+            });
 
             string Column;
             if (NavigationContext.QueryString.TryGetValue("column", out Column))
@@ -230,12 +238,15 @@ namespace Ocell
             if (Lists.ContainsKey(Resource.String))
                 return;
 
-            Lists.Add(Resource.String, list);            
+            Lists.Add(Resource.String, list);
 
             list.Compression += new ExtendedListBox.OnCompression(list_Compression);
             list.Loader.Error += new TweetLoader.OnError(Loader_Error);
             list.Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
             list.Loader.ActivateLoadMoreButton = true;
+            if (Config.RetweetAsMentions == null)
+                Config.RetweetAsMentions = true;
+            list.Loader.LoadRetweetsAsMentions = (bool)Config.RetweetAsMentions;
 
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
             list.Loader.LoadCacheAsync();
@@ -246,7 +257,7 @@ namespace Ocell
         }
 
         void CheckForFilterUpdate(object sender, RoutedEventArgs e)
-        {        
+        {
             ExtendedListBox list = sender as ExtendedListBox;
             if (list != null && ((DataTransfer.ShouldReloadFilters && DataTransfer.cFilter.Resource == list.Loader.Resource) || DataTransfer.IsGlobalFilter))
             {
@@ -337,33 +348,33 @@ namespace Ocell
 
         private void send_DM_Click(object sender, System.EventArgs e)
         {
-        	NavigationService.Navigate(Uris.SelectUserForDM);
+            NavigationService.Navigate(Uris.SelectUserForDM);
         }
 
         private void SearchBtn_Click(object sender, System.EventArgs e)
         {
-        	NavigationService.Navigate(Uris.SearchForm);
+            NavigationService.Navigate(Uris.SearchForm);
         }
 
         private void pinToStart_Click(object sender, System.EventArgs e)
         {
-            if(SecondaryTiles.ColumnTileIsCreated((TwitterResource)MainPivot.SelectedItem))
+            if (SecondaryTiles.ColumnTileIsCreated((TwitterResource)MainPivot.SelectedItem))
                 Dispatcher.BeginInvoke(() => MessageBox.Show("This column is already pinned."));
             else
-             SecondaryTiles.CreateColumnTile((TwitterResource)MainPivot.SelectedItem);
+                SecondaryTiles.CreateColumnTile((TwitterResource)MainPivot.SelectedItem);
         }
 
         private void about_Click(object sender, System.EventArgs e)
         {
-        	NavigationService.Navigate(Uris.About);
+            NavigationService.Navigate(Uris.About);
         }
 
         private void Trending_Click(object sender, System.EventArgs e)
         {
-        	NavigationService.Navigate(Uris.TrendingTopics);
-		}
+            NavigationService.Navigate(Uris.TrendingTopics);
+        }
 
-		private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
+        private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
         {
             DataTransfer.cFilter = Config.Filters.FirstOrDefault(item => item.Resource == ((TwitterResource)MainPivot.SelectedItem));
             if (DataTransfer.cFilter == null)
@@ -376,6 +387,32 @@ namespace Ocell
         {
             DataTransfer.IsGlobalFilter = false;
             base.OnNavigatedFrom(e);
+        }
+
+        private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            TextBlock text = sender as TextBlock;
+            if (text == null)
+                return;
+
+            ExtendedListBox list;
+            TwitterResource resource;
+
+            if (text.Tag is TwitterResource)
+            {
+                resource = (TwitterResource)text.Tag;
+                if(Lists.TryGetValue(resource.String, out list) && list.ItemsSource != null && list.Loader.Source.Any())
+                {
+                    list.ScrollIntoView(list.Loader.Source.First());
+                }
+            }
+
+        }
+
+        private void myprofile_Click(object sender, System.EventArgs e)
+        {
+            if (DataTransfer.CurrentAccount != null)
+                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + DataTransfer.CurrentAccount.ScreenName, UriKind.Relative));
         }
 
     }
