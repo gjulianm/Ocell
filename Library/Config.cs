@@ -18,17 +18,31 @@ namespace Ocell.Library
         private const string TweetTasksKey = "TWEETTASKS";
         private const string BGLoadColumns = "BGLOADCOLUMNS";
         private const string ProtectedAccountsKey = "PROTECTEDACC";
-        private static readonly string FiltersKey = "FILTERS";
-        private static readonly string GlobalFilterKey = "GLOBALFILTER";
+        private const string FiltersKey = "FILTERS";
+        private const string GlobalFilterKey = "GLOBALFILTER";
+        private const string RTAsMentionsKey = "RTASMENTIONS";
 
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
         private static bool? _followMessageShown;
-        private static List<ITweetableTask> _tweetTasks;
+        private static List<TwitterStatusTask> _tweetTasks;
         private static bool? _backgroundLoadColumns;
         private static List<UserToken> _protectedAccounts;
         private static List<ColumnFilter> _filters;
         private static ColumnFilter _globalFilter;
+        private static bool? _retweetAsMentions;
+
+        public static bool? RetweetAsMentions
+        {
+            get
+            {
+                return GenericGetFromConfig<bool?>(RTAsMentionsKey, ref _retweetAsMentions);
+            }
+            set
+            {
+                GenericSaveToConfig<bool?>(RTAsMentionsKey, ref _retweetAsMentions, value);
+            }
+        }
 
         public static ColumnFilter GlobalFilter
         {
@@ -78,15 +92,15 @@ namespace Ocell.Library
             }
         }
 
-        public static List<ITweetableTask> TweetTasks
+        public static List<TwitterStatusTask> TweetTasks
         {
             get
             {
-                return GenericGetFromConfig<List<ITweetableTask>>(TweetTasksKey, ref _tweetTasks);
+                return GenericGetFromConfig<List<TwitterStatusTask>>(TweetTasksKey, ref _tweetTasks);
             }
             set
             {
-                GenericSaveToConfig<List<ITweetableTask>>(TweetTasksKey, ref _tweetTasks, value);
+                GenericSaveToConfig<List<TwitterStatusTask>>(TweetTasksKey, ref _tweetTasks, value);
             }
         }
 
