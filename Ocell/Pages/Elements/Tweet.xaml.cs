@@ -19,6 +19,7 @@ namespace Ocell.Pages.Elements
         public TweetSharp.TwitterStatus status;
         private bool _favBtnState;
         private ApplicationBarIconButton _favButton;
+        private ContextMenu _menuOpened;
 
         public Tweet()
         {
@@ -272,21 +273,50 @@ namespace Ocell.Pages.Elements
             var link = new Hyperlink();
             link.Inlines.Add(new Run() { Text = "#" + Hashtag.Text });
             link.FontWeight = FontWeights.Bold;
-            link.TextDecorations = null;
             link.TargetName = "#" + Hashtag.Text;
             link.Click += new RoutedEventHandler(link_Click);
 
+            ContextMenu menu = new ContextMenu();
+            MenuItem item = new MenuItem();
+            item.Click += new RoutedEventHandler(CopyLink);
+            item.Header = "copy hashtag";
+            item.Tag = "#" + Hashtag.Text;
+            menu.Items.Add(item);
+            ContextMenuService.SetContextMenu(link, menu);
+
+            GestureListener listener = GestureService.GetGestureListener(link);
+            if (listener != null)
+            {
+                listener.Hold += new EventHandler<GestureEventArgs>(OpenContextMenu);
+               
+            }
+
             return link;
         }
+
+        
 
         Inline CreateMentionLink(TwitterMention Mention)
         {
             var link = new Hyperlink();
             link.Inlines.Add(new Run() { Text = "@" + Mention.ScreenName });
             link.FontWeight = FontWeights.Bold;
-            link.TextDecorations = null;
-            link.TargetName = "@" + Mention.ScreenName;
+            link.TextDecorations = TextDecorations.Underline;
             link.Click += new RoutedEventHandler(link_Click);
+
+            ContextMenu menu = new ContextMenu();
+            MenuItem item = new MenuItem();
+            item.Click += new RoutedEventHandler(CopyLink);
+            item.Header = "copy user name";
+            item.Tag = Mention.ScreenName;
+            menu.Items.Add(item);
+            ContextMenuService.SetContextMenu(link, menu);
+
+            GestureListener listener = GestureService.GetGestureListener(link);
+            if (listener != null)
+            {
+                listener.Hold += new EventHandler<GestureEventArgs>(OpenContextMenu);
+            }
 
             return link;
         }
@@ -296,9 +326,23 @@ namespace Ocell.Pages.Elements
             var link = new Hyperlink();
             link.Inlines.Add(new Run() { Text = TweetTextConverter.TrimUrl(URL.ExpandedValue) });
             link.FontWeight = FontWeights.Bold;
-            link.TextDecorations = null;
-            link.TargetName = URL.ExpandedValue;
+            link.TextDecorations = TextDecorations.Underline;
+            link.TargetName = URL.ExpandedValue;            
             link.Click += new RoutedEventHandler(link_Click);
+
+            ContextMenu menu = new ContextMenu();
+            MenuItem item = new MenuItem();
+            item.Click += new RoutedEventHandler(CopyLink);
+            item.Header = "copy link";
+            item.Tag = URL.ExpandedValue;
+            menu.Items.Add(item);
+            ContextMenuService.SetContextMenu(link, menu);
+
+            GestureListener listener = GestureService.GetGestureListener(link);
+            if (listener != null)
+            {
+                listener.Hold += new EventHandler<GestureEventArgs>(OpenContextMenu);
+            }
 
             return link;
         }
@@ -312,7 +356,54 @@ namespace Ocell.Pages.Elements
             link.TargetName = Media.ExpandedUrl;
             link.Click += new RoutedEventHandler(link_Click);
 
+            ContextMenu menu = new ContextMenu();
+            MenuItem item = new MenuItem();
+            item.Click += new RoutedEventHandler(CopyLink);
+            item.Header = "copy link";
+            item.Tag = Media.DisplayUrl;
+            menu.Items.Add(item);
+            ContextMenuService.SetContextMenu(link, menu);
+            
+            GestureListener listener = GestureService.GetGestureListener(link);
+            if (listener != null)
+            {
+                listener.Hold += new EventHandler<GestureEventArgs>(OpenContextMenu);   
+            }
+
             return link;
+        }
+
+        void OpenContextMenu(object sender, GestureEventArgs e)
+        {
+            Hyperlink link = sender as Hyperlink;
+            if (link == null)
+                return;
+
+            ContextMenu menu = ContextMenuService.GetContextMenu(link);
+            if (menu == null)
+                return;
+
+            this.BackKeyPress += CloseContextMenu;
+            menu.IsOpen = true;
+        }
+
+        void CloseContextMenu(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_menuOpened != null)
+            {
+                _menuOpened.IsOpen = false;
+                _menuOpened = null;
+            }
+
+            this.BackKeyPress -= CloseContextMenu;
+        }
+
+
+        void CopyLink(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            if (item != null && item.Tag is string && !(string.IsNullOrWhiteSpace(item.Tag as string)))
+                Clipboard.SetText(item.Tag as string);
         }
 
         private void ImageClick(object sender, EventArgs e)
