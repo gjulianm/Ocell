@@ -24,6 +24,7 @@ namespace Ocell.Library.Twitter
         protected TwitterResource _resource;
         private static DateTime _rateResetTime;
         private Mutex _cacheMutex;
+        private ConversationService _conversationService;
 
         public TwitterResource Resource
         {
@@ -33,8 +34,13 @@ namespace Ocell.Library.Twitter
             }
             set
             {
+                if (value == _resource)
+                    return;
+
                 _resource = value;
                 _srv = ServiceDispatcher.GetService(_resource.User);
+                _conversationService = new ConversationService(_resource.User);
+                _conversationService.Finished += ConversationFinished;
             }
         }
         public ObservableCollection<ITweetable> Source { get; protected set; }
@@ -47,6 +53,7 @@ namespace Ocell.Library.Twitter
         {
             Resource = resource;
             _srv = ServiceDispatcher.GetService(resource.User);
+            _conversationService = new ConversationService(resource.User);
             Cached = cached;
         }
 
@@ -71,14 +78,9 @@ namespace Ocell.Library.Twitter
 
             Error += new OnError(CheckForRateLimit);
         }
-        #endregion
+        #endregion 
 
-        void CheckForRateLimit(TwitterResponse response)
-        {
-            if (response.RateLimitStatus.RemainingHits <= 0)
-                _rateResetTime = response.RateLimitStatus.ResetTime;
-        }
-
+        #region Cache
         private void SaveToCacheThreaded()
         {
             ThreadPool.QueueUserWorkItem((threadContext) => SaveToCache());
@@ -133,15 +135,11 @@ namespace Ocell.Library.Twitter
             if (CacheLoad != null)
                 CacheLoad(this, new EventArgs());
         }
-
-        protected void ReceiveCallback(IAsyncResult result)
-        {
-        }
+        #endregion
 
         #region Loaders
         public void Load(bool Old = false)
         {
-
             if (Resource == null || _srv == null ||
                 _requestsInProgress >= 2 ||
                 _rateResetTime > DateTime.Now)
@@ -158,29 +156,9 @@ namespace Ocell.Library.Twitter
             else
                 LoadNew();
         }
-
         public void LoadFrom(long Id)
         {
             LoadOld(Id);
-        }
-
-        protected void InternalLoad(bool Old = false)
-        {
-            if (Resource == null || _srv == null ||
-                _requestsInProgress >= 2 ||
-                _rateResetTime > DateTime.Now)
-            {
-                if (LoadFinished != null)
-                    LoadFinished(this, new EventArgs());
-                return;
-            }
-
-            _requestsInProgress++;
-
-            if (Old)
-                LoadOld();
-            else
-                LoadNew();
         }
         protected void LoadNew()
         {
@@ -215,6 +193,9 @@ namespace Ocell.Library.Twitter
                     break;
                 case ResourceType.Tweets:
                     _srv.ListTweetsOnSpecifiedUserTimeline(Resource.Data, TweetsToLoadPerRequest, true, ReceiveTweets);
+                    break;
+                case ResourceType.Conversation:
+                    _conversationService.GetRepliesForStatus(Resource.Data, ReceiveTweets);
                     break;
             }
         }
@@ -258,10 +239,11 @@ namespace Ocell.Library.Twitter
                 case ResourceType.Tweets:
                     _srv.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, last, true, ReceiveTweets);
                     break;
+                case ResourceType.Conversation:
+                    _conversationService.GetRepliesForStatus(Resource.Data, ReceiveTweets);
+                    break;
             }
         }
-
-
         #endregion
 
         #region Specific Receivers
@@ -305,6 +287,7 @@ namespace Ocell.Library.Twitter
         }
         #endregion
 
+        #region Generic Receivers
         protected void GenericReceive(IEnumerable<ITweetable> list, TwitterResponse response)
         {
             try
@@ -356,7 +339,9 @@ namespace Ocell.Library.Twitter
 
             SaveToCacheThreaded();
         }
+        #endregion
 
+        #region Load more button
         private void TryAddLoadMoreButton(ref IEnumerable<ITweetable> received)
         {
             if (!ActivateLoadMoreButton)
@@ -384,6 +369,23 @@ namespace Ocell.Library.Twitter
             if (diff.TotalSeconds > 4 * avgTime)
                 Source.Add(new LoadMoreTweetable { Id = olderTweetReceived.Id - 1 });
         }
+        public void RemoveLoadMore()
+        {
+            ITweetable item = Source.FirstOrDefault(e => e is LoadMoreTweetable);
+            while (item != null)
+            {
+                Source.Remove(item);
+                item = Source.FirstOrDefault(e => e is LoadMoreTweetable);
+            }
+
+        }
+        #endregion
+
+        void CheckForRateLimit(TwitterResponse response)
+        {
+            if (response.RateLimitStatus.RemainingHits <= 0)
+                _rateResetTime = response.RateLimitStatus.ResetTime;
+        }
 
         protected void OrderSource()
         {
@@ -395,17 +397,12 @@ namespace Ocell.Library.Twitter
             Source.Clear();
         }
 
-        public void RemoveLoadMore()
+        private void ConversationFinished(object sender, EventArgs e)
         {
-            ITweetable item = Source.FirstOrDefault(e => e is LoadMoreTweetable);
-            while (item != null)
-            {
-                Source.Remove(item);
-                item = Source.FirstOrDefault(e => e is LoadMoreTweetable);
-            }
-
+            if (LoadFinished != null)
+                LoadFinished(this, e);
         }
-
+        
         #region Events
         public event EventHandler LoadFinished;
 

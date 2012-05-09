@@ -98,7 +98,7 @@
             <TextBlock x:Name="ApplicationTitle" Style="{StaticResource PhoneTextNormalStyle}"><Run Text="OCELL"/><Run Text=" - COMPOSE"/></TextBlock>
         </StackPanel>
         <Grid x:Name="ContentPanel" Margin="12,0,12,0" Grid.Row="1" >
-        	<ScrollViewer d:LayoutOverrides="Width, Height">
+        	<ScrollViewer d:LayoutOverrides="Width, Height" HorizontalScrollBarVisibility="Disabled">
         		<Grid>
         			<TextBox TextWrapping="Wrap" VerticalAlignment="Top" Height="205" x:Name="Tweet" InputScope="Text" Margin="0,-5,0,0" d:LayoutOverrides="VerticalAlignment" TextChanged="Tweet_TextChanged"/>
         			<TextBlock Margin="0,-32,10,0" TextWrapping="Wrap" Text="140" VerticalAlignment="Top" Foreground="#FF858585" x:Name="Count" HorizontalAlignment="Right" FontFamily="Segoe WP Light"/>

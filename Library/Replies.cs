@@ -13,46 +13,46 @@ using TweetSharp;
 using Hammock.Authentication.OAuth;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Linq;
 
 namespace Ocell.Library.Twitter
 {
     // ATTENTION: This is an EXPERIMENTAL class, because it's using an experimental Twitter API path.
     // Because of this, it's standalone in another class and does not use TweetSharp, just for authentication.
     // Not guaranteed to get results, but will not cause any exceptions to the outside because of serialization.
-    public class ReplyService
+    public class ConversationService
     {
         protected UserToken _account;
+        protected Action<IEnumerable<TwitterStatus>, TwitterResponse> _action;
+        protected int _pendingCalls;
 
-        public ReplyService(UserToken account)
+        public ConversationService(UserToken account)
         {
             _account = account;
+            _pendingCalls = 0;
         }
 
-        public void GetRepliesForStatus(TwitterStatus status, Action<IEnumerable<TwitterStatus>, RestResponse> action)
+        public void GetRepliesForStatus(string Id, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
         {
-            RestRequest req = PrepareRestRequest(status.Id);
+            RestRequest req = PrepareRestRequest(Id);
             RestClient client = GetRestClient();
+            _action = action;
 
-            client.BeginRequest(req, Callback, action);
+            _pendingCalls++;
+            client.BeginRequest(req, Callback, null);
+
+            TwitterService srv = ServiceDispatcher.GetService(_account);
+            _pendingCalls++;
+            srv.GetTweet(long.Parse(Id), ReceiveSingleTweet);
         }
-
-        protected void Callback(RestRequest request, RestResponse response, object userState)
+        public void GetRepliesForStatus(TwitterStatus status, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
         {
-            Action<IEnumerable<TwitterStatus>, RestResponse> action = userState as Action<IEnumerable<TwitterStatus>, RestResponse>;
-
-            if (response.StatusCode != HttpStatusCode.OK || response.ContentLength == 0)
-            {
-                if (action != null)
-                    action.Invoke(new List<TwitterStatus>(), response);
-                return;
-            }
-
-            IEnumerable<string> statusStrings = GetStatusesFromResult(response.Content);
-
-            action.Invoke(DeserializeTweets(statusStrings), response);
+            GetRepliesForStatus(status.Id.ToString(), action);
         }
 
-        protected RestRequest PrepareRestRequest(long id)
+        protected RestRequest PrepareRestRequest(string id)
         {
             if (_account == null)
                 throw new NullReferenceException("Account is null.");
@@ -71,12 +71,11 @@ namespace Ocell.Library.Twitter
             RestRequest req = new RestRequest
             {
                 Credentials = credentials,
-                Path = "/related_results/show/" + id.ToString() + ".json?include_entities=true"
+                Path = "/related_results/show/" + id + ".json?include_entities=true"
             };
 
             return req;
         }
-
         protected RestClient GetRestClient()
         {
             RestClient client = new RestClient();
@@ -86,15 +85,102 @@ namespace Ocell.Library.Twitter
             return client;
         }
 
+        protected void Callback(RestRequest request, RestResponse response, object userState)
+        {
+            Action<IEnumerable<TwitterStatus>, TwitterResponse> action = _action;
+
+            if (response.StatusCode != HttpStatusCode.OK || response.ContentLength == 0)
+            {
+                if (action != null)
+                    action.Invoke(new List<TwitterStatus>(), new TwitterResponse(response));
+                return;
+            }
+
+            IEnumerable<TwitterStatus> statuses;
+            try
+            {
+                IEnumerable<string> statusStrings = GetStatusesFromResult(response.Content);
+                statuses = new List<TwitterStatus>(DeserializeTweets(statusStrings));
+            }
+            catch (Exception)
+            {
+                statuses = new List<TwitterStatus>();
+            }
+
+            foreach (var status in statuses)
+                GetRepliesForStatus(status, _action);
+
+            if(action != null)
+                action.Invoke(statuses, new TwitterResponse(response));
+
+            TryFinish();
+        }
+        protected void ReceiveSingleTweet(TwitterStatus status, TwitterResponse response)
+        {
+            List<TwitterStatus> list = new List<TwitterStatus>();
+            if (status == null || response.StatusCode != HttpStatusCode.OK)
+            {
+                if (_action != null)
+                    _action.Invoke(list, response);
+            }
+
+            list.Add(status);
+            if (status.InReplyToStatusId != null)
+            {
+                _pendingCalls++;
+                ServiceDispatcher.GetService(_account).GetTweet((long)status.InReplyToStatusId, ReceiveSingleTweet);
+            }
+
+            if(_action != null)
+                _action.Invoke(list, response);
+            TryFinish();
+        }
+
+        protected IEnumerable<TwitterStatus> DeserializeTweets(IEnumerable<string> strings)
+        {
+            TwitterService srv = ServiceDispatcher.GetDefaultService();
+
+            // Little side note: I LOVE yield return.
+            foreach (string status in strings)
+                yield return srv.Deserialize<TwitterStatus>(status);
+        }
         protected IEnumerable<string> GetStatusesFromResult(string result)
         {
-            Regex rx = new Regex("pattern goes here");
-            Match match = rx.Match(result);
-            while(match.Success)
+            int valueStart;
+            string value;
+            int pos;
+            int pendingBrackets;
+
+            valueStart = result.IndexOf("value\":");
+            while (valueStart != -1)
             {
-                yield return match.Value;
-                match = match.NextMatch();
+                pos = result.IndexOf('{', valueStart) + 1;
+                pendingBrackets = 1;
+                value = "{";
+                while (pendingBrackets > 0)
+                {
+                    value += result[pos];
+                    if (result[pos] == '{')
+                        pendingBrackets++;
+                    if (result[pos] == '}')
+                        pendingBrackets--;
+                    pos++;
+                }
+                yield return value;
             }
         }
+
+        private void TryFinish()
+        {
+            _pendingCalls--;
+            if (_pendingCalls <= 0)
+            {
+                if (Finished != null)
+                    Finished(this, new EventArgs());
+            }
+        }
+
+        public event EventHandler Finished;
+        
     }
 }

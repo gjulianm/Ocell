@@ -53,6 +53,9 @@ namespace Ocell.Library.Twitter
                     case ResourceType.Tweets:
                         value += "Tweets:" + Data;
                         break;
+                    case ResourceType.Conversation:
+                        value += "Conversation:" + Data;
+                        break;
                     default:
                         value += "Unknown value";
                         break;
@@ -114,6 +117,11 @@ namespace Ocell.Library.Twitter
                 Type = ResourceType.Tweets;
                 Data = value.Substring(ColonIndex);
             }
+            else if (value.Contains("Conversation:"))
+            {
+                Type = ResourceType.Conversation;
+                Data = value.Substring(ColonIndex);
+            }
             else
                 Type = ResourceType.Home;
         }
@@ -140,5 +148,5 @@ namespace Ocell.Library.Twitter
         }
     };
 
-    public enum ResourceType { Home, Mentions, Messages, List, Search, Favorites, Tweets};
+    public enum ResourceType { Home, Mentions, Messages, List, Search, Favorites, Tweets, Conversation};
 }

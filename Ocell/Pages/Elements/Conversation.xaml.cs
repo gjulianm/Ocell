@@ -8,6 +8,7 @@ using Microsoft.Phone.Controls;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using TweetSharp;
+using System.Collections.Generic;
 
 namespace Ocell.Pages.Elements
 {
@@ -16,14 +17,16 @@ namespace Ocell.Pages.Elements
         private TwitterStatus LastStatus;
         private ObservableCollection<TwitterStatus> Source;
         private bool selectionChangeFired = false;
-        
+        private ConversationService replies;
+        private int pendingCalls;
         public Conversation()
         {
             InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
             
             this.Loaded += new RoutedEventHandler(Conversation_Loaded);
-            
+            replies = new ConversationService(DataTransfer.CurrentAccount);
             Source = new ObservableCollection<TwitterStatus>();
+            pendingCalls = 0;
         }
         
         private void Conversation_Loaded(object sender, RoutedEventArgs e)
@@ -34,7 +37,7 @@ namespace Ocell.Pages.Elements
                 return;
             }
 
-            if (!Source.Contains(DataTransfer.Status))
+            /*if (!Source.Contains(DataTransfer.Status))
                 Source.Clear();
 
             LastStatus = DataTransfer.Status;
@@ -42,7 +45,28 @@ namespace Ocell.Pages.Elements
             	Source.Add(LastStatus);
             CList.ItemsSource = Source;
 
-            MoreConversation();
+            MoreConversation();*/
+
+            TwitterResource resource = new TwitterResource
+            {
+                Data = DataTransfer.Status.Id.ToString(),
+                Type = ResourceType.Conversation,
+                User = DataTransfer.CurrentAccount
+            };
+
+            if (CList.Loader != null)
+            {
+                CList.Loader.Resource = resource;
+            }
+            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
+            CList.Loader.LoadFinished += new EventHandler(LoadFinished);
+            CList.Loader.Load();
+            
+        }
+
+        private void LoadFinished(object sender, EventArgs e)
+        {
+            Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
         }
         
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
@@ -52,16 +76,45 @@ namespace Ocell.Pages.Elements
         
         private void MoreConversation()
         {
-            TwitterStatus status = Source.Last();
-            if(status != null && status.InReplyToStatusId == null)
+            TwitterStatus status = Source.LastOrDefault();
+
+            if(status == null)
             {
                 EndLoad();
                 return;
             }
+
+            pendingCalls++;
+            replies.GetRepliesForStatus(status, ReceiveTweets);
+
+            if (status.InReplyToStatusId == null) 
+            { 
+                EndLoad(); 
+                return; 
+            }
+
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
+            pendingCalls++;
             ServiceDispatcher.GetCurrentService().GetTweet((long)status.InReplyToStatusId, ReceiveTweet);
         }
-        
+
+        private void ReceiveTweets(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
+        {
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                EndLoad();
+                return;
+            }
+
+            foreach (var status in statuses)
+            {
+                pendingCalls++;
+                ReceiveTweet(status, response);
+            }
+
+            EndLoad();
+        }
+
         private void ReceiveTweet(TwitterStatus status, TwitterResponse response)
         {
             if(status == null || response.StatusCode != HttpStatusCode.OK)
@@ -75,7 +128,9 @@ namespace Ocell.Pages.Elements
                 if(!Source.Contains(status))
                     Source.Add(status);
             });
+
             MoreConversation();
+            EndLoad();
         }
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -93,7 +148,9 @@ namespace Ocell.Pages.Elements
         }
         private void EndLoad()
         {
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
+            pendingCalls--;
+            if(pendingCalls <= 0)
+                Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
         }
     }
 }

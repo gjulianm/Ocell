@@ -60,16 +60,7 @@
     <Reference Include="Microsoft.Phone.Controls, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Interop" />
-    <Reference Include="Microsoft.Silverlight.Testing">
-      <HintPath>..\packages\WindowsPhoneEssentials.Testing.0.7.2.88\lib\SL4-WindowsPhone71\Microsoft.Silverlight.Testing.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
-      <HintPath>..\packages\WindowsPhoneEssentials.Testing.0.7.2.88\lib\SL4-WindowsPhone71\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.3.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
-    <Reference Include="SilverlightSerializer.WP7">
-      <HintPath>..\packages\WindowsPhoneEssentials.0.7.2.88\lib\SL4-WindowsPhone71\SilverlightSerializer.WP7.dll</HintPath>
-    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -78,12 +69,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="mscorlib.extensions" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="WindowsPhoneEssentials">
-      <HintPath>..\packages\WindowsPhoneEssentials.0.7.2.88\lib\SL4-WindowsPhone71\WindowsPhoneEssentials.dll</HintPath>
-    </Reference>
-    <Reference Include="WindowsPhoneEssentials.Testing">
-      <HintPath>..\packages\WindowsPhoneEssentials.Testing.0.7.2.88\lib\SL4-WindowsPhone71\WindowsPhoneEssentials.Testing.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -256,7 +241,6 @@
   <ItemGroup>
     <None Include="Ocell_2012_03_18_19_41_51.sap" />
     <None Include="Ocell_2012_04_11_23_33_33.sap" />
-    <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />
   </ItemGroup>
@@ -275,7 +259,6 @@
     <Content Include="Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll" />
     <Content Include="Assemblies\Newtonsoft.Json.dll" />
     <Resource Include="Pages\Settings\OcellIcon200.png" />
-    <Resource Include="Toolkit.Content\ie.png" />
     <Content Include="Images\Icons_White\appbar.add.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
