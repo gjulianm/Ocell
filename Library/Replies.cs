@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace Ocell.Library.Twitter
 {
@@ -28,19 +29,37 @@ namespace Ocell.Library.Twitter
         protected Action<IEnumerable<TwitterStatus>, TwitterResponse> _action;
         protected int _pendingCalls;
         protected List<string> _processedStatus;
+        protected Action<bool> _checkAction;
+        protected bool _onlyFirstCheck;
 
         public ConversationService(UserToken account)
         {
             _account = account;
             _pendingCalls = 0;
             _processedStatus = new List<string>();
+            _onlyFirstCheck = false;
+        }
+
+        public void CheckIfReplied(TwitterStatus status, Action<bool> action)
+        {
+            _action = CheckIfRepliedCallback;
+            _checkAction = action;
+            _onlyFirstCheck = true;
+            GetReplies(status.Id.ToString());
+        }
+
+        protected void CheckIfRepliedCallback(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
+        {
+            if (_checkAction != null)
+                _checkAction.Invoke(statuses.Any());
         }
 
         public void GetConversationForStatus(string Id, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
         {
             _action = action;
+            _onlyFirstCheck = false;
             GetReplies(Id);
-            GetReplied(long.Parse(Id));            
+            GetReplied(long.Parse(Id));
         }
         public void GetConversationForStatus(TwitterStatus status, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
         {
@@ -118,6 +137,13 @@ namespace Ocell.Library.Twitter
                 return;
             }
 
+            if (_onlyFirstCheck)
+            {
+                if (_checkAction != null)
+                    _checkAction.Invoke(response.ContentLength > 2);
+                return;
+            }
+
             IEnumerable<TwitterStatus> statuses;
             try
             {
@@ -132,7 +158,7 @@ namespace Ocell.Library.Twitter
             foreach (var status in statuses)
                 GetConversationForStatus(status, _action);
 
-            if(action != null)
+            if (action != null)
                 action.Invoke(statuses, new TwitterResponse(response));
 
             TryFinish();
@@ -152,7 +178,7 @@ namespace Ocell.Library.Twitter
 
             GetReplies(status.Id.ToString());
 
-            if(_action != null)
+            if (_action != null)
                 _action.Invoke(list, response);
             TryFinish();
         }
@@ -203,6 +229,6 @@ namespace Ocell.Library.Twitter
         }
 
         public event EventHandler Finished;
-        
+
     }
 }

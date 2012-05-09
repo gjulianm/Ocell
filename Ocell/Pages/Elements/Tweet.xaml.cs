@@ -20,6 +20,7 @@ namespace Ocell.Pages.Elements
         private bool _favBtnState;
         private ApplicationBarIconButton _favButton;
         private ContextMenu _menuOpened;
+        private ConversationService _conversation;
 
         public Tweet()
         {
@@ -65,10 +66,17 @@ namespace Ocell.Pages.Elements
                 return;
             }
 
+            _conversation = new ConversationService(DataTransfer.CurrentAccount);
+            
             if(DataTransfer.Status.RetweetedStatus != null)
                 status = DataTransfer.Status.RetweetedStatus;
             else
                 status = DataTransfer.Status;
+
+            _conversation.CheckIfReplied(status, (replied) => {
+                if (replied)
+                    Dispatcher.BeginInvoke(() => Replies.Visibility = Visibility.Visible);
+            });
 
             if (status.IsFavorited)
                 Dispatcher.BeginInvoke(ToggleFavButton);
@@ -270,8 +278,10 @@ namespace Ocell.Pages.Elements
             var link = new Hyperlink();
             link.Inlines.Add(new Run() { Text = "#" + Hashtag.Text });
             link.FontWeight = FontWeights.Bold;
+            link.TextDecorations = null;
             link.TargetName = "#" + Hashtag.Text;
             link.Click += new RoutedEventHandler(link_Click);
+            link.Foreground = (System.Windows.Media.Brush)Application.Current.Resources["PhoneContrastForegroundBrush"];
 
             ContextMenu menu = new ContextMenu();
             MenuItem item = new MenuItem();
@@ -291,8 +301,9 @@ namespace Ocell.Pages.Elements
             var link = new Hyperlink();
             link.Inlines.Add(new Run() { Text = "@" + Mention.ScreenName });
             link.FontWeight = FontWeights.Bold;
-            link.TextDecorations = TextDecorations.Underline;
+            link.TextDecorations = null;
             link.Click += new RoutedEventHandler(link_Click);
+            link.Foreground = (System.Windows.Media.Brush)Application.Current.Resources["PhoneContrastForegroundBrush"];
 
             ContextMenu menu = new ContextMenu();
             MenuItem item = new MenuItem();
@@ -315,8 +326,8 @@ namespace Ocell.Pages.Elements
         {
             var link = new Hyperlink();
             link.Inlines.Add(new Run() { Text = TweetTextConverter.TrimUrl(URL.ExpandedValue) });
-            link.FontWeight = FontWeights.Bold;
-            link.TextDecorations = TextDecorations.Underline;
+            link.Foreground = (System.Windows.Media.Brush)Application.Current.Resources["PhoneContrastForegroundBrush"];
+            link.TextDecorations = null;
             link.TargetName = URL.ExpandedValue;            
             link.Click += new RoutedEventHandler(link_Click);
 
