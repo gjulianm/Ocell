@@ -27,29 +27,50 @@ namespace Ocell.Library.Twitter
         protected UserToken _account;
         protected Action<IEnumerable<TwitterStatus>, TwitterResponse> _action;
         protected int _pendingCalls;
+        protected List<string> _processedStatus;
 
         public ConversationService(UserToken account)
         {
             _account = account;
             _pendingCalls = 0;
+            _processedStatus = new List<string>();
         }
 
-        public void GetRepliesForStatus(string Id, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
+        public void GetConversationForStatus(string Id, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
         {
+            _action = action;
+            GetReplies(Id);
+            GetReplied(long.Parse(Id));            
+        }
+        public void GetConversationForStatus(TwitterStatus status, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
+        {
+            GetConversationForStatus(status.Id.ToString(), action);
+        }
+
+        protected void GetReplies(string Id)
+        {
+            if (_processedStatus.Contains("a" + Id))
+                return;
+
+            _processedStatus.Add("a" + Id);
+
             RestRequest req = PrepareRestRequest(Id);
             RestClient client = GetRestClient();
-            _action = action;
 
             _pendingCalls++;
             client.BeginRequest(req, Callback, null);
+        }
+
+        protected void GetReplied(long Id)
+        {
+            if (_processedStatus.Contains("b" + Id.ToString()))
+                return;
+
+            _processedStatus.Add("b" + Id.ToString());
 
             TwitterService srv = ServiceDispatcher.GetService(_account);
             _pendingCalls++;
-            srv.GetTweet(long.Parse(Id), ReceiveSingleTweet);
-        }
-        public void GetRepliesForStatus(TwitterStatus status, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
-        {
-            GetRepliesForStatus(status.Id.ToString(), action);
+            srv.GetTweet(Id, ReceiveSingleTweet);
         }
 
         protected RestRequest PrepareRestRequest(string id)
@@ -93,6 +114,7 @@ namespace Ocell.Library.Twitter
             {
                 if (action != null)
                     action.Invoke(new List<TwitterStatus>(), new TwitterResponse(response));
+                TryFinish();
                 return;
             }
 
@@ -108,7 +130,7 @@ namespace Ocell.Library.Twitter
             }
 
             foreach (var status in statuses)
-                GetRepliesForStatus(status, _action);
+                GetConversationForStatus(status, _action);
 
             if(action != null)
                 action.Invoke(statuses, new TwitterResponse(response));
@@ -126,10 +148,9 @@ namespace Ocell.Library.Twitter
 
             list.Add(status);
             if (status.InReplyToStatusId != null)
-            {
-                _pendingCalls++;
-                ServiceDispatcher.GetService(_account).GetTweet((long)status.InReplyToStatusId, ReceiveSingleTweet);
-            }
+                GetReplied((long)status.InReplyToStatusId);
+
+            GetReplies(status.Id.ToString());
 
             if(_action != null)
                 _action.Invoke(list, response);
@@ -167,6 +188,7 @@ namespace Ocell.Library.Twitter
                     pos++;
                 }
                 yield return value;
+                valueStart = result.IndexOf("value\":", pos);
             }
         }
 

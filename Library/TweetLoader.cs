@@ -65,7 +65,7 @@ namespace Ocell.Library.Twitter
 
         public TweetLoader()
         {
-            TweetsToLoadPerRequest = 25;
+            TweetsToLoadPerRequest = 40;
             _loaded = 0;
             Source = new ObservableCollection<TweetSharp.ITweetable>();
             LastId = 0;
@@ -195,7 +195,7 @@ namespace Ocell.Library.Twitter
                     _srv.ListTweetsOnSpecifiedUserTimeline(Resource.Data, TweetsToLoadPerRequest, true, ReceiveTweets);
                     break;
                 case ResourceType.Conversation:
-                    _conversationService.GetRepliesForStatus(Resource.Data, ReceiveTweets);
+                    _conversationService.GetConversationForStatus(Resource.Data, ReceiveTweets);
                     break;
             }
         }
@@ -240,7 +240,7 @@ namespace Ocell.Library.Twitter
                     _srv.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, last, true, ReceiveTweets);
                     break;
                 case ResourceType.Conversation:
-                    _conversationService.GetRepliesForStatus(Resource.Data, ReceiveTweets);
+                    _conversationService.GetConversationForStatus(Resource.Data, ReceiveTweets);
                     break;
             }
         }
@@ -323,19 +323,11 @@ namespace Ocell.Library.Twitter
             if (list.Any())
                 LastId = list.Last().Id;
 
+            if (LoadFinished != null && _resource.Type != ResourceType.Conversation)
+                LoadFinished(this, new EventArgs());
+            else if (PartialLoad != null && _resource.Type == ResourceType.Conversation)
+                PartialLoad(this, new EventArgs()); // When loading conversations, calls to this function will be partial.
 
-            if (_loaded < _toLoad && list.Any())
-            {
-                LoadOld(LastId);
-                if (PartialLoad != null)
-                    PartialLoad(this, new EventArgs());
-            }
-            else
-            {
-                _loaded = 0;
-                if (LoadFinished != null)
-                    LoadFinished(this, new EventArgs());
-            }
 
             SaveToCacheThreaded();
         }

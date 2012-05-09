@@ -67,6 +67,7 @@ namespace Ocell.Pages.Elements
             
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
             CList.Loader.LoadFinished += new EventHandler(LoadFinished);
+            CList.Loader.Cached = false;
             CList.Loader.Load();
             
         }
@@ -80,65 +81,7 @@ namespace Ocell.Pages.Elements
         {
             
         }
-        
-        private void MoreConversation()
-        {
-            TwitterStatus status = Source.LastOrDefault();
-
-            if(status == null)
-            {
-                EndLoad();
-                return;
-            }
-
-            pendingCalls++;
-            replies.GetRepliesForStatus(status, ReceiveTweets);
-
-            if (status.InReplyToStatusId == null) 
-            { 
-                EndLoad(); 
-                return; 
-            }
-
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-            pendingCalls++;
-            ServiceDispatcher.GetCurrentService().GetTweet((long)status.InReplyToStatusId, ReceiveTweet);
-        }
-
-        private void ReceiveTweets(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
-        {
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                EndLoad();
-                return;
-            }
-
-            foreach (var status in statuses)
-            {
-                pendingCalls++;
-                ReceiveTweet(status, response);
-            }
-
-            EndLoad();
-        }
-
-        private void ReceiveTweet(TwitterStatus status, TwitterResponse response)
-        {
-            if(status == null || response.StatusCode != HttpStatusCode.OK)
-            {
-               EndLoad();
-               return;
-            }
-
-            Dispatcher.BeginInvoke(() =>
-            {
-                if(!Source.Contains(status))
-                    Source.Add(status);
-            });
-
-            MoreConversation();
-            EndLoad();
-        }
+    
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!selectionChangeFired)
