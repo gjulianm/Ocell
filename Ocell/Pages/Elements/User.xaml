@@ -60,6 +60,7 @@
         	<shell:ApplicationBar.MenuItems>
         		<shell:ApplicationBarMenuItem x:Name="blockBtn" Text="block" Click="blockBtn_Click"/>
         		<shell:ApplicationBarMenuItem x:Name="spamBtn" Text="block &amp; report spam" Click="spamBtn_Click"/>
+        		<shell:ApplicationBarMenuItem x:Name="ManageLists" Text="manage lists for user..." Click="ManageLists_Click"/>
         	</shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>

@@ -89,6 +89,12 @@
     <Compile Include="Pages\Columns\SelectAccount.xaml.cs">
       <DependentUpon>SelectAccount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Lists\CreateList.xaml.cs">
+      <DependentUpon>CreateList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Lists\ListManager.xaml.cs">
+      <DependentUpon>ListManager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Search\EnterSearch.xaml.cs">
       <DependentUpon>EnterSearch.xaml</DependentUpon>
     </Compile>
@@ -180,6 +186,14 @@
     <Page Include="Pages\Elements\DMView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Lists\CreateList.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Lists\ListManager.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Search\EnterSearch.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>

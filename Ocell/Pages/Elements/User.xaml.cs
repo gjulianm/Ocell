@@ -319,5 +319,10 @@ namespace Ocell.Pages.Elements
                     Dispatcher.BeginInvoke(() => Notificator.ShowMessage("User could not be blocked.", pBar));
             });
         }
+
+        private void ManageLists_Click(object sender, System.EventArgs e)
+        {
+            Dispatcher.BeginInvoke(() => NavigationService.Navigate(new Uri("/Pages/Lists/ListManager.xaml?user=" + CurrentUser.ScreenName, UriKind.Relative)));
+        }
     }
 }
