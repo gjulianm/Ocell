@@ -21,6 +21,7 @@ namespace Ocell.Library
         private const string FiltersKey = "FILTERS";
         private const string GlobalFilterKey = "GLOBALFILTER";
         private const string RTAsMentionsKey = "RTASMENTIONS";
+        private const string TweetsPerReqKey = "TWEETSXREQ";
 
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
@@ -31,6 +32,19 @@ namespace Ocell.Library
         private static List<ColumnFilter> _filters;
         private static ColumnFilter _globalFilter;
         private static bool? _retweetAsMentions;
+        private static int? _tweetsPerRequest;
+
+        public static int? TweetsPerRequest
+        {
+            get
+            {
+                return GenericGetFromConfig<int?>(TweetsPerReqKey, ref _tweetsPerRequest);
+            }
+            set
+            {
+                GenericSaveToConfig<int?>(TweetsPerReqKey, ref _tweetsPerRequest, value);
+            }
+        }
 
         public static bool? RetweetAsMentions
         {
