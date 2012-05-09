@@ -21,14 +21,15 @@ namespace Ocell.Pages.Elements
         private ApplicationBarIconButton _favButton;
         private ContextMenu _menuOpened;
         private ConversationService _conversation;
+        private ApplicationBarMenuItem _removeTweet;
 
         public Tweet()
         {
-            InitializeComponent(); 
+            InitializeComponent();
             ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
             CreateFavButton();
 
-            this.Loaded += new RoutedEventHandler(Tweet_Loaded); 
+            this.Loaded += new RoutedEventHandler(Tweet_Loaded);
         }
 
         void CreateFavButton()
@@ -67,13 +68,14 @@ namespace Ocell.Pages.Elements
             }
 
             _conversation = new ConversationService(DataTransfer.CurrentAccount);
-            
-            if(DataTransfer.Status.RetweetedStatus != null)
+
+            if (DataTransfer.Status.RetweetedStatus != null)
                 status = DataTransfer.Status.RetweetedStatus;
             else
                 status = DataTransfer.Status;
 
-            _conversation.CheckIfReplied(status, (replied) => {
+            _conversation.CheckIfReplied(status, (replied) =>
+            {
                 if (replied)
                     Dispatcher.BeginInvoke(() => Replies.Visibility = Visibility.Visible);
             });
@@ -91,8 +93,29 @@ namespace Ocell.Pages.Elements
             SetUsername();
             CheckForRetweets();
             SetImage();
+            CheckIfCanDelete();
 
             ContentPanel.UpdateLayout();
+        }
+
+        private void CheckIfCanDelete()
+        {
+            UserToken user = Config.Accounts.FirstOrDefault(item => item != null && item.ScreenName == status.Author.ScreenName);
+            if (user != null && _removeTweet == null)
+            {
+                _removeTweet = new ApplicationBarMenuItem("delete tweet");
+                _removeTweet.Click += (sender, e) =>
+                {
+                    ServiceDispatcher.GetService(user).DeleteTweet(status.Id, (s, response) =>
+                    {
+                        if (response.StatusCode == HttpStatusCode.OK)
+                            Dispatcher.BeginInvoke(() => MessageBox.Show("Tweet deleted! (Note that it could take a few minutes to disappear completely from your streams)"));
+                        else
+                            Dispatcher.BeginInvoke(() => MessageBox.Show("An error has occurred."));
+                    });
+                };
+                ApplicationBar.MenuItems.Add(_removeTweet);
+            }
         }
 
         private void CheckForRetweets()
@@ -109,9 +132,11 @@ namespace Ocell.Pages.Elements
                 foreach (var rt in rts)
                     users.Add(rt.Author);
 
-                Dispatcher.BeginInvoke((() => {RTList.ItemsSource = users;
-                RTList.Visibility = System.Windows.Visibility.Visible;
-                usersText.Visibility = Visibility.Visible;
+                Dispatcher.BeginInvoke((() =>
+                {
+                    RTList.ItemsSource = users;
+                    RTList.Visibility = System.Windows.Visibility.Visible;
+                    usersText.Visibility = Visibility.Visible;
                 }));
             }
         }
@@ -155,7 +180,7 @@ namespace Ocell.Pages.Elements
                 var photo = status.Entities.Media.First();
                 gotoUri = new Uri(photo.DisplayUrl, UriKind.Absolute);
                 uriSource = new Uri(photo.MediaUrl, UriKind.Absolute);
-                
+
             }
             else if (status.Entities.Urls != null && status.Entities.Urls.Any())
             {
@@ -165,7 +190,9 @@ namespace Ocell.Pages.Elements
                     {
                         var url = i as TwitterUrl;
                         if (url.ExpandedValue.Contains("http://yfrog.com/"))
-                        { 
+                        {
+                            gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
+                            uriSource = new Uri(url.ExpandedValue + ":iphone", UriKind.Absolute);
                         }
                     }
                 }
@@ -261,7 +288,8 @@ namespace Ocell.Pages.Elements
             }
 
             if (i < TweetText.Length)
-                runs.Add(new Run{
+                runs.Add(new Run
+                {
                     Text = HttpUtility.HtmlDecode(TweetText.Substring(i))
                 });
 
@@ -294,7 +322,7 @@ namespace Ocell.Pages.Elements
             return link;
         }
 
-        
+
 
         Inline CreateMentionLink(TwitterMention Mention)
         {
@@ -303,7 +331,7 @@ namespace Ocell.Pages.Elements
             link.FontWeight = FontWeights.Bold;
             link.TextDecorations = null;
             link.Click += new RoutedEventHandler(link_Click);
-            link.Foreground = (System.Windows.Media.Brush)Application.Current.Resources["PhoneContrastForegroundBrush"];
+            link.Foreground = (System.Windows.Media.Brush)Application.Current.Resources["PhoneAccentBrush"];
 
             ContextMenu menu = new ContextMenu();
             MenuItem item = new MenuItem();
@@ -326,9 +354,9 @@ namespace Ocell.Pages.Elements
         {
             var link = new Hyperlink();
             link.Inlines.Add(new Run() { Text = TweetTextConverter.TrimUrl(URL.ExpandedValue) });
-            link.Foreground = (System.Windows.Media.Brush)Application.Current.Resources["PhoneContrastForegroundBrush"];
             link.TextDecorations = null;
-            link.TargetName = URL.ExpandedValue;            
+            link.TargetName = URL.ExpandedValue;
+            link.Foreground = (System.Windows.Media.Brush)Application.Current.Resources["PhoneAccentBrush"];
             link.Click += new RoutedEventHandler(link_Click);
 
             ContextMenu menu = new ContextMenu();
@@ -356,6 +384,7 @@ namespace Ocell.Pages.Elements
             link.TextDecorations = null;
             link.TargetName = Media.ExpandedUrl;
             link.Click += new RoutedEventHandler(link_Click);
+            link.Foreground = (System.Windows.Media.Brush)Application.Current.Resources["PhoneAccentBrush"];
 
             ContextMenu menu = new ContextMenu();
             MenuItem item = new MenuItem();
@@ -364,11 +393,11 @@ namespace Ocell.Pages.Elements
             item.Tag = Media.DisplayUrl;
             menu.Items.Add(item);
             ContextMenuService.SetContextMenu(link, menu);
-            
+
             GestureListener listener = GestureService.GetGestureListener(link);
             if (listener != null)
             {
-                listener.Hold += new EventHandler<GestureEventArgs>(OpenContextMenu);   
+                listener.Hold += new EventHandler<GestureEventArgs>(OpenContextMenu);
             }
 
             return link;
@@ -410,7 +439,7 @@ namespace Ocell.Pages.Elements
         private void ImageClick(object sender, EventArgs e)
         {
             System.Windows.Controls.Image Img = sender as System.Windows.Controls.Image;
-            if(Img != null)
+            if (Img != null)
                 NavigationService.Navigate(new Uri("/Pages/Elements/ImageView.xaml?img=" + Img.Tag.ToString(), UriKind.Relative));
         }
 
@@ -437,7 +466,7 @@ namespace Ocell.Pages.Elements
                 DataTransfer.Search = link.TargetName;
                 NavigationService.Navigate(new Uri("/Pages/Search/Search.xaml?q=" + link.TargetName, UriKind.Relative));
             }
-              
+
         }
 
         private void replyButton_Click(object sender, EventArgs e)
@@ -516,7 +545,7 @@ namespace Ocell.Pages.Elements
         {
             NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + status.Author.ScreenName, UriKind.Relative));
         }
-        
+
         private void Replies_Tap(object sender, EventArgs e)
         {
             NavigationService.Navigate(Uris.Conversation);
@@ -525,7 +554,7 @@ namespace Ocell.Pages.Elements
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             var Img = sender as System.Windows.Controls.Image;
-            if(Img != null && Img.Tag is ITweeter)
+            if (Img != null && Img.Tag is ITweeter)
                 NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + (Img.Tag as ITweeter).ScreenName, UriKind.Relative));
         }
     }
