@@ -181,6 +181,7 @@ namespace Ocell
 
         void ShowLoginMsg()
         {
+            Config.TweetsPerRequest = 40;
             Dispatcher.BeginInvoke(() =>
             {
                 MessageBoxResult r = MessageBox.Show("You have to log in with Twitter in order to use Ocell.", "", MessageBoxButton.OKCancel);
@@ -246,6 +247,10 @@ namespace Ocell
             list.Loader.ActivateLoadMoreButton = true;
             if (Config.RetweetAsMentions == null)
                 Config.RetweetAsMentions = true;
+            if (Config.TweetsPerRequest == null)
+                Config.TweetsPerRequest = 40;
+
+            list.Loader.TweetsToLoadPerRequest = (int)Config.TweetsPerRequest;
             list.Loader.LoadRetweetsAsMentions = (bool)Config.RetweetAsMentions;
 
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);

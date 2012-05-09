@@ -7,20 +7,21 @@
 	xmlns:custom="clr-namespace:Ocell.Controls"
 	>
 	<phone:PhoneApplicationPage.Resources>
+		<custom:ExtendedListBox x:Key="ExtendedListBoxDataSource" d:IsDataSource="True"/>
 		<DataTemplate x:Key="DataTemplate1">
 			<Grid/>
 		</DataTemplate>
 
         <DataTemplate x:Key="AccountsContextTemplate">
             <Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">
-                <TextBlock Text="{Binding ScreenName}" Margin="89,21,8,21" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="24"/>
-                <Image Margin="8,8,0,0" HorizontalAlignment="Left" Width="64" Height="64" VerticalAlignment="Top" Source="{Binding AvatarUrl}"/>
                 <toolkit:ContextMenuService.ContextMenu>
-                    <toolkit:ContextMenu Name="ContextMenu2">
+                    <toolkit:ContextMenu x:Name="ContextMenu2">
                         <toolkit:MenuItem Header="delete" Command="{StaticResource DeleteCommand}" CommandParameter="{Binding}" Click="MenuItem_Click" />
                         <toolkit:MenuItem Header="{Binding Converter={StaticResource ProtectedConverter}}" Command="{StaticResource ProtectCommand}" CommandParameter="{Binding}"  Click="MenuItem_Click" />
                     </toolkit:ContextMenu>
                 </toolkit:ContextMenuService.ContextMenu>
+                <TextBlock Text="{Binding ScreenName}" Margin="89,21,8,21" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="24"/>
+                <Image Margin="8,8,0,0" HorizontalAlignment="Left" Width="64" Height="64" VerticalAlignment="Top" Source="{Binding AvatarUrl}"/>
             </Grid>
         </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
@@ -74,6 +75,22 @@
 			</Grid.Background>
 		<controls:Pivot Title="OCELL - SETTINGS" Margin="0,60,0,0">
 
+			<controls:PivotItem Header="settings">
+				<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+					<Grid Height="859">
+						<toolkit:ToggleSwitch x:Name="RetweetsInMentions" Header="Show retweets as mentions" VerticalAlignment="Top" Checked="RetweetsInMentions_Checked" Unchecked="RetweetsInMentions_Checked" Margin="0,108,0,0"/>
+						<toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="Update tiles in the background" Margin="0,247,0,0" Checked="ColumnUpdate_Checked" Unchecked="ColumnUpdate_Checked" VerticalAlignment="Top"/>
+						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,289" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Height="96" VerticalAlignment="Bottom"><Run Text="To add columns tiles, go to the main page and press &quot;pin column to start&quot; in the bottom bar."/><LineBreak/><Run/></TextBlock>
+						<Button x:Name="ComposePin" Content="Pin compose tile to start" HorizontalAlignment="Left" Margin="52,378,0,0" Width="344" Click="ComposePin_Click" VerticalAlignment="Top"/>
+						<TextBlock HorizontalAlignment="Left" Margin="8,214,0,0" TextWrapping="Wrap" Text="Tiles" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24"/>
+						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,281" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" RenderTransformOrigin="0.5,0.507" Text="Global filter"/>
+						<Button x:Name="filter_btn" Content="Edit global filters" HorizontalAlignment="Left" Margin="52,0,0,208" VerticalAlignment="Bottom" Width="344" Click="FilterClick"/>
+						<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Tweets to load per request" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
+						<TextBox x:Name="tweetsPerReq" Margin="0,39,8,0" TextWrapping="Wrap" VerticalAlignment="Top" InputScope="Number" TextChanged="tweetsPerReq_TextChanged"/>
+					</Grid>
+				</ScrollViewer>
+			</controls:PivotItem>
+
 			<controls:PivotItem Header="accounts" Margin="12,0">
 				<Grid Height="608" Margin="0,-9,0,0">
 					<Button Content="Add account" Height="72" Margin="35,286,34,250" x:Name="btnLogin" Width="379" Click="btnLogin_Click" />
@@ -99,19 +116,6 @@
 						<toolkit:ListPickerItem x:Name="Toast1" Content="Toast and Tile"/>
 					</toolkit:ListPicker>
 				</Grid>
-			</controls:PivotItem>
-			<controls:PivotItem Header="other">
-				<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-					<Grid>
-						<toolkit:ToggleSwitch x:Name="RetweetsInMentions" Header="Show retweets in the mentions column" VerticalAlignment="Top" Checked="RetweetsInMentions_Checked" Unchecked="RetweetsInMentions_Checked"/>
-						<toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="Update tiles in the background" Margin="0,139,0,0" VerticalAlignment="Top" Checked="ColumnUpdate_Checked" Unchecked="ColumnUpdate_Checked"/>
-						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,109" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Height="96" VerticalAlignment="Bottom"><Run Text="To add columns tiles, go to the main page and press &quot;pin column to start&quot; in the bottom bar."/><LineBreak/><Run/></TextBlock>
-						<Button x:Name="ComposePin" Content="Pin compose tile to start" HorizontalAlignment="Left" Margin="52,270,0,0" Width="344" Click="ComposePin_Click" VerticalAlignment="Top"/>
-						<TextBlock HorizontalAlignment="Left" Margin="8,106,0,0" TextWrapping="Wrap" Text="Tiles" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24"/>
-						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,101" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" RenderTransformOrigin="0.5,0.507" Text="Global filter"/>
-						<Button x:Name="filter_btn" Content="Edit global filters" HorizontalAlignment="Left" Margin="52,0,0,28" VerticalAlignment="Bottom" Width="344" Click="FilterClick"/>
-					</Grid>
-				</ScrollViewer>
 			</controls:PivotItem>
 		</controls:Pivot>
 

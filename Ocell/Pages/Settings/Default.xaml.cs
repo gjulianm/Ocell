@@ -140,6 +140,9 @@ namespace Ocell.Settings
             ColumnUpdate.IsChecked = Config.BackgroundLoadColumns;
             RetweetsInMentions.IsChecked = Config.RetweetAsMentions;
             ComposePin.IsEnabled = !SecondaryTiles.ComposeTileIsCreated();
+            if (Config.TweetsPerRequest == null)
+                Config.TweetsPerRequest = 40;
+            tweetsPerReq.Text = Config.TweetsPerRequest.ToString();
 
             if(Config.Accounts != null && Config.Accounts.Count > 0)
                 Accounts_Not.SelectedIndex = 0;
@@ -205,6 +208,15 @@ namespace Ocell.Settings
         private void RetweetsInMentions_Checked(object sender, System.Windows.RoutedEventArgs e)
         {
             Config.RetweetAsMentions = (bool)RetweetsInMentions.IsChecked;
+        }
+
+        private void tweetsPerReq_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+        	int num;
+			if(int.TryParse(tweetsPerReq.Text, out num))
+			{
+				Config.TweetsPerRequest = num;
+			}
         }
     }
 }
