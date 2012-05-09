@@ -54,10 +54,17 @@ namespace Ocell.Pages.Elements
                 User = DataTransfer.CurrentAccount
             };
 
-            if (CList.Loader != null)
+            if (CList.Loader == null)
             {
+                CList.Loader = new TweetLoader(resource);
+            }
+
+            if (CList.Loader.Resource != resource)
+            {
+                CList.Loader.Source.Clear();
                 CList.Loader.Resource = resource;
             }
+            
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
             CList.Loader.LoadFinished += new EventHandler(LoadFinished);
             CList.Loader.Load();
