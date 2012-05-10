@@ -178,7 +178,7 @@ namespace Ocell.Pages.Elements
             if (status.Entities.Media != null && status.Entities.Media.Any())
             {
                 var photo = status.Entities.Media.First();
-                gotoUri = new Uri(photo.DisplayUrl, UriKind.Absolute);
+                gotoUri = new Uri(photo.ExpandedUrl, UriKind.Absolute);
                 uriSource = new Uri(photo.MediaUrl, UriKind.Absolute);
 
             }
@@ -194,6 +194,22 @@ namespace Ocell.Pages.Elements
                             gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
                             uriSource = new Uri(url.ExpandedValue + ":iphone", UriKind.Absolute);
                         }
+                        else if (url.ExpandedValue.Contains("http://twitpic.com/"))
+                        {
+                            gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
+                            uriSource = new Uri("http://twitpic.com/show/thumb" + url.ExpandedValue.Substring(url.ExpandedValue.LastIndexOf('/')), UriKind.Relative);
+                        }
+                        else if (url.ExpandedValue.Contains("http://instagr.am/"))
+                        {
+                            gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
+                            string idcode;
+                            if(url.ExpandedValue.Last() == '/')
+                                idcode = url.ExpandedValue.Substring(0, url.ExpandedValue.Length-1);
+                            else
+                                idcode = url.ExpandedValue;
+                            idcode = idcode.Substring(idcode.LastIndexOf('/') + 1);
+                            uriSource = new Uri("http://instagr.am/p/" + idcode + "/media/?size=m", UriKind.Absolute);
+                        }
                     }
                 }
             }
@@ -206,8 +222,20 @@ namespace Ocell.Pages.Elements
                 pBar.Text = "Downloading image...";
                 pBar.IsVisible = true;
             });
+            img.MinWidth = 415.0;
             img.Source = new System.Windows.Media.Imaging.BitmapImage(uriSource);
-            img.ImageOpened += (sender, e) => { Dispatcher.BeginInvoke(() => { pBar.Text = ""; pBar.IsVisible = false; }); };
+            img.ImageOpened += (sender, e) => { 
+                Dispatcher.BeginInvoke(() => { pBar.Text = ""; pBar.IsVisible = false; }); 
+            };
+            img.ImageFailed += (sender, e) =>
+            {
+                Dispatcher.BeginInvoke(() =>
+                { 
+                    pBar.Text = ""; 
+                    pBar.IsVisible = false;
+                    MessageBox.Show("Error downloading image.");
+                }); 
+            };
             img.Tap += (sender, e) =>
             {
                 Dispatcher.BeginInvoke(() =>
@@ -309,7 +337,6 @@ namespace Ocell.Pages.Elements
             link.TextDecorations = null;
             link.TargetName = "#" + Hashtag.Text;
             link.Click += new RoutedEventHandler(link_Click);
-            link.Foreground = (System.Windows.Media.Brush)Application.Current.Resources["PhoneContrastForegroundBrush"];
 
             ContextMenu menu = new ContextMenu();
             MenuItem item = new MenuItem();
@@ -331,7 +358,6 @@ namespace Ocell.Pages.Elements
             link.FontWeight = FontWeights.Bold;
             link.TextDecorations = null;
             link.Click += new RoutedEventHandler(link_Click);
-            link.Foreground = (System.Windows.Media.Brush)Application.Current.Resources["PhoneAccentBrush"];
 
             ContextMenu menu = new ContextMenu();
             MenuItem item = new MenuItem();
@@ -356,7 +382,6 @@ namespace Ocell.Pages.Elements
             link.Inlines.Add(new Run() { Text = TweetTextConverter.TrimUrl(URL.ExpandedValue) });
             link.TextDecorations = null;
             link.TargetName = URL.ExpandedValue;
-            link.Foreground = (System.Windows.Media.Brush)Application.Current.Resources["PhoneAccentBrush"];
             link.Click += new RoutedEventHandler(link_Click);
 
             ContextMenu menu = new ContextMenu();

@@ -99,21 +99,21 @@
         <!--ContentPanel. Colocar aquí el contenido adicional-->
         <Grid x:Name="ContentPanel" Margin="12,-15,8,8" Grid.Row="1">
         	<ScrollViewer Margin="1,0,12,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
-        		<Grid VerticalAlignment="Top">
+        		<Grid VerticalAlignment="Top" Height="798">
         			<Grid Height="99" Margin="7,0,117,0" VerticalAlignment="Top" Tap="Grid_Tap" toolkit:TiltEffect.IsTiltEnabled="True">
         				<Image x:Name="Avatar" HorizontalAlignment="Left" Margin="0,8,0,0" Width="85" RenderTransformOrigin="0.475,0.52" Source="{Binding Author.ProfileImageUrl}"/>
         				<TextBlock x:Name="FName" Margin="94,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" FontSize="32" HorizontalAlignment="Left" Text="{Binding Author.Name}" Width="238"/>
         				<TextBlock x:Name="SName" Margin="94,42,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" Text="" FontSize="21.333" FontFamily="Segoe WP SemiLight"/>
         			</Grid>
         			<RichTextBox x:Name="Text" TextWrapping="Wrap" HorizontalAlignment="Left" Width="440" FontSize="29.333" VerticalAlignment="Top" Margin="0,110,0,0" IsReadOnly="True" FontFamily="Segoe WP SemiLight" />
-        			<Grid x:Name="SecondBlock" Height="452" Margin="8,0,8,-92" VerticalAlignment="Top">
+        			<Grid x:Name="SecondBlock" Height="646" Margin="8,0" VerticalAlignment="Top">
         				<TextBlock x:Name="ViaDate" HorizontalAlignment="Right" Margin="0,8,14,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="18.667" Foreground="#FFABABAB" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP Light" d:LayoutOverrides="VerticalAlignment" Height="28"/>
         				<TextBlock x:Name="Replies" Tap="Replies_Tap" Margin="0,40,13,0" TextWrapping="Wrap" Text="Conversation" VerticalAlignment="Top" FontSize="21.333" Foreground="{StaticResource PhoneAccentBrush}" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP" HorizontalAlignment="Right" Visibility="Collapsed"/>
         				<TextBlock x:Name="usersText" Margin="8,76,213,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" Visibility="Collapsed"><Run Text="Users who re"/><Run Text="tweeted:"/></TextBlock>
         				<ListBox x:Name="RTList" Margin="8,107,14,0" Height="65"  VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ItemsPanel="{StaticResource PanelTemplate}" ItemTemplate="{StaticResource RetweetUserTemplate}">
         					</ListBox>
+        				<Image x:Name="img" Margin="15,182,15,0" VerticalAlignment="Top" Width="401" Stretch="UniformToFill"/>
         			</Grid>
-        			<Image x:Name="img" Margin="8,0,8,26" VerticalAlignment="Bottom"/>
         		</Grid>
         	</ScrollViewer>
         </Grid>
