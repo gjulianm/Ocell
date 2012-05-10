@@ -7,11 +7,6 @@
 	xmlns:custom="clr-namespace:Ocell.Controls"
 	>
 	<phone:PhoneApplicationPage.Resources>
-		<custom:ExtendedListBox x:Key="ExtendedListBoxDataSource" d:IsDataSource="True"/>
-		<DataTemplate x:Key="DataTemplate1">
-			<Grid/>
-		</DataTemplate>
-
         <DataTemplate x:Key="AccountsContextTemplate">
             <Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">
                 <toolkit:ContextMenuService.ContextMenu>
@@ -116,6 +111,43 @@
 						<toolkit:ListPickerItem x:Name="Toast1" Content="Toast and Tile"/>
 					</toolkit:ListPicker>
 				</Grid>
+			</controls:PivotItem>
+			<controls:PivotItem Header="about">
+				<Grid>
+					<Image Height="128" Margin="156,8,172,0" Source="OcellIcon200.png" Stretch="Fill" VerticalAlignment="Top"/>
+				<RichTextBox Margin="8,148,8,0" VerticalAlignment="Top" Height="436">
+					<Paragraph><Run Text="Ocell is a open source (ASL) twitter client for Windows Phone, developed by "/><Run Text=" "/><Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=gjulianm"><Run Text="Guillermo Julián">
+								<Run.Foreground>
+									<SolidColorBrush Color="White">
+										<SolidColorBrush.RelativeTransform>
+											<MatrixTransform Matrix="Identity"/>
+										</SolidColorBrush.RelativeTransform>
+										<SolidColorBrush.Transform>
+											<MatrixTransform Matrix="Identity"/>
+										</SolidColorBrush.Transform>
+									</SolidColorBrush>
+								</Run.Foreground>
+							</Run></Hyperlink><Run Text=" "/><Run Text=". You can follow "/><Run Text=" "/><Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=OcellApp"><Run Text="@OcellApp">
+								<Run.Foreground>
+									<SolidColorBrush Color="White">
+										<SolidColorBrush.RelativeTransform>
+											<MatrixTransform Matrix="Identity"/>
+										</SolidColorBrush.RelativeTransform>
+										<SolidColorBrush.Transform>
+											<MatrixTransform Matrix="Identity"/>
+										</SolidColorBrush.Transform>
+									</SolidColorBrush>
+								</Run.Foreground>
+							</Run><Run Text=" "/></Hyperlink><Run Text="on Twitter to receive the lastest updates about Ocell."/></Paragraph>
+					<Paragraph><Run/></Paragraph>
+					<Paragraph><Run FontWeight="Bold" Text="Tips:"/></Paragraph>
+					<Paragraph><Run Text="   - Pin your favourite columns to the start screen with the &quot;Pin to start&quot; button in the main page."/></Paragraph>
+					<Paragraph><Run/></Paragraph>
+					<Paragraph><Run Text="   - To protect accounts go to Settings -&gt; Accounts, tap and hold one account and choose &quot;Protect&quot;. Never tweet from the wrong account again!"/></Paragraph>
+					<Paragraph><Run/></Paragraph>
+				</RichTextBox>
+			</Grid>
+				
 			</controls:PivotItem>
 		</controls:Pivot>
 
