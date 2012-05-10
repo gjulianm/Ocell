@@ -55,11 +55,11 @@
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
             <shell:ApplicationBar.MenuItems>
             	<shell:ApplicationBarMenuItem x:Name="pinToStart" Text="pin column to start" Click="pinToStart_Click"/>
-            	<shell:ApplicationBarMenuItem x:Name="Trending" Text="trending topics" Click="Trending_Click"/>
                 <shell:ApplicationBarMenuItem Text="filter this column" Click="ApplicationBarMenuItem_Click"/>
-                <shell:ApplicationBarMenuItem x:Name="menuItem1" Text="settings" Click="menuItem1_Click" />
+            	<shell:ApplicationBarMenuItem x:Name="Trending" Text="trending topics" Click="Trending_Click"/>
                 <shell:ApplicationBarMenuItem x:Name="myprofile" Text="my profile" Click="myprofile_Click"/>
-                <shell:ApplicationBarMenuItem x:Name="about" Text="about" Click="about_Click"/>
+                <shell:ApplicationBarMenuItem x:Name="GoToUserBtn" Text="go to user..." Click="GoToUserBtn_Click"/>
+                <shell:ApplicationBarMenuItem x:Name="menuItem1" Text="settings" Click="menuItem1_Click" />
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton x:Name="compose" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="Compose" Click="compose_Click" />
             <shell:ApplicationBarIconButton x:Name="add" IconUri="/Images/Icons_White/appbar.columns.rest.png" Text="columns" Click="add_Click"/>
@@ -91,6 +91,11 @@
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>
+        <Grid x:Name="GoToUserGrid" Height="104" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Visibility="Collapsed">
+        	<TextBlock TextWrapping="Wrap" Text="User name:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="13,8,0,0"/>
+        	<TextBox x:Name="UserNameBox" TextWrapping="Wrap" d:LayoutOverrides="Height" Margin="0,32,168,0"/>
+        	<Button x:Name="GoUser" Content="Go" HorizontalAlignment="Right" Margin="0,0,8,0" VerticalAlignment="Bottom" Width="156" Click="GoUser_Click"/>
+        </Grid>
     </Grid>
 
 </phone:PhoneApplicationPage>

@@ -101,7 +101,6 @@ namespace Ocell
             _initialised = true;
         }
 
-
         void NavigateToColumn(string Column)
         {
             TwitterResource Resource = pivots.FirstOrDefault(item => item.String == Column);
@@ -420,5 +419,21 @@ namespace Ocell
                 NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + DataTransfer.CurrentAccount.ScreenName, UriKind.Relative));
         }
 
+        private void GoToUserBtn_Click(object sender, System.EventArgs e)
+        {
+            Dispatcher.BeginInvoke(() => GoToUserGrid.Visibility = Visibility.Visible);
+            this.BackKeyPress += HideUserGrid;
+        }
+        private void HideUserGrid(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Dispatcher.BeginInvoke(() => GoToUserGrid.Visibility = Visibility.Collapsed);
+            this.BackKeyPress -= HideUserGrid;
+        }
+
+        private void GoUser_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(() => GoToUserGrid.Visibility = Visibility.Collapsed);
+            NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + UserNameBox.Text, UriKind.Relative));
+        }
     }
 }
