@@ -20,6 +20,7 @@ namespace Ocell.Library.Twitter
         public bool Cached { get; set; }
         public bool ActivateLoadMoreButton { get; set; }
         public bool LoadRetweetsAsMentions { get; set; }
+        public int CacheSize { get; set; }
         private int _requestsInProgress;
         protected TwitterResource _resource;
         private static DateTime _rateResetTime;
@@ -66,6 +67,7 @@ namespace Ocell.Library.Twitter
         public TweetLoader()
         {
             TweetsToLoadPerRequest = 40;
+            CacheSize = 40;
             _loaded = 0;
             Source = new ObservableCollection<TweetSharp.ITweetable>();
             LastId = 0;
@@ -105,7 +107,7 @@ namespace Ocell.Library.Twitter
                 try
                 {
                     _cacheMutex.WaitOne();
-                    Cacher.SaveToCache(Resource, Source.OrderByDescending(item => item.Id).Cast<TwitterStatus>().Take(30));
+                    Cacher.SaveToCache(Resource, Source.OrderByDescending(item => item.Id).Cast<TwitterStatus>().Take(CacheSize));
                     _cacheMutex.ReleaseMutex();
                 }
                 catch (Exception)
