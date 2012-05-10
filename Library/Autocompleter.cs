@@ -32,7 +32,7 @@ namespace Ocell.Library
             if (_textbox == null)
                 return;
 
-            if (_textbox.Text.Length > 0 && _textbox.SelectionStart > 0 && _textbox.Text[_textbox.SelectionStart - 1] == Trigger)
+            if (_textbox.Text.Length > 0 && _textbox.SelectionStart > 0 && (Trigger != '\0' && _textbox.Text[_textbox.SelectionStart - 1] == Trigger))
             {
                 _isAutocompleting = true;
                 _triggerPosition = _textbox.SelectionStart - 1;
@@ -52,7 +52,7 @@ namespace Ocell.Library
             if (string.IsNullOrWhiteSpace(_text))
                 return true;
 
-            if (!_text.Contains(Trigger))
+            if (!_text.Contains(Trigger) && Trigger != '\0')
                 return true;
 
             if (_textbox.SelectionStart <= _text.Length && _text[_textbox.SelectionStart - 1] == ' ')
