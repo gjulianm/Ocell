@@ -1,5 +1,6 @@
 ﻿using Ocell.Library.Twitter;
 using TweetSharp;
+using System;
 
 namespace Ocell.Library.Filtering
 {
@@ -16,6 +17,7 @@ namespace Ocell.Library.Filtering
         public string Filter { get; set; }
         public IncludeOrExclude Inclusion { get; set; }
         public FilterType Type { get; set; }
+        public DateTime IsValidUntil { get; set; }
         private string getStringToCheck(ITweetable item)
         {
             if (item is LoadMoreTweetable)
@@ -43,7 +45,7 @@ namespace Ocell.Library.Filtering
             if (Filter == null)
                 Filter = "";
 
-            if (item == null)
+            if (item == null || DateTime.Now > IsValidUntil)
                 return false;
 
             string whatToCheck = getStringToCheck(item);

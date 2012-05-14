@@ -16,10 +16,11 @@
 
 	<phone:PhoneApplicationPage.Resources>
 		<DataTemplate x:Key="ItemTemplate">
-			<Grid Height="138" Width="444" Tap="Grid_Tap" Hold="Grid_Hold" toolkit:TiltEffect.IsTiltEnabled="True" Tag="{Binding}">
-				<TextBlock x:Name="inclusion" Text="{Binding Inclusion, Converter={StaticResource IncludeExcludeConverter}}" VerticalAlignment="Bottom" Margin="8,0,8,41"/>
-				<TextBlock x:Name="source" Text="{Binding Converter={StaticResource FilterTypeConverter}}" Margin="32,39,8,0" FontWeight="Bold" VerticalAlignment="Top"/>
-				<TextBlock x:Name="filter" Text="{Binding Filter}" Margin="32,0,8,10" VerticalAlignment="Bottom" FontWeight="Bold"/>
+			<Grid Height="192" Width="444" Tap="Grid_Tap" Hold="Grid_Hold" toolkit:TiltEffect.IsTiltEnabled="True" Tag="{Binding}">
+				<TextBlock x:Name="source" Text="{Binding Converter={StaticResource FilterTypeConverter}, FallbackValue=This}" Margin="32,39,8,0" FontWeight="Bold" VerticalAlignment="Top"/>
+				<TextBlock x:Name="inclusion" Text="{Binding Inclusion, Converter={StaticResource IncludeExcludeConverter}, FallbackValue=This}" Margin="8,77,8,0" VerticalAlignment="Top"/>
+				<TextBlock x:Name="filter" Text="{Binding Filter, FallbackValue=This}" Margin="32,108,8,0" FontWeight="Bold" VerticalAlignment="Top"/>
+				<TextBlock x:Name="time" Text="{Binding IsValidUntil, Converter={StaticResource FilterDateConverter},FallbackValue=This}" Margin="8,0,32,13" VerticalAlignment="Bottom" FontWeight="Bold"/>
 				<TextBlock x:Name="text" HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Don't show tweets where" VerticalAlignment="Top"/>
 			</Grid>
 		</DataTemplate>

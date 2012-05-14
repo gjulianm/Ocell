@@ -15,6 +15,7 @@ namespace Ocell.Settings
     {
         private bool _selectionChangeFired;
         private int _ProgramaticallyFiredChange = 0;
+        private bool _selectionChangeFiredPicker;
 
         public Default()
         {
@@ -27,6 +28,7 @@ namespace Ocell.Settings
             MessagesPicker.SelectionChanged += new SelectionChangedEventHandler(MessagesPicker_SelectionChanged);
             MentionsPicker.SelectionChanged += new SelectionChangedEventHandler(MentionsPicker_SelectionChanged);
             _selectionChangeFired = false;
+            _selectionChangeFiredPicker = false;
         }
 
         void MentionsPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -146,6 +148,8 @@ namespace Ocell.Settings
 
             if(Config.Accounts != null && Config.Accounts.Count > 0)
                 Accounts_Not.SelectedIndex = 0;
+
+            if (SilencePicker != null) UpdateListPicker();
         }
 
         private void BindAccounts()
@@ -217,6 +221,53 @@ namespace Ocell.Settings
 			{
 				Config.TweetsPerRequest = num;
 			}
+        }
+
+        private void ListPicker_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (!_selectionChangeFiredPicker)
+            {
+                if (SilencePicker == null)
+                    return;
+
+                switch (SilencePicker.SelectedIndex)
+                {
+                    case 0:
+                        Config.DefaultMuteTime = TimeSpan.FromHours(1);
+                        break;
+                    case 1:
+                        Config.DefaultMuteTime = TimeSpan.FromHours(8);
+                        break;
+                    case 2:
+                        Config.DefaultMuteTime = TimeSpan.FromDays(1);
+                        break;
+                    case 3:
+                        Config.DefaultMuteTime = TimeSpan.FromDays(7);
+                        break;
+                    case 4:
+                        Config.DefaultMuteTime = TimeSpan.MaxValue;
+                        break;
+                }
+            }
+            else
+            {
+                _selectionChangeFiredPicker = false;
+            }
+        }
+
+        private void UpdateListPicker()
+        {
+            _selectionChangeFiredPicker = true;
+            if (Config.DefaultMuteTime == TimeSpan.FromHours(1))
+                SilencePicker.SelectedIndex = 0;
+            else if (Config.DefaultMuteTime == TimeSpan.FromHours(8))
+                SilencePicker.SelectedIndex = 1;
+            else if (Config.DefaultMuteTime == TimeSpan.FromDays(1))
+                SilencePicker.SelectedIndex = 2;
+            else if (Config.DefaultMuteTime == TimeSpan.FromDays(7))
+                SilencePicker.SelectedIndex = 3;
+            else
+                SilencePicker.SelectedIndex = 4; 
         }
     }
 }

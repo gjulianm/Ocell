@@ -12,7 +12,7 @@
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
 	Orientation="Portrait"
-	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0"
+	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
 	>
 	
 	<phone:PhoneApplicationPage.ApplicationBar>
@@ -39,16 +39,19 @@
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
 				<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Don't show tweets where" VerticalAlignment="Top" FontSize="21.333"/>
-				<toolkit:ListPicker x:Name="Resource" Margin="8,41,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="132">
+				<toolkit:ListPicker x:Name="Resource" Margin="12,41,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="132">
 					<toolkit:ListPickerItem x:Name="user" Content="User"/>
 					<toolkit:ListPickerItem x:Name="source" Content="Source"/>
 					<toolkit:ListPickerItem x:Name="text" Content="Text"/>
 				</toolkit:ListPicker>
-				<toolkit:ListPicker x:Name="Inclusion" Margin="152,41,28,0" VerticalAlignment="Top">
+				<toolkit:ListPicker x:Name="Inclusion" Margin="160,41,20,0" VerticalAlignment="Top">
 					<toolkit:ListPickerItem x:Name="exclude" Content="Contains"/>
 					<toolkit:ListPickerItem x:Name="include" Content="Does not contain"/>
 				</toolkit:ListPicker>
 				<TextBox x:Name="FilterText" Margin="0,202,12,232" TextWrapping="Wrap" d:LayoutOverrides="Height"/>
+				<TextBlock HorizontalAlignment="Left" Margin="8,0,0,184" TextWrapping="Wrap" Text="Until:" VerticalAlignment="Bottom"/>
+				<toolkit:DatePicker x:Name="date" Margin="0,0,152,108" VerticalAlignment="Bottom"/>
+				<toolkit:TimePicker x:Name="time" HorizontalAlignment="Right" Margin="0,0,12,108" VerticalAlignment="Bottom" RenderTransformOrigin="0.828,0.222" Width="140"/>
 			</Grid>
 		</Grid>
 		

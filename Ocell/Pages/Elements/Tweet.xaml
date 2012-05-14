@@ -73,6 +73,7 @@
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="retweet with comments" x:Name="quoteButton" Click="quoteButton_Click"/> 
                 <shell:ApplicationBarMenuItem Text="share..." x:Name="shareButton" Click="shareButton_Click"/>
+                <shell:ApplicationBarMenuItem x:Name="MuteBtn" Text="mute..." Click="ApplicationBarMenuItem_Click"/>
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.reply.rest.png" Text="reply" x:Name="replyButton" Click="replyButton_Click"  />
             <shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.replyall.rest.png" Text="reply all" x:Name="replyAllButton" Click="replyAllButton_Click"/>
@@ -116,6 +117,12 @@
         			</Grid>
         		</Grid>
         	</ScrollViewer>
+        	<Grid x:Name="MuteGrid" Height="91" VerticalAlignment="Bottom" Margin="-12,0,-8,-11" Background="{StaticResource PhoneChromeBrush}" Visibility="Collapsed">
+        		<TextBlock  toolkit:TiltEffect.IsTiltEnabled="True" x:Name="MuteUser" TextWrapping="Wrap" Text="User" HorizontalAlignment="Left" Margin="32,40,0,8" Foreground="{StaticResource PhoneAccentBrush}" FontSize="26.667" FontFamily="Segoe WP SemiLight" Width="74" Tap="MuteUser_Tap"/>
+        		<TextBlock toolkit:TiltEffect.IsTiltEnabled="True" x:Name="MuteHashtags" TextWrapping="Wrap" Text="Hashtags" Margin="184,40,182,8" Foreground="{StaticResource PhoneAccentBrush}" FontSize="26.667" FontFamily="Segoe WP SemiLight" Tap="MuteHashtags_Tap"/>
+        		<TextBlock toolkit:TiltEffect.IsTiltEnabled="True" x:Name="Source" TextWrapping="Wrap" Text="Source" HorizontalAlignment="Right" Margin="0,40,45,16" Foreground="{StaticResource PhoneAccentBrush}" FontSize="26.667" FontFamily="Segoe WP SemiLight" Width="91" Tap="Source_Tap"/>
+        		<TextBlock HorizontalAlignment="Left" Margin="16,8,0,0" TextWrapping="Wrap" Text="What do you want to mute?" VerticalAlignment="Top" FontFamily="Segoe WP Light"/>
+        	</Grid>
         </Grid>
         <ListBox HorizontalAlignment="Left" Margin="0,0,0,21" Width="100"/>
     </Grid>

@@ -6,7 +6,6 @@ using TweetSharp;
 
 namespace Ocell.Library.Filtering
 {
-
     public class ColumnFilter 
     {
         private List<ITweetableFilter> _predicates;

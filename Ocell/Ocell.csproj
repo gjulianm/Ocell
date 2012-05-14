@@ -188,11 +188,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Lists\CreateList.xaml">
-      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Lists\ListManager.xaml">
-      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Search\EnterSearch.xaml">

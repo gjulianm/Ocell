@@ -66,6 +66,7 @@
     <Compile Include="DataTransfer.cs" />
     <Compile Include="DebugWriter.cs" />
     <Compile Include="DecisionMaker.cs" />
+    <Compile Include="GlobalEvents.cs" />
     <Compile Include="IsolatedFileStreamExtension.cs" />
     <Compile Include="ColumnFilter.cs" />
     <Compile Include="LoadMoreTweetable.cs" />

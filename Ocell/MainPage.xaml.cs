@@ -92,6 +92,8 @@ namespace Ocell
                 CreateTile();
                 ShowFollowMessage();
                 LittleWatson.CheckForPreviousException();
+                if (Config.DefaultMuteTime == null || Config.DefaultMuteTime == TimeSpan.FromHours(0))
+                    Config.DefaultMuteTime = TimeSpan.FromHours(8);
             });
 
             string Column;
@@ -222,42 +224,52 @@ namespace Ocell
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
             ExtendedListBox list = sender as ExtendedListBox;
-            TwitterResource Resource = new TwitterResource();
-
             if (list == null)
                 return;
+            var tag = list.Tag;
 
-            if (list.Tag is TwitterResource)
-            {
-                Resource = (TwitterResource)list.Tag;
-                list.Bind(Resource);
-            }
+            ThreadPool.QueueUserWorkItem((threadcontext) =>
+            {                
+                TwitterResource Resource = new TwitterResource();             
 
-            FilterManager.SetupFilter(list);
+                if (tag is TwitterResource)
+                {
+                    Resource = (TwitterResource)tag;
+                    list.Bind(Resource);
+                }
 
-            if (Lists.ContainsKey(Resource.String))
-                return;
+                Dispatcher.BeginInvoke(() => FilterManager.SetupFilter(list));
 
-            Lists.Add(Resource.String, list);
+                if (Lists.ContainsKey(Resource.String))
+                    return;
 
-            list.Compression += new ExtendedListBox.OnCompression(list_Compression);
-            list.Loader.Error += new TweetLoader.OnError(Loader_Error);
-            list.Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
-            list.Loader.ActivateLoadMoreButton = true;
-            if (Config.RetweetAsMentions == null)
-                Config.RetweetAsMentions = true;
-            if (Config.TweetsPerRequest == null)
-                Config.TweetsPerRequest = 40;
+                Lists.Add(Resource.String, list);
 
-            list.Loader.TweetsToLoadPerRequest = (int)Config.TweetsPerRequest;
-            list.Loader.LoadRetweetsAsMentions = (bool)Config.RetweetAsMentions;
+                list.Compression += new ExtendedListBox.OnCompression(list_Compression);
+                list.Loader.Error += new TweetLoader.OnError(Loader_Error);
+                list.Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
+                list.Loader.ActivateLoadMoreButton = true;
 
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-            list.Loader.LoadCacheAsync();
-            list.Loader.Load();
+                if (Config.RetweetAsMentions == null)
+                    Config.RetweetAsMentions = true;
+                if (Config.TweetsPerRequest == null)
+                    Config.TweetsPerRequest = 40;
 
-            list.Loaded -= ListBox_Loaded;
-            list.Loaded += new RoutedEventHandler(CheckForFilterUpdate);
+                list.Loader.TweetsToLoadPerRequest = (int)Config.TweetsPerRequest;
+                list.Loader.LoadRetweetsAsMentions = (bool)Config.RetweetAsMentions;
+
+                Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
+                list.Loader.LoadCacheAsync();
+                list.Loader.Load();
+
+                Dispatcher.BeginInvoke(() =>
+                {
+                    list.Loaded -= ListBox_Loaded;
+                    list.Loaded += new RoutedEventHandler(CheckForFilterUpdate);
+                });
+
+                GlobalEvents.FiltersChanged += (sender1, e1) => Dispatcher.BeginInvoke(() => FilterManager.SetupFilter(list));
+            });
         }
 
         void CheckForFilterUpdate(object sender, RoutedEventArgs e)
@@ -405,7 +417,7 @@ namespace Ocell
             if (text.Tag is TwitterResource)
             {
                 resource = (TwitterResource)text.Tag;
-                if(Lists.TryGetValue(resource.String, out list) && list.ItemsSource != null && list.Loader.Source.Any())
+                if (Lists.TryGetValue(resource.String, out list) && list.ItemsSource != null && list.Loader.Source.Any())
                 {
                     list.ScrollIntoView(list.Loader.Source.First());
                 }
@@ -427,6 +439,7 @@ namespace Ocell
         private void HideUserGrid(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Dispatcher.BeginInvoke(() => GoToUserGrid.Visibility = Visibility.Collapsed);
+            e.Cancel = true;
             this.BackKeyPress -= HideUserGrid;
         }
 

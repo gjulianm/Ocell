@@ -6,7 +6,7 @@ using Ocell.Library;
 using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
 using TweetSharp;
-
+using System.Threading;
 namespace Ocell.Commands
 {
     public class ReplyCommand : ICommand
@@ -172,6 +172,42 @@ namespace Ocell.Commands
             DataTransfer.cFilter.RemoveFilter(parameter as ITweetableFilter);
             PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
             service.Navigate(Uris.Filters);
+        }
+
+        public event EventHandler CanExecuteChanged;
+    }
+
+    public class MuteCommand : ICommand
+    {
+        public bool CanExecute(object parameter)
+        {
+            return parameter is ITweetable;
+        }
+
+        public void Execute(object parameter)
+        {
+            ITweetable tweet = parameter as ITweetable;
+
+            if (tweet == null)
+                return;
+
+            ITweeter author = tweet.Author;
+
+            if (Config.GlobalFilter == null)
+                Config.GlobalFilter = new ColumnFilter();
+
+            ITweetableFilter filter = new ITweetableFilter();
+            filter.Inclusion = IncludeOrExclude.Exclude;
+            filter.Type = FilterType.User;
+            filter.Filter = author.ScreenName;
+            if (Config.DefaultMuteTime == TimeSpan.MaxValue)
+                filter.IsValidUntil = DateTime.MaxValue;
+            else
+            filter.IsValidUntil = DateTime.Now + (TimeSpan)Config.DefaultMuteTime;
+
+            Config.GlobalFilter.AddFilter(filter);
+            Config.GlobalFilter = Config.GlobalFilter; // Force save.
+            GlobalEvents.FireFiltersChanged(filter, new EventArgs());
         }
 
         public event EventHandler CanExecuteChanged;

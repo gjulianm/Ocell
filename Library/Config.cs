@@ -22,6 +22,7 @@ namespace Ocell.Library
         private const string GlobalFilterKey = "GLOBALFILTER";
         private const string RTAsMentionsKey = "RTASMENTIONS";
         private const string TweetsPerReqKey = "TWEETSXREQ";
+        private const string DefaultMuteTimeKey = "DEFAULTMUTETIME";
 
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
@@ -33,6 +34,20 @@ namespace Ocell.Library
         private static ColumnFilter _globalFilter;
         private static bool? _retweetAsMentions;
         private static int? _tweetsPerRequest;
+        private static TimeSpan? _defaultMuteTime;
+
+        public static TimeSpan? DefaultMuteTime
+        {
+            get
+            {
+                return GenericGetFromConfig<TimeSpan?>(DefaultMuteTimeKey, ref _defaultMuteTime);
+            }
+            set
+            {
+                GenericSaveToConfig<TimeSpan?>(DefaultMuteTimeKey, ref _defaultMuteTime, value);
+            }
+        }
+        
 
         public static int? TweetsPerRequest
         {

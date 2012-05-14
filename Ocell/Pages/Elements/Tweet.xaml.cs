@@ -10,6 +10,7 @@ using Microsoft.Phone.Shell;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using TweetSharp;
+using Ocell.Library.Filtering;
 
 
 namespace Ocell.Pages.Elements
@@ -581,6 +582,69 @@ namespace Ocell.Pages.Elements
             var Img = sender as System.Windows.Controls.Image;
             if (Img != null && Img.Tag is ITweeter)
                 NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + (Img.Tag as ITweeter).ScreenName, UriKind.Relative));
+        }
+
+        private ITweetableFilter CreateNewFilter(FilterType type, string data)
+        {
+            if (Config.GlobalFilter == null)
+                Config.GlobalFilter = new ColumnFilter();
+
+            if (Config.DefaultMuteTime == null)
+                Config.DefaultMuteTime = TimeSpan.FromHours(8);
+
+            ITweetableFilter filter = new ITweetableFilter();
+            filter.Type = type;
+            filter.Filter = data;
+            if (Config.DefaultMuteTime == TimeSpan.MaxValue)
+                filter.IsValidUntil = DateTime.MaxValue;
+            else
+                filter.IsValidUntil = DateTime.Now + (TimeSpan)Config.DefaultMuteTime;
+            filter.Inclusion = IncludeOrExclude.Exclude;
+
+            Config.GlobalFilter.AddFilter(filter);
+            Config.GlobalFilter = Config.GlobalFilter;
+
+            return filter;
+        }
+
+        private void MuteUser_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            var filter = CreateNewFilter(FilterType.User, status.Author.ScreenName);
+            Dispatcher.BeginInvoke(() => MessageBox.Show("The user " + status.Author.ScreenName + " is now muted until " + filter.IsValidUntil.ToString("f") + "."));
+            MuteGrid.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void MuteHashtags_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            ITweetableFilter filter = null;
+            string message = "";
+            foreach (var entity in status.Entities)
+            {
+                if (entity.EntityType == TwitterEntityType.HashTag)
+                {
+                    filter = CreateNewFilter(FilterType.Text, ((TwitterHashTag)entity).Text);
+                    message += ((TwitterHashTag)entity).Text + ", ";
+                }
+            }
+            if (message == "")
+                Dispatcher.BeginInvoke(() => MessageBox.Show("No hashtags to mute"));
+            else
+                Dispatcher.BeginInvoke(() => MessageBox.Show("The hashtag(s) " + message.Substring(0, message.Length - 2) + " are now muted until " + filter.IsValidUntil.ToString("f") +"."));
+            MuteGrid.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void Source_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            RemoveHTML conv = new RemoveHTML();
+            string source = conv.Convert(status.Source, null, null, null) as string;
+            var filter = CreateNewFilter(FilterType.Source, source);
+            Dispatcher.BeginInvoke(() => MessageBox.Show("The source " + source + " is now muted until " + filter.IsValidUntil.ToString("f") + "."));
+            MuteGrid.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
+        {
+            MuteGrid.Visibility = System.Windows.Visibility.Visible;
         }
     }
 }

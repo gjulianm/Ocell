@@ -2,6 +2,7 @@
 using Microsoft.Phone.Controls;
 using Ocell.Library;
 using Ocell.Library.Filtering;
+using System;
 
 namespace Ocell.Pages.Filtering
 {
@@ -42,6 +43,9 @@ namespace Ocell.Pages.Filtering
 
             FilterText.Text = Filter.Filter;
 
+            date.Value = Filter.IsValidUntil.Date;
+            time.Value = Filter.IsValidUntil;
+
             if (Filter.Inclusion == IncludeOrExclude.Include)
                 Inclusion.SelectedIndex = 1;
             else
@@ -65,6 +69,14 @@ namespace Ocell.Pages.Filtering
             }
 
             filter.Filter = FilterText.Text;
+
+            filter.IsValidUntil = new DateTime(
+                date.Value.Value.Year,
+                date.Value.Value.Month,
+                date.Value.Value.Day,
+                time.Value.Value.Hour,
+                time.Value.Value.Minute,
+                0);
 
             if (Inclusion.SelectedIndex == 1)
                 filter.Inclusion = IncludeOrExclude.Include;

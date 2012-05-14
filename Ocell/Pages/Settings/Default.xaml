@@ -78,8 +78,6 @@
 						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,289" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Height="96" VerticalAlignment="Bottom"><Run Text="To add columns tiles, go to the main page and press &quot;pin column to start&quot; in the bottom bar."/><LineBreak/><Run/></TextBlock>
 						<Button x:Name="ComposePin" Content="Pin compose tile to start" HorizontalAlignment="Left" Margin="52,378,0,0" Width="344" Click="ComposePin_Click" VerticalAlignment="Top"/>
 						<TextBlock HorizontalAlignment="Left" Margin="8,214,0,0" TextWrapping="Wrap" Text="Tiles" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24"/>
-						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,281" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" RenderTransformOrigin="0.5,0.507" Text="Global filter"/>
-						<Button x:Name="filter_btn" Content="Edit global filters" HorizontalAlignment="Left" Margin="52,0,0,208" VerticalAlignment="Bottom" Width="344" Click="FilterClick"/>
 						<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Tweets to load per request" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
 						<TextBox x:Name="tweetsPerReq" Margin="0,39,8,0" TextWrapping="Wrap" VerticalAlignment="Top" InputScope="Number" TextChanged="tweetsPerReq_TextChanged"/>
 					</Grid>
@@ -93,6 +91,19 @@
 					<ListBox x:Name="Users" toolkit:TiltEffect.IsTiltEnabled="True" Margin="8,40,8,0"  Height="232" VerticalAlignment="Top" ItemTemplate="{StaticResource AccountsContextTemplate}"/>
 					<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Accounts" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
 			    </Grid>
+			</controls:PivotItem>
+			<controls:PivotItem Header="filters">
+				<Grid>
+					<Button x:Name="filter_btn" Content="Edit muted tweets" HorizontalAlignment="Left" Margin="52,8,0,0" Width="344" Click="FilterClick" VerticalAlignment="Top"/>
+					<TextBlock HorizontalAlignment="Left" Margin="8,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Silence time when mutin"/><Run Text="g tweets"/><Run Text=":"/></TextBlock>
+					<toolkit:ListPicker x:Name="SilencePicker" Margin="8,130,8,0" VerticalAlignment="Top" SelectionChanged="ListPicker_SelectionChanged">
+						<toolkit:ListPickerItem x:Name="hour" Content="1 hour"/>
+						<toolkit:ListPickerItem x:Name="hours8" Content="8 hours"/>
+						<toolkit:ListPickerItem x:Name="day" Content="1 day"/>
+						<toolkit:ListPickerItem x:Name="week" Content="1 week"/>
+						<toolkit:ListPickerItem x:Name="forever" Content="forever"/>
+					</toolkit:ListPicker>
+				</Grid>
 			</controls:PivotItem>
 			<controls:PivotItem Header="notifications" Margin="12,8,12,0">
 				<Grid>

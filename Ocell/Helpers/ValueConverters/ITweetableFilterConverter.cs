@@ -60,4 +60,28 @@ namespace Ocell
             return null;
         }
     }
+
+    public class FilterDateConverter : IValueConverter
+    {
+        public object Convert(object value, Type targeType, object parameter, CultureInfo culture)
+        {
+            
+            if (value is DateTime)
+            {
+                DateTime date = (DateTime)value;
+                if (date == DateTime.MaxValue)
+                    return "forever.";
+                else
+                    return "until " + date.ToString("f") +".";
+            }
+
+            return "forever.";
+
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
 }

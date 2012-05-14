@@ -35,6 +35,8 @@
     		<commands:DeleteCommand x:Key="DeleteCommand" />
     		<commands:ProtectCommand x:Key="ProtectCommand" />
     		<local:ProtectedConverter x:Key="ProtectedConverter"/>
+			<commands:MuteCommand x:Key="MuteCommand"/>
+			<local:FilterDateConverter x:Key="FilterDateConverter" />
 
     		<DataTemplate x:Key="TweetTemplate">
     			<local:TweetTemplateSelector Content="{Binding}" Margin="0" HorizontalContentAlignment="Stretch" >
@@ -50,10 +52,10 @@
     							</Grid.ColumnDefinitions>
     							<toolkit:ContextMenuService.ContextMenu>
     								<toolkit:ContextMenu x:Name="ContextMenu">
-    									<toolkit:MenuItem Header="reply" Command="{StaticResource ReplyCommand}" CommandParameter="{Binding}" />
-    									<toolkit:MenuItem Header="reply all" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding}" />
+    									<toolkit:MenuItem Header="reply" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding}" />
     									<toolkit:MenuItem Header="retweet" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding}" />
     									<toolkit:MenuItem Header="favorite" Command="{StaticResource FavoriteCommand}" CommandParameter="{Binding}" />
+										<toolkit:MenuItem Header="mute user" Command="{StaticResource MuteCommand}" CommandParameter="{Binding}" />
     								</toolkit:ContextMenu>
     							</toolkit:ContextMenuService.ContextMenu>
     							<TextBlock x:Name="Date" Text="{Binding CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}" VerticalAlignment="Top" Margin="0,5.753,8,0" Foreground="#FF707070" Grid.Column="1" HorizontalAlignment="Right" UseLayoutRounding="False" FontFamily="Segoe WP Light"/>
