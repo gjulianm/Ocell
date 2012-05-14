@@ -60,15 +60,18 @@ namespace Ocell
                 }
                 if (contents != null)
                 {
-                    if (MessageBox.Show("A problem occurred the last time you ran this application. Would you like to send an email to report it?", "Problem Report", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    Deployment.Current.Dispatcher.BeginInvoke(() =>
                     {
-                        EmailComposeTask email = new EmailComposeTask();
-                        email.To = "gjulian93@gmail.com";
-                        email.Subject = "Ocell Error Report";
-                        email.Body = contents;
-                        SafeDeleteFile(IsolatedStorageFile.GetUserStoreForApplication()); // line added 1/15/2011
-                        email.Show();
-                    }
+                        if (MessageBox.Show("A problem occurred the last time you ran this application. Would you like to send an email to report it?", "Problem Report", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                        {
+                            EmailComposeTask email = new EmailComposeTask();
+                            email.To = "gjulian93@gmail.com";
+                            email.Subject = "Ocell Error Report";
+                            email.Body = contents;
+                            SafeDeleteFile(IsolatedStorageFile.GetUserStoreForApplication()); // line added 1/15/2011
+                            email.Show();
+                        }
+                    });
                 }
             }
             catch (Exception)

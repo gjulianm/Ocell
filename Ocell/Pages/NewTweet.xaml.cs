@@ -23,6 +23,7 @@ namespace Ocell.Pages
         private UsernameProvider _provider;
         private Autocompleter _completer;
         private bool _isScheduled;
+        private TwitterDraft draft;
 
         public NewTweet()
         {
@@ -47,7 +48,7 @@ namespace Ocell.Pages
         private void InitalizeAppBar()
         {
             // Crappy Application bar design is crap. I have to initialise the buttons here in order to access them later.
-            ApplicationBar appBar = new ApplicationBar();
+            IApplicationBar appBar = ApplicationBar;
 
             SendButton = new ApplicationBarIconButton(new Uri("/Images/Icons_White/appbar.sendmail.rest.png", UriKind.Relative));
             SendButton.Click += new EventHandler(SendButton_Click);
@@ -70,7 +71,42 @@ namespace Ocell.Pages
 
         void saveButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            SaveDraft();
+        }
+
+        private TwitterDraft SaveDraft()
+        {
+            TwitterDraft draft = new TwitterDraft();
+            draft.Text = Tweet.Text;
+
+            if (Scheduled_cb.IsChecked == true)
+            {
+                draft.Scheduled = new DateTime(
+                datePicker.Value.Value.Year,
+                datePicker.Value.Value.Month,
+                datePicker.Value.Value.Day,
+                timePicker.Value.Value.Hour,
+                timePicker.Value.Value.Minute,
+                0);
+            }
+            else
+                draft.Scheduled = null;
+
+            draft.CreatedAt = DateTime.Now;
+            draft.Accounts = new List<UserToken>();
+            foreach (var acc in AccountsList.SelectedItems)
+            {
+                if (acc is UserToken)
+                    draft.Accounts.Add(acc as UserToken);
+            }
+            draft.ReplyId = DataTransfer.ReplyId;
+
+            Config.Drafts.Add(draft);
+            Config.Drafts = Config.Drafts;
+
+            Dispatcher.BeginInvoke(() => MessageBox.Show("Draft saved!"));
+
+            return draft;
         }
 
         void NewTweet_Unloaded(object sender, RoutedEventArgs e)
@@ -81,6 +117,9 @@ namespace Ocell.Pages
                 _provider.Usernames.Clear();
             }
             DataTransfer.Text = Tweet.Text;
+
+            if (DataTransfer.Draft != null)
+                DataTransfer.Draft = SaveDraft();
         }
 
         void NewTweet_Loaded(object sender, RoutedEventArgs e)
@@ -98,12 +137,33 @@ namespace Ocell.Pages
                 NavigationService.RemoveBackEntry();
             }
 
-            Tweet.Text = DataTransfer.Text == null ? "" : DataTransfer.Text;
-            Tweet.SelectionStart = (Tweet.Text.Length - 1) < 0 ? 0 : (Tweet.Text.Length - 1);
-            Tweet.Focus();
+            draft = DataTransfer.Draft;
 
-            int Index = Config.Accounts.IndexOf(DataTransfer.CurrentAccount);
-            AccountsList.SelectedIndex = Index;
+            if (draft != null)
+            {
+                Tweet.Text = draft.Text;
+                Tweet.SelectionStart = (Tweet.Text.Length - 1) < 0 ? 0 : (Tweet.Text.Length);
+                Tweet.Focus();
+
+                foreach (var account in draft.Accounts)
+                    AccountsList.SelectedItems.Add(account);
+
+                if (draft.Scheduled != null)
+                {
+                    Scheduled_cb.IsChecked = true;
+                    timePicker.Value = draft.Scheduled;
+                    datePicker.Value = draft.Scheduled;
+                }
+            }
+            else
+            {
+                Tweet.Text = DataTransfer.Text == null ? "" : DataTransfer.Text;
+                Tweet.SelectionStart = (Tweet.Text.Length - 1) < 0 ? 0 : (Tweet.Text.Length);
+                Tweet.Focus();
+
+                int Index = Config.Accounts.IndexOf(DataTransfer.CurrentAccount);
+                AccountsList.SelectedIndex = Index;
+            }
 
             _provider = new UsernameProvider();
             _provider.User = DataTransfer.CurrentAccount;
@@ -239,6 +299,16 @@ namespace Ocell.Pages
                 srv = ServiceDispatcher.GetService(Account);
                 srv.SendTweet(Tweet.Text, DataTransfer.ReplyId, ReceiveResponse);
             }
+
+            if (DataTransfer.Draft != null)
+            {
+                if (Config.Drafts.Contains(DataTransfer.Draft))
+                    Config.Drafts.Remove(DataTransfer.Draft);
+
+                DataTransfer.Draft = null;
+                draft = null;
+                Config.SaveDrafts();
+            }
         }
 
         private void ReceiveResponse(TwitterStatus status, TwitterResponse response)
@@ -365,7 +435,8 @@ namespace Ocell.Pages
             if (img == null || (img.Tag as UserToken) == null)
                 return;
 
-            if ((img.Tag as UserToken) == DataTransfer.CurrentAccount)
+            UserToken usr = img.Tag as UserToken;
+            if (usr == DataTransfer.CurrentAccount || (draft != null && draft.Accounts.Contains(usr)))
                 UpdateOpacity(img);
         }
 
@@ -391,6 +462,11 @@ namespace Ocell.Pages
         {
         	Dispatcher.BeginInvoke(() => MessageBox.Show("Because of the system's limitations, we can only check your scheduled tweets every half hour, " +
 			", so it's possible that your tweet will not be sent at the exact time you specified. Also, remember that if you have your phone in battery saving mode or turned off, we won't be able to send your tweet."));
+        }
+
+        private void draft_Click(object sender, System.EventArgs e)
+        {
+            NavigationService.Navigate(Uris.ManageDrafts);
         }
     }
 }

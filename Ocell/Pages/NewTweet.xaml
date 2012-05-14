@@ -79,7 +79,11 @@
     
     <!--Código de ejemplo que muestra el uso de ApplicationBar-->
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True"/>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+        	<shell:ApplicationBar.MenuItems>
+        		<shell:ApplicationBarMenuItem x:Name="draftBtn" Text="drafts" Click="draft_Click"/>
+        	</shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
     
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->

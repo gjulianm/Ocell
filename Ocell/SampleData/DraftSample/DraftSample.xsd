@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+      *********    NO MODIFIQUE ESTE ARCHIVO     *********
+      Este archivo se regenera mediante una herramienta de diseño.
+       Si realiza cambios en este archivo, puede causar errores.
+-->
+<xs:schema xmlns:tns="Expression.Blend.SampleData.DraftSample" xmlns:blend="http://schemas.microsoft.com/expression/blend/2008" targetNamespace="Expression.Blend.SampleData.DraftSample" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="DraftSample" type="tns:DraftSample" />
+  <xs:complexType name="DraftSample">
+    <xs:sequence>
+      <xs:element name="Collection" type="tns:ItemCollection" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ItemCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="Item" type="tns:Item" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Item">
+    <xs:attribute blend:FormatParameters="25,8" name="Text" type="xs:string" />
+    <xs:attribute blend:Format="Fecha" name="Date" type="xs:string" />
+  </xs:complexType>
+</xs:schema>

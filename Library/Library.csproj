@@ -82,6 +82,7 @@
     <Compile Include="TweetLoader.cs" />
     <Compile Include="TweetTask.cs" />
     <Compile Include="TwitterComparers.cs" />
+    <Compile Include="TwitterDraft.cs" />
     <Compile Include="TwitterResource.cs" />
     <Compile Include="UsernameProvider.cs" />
     <Compile Include="UserToken.cs" />

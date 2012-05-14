@@ -23,6 +23,7 @@ namespace Ocell.Library
         private const string RTAsMentionsKey = "RTASMENTIONS";
         private const string TweetsPerReqKey = "TWEETSXREQ";
         private const string DefaultMuteTimeKey = "DEFAULTMUTETIME";
+        private const string DraftsKey = "DRAFTS";
 
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
@@ -35,6 +36,20 @@ namespace Ocell.Library
         private static bool? _retweetAsMentions;
         private static int? _tweetsPerRequest;
         private static TimeSpan? _defaultMuteTime;
+        private static List<TwitterDraft> _drafts;
+
+
+        public static List<TwitterDraft> Drafts
+        {
+            get
+            {
+                return GenericGetFromConfig<List<TwitterDraft>>(DraftsKey, ref _drafts);
+            }
+            set
+            {
+                GenericSaveToConfig<List<TwitterDraft>>(DraftsKey, ref _drafts, value);
+            }
+        }
 
         public static TimeSpan? DefaultMuteTime
         {
@@ -269,6 +284,11 @@ namespace Ocell.Library
 		public static void SaveFilters()
         {
             Filters = _filters;
+        }
+
+        public static void SaveDrafts()
+        {
+            Drafts = _drafts;
         }
     }
 }

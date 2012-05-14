@@ -20,5 +20,6 @@ namespace Ocell.Library
         public static bool IsGlobalFilter;
         public static bool ShouldReloadColumns;
         public static bool ShouldReloadFilters = false;
+        public static TwitterDraft Draft;
     }
 }

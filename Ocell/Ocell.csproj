@@ -89,6 +89,9 @@
     <Compile Include="Pages\Columns\SelectAccount.xaml.cs">
       <DependentUpon>SelectAccount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Drafts\ManageDrafts.xaml.cs">
+      <DependentUpon>ManageDrafts.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Lists\CreateList.xaml.cs">
       <DependentUpon>CreateList.xaml</DependentUpon>
     </Compile>
@@ -116,6 +119,9 @@
     </Compile>
     <Compile Include="Pages\Topics.xaml.cs">
       <DependentUpon>Topics.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SampleData\DraftSample\DraftSample.xaml.cs">
+      <DependentUpon>DraftSample.xaml</DependentUpon>
     </Compile>
     <Compile Include="SchedulerSync.cs" />
     <Compile Include="ThemeFunctions.cs" />
@@ -178,6 +184,10 @@
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Drafts\ManageDrafts.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Elements\Conversation.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
@@ -251,12 +261,17 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <DesignTimeOnly Include="SampleData\DraftSample\DraftSample.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </DesignTimeOnly>
   </ItemGroup>
   <ItemGroup>
     <None Include="Ocell_2012_03_18_19_41_51.sap" />
     <None Include="Ocell_2012_04_11_23_33_33.sap" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />
+    <DesignTimeOnly Include="SampleData\DraftSample\DraftSample.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BackgroundFabric.png">
