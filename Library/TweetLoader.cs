@@ -188,7 +188,7 @@ namespace Ocell.Library.Twitter
                     break;
                 case ResourceType.List:
                     _srv.ListTweetsOnList(Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
-                            Resource.Data.Substring(Resource.Data.IndexOf('/') + 1), ReceiveTweets);
+                            Resource.Data.Substring(Resource.Data.IndexOf('/') + 1), TweetsToLoadPerRequest, ReceiveTweets);
                     break;
                 case ResourceType.Search:
                     _srv.Search(Resource.Data, 1, 20, ReceiveSearch);
@@ -233,7 +233,7 @@ namespace Ocell.Library.Twitter
                     break;
                 case ResourceType.List:
                     _srv.ListTweetsOnListBefore(Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
-                            Resource.Data.Substring(Resource.Data.IndexOf('/') + 1), last, ReceiveTweets);
+                            Resource.Data.Substring(Resource.Data.IndexOf('/') + 1), last, TweetsToLoadPerRequest, ReceiveTweets);
                     break;
                 case ResourceType.Search:
                     _srv.SearchBefore(last, Resource.Data, ReceiveSearch);

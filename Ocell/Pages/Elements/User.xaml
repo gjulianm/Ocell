@@ -30,7 +30,7 @@
 			<!--Elemento uno de Pivot-->
 			<controls:PivotItem x:Name="pvProfile" Header="profile">
 				<Grid>
-					<Image HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="124" Height="124" x:Name="Avatar"/>
+					<Image HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="124" Height="124" x:Name="Avatar" Tap="Avatar_Tap"/>
 					<TextBlock x:Name="FullName" Margin="148,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="300" FontSize="32"/>
 					<TextBlock x:Name="ScreenName" Margin="148,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="21.333" FontFamily="Segoe WP SemiLight"/>
 					<HyperlinkButton x:Name="Website" Margin="148,101,0,0" VerticalAlignment="Top" FontFamily="Segoe WP Light" Tap="Website_Tap" HorizontalAlignment="Left"/>

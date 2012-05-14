@@ -324,5 +324,16 @@ namespace Ocell.Pages.Elements
         {
             Dispatcher.BeginInvoke(() => NavigationService.Navigate(new Uri("/Pages/Lists/ListManager.xaml?user=" + CurrentUser.ScreenName, UriKind.Relative)));
         }
+
+        private void Avatar_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            
+            if (CurrentUser == null)
+                return;
+
+            WebBrowserTask wb = new WebBrowserTask();
+            wb.Uri = new Uri(CurrentUser.ProfileImageUrl, UriKind.Absolute);
+            wb.Show();
+        }
     }
 }
