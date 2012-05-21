@@ -11,6 +11,8 @@ using System.Windows.Shapes;
 using System.IO.IsolatedStorage;
 using System.IO;
 using Microsoft.Phone.Tasks;
+using System.Diagnostics;
+using Microsoft.Phone.Info;
 
 namespace Ocell
 {
@@ -29,11 +31,17 @@ namespace Ocell
                 using (var store = IsolatedStorageFile.GetUserStoreForApplication())
                 {
                     SafeDeleteFile(store);
+                    
                     using (TextWriter output = new StreamWriter(store.CreateFile(filename)))
                     {
+                        output.WriteLine("Phone: " + DeviceStatus.DeviceName + " by " + DeviceStatus.DeviceManufacturer);
+                        output.WriteLine("Memory usage: " + (DeviceStatus.ApplicationCurrentMemoryUsage / (1024 * 1024)).ToString());
+                        output.WriteLine("Memory peak: " + (DeviceStatus.ApplicationPeakMemoryUsage / (1024 * 1024)).ToString());
+                        output.WriteLine("Firmware version: " + DeviceStatus.DeviceFirmwareVersion);
+                        output.WriteLine("");
                         output.WriteLine(extra);
                         output.WriteLine(ex.Message);
-                        output.WriteLine(ex.StackTrace);
+                        output.WriteLine(ex.StackTrace);                        
                     }
                 }
             }
@@ -62,7 +70,7 @@ namespace Ocell
                 {
                     Deployment.Current.Dispatcher.BeginInvoke(() =>
                     {
-                        if (MessageBox.Show("A problem occurred the last time you ran this application. Would you like to send an email to report it?", "Problem Report", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                        if (MessageBox.Show("A problem occurred the last time you ran this application. Would you like to send an email to report it? The report contains data to help me correct the bug. It will not send any personal data.", "Problem Report", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                         {
                             EmailComposeTask email = new EmailComposeTask();
                             email.To = "gjulian93@gmail.com";
