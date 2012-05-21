@@ -104,12 +104,12 @@
         <Grid x:Name="ContentPanel" Margin="12,0,12,0" Grid.Row="1" >
         	<ScrollViewer d:LayoutOverrides="Width, Height" HorizontalScrollBarVisibility="Disabled">
         		<Grid>
-        			<TextBox TextWrapping="Wrap" VerticalAlignment="Top" Height="205" x:Name="Tweet" InputScope="Text" Margin="0,-5,0,0" d:LayoutOverrides="VerticalAlignment" TextChanged="Tweet_TextChanged"/>
-        			<TextBlock Margin="0,-32,10,0" TextWrapping="Wrap" Text="140" VerticalAlignment="Top" Foreground="#FF858585" x:Name="Count" HorizontalAlignment="Right" FontFamily="Segoe WP Light"/>
-        			<ListBox x:Name="AccountsList" SelectionMode="Multiple" Margin="12,236,12,288" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}"/>
-        			<TextBlock x:Name="TextBlockAccounts" HorizontalAlignment="Left" Margin="12,200,0,0" TextWrapping="Wrap" Text="Accounts:" Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top"/>
-        			<CheckBox x:Name="Scheduled_cb" Content="Scheduled?" Margin="8,321,216,0" VerticalAlignment="Top" Checked="Scheduled_cb_Checked" Unchecked="Scheduled_cb_Checked"/>
-        			<Grid x:Name="ScheduleGrid" Margin="8,425,20,0" Height="131" VerticalAlignment="Top" Visibility="Collapsed">
+        			<TextBox TextWrapping="Wrap" VerticalAlignment="Top" Height="205" x:Name="Tweet" InputScope="Text" Margin="0,31,0,0" d:LayoutOverrides="VerticalAlignment" TextChanged="Tweet_TextChanged"/>
+        			<TextBlock Margin="0,4,9,0" TextWrapping="Wrap" Text="140" VerticalAlignment="Top" Foreground="#FF858585" x:Name="Count" HorizontalAlignment="Right" FontFamily="Segoe WP Light"/>
+        			<ListBox x:Name="AccountsList" SelectionMode="Multiple" Margin="12,272,12,252" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}"/>
+        			<TextBlock x:Name="TextBlockAccounts" HorizontalAlignment="Left" Margin="12,236,0,0" TextWrapping="Wrap" Text="Accounts:" Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top"/>
+        			<CheckBox x:Name="Scheduled_cb" Content="Scheduled?" Margin="8,357,216,0" VerticalAlignment="Top" Checked="Scheduled_cb_Checked" Unchecked="Scheduled_cb_Checked"/>
+        			<Grid x:Name="ScheduleGrid" Margin="8,433,20,0" Height="131" VerticalAlignment="Top" Visibility="Collapsed">
         				<toolkit:DatePicker x:Name="datePicker" Margin="0,27,0,31" HorizontalAlignment="Left" Width="208" d:LayoutOverrides="Height"/>
         				<toolkit:TimePicker x:Name="timePicker" HorizontalAlignment="Right" Margin="0,27,0,31" Width="208" d:LayoutOverrides="Height"/>
         				<TextBlock HorizontalAlignment="Left" Margin="14,0,0,0" TextWrapping="Wrap" Text="Date:" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>

@@ -410,7 +410,6 @@ namespace Ocell.Pages.Elements
             link.TextDecorations = null;
             link.TargetName = Media.ExpandedUrl;
             link.Click += new RoutedEventHandler(link_Click);
-            link.Foreground = (System.Windows.Media.Brush)Application.Current.Resources["PhoneAccentBrush"];
 
             ContextMenu menu = new ContextMenu();
             MenuItem item = new MenuItem();

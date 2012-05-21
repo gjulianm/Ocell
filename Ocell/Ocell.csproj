@@ -287,6 +287,12 @@
     <Content Include="Assemblies\Hammock.WindowsPhone.dll" />
     <Content Include="Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll" />
     <Content Include="Assemblies\Newtonsoft.Json.dll" />
+    <EmbeddedResource Include="Toolkit.Content\ApplicationBar.Check.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Toolkit.Content\ApplicationBar.Cancel.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Resource Include="Pages\Settings\OcellIcon200.png" />
     <Content Include="Images\Icons_White\appbar.add.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

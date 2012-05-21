@@ -35,6 +35,11 @@ namespace Ocell.Pages.Filtering
             DataTransfer.Filter.Type = FilterType.User;
             DataTransfer.Filter.Filter = "";
             DataTransfer.Filter.Inclusion = IncludeOrExclude.Include;
+            if (Config.DefaultMuteTime == TimeSpan.MaxValue)
+                DataTransfer.Filter.IsValidUntil = DateTime.Now.AddYears(1);
+            else
+                DataTransfer.Filter.IsValidUntil = DateTime.Now + (TimeSpan)Config.DefaultMuteTime;
+            
             NavigationService.Navigate(Uris.SingleFilter);
         }
 

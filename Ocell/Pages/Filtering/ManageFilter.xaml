@@ -37,7 +37,7 @@
 			</StackPanel>
 
 		<!--ContentPanel: coloque aquí el contenido adicional-->
-			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
+			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox" CacheMode="BitmapCache">
 				<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Don't show tweets where" VerticalAlignment="Top" FontSize="21.333"/>
 				<toolkit:ListPicker x:Name="Resource" Margin="12,41,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="132">
 					<toolkit:ListPickerItem x:Name="user" Content="User"/>

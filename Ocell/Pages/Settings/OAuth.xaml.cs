@@ -67,7 +67,7 @@ namespace Ocell.Settings
             {
                 Dispatcher.BeginInvoke(() =>
                 {
-                    MessageBox.Show("Error while authenticating with Twitter. Please try again");
+                    MessageBox.Show("An error happened while trying to get auth URL. Please contact @OcellApp if this happens frequently.");
                     if (NavigationService.CanGoBack)
                         NavigationService.GoBack();
                 });
@@ -86,7 +86,7 @@ namespace Ocell.Settings
             {
                 Dispatcher.BeginInvoke(() =>
                 {
-                    MessageBox.Show("Error while authenticating with Twitter. Please try again");
+                    MessageBox.Show("An error happened while trying to get auth URL. Please contact @OcellApp if this happens frequently.");
                     if (NavigationService.CanGoBack)
                         NavigationService.GoBack();
                 });
@@ -117,14 +117,30 @@ namespace Ocell.Settings
 
                 var collection = HttpUtility.ParseQueryString(url);
 
-                string token = collection["oauth_token"];
-                string verifier = collection["oauth_verifier"];
+                string token; 
+                string verifier;
+
+                try
+                {
+                    token = collection["oauth_token"];
+                    verifier = collection["oauth_verifier"];
+                }
+                catch (Exception)
+                {
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        MessageBox.Show("");
+                        if (NavigationService.CanGoBack)
+                            NavigationService.GoBack();
+                    });
+                    return;
+                }
 
                 if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(verifier))
                 {
                     Dispatcher.BeginInvoke(() =>
                     {
-                        MessageBox.Show("Authentication error.");
+                        MessageBox.Show("An error happened while trying to get client tokens. Try again, and please contact @OcellApp if this happens frequently.");
                         if (NavigationService.CanGoBack)
                             NavigationService.GoBack();
                     });
@@ -176,25 +192,25 @@ namespace Ocell.Settings
             {
                 Dispatcher.BeginInvoke(() =>
                 {
-                    MessageBox.Show("Error while authenticating with Twitter");
+                    MessageBox.Show("An error happened while trying to get user tokens. Try again, and please contact @OcellApp if this happens frequently.");
                     if (NavigationService.CanGoBack)
                         NavigationService.GoBack();
                 });
                 return;
             }
 
-            var collection = HttpUtility.ParseQueryString(response.Content);
-            
             try
             {
+                var collection = HttpUtility.ParseQueryString(response.Content);
+
                 UserToken Token = new UserToken
                 {
                     Key = collection["oauth_token"],
                     Secret = collection["oauth_token_secret"],
                     Preferences = new NotificationPreferences
                     {
-                        MentionsPreferences = NotificationType.None,
-                        MessagesPreferences = NotificationType.None
+                        MentionsPreferences = NotificationType.Tile,
+                        MessagesPreferences = NotificationType.Tile
                     }
                 };
 
@@ -205,7 +221,7 @@ namespace Ocell.Settings
             }
             catch (Exception)
             {
-                Dispatcher.BeginInvoke(() => MessageBox.Show("An error ocurred while authenticating with Twitter. Verify your Internet connection or connect with WiFi"));
+                Dispatcher.BeginInvoke(() => MessageBox.Show("An error happened while trying to get user tokens. Try again, and please contact @OcellApp if this happens frequently."));
             }
         }
 
