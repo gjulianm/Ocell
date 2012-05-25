@@ -114,7 +114,7 @@
         				<TextBlock x:Name="usersText" Margin="8,76,213,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" Visibility="Collapsed"><Run Text="Users who re"/><Run Text="tweeted:"/></TextBlock>
         				<ListBox x:Name="RTList" Margin="8,107,14,0" Height="65"  VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ItemsPanel="{StaticResource PanelTemplate}" ItemTemplate="{StaticResource RetweetUserTemplate}">
         					</ListBox>
-        				<Image x:Name="img" Margin="15,182,15,0" VerticalAlignment="Top" Width="401" Stretch="UniformToFill"/>
+        				<Image x:Name="img" Margin="15,182,15,0" VerticalAlignment="Top" Width="401"/>
         			</Grid>
         		</Grid>
         	</ScrollViewer>
