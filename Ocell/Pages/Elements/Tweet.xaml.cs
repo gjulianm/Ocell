@@ -11,6 +11,7 @@ using Ocell.Library;
 using Ocell.Library.Twitter;
 using TweetSharp;
 using Ocell.Library.Filtering;
+using System.Windows.Controls;
 
 
 namespace Ocell.Pages.Elements
@@ -331,129 +332,57 @@ namespace Ocell.Pages.Elements
             Text.UpdateLayout();
         }
 
-        Inline CreateHashtagLink(TwitterHashTag Hashtag)
+        Inline CreateBaseLink(string content, string contextHeader, string contextTag)
         {
-            var link = new Hyperlink();
-            link.Inlines.Add(new Run() { Text = "#" + Hashtag.Text });
-            link.FontWeight = FontWeights.Bold;
-            link.TextDecorations = null;
-            link.TargetName = "#" + Hashtag.Text;
+            var link = new HyperlinkButton
+            {
+                Content = content,
+                FontSize = Text.FontSize,
+                FontWeight = Text.FontWeight,
+                FontStretch = Text.FontStretch,
+                FontFamily = Text.FontFamily,
+                Margin = new Thickness(-10, -5, -10, -8)
+            };
+
             link.Click += new RoutedEventHandler(link_Click);
 
-            ContextMenu menu = new ContextMenu();
-            MenuItem item = new MenuItem();
+
+            MenuItem item = new MenuItem
+            {
+                Header = contextHeader,
+                Tag = contextTag
+            };
             item.Click += new RoutedEventHandler(CopyLink);
-            item.Header = "copy hashtag";
-            item.Tag = "#" + Hashtag.Text;
+
+            ContextMenu menu = new ContextMenu();
             menu.Items.Add(item);
+
             ContextMenuService.SetContextMenu(link, menu);
 
-            return link;
+            InlineUIContainer container = new InlineUIContainer();
+            container.Child = link;
+            return container;
         }
 
-
+        Inline CreateHashtagLink(TwitterHashTag Hashtag)
+        {
+            return CreateBaseLink("#" + Hashtag.Text, "copy hashtag", "#" + Hashtag.Text);
+        }
 
         Inline CreateMentionLink(TwitterMention Mention)
         {
-            var link = new Hyperlink();
-            link.Inlines.Add(new Run() { Text = "@" + Mention.ScreenName });
-            link.FontWeight = FontWeights.Bold;
-            link.TextDecorations = null;
-            link.Click += new RoutedEventHandler(link_Click);
-
-            ContextMenu menu = new ContextMenu();
-            MenuItem item = new MenuItem();
-            item.Click += new RoutedEventHandler(CopyLink);
-            item.Header = "copy user name";
-            item.Tag = Mention.ScreenName;
-            menu.Items.Add(item);
-            ContextMenuService.SetContextMenu(link, menu);
-
-            GestureListener listener = GestureService.GetGestureListener(link);
-            if (listener != null)
-            {
-                listener.Hold += new EventHandler<GestureEventArgs>(OpenContextMenu);
-            }
-
-            return link;
+            return CreateBaseLink("@" + Mention.ScreenName, "copy user name", Mention.ScreenName);
         }
 
         Inline CreateUrlLink(TwitterUrl URL)
         {
-            var link = new Hyperlink();
-            link.Inlines.Add(new Run() { Text = TweetTextConverter.TrimUrl(URL.ExpandedValue) });
-            link.TextDecorations = null;
-            link.TargetName = URL.ExpandedValue;
-            link.Click += new RoutedEventHandler(link_Click);
-
-            ContextMenu menu = new ContextMenu();
-            MenuItem item = new MenuItem();
-            item.Click += new RoutedEventHandler(CopyLink);
-            item.Header = "copy link";
-            item.Tag = URL.ExpandedValue;
-            menu.Items.Add(item);
-            ContextMenuService.SetContextMenu(link, menu);
-
-            GestureListener listener = GestureService.GetGestureListener(link);
-            if (listener != null)
-            {
-                listener.Hold += new EventHandler<GestureEventArgs>(OpenContextMenu);
-            }
-
-            return link;
+            return CreateBaseLink(TweetTextConverter.TrimUrl(URL.ExpandedValue), "copy link", URL.ExpandedValue);
         }
 
         Inline CreateMediaLink(TwitterMedia Media)
         {
-            var link = new Hyperlink();
-            link.Inlines.Add(new Run() { Text = Media.DisplayUrl });
-            link.FontWeight = FontWeights.Bold;
-            link.TextDecorations = null;
-            link.TargetName = Media.ExpandedUrl;
-            link.Click += new RoutedEventHandler(link_Click);
-
-            ContextMenu menu = new ContextMenu();
-            MenuItem item = new MenuItem();
-            item.Click += new RoutedEventHandler(CopyLink);
-            item.Header = "copy link";
-            item.Tag = Media.DisplayUrl;
-            menu.Items.Add(item);
-            ContextMenuService.SetContextMenu(link, menu);
-
-            GestureListener listener = GestureService.GetGestureListener(link);
-            if (listener != null)
-            {
-                listener.Hold += new EventHandler<GestureEventArgs>(OpenContextMenu);
-            }
-
-            return link;
+            return CreateBaseLink(Media.DisplayUrl, "copy link", Media.DisplayUrl);
         }
-
-        void OpenContextMenu(object sender, GestureEventArgs e)
-        {
-            Hyperlink link = sender as Hyperlink;
-            if (link == null)
-                return;
-
-            ContextMenu menu = ContextMenuService.GetContextMenu(link);
-            if (menu == null)
-                return;
-
-            this.BackKeyPress += CloseContextMenu;
-            menu.IsOpen = true;
-        }
-
-        void CloseContextMenu(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (_menuOpened != null)
-            {
-                _menuOpened.IsOpen = false;
-                _menuOpened = null;
-            }
-
-            this.BackKeyPress -= CloseContextMenu;
-        }
-
 
         void CopyLink(object sender, RoutedEventArgs e)
         {
