@@ -24,6 +24,7 @@ namespace Ocell.Library
         private const string TweetsPerReqKey = "TWEETSXREQ";
         private const string DefaultMuteTimeKey = "DEFAULTMUTETIME";
         private const string DraftsKey = "DRAFTS";
+        private const string ReadLaterCredsKey = "READLATERCREDS";
 
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
@@ -37,6 +38,19 @@ namespace Ocell.Library
         private static int? _tweetsPerRequest;
         private static TimeSpan? _defaultMuteTime;
         private static List<TwitterDraft> _drafts;
+        private static ReadLaterCredentials _readLaterCredentials;
+
+        public static ReadLaterCredentials ReadLaterCredentials
+        {
+            get
+            {
+                return GenericGetFromConfig<ReadLaterCredentials>(ReadLaterCredsKey, ref _readLaterCredentials);
+            }
+            set
+            {
+                GenericSaveToConfig(ReadLaterCredsKey, ref _readLaterCredentials, value);
+            }
+        }
 
 
         public static List<TwitterDraft> Drafts

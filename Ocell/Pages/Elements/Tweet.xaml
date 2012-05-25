@@ -74,6 +74,7 @@
                 <shell:ApplicationBarMenuItem Text="retweet with comments" x:Name="quoteButton" Click="quoteButton_Click"/> 
                 <shell:ApplicationBarMenuItem Text="share..." x:Name="shareButton" Click="shareButton_Click"/>
                 <shell:ApplicationBarMenuItem x:Name="MuteBtn" Text="mute..." Click="ApplicationBarMenuItem_Click"/>
+                <shell:ApplicationBarMenuItem x:Name="saveForLater" Text="read later" Click="saveForLater_Click" />
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.reply.rest.png" Text="reply" x:Name="replyButton" Click="replyButton_Click"  />
             <shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.replyall.rest.png" Text="reply all" x:Name="replyAllButton" Click="replyAllButton_Click"/>

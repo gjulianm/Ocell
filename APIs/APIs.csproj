@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</ProjectGuid>
+    <ProjectGuid>{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}</ProjectGuid>
     <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Library</RootNamespace>
-    <AssemblyName>Library</AssemblyName>
+    <RootNamespace>Ocell.Library</RootNamespace>
+    <AssemblyName>APIs</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
@@ -18,8 +18,6 @@
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <Utf8Output>true</Utf8Output>
-    <ExpressionBlendVersion>4.0.30816.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,60 +41,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib.WindowsPhone, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Ocell\Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Phone" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Ocell\Assemblies\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="mscorlib.extensions" />
-    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Autocompleter.cs" />
-    <Compile Include="Cacher.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="DataTransfer.cs" />
-    <Compile Include="DebugWriter.cs" />
-    <Compile Include="DecisionMaker.cs" />
-    <Compile Include="GlobalEvents.cs" />
-    <Compile Include="IsolatedFileStreamExtension.cs" />
-    <Compile Include="ColumnFilter.cs" />
-    <Compile Include="LoadMoreTweetable.cs" />
-    <Compile Include="NotificationPreferences.cs" />
+    <Compile Include="ReadLater\Instapaper\InstapaperService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DateSync.cs" />
-    <Compile Include="ProtectedAccounts.cs" />
-    <Compile Include="ReadLaterCompatibility.cs" />
-    <Compile Include="Replies.cs" />
+    <Compile Include="ReadLater\IReadLaterService.cs" />
+    <Compile Include="ReadLater\Pocket\PocketService.cs" />
+    <Compile Include="ReadLater\ReadLaterResponse.cs" />
     <Compile Include="SensitiveData.cs" />
-    <Compile Include="ServiceDispatcher.cs" />
-    <Compile Include="TileManager.cs" />
-    <Compile Include="TweetFilter.cs" />
-    <Compile Include="TweetLoader.cs" />
-    <Compile Include="TweetTask.cs" />
-    <Compile Include="TwitterComparers.cs" />
-    <Compile Include="TwitterDraft.cs" />
-    <Compile Include="TwitterResource.cs" />
-    <Compile Include="UsernameProvider.cs" />
-    <Compile Include="UserToken.cs" />
-    <Compile Include="Watch.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">
       <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
       <Name>Hammock.WindowsPhone</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
-      <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
-      <Name>TweetSharp.WindowsPhone.Mango</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />

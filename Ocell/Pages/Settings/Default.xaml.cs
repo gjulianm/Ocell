@@ -8,6 +8,9 @@ using System.Linq;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Library.Notifications;
+using Ocell.Library.ReadLater.Pocket;
+using Ocell.Library.ReadLater.Instapaper;
+using Ocell.Library.ReadLater;
 
 namespace Ocell.Settings
 {
@@ -19,7 +22,7 @@ namespace Ocell.Settings
 
         public Default()
         {
-            InitializeComponent(); 
+            InitializeComponent();
             ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(Default_Loaded);
@@ -67,7 +70,7 @@ namespace Ocell.Settings
 
         void Accounts_Not_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-           if (e.AddedItems == null || e.AddedItems.Count == 0)
+            if (e.AddedItems == null || e.AddedItems.Count == 0)
                 return;
 
             UserToken User = e.AddedItems[0] as UserToken;
@@ -96,7 +99,7 @@ namespace Ocell.Settings
                 UserToken Account = e.AddedItems[0] as UserToken;
                 Dispatcher.BeginInvoke(() =>
                     {
-                        MessageBoxResult Result = MessageBox.Show("Do you really want to delete the account " + Account.ScreenName +"?", "", MessageBoxButton.OKCancel);
+                        MessageBoxResult Result = MessageBox.Show("Do you really want to delete the account " + Account.ScreenName + "?", "", MessageBoxButton.OKCancel);
                         if (Result == MessageBoxResult.OK)
                         {
                             Config.Accounts.Remove(Account);
@@ -114,26 +117,26 @@ namespace Ocell.Settings
 
         void RemoveColumnsAssociatedWith(UserToken Account)
         {
-           try
-           {
-           		UnsafeRemoveColumnsAssociatedWith(Account);
-           }
-           catch(Exception)
-           { 
-           }
+            try
+            {
+                UnsafeRemoveColumnsAssociatedWith(Account);
+            }
+            catch (Exception)
+            {
+            }
         }
-        
+
         void UnsafeRemoveColumnsAssociatedWith(UserToken Account)
         {
-        	 if (Config.Columns.Count == 0 || Account == null)
+            if (Config.Columns.Count == 0 || Account == null)
                 return;
             foreach (var item in Config.Columns)
             {
-            	if(item.User == Account)
-                	Config.Columns.Remove(item);
+                if (item.User == Account)
+                    Config.Columns.Remove(item);
             }
             Config.SaveColumns();
-		}
+        }
 
         void Default_Loaded(object sender, RoutedEventArgs e)
         {
@@ -146,10 +149,21 @@ namespace Ocell.Settings
                 Config.TweetsPerRequest = 40;
             tweetsPerReq.Text = Config.TweetsPerRequest.ToString();
 
-            if(Config.Accounts != null && Config.Accounts.Count > 0)
+            if (Config.Accounts != null && Config.Accounts.Count > 0)
                 Accounts_Not.SelectedIndex = 0;
 
             if (SilencePicker != null) UpdateListPicker();
+
+            if (Config.ReadLaterCredentials.Pocket != null)
+            {
+                PocketPass.Password = Config.ReadLaterCredentials.Pocket.Password;
+                PocketUser.Text = Config.ReadLaterCredentials.Pocket.User;
+            }
+            if (Config.ReadLaterCredentials.Instapaper != null)
+            {
+                IPPass.Password = Config.ReadLaterCredentials.Instapaper.Password;
+                IPUser.Text = Config.ReadLaterCredentials.Instapaper.User;
+            }
         }
 
         private void BindAccounts()
@@ -158,7 +172,7 @@ namespace Ocell.Settings
             {
                 Users.DataContext = Config.Accounts;
                 Users.ItemsSource = Config.Accounts;
-                
+
                 Accounts_Not.DataContext = Config.Accounts;
                 Accounts_Not.ItemsSource = Config.Accounts;
             }
@@ -216,11 +230,11 @@ namespace Ocell.Settings
 
         private void tweetsPerReq_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-        	int num;
-			if(int.TryParse(tweetsPerReq.Text, out num))
-			{
-				Config.TweetsPerRequest = num;
-			}
+            int num;
+            if (int.TryParse(tweetsPerReq.Text, out num))
+            {
+                Config.TweetsPerRequest = num;
+            }
         }
 
         private void ListPicker_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -267,7 +281,59 @@ namespace Ocell.Settings
             else if (Config.DefaultMuteTime == TimeSpan.FromDays(7))
                 SilencePicker.SelectedIndex = 3;
             else
-                SilencePicker.SelectedIndex = 4; 
+                SilencePicker.SelectedIndex = 4;
+        }
+
+        private void SaveRLBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            AuthPair PocketPair = null;
+            AuthPair InstapaperPair = null;
+
+            if (!string.IsNullOrWhiteSpace(PocketUser.Text))
+            {
+                Dispatcher.BeginInvoke(() => { pBar.Text = "Verifying credentials..."; pBar.IsVisible = true; });
+                PocketPair = new AuthPair { User = PocketUser.Text, Password = PocketPass.Password };
+                var service = new PocketService { UserName = PocketPair.User, Password = PocketPair.Password };
+                service.CheckCredentials((valid, response) =>
+                {
+                    if (valid)
+                    {
+                        Dispatcher.BeginInvoke(() => { Notificator.ShowMessage("Credentials saved.", pBar); });
+                        Config.ReadLaterCredentials.Pocket = PocketPair;
+                        Config.ReadLaterCredentials = Config.ReadLaterCredentials;
+                    }
+                    else
+                        Dispatcher.BeginInvoke(() => { pBar.IsVisible = false; MessageBox.Show("Invalid Pocket credentials."); });
+                });
+            }
+            else
+            {
+                Config.ReadLaterCredentials.Pocket = null;
+                Config.ReadLaterCredentials = Config.ReadLaterCredentials;
+            }
+
+            if (!string.IsNullOrWhiteSpace(IPUser.Text))
+            {
+                Dispatcher.BeginInvoke(() => { pBar.Text = "Verifying credentials..."; pBar.IsVisible = true; });
+                InstapaperPair = new AuthPair { User = IPUser.Text, Password = IPPass.Password };
+                var service = new InstapaperService { UserName = InstapaperPair.User, Password = InstapaperPair.Password };
+                service.CheckCredentials((valid, response) =>
+                {
+                    if (valid)
+                    {
+                        Dispatcher.BeginInvoke(() => { Notificator.ShowMessage("Credentials saved.", pBar); });
+                        Config.ReadLaterCredentials.Instapaper = InstapaperPair;
+                        Config.ReadLaterCredentials = Config.ReadLaterCredentials;
+                    }
+                    else
+                        Dispatcher.BeginInvoke(() => MessageBox.Show("Invalid Instapaper credentials."));
+                });
+            }
+            else
+            {
+                Config.ReadLaterCredentials.Pocket = null;
+                Config.ReadLaterCredentials = Config.ReadLaterCredentials;
+            }
         }
     }
 }

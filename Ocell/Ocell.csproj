@@ -425,6 +425,10 @@
     <Folder Include="Images\Icons_Black\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\APIs\APIs.csproj">
+      <Project>{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}</Project>
+      <Name>APIs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">
       <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
       <Name>Hammock.WindowsPhone</Name>

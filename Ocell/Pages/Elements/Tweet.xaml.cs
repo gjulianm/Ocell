@@ -198,7 +198,8 @@ namespace Ocell.Pages.Elements
                         else if (url.ExpandedValue.Contains("http://twitpic.com/"))
                         {
                             gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
-                            uriSource = new Uri("http://twitpic.com/show/thumb" + url.ExpandedValue.Substring(url.ExpandedValue.LastIndexOf('/')), UriKind.Relative);
+                            var strUri = "http://twitpic.com/show/thumb" + url.ExpandedValue.Substring(url.ExpandedValue.LastIndexOf('/'));
+                            uriSource = new Uri(strUri, UriKind.Absolute);
                         }
                         else if (url.ExpandedValue.Contains("http://instagr.am/"))
                         {
@@ -644,6 +645,15 @@ namespace Ocell.Pages.Elements
         private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
         {
             MuteGrid.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void saveForLater_Click(object sender, System.EventArgs e)
+        {
+            var command = new Ocell.Commands.ReadLaterCommand();
+            if (!command.CanExecute(status))
+                Dispatcher.BeginInvoke(() => MessageBox.Show("You have not configured any read later (Instapaper or Pocket) account. You can do it in the settings page."));
+            else
+                command.Execute(status);
         }
     }
 }

@@ -7,6 +7,11 @@ using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
 using TweetSharp;
 using System.Threading;
+using Ocell.Library.ReadLater.Instapaper;
+using Ocell.Library.ReadLater.Pocket;
+using Ocell.Library.ReadLater;
+using System.Linq;
+
 namespace Ocell.Commands
 {
     public class ReplyCommand : ICommand
@@ -208,6 +213,75 @@ namespace Ocell.Commands
             Config.GlobalFilter.AddFilter(filter);
             Config.GlobalFilter = Config.GlobalFilter; // Force save.
             GlobalEvents.FireFiltersChanged(filter, new EventArgs());
+        }
+
+        public event EventHandler CanExecuteChanged;
+    }
+
+    public class ReadLaterCommand : ICommand
+    {
+        private int _pendingCalls;
+
+        public bool CanExecute(object parameter)
+        {
+            var creds = Config.ReadLaterCredentials;
+            return parameter is TwitterStatus && (creds.Instapaper != null || creds.Pocket != null);
+        }
+
+        public void Execute(object parameter)
+        {
+            TwitterStatus tweet = parameter as TwitterStatus;
+            _pendingCalls = 0;
+            var credentials = Config.ReadLaterCredentials;
+
+            if (tweet == null)
+                return;
+
+            if (credentials.Pocket != null)
+            {
+                var service = new PocketService();
+                service.UserName = credentials.Pocket.User;
+                service.Password = credentials.Pocket.Password;
+
+                TwitterUrl link = tweet.Entities.FirstOrDefault(item => item != null && item.EntityType == TwitterEntityType.Url) as TwitterUrl;
+                _pendingCalls++;
+                if (link != null)
+                    service.AddUrl(link.ExpandedValue, tweet.Id, Callback);
+                else
+                {
+                    string url = "http://twitter.com/" + tweet.Author.ScreenName + "/statuses/" + tweet.Id.ToString();
+                    service.AddUrl(url, Callback);
+                }
+            }
+            if (credentials.Instapaper != null)
+            {
+                var service = new InstapaperService();
+                service.UserName = credentials.Instapaper.User;
+                service.Password = credentials.Instapaper.Password;
+
+                TwitterUrl link = tweet.Entities.FirstOrDefault(item => item != null && item.EntityType == TwitterEntityType.Url) as TwitterUrl;
+                _pendingCalls++;
+                if (link != null)
+                    service.AddUrl(link.ExpandedValue, tweet.Text, Callback);
+                else
+                {
+                    string url = "http://twitter.com/" + tweet.Author.ScreenName + "/statuses/" + tweet.Id.ToString();
+                    service.AddUrl(url, Callback);
+                }
+            }
+        }
+
+        private void Callback(ReadLaterResponse response)
+        {
+            _pendingCalls--;
+            if (response.Result != ReadLaterResult.Accepted)
+            {
+                Deployment.Current.Dispatcher.BeginInvoke(() => { MessageBox.Show("There has been an error while trying to save this tweet for later."); });
+            }
+            else if (_pendingCalls <= 0)
+            {
+                Deployment.Current.Dispatcher.BeginInvoke(() => { MessageBox.Show("Saved for later!"); });
+            }
         }
 
         public event EventHandler CanExecuteChanged;

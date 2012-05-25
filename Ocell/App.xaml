@@ -24,6 +24,7 @@
     		<commands:ReplyAllCommand x:Key="ReplyAllCommand"/>
     		<commands:ReplyCommand x:Key="ReplyCommand"/>
     		<commands:RetweetCommand x:Key="RetweetCommand"/>
+            <commands:ReadLaterCommand x:Key="ReadLaterCommand"/>
     		<local:ToColumn x:Key="ToColumnConverter" />
     		<local:IncludeExcludeConverter x:Key="IncludeExcludeConverter" />
     		<local:FilterTypeConverter x:Key="FilterTypeConverter" />
@@ -56,7 +57,8 @@
     									<toolkit:MenuItem Header="retweet" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding}" />
     									<toolkit:MenuItem Header="favorite" Command="{StaticResource FavoriteCommand}" CommandParameter="{Binding}" />
 										<toolkit:MenuItem Header="mute user" Command="{StaticResource MuteCommand}" CommandParameter="{Binding}" />
-    								</toolkit:ContextMenu>
+                                        <toolkit:MenuItem Header="read later" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding}" />
+                                    </toolkit:ContextMenu>
     							</toolkit:ContextMenuService.ContextMenu>
     							<TextBlock x:Name="Date" Text="{Binding CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}" VerticalAlignment="Top" Margin="0,5.753,8,0" Foreground="#FF707070" Grid.Column="1" HorizontalAlignment="Right" UseLayoutRounding="False" FontFamily="Segoe WP Light"/>
     							<Image x:Name="Avatar" Source="{Binding ConverterParameter=false, Converter={StaticResource AvatarConverter}}" HorizontalAlignment="Left" Width="{Binding Converter={StaticResource SizeConverter}}" Margin="{Binding Converter={StaticResource MarginConverter}}" d:LayoutOverrides="HorizontalAlignment, Height" Height="{Binding Converter={StaticResource SizeConverter}}" UseLayoutRounding="False" VerticalAlignment="Top"/>

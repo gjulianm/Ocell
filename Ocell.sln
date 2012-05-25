@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hammock.WindowsPhone", "ham
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TweetSharp.WindowsPhone.Mango", "tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj", "{51554319-87B7-4D38-9DDA-8F771FDA70FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIs", "APIs\APIs.csproj", "{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ClientProfiles|Any CPU = ClientProfiles|Any CPU
@@ -225,6 +227,42 @@ Global
 		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Staging|Mixed Platforms.Build.0 = Release|Any CPU
 		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Staging|PHP 5.3.ActiveCfg = Release|Any CPU
 		{51554319-87B7-4D38-9DDA-8F771FDA70FD}.Staging|x86.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.ClientProfiles|Any CPU.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.ClientProfiles|Any CPU.Build.0 = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.ClientProfiles|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.ClientProfiles|Mixed Platforms.Build.0 = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.ClientProfiles|PHP 5.3.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.ClientProfiles|x86.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Debug|PHP 5.3.ActiveCfg = Debug|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Local|Any CPU.Build.0 = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Local|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Local|Mixed Platforms.Build.0 = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Local|PHP 5.3.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Local|x86.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Production|Any CPU.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Production|Any CPU.Build.0 = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Production|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Production|Mixed Platforms.Build.0 = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Production|PHP 5.3.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Production|x86.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Release|PHP 5.3.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Release|x86.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Staging|Any CPU.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Staging|Any CPU.Build.0 = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Staging|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Staging|Mixed Platforms.Build.0 = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Staging|PHP 5.3.ActiveCfg = Release|Any CPU
+		{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}.Staging|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
