@@ -5,21 +5,26 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</ProjectGuid>
+    <ProjectGuid>{8EFE9F9D-4301-4568-B6B7-B77571D890DC}</ProjectGuid>
     <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Library</RootNamespace>
-    <AssemblyName>Library</AssemblyName>
+    <RootNamespace>Ocell.Testing</RootNamespace>
+    <AssemblyName>Ocell.Testing</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <SilverlightApplication>false</SilverlightApplication>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>
+    </SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>Ocell.Testing.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>Ocell.Testing.App</SilverlightAppEntry>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <Utf8Output>true</Utf8Output>
-    <ExpressionBlendVersion>4.0.30816.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,65 +51,63 @@
     <Reference Include="Calcium.Phone">
       <HintPath>..\..\..\..\..\Program Files (x86)\Calcium SDK\Windows Phone\1.0\Libraries\Calcium.Phone.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib.WindowsPhone, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Ocell\Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Phone" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Ocell\Assemblies\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.Phone.Interop" />
+    <Reference Include="Microsoft.Silverlight.Testing">
+      <HintPath>..\Testing\Assemblies\Microsoft.Silverlight.Testing.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
+      <HintPath>..\Testing\Assemblies\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Xml" />
     <Reference Include="mscorlib.extensions" />
-    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Autocompleter.cs" />
-    <Compile Include="Cacher.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="DataTransfer.cs" />
-    <Compile Include="DebugWriter.cs" />
-    <Compile Include="DecisionMaker.cs" />
-    <Compile Include="GlobalEvents.cs" />
-    <Compile Include="IsolatedFileStreamExtension.cs" />
-    <Compile Include="ColumnFilter.cs" />
-    <Compile Include="LoadMoreTweetable.cs" />
-    <Compile Include="NotificationPreferences.cs" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DateSync.cs" />
-    <Compile Include="ProtectedAccounts.cs" />
-    <Compile Include="ReadLaterCompatibility.cs" />
-    <Compile Include="Replies.cs" />
-    <Compile Include="SensitiveData.cs" />
-    <Compile Include="ServiceDispatcher.cs" />
-    <Compile Include="TileManager.cs" />
-    <Compile Include="TweetFilter.cs" />
-    <Compile Include="TweetLoader.cs" />
-    <Compile Include="TweetTask.cs" />
-    <Compile Include="TwitterComparers.cs" />
-    <Compile Include="TwitterDraft.cs" />
-    <Compile Include="TwitterResource.cs" />
-    <Compile Include="UsernameProvider.cs" />
-    <Compile Include="UserToken.cs" />
-    <Compile Include="Watch.cs" />
+    <Compile Include="Tests\UI\Search\EnterSearchTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">
-      <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
-      <Name>Hammock.WindowsPhone</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
-      <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
-      <Name>TweetSharp.WindowsPhone.Mango</Name>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AppManifest.xml" />
+    <None Include="Properties\WMAppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ApplicationIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SplashScreenImage.jpg" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Ocell\Ocell.csproj">
+      <Project>{F3B6A65D-237D-4E5E-B4A9-F9E098730119}</Project>
+      <Name>Ocell</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
-  <ProjectExtensions />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -112,4 +115,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ProjectExtensions />
 </Project>

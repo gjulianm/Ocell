@@ -22,6 +22,7 @@ namespace Ocell.Library.Filtering
         public ColumnFilter()
         {
             _predicates = new List<ITweetableFilter>();
+            Global = null;
         }
 
         public bool Evaluate(object item)

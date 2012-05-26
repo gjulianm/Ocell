@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO.IsolatedStorage;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using Ocell.Library;
-using DanielVaughan.InversionOfControl;
-using DanielVaughan.Services;
-using DanielVaughan.Services.Implementation;
-using DanielVaughan;
-
+using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
-using DanielVaughan.InversionOfControl.Containers.SimpleContainer;
-
-namespace Ocell
+namespace Ocell.Testing
 {
     public partial class App : Application
     {
@@ -61,19 +57,12 @@ namespace Ocell
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
 
-            SimpleContainer container = new SimpleContainer();
-            container.InitializeServiceLocator();
-
-            Dependency.Register<INavigationService, FrameNavigationService>(true);
-
         }
 
         // Código para ejecutar cuando la aplicación se inicia (p.ej. a partir de Inicio)
         // Este código no se ejecutará cuando la aplicación se reactive
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
-            // Load configuration. 
-            
         }
 
         // Código para ejecutar cuando la aplicación se activa (se trae a primer plano)
@@ -86,16 +75,12 @@ namespace Ocell
         // Este código no se ejecutará cuando la aplicación se cierre
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
-            Config.SaveAccounts();
-            Config.SaveColumns();
         }
 
         // Código para ejecutar cuando la aplicación se cierra (p.ej., al hacer clic en Atrás)
         // Este código no se ejecutará cuando la aplicación se desactive
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
-            Config.SaveAccounts();
-            Config.SaveColumns();
         }
 
         // Código para ejecutar si hay un error de navegación
@@ -116,8 +101,6 @@ namespace Ocell
                 // Se ha producido una excepción no controlada; interrumpir el depurador
                 System.Diagnostics.Debugger.Break();
             }
-
-            LittleWatson.ReportException(e.ExceptionObject, "Ocell App Error");
         }
 
         #region Inicialización de la aplicación telefónica
@@ -155,6 +138,5 @@ namespace Ocell
         }
 
         #endregion
-
     }
 }

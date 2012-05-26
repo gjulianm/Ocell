@@ -5,7 +5,7 @@
 	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
+	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
 	x:Class="Ocell.Pages.Search.EnterSearch"
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"
 	FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -32,9 +32,9 @@
 
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 			<Grid x:Name="ContentPanel" Margin="4,144,8,0" d:LayoutOverrides="GridBox">
-				<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment"><Run Text="Enter your search "/><Run Text="query:"/></TextBlock>
-				<TextBox x:Name="SearchQuery" Margin="0,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" d:LayoutOverrides="Width"/>
-				<Button Content="Search" Margin="104,111,104,0" VerticalAlignment="Top" Click="Button_Click"/>
+				<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment"><Run Text="Enter your search query:"/></TextBlock>
+                <TextBox x:Name="SearchQuery" Text="{Binding Query, Mode=TwoWay, UpdateSourceTrigger=Explicit}"  Margin="0,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" d:LayoutOverrides="Width"/>
+				<Button Content="Search" Margin="104,111,104,0" VerticalAlignment="Top" Command="{Binding ButtonClick}"/>
 			</Grid>
 		</Grid>
 		

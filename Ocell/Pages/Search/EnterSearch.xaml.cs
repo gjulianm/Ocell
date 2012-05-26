@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using System.Data;
+using System.Windows.Data;
 
 namespace Ocell.Pages.Search
 {
@@ -18,12 +20,18 @@ namespace Ocell.Pages.Search
         public EnterSearch()
         {
             InitializeComponent();
+            
+            DataContext = new EnterSearchModel();
+            SearchQuery.TextChanged += OnTextBoxTextChanged;
             ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
         }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)
         {
-        	NavigationService.Navigate(new Uri("/Pages/Search/Search.xaml?form=1&q=" + Uri.EscapeDataString(SearchQuery.Text), UriKind.Relative));
+            TextBox textBox = sender as TextBox;
+            // Update the binding source
+            BindingExpression bindingExpr = textBox.GetBindingExpression(TextBox.TextProperty);
+            bindingExpr.UpdateSource();
         }
     }
 }

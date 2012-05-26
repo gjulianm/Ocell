@@ -89,6 +89,11 @@ namespace Ocell
 
             ThreadPool.QueueUserWorkItem((threadContext) =>
             {
+                if (Config.RetweetAsMentions == null)
+                    Config.RetweetAsMentions = true;
+                if (Config.TweetsPerRequest == null)
+                    Config.TweetsPerRequest = 40;
+
                 CreateTile();
                 ShowFollowMessage();
                 LittleWatson.CheckForPreviousException();
@@ -249,11 +254,6 @@ namespace Ocell
                 list.Loader.Error += new TweetLoader.OnError(Loader_Error);
                 list.Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
                 list.Loader.ActivateLoadMoreButton = true;
-
-                if (Config.RetweetAsMentions == null)
-                    Config.RetweetAsMentions = true;
-                if (Config.TweetsPerRequest == null)
-                    Config.TweetsPerRequest = 40;
 
                 list.Loader.TweetsToLoadPerRequest = (int)Config.TweetsPerRequest;
                 list.Loader.LoadRetweetsAsMentions = (bool)Config.RetweetAsMentions;
