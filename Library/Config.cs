@@ -12,6 +12,8 @@ namespace Ocell.Library
 {
     public static class Config 
     {
+        private static object ISConfFlag = new object();
+
         private const string AccountsKey = "ACCOUNTS";
         private const string ColumnsKey = "COLUMNS";
         private const string FollowMsg = "FOLLOWMSG";
@@ -217,23 +219,27 @@ namespace Ocell.Library
             if (element != null)
                 return element;
 
-            IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
+            lock (ISConfFlag)
+            {
 
-            try
-            {
-                if (!config.TryGetValue<T>(key, out element))
+                IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
+
+                try
                 {
-                    element = new T();
-                    config.Add(key, element);
-                    config.Save();
+                    if (!config.TryGetValue<T>(key, out element))
+                    {
+                        element = new T();
+                        config.Add(key, element);
+                        config.Save();
+                    }
                 }
-            }
-            catch (InvalidCastException)
-            {
-                config.Remove(key);
-            }
-            catch (Exception)
-            {
+                catch (InvalidCastException)
+                {
+                    config.Remove(key);
+                }
+                catch (Exception)
+                {
+                }
             }
 
             if (element == null)
@@ -248,20 +254,23 @@ namespace Ocell.Library
             if (value == null)
                 return;
 
-            IsolatedStorageSettings conf = IsolatedStorageSettings.ApplicationSettings;
+            lock (ISConfFlag)
+            {
+                IsolatedStorageSettings conf = IsolatedStorageSettings.ApplicationSettings;
 
-            try
-            {
-                element = value;
-                if (conf.Contains(Key))
-                    conf[Key] = value;
-                else
-                    conf.Add(Key, value);
-                conf.Save();
-            }
-            catch (Exception)
-            {
-                throw;
+                try
+                {
+                    element = value;
+                    if (conf.Contains(Key))
+                        conf[Key] = value;
+                    else
+                        conf.Add(Key, value);
+                    conf.Save();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 
