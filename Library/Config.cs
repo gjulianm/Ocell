@@ -313,5 +313,11 @@ namespace Ocell.Library
         {
             Drafts = _drafts;
         }
+
+        public static void ClearAll()
+        {
+            lock(ISConfFlag)
+                IsolatedStorageSettings.ApplicationSettings.Clear();
+        }
     }
 }
