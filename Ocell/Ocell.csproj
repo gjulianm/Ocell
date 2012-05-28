@@ -61,6 +61,9 @@
     <Reference Include="Microsoft.Phone.Controls, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Interop" />
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Calcium SDK\Windows Phone\1.0\Libraries\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.3.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
@@ -87,10 +90,13 @@
     <Compile Include="Helpers\ValueConverters\ToColumn.cs" />
     <Compile Include="Helpers\ValueConverters\TweetTextConverter.cs" />
     <Compile Include="LittleWatson.cs" />
+    <Compile Include="Pages\SelectUserModel.cs" />
+    <Compile Include="Pages\TopicsModel.cs" />
     <Compile Include="Notificator.cs" />
     <Compile Include="Pages\Columns\SelectAccount.xaml.cs">
       <DependentUpon>SelectAccount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Drafts\ManageDraftsModel.cs" />
     <Compile Include="Pages\Drafts\ManageDrafts.xaml.cs">
       <DependentUpon>ManageDrafts.xaml</DependentUpon>
     </Compile>
@@ -100,6 +106,7 @@
     <Compile Include="Pages\Lists\ListManager.xaml.cs">
       <DependentUpon>ListManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Search\SearchModel.cs" />
     <Compile Include="Pages\Search\EnterSearch.xaml.cs">
       <DependentUpon>EnterSearch.xaml</DependentUpon>
     </Compile>

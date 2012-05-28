@@ -11,40 +11,10 @@ namespace Ocell.Pages
         public Topics()
         {
             InitializeComponent();
+            DataContext = new TopicsModel();
+
             ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
-
-            this.Loaded += new RoutedEventHandler(Topics_Loaded);
-        }
-
-        void Topics_Loaded(object sender, RoutedEventArgs e)
-        {
-            Dispatcher.BeginInvoke(() =>
-            {
-                pBar.IsVisible = true;
-                pBar.Text = "Downloading trending topics...";
-            });
-            ServiceDispatcher.GetDefaultService().ListLocalTrendsFor(1, ReceiveTrends);
-        }
-
-        private void ReceiveTrends(TweetSharp.TwitterTrends Trends, TweetSharp.TwitterResponse Response)
-        {
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
-            if (Response.StatusCode != HttpStatusCode.OK)
-            {
-                Dispatcher.BeginInvoke(() =>
-                {
-                    MessageBox.Show("Error loading trending topics. Sorry :(");
-                    NavigationService.GoBack();
-                });
-                return;
-            }
-
-            Dispatcher.BeginInvoke(() =>
-            {
-                TList.DataContext = Trends;
-                TList.ItemsSource = Trends;
-            });
-        }
+        }       
 
         private void TList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {

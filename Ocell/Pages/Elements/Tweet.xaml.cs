@@ -191,27 +191,30 @@ namespace Ocell.Pages.Elements
                     if (i.EntityType == TwitterEntityType.Url)
                     {
                         var url = i as TwitterUrl;
-                        if (url.ExpandedValue.Contains("http://yfrog.com/"))
+                        if (url != null || string.IsNullOrWhiteSpace(url.ExpandedValue))
                         {
-                            gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
-                            uriSource = new Uri(url.ExpandedValue + ":iphone", UriKind.Absolute);
-                        }
-                        else if (url.ExpandedValue.Contains("http://twitpic.com/"))
-                        {
-                            gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
-                            var strUri = "http://twitpic.com/show/thumb" + url.ExpandedValue.Substring(url.ExpandedValue.LastIndexOf('/'));
-                            uriSource = new Uri(strUri, UriKind.Absolute);
-                        }
-                        else if (url.ExpandedValue.Contains("http://instagr.am/"))
-                        {
-                            gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
-                            string idcode;
-                            if(url.ExpandedValue.Last() == '/')
-                                idcode = url.ExpandedValue.Substring(0, url.ExpandedValue.Length-1);
-                            else
-                                idcode = url.ExpandedValue;
-                            idcode = idcode.Substring(idcode.LastIndexOf('/') + 1);
-                            uriSource = new Uri("http://instagr.am/p/" + idcode + "/media/?size=m", UriKind.Absolute);
+                            if (url.ExpandedValue.Contains("http://yfrog.com/"))
+                            {
+                                gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
+                                uriSource = new Uri(url.ExpandedValue + ":iphone", UriKind.Absolute);
+                            }
+                            else if (url.ExpandedValue.Contains("http://twitpic.com/"))
+                            {
+                                gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
+                                var strUri = "http://twitpic.com/show/thumb" + url.ExpandedValue.Substring(url.ExpandedValue.LastIndexOf('/'));
+                                uriSource = new Uri(strUri, UriKind.Absolute);
+                            }
+                            else if (url.ExpandedValue.Contains("http://instagr.am/"))
+                            {
+                                gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
+                                string idcode;
+                                if (url.ExpandedValue.Last() == '/')
+                                    idcode = url.ExpandedValue.Substring(0, url.ExpandedValue.Length - 1);
+                                else
+                                    idcode = url.ExpandedValue;
+                                idcode = idcode.Substring(idcode.LastIndexOf('/') + 1);
+                                uriSource = new Uri("http://instagr.am/p/" + idcode + "/media/?size=m", UriKind.Absolute);
+                            }
                         }
                     }
                 }

@@ -19,19 +19,14 @@ namespace Ocell
     {
         private bool _selectionChangeFired;
 
+        private ManageDraftsModel viewModel;
+
         public ManageDrafts()
         {
             InitializeComponent();
-
-            this.Loaded += new RoutedEventHandler(ManageDrafts_Loaded);
+            viewModel = new ManageDraftsModel();
+            DataContext = viewModel;
             _selectionChangeFired = false;
-        }
-
-        void ManageDrafts_Loaded(object sender, RoutedEventArgs e)
-        {
-            draftsList.ItemsSource = Config.Drafts;
-            draftsList.DataContext = Config.Drafts;
-
         }
 
         private void draftsList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -55,25 +50,7 @@ namespace Ocell
 
         private void Grid_Hold(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            Grid grid = sender as Grid;
-            if (grid == null)
-                return;
-            TwitterDraft draft = grid.Tag as TwitterDraft;
-            if(draft != null && Config.Drafts.Contains(draft))
-            {
-                Dispatcher.BeginInvoke(() =>
-                {
-                    var result = MessageBox.Show("Are you sure you want to delete this draft?", "", MessageBoxButton.OKCancel);
-                    if (result == MessageBoxResult.OK)
-                    {
-                        Config.Drafts.Remove(draft);
-                        Config.SaveDrafts();
-                        draftsList.ItemsSource = null;
-                        draftsList.ItemsSource = Config.Drafts;
-                        MessageBox.Show("Draft deleted.");
-                    }
-                });
-            }
+            viewModel.GridHold(sender, e);
         }
     }
 }

@@ -5,27 +5,22 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.Accounts" xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit" 
-    xmlns:SampleData1="clr-namespace:Expression.Blend.SampleData.Users" 
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:controls="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
     x:Class="Ocell.Pages.SelectUser"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="193" d:DesignWidth="480"
+    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True"
 	shell:SystemTray.Opacity="0">
 
 	<phone:PhoneApplicationPage.Resources>
-		<DataTemplate x:Key="ItemTemplate">
+		<DataTemplate x:Key="UserFromTemplate">
 			<StackPanel>
 				<TextBlock Text="{Binding ScreenName}"/>
 			</StackPanel>
 		</DataTemplate>
-		<DataTemplate x:Key="ItemTemplate1">
-			<Grid Height="69" Width="300">
-				<TextBlock Text="{Binding ScreenName}" d:LayoutOverrides="Width, Height" Margin="68,18,49,24"/>
-				<Image Source="{Binding ProfileImageUrl}" HorizontalAlignment="Left" Width="64" Margin="0,0,0,5" d:LayoutOverrides="HorizontalAlignment"/>
-			</Grid>
-		</DataTemplate>
-		<DataTemplate x:Key="ItemTemplate2">
+
+		<DataTemplate x:Key="UserTemplate">
 			<Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">
 				<TextBlock Text="{Binding ScreenName}" Margin="89,21,8,21" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="24"/>
 				<Image Margin="8,8,0,0" HorizontalAlignment="Left" Width="64" Height="64" VerticalAlignment="Top" Source="{Binding ProfileImageUrl}"/>
@@ -33,11 +28,7 @@
 		</DataTemplate>
 	</phone:PhoneApplicationPage.Resources>
 <!--Código de ejemplo que muestra el uso de ApplicationBar-->
-<phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton x:Name="Next" IconUri="/Images/Icons_White/appbar.next.rest.png" Text="continue" Click="Next_Click"/>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
+
 	<phone:PhoneApplicationPage.FontFamily>
 		<StaticResource ResourceKey="PhoneFontFamilyNormal"/>
 	</phone:PhoneApplicationPage.FontFamily>
@@ -49,7 +40,7 @@
 	</phone:PhoneApplicationPage.Foreground>
 	
 	<shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="False" x:Name="pBar" />
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="Downloading list of users..." x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
 	
 <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
@@ -65,17 +56,21 @@
 <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
     		<StackPanel x:Name="TitlePanel" Grid.Row="0" Height="116" VerticalAlignment="Top" Margin="4,0,8,0">
     			<TextBlock x:Name="ApplicationTitle" Text="OCELL" Style="{StaticResource PhoneTextNormalStyle}"/>
-    			<TextBlock x:Name="PageTitle" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"><Run Text="send "/><Run Text="m"/><Run Text="essage"/></TextBlock>
+    			<TextBlock x:Name="PageTitle" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"><Run Text="send message"/></TextBlock>
     		</StackPanel>
 
         <!--ContentPanel. Colocar aquí el contenido adicional-->
     		<Grid x:Name="ContentPanel" Margin="16,128,8,0" d:LayoutOverrides="GridBox">
     			<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="From:" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
-    			<toolkit:ListPicker x:Name="AccountsPicker" Margin="12,39,20,0" VerticalAlignment="Top" ItemTemplate="{StaticResource ItemTemplate}"/>
+                <toolkit:ListPicker x:Name="AccountsPicker" Margin="12,39,20,0" VerticalAlignment="Top" ItemsSource="{Binding Accounts}" ItemTemplate="{StaticResource UserFromTemplate}"/>
     			<TextBlock HorizontalAlignment="Left" Margin="8,117,0,0" TextWrapping="Wrap" Text="To:" VerticalAlignment="Top" RenderTransformOrigin="0.667,0.926" Foreground="{StaticResource PhoneSubtleBrush}"/>
-    			<TextBox x:Name="UserFilter" Margin="0,139,8,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
-    			<ListBox x:Name="UserList" Margin="12,211,20,8" ItemTemplate="{StaticResource ItemTemplate2}" />
+                <TextBox x:Name="UserFilter" Margin="0,139,8,0" Text="{Binding UserFilter, Mode=TwoWay, UpdateSourceTrigger=Explicit}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+    			<ListBox x:Name="UserList" Margin="12,211,20,8" ItemsSource="{Binding Collection.View}" SelectedItem="{Binding Destinatary, Mode=TwoWay}" ItemTemplate="{StaticResource UserTemplate}" />
     		</Grid>
+            
+            <controls:AppBar>
+                <controls:AppBarIconButton Text="next" IconUri="/Images/Icons_White/appbar.next.rest.png" Command="{Binding GoNext}" />
+            </controls:AppBar>
     	</Grid>
 
 <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->

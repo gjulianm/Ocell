@@ -6,7 +6,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.DraftSample"
-	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
+	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
 	x:Class="Ocell.ManageDrafts"
 	 xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
 	
@@ -21,8 +21,8 @@
 		<DataTemplate x:Key="ItemTemplate" >
 			<Grid Tag="{Binding}" Height="100" Width="431" toolkit:TiltEffect.IsTiltEnabled="True" Hold="Grid_Hold">
 				<TextBlock Text="{Binding Text}" FontFamily="Segoe WP SemiLight" TextTrimming="WordEllipsis" TextWrapping="Wrap" Margin="0,0,0,31"/>
-				<TextBlock Text="{Binding CreatedAt, Converter={StaticResource RelativeDateTimeConverter}}" HorizontalAlignment="Right" Foreground="{StaticResource PhoneSubtleBrush}" FontFamily="Segoe WP Light" Margin="0,54,0,19" d:LayoutOverrides="Height"/>
-			</Grid>
+                <TextBlock Text="{Binding CreatedAt, Converter={StaticResource RelativeDateTimeConverter}}" HorizontalAlignment="Right" Foreground="{StaticResource PhoneSubtleBrush}" FontFamily="Segoe WP Light" Margin="0,54,0,19" d:LayoutOverrides="Height"/>
+            </Grid>
 		</DataTemplate>
 	</phone:PhoneApplicationPage.Resources>
 
@@ -54,8 +54,8 @@
 
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
-				<ListBox x:Name="draftsList" Margin="8,8,8,55" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}" SelectionChanged="draftsList_SelectionChanged"/>
-				<TextBlock HorizontalAlignment="Left" Margin="8,0,0,8" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="440" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Tap a draft to modify it, tap &amp;"/><Run Text=" "/><Run Text="hold to "/><Run Text="delete "/><Run Text="it."/></TextBlock>
+                <ListBox x:Name="draftsList" Margin="8,8,8,55" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}"  SelectedItem="{Binding ListSelection, Mode=TwoWay}" />
+                <TextBlock HorizontalAlignment="Left" Margin="8,0,0,8" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="440" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Tap a draft to modify it, tap &amp;"/><Run Text=" "/><Run Text="hold to "/><Run Text="delete "/><Run Text="it."/></TextBlock>
 			</Grid>
 		</Grid>
 		

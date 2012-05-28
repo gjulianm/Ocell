@@ -214,6 +214,7 @@ namespace Ocell.Pages
                         pBar.Text = "Sending message...";
                     });
                     Service.SendDirectMessage((int)DataTransfer.DMDestinationId, Tweet.Text, ReceiveDM);
+                    
                 }
                 else
                     SendTweet();
@@ -273,6 +274,7 @@ namespace Ocell.Pages
             else
                 Dispatcher.BeginInvoke(() =>
                 {
+                    DataTransfer.ReplyingDM = false;
                 	Tweet.Text = "";
                     DataTransfer.Text = "";
                     if (NavigationService.CanGoBack)

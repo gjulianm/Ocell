@@ -10,63 +10,35 @@ namespace Ocell.Pages.Search
 {
     public partial class Search : PhoneApplicationPage
     {
-        private string query;
+        private SearchModel viewModel;
         private bool selectionChangeFired = false;
+
         public Search()
         {
-            InitializeComponent(); 
-            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent();
 
-            TweetList.SelectionChanged += new SelectionChangedEventHandler(ListBox_SelectionChanged);
+            viewModel = new SearchModel();
+            DataContext = viewModel;
+
+            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
         }
 
         private void TweetList_Loaded(object sender, RoutedEventArgs e)
         {
+            string query;
             if (!NavigationContext.QueryString.TryGetValue("q", out query) || string.IsNullOrWhiteSpace(query))
                 if ((query = DataTransfer.Search) == null)
                     NavigationService.GoBack();
 
             string fromForm;
-
             if (NavigationContext.QueryString.TryGetValue("form", out fromForm) && fromForm == "1")
                 NavigationService.RemoveBackEntry();
 
-            Dispatcher.BeginInvoke(() => PTitle.Text = query);
-            TweetList.Loader.Resource = new TwitterResource { Type = ResourceType.Search, Data = query, User = Config.Accounts[0] };
-            TweetList.Compression += new Controls.ExtendedListBox.OnCompression(TweetList_Compression);
-            TweetList.Loader.LoadFinished += new EventHandler(Loader_LoadFinished);
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-            TweetList.Loader.Load();
-        }
+            viewModel.Query = query;
+            viewModel.Loader = TweetList.Loader;
 
-        void TweetList_Compression(object sender, Controls.CompressionEventArgs e)
-        {
-            bool old = false;
-            if (e.Type == Controls.CompressionType.Bottom)
-                old = true;
-            TweetList.Loader.Load(old);
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-        }
-
-        void Loader_LoadFinished(object sender, EventArgs e)
-        {
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
-        }
-
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!selectionChangeFired)
-            {
-                DataTransfer.Status = StatusConverter.SearchToStatus(e.AddedItems[0] as TwitterSearchStatus);
-                
-                ListBox list = sender as ListBox;
-                selectionChangeFired = true;
-                list.SelectedIndex = -1;
-
-                NavigationService.Navigate(Uris.ViewTweet);
-            }
-            else
-                selectionChangeFired = false;
+            TweetList.AutoManageNavigation = true;
+            TweetList.ActivatePullToRefresh = true;
         }
 
         private void Add_Click(object sender, System.EventArgs e)

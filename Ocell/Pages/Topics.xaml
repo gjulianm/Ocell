@@ -5,7 +5,8 @@
 	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
+	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
+    xmlns:controls="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
 	x:Class="Ocell.Pages.Topics"
 	Orientation="Portrait"
 	shell:SystemTray.IsVisible="True"
@@ -29,7 +30,7 @@
 	</phone:PhoneApplicationPage.Foreground>
 
 	<shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="False" x:Name="pBar" />
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="Downloading trending topics..." x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator> 
 
 	<!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
@@ -51,8 +52,12 @@
 
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
-				<ListBox x:Name="TList" Margin="28,8,8,8" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}" SelectionChanged="TList_SelectionChanged"/>
+				<ListBox x:Name="TList" Margin="28,8,8,8" SelectedItem="{Binding ListSelection, Mode=TwoWay}" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}" SelectionChanged="TList_SelectionChanged"/>
 			</Grid>
+            
+            <controls:AppBar>
+                <controls:AppBarIconButton Command="{Binding Refresh}" IconUri="/Images/Icons_White/appbar.refresh.rest.png" Text="refresh"/>
+            </controls:AppBar>
 		</Grid>
 		
 		<!--TitlePanel contiene el nombre de la aplicación y el título de la página--><!--ContentPanel: coloque aquí el contenido adicional-->
