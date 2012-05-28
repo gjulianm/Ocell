@@ -13,6 +13,11 @@ using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
 using Ocell.Library.Twitter.Comparers;
 using TweetSharp;
+using System.ComponentModel;
+using DanielVaughan.ComponentModel;
+using Ocell.Library;
+using DanielVaughan.Services;
+using DanielVaughan;
 
 
 namespace Ocell.Controls
@@ -27,13 +32,23 @@ namespace Ocell.Controls
         protected ObservableCollection<ITweetable> _Items;
         protected CollectionViewSource _ViewSource;
         private ColumnFilter _filter;
+        protected bool _isLoading;
+        protected bool _selectionChangeFired;
 
+        public bool ActivatePullToRefresh { get; set; }
+        public bool AutoManageNavigation { get; set; }
+        public string NavigationUri { get; set; }
 
         public ExtendedListBox()
         {
             Loader = new TweetLoader();
+            ActivatePullToRefresh = true;
+            AutoManageNavigation = true;
+            _selectionChangeFired = false;
             this.Loaded += new RoutedEventHandler(ListBox_Loaded);
             this.Unloaded += new RoutedEventHandler(ExtendedListBox_Unloaded);
+            this.Compression += new OnCompression(RefreshOnPull);
+            this.SelectionChanged += new SelectionChangedEventHandler(ManageNavigation);
             Loader.LoadFinished += new EventHandler(PopulateItemsSource);
             Loader.PartialLoad += new EventHandler(PopulateItemsSource);
             Loader.CacheLoad += new EventHandler(PopulateItemsSource);
@@ -41,6 +56,9 @@ namespace Ocell.Controls
             _ViewSource = new CollectionViewSource();
             SetupCollectionViewSource();
         }
+
+
+        
 
         private void SetupCollectionViewSource()
         {
@@ -274,6 +292,50 @@ namespace Ocell.Controls
             return null;
         }
         #endregion
+
+        void RefreshOnPull(object sender, CompressionEventArgs e)
+        {
+            if (!ActivatePullToRefresh)
+                return;
+
+            bool old = (e.Type == Controls.CompressionType.Bottom);
+            Loader.Load(old);
+        }
+
+        void ManageNavigation(object sender, SelectionChangedEventArgs e)
+        {
+            if (!AutoManageNavigation)
+                return;
+
+            INavigationService NavigationService = Dependency.Resolve<INavigationService>();
+
+            if (!_selectionChangeFired)
+            {
+                DataTransfer.Status = e.AddedItems[0] as TwitterStatus;
+                DataTransfer.DM = e.AddedItems[0] as TwitterDirectMessage;
+
+                _selectionChangeFired = true;
+                SelectedItem = null;
+
+                if (e.AddedItems[0] is TwitterStatus)
+                    NavigationService.Navigate(Uris.ViewTweet);
+                else if (e.AddedItems[0] is TwitterDirectMessage)
+                    NavigationService.Navigate(Uris.ViewDM);
+
+                else if (e.AddedItems[0] is TwitterSearchStatus)
+                {
+                    DataTransfer.Status = StatusConverter.SearchToStatus(e.AddedItems[0] as TwitterSearchStatus);
+                    NavigationService.Navigate(Uris.ViewTweet);
+                }
+                else if (e.AddedItems[0] is LoadMoreTweetable)
+                {
+                    LoadIntermediate(e.AddedItems[0] as LoadMoreTweetable);
+                    RemoveLoadMore();
+                }
+            }
+            else
+                _selectionChangeFired = false;
+        }
 
         public delegate void OnCompression(object sender, CompressionEventArgs e);
         public event OnCompression Compression;
