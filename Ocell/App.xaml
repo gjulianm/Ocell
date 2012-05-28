@@ -12,6 +12,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
     xmlns:tr="clr-namespace:Ocell.Transitions"
+    xmlns:navigation="clr-namespace:System.Windows.Navigation;assembly=Microsoft.Phone"
     >
 
     <!--Recursos de la aplicación-->
@@ -153,5 +154,15 @@
             Launching="Application_Launching" Closing="Application_Closing" 
             Activated="Application_Activated" Deactivated="Application_Deactivated"/>
     </Application.ApplicationLifetimeObjects>
+    
+    <!--<Application.RootVisual>
+        <phone:PhoneApplicationFrame x:Name="RootFrame">
+            <phone:PhoneApplicationFrame.UriMapper>
+                <navigation:UriMapper>
+                    <navigation:UriMapping Uri="/Search/{query}" MappedUri="/Pages/Search/Search.xaml?q={query}" />
+                </navigation:UriMapper>
+            </phone:PhoneApplicationFrame.UriMapper>
+        </phone:PhoneApplicationFrame>
+    </Application.RootVisual>-->
 
 </Application>

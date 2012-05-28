@@ -65,6 +65,7 @@ namespace Ocell
             container.InitializeServiceLocator();
 
             Dependency.Register<INavigationService, FrameNavigationService>(true);
+            Dependency.Register<IMessageService, MessageService>(true);
 
         }
 
