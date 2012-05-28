@@ -42,6 +42,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Calcium.Phone">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Calcium SDK\Windows Phone\1.0\Libraries\Calcium.Phone.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib.WindowsPhone">
       <HintPath>..\Ocell\Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll</HintPath>
     </Reference>
