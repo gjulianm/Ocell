@@ -9,7 +9,7 @@
     <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Library</RootNamespace>
+    <RootNamespace>Ocell.Library</RootNamespace>
     <AssemblyName>Library</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -64,32 +64,33 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Autocompleter.cs" />
-    <Compile Include="Cacher.cs" />
+    <Compile Include="SafeObservable.cs" />
+    <Compile Include="Twitter\Cacher.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DataTransfer.cs" />
     <Compile Include="DebugWriter.cs" />
     <Compile Include="DecisionMaker.cs" />
     <Compile Include="GlobalEvents.cs" />
     <Compile Include="IsolatedFileStreamExtension.cs" />
-    <Compile Include="ColumnFilter.cs" />
-    <Compile Include="LoadMoreTweetable.cs" />
-    <Compile Include="NotificationPreferences.cs" />
+    <Compile Include="Filtering\ColumnFilter.cs" />
+    <Compile Include="Twitter\LoadMoreTweetable.cs" />
+    <Compile Include="Notifications\NotificationPreferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DateSync.cs" />
-    <Compile Include="ProtectedAccounts.cs" />
+    <Compile Include="Twitter\ProtectedAccounts.cs" />
     <Compile Include="ReadLaterCompatibility.cs" />
-    <Compile Include="Replies.cs" />
+    <Compile Include="Twitter\ConversationService.cs" />
     <Compile Include="SensitiveData.cs" />
-    <Compile Include="ServiceDispatcher.cs" />
-    <Compile Include="TileManager.cs" />
+    <Compile Include="Twitter\ServiceDispatcher.cs" />
+    <Compile Include="Notifications\TileManager.cs" />
     <Compile Include="TweetFilter.cs" />
-    <Compile Include="TweetLoader.cs" />
-    <Compile Include="TweetTask.cs" />
-    <Compile Include="TwitterComparers.cs" />
-    <Compile Include="TwitterDraft.cs" />
-    <Compile Include="TwitterResource.cs" />
-    <Compile Include="UsernameProvider.cs" />
-    <Compile Include="UserToken.cs" />
+    <Compile Include="Twitter\TweetLoader.cs" />
+    <Compile Include="Tasks\TwitterStatusTask.cs" />
+    <Compile Include="Twitter\Comparers\TwitterComparers.cs" />
+    <Compile Include="Twitter\TwitterDraft.cs" />
+    <Compile Include="Twitter\TwitterResource.cs" />
+    <Compile Include="Twitter\UsernameProvider.cs" />
+    <Compile Include="Twitter\UserToken.cs" />
     <Compile Include="Watch.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +103,7 @@
       <Name>TweetSharp.WindowsPhone.Mango</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions />
