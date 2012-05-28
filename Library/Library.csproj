@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Autocompleter.cs" />
+    <Compile Include="MessageServiceExtension.cs" />
     <Compile Include="SafeObservable.cs" />
     <Compile Include="Twitter\Cacher.cs" />
     <Compile Include="Config.cs" />
@@ -73,10 +74,12 @@
     <Compile Include="GlobalEvents.cs" />
     <Compile Include="IsolatedFileStreamExtension.cs" />
     <Compile Include="Filtering\ColumnFilter.cs" />
+    <Compile Include="Twitter\IProvider.cs" />
     <Compile Include="Twitter\LoadMoreTweetable.cs" />
     <Compile Include="Notifications\NotificationPreferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DateSync.cs" />
+    <Compile Include="Twitter\MockUserProvider.cs" />
     <Compile Include="Twitter\ProtectedAccounts.cs" />
     <Compile Include="ReadLaterCompatibility.cs" />
     <Compile Include="Twitter\ConversationService.cs" />
