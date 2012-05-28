@@ -17,7 +17,7 @@ namespace Ocell.Library
 {
     // Adapted from http://www.deanchalk.me.uk/post/Thread-Safe-Dispatcher-Safe-Observable-Collection-for-WPF.aspx.
 
-    public class SafeObservable<T> : IList<T>, INotifyCollectionChanged
+    public class SafeObservable<T> : IList<T>, INotifyCollectionChanged where T : IEquatable<T>
     {
         private IList<T> collection = new List<T>();
         private Dispatcher dispatcher;
@@ -37,14 +37,38 @@ namespace Ocell.Library
                 dispatcher.BeginInvoke((Action)(() => { DoAdd(item); }));
         }
 
+        public void BulkAdd(IEnumerable<T> items)
+        {
+            if (dispatcher.CheckAccess())
+                DoBulkAdd(items);
+            else
+                dispatcher.BeginInvoke(() => DoBulkAdd(items));
+        }
+
+        private void DoBulkAdd(IEnumerable<T> items)
+        {
+            int added = 0;
+            foreach (var item in items)
+            {
+                DoAdd(item);
+                added++;
+                if (added >= 5)
+                {
+                    Thread.Sleep(10);
+                    added = 0;
+                }
+            }
+        }
+
         private void DoAdd(T item)
         {
             lock (sync)
             {
                 collection.Add(item);
+                int index = collection.Count;
                 if (CollectionChanged != null)
                     CollectionChanged(this,
-                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add));
+                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
             }
         }
 
@@ -122,7 +146,7 @@ namespace Ocell.Library
                 result = collection.Remove(item);
                 if (result && CollectionChanged != null)
                     CollectionChanged(this, new
-                        NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove));
+                        NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
             }
             return result;
         }
@@ -200,11 +224,12 @@ namespace Ocell.Library
             {
                 lock (sync)
                 {
-                    if (collection.Count == 0 || collection.Count <= index)
-                    {
+                    if (collection.Count == 0 || collection.Count <= index || collection[index].Equals(value))
                         return;
-                    }
+                    var old = collection[index];
                     collection[index] = value;
+                    if(CollectionChanged != null)
+                        CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, old, index));
                 }
             }
 
