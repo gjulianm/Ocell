@@ -62,7 +62,7 @@
         <!--ContentPanel. Colocar aquí el contenido adicional-->
     		<Grid x:Name="ContentPanel" Margin="16,128,8,0" d:LayoutOverrides="GridBox">
     			<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="From:" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
-                <toolkit:ListPicker x:Name="AccountsPicker" Margin="12,39,20,0" VerticalAlignment="Top" ItemsSource="{Binding Accounts}" ItemTemplate="{StaticResource UserFromTemplate}"/>
+                <toolkit:ListPicker x:Name="AccountsPicker" Margin="12,39,20,0" VerticalAlignment="Top" ItemsSource="{Binding Accounts}" SelectedItem="{Binding Sender, Mode=TwoWay}" ItemTemplate="{StaticResource UserFromTemplate}"/>
     			<TextBlock HorizontalAlignment="Left" Margin="8,117,0,0" TextWrapping="Wrap" Text="To:" VerticalAlignment="Top" RenderTransformOrigin="0.667,0.926" Foreground="{StaticResource PhoneSubtleBrush}"/>
                 <TextBox x:Name="UserFilter" Margin="0,139,8,0" Text="{Binding UserFilter, Mode=TwoWay, UpdateSourceTrigger=Explicit}" TextWrapping="Wrap" VerticalAlignment="Top"/>
     			<ListBox x:Name="UserList" Margin="12,211,20,8" ItemsSource="{Binding Collection.View}" SelectedItem="{Binding Destinatary, Mode=TwoWay}" ItemTemplate="{StaticResource UserTemplate}" />

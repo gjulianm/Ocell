@@ -9,12 +9,18 @@ using Ocell.Library.Twitter;
 using System.Collections.Generic;
 using System;
 using System.ComponentModel;
+using System.Threading;
+using DanielVaughan;
+using DanielVaughan.InversionOfControl;
+using DanielVaughan.Net;
+using DanielVaughan.Services;
+using System.Linq;
 
 namespace Ocell.Pages
 {
     public class SelectUserModel : ViewModelBase
     {
-        private UserProvider provider;
+        private IUserProvider provider;
 
         CollectionViewSource collection;
         public CollectionViewSource Collection
@@ -66,25 +72,33 @@ namespace Ocell.Pages
 
         public SelectUserModel()
             : base("SelectUserForDM")
-        {            
-            provider = new UserProvider();
+        {
+            provider = Dependency.Resolve<IUserProvider>();
             provider.GetFollowers = true;
             provider.GetFollowing = false;
             provider.Finished += (sender, e) => IsLoading = false;
+            provider.Error += (sender, e) =>
+            {
+                IsLoading = false;
+                MessageService.ShowError("An error has ocurred (" + e.StatusDescription + "), we couldn't download the user list. Please try later.");
+            };
 
             Collection = new CollectionViewSource();
             Collection.Source = provider.Users;
 
             Collection.SortDescriptions.Add(new SortDescription("ScreenName", System.ComponentModel.ListSortDirection.Ascending));
 
-            Accounts = Config.Accounts;            
+            Accounts = Config.Accounts;
 
             goNext = new DelegateCommand((obj) =>
             {
                 DataTransfer.ReplyingDM = true;
                 Navigate(new Uri("/Pages/NewTweet.xaml?removeBack=1", UriKind.Relative));
 
-            }, (obj) => Destinatary != null);
+            }, (obj) =>
+                {
+                    return Destinatary != null && Sender != null;
+                });
 
             this.PropertyChanged += (sender, e) =>
                 {
@@ -95,24 +109,31 @@ namespace Ocell.Pages
                     else if (e.PropertyName == "UserFilter")
                         UserFilterUpdated();
                 };
+        }
 
-            IsLoading = true;
-            provider.Start();
+        public void Loaded()
+        {
+            Sender = Config.Accounts.FirstOrDefault();
         }
 
         private void DestinataryUpdated()
         {
             TwitterUser user = Destinatary as TwitterUser;
             if (user != null)
-                DataTransfer.DMDestinationId = user.Id;             
+                DataTransfer.DMDestinationId = user.Id;
+            goNext.RaiseCanExecuteChanged();
         }
 
         private void SenderUpdated()
         {
             provider.Users.Clear();
             provider.User = Sender as UserToken;
-            IsLoading = true;
-            provider.Start();
+            ThreadPool.QueueUserWorkItem((context) =>
+            {
+                IsLoading = true;
+                provider.Start();
+            });
+            goNext.RaiseCanExecuteChanged();
             DataTransfer.CurrentAccount = Sender as UserToken;
         }
 

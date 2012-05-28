@@ -14,12 +14,15 @@ namespace Ocell.Pages
 {
     public partial class SelectUser : PhoneApplicationPage
     {
+        private SelectUserModel viewModel;
         public SelectUser()
         {
             InitializeComponent();
             ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
-
+            viewModel = new SelectUserModel();
+            DataContext = viewModel;
             UserFilter.TextChanged += new TextChangedEventHandler(OnTextBoxTextChanged);
+            this.Loaded += (sender, e) => viewModel.Loaded();
         }
 
         private void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)
