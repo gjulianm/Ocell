@@ -327,35 +327,6 @@ namespace Ocell
                 NavigationService.Navigate(Uris.Columns);
         }
 
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!selectionChangeFired)
-            {
-                DataTransfer.Status = e.AddedItems[0] as TwitterStatus;
-                DataTransfer.DM = e.AddedItems[0] as TwitterDirectMessage;
-                ExtendedListBox list = sender as ExtendedListBox;
-                selectionChangeFired = true;
-                list.SelectedItem = null;
-                if (e.AddedItems[0] is TwitterStatus)
-                    NavigationService.Navigate(Uris.ViewTweet);
-                else if (e.AddedItems[0] is TwitterDirectMessage)
-                    NavigationService.Navigate(Uris.ViewDM);
-                else if (e.AddedItems[0] is TwitterSearchStatus)
-                {
-                    DataTransfer.Status = StatusConverter.SearchToStatus(e.AddedItems[0] as TwitterSearchStatus);
-                    NavigationService.Navigate(Uris.ViewTweet);
-                }
-                else if (e.AddedItems[0] is LoadMoreTweetable)
-                {
-                    Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-                    list.LoadIntermediate(e.AddedItems[0] as LoadMoreTweetable);
-                    list.RemoveLoadMore();
-                }
-            }
-            else
-                selectionChangeFired = false;
-        }
-
         private void MainPivot_Loaded(object sender, RoutedEventArgs e)
         {
             MainPivot.DataContext = pivots;
