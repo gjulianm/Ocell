@@ -6,7 +6,7 @@ using TweetSharp;
 
 namespace Ocell.Library.Twitter
 {
-    public class UserProvider
+    public class UserProvider : IUserProvider
     {
         public SafeObservable<TwitterUser> Users { get; set; }
         public UserToken User { get; set; }
@@ -63,13 +63,13 @@ namespace Ocell.Library.Twitter
                 Users = new SafeObservable<TwitterUser>();
 
             foreach (var user in users)
-                Users.Add(user);
+                if(!Users.Contains(user))
+                    Users.Add(user);
 
             if (finish && Finished != null)
                 Finished(this, new EventArgs());
         }
 
-        public delegate void OnError(object sender, TwitterResponse response);
         public event OnError Error;
 
         public event EventHandler Finished;
@@ -134,7 +134,6 @@ namespace Ocell.Library.Twitter
             _stop = true;
         }
 
-        public delegate void OnError(object sender, TwitterResponse response);
         public event OnError Error;
     }
 }
