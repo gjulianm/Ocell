@@ -8,11 +8,11 @@ using Ocell.Library;
 using System.Threading;
 using Ocell.Library.Twitter;
 using Ocell.Library.Twitter.Comparers;
-
+using DanielVaughan.ComponentModel;
 
 namespace Ocell.Library.Twitter
 {
-    public class TweetLoader : IDisposable
+    public class TweetLoader : ObservableObject, IDisposable
     {
         private int _loaded;
         private const int _toLoad = 1;
@@ -24,7 +24,6 @@ namespace Ocell.Library.Twitter
         private int _requestsInProgress;
         protected TwitterResource _resource;
         private static DateTime _rateResetTime;
-        private Mutex _cacheMutex;
         private ConversationService _conversationService;
 
         public TwitterResource Resource
@@ -47,6 +46,13 @@ namespace Ocell.Library.Twitter
         public ObservableCollection<ITweetable> Source { get; protected set; }
         protected TwitterService _srv;
         protected long LastId;
+
+        protected bool _isLoading;
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            protected set { Assign("IsLoading", ref _isLoading, value); }
+        }
 
         #region Constructors
         public TweetLoader(TwitterResource resource, bool cached)
@@ -74,7 +80,6 @@ namespace Ocell.Library.Twitter
             Cached = true;
             ActivateLoadMoreButton = false;
             _requestsInProgress = 0;
-            _cacheMutex = new Mutex(false, "cacheMutex");
             if (_rateResetTime == null)
                 _rateResetTime = DateTime.MinValue;
 
@@ -106,9 +111,7 @@ namespace Ocell.Library.Twitter
             {
                 try
                 {
-                    _cacheMutex.WaitOne();
                     Cacher.SaveToCache(Resource, Source.OrderByDescending(item => item.Id).Cast<TwitterStatus>().Take(CacheSize));
-                    _cacheMutex.ReleaseMutex();
                 }
                 catch (Exception)
                 {
@@ -122,9 +125,9 @@ namespace Ocell.Library.Twitter
                 return;
 
             TweetEqualityComparer comparer = new TweetEqualityComparer();
-            _cacheMutex.WaitOne();
+
             IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id);
-            _cacheMutex.ReleaseMutex();
+
 
             if (!DecisionMaker.ShouldLoadCache(ref cacheList))
                 return;
@@ -165,6 +168,7 @@ namespace Ocell.Library.Twitter
         protected void LoadNew()
         {
             _loaded++;
+            IsLoading = true;
             switch (Resource.Type)
             {
                 case ResourceType.Home:
@@ -207,9 +211,10 @@ namespace Ocell.Library.Twitter
 
             if (!Source.Any())
                 return;
-
+            IsLoading = true;
             if (last == 0)
                 last = Source.Last().Id;
+
             switch (Resource.Type)
             {
                 case ResourceType.Home:
@@ -325,6 +330,7 @@ namespace Ocell.Library.Twitter
             if (list.Any())
                 LastId = list.Last().Id;
 
+            IsLoading = false;
             if (LoadFinished != null && _resource.Type != ResourceType.Conversation)
                 LoadFinished(this, new EventArgs());
             else if (PartialLoad != null && _resource.Type == ResourceType.Conversation)

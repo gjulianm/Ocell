@@ -8,7 +8,7 @@ namespace Ocell.Library.Twitter
 {
     public class UserProvider
     {
-        public ObservableCollection<TwitterUser> Users { get; set; }
+        public SafeObservable<TwitterUser> Users { get; set; }
         public UserToken User { get; set; }
         public bool GetFollowers { get; set; }
         public bool GetFollowing { get; set; }
@@ -18,7 +18,7 @@ namespace Ocell.Library.Twitter
         {
             GetFollowers = true;
             GetFollowing = true;
-            Users = new ObservableCollection<TwitterUser>();
+            Users = new SafeObservable<TwitterUser>();
         }
 
         private void GetService()
@@ -60,7 +60,7 @@ namespace Ocell.Library.Twitter
                 finish = true;
 
             if (Users == null)
-                Users = new ObservableCollection<TwitterUser>();
+                Users = new SafeObservable<TwitterUser>();
 
             foreach (var user in users)
                 Users.Add(user);
