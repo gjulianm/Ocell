@@ -7,61 +7,76 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:custom="clr-namespace:Ocell.Controls"
-	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
+	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
 	x:Class="Ocell.Pages.Elements.User"
+    xmlns:u="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:converters="clr-namespace:DanielVaughan.Windows.Converters;assembly=Calcium.Phone"
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
 	SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
 	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache">
+
+    <phone:PhoneApplicationPage.Resources>
+
+        
+    </phone:PhoneApplicationPage.Resources>
     
     <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="False" x:Name="pBar" />
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
 
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
-	<Grid x:Name="LayoutRoot" Margin="0,-32,0,0" >
-		<Grid.Background>
-    		<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
-    	</Grid.Background>
-		<!--Control Pivot-->
-		<controls:Pivot x:Name="pivots" Title="OCELL" Margin="0,64,0,0">
-			<!--Elemento uno de Pivot-->
-			<controls:PivotItem x:Name="pvProfile" Header="profile">
-				<Grid>
-					<Image HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="124" Height="124" x:Name="Avatar" Tap="Avatar_Tap"/>
-					<TextBlock x:Name="FullName" Margin="148,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="300" FontSize="32"/>
-					<TextBlock x:Name="ScreenName" Margin="148,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="21.333" FontFamily="Segoe WP SemiLight"/>
-					<HyperlinkButton x:Name="Website" Margin="148,101,0,0" VerticalAlignment="Top" FontFamily="Segoe WP Light" Tap="Website_Tap" HorizontalAlignment="Left"/>
-					
-					<TextBlock x:Name="Biography" Margin="8,148,8,288" TextWrapping="Wrap" FontSize="24" FontFamily="Segoe WP SemiLight"></TextBlock>
-					<StackPanel HorizontalAlignment="Left" Margin="8,0,0,53" Orientation="Vertical" VerticalAlignment="Bottom" Width="112">
-						<TextBlock Margin="0,0,33,0" TextWrapping="Wrap" Text="tweets" FontFamily="Segoe WP Light" FontSize="29.333" d:LayoutOverrides="Width"/>
-						<TextBlock x:Name="Tweets" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" FontFamily="Segoe WP Light"/>
-						<TextBlock TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41"><Run Text="followers"/><LineBreak/><Run/></TextBlock>
-						<TextBlock x:Name="Followers" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" FontFamily="Segoe WP Light"/>
-						<TextBlock TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41" Text="following"/>
-						<TextBlock x:Name="Following" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" FontFamily="Segoe WP Light"/>
-					</StackPanel>
-				</Grid>
-			</controls:PivotItem>
-			<controls:PivotItem x:Name="pvTweets" Header="tweets">
+    <Grid x:Name="LayoutRoot" Margin="0,-32,0,0" >
+        <Grid.Background>
+            <ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
+        </Grid.Background>
+        <!--Control Pivot-->
+        <controls:Pivot x:Name="pivots" Title="OCELL" Margin="0,64,0,0">
+            <!--Elemento uno de Pivot-->
+            <controls:PivotItem x:Name="pvProfile" Header="profile">
                 <Grid>
-                    <custom:ExtendedListBox ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" Tag="Tweets" Loaded="ListBox_Loaded"/>
+                    <Image HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="124" Height="124" x:Name="Avatar" Source="{Binding Avatar}"/>
+                    <TextBlock x:Name="FullName" Margin="148,0,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="300" FontSize="32" Text="{Binding Name}"/>
+                    <TextBlock x:Name="ScreenName" Margin="148,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="21.333" FontFamily="Segoe WP SemiLight"><Run Text="@"/><Run Text="{Binding ScreenName}"/></TextBlock>
+                    <HyperlinkButton x:Name="Website" Visibility="{Binding WebsiteEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="148,101,0,0" VerticalAlignment="Top" FontFamily="Segoe WP Light" HorizontalAlignment="Left" Content="{Binding Website}" NavigateUri="{Binding Website}"/>
+
+                    <TextBlock x:Name="Biography" Margin="8,148,8,288" TextWrapping="Wrap" FontSize="24" FontFamily="Segoe WP SemiLight" Text="{Binding Biography}"></TextBlock>
+                    <StackPanel HorizontalAlignment="Left" Margin="8,0,0,53" Orientation="Vertical" VerticalAlignment="Bottom" Width="112">
+                        <TextBlock Margin="0,0,33,0" TextWrapping="Wrap" Text="tweets" FontFamily="Segoe WP Light" FontSize="29.333" d:LayoutOverrides="Width"/>
+                        <TextBlock x:Name="Tweets" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Tweets}" FontFamily="Segoe WP Light"/>
+                        <TextBlock TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41"><Run Text="followers"/><LineBreak/><Run/></TextBlock>
+                        <TextBlock x:Name="Followers" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Followers}" FontFamily="Segoe WP Light"/>
+                        <TextBlock TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41" Text="following"/>
+                        <TextBlock x:Name="Following" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Following}" FontFamily="Segoe WP Light"/>
+                    </StackPanel>
                 </Grid>
-			</controls:PivotItem>
-		</controls:Pivot>
-		
-		
-	</Grid>
-	<phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-        	<shell:ApplicationBar.MenuItems>
-        		<shell:ApplicationBarMenuItem x:Name="blockBtn" Text="block" Click="blockBtn_Click"/>
-        		<shell:ApplicationBarMenuItem x:Name="spamBtn" Text="block &amp; report spam" Click="spamBtn_Click"/>
-        		<shell:ApplicationBarMenuItem x:Name="ManageLists" Text="manage lists for user..." Click="ManageLists_Click"/>
-        	</shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
+            </controls:PivotItem>
+            <controls:PivotItem x:Name="pvTweets" Header="tweets">
+                <Grid>
+                    <custom:ExtendedListBox ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" 
+                                            x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" />
+                </Grid>
+            </controls:PivotItem>
+        </controls:Pivot>
+
+        <u:AppBar>
+            <u:AppBarToggleButton 
+                Command1="{Binding FollowUser}" IconUri1="/Images/Icons_White/appbar.add.rest.png" Text1="follow"
+                Command2="{Binding UnfollowUser}" IconUri2="/Images/Icons_White/appbar.minus.rest.png" Text2="unfollow"
+                Toggled="{Binding Followed}"/>
+            <u:AppBarIconButton Command="{Binding PinUser}" Text="pin to main page" IconUri="/Images/Icons_White/appbar.pin.rest.png" />
+            <u:AppBar.MenuItems>
+                <u:AppBarToggleMenuItem 
+                    Command1="{Binding Block}" Text1="block"
+                    Command2="{Binding Unblock}" Text2="unblock"
+                    Toggled="{Binding Blocked}"/>
+                <u:AppBarMenuItem Text="block &amp; report spam" Command="{Binding ReportSpam}"/>
+                <u:AppBarMenuItem Text="manage lists for user..." Command="{Binding ManageLists}"/>
+                <u:AppBarMenuItem Text="change avatar" Command="{Binding ChangeAvatar}"/>
+            </u:AppBar.MenuItems>
+        </u:AppBar>
+
+    </Grid>
 </phone:PhoneApplicationPage>
