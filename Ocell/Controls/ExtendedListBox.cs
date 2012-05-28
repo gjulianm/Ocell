@@ -38,17 +38,21 @@ namespace Ocell.Controls
         public bool ActivatePullToRefresh { get; set; }
         public bool AutoManageNavigation { get; set; }
         public string NavigationUri { get; set; }
+        public bool AutoManageErrors { get; set; }
 
         public ExtendedListBox()
         {
             Loader = new TweetLoader();
             ActivatePullToRefresh = true;
             AutoManageNavigation = true;
+            AutoManageErrors = true;
             _selectionChangeFired = false;
             this.Loaded += new RoutedEventHandler(ListBox_Loaded);
             this.Unloaded += new RoutedEventHandler(ExtendedListBox_Unloaded);
             this.Compression += new OnCompression(RefreshOnPull);
             this.SelectionChanged += new SelectionChangedEventHandler(ManageNavigation);
+
+            Loader.Error += new TweetLoader.OnError(Loader_Error);
             Loader.LoadFinished += new EventHandler(PopulateItemsSource);
             Loader.PartialLoad += new EventHandler(PopulateItemsSource);
             Loader.CacheLoad += new EventHandler(PopulateItemsSource);
@@ -57,8 +61,7 @@ namespace Ocell.Controls
             SetupCollectionViewSource();
         }
 
-
-        
+              
 
         private void SetupCollectionViewSource()
         {
@@ -336,6 +339,15 @@ namespace Ocell.Controls
             else
                 _selectionChangeFired = false;
         }
+
+        void Loader_Error(TwitterResponse response)
+        {
+            var messager = Dependency.Resolve<IMessageService>();
+            if (response.RateLimitStatus.RemainingHits == 0)
+                messager.ShowError("Woops! You have spent the limit of calls to Twitter. You'll have to wait until " + response.RateLimitStatus.ResetTime.ToString("H:mm"));
+            else
+                messager.ShowError("We couldn't load the tweets: " + response.StatusDescription);
+        }  
 
         public delegate void OnCompression(object sender, CompressionEventArgs e);
         public event OnCompression Compression;
