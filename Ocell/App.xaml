@@ -13,6 +13,7 @@
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
     xmlns:tr="clr-namespace:Ocell.Transitions"
     xmlns:navigation="clr-namespace:System.Windows.Navigation;assembly=Microsoft.Phone"
+    xmlns:u="clr-namespace:DanielVaughan.Windows.Converters;assembly=Calcium.Phone"
     >
 
     <!--Recursos de la aplicación-->
@@ -39,6 +40,7 @@
     		<local:ProtectedConverter x:Key="ProtectedConverter"/>
 			<commands:MuteCommand x:Key="MuteCommand"/>
 			<local:FilterDateConverter x:Key="FilterDateConverter" />
+            <u:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
     		<DataTemplate x:Key="TweetTemplate">
     			<local:TweetTemplateSelector Content="{Binding}" Margin="0" HorizontalContentAlignment="Stretch" >

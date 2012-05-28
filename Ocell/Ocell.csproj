@@ -90,6 +90,7 @@
     <Compile Include="Helpers\ValueConverters\ToColumn.cs" />
     <Compile Include="Helpers\ValueConverters\TweetTextConverter.cs" />
     <Compile Include="LittleWatson.cs" />
+    <Compile Include="Pages\Elements\UserModel.cs" />
     <Compile Include="Pages\SelectUserModel.cs" />
     <Compile Include="Pages\TopicsModel.cs" />
     <Compile Include="Notificator.cs" />

@@ -11,9 +11,7 @@ using DanielVaughan.InversionOfControl;
 using DanielVaughan.Services;
 using DanielVaughan.Services.Implementation;
 using DanielVaughan;
-
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
+using Ocell.Library.Twitter;
 
 using DanielVaughan.InversionOfControl.Containers.SimpleContainer;
 
@@ -66,6 +64,7 @@ namespace Ocell
 
             Dependency.Register<INavigationService, FrameNavigationService>(true);
             Dependency.Register<IMessageService, MessageService>(true);
+            Dependency.Register<IUserProvider, UserProvider>();
 
         }
 
