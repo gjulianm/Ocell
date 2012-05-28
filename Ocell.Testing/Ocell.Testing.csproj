@@ -78,6 +78,7 @@
     <Compile Include="Tests\AssemblyInit.cs" />
     <Compile Include="Tests\Library\ConfigTest.cs" />
     <Compile Include="Tests\MockNavigationService.cs" />
+    <Compile Include="Tests\UI\DirectMessage\SelectUserTest.cs" />
     <Compile Include="Tests\UI\Drafts\ManageDraftsTest.cs" />
     <Compile Include="Tests\UI\Search\EnterSearchTest.cs" />
     <Compile Include="Tests\UI\Search\SearchTest.cs" />
@@ -107,6 +108,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">
+      <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
+      <Name>Hammock.WindowsPhone</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</Project>
       <Name>Library</Name>
@@ -114,6 +119,10 @@
     <ProjectReference Include="..\Ocell\Ocell.csproj">
       <Project>{F3B6A65D-237D-4E5E-B4A9-F9E098730119}</Project>
       <Name>Ocell</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
+      <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
+      <Name>TweetSharp.WindowsPhone.Mango</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
