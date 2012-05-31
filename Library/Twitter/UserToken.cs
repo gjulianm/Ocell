@@ -19,7 +19,7 @@ namespace Ocell.Library.Twitter
             if (!(string.IsNullOrWhiteSpace(ScreenName) || string.IsNullOrWhiteSpace(AvatarUrl) || Id == null))
                 return;
 
-            TwitterService srv = ServiceDispatcher.GetService(this);
+            ITwitterService srv = ServiceDispatcher.GetService(this);
             srv.GetUserProfile(ReceiveUserProfile);
         }
 

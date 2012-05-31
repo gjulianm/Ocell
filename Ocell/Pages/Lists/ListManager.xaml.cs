@@ -19,7 +19,7 @@ namespace Ocell.Pages.Lists
     public partial class ListManager : PhoneApplicationPage
     {
         private string _userName;
-        private TweetSharp.TwitterService _srv;
+        private ITwitterService _srv;
         private bool _selectionChangeFired;
         private int _pendingCalls;
         public ListManager()

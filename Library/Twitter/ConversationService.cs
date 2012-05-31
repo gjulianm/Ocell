@@ -87,7 +87,7 @@ namespace Ocell.Library.Twitter
 
             _processedStatus.Add("b" + Id.ToString());
 
-            TwitterService srv = ServiceDispatcher.GetService(_account);
+            ITwitterService srv = ServiceDispatcher.GetService(_account);
             _pendingCalls++;
             srv.GetTweet(Id, ReceiveSingleTweet);
         }
@@ -186,7 +186,7 @@ namespace Ocell.Library.Twitter
 
         protected IEnumerable<TwitterStatus> DeserializeTweets(IEnumerable<string> strings)
         {
-            TwitterService srv = ServiceDispatcher.GetDefaultService();
+            TwitterService srv = new TwitterService();
 
             // Little side note: I LOVE yield return.
             foreach (string status in strings)

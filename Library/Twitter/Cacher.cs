@@ -121,7 +121,7 @@ namespace Ocell.Library.Twitter
 
             string Key = GetCacheName(Resource);
             TwitterStatus Item;
-            TwitterService DefaultService = ServiceDispatcher.GetDefaultService();
+            TwitterService DefaultService = new TwitterService();
 
             try
             {

@@ -12,7 +12,7 @@ namespace Ocell.Library.Twitter
         public UserToken User { get; set; }
         public bool GetFollowers { get; set; }
         public bool GetFollowing { get; set; }
-        private TwitterService _service;
+        private ITwitterService _service;
 
         public UserProvider()
         {
@@ -79,7 +79,7 @@ namespace Ocell.Library.Twitter
     {
         public IList<string> Usernames { get; protected set; }
         public UserToken User { get; set; }
-        private TwitterService _service;
+        private ITwitterService _service;
         private bool _stop;
 
         public UsernameProvider()

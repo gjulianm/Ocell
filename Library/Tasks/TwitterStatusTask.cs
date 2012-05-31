@@ -32,7 +32,7 @@ namespace Ocell.Library.Tasks
             PendingCalls = 0;
             foreach (var user in Accounts)
             {
-                TwitterService service = ServiceDispatcher.GetService(user);
+                ITwitterService service = ServiceDispatcher.GetService(user);
                 service.SendTweet(Text, InReplyTo, ReceiveResponse);
                 PendingCalls++;
             }

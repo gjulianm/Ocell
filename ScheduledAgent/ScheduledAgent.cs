@@ -119,7 +119,7 @@ namespace ScheduledAgent
 
         protected void GetMentionsFor(UserToken User)
         {
-            TwitterService Service = ServiceDispatcher.GetService(User);
+            ITwitterService Service = ServiceDispatcher.GetService(User);
 
             if (User.Preferences.MentionsPreferences == NotificationType.Tile)
             {

@@ -26,7 +26,7 @@ namespace Ocell.Pages.Lists
 
         private void CreateButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            TwitterService srv = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+            ITwitterService srv = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
             string mode;
             if (PublicBtn.IsChecked == true)
                 mode = "public";

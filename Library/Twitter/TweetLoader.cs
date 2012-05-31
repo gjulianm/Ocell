@@ -44,7 +44,7 @@ namespace Ocell.Library.Twitter
             }
         }
         public ObservableCollection<ITweetable> Source { get; protected set; }
-        protected TwitterService _srv;
+        protected ITwitterService _srv;
         protected long LastId;
 
         protected bool _isLoading;

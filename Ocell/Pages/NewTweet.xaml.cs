@@ -208,7 +208,7 @@ namespace Ocell.Pages
 
                 if (DataTransfer.ReplyingDM)
                 {
-                    TwitterService Service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+                    ITwitterService Service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
                     Dispatcher.BeginInvoke(() =>
                     {
                         pBar.Text = "Sending message...";
@@ -286,7 +286,7 @@ namespace Ocell.Pages
 
         private void SendTweet()
         {
-            TwitterService srv;
+            ITwitterService srv;
             Dispatcher.BeginInvoke(() =>
             {
                 pBar.Text = "Sending tweet...";
@@ -352,7 +352,7 @@ namespace Ocell.Pages
                 SendButton.IsEnabled = false;
             });
 
-            TwitterService srv = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+            ITwitterService srv = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
             RestRequest req = srv.PrepareEchoRequest();
             RestClient client = new RestClient { Authority = "http://api.twitpic.com/", VersionPath = "1" };
 

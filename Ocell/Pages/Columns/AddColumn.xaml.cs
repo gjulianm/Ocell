@@ -16,7 +16,7 @@ namespace Ocell.Pages.Columns
     public partial class AddColumn : PhoneApplicationPage
     {
         public ObservableCollection<TwitterList> lists;
-        private TwitterService _srv;
+        private ITwitterService _srv;
         public AddColumn()
         {
             InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
