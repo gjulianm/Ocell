@@ -17,7 +17,7 @@ namespace Ocell.Library
 {
     // Adapted from http://www.deanchalk.me.uk/post/Thread-Safe-Dispatcher-Safe-Observable-Collection-for-WPF.aspx.
 
-    public class SafeObservable<T> : IList<T>, INotifyCollectionChanged where T : IEquatable<T>
+    public class SafeObservable<T> : IList<T>, INotifyCollectionChanged 
     {
         private IList<T> collection = new List<T>();
         private Dispatcher dispatcher;
