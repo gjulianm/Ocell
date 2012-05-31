@@ -61,7 +61,21 @@ namespace Ocell.Controls
             SetupCollectionViewSource();
         }
 
-              
+        public void ScrollToTop()
+        {
+            var dispatcher = Deployment.Current.Dispatcher;
+            if (dispatcher.CheckAccess())
+                DoScrollToTop();
+            else
+                dispatcher.BeginInvoke(DoScrollToTop);
+        }
+
+        private void DoScrollToTop()
+        {
+            var first = _Items.FirstOrDefault();
+            if (first != null)
+                ScrollIntoView(first);
+        }
 
         private void SetupCollectionViewSource()
         {
@@ -347,7 +361,7 @@ namespace Ocell.Controls
                 messager.ShowError("Woops! You have spent the limit of calls to Twitter. You'll have to wait until " + response.RateLimitStatus.ResetTime.ToString("H:mm"));
             else
                 messager.ShowError("We couldn't load the tweets: " + response.StatusDescription);
-        }  
+        }
 
         public delegate void OnCompression(object sender, CompressionEventArgs e);
         public event OnCompression Compression;
