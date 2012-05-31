@@ -20,11 +20,12 @@ using TweetSharp;
 using Ocell.Library;
 using System.Linq;
 using Microsoft.Phone.Tasks;
+
 namespace Ocell.Pages.Elements
 {
     public class UserModel : ViewModelBase
     {
-        TwitterUser user;
+        public TwitterUser User { get; set; } // Not a property, don't need Assign().
 
         bool isLoading;
         public bool IsLoading
@@ -181,25 +182,25 @@ namespace Ocell.Pages.Elements
         public UserModel()
             : base("User")
         {
-            GenericCanExecute = (obj) => user != null && DataTransfer.CurrentAccount != null;
+            GenericCanExecute = (obj) => User != null && DataTransfer.CurrentAccount != null;
 
             followUser = new DelegateCommand((obj) =>
             {
                 IsLoading = true;
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FollowUser(user.Id, ReceiveFollow);
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FollowUser(User.Id, ReceiveFollow);
             }, GenericCanExecute);
 
             unfollowUser = new DelegateCommand((obj) =>
             {
                 IsLoading = true;
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfollowUser(user.Id, ReceiveFollow);
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfollowUser(User.Id, ReceiveFollow);
             }, GenericCanExecute);
 
             pinUser = new DelegateCommand((obj) =>
                 {
                     Config.Columns.Add(new TwitterResource
                     {
-                        Data = user.ScreenName,
+                        Data = User.ScreenName,
                         Type = ResourceType.Tweets,
                         User = DataTransfer.CurrentAccount
                     });
@@ -208,24 +209,24 @@ namespace Ocell.Pages.Elements
                     pinUser.RaiseCanExecuteChanged();
 
                 }, item => GenericCanExecute.Invoke(null) 
-                    && !Config.Columns.Any(o => o.Type == ResourceType.Tweets && o.Data == user.ScreenName));
+                    && !Config.Columns.Any(o => o.Type == ResourceType.Tweets && o.Data == User.ScreenName));
 
             block = new DelegateCommand((obj) =>
                 {
                     IsLoading = true;
-                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).BlockUser(user.Id, ReceiveBlock);
+                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).BlockUser(User.Id, ReceiveBlock);
                 }, GenericCanExecute);
 
             unblock = new DelegateCommand((obj) =>
                 {
                     IsLoading = true;
-                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnblockUser(user.Id, ReceiveBlock);
+                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnblockUser(User.Id, ReceiveBlock);
                 }, GenericCanExecute);
 
             reportSpam = new DelegateCommand((obj) =>
             {
                 IsLoading = true;
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).ReportSpam(user.Id, ReceiveReportSpam);
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).ReportSpam(User.Id, ReceiveReportSpam);
             }, GenericCanExecute);
 
             changeAvatar = new DelegateCommand((obj) =>
@@ -236,7 +237,7 @@ namespace Ocell.Pages.Elements
                     task.Show();
                 }, (obj) => GenericCanExecute.Invoke(null) && IsOwner);
 
-            manageLists = new DelegateCommand((obj) => Navigate("/Pages/Lists/ListManager.xaml?user=" + user.ScreenName),
+            manageLists = new DelegateCommand((obj) => Navigate("/Pages/Lists/ListManager.xaml?user=" + User.ScreenName),
                 GenericCanExecute);
         }
 
@@ -255,12 +256,12 @@ namespace Ocell.Pages.Elements
         void task_Completed(object sender, PhotoResult e)
         {
             UserToken usr;
-            usr = Config.Accounts.FirstOrDefault(item => item != null && item.ScreenName == user.ScreenName);
-            if (e.TaskResult == TaskResult.OK && user != null)
+            usr = Config.Accounts.FirstOrDefault(item => item != null && item.ScreenName == User.ScreenName);
+            if (e.TaskResult == TaskResult.OK && User != null)
             {
                 BarText = "Uploading picture...";
                 IsLoading = true;
-                TwitterService srv = ServiceDispatcher.GetService(usr);
+                ITwitterService srv = ServiceDispatcher.GetService(usr);
                 srv.UpdateProfileImage(e.OriginalFileName, e.ChosenPhoto, ReceivePhotoUpload);
             }
         }
@@ -287,7 +288,7 @@ namespace Ocell.Pages.Elements
                 unfollowUser.RaiseCanExecuteChanged(); ;
             }
             else
-                MessageService.ShowError("We couldn't " + action + " " + user.ScreenName + ".");
+                MessageService.ShowError("We couldn't " + action + " " + User.ScreenName + ".");
         }
 
         void ReceiveBlock(TwitterUser usr, TwitterResponse response)
@@ -304,7 +305,7 @@ namespace Ocell.Pages.Elements
                 unblock.RaiseCanExecuteChanged();
             }
             else
-                MessageService.ShowError("We couldn't " + action + " " + user.ScreenName + ".");
+                MessageService.ShowError("We couldn't " + action + " " + User.ScreenName + ".");
         }
 
         void ReceiveReportSpam(TwitterUser usr, TwitterResponse response)
@@ -316,8 +317,6 @@ namespace Ocell.Pages.Elements
                 MessageService.ShowError("We couldn't report the user.");
         }
 
-
-
         void ReceiveUsers(IEnumerable<TwitterUser> users, TwitterResponse response)
         {
             BarText = "";
@@ -328,23 +327,23 @@ namespace Ocell.Pages.Elements
                 return;
             }
 
-            user = users.First();
+            User = users.First();
 
-            Avatar = user.ProfileImageUrl;
-            Name = user.Name;
-            ScreenName = user.ScreenName;
-            Website = user.Url;
-            Biography = user.Description;
-            Tweets = user.StatusesCount.ToString();
-            Followers = user.FollowersCount.ToString();
-            Following = user.FriendsCount.ToString();
-            WebsiteEnabled = Uri.IsWellFormedUriString(user.Url, UriKind.Absolute);
-            IsOwner = Config.Accounts.Any(item => item.Id == user.Id);
+            Avatar = User.ProfileImageUrl;
+            Name = User.Name;
+            ScreenName = User.ScreenName;
+            Website = User.Url;
+            Biography = User.Description;
+            Tweets = User.StatusesCount.ToString();
+            Followers = User.FollowersCount.ToString();
+            Following = User.FriendsCount.ToString();
+            WebsiteEnabled = Uri.IsWellFormedUriString(User.Url, UriKind.Absolute);
+            IsOwner = Config.Accounts.Any(item => item.Id == User.Id);
 
             if (DataTransfer.CurrentAccount != null)
             {
                 var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
-                service.GetFriendshipInfo((int)DataTransfer.CurrentAccount.Id, user.Id, ReceiveFriendshipInfo);
+                service.GetFriendshipInfo((int)DataTransfer.CurrentAccount.Id, User.Id, ReceiveFriendshipInfo);
                 service.ListBlockedUserIds(ReceiveBlockedUsers);
             }
 
@@ -374,7 +373,7 @@ namespace Ocell.Pages.Elements
 
         void ReceiveBlockedUsers(IEnumerable<int> blockedIds, TwitterResponse response)
         {
-            Blocked = blockedIds.Any() && blockedIds.Contains(user.Id);
+            Blocked = blockedIds.Any() && blockedIds.Contains(User.Id);
 
             block.RaiseCanExecuteChanged();
             unblock.RaiseCanExecuteChanged();
