@@ -80,6 +80,7 @@
     <Compile Include="Tests\MockNavigationService.cs" />
     <Compile Include="Tests\UI\DirectMessage\SelectUserTest.cs" />
     <Compile Include="Tests\UI\Drafts\ManageDraftsTest.cs" />
+    <Compile Include="Tests\UI\Elements\UserTest.cs" />
     <Compile Include="Tests\UI\Search\EnterSearchTest.cs" />
     <Compile Include="Tests\UI\Search\SearchTest.cs" />
   </ItemGroup>

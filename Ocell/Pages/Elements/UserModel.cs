@@ -182,6 +182,7 @@ namespace Ocell.Pages.Elements
             : base("User")
         {
             GenericCanExecute = (obj) => user != null && DataTransfer.CurrentAccount != null;
+
             followUser = new DelegateCommand((obj) =>
             {
                 IsLoading = true;
@@ -297,7 +298,7 @@ namespace Ocell.Pages.Elements
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                MessageService.ShowLightNotification(usr.ScreenName + "is now " + pastAction + ".");
+                MessageService.ShowLightNotification(usr.ScreenName + " is now " + pastAction + ".");
                 Blocked = !Blocked;
                 block.RaiseCanExecuteChanged();
                 unblock.RaiseCanExecuteChanged();
