@@ -15,41 +15,50 @@ using DanielVaughan.InversionOfControl;
 using DanielVaughan.Net;
 using DanielVaughan.Services;
 using System.Linq;
+using Ocell.Library.Filtering;
 
-namespace Ocell.Pages
+namespace Ocell
 {
-    public class ReloadArgs : EventArgs
+    public class BroadcastArgs : EventArgs
     {
         public TwitterResource Resource { get; set; }
-        public bool ReloadAll { get; set; }
+        public bool BroadcastAll { get; set; }
 
-        public ReloadArgs(TwitterResource resource, bool reloadAll = false)
+        public BroadcastArgs(TwitterResource resource, bool broadcastToAll = false)
         {
             Resource = resource;
-            ReloadAll = reloadAll;
+            BroadcastAll = broadcastToAll;
         }
     }
 
-    public delegate void ReloadEventHandler(object sender, ReloadArgs e);
+    public delegate void BroadcastEventHandler(object sender, BroadcastArgs e);
 
-    public class AddColumnModel : ViewModelBase
+    public class MainPageModel : ViewModelBase
     {
         DateTime lastAutoReload;
         const int secondsBetweenReloads = 25;
 
-        public event ReloadEventHandler ReloadLists;
+        public event BroadcastEventHandler ScrollToTop;
+        public void RaiseScrollToTop(TwitterResource resource)
+        {
+            var temp = ScrollToTop;
+            if (temp != null)
+                temp(this, new BroadcastArgs(resource));
+        }
+
+        public event BroadcastEventHandler ReloadLists;
         private void RaiseReload(TwitterResource resource)
         {
             var temp = ReloadLists;
             if (temp != null)
-                temp(this, new ReloadArgs(resource, false));
+                temp(this, new BroadcastArgs(resource, false));
         }
 
         private void RaiseReloadAll()
         {
             var temp = ReloadLists;
             if (temp != null)
-                temp(this, new ReloadArgs(Config.Columns.FirstOrDefault(), true));
+                temp(this, new BroadcastArgs(Config.Columns.FirstOrDefault(), true));
         }
 
         bool isLoading;
@@ -57,6 +66,21 @@ namespace Ocell.Pages
         {
             get { return isLoading; }
             set { Assign("IsLoading", ref isLoading, value); }
+        }
+
+        int loadingCount;
+        public int LoadingCount
+        {
+            get { return loadingCount; }
+            set
+            {
+                loadingCount = value;
+                if (loadingCount <= 0)
+                    IsLoading = false;
+                else
+                    IsLoading = true;
+            }
+
         }
 
         SafeObservable<TwitterResource> pivots;
@@ -80,8 +104,87 @@ namespace Ocell.Pages
             set { Assign("CurrentAccountName", ref currentAccountName, value); }
         }
 
-        public AddColumnModel()
-            : base("AddColumn")
+        bool isSearching;
+        public bool IsSearching
+        {
+            get { return isSearching; }
+            set { Assign("IsSearchign", ref isSearching, value); }
+        }
+
+        string userSearch;
+        public string UserSearch
+        {
+            get { return userSearch; }
+            set { Assign("UserSearch", ref userSearch, value); }
+        }
+
+        #region Commands
+        DelegateCommand pinToStart;
+        public ICommand PinToStart
+        {
+            get { return pinToStart; }
+        }
+
+        DelegateCommand filterColumn;
+        public ICommand FilterColumn
+        {
+            get { return filterColumn; }
+        }
+
+        DelegateCommand toMyProfile;
+        public ICommand ToMyProfile
+        {
+            get { return toMyProfile; }
+        }
+
+        DelegateCommand goToUser;
+        public ICommand GoToUser
+        {
+            get { return goToUser; }
+        }
+        #endregion
+
+        private void SetUpCommands()
+        {
+            pinToStart = new DelegateCommand((obj) =>
+                {
+                    var column = (TwitterResource)SelectedPivot;
+                    if (SecondaryTiles.ColumnTileIsCreated(column))
+                        MessageService.ShowError("This column is already pinned.");
+                    else
+                    {
+                        SecondaryTiles.CreateColumnTile(column);
+                        MessageService.ShowLightNotification("Pinned!");
+                    }
+                }, (obj) => SelectedPivot != null);
+
+            filterColumn = new DelegateCommand((obj) =>
+            {
+                var column = (TwitterResource)SelectedPivot;
+                DataTransfer.cFilter = Config.Filters.FirstOrDefault(item => item.Resource == column);
+
+                if (DataTransfer.cFilter == null)
+                    DataTransfer.cFilter = new ColumnFilter { Resource = column };
+
+                DataTransfer.IsGlobalFilter = false;
+                Navigate(Uris.Filters);
+
+            }, (obj) => SelectedPivot != null);
+
+            toMyProfile = new DelegateCommand((obj) =>
+                {
+                    Navigate("/Pages/User.xaml?user=" + CurrentAccountName);
+                }, (obj) => CurrentAccountName != null);
+
+            goToUser = new DelegateCommand((obj) =>
+            {
+                Navigate("/Pages/User.xaml?user=" + UserSearch);
+            });
+
+        }
+
+        public MainPageModel()
+            : base("MainPage")
         {
             if (Config.RetweetAsMentions == null)
                 Config.RetweetAsMentions = true;
@@ -95,6 +198,8 @@ namespace Ocell.Pages
 
             foreach (var pivot in Config.Columns)
                 Pivots.Add(pivot);
+
+            
 
             Config.Columns.CollectionChanged += (sender, e) =>
             {
@@ -126,6 +231,8 @@ namespace Ocell.Pages
                 if(Config.Columns.Any(item => item.String == column))
                     SelectedPivot = Config.Columns.First(item => item.String == column);
             }
+
+            SetUpCommands();
         }
 
         void UpdatePivot()

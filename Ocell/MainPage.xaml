@@ -9,7 +9,8 @@
     xmlns:local="clr-namespace:Ocell" 
     xmlns:custom="clr-namespace:Ocell.Controls"
 	x:Class="Ocell.MainPage" 
-    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
+    xmlns:u="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
     SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
@@ -50,51 +51,52 @@
         <StaticResource ResourceKey="PhoneForegroundBrush"/>
     </phone:PhoneApplicationPage.Foreground>
 
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBar.MenuItems>
-            	<shell:ApplicationBarMenuItem x:Name="pinToStart" Text="pin column to start" Click="pinToStart_Click"/>
-                <shell:ApplicationBarMenuItem Text="filter this column" Click="ApplicationBarMenuItem_Click"/>
-            	<shell:ApplicationBarMenuItem x:Name="Trending" Text="trending topics" Click="Trending_Click"/>
-                <shell:ApplicationBarMenuItem x:Name="myprofile" Text="my profile" Click="myprofile_Click"/>
-                <shell:ApplicationBarMenuItem x:Name="GoToUserBtn" Text="go to user..." Click="GoToUserBtn_Click"/>
-                <shell:ApplicationBarMenuItem x:Name="menuItem1" Text="settings" Click="menuItem1_Click" />
-            </shell:ApplicationBar.MenuItems>
-            <shell:ApplicationBarIconButton x:Name="compose" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="Compose" Click="compose_Click" />
-            <shell:ApplicationBarIconButton x:Name="add" IconUri="/Images/Icons_White/appbar.columns.rest.png" Text="columns" Click="add_Click"/>
-            <shell:ApplicationBarIconButton x:Name="send_DM" IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="send DM" Click="send_DM_Click"/>
-            <shell:ApplicationBarIconButton x:Name="SearchBtn" IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="search" Click="SearchBtn_Click"/>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
+
 
     <shell:SystemTray.ProgressIndicator>
         <shell:ProgressIndicator IsIndeterminate="True" IsVisible="False" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
 
-    
+
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
     <Grid x:Name="LayoutRoot" CacheMode="BitmapCache" Margin="0,-32,0,0">
-    	<Grid.Background>
-    		<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
-    	</Grid.Background>
+        <Grid.Background>
+            <ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
+        </Grid.Background>
         <!--Control Pivot-->
-        <controls:Pivot Title="{Binding CurrentAccountName, StringFormat=OCELL - {0}}" x:Name="MainPivot" Loaded="MainPivot_Loaded" Background="{x:Null}" ItemsSource="{Binding Pivots}" SelectedItem="{Binding SelectedPivot, Mode=TwoWay}" Margin="0,50,0,0">
+        <controls:Pivot Title="{Binding CurrentAccountName, StringFormat='OCELL - {0}'}" x:Name="MainPivot" Background="{x:Null}" ItemsSource="{Binding Pivots}" SelectedItem="{Binding SelectedPivot, Mode=TwoWay}" Margin="0,50,0,0">
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding String, Converter={StaticResource ListConverter}, FallbackValue=error}" Tag="{Binding}" Tap="TextBlock_Tap" />
-                </DataTemplate>                
+                </DataTemplate>
             </controls:Pivot.HeaderTemplate>
             <controls:Pivot.ItemTemplate>
                 <DataTemplate>
-                    <custom:ExtendedListBox ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" Tag="{Binding}" Loaded="ListBox_Loaded"/>	
+                    <custom:ExtendedListBox ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" Tag="{Binding}" Loaded="ListBox_Loaded"/>
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>
-        <Grid x:Name="GoToUserGrid" Height="104" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Visibility="Collapsed">
-        	<TextBlock TextWrapping="Wrap" Text="User name:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="13,8,0,0"/>
-        	<TextBox x:Name="UserNameBox" TextWrapping="Wrap" d:LayoutOverrides="Height" Margin="0,32,168,0"/>
-        	<Button x:Name="GoUser" Content="Go" HorizontalAlignment="Right" Margin="0,0,8,0" VerticalAlignment="Bottom" Width="156" Click="GoUser_Click"/>
+        <Grid x:Name="GoToUserGrid" Height="104" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock TextWrapping="Wrap" Text="User name:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="13,8,0,0"/>
+            <TextBox x:Name="UserNameBox" TextWrapping="Wrap" d:LayoutOverrides="Height" Margin="0,32,168,0"/>
+            <Button x:Name="GoUser" Content="Go" HorizontalAlignment="Right" Margin="0,0,8,0" VerticalAlignment="Bottom" Width="156" Command="{Binding GoToUser}"/>
         </Grid>
+
+        <u:AppBar>
+
+            <u:AppBar.MenuItems>
+                <u:AppBarMenuItem Text="pin column to start" Command="{Binding PinToStart}"/>
+                <u:AppBarMenuItem Text="filter this column" Command="{Binding FilterColumn}"/>
+                <u:AppBarHyperlinkMenuItem x:Name="Trending" Text="trending topics" NavigateUri="/Pages/Topics.xaml"/>
+                <u:AppBarMenuItem Text="my profile" Command="{Binding ToMyProfile}"/>
+                <u:AppBarMenuItem Text="go to user..." Click="AppBarMenuItem_Click"/>
+                <u:AppBarHyperlinkMenuItem Text="settings" NavigateUri="/Pages/Settings/Default.xaml"/>
+            </u:AppBar.MenuItems>
+            <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="compose" NavigateUri="/Pages/NewTweet.xaml" />
+            <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.columns.rest.png" Text="columns" NavigateUri="/Pages/Columns/ManageColumns.xaml" />
+            <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="send DM" NavigateUri="/Pages/SelectUser.xaml"/>
+            <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="search" NavigateUri="/Pages/Search/EnterSearch.xaml" />
+        </u:AppBar>
     </Grid>
 
 </phone:PhoneApplicationPage>
