@@ -12,273 +12,41 @@ using Ocell.Library.Twitter;
 using TweetSharp;
 using Ocell.Library.Filtering;
 using System.Windows.Controls;
-
+using DanielVaughan;
+using DanielVaughan.Services;
 
 namespace Ocell.Pages.Elements
 {
     public partial class Tweet : PhoneApplicationPage
     {
-        public TweetSharp.TwitterStatus status;
-        private bool _favBtnState;
-        private ApplicationBarIconButton _favButton;
-        private ContextMenu _menuOpened;
-        private ConversationService _conversation;
-        private ApplicationBarMenuItem _removeTweet;
+        TweetModel viewModel;
 
         public Tweet()
         {
             InitializeComponent();
             ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
-            CreateFavButton();
+
+            viewModel = new TweetModel();
+            DataContext = viewModel;
 
             this.Loaded += new RoutedEventHandler(Tweet_Loaded);
-        }
-
-        void CreateFavButton()
-        {
-            _favButton = new ApplicationBarIconButton();
-            _favButton.IconUri = new Uri("/Images/Icons_White/appbar.favs.addto.rest.png", UriKind.Relative);
-            _favButton.Click += new EventHandler(favButton_Click);
-            _favButton.Text = "add favorite";
-            _favBtnState = true;
-            ApplicationBar.Buttons.Add(_favButton);
-        }
-
-        void ToggleFavButton()
-        {
-            if (_favBtnState)
-            {
-                _favButton.Text = "remove favorite";
-                _favButton.IconUri = new Uri("/Images/Icons_White/appbar.favs.remove.rest.png", UriKind.Relative);
-                _favBtnState = false;
-            }
-            else
-            {
-                _favButton.Text = "add favorite";
-                _favButton.IconUri = new Uri("/Images/Icons_White/appbar.favs.addto.rest.png", UriKind.Relative);
-                _favBtnState = true;
-            }
+            img.ImageFailed += viewModel.ImageFailed;
+            img.ImageOpened += viewModel.ImageOpened;
+            img.Tap += viewModel.ImageTapped;
         }
 
         void Tweet_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataTransfer.Status == null)
-            {
-                Dispatcher.BeginInvoke(() => MessageBox.Show("Error loading the tweet. Sorry :("));
-                NavigationService.GoBack();
-                return;
-            }
-
-            _conversation = new ConversationService(DataTransfer.CurrentAccount);
-
-            if (DataTransfer.Status.RetweetedStatus != null)
-                status = DataTransfer.Status.RetweetedStatus;
-            else
-                status = DataTransfer.Status;
-
-            _conversation.CheckIfReplied(status, (replied) =>
-            {
-                if (replied)
-                    Dispatcher.BeginInvoke(() => Replies.Visibility = Visibility.Visible);
-            });
-
-            if (status.IsFavorited)
-                Dispatcher.BeginInvoke(ToggleFavButton);
-
-            if (status.User == null || status.User.Name == null)
-                FillUser();
-
-            SetBindings();
-            CreateText(status);
+            CreateText(viewModel.Tweet);
             AdjustMargins();
-            SetVisibilityOfRepliesAndImages();
-            SetUsername();
-            CheckForRetweets();
-            SetImage();
-            CheckIfCanDelete();
 
             ContentPanel.UpdateLayout();
         }
 
-        private void CheckIfCanDelete()
-        {
-            UserToken user = Config.Accounts.FirstOrDefault(item => item != null && item.ScreenName == status.Author.ScreenName);
-            if (user != null && _removeTweet == null)
-            {
-                _removeTweet = new ApplicationBarMenuItem("delete tweet");
-                _removeTweet.Click += (sender, e) =>
-                {
-                    ServiceDispatcher.GetService(user).DeleteTweet(status.Id, (s, response) =>
-                    {
-                        if (response.StatusCode == HttpStatusCode.OK)
-                            Dispatcher.BeginInvoke(() => MessageBox.Show("Tweet deleted! (Note that it could take a few minutes to disappear completely from your streams)"));
-                        else
-                            Dispatcher.BeginInvoke(() => MessageBox.Show("An error has occurred."));
-                    });
-                };
-                ApplicationBar.MenuItems.Add(_removeTweet);
-            }
-        }
-
-        private void CheckForRetweets()
-        {
-            TwitterService srv = ServiceDispatcher.GetCurrentService();
-            srv.Retweets(status.Id, ReceiveRetweets);
-        }
-
-        private void ReceiveRetweets(IEnumerable<TwitterStatus> rts, TwitterResponse response)
-        {
-            if (rts != null && rts.Any())
-            {
-                var users = new System.Collections.ObjectModel.ObservableCollection<ITweeter>();
-                foreach (var rt in rts)
-                    users.Add(rt.Author);
-
-                Dispatcher.BeginInvoke((() =>
-                {
-                    RTList.ItemsSource = users;
-                    RTList.Visibility = System.Windows.Visibility.Visible;
-                    usersText.Visibility = Visibility.Visible;
-                }));
-            }
-        }
-
-        private void FillUser()
-        {
-            ServiceDispatcher.GetDefaultService().GetUserProfileFor(status.Author.ScreenName, ReceiveUser);
-        }
-
-        private void ReceiveUser(TwitterUser user, TwitterResponse response)
-        {
-            if (response.StatusCode != HttpStatusCode.OK)
-                Dispatcher.BeginInvoke(() => MessageBox.Show("Couldn't get the full user profile."));
-            status.User = user;
-            Dispatcher.BeginInvoke(() =>
-            {
-                SetBindings();
-                ContentPanel.UpdateLayout();
-            });
-        }
-
-        private void SetBindings()
-        {
-            if (status != null)
-            {
-                ContentPanel.DataContext = null;
-                ContentPanel.DataContext = status;
-            }
-        }
-
-        private void SetImage()
-        {
-            if (status == null)
-                return;
-
-            Uri uriSource = null;
-            Uri gotoUri = null;
-
-            if (status.Entities.Media != null && status.Entities.Media.Any())
-            {
-                var photo = status.Entities.Media.First();
-                gotoUri = new Uri(photo.ExpandedUrl, UriKind.Absolute);
-                uriSource = new Uri(photo.MediaUrl, UriKind.Absolute);
-
-            }
-            else if (status.Entities.Urls != null && status.Entities.Urls.Any())
-            {
-                foreach (var i in status.Entities.Urls)
-                {
-                    if (i.EntityType == TwitterEntityType.Url)
-                    {
-                        var url = i as TwitterUrl;
-                        if (url != null || string.IsNullOrWhiteSpace(url.ExpandedValue))
-                        {
-                            if (url.ExpandedValue.Contains("http://yfrog.com/"))
-                            {
-                                gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
-                                uriSource = new Uri(url.ExpandedValue + ":iphone", UriKind.Absolute);
-                            }
-                            else if (url.ExpandedValue.Contains("http://twitpic.com/"))
-                            {
-                                gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
-                                var strUri = "http://twitpic.com/show/thumb" + url.ExpandedValue.Substring(url.ExpandedValue.LastIndexOf('/'));
-                                uriSource = new Uri(strUri, UriKind.Absolute);
-                            }
-                            else if (url.ExpandedValue.Contains("http://instagr.am/"))
-                            {
-                                gotoUri = new Uri(url.ExpandedValue, UriKind.Absolute);
-                                string idcode;
-                                if (url.ExpandedValue.Last() == '/')
-                                    idcode = url.ExpandedValue.Substring(0, url.ExpandedValue.Length - 1);
-                                else
-                                    idcode = url.ExpandedValue;
-                                idcode = idcode.Substring(idcode.LastIndexOf('/') + 1);
-                                uriSource = new Uri("http://instagr.am/p/" + idcode + "/media/?size=m", UriKind.Absolute);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (gotoUri == null || uriSource == null)
-                return;
-
-            Dispatcher.BeginInvoke(() =>
-            {
-                pBar.Text = "Downloading image...";
-                pBar.IsVisible = true;
-            });
-            img.MinWidth = 415.0;
-            img.Source = new System.Windows.Media.Imaging.BitmapImage(uriSource);
-            img.ImageOpened += (sender, e) => { 
-                Dispatcher.BeginInvoke(() => { pBar.Text = ""; pBar.IsVisible = false; }); 
-            };
-            img.ImageFailed += (sender, e) =>
-            {
-                Dispatcher.BeginInvoke(() =>
-                { 
-                    pBar.Text = ""; 
-                    pBar.IsVisible = false;
-                    MessageBox.Show("Error downloading image.");
-                }); 
-            };
-            img.Tap += (sender, e) =>
-            {
-                Dispatcher.BeginInvoke(() =>
-                {
-                    var task = new Microsoft.Phone.Tasks.WebBrowserTask { Uri = gotoUri };
-                    task.Show();
-                });
-            };
-        }
-
-        private void SetUsername()
-        {
-            string RTByText = "";
-            if (DataTransfer.Status.RetweetedStatus != null)
-                RTByText = " (RT by @" + DataTransfer.Status.Author.ScreenName + ")";
-
-            SName.Text = "@" + status.Author.ScreenName + RTByText;
-        }
-
-        private void SetVisibilityOfRepliesAndImages()
-        {
-            if (status.InReplyToStatusId != null)
-                Replies.Visibility = Visibility.Visible;
-
-            if (status.Entities.Media.Count != 0)
-                img.Visibility = Visibility.Visible;
-        }
-
         private void AdjustMargins()
         {
-            RemoveHTML conv = new RemoveHTML();
-            RelativeDateTimeConverter dc = new RelativeDateTimeConverter();
-
             SecondBlock.Margin = new Thickness(SecondBlock.Margin.Left, Text.ActualHeight + Text.Margin.Top + 10,
                 SecondBlock.Margin.Right, SecondBlock.Margin.Bottom);
-            ViaDate.Text = (string)dc.Convert(status.CreatedDate, null, null, null) + " via " +
-                conv.Convert(status.Source, null, null, null);
         }
 
         private void CreateText(ITweetable Status)
@@ -292,7 +60,7 @@ namespace Ocell.Pages.Elements
             string PreviousText;
             int i = 0;
 
-            foreach (var Entity in status.Entities)
+            foreach (var Entity in viewModel.Tweet.Entities)
             {
                 if (Entity.StartIndex > i)
                 {
@@ -335,7 +103,7 @@ namespace Ocell.Pages.Elements
             Text.UpdateLayout();
         }
 
-        Inline CreateBaseLink(string content, string contextHeader, string contextTag)
+        Inline CreateBaseLink(string content, string contextHeader, string contextTag, MenuItem customButton = null)
         {
             var link = new HyperlinkButton
             {
@@ -359,6 +127,8 @@ namespace Ocell.Pages.Elements
 
             ContextMenu menu = new ContextMenu();
             menu.Items.Add(item);
+            if (customButton != null)
+                menu.Items.Add(customButton);
 
             ContextMenuService.SetContextMenu(link, menu);
 
@@ -369,21 +139,69 @@ namespace Ocell.Pages.Elements
 
         Inline CreateHashtagLink(TwitterHashTag Hashtag)
         {
-            return CreateBaseLink("#" + Hashtag.Text, "copy hashtag", "#" + Hashtag.Text);
+            MenuItem item = new MenuItem
+            {
+                Header = "mute this hashtag",
+            };
+            item.Click += (sender, e) =>
+                {
+                    var filter = FilterManager.SetupMute(FilterType.Text, "#" + Hashtag.Text);
+                    Dependency.Resolve<IMessageService>().ShowLightNotification("Muted until " + filter.IsValidUntil.ToString("f"));
+                };
+            return CreateBaseLink("#" + Hashtag.Text, "copy hashtag", "#" + Hashtag.Text, item);
         }
 
         Inline CreateMentionLink(TwitterMention Mention)
         {
-            return CreateBaseLink("@" + Mention.ScreenName, "copy user name", Mention.ScreenName);
+            MenuItem item = new MenuItem
+            {
+                Header = "mute this user",
+            };
+            item.Click += (sender, e) =>
+            {
+                var filter = FilterManager.SetupMute(FilterType.User, Mention.ScreenName);
+                Dependency.Resolve<IMessageService>().ShowLightNotification("Muted until " + filter.IsValidUntil.ToString("f"));
+            };
+            return CreateBaseLink("@" + Mention.ScreenName, "copy user name", Mention.ScreenName, item);
         }
 
         Inline CreateUrlLink(TwitterUrl URL)
         {
+            MenuItem item = new MenuItem
+            {
+                Header = "mute this domain",
+            };
+            item.Click += (sender, e) =>
+            {
+                Uri uri;
+                if (Uri.TryCreate(URL.ExpandedValue, UriKind.Absolute, out uri))
+                {
+                    var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
+                    Dependency.Resolve<IMessageService>().ShowLightNotification("Muted until " + filter.IsValidUntil.ToString("f"));
+                }
+                else
+                    Dependency.Resolve<IMessageService>().ShowError("Ooops, that's not a valid URL.");
+            };
             return CreateBaseLink(TweetTextConverter.TrimUrl(URL.ExpandedValue), "copy link", URL.ExpandedValue);
         }
 
         Inline CreateMediaLink(TwitterMedia Media)
         {
+            MenuItem item = new MenuItem
+            {
+                Header = "mute this domain",
+            };
+            item.Click += (sender, e) =>
+            {
+                Uri uri;
+                if (Uri.TryCreate(Media.DisplayUrl, UriKind.Absolute, out uri))
+                {
+                    var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
+                    Dependency.Resolve<IMessageService>().ShowLightNotification("Muted until " + filter.IsValidUntil.ToString("f"));
+                }
+                else
+                    Dependency.Resolve<IMessageService>().ShowError("Ooops, that's not a valid URL.");
+            };
             return CreateBaseLink(Media.DisplayUrl, "copy link", Media.DisplayUrl);
         }
 
@@ -392,13 +210,6 @@ namespace Ocell.Pages.Elements
             MenuItem item = sender as MenuItem;
             if (item != null && item.Tag is string && !(string.IsNullOrWhiteSpace(item.Tag as string)))
                 Clipboard.SetText(item.Tag as string);
-        }
-
-        private void ImageClick(object sender, EventArgs e)
-        {
-            System.Windows.Controls.Image Img = sender as System.Windows.Controls.Image;
-            if (Img != null)
-                NavigationService.Navigate(new Uri("/Pages/Elements/ImageView.xaml?img=" + Img.Tag.ToString(), UriKind.Relative));
         }
 
         void link_Click(object sender, RoutedEventArgs e)
@@ -427,93 +238,23 @@ namespace Ocell.Pages.Elements
 
         }
 
-        private void replyButton_Click(object sender, EventArgs e)
-        {
-            DataTransfer.ReplyId = status.Id;
-            DataTransfer.Text = "@" + status.Author.ScreenName + " ";
-            DataTransfer.ReplyingDM = false;
-            NavigationService.Navigate(Uris.WriteTweet);
-        }
-
-        private void replyAllButton_Click(object sender, EventArgs e)
-        {
-            DataTransfer.ReplyId = status.Id;
-            DataTransfer.Text = "@" + status.Author.ScreenName + " ";
-            DataTransfer.ReplyingDM = false;
-
-            foreach (string user in StringManipulator.GetUserNames(status.Text))
-                DataTransfer.Text += "@" + user + " ";
-
-            NavigationService.Navigate(Uris.WriteTweet);
-        }
-
-        private void retweetButton_Click(object sender, EventArgs e)
-        {
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-            ServiceDispatcher.GetCurrentService().Retweet(status.Id, (Action<TwitterStatus, TwitterResponse>)receive);
-        }
-
-        private void favButton_Click(object sender, EventArgs e)
-        {
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-            if (_favBtnState)
-            {
-                ServiceDispatcher.GetCurrentService().FavoriteTweet(status.Id, (Action<TwitterStatus, TwitterResponse>)receiveFav);
-            }
-            else
-            {
-                ServiceDispatcher.GetCurrentService().UnfavoriteTweet(status.Id, receiveFav);
-            }
-        }
-
-        private void receive(TwitterStatus status, TwitterResponse resp)
-        {
-            if (resp.StatusCode != HttpStatusCode.OK)
-                Dispatcher.BeginInvoke(() => { MessageBox.Show("An error has occurred :("); });
-            Dispatcher.BeginInvoke(() => { pBar.IsVisible = false; Notificator.ShowMessage("Retweeted!", pBar); });
-        }
-
-        private void receiveFav(TwitterStatus status, TwitterResponse resp)
-        {
-            if (resp.StatusCode != HttpStatusCode.OK)
-                Dispatcher.BeginInvoke(() => { MessageBox.Show("An error has occurred :("); });
-            Dispatcher.BeginInvoke(() => { pBar.IsVisible = false; ToggleFavButton(); Notificator.ShowMessage("Done!", pBar); });
-        }
-
-        private void quoteButton_Click(object sender, EventArgs e)
-        {
-            DataTransfer.ReplyId = 0;
-            DataTransfer.Text = "RT @" + status.User.ScreenName + " " + status.Text;
-
-            NavigationService.Navigate(Uris.WriteTweet);
-        }
-
-        private void shareButton_Click(object sender, EventArgs e)
-        {
-            EmailComposeTask emailComposeTask = new EmailComposeTask();
-
-            emailComposeTask.Subject = "Tweet from @" + status.Author.ScreenName;
-            emailComposeTask.Body = "@" + status.Author.ScreenName + ": " + status.Text + Environment.NewLine + Environment.NewLine +
-                status.CreatedDate.ToString();
-
-            emailComposeTask.Show();
-        }
-
         private void Grid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + status.Author.ScreenName, UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + viewModel.Tweet.Author.ScreenName, UriKind.Relative));
+        }
+
+        private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            var image = sender as Image;
+            if(image != null & image.Tag is ITweeter)
+            {
+            NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + (image.Tag as ITweeter).ScreenName, UriKind.Relative));
+            }
         }
 
         private void Replies_Tap(object sender, EventArgs e)
         {
             NavigationService.Navigate(Uris.Conversation);
-        }
-
-        private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            var Img = sender as System.Windows.Controls.Image;
-            if (Img != null && Img.Tag is ITweeter)
-                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + (Img.Tag as ITweeter).ScreenName, UriKind.Relative));
         }
 
         private ITweetableFilter CreateNewFilter(FilterType type, string data)
@@ -541,51 +282,57 @@ namespace Ocell.Pages.Elements
 
         private void MuteUser_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            var filter = CreateNewFilter(FilterType.User, status.Author.ScreenName);
-            Dispatcher.BeginInvoke(() => MessageBox.Show("The user " + status.Author.ScreenName + " is now muted until " + filter.IsValidUntil.ToString("f") + "."));
-            MuteGrid.Visibility = System.Windows.Visibility.Collapsed;
+            var filter = FilterManager.SetupMute(FilterType.User, viewModel.Tweet.Author.ScreenName);
+            Dependency.Resolve<IMessageService>().
+                ShowMessage("The user " + viewModel.Tweet.Author.ScreenName +
+                " is now muted until " + filter.IsValidUntil.ToString("f") + ".", "");
+            viewModel.IsMuting = false;
         }
 
         private void MuteHashtags_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             ITweetableFilter filter = null;
             string message = "";
-            foreach (var entity in status.Entities)
+            foreach (var entity in viewModel.Tweet.Entities)
             {
                 if (entity.EntityType == TwitterEntityType.HashTag)
                 {
-                    filter = CreateNewFilter(FilterType.Text, ((TwitterHashTag)entity).Text);
+                    filter = FilterManager.SetupMute(FilterType.Text, ((TwitterHashTag)entity).Text);
                     message += ((TwitterHashTag)entity).Text + ", ";
                 }
             }
             if (message == "")
-                Dispatcher.BeginInvoke(() => MessageBox.Show("No hashtags to mute"));
+                Dependency.Resolve<IMessageService>().ShowMessage("No hashtags to mute");
             else
-                Dispatcher.BeginInvoke(() => MessageBox.Show("The hashtag(s) " + message.Substring(0, message.Length - 2) + " are now muted until " + filter.IsValidUntil.ToString("f") +"."));
-            MuteGrid.Visibility = System.Windows.Visibility.Collapsed;
+                Dependency.Resolve<IMessageService>().
+                ShowMessage("The hashtag(s) " + message.Substring(0, message.Length - 2) +
+                " are now muted until " + filter.IsValidUntil.ToString("f") + ".");
+            viewModel.IsMuting = false;
         }
 
         private void Source_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             RemoveHTML conv = new RemoveHTML();
-            string source = conv.Convert(status.Source, null, null, null) as string;
-            var filter = CreateNewFilter(FilterType.Source, source);
-            Dispatcher.BeginInvoke(() => MessageBox.Show("The source " + source + " is now muted until " + filter.IsValidUntil.ToString("f") + "."));
-            MuteGrid.Visibility = System.Windows.Visibility.Collapsed;
+            string source = conv.Convert(viewModel.Tweet.Source, null, null, null) as string;
+            var filter = FilterManager.SetupMute(FilterType.Source, source);
+            Dependency.Resolve<IMessageService>().ShowMessage("The source " + source + 
+                " is now muted until " + filter.IsValidUntil.ToString("f") + ".");
+            viewModel.IsMuting = false;
         }
 
-        private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
+        void HideMuteGrid(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            MuteGrid.Visibility = System.Windows.Visibility.Visible;
+            e.Cancel = true;
+            viewModel.IsMuting = false;
+            this.BackKeyPress -= HideMuteGrid;
         }
 
-        private void saveForLater_Click(object sender, System.EventArgs e)
+        private void MuteBtn_Click(object sender, EventArgs e)
         {
-            var command = new Ocell.Commands.ReadLaterCommand();
-            if (!command.CanExecute(status))
-                Dispatcher.BeginInvoke(() => MessageBox.Show("You have not configured any read later (Instapaper or Pocket) account. You can do it in the settings page."));
-            else
-                command.Execute(status);
+            this.BackKeyPress += HideMuteGrid;
+            viewModel.IsMuting = true;
         }
+
+
     }
 }

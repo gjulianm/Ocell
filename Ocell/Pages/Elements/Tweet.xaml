@@ -6,20 +6,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-
+    xmlns:controls="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
     x:Class="Ocell.Pages.Elements.Tweet"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
+    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
     >
 	<phone:PhoneApplicationPage.Resources>
 		<DataTemplate x:Key="ImagesListTemplate">
 			<Grid/>
-		</DataTemplate>
-		<DataTemplate x:Key="ItemTemplate">
-			<StackPanel Orientation="Horizontal">
-				<Image Source="{Binding MediaUrl}" Tap="ImageClick" Tag="{Binding MediaUrl}" HorizontalAlignment="Left" Height="68" Width="84" Margin="0,0,6,0"/>
-			</StackPanel>
 		</DataTemplate>
 		
 		<ItemsPanelTemplate x:Key="PanelTemplate">
@@ -64,23 +59,11 @@
 	</toolkit:TransitionService.NavigationOutTransition>
 
     <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="False" x:Name="pBar" />
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
  
     <!--Código de ejemplo que muestra el uso de ApplicationBar-->
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="retweet with comments" x:Name="quoteButton" Click="quoteButton_Click"/> 
-                <shell:ApplicationBarMenuItem Text="share..." x:Name="shareButton" Click="shareButton_Click"/>
-                <shell:ApplicationBarMenuItem x:Name="MuteBtn" Text="mute..." Click="ApplicationBarMenuItem_Click"/>
-                <shell:ApplicationBarMenuItem x:Name="saveForLater" Text="read later" Click="saveForLater_Click" />
-            </shell:ApplicationBar.MenuItems>
-            <shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.reply.rest.png" Text="reply" x:Name="replyButton" Click="replyButton_Click"  />
-            <shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.replyall.rest.png" Text="reply all" x:Name="replyAllButton" Click="replyAllButton_Click"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.retweet.rest.png" Text="retweet" x:Name="retweetButton" Click="retweetButton_Click"/>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
+    
     
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
     <Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
@@ -103,29 +86,48 @@
         	<ScrollViewer Margin="1,0,12,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
         		<Grid VerticalAlignment="Top" Height="798">
         			<Grid Height="99" Margin="7,0,117,0" VerticalAlignment="Top" Tap="Grid_Tap" toolkit:TiltEffect.IsTiltEnabled="True">
-        				<Image x:Name="Avatar" HorizontalAlignment="Left" Margin="0,8,0,0" Width="85" RenderTransformOrigin="0.475,0.52" Source="{Binding Author.ProfileImageUrl}"/>
-        				<TextBlock x:Name="FName" Margin="94,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" FontSize="32" HorizontalAlignment="Left" Text="{Binding Author.Name}" Width="238"/>
-        				<TextBlock x:Name="SName" Margin="94,42,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" Text="" FontSize="21.333" FontFamily="Segoe WP SemiLight"/>
+                        <Image x:Name="Avatar" HorizontalAlignment="Left" Margin="0,8,0,0" Width="85" RenderTransformOrigin="0.475,0.52" Source="{Binding Tweet.Author.ProfileImageUrl}"/>
+        				<TextBlock x:Name="FName" Margin="94,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" FontSize="32" HorizontalAlignment="Left" Text="{Binding Tweet.User.Name}" Width="238"/>
+                        <TextBlock x:Name="SName" Margin="94,42,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" Text="" FontSize="21.333" FontFamily="Segoe WP SemiLight"><Run Text="@"/><Run Text="{Binding Tweet.Author.ScreenName}"/><Run Text="{Binding WhoRetweeted}"/></TextBlock>
         			</Grid>
-        			<RichTextBox x:Name="Text" TextWrapping="Wrap" HorizontalAlignment="Left" Width="440" FontSize="29.333" VerticalAlignment="Top" Margin="0,110,0,0" IsReadOnly="True" FontFamily="Segoe WP SemiLight" />
+        			<RichTextBox x:Name="Text" TextWrapping="Wrap" HorizontalAlignment="Left" Width="440" FontSize="29.333" VerticalAlignment="Top" Margin="0,110,0,0" IsReadOnly="True" FontFamily="Segoe WP SemiLight"  />
         			<Grid x:Name="SecondBlock" Height="646" Margin="8,0" VerticalAlignment="Top">
-        				<TextBlock x:Name="ViaDate" HorizontalAlignment="Right" Margin="0,8,14,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="18.667" Foreground="#FFABABAB" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP Light" d:LayoutOverrides="VerticalAlignment" Height="28"/>
-        				<TextBlock x:Name="Replies" Tap="Replies_Tap" Margin="0,40,13,0" TextWrapping="Wrap" Text="Conversation" VerticalAlignment="Top" FontSize="21.333" Foreground="{StaticResource PhoneAccentBrush}" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP" HorizontalAlignment="Right" Visibility="Collapsed"/>
-        				<TextBlock x:Name="usersText" Margin="8,76,213,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" Visibility="Collapsed"><Run Text="Users who re"/><Run Text="tweeted:"/></TextBlock>
-        				<ListBox x:Name="RTList" Margin="8,107,14,0" Height="65"  VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ItemsPanel="{StaticResource PanelTemplate}" ItemTemplate="{StaticResource RetweetUserTemplate}">
-        					</ListBox>
-        				<Image x:Name="img" Margin="15,182,15,0" VerticalAlignment="Top" Width="401"/>
+                        <TextBlock x:Name="ViaDate" HorizontalAlignment="Right" Margin="0,8,14,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="18.667" Foreground="#FFABABAB" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP Light" d:LayoutOverrides="VerticalAlignment" Height="28">
+                            <Run Text="{Binding Tweet.CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}"/>
+                            <Run Text="via"/>
+                            <Run Text="{Binding Tweet.Source, Converter={StaticResource RemoveHTMLConverter}}" />
+                        </TextBlock>
+                        <TextBlock x:Name="Replies" toolkit:TiltEffect.IsTiltEnabled="True" Tap="Replies_Tap" Margin="0,40,13,0" TextWrapping="Wrap" Text="Conversation" VerticalAlignment="Top" FontSize="21.333" Foreground="{StaticResource PhoneAccentBrush}" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP" HorizontalAlignment="Right" Visibility="{Binding HasReplies, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock x:Name="usersText" Margin="8,76,213,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" Visibility="{Binding HasRetweets, Converter={StaticResource BooleanToVisibilityConverter}}"><Run Text="Users who retweeted:"/></TextBlock>
+                        <ListBox x:Name="RTList" ItemsSource="{Binding UsersWhoRetweeted}" Margin="8,107,14,0" Height="65"  VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ItemsPanel="{StaticResource PanelTemplate}" ItemTemplate="{StaticResource RetweetUserTemplate}" Visibility="{Binding HasRetweets, Converter={StaticResource BooleanToVisibilityConverter}}">
+        			    </ListBox>
+                        <Image x:Name="img" Margin="15,182,15,0" VerticalAlignment="Top" Width="415" Visibility="{Binding HasImage, Converter={StaticResource BooleanToVisibilityConverter}}" Source="{Binding ImageSource}"/>
         			</Grid>
         		</Grid>
         	</ScrollViewer>
-        	<Grid x:Name="MuteGrid" Height="91" VerticalAlignment="Bottom" Margin="-12,0,-8,-11" Background="{StaticResource PhoneChromeBrush}" Visibility="Collapsed">
-        		<TextBlock  toolkit:TiltEffect.IsTiltEnabled="True" x:Name="MuteUser" TextWrapping="Wrap" Text="User" HorizontalAlignment="Left" Margin="32,40,0,8" Foreground="{StaticResource PhoneAccentBrush}" FontSize="26.667" FontFamily="Segoe WP SemiLight" Width="74" Tap="MuteUser_Tap"/>
+        	<Grid x:Name="MuteGrid" Height="91" VerticalAlignment="Bottom" Margin="-12,0,-8,-11" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsMuting, Converter={StaticResource BooleanToVisibilityConverter}}">
+        		<TextBlock toolkit:TiltEffect.IsTiltEnabled="True" x:Name="MuteUser" TextWrapping="Wrap" Text="User" HorizontalAlignment="Left" Margin="32,40,0,8" Foreground="{StaticResource PhoneAccentBrush}" FontSize="26.667" FontFamily="Segoe WP SemiLight" Width="74" Tap="MuteUser_Tap"/>
         		<TextBlock toolkit:TiltEffect.IsTiltEnabled="True" x:Name="MuteHashtags" TextWrapping="Wrap" Text="Hashtags" Margin="184,40,182,8" Foreground="{StaticResource PhoneAccentBrush}" FontSize="26.667" FontFamily="Segoe WP SemiLight" Tap="MuteHashtags_Tap"/>
         		<TextBlock toolkit:TiltEffect.IsTiltEnabled="True" x:Name="Source" TextWrapping="Wrap" Text="Source" HorizontalAlignment="Right" Margin="0,40,45,16" Foreground="{StaticResource PhoneAccentBrush}" FontSize="26.667" FontFamily="Segoe WP SemiLight" Width="91" Tap="Source_Tap"/>
         		<TextBlock HorizontalAlignment="Left" Margin="16,8,0,0" TextWrapping="Wrap" Text="What do you want to mute?" VerticalAlignment="Top" FontFamily="Segoe WP Light"/>
         	</Grid>
         </Grid>
-        <ListBox HorizontalAlignment="Left" Margin="0,0,0,21" Width="100"/>
+        
+        <controls:AppBar>
+            <controls:AppBar.MenuItems>
+                <controls:AppBarMenuItem Text="retweet with comments" x:Name="quoteButton" Command="{Binding Quote}"/>
+                <controls:AppBarMenuItem Text="share..." x:Name="shareButton" Command="{Binding Share}"/>
+                <controls:AppBarMenuItem x:Name="MuteBtn" Text="mute..." Click="MuteBtn_Click"/>
+                <controls:AppBarMenuItem x:Name="saveForLater" Text="read later" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding Tweet}" />
+                <controls:AppBarMenuItem Text="delete tweet" Command="{Binding DeleteTweet}" /> 
+            </controls:AppBar.MenuItems>
+            <controls:AppBarIconButton IconUri="/Images/Icons_White/appbar.reply.rest.png" Text="reply" x:Name="replyButton" Command="{StaticResource ReplyCommand}" CommandParameter="{Binding Tweet}" />
+            <controls:AppBarIconButton IconUri="/Images/Icons_White/appbar.replyall.rest.png" Text="reply all" x:Name="replyAllButton" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding Tweet}"/>
+            <controls:AppBarIconButton IconUri="/Images/Icons_White/appbar.retweet.rest.png" Text="retweet" x:Name="retweetButton" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding Tweet}"/>
+            <controls:AppBarToggleButton Toggled="{Binding IsFavorited}"
+                                         IconUri2="/Images/Icons_White/appbar.favs.remove.rest.png" Command2="{Binding Favorite}" CommandParameter2="{Binding Tweet}" Text2="remove favorite"
+                                         IconUri1="/Images/Icons_White/appbar.favs.addto.rest.png" Command1="{Binding Favorite}" CommandParameter1="{Binding Tweet}" Text1="add favorite" />
+        </controls:AppBar>
     </Grid>
 
 </phone:PhoneApplicationPage>
