@@ -21,7 +21,7 @@
     	<ResourceDictionary>
     		<local:ListConverter x:Key="ListConverter"/>
     		<local:RelativeDateTimeConverter x:Key="RelativeDateTimeConverter"/>
-
+            <local:RemoveHTML x:Key="RemoveHTMLConverter" />
     		<commands:FavoriteCommand x:Key="FavoriteCommand" />
     		<commands:ReplyAllCommand x:Key="ReplyAllCommand"/>
     		<commands:ReplyCommand x:Key="ReplyCommand"/>
