@@ -7,14 +7,16 @@ namespace Ocell.Library.Twitter
     public static class ServiceDispatcher 
     {
         private static object _lockFlag = new object();
-        private static Dictionary<string, TwitterService> _list;
-        
-        public static TwitterService GetService(UserToken account)
+        private static Dictionary<string, ITwitterService> _list;
+
+        public static bool TestSession { get; set; }
+
+        public static ITwitterService GetService(UserToken account)
         {
             lock (_lockFlag)
             {
                 if (_list == null)
-                    _list = new Dictionary<string, TwitterService>();
+                    _list = new Dictionary<string, ITwitterService>();
             }
 
             if (account == null || account.Key == null)
@@ -25,8 +27,13 @@ namespace Ocell.Library.Twitter
                 if (_list.ContainsKey(account.Key))
                     return _list[account.Key];
             }
-            
-            TwitterService srv = new TwitterService();
+
+            ITwitterService srv;
+            if (TestSession)
+                srv = new MockTwitterService();
+            else
+                srv = new TwitterService();
+
             srv.AuthenticateWith(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, account.Key, account.Secret);
 
             lock(_lockFlag)
@@ -34,7 +41,7 @@ namespace Ocell.Library.Twitter
             return srv;
         }
 
-        public static TwitterService GetDefaultService()
+        public static ITwitterService GetDefaultService()
         {
             if (Config.Accounts.Count > 0)
             {
@@ -45,7 +52,7 @@ namespace Ocell.Library.Twitter
             return null;
         }
 
-        public static TwitterService GetCurrentService()
+        public static ITwitterService GetCurrentService()
         {
             return GetService(DataTransfer.CurrentAccount);
         }
