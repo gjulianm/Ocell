@@ -90,6 +90,8 @@
     <Compile Include="Helpers\ValueConverters\ToColumn.cs" />
     <Compile Include="Helpers\ValueConverters\TweetTextConverter.cs" />
     <Compile Include="LittleWatson.cs" />
+    <Compile Include="MainPageModel.cs" />
+    <Compile Include="Pages\Elements\TweetModel.cs" />
     <Compile Include="Pages\Elements\UserModel.cs" />
     <Compile Include="Pages\SelectUserModel.cs" />
     <Compile Include="Pages\TopicsModel.cs" />
@@ -113,9 +115,6 @@
     </Compile>
     <Compile Include="Pages\Filtering\Filters.xaml.cs">
       <DependentUpon>Filters.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Elements\ImageView.xaml.cs">
-      <DependentUpon>ImageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Filtering\ManageFilter.xaml.cs">
       <DependentUpon>ManageFilter.xaml</DependentUpon>
@@ -221,10 +220,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Filtering\Filters.xaml">
-      <Generator>MSBuild:MarkupCompilePass1</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\Elements\ImageView.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
