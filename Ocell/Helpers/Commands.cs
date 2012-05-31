@@ -11,6 +11,8 @@ using Ocell.Library.ReadLater.Instapaper;
 using Ocell.Library.ReadLater.Pocket;
 using Ocell.Library.ReadLater;
 using System.Linq;
+using DanielVaughan;
+using DanielVaughan.Services;
 
 namespace Ocell.Commands
 {
@@ -36,8 +38,7 @@ namespace Ocell.Commands
                 DataTransfer.ReplyingDM = true;
             }
 
-            PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
-            Deployment.Current.Dispatcher.BeginInvoke(() => service.Navigate(Uris.WriteTweet));
+            Dependency.Resolve<INavigationService>().Navigate(Uris.WriteTweet);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -57,8 +58,8 @@ namespace Ocell.Commands
             DataTransfer.Text = "";
             foreach (string user in StringManipulator.GetUserNames(tweet.Text))
                 DataTransfer.Text += "@" + user + " ";
-            PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
-            Deployment.Current.Dispatcher.BeginInvoke(() => service.Navigate(Uris.WriteTweet));
+
+            Dependency.Resolve<INavigationService>().Navigate(Uris.WriteTweet);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -75,7 +76,11 @@ namespace Ocell.Commands
 
         public void Execute(object parameter)
         {
-            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).Retweet(((ITweetable)parameter).Id, (sts, resp) => { Deployment.Current.Dispatcher.BeginInvoke(() => { MessageBox.Show("Retweeted!"); }); });
+            Dependency.Resolve<IMessageService>().SetLoadingBar(true);
+            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).Retweet(((ITweetable)parameter).Id, (sts, resp) => 
+            {
+                Dependency.Resolve<IMessageService>().ShowLightNotification("Retweeted!");
+            });
         }
 
         public event EventHandler CanExecuteChanged;
@@ -92,7 +97,17 @@ namespace Ocell.Commands
 
         public void Execute(object parameter)
         {
-            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(((ITweetable)parameter).Id, (sts, resp) => { Deployment.Current.Dispatcher.BeginInvoke(() => { MessageBox.Show("Favorited!"); });  });
+            TwitterStatus param = (TwitterStatus)parameter;
+            if(param.IsFavorited)
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweet(param.Id, (sts, resp) =>
+                {
+                    Dependency.Resolve<IMessageService>().ShowLightNotification("Unfavorited!");
+                });
+            else
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(param.Id, (sts, resp) => 
+                { 
+                    Dependency.Resolve<IMessageService>().ShowLightNotification("Favorited!"); 
+                });
         }
 
         public event EventHandler CanExecuteChanged;
@@ -138,10 +153,17 @@ namespace Ocell.Commands
         {
             try
             {
-                ProtectedAccounts.SwitchAccountState(parameter as UserToken);
+                var isProtected = ProtectedAccounts.SwitchAccountState(parameter as UserToken);
+                string msg;
+                if(isProtected)
+                    msg = "protected!";
+                else
+                    msg = "unprotected!";
+                Dependency.Resolve<IMessageService>().ShowLightNotification("Account "+ msg);
             }
             catch (Exception)
             {
+                Dependency.Resolve<IMessageService>().ShowError("We couldn't complete your petition.");
             }
         }
 
@@ -198,21 +220,8 @@ namespace Ocell.Commands
 
             ITweeter author = tweet.Author;
 
-            if (Config.GlobalFilter == null)
-                Config.GlobalFilter = new ColumnFilter();
-
-            ITweetableFilter filter = new ITweetableFilter();
-            filter.Inclusion = IncludeOrExclude.Exclude;
-            filter.Type = FilterType.User;
-            filter.Filter = author.ScreenName;
-            if (Config.DefaultMuteTime == TimeSpan.MaxValue)
-                filter.IsValidUntil = DateTime.MaxValue;
-            else
-            filter.IsValidUntil = DateTime.Now + (TimeSpan)Config.DefaultMuteTime;
-
-            Config.GlobalFilter.AddFilter(filter);
-            Config.GlobalFilter = Config.GlobalFilter; // Force save.
-            GlobalEvents.FireFiltersChanged(filter, new EventArgs());
+            FilterManager.SetupMute(FilterType.User, author.ScreenName);
+            Dependency.Resolve<IMessageService>().ShowLightNotification("filtered!");
         }
 
         public event EventHandler CanExecuteChanged;
@@ -244,6 +253,7 @@ namespace Ocell.Commands
                 service.Password = credentials.Pocket.Password;
 
                 TwitterUrl link = tweet.Entities.FirstOrDefault(item => item != null && item.EntityType == TwitterEntityType.Url) as TwitterUrl;
+                Dependency.Resolve<IMessageService>().SetLoadingBar(true, "saving for later...");
                 _pendingCalls++;
                 if (link != null)
                     service.AddUrl(link.ExpandedValue, tweet.Id, Callback);
@@ -260,6 +270,7 @@ namespace Ocell.Commands
                 service.Password = credentials.Instapaper.Password;
 
                 TwitterUrl link = tweet.Entities.FirstOrDefault(item => item != null && item.EntityType == TwitterEntityType.Url) as TwitterUrl;
+                Dependency.Resolve<IMessageService>().SetLoadingBar(true, "saving for later...");
                 _pendingCalls++;
                 if (link != null)
                     service.AddUrl(link.ExpandedValue, tweet.Text, Callback);
@@ -273,14 +284,15 @@ namespace Ocell.Commands
 
         private void Callback(ReadLaterResponse response)
         {
+            Dependency.Resolve<IMessageService>().SetLoadingBar(false);
             _pendingCalls--;
             if (response.Result != ReadLaterResult.Accepted)
             {
-                Deployment.Current.Dispatcher.BeginInvoke(() => { MessageBox.Show("There has been an error while trying to save this tweet for later."); });
+                Dependency.Resolve<IMessageService>().ShowError("There has been an error saving this tweet for later.");
             }
             else if (_pendingCalls <= 0)
             {
-                Deployment.Current.Dispatcher.BeginInvoke(() => { MessageBox.Show("Saved for later!"); });
+                Dependency.Resolve<IMessageService>().ShowLightNotification("Saved for later!");
             }
         }
 
