@@ -170,6 +170,7 @@ namespace Ocell.Library.Twitter
             {
                 if (_action != null)
                     _action.Invoke(list, response);
+                return;
             }
 
             list.Add(status);
