@@ -37,12 +37,18 @@ namespace Ocell.Library.Twitter
                 _protectedAccounts.Remove(User);
         }
 
-        public static void SwitchAccountState(UserToken User)
+        public static bool SwitchAccountState(UserToken User)
         {
             if (IsProtected(User))
+            {
                 UnprotectAccount(User);
+                return false;
+            }
             else
+            {
                 ProtectAccount(User);
+                return true;
+            }
         }
     }
 }
