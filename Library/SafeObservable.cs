@@ -24,6 +24,11 @@ namespace Ocell.Library
         public event NotifyCollectionChangedEventHandler CollectionChanged;
         private object sync = new object();
 
+        public SafeObservable(IEnumerable<T> source) : this()
+        {
+            collection = new List<T>(source);
+        }
+
         public SafeObservable()
         {
             dispatcher = Deployment.Current.Dispatcher;
