@@ -45,6 +45,12 @@ namespace Ocell
             LastReloadTime = DateTime.MinValue;
         }
 
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            viewModel.RaiseNavigatedTo(this, e);
+            base.OnNavigatedTo(e);
+        }
+
         void ReloadColumns()
         {
             foreach (var pivot in Config.Columns)
@@ -153,7 +159,7 @@ namespace Ocell
                 viewModel.ReloadLists += (sender1, e1) =>
                 {
                     if (e1.BroadcastAll || e1.Resource == Resource)
-                        ThreadPool.QueueUserWorkItem((context) => list.Loader.Load());
+                        ThreadPool.QueueUserWorkItem((context) => list.AutoReload());
                 };
 
                 list.Loader.LoadCacheAsync();

@@ -108,7 +108,7 @@ namespace Ocell
         public bool IsSearching
         {
             get { return isSearching; }
-            set { Assign("IsSearchign", ref isSearching, value); }
+            set { Assign("IsSearching", ref isSearching, value); }
         }
 
         string userSearch;
@@ -173,12 +173,13 @@ namespace Ocell
 
             toMyProfile = new DelegateCommand((obj) =>
                 {
-                    Navigate("/Pages/User.xaml?user=" + CurrentAccountName);
+                    Navigate("/Pages/Elements/User.xaml?user=" + CurrentAccountName);
                 }, (obj) => CurrentAccountName != null);
 
             goToUser = new DelegateCommand((obj) =>
             {
-                Navigate("/Pages/User.xaml?user=" + UserSearch);
+                IsSearching = false;
+                Navigate("/Pages/Elements/User.xaml?user=" + UserSearch);
             });
 
         }
@@ -198,8 +199,6 @@ namespace Ocell
 
             foreach (var pivot in Config.Columns)
                 Pivots.Add(pivot);
-
-            
 
             Config.Columns.CollectionChanged += (sender, e) =>
             {
@@ -222,8 +221,6 @@ namespace Ocell
                         UpdatePivot();
                 };
 
-            this.NavigatedTo += (sender, e) => ThreadPool.QueueUserWorkItem((context) => RaiseReloadAll());
-
             string column;
             if (QueryParameters.TryGetValue("column", out column))
             {
@@ -240,7 +237,7 @@ namespace Ocell
             if (SelectedPivot is TwitterResource)
             {
                 var resource = (TwitterResource)SelectedPivot;
-                CurrentAccountName = resource.User.ScreenName;
+                CurrentAccountName = resource.User.ScreenName.ToUpperInvariant();
                 if (DateTime.Now > lastAutoReload.AddSeconds(secondsBetweenReloads))
                 {
                     lastAutoReload = DateTime.Now;
@@ -248,6 +245,11 @@ namespace Ocell
                 }
                 DataTransfer.CurrentAccount = resource.User;
             }
+        }
+
+        public void RaiseNavigatedTo(object sender, System.Windows.Navigation.NavigationEventArgs e) 
+        {
+            ThreadPool.QueueUserWorkItem((context) => RaiseReloadAll());
         }
     }
 }
