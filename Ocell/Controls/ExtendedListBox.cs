@@ -34,6 +34,9 @@ namespace Ocell.Controls
         private ColumnFilter _filter;
         protected bool _isLoading;
         protected bool _selectionChangeFired;
+        protected DateTime _lastAutoReload;
+        protected TimeSpan _autoReloadInterval = TimeSpan.FromSeconds(60);
+        protected static DateTime _lastErrorFired;
 
         public bool ActivatePullToRefresh { get; set; }
         public bool AutoManageNavigation { get; set; }
@@ -47,6 +50,8 @@ namespace Ocell.Controls
             AutoManageNavigation = true;
             AutoManageErrors = true;
             _selectionChangeFired = false;
+            _lastAutoReload = DateTime.MinValue;
+            _lastErrorFired = DateTime.MinValue;
             this.Loaded += new RoutedEventHandler(ListBox_Loaded);
             this.Unloaded += new RoutedEventHandler(ExtendedListBox_Unloaded);
             this.Compression += new OnCompression(RefreshOnPull);
@@ -357,10 +362,23 @@ namespace Ocell.Controls
         void Loader_Error(TwitterResponse response)
         {
             var messager = Dependency.Resolve<IMessageService>();
-            if (response.RateLimitStatus.RemainingHits == 0)
-                messager.ShowError("Woops! You have spent the limit of calls to Twitter. You'll have to wait until " + response.RateLimitStatus.ResetTime.ToString("H:mm"));
-            else
-                messager.ShowError("We couldn't load the tweets: " + response.StatusDescription);
+            if (DateTime.Now > _lastErrorFired.AddSeconds(5))
+            {
+                if (response.RateLimitStatus.RemainingHits == 0)
+                    messager.ShowError("Woops! You have spent the limit of calls to Twitter. You'll have to wait until " + response.RateLimitStatus.ResetTime.ToString("H:mm"));
+                else
+                    messager.ShowError("We couldn't load the tweets: " + response.StatusDescription);
+                _lastErrorFired = DateTime.Now;
+            }
+        }
+
+        public void AutoReload() // EL will manage tiems to avoid overcalling Twitter API
+        {
+            if (DateTime.Now > (_lastAutoReload + _autoReloadInterval))
+            {
+                Loader.Load();
+                _lastAutoReload = DateTime.Now;
+            }
         }
 
         public delegate void OnCompression(object sender, CompressionEventArgs e);
