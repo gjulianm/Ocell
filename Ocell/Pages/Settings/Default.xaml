@@ -22,7 +22,7 @@
     </phone:PhoneApplicationPage.Resources>
  
  	<shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="False" x:Name="pBar" />
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
  
     <!--Código de ejemplo que muestra el uso de ApplicationBar-->
@@ -77,30 +77,34 @@
 			<controls:PivotItem x:Name="pSettings" Header="settings">
 				<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 					<Grid Height="859">
-						<toolkit:ToggleSwitch x:Name="RetweetsInMentions" Header="Show retweets as mentions" VerticalAlignment="Top" Checked="RetweetsInMentions_Checked" Unchecked="RetweetsInMentions_Checked" Margin="0,108,0,0"/>
-						<toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="Update tiles in the background" Margin="0,247,0,0" Checked="ColumnUpdate_Checked" Unchecked="ColumnUpdate_Checked" VerticalAlignment="Top"/>
+						<toolkit:ToggleSwitch x:Name="RetweetsInMentions" Header="Show retweets as mentions" VerticalAlignment="Top" IsChecked="{Binding RetweetsAsMentions, Mode=TwoWay}" Margin="0,108,0,0"/>
+						<toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="Update tiles in the background" Margin="0,247,0,0" IsChecked="{Binding BackgroundUpdateTiles, Mode=TwoWay}" VerticalAlignment="Top"/>
 						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,289" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Height="96" VerticalAlignment="Bottom"><Run Text="To add columns tiles, go to the main page and press &quot;pin column to start&quot; in the bottom bar."/><LineBreak/><Run/></TextBlock>
-						<Button x:Name="ComposePin" Content="Pin compose tile to start" HorizontalAlignment="Left" Margin="52,378,0,0" Width="344" Click="ComposePin_Click" VerticalAlignment="Top"/>
+						<Button x:Name="ComposePin" Content="Pin compose tile to start" HorizontalAlignment="Left" Margin="52,378,0,0" Width="344" Command="{Binding PinComposeToStart}" VerticalAlignment="Top"/>
 						<TextBlock HorizontalAlignment="Left" Margin="8,214,0,0" TextWrapping="Wrap" Text="Tiles" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24"/>
 						<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Tweets to load per request" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
-						<TextBox x:Name="tweetsPerReq" Margin="0,39,8,0" TextWrapping="Wrap" VerticalAlignment="Top" InputScope="Number" TextChanged="tweetsPerReq_TextChanged"/>
+						<TextBox x:Name="tweetsPerReq" Margin="0,39,8,0" TextWrapping="Wrap" VerticalAlignment="Top" InputScope="Number" Text="{Binding TweetsPerRequest}"/>
 					</Grid>
 				</ScrollViewer>
 			</controls:PivotItem>
 
 			<controls:PivotItem x:Name="pAccounts" Header="accounts" Margin="12,0">
 				<Grid Height="608" Margin="0,-9,0,0">
-					<Button Content="Add account" Height="72" Margin="35,286,34,250" x:Name="btnLogin" Width="379" Click="btnLogin_Click" />
+					<Button Content="Add account" Height="72" Margin="35,286,34,250" x:Name="btnLogin" Width="379" Command="{Binding AddAccount}" />
 					<TextBlock Height="30" Margin="213,6,-119,0" x:Name="UserName" VerticalAlignment="Top" Style="{StaticResource PhoneTextAccentStyle}" Foreground="{StaticResource PhoneForegroundBrush}" d:LayoutOverrides="Width" />
-					<ListBox x:Name="Users" toolkit:TiltEffect.IsTiltEnabled="True" Margin="8,40,8,0"  Height="232" VerticalAlignment="Top" ItemTemplate="{StaticResource AccountsContextTemplate}"/>
+					<ListBox x:Name="Users" toolkit:TiltEffect.IsTiltEnabled="True" Margin="8,40,8,0"  Height="232" VerticalAlignment="Top" ItemTemplate="{StaticResource AccountsContextTemplate}" ItemsSource="{Binding Accounts}" SelectedIndex="{Binding SelectedAccount, Mode=TwoWay}"/>
 					<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Accounts" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
-			    </Grid>
+                    <TextBlock HorizontalAlignment="Left" Margin="8,0,0,178" TextWrapping="Wrap" VerticalAlignment="Bottom" Text="Notify mentions:" Foreground="{StaticResource PhoneSubtleBrush}"/>
+                    <toolkit:ListPicker x:Name="MentionsPicker" Margin="7,0,9,117" VerticalAlignment="Bottom" ItemsSource="{Binding NotifyOptions}" SelectedIndex="{Binding MentionNotifyOption, Mode=TwoWay}" />
+                    <TextBlock HorizontalAlignment="Left" Margin="7,0,0,65" TextWrapping="Wrap" VerticalAlignment="Bottom" Text="Notify messages:" Foreground="{StaticResource PhoneSubtleBrush}"/>
+                    <toolkit:ListPicker x:Name="MessagesPicker" Margin="7,0,9,9" VerticalAlignment="Bottom" ItemsSource="{Binding NotifyOptions}" SelectedIndex="{Binding MessageNotifyOption, Mode=TwoWay}"/>
+                </Grid>
 			</controls:PivotItem>
 			<controls:PivotItem x:Name="pFilters" Header="filters">
 				<Grid>
-					<Button x:Name="filter_btn" Content="Edit muted tweets" HorizontalAlignment="Left" Margin="52,8,0,0" Width="344" Click="FilterClick" VerticalAlignment="Top"/>
-					<TextBlock HorizontalAlignment="Left" Margin="8,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Silence time when mutin"/><Run Text="g tweets"/><Run Text=":"/></TextBlock>
-					<toolkit:ListPicker x:Name="SilencePicker" Margin="8,130,8,0" VerticalAlignment="Top" SelectionChanged="ListPicker_SelectionChanged">
+					<Button x:Name="filter_btn" Content="Edit muted tweets" HorizontalAlignment="Left" Margin="52,8,0,0" Width="344" Command="{Binding EditFilters}" VerticalAlignment="Top"/>
+					<TextBlock HorizontalAlignment="Left" Margin="8,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Silence time when muting tweets:"/></TextBlock>
+					<toolkit:ListPicker x:Name="SilencePicker" Margin="8,130,8,0" VerticalAlignment="Top" SelectedIndex="{Binding SelectedMuteTime, Mode=TwoWay}">
 						<toolkit:ListPickerItem x:Name="hour" Content="1 hour"/>
 						<toolkit:ListPickerItem x:Name="hours8" Content="8 hours"/>
 						<toolkit:ListPickerItem x:Name="day" Content="1 day"/>
@@ -109,37 +113,20 @@
 					</toolkit:ListPicker>
 				</Grid>
 			</controls:PivotItem>
-			<controls:PivotItem x:Name="pNotifications" Header="notifications" Margin="12,8,12,0">
-				<Grid>
-					<ListBox x:Name="Accounts_Not" toolkit:TiltEffect.IsTiltEnabled="True" Margin="8,40,8,0" Height="232" VerticalAlignment="Top" ItemTemplate="{StaticResource AccountsTemplate}"/>
-					<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" Height="32"><Run Text="Select an account to modify its notifications"/><LineBreak/><Run/></TextBlock>
-					<TextBlock HorizontalAlignment="Left" Margin="8,0,0,311" TextWrapping="Wrap" VerticalAlignment="Bottom" Text="Mentions" Foreground="{StaticResource PhoneSubtleBrush}"/>
-					<toolkit:ListPicker x:Name="MentionsPicker" Margin="8,0,8,250" VerticalAlignment="Bottom">
-						<toolkit:ListPickerItem x:Name="None" Content="None" HorizontalAlignment="Left"/>
-						<toolkit:ListPickerItem x:Name="Tile" Content="Only Tile"/>
-						<toolkit:ListPickerItem x:Name="Toast" Content="Toast and Tile"/>
-					</toolkit:ListPicker>
-					<TextBlock HorizontalAlignment="Left" Margin="8,0,0,198" TextWrapping="Wrap" VerticalAlignment="Bottom" Text="Messages" Foreground="{StaticResource PhoneSubtleBrush}"/>
-					<toolkit:ListPicker x:Name="MessagesPicker" Margin="8,0,8,142" VerticalAlignment="Bottom">
-						<toolkit:ListPickerItem x:Name="None1" Content="None" HorizontalAlignment="Left"/>
-						<toolkit:ListPickerItem x:Name="Tile1" Content="Only Tile"/>
-						<toolkit:ListPickerItem x:Name="Toast1" Content="Toast and Tile"/>
-					</toolkit:ListPicker>
-				</Grid>
-			</controls:PivotItem>
+		
 			<controls:PivotItem x:Name="pReadLater" Header="read later" Margin="12,8,12,0">
 				<Grid>
 					<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Pocket" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontSize="24"/>
 					<TextBlock HorizontalAlignment="Left" Margin="12,51,0,0" TextWrapping="Wrap" Text="Login:" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"/>
-					<TextBox x:Name="PocketUser" Margin="0,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+					<TextBox x:Name="PocketUser" Margin="0,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding PocketUser, Mode=TwoWay}"/>
 					<TextBlock HorizontalAlignment="Left" Margin="12,158,0,0" TextWrapping="Wrap" Text="Password:" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"/>
-					<PasswordBox x:Name="PocketPass" Margin="0,189,0,0" VerticalAlignment="Top"/>
+					<PasswordBox x:Name="PocketPass" Margin="0,189,0,0" VerticalAlignment="Top" Password="{Binding PocketPassword, Mode=TwoWay}"/>
 					<TextBlock HorizontalAlignment="Left" Margin="8,265,0,0" TextWrapping="Wrap" Text="Instapaper" Foreground="{StaticResource PhoneAccentBrush}" FontSize="24" Height="38" VerticalAlignment="Top"/>
 					<TextBlock HorizontalAlignment="Left" Margin="12,307,0,0" TextWrapping="Wrap" Text="Username or email:" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"/>
-					<TextBox x:Name="IPUser" Margin="0,334,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-					<TextBlock HorizontalAlignment="Left" Margin="12,410,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Password"/><Run Text=" (if you have one):"/></TextBlock>
-					<PasswordBox x:Name="IPPass" Margin="0,441,0,0" VerticalAlignment="Top" />
-					<Button x:Name="SaveRLBtn" Content="Save credentials" Margin="98,0,98,5" VerticalAlignment="Bottom" Click="SaveRLBtn_Click"/>
+                    <TextBox x:Name="IPUser" Margin="0,334,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding InstapaperUser, Mode=TwoWay}"/>
+					<TextBlock HorizontalAlignment="Left" Margin="12,410,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Password (if you have one):"/></TextBlock>
+                    <PasswordBox x:Name="IPPass" Password="{Binding InstapaperPassword, Mode=TwoWay}" Margin="0,441,0,0" VerticalAlignment="Top" />
+					<Button x:Name="SaveRLBtn" Content="Save credentials" Margin="98,0,98,5" VerticalAlignment="Bottom" Command="{Binding SaveCredentials}"/>
 				</Grid>
 			</controls:PivotItem>
 			<controls:PivotItem x:Name="pAbout" Header="about">
