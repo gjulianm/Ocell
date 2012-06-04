@@ -203,7 +203,7 @@ namespace Ocell
 
         private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            var box = sender as TextBox;
+            var box = sender as TextBlock;
             if (box != null && box.Tag is TwitterResource)
                 viewModel.RaiseScrollToTop((TwitterResource)box.Tag);
         }
@@ -218,6 +218,7 @@ namespace Ocell
         private void HideUserGrid(object sender, System.ComponentModel.CancelEventArgs e)
         {
             viewModel.IsSearching = false;
+            e.Cancel = true;
             this.BackKeyPress -= HideUserGrid;
         }
 
