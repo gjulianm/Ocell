@@ -12,7 +12,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="719.6300048828125" d:DesignWidth="480"
+    mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     >
@@ -20,7 +20,7 @@
 	<toolkit:TransitionService.NavigationInTransition>
 	    <toolkit:NavigationInTransition>
 	        <toolkit:NavigationInTransition.Backward>
-	            <toolkit:TurnstileTransition Mode="BackwardIn"/>
+	            <toolkit:SlideTransition Mode="SlideRightFadeIn"/>
 	        </toolkit:NavigationInTransition.Backward>
 	        <toolkit:NavigationInTransition.Forward>
 	            <toolkit:TurnstileTransition Mode="ForwardIn"/>
@@ -30,18 +30,23 @@
 	<toolkit:TransitionService.NavigationOutTransition>
 	    <toolkit:NavigationOutTransition>
 	        <toolkit:NavigationOutTransition.Backward>
-	            <toolkit:TurnstileTransition Mode="BackwardOut"/>
-	        </toolkit:NavigationOutTransition.Backward>
+                <toolkit:SlideTransition Mode="SlideLeftFadeOut"/>
+            </toolkit:NavigationOutTransition.Backward>
 	        <toolkit:NavigationOutTransition.Forward>
 	            <toolkit:TurnstileTransition Mode="ForwardOut"/>
 	        </toolkit:NavigationOutTransition.Forward>
 	    </toolkit:NavigationOutTransition>
 	</toolkit:TransitionService.NavigationOutTransition>
+    
 	<phone:PhoneApplicationPage.Resources>
 		<DataTemplate x:Key="ItemTemplate" toolkit:TiltEffect.IsTiltEnabled="True">
 			<Grid Height="80" Width="450">
                 <TextBlock Text="{Binding Converter={StaticResource ToColumnConverter}}" FontSize="24" Margin="83,23,0,0" HorizontalAlignment="Left" Width="308" VerticalAlignment="Top"/>
-                <Image HorizontalAlignment="Left" Margin="8,8,0,8" Width="64" Source="{Binding User.AvatarUrl}" Height="64" />
+                <Image HorizontalAlignment="Left" Margin="8,8,0,8" Width="64" Height="64">
+                    <Image.Source>
+                        <BitmapImage UriSource="{Binding User.AvatarUrl}" CreateOptions="BackgroundCreation"/>
+                    </Image.Source>
+                </Image>
 				<toolkit:ContextMenuService.ContextMenu>
 					<toolkit:ContextMenu>
 						<toolkit:MenuItem Click="menuItemClick" Tag="{Binding}" Header="delete" />
@@ -69,7 +74,7 @@
 
         <!--ContentPanel. Colocar aquí el contenido adicional-->
     		<Grid x:Name="ContentPanel" Margin="8,119,-8,-16" d:LayoutOverrides="VerticalAlignment">
-    			<ListBox x:Name="MainList" ItemTemplate="{StaticResource ItemTemplate}" Margin="8,0,16,8" SelectionChanged="MainList_SelectionChanged"/>			
+    			<ListBox x:Name="MainList" ItemTemplate="{StaticResource ItemTemplate}" Margin="8,0,16,8" SelectionChanged="MainList_SelectionChanged" toolkit:TiltEffect.IsTiltEnabled="True"/>			
 				
     		</Grid>
     	</Grid>
@@ -82,9 +87,6 @@
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
             <shell:ApplicationBarIconButton IconUri="/Images/Icons_White/appbar.new.rest.png" Text="Add" Click="ApplicationBarIconButton_Click"/>
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="Settings" Click="ApplicationBarMenuItem_Click"/>
-            </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 
