@@ -58,9 +58,6 @@ namespace Ocell.Controls
             this.SelectionChanged += new SelectionChangedEventHandler(ManageNavigation);
 
             Loader.Error += new TweetLoader.OnError(Loader_Error);
-            Loader.LoadFinished += new EventHandler(PopulateItemsSource);
-            Loader.PartialLoad += new EventHandler(PopulateItemsSource);
-            Loader.CacheLoad += new EventHandler(PopulateItemsSource);
             _Items = new ObservableCollection<ITweetable>();
             _ViewSource = new CollectionViewSource();
             SetupCollectionViewSource();
@@ -77,14 +74,14 @@ namespace Ocell.Controls
 
         private void DoScrollToTop()
         {
-            var first = _Items.FirstOrDefault();
+            var first = Loader.Source.OrderByDescending(item => item.Id).FirstOrDefault();
             if (first != null)
                 ScrollIntoView(first);
         }
 
         private void SetupCollectionViewSource()
         {
-            _ViewSource.Source = _Items;
+            _ViewSource.Source = Loader.Source;
             ItemsSource = _ViewSource.View;
             System.ComponentModel.SortDescription Sorter = new System.ComponentModel.SortDescription();
             Sorter.PropertyName = "Id";

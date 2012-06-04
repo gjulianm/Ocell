@@ -43,7 +43,7 @@ namespace Ocell.Library.Twitter
                 _conversationService.Finished += ConversationFinished;
             }
         }
-        public ObservableCollection<ITweetable> Source { get; protected set; }
+        public SafeObservable<ITweetable> Source { get; protected set; }
         protected ITwitterService _srv;
         protected long LastId;
 
@@ -75,7 +75,7 @@ namespace Ocell.Library.Twitter
             TweetsToLoadPerRequest = 40;
             CacheSize = 40;
             _loaded = 0;
-            Source = new ObservableCollection<TweetSharp.ITweetable>();
+            Source = new SafeObservable<ITweetable>();
             LastId = 0;
             Cached = true;
             ActivateLoadMoreButton = false;
@@ -213,7 +213,7 @@ namespace Ocell.Library.Twitter
                 return;
             IsLoading = true;
             if (last == 0)
-                last = Source.Last().Id;
+                last = Source.Min(item => item.Id);
 
             switch (Resource.Type)
             {
@@ -309,6 +309,7 @@ namespace Ocell.Library.Twitter
         {
             TweetEqualityComparer comparer = new TweetEqualityComparer();
 
+            IsLoading = false;
             if (list == null || response.StatusCode != HttpStatusCode.OK)
             {
                 if (Error != null)
@@ -317,7 +318,7 @@ namespace Ocell.Library.Twitter
             }
 
             if (Source == null)
-                Source = new ObservableCollection<ITweetable>();
+                Source = new SafeObservable<ITweetable>();
 
             TryAddLoadMoreButton(ref list);
 
@@ -325,12 +326,10 @@ namespace Ocell.Library.Twitter
                 if (!Source.Contains(status, comparer))
                     Source.Add(status);
 
-            OrderSource();
-
             if (list.Any())
-                LastId = list.Last().Id;
+                LastId = list.Min(item => item.Id);
 
-            IsLoading = false;
+            
             if (LoadFinished != null && _resource.Type != ResourceType.Conversation)
                 LoadFinished(this, new EventArgs());
             else if (PartialLoad != null && _resource.Type == ResourceType.Conversation)
@@ -389,7 +388,7 @@ namespace Ocell.Library.Twitter
 
         protected void OrderSource()
         {
-            Source = new ObservableCollection<ITweetable>(Source.OrderByDescending(item => item.Id));
+            Source = new SafeObservable<ITweetable>(Source.OrderByDescending(item => item.Id));
         }
 
         public void Dispose()
