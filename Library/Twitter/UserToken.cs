@@ -33,7 +33,7 @@ namespace Ocell.Library.Twitter
             AvatarUrl = user.ProfileImageUrl;
 
             if (UserDataFilled != null)
-                UserDataFilled(this);
+               UserDataFilled(this);
         }
 
         public delegate void OnUserDataFilled(UserToken Token);
