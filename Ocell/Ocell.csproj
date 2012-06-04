@@ -94,6 +94,7 @@
     <Compile Include="Pages\Elements\TweetModel.cs" />
     <Compile Include="Pages\Elements\UserModel.cs" />
     <Compile Include="Pages\SelectUserModel.cs" />
+    <Compile Include="Pages\Settings\DefaultMode.cs" />
     <Compile Include="Pages\TopicsModel.cs" />
     <Compile Include="Notificator.cs" />
     <Compile Include="Pages\Columns\SelectAccount.xaml.cs">
@@ -442,10 +443,6 @@
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</Project>
       <Name>Library</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ScheduledAgent\ScheduledAgent.csproj">
-      <Project>{A6840CCC-134F-43B5-AB3D-3284BC385FE1}</Project>
-      <Name>ScheduledAgent</Name>
     </ProjectReference>
     <ProjectReference Include="..\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
       <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
