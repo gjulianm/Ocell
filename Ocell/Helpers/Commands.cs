@@ -130,6 +130,9 @@ namespace Ocell.Commands
                     Result = MessageBox.Show("Are you sure you want to delete the account @" + User.ScreenName, "", MessageBoxButton.OKCancel);
                     if (Result == MessageBoxResult.OK)
                     {
+                        foreach(var item in Config.Columns.Where(item => item.User == User))
+                            Config.Columns.Remove(item);
+                        Config.SaveColumns();
                         Config.Accounts.Remove(User);
                         Config.SaveAccounts();
                         PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
