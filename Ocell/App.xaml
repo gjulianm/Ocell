@@ -5,6 +5,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:img="clr-namespace:System.Windows.Media.Imaging;assembly=System.Windows"
 	xmlns:local="clr-namespace:Ocell" 
 	xmlns:commands="clr-namespace:Ocell.Commands"
     mc:Ignorable="d"
@@ -65,9 +66,13 @@
     							</toolkit:ContextMenuService.ContextMenu>
     							<TextBlock x:Name="Date" Text="{Binding CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}" VerticalAlignment="Top" Margin="0,5.753,8,0" Foreground="#FF707070" Grid.Column="1" HorizontalAlignment="Right" UseLayoutRounding="False" FontFamily="Segoe WP Light"/>
     							<Image x:Name="Avatar" Source="{Binding ConverterParameter=false, Converter={StaticResource AvatarConverter}}" HorizontalAlignment="Left" Width="{Binding Converter={StaticResource SizeConverter}}" Margin="{Binding Converter={StaticResource MarginConverter}}" d:LayoutOverrides="HorizontalAlignment, Height" Height="{Binding Converter={StaticResource SizeConverter}}" UseLayoutRounding="False" VerticalAlignment="Top"/>
-    							<Image x:Name="RetweetedAvatar" Source="{Binding ConverterParameter=true, Converter={StaticResource AvatarConverter}}" HorizontalAlignment="Left" Width="30" Margin="8,54,0,0" d:LayoutOverrides="HorizontalAlignment, Height" Height="30" UseLayoutRounding="False" VerticalAlignment="Top"/>
-    							<TextBlock x:Name="Text" Text="{Binding Converter={StaticResource TweetTextConverter}}" Margin="86,32.356,8,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Grid.ColumnSpan="2" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight"/>
-    							<TextBlock x:Name="Name" Margin="86,0,0,0" TextWrapping="Wrap" Text="{Binding Converter={StaticResource ScreenNameConverter}}" VerticalAlignment="Top" FontSize="24" UseLayoutRounding="False" HorizontalAlignment="Left" Width="258"/>
+                                <Image x:Name="RetweetedAvatar"  HorizontalAlignment="Left" Width="30" Margin="8,54,0,0" d:LayoutOverrides="HorizontalAlignment, Height" Height="30" UseLayoutRounding="False" VerticalAlignment="Top">
+                                    <Image.Source>
+                                        <BitmapImage UriSource="{Binding ConverterParameter=true, Converter={StaticResource AvatarConverter}}" CreateOptions="BackgroundCreation,DelayCreation"/>
+                                    </Image.Source>
+                                </Image>
+    							<TextBlock x:Name="Text" Text="{Binding CleanText}" Margin="86,32.356,8,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Grid.ColumnSpan="2" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight"/>
+    							<TextBlock x:Name="Name" Margin="86,0,0,0" TextWrapping="Wrap" Text="{Binding AuthorName}" VerticalAlignment="Top" FontSize="24" UseLayoutRounding="False" HorizontalAlignment="Left" Width="258"/>
     						</Grid>
     					</DataTemplate>
     				</local:TweetTemplateSelector.UsualTemplate>
