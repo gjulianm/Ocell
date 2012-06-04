@@ -217,7 +217,7 @@ namespace Ocell.Settings
                 Token.UserDataFilled += new UserToken.OnUserDataFilled(InsertTokenIntoAccounts);
                 Token.FillUserData();
 
-                CreateColumns(Token);
+                
             }
             catch (Exception)
             {
@@ -242,7 +242,7 @@ namespace Ocell.Settings
         private void InsertTokenIntoAccounts(UserToken Token)
         {
             CheckIfExistsAndInsert(Token);
-
+            CreateColumns(Token);
             Dispatcher.BeginInvoke(() => { NavigationService.Navigate(Uris.MainPage); });
             return;
         }
