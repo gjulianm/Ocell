@@ -12,5 +12,7 @@ namespace Ocell.Library.Twitter
         public DateTime CreatedDate { get; set; }
         public TwitterEntities Entities { get { return null; } }
         public string RawSource { get; set; }
+        public string AuthorName { get; set; }
+        public string CleanText { get; set; }
     }
 }
