@@ -73,7 +73,7 @@ namespace Ocell.Library.ReadLater.Pocket
 
             RestRequest request = new RestRequest
             {
-                Path = "authenticate?" + GetCredentials() + "&apikey=" + SensitiveData.PocketAPIKey
+                Path = "auth?" + GetCredentials() + "&apikey=" + SensitiveData.PocketAPIKey
             };
 
             _client.BeginRequest(request, CredentialsCallback, action);
