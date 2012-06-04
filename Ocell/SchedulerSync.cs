@@ -75,14 +75,17 @@ namespace Ocell
             periodicTask = new PeriodicTask(periodicTaskName);
             periodicTask.Description = "Updates live tile, sends scheduled tweets.";
 
-            try
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
-                ScheduledActionService.Add(periodicTask);
-                //ScheduledActionService.LaunchForTest(periodicTaskName, TimeSpan.FromSeconds(10));
-            }
-            catch (Exception)
-            {
-            }
+                try
+                {
+                    ScheduledActionService.Add(periodicTask);
+                    ScheduledActionService.LaunchForTest(periodicTaskName, TimeSpan.FromSeconds(30));
+                }
+                catch (Exception)
+                {
+                }
+            });
         }
 
         private static void RemoveAgent(string name)

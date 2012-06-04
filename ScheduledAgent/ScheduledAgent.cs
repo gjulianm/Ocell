@@ -10,6 +10,9 @@ using Ocell.Library.Notifications;
 using Ocell.Library.Tasks;
 using Ocell.Library.Twitter;
 using TweetSharp;
+using System.Diagnostics;
+using Microsoft.Phone.Info;
+
 
 namespace ScheduledAgent
 {
@@ -63,8 +66,12 @@ namespace ScheduledAgent
         /// </remarks>
         protected override void OnInvoke(ScheduledTask task)
         {
+            Debug.WriteLine("Memory at start: {0} KB", DeviceStatus.ApplicationCurrentMemoryUsage / (1024));
+            
             foreach (UserToken User in Config.Accounts)
                 GetMentionsFor(User);
+
+            Debug.WriteLine("Memory when retrieved mentions: {0} KB", DeviceStatus.ApplicationCurrentMemoryUsage / (1024));
 
             Config.Dispose();
 
@@ -79,11 +86,15 @@ namespace ScheduledAgent
                 }
             }
 
+            Debug.WriteLine("Launched tweet tasks: {0} KB", DeviceStatus.ApplicationCurrentMemoryUsage / (1024));
+
             if (Config.BackgroundLoadColumns == true)
             {
                 foreach (var column in FindColumnsToUpdate())
                     UpdateColumn(column);
             }
+
+            Debug.WriteLine("Updated background columns: {0} KB", DeviceStatus.ApplicationCurrentMemoryUsage / (1024));
 
             Config.Dispose();
 
@@ -99,6 +110,8 @@ namespace ScheduledAgent
                 }
                 NotifyComplete();
             }
+
+            Debug.WriteLine("End: {0} KB", DeviceStatus.ApplicationCurrentMemoryUsage / (1024));
         }
 
         void Task_Error(object sender, EventArgs e)
