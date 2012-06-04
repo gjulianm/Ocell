@@ -16,6 +16,8 @@ using DanielVaughan.Net;
 using DanielVaughan.Services;
 using System.Linq;
 using Ocell.Library.Filtering;
+using System.Collections.Specialized;
+using System.Windows;
 
 namespace Ocell
 {
@@ -38,6 +40,7 @@ namespace Ocell
         DateTime lastAutoReload;
         const int secondsBetweenReloads = 25;
 
+        #region Events
         public event BroadcastEventHandler ScrollToTop;
         public void RaiseScrollToTop(TwitterResource resource)
         {
@@ -60,6 +63,7 @@ namespace Ocell
             if (temp != null)
                 temp(this, new BroadcastArgs(Config.Columns.FirstOrDefault(), true));
         }
+        #endregion
 
         bool isLoading;
         public bool IsLoading
@@ -83,8 +87,10 @@ namespace Ocell
 
         }
 
-        SafeObservable<TwitterResource> pivots;
-        public SafeObservable<TwitterResource> Pivots
+        Queue<NotifyCollectionChangedEventArgs> collectionChangedArgs;
+
+        ObservableCollection<TwitterResource> pivots;
+        public ObservableCollection<TwitterResource> Pivots
         {
             get { return pivots; }
             set { Assign("Pivots", ref pivots, value); }
@@ -152,10 +158,7 @@ namespace Ocell
                     if (SecondaryTiles.ColumnTileIsCreated(column))
                         MessageService.ShowError("This column is already pinned.");
                     else
-                    {
                         SecondaryTiles.CreateColumnTile(column);
-                        MessageService.ShowLightNotification("Pinned!");
-                    }
                 }, (obj) => SelectedPivot != null);
 
             filterColumn = new DelegateCommand((obj) =>
@@ -195,24 +198,34 @@ namespace Ocell
                 Config.DefaultMuteTime = TimeSpan.FromHours(8);
 
             lastAutoReload = DateTime.MinValue;
-            Pivots = new SafeObservable<TwitterResource>();
+            Pivots = new ObservableCollection<TwitterResource>();
+            collectionChangedArgs = new Queue<NotifyCollectionChangedEventArgs>();
 
             foreach (var pivot in Config.Columns)
                 Pivots.Add(pivot);
 
             Config.Columns.CollectionChanged += (sender, e) =>
             {
-                foreach (var item in e.NewItems)
-                {
-                    if ((item is TwitterResource) && !Pivots.Contains((TwitterResource)item))
-                        Pivots.Add((TwitterResource)item);
-                }
+                Deployment.Current.Dispatcher.InvokeIfRequired(() =>
+                    {
+                        if (e.NewItems != null)
+                        {
+                            foreach (var item in e.NewItems)
+                            {
+                                if ((item is TwitterResource) && !Pivots.Contains((TwitterResource)item))
+                                    Pivots.Add((TwitterResource)item);
+                            }
+                        }
 
-                foreach (var item in e.OldItems)
-                {
-                    if ((item is TwitterResource) && Pivots.Contains((TwitterResource)item))
-                        Pivots.Remove((TwitterResource)item);
-                }
+                        if (e.OldItems != null)
+                        {
+                            foreach (var item in e.OldItems)
+                            {
+                                if ((item is TwitterResource) && Pivots.Contains((TwitterResource)item))
+                                    Pivots.Remove((TwitterResource)item);
+                            }
+                        }
+                    });
             };
 
             this.PropertyChanged += (sender, e) =>
@@ -225,7 +238,7 @@ namespace Ocell
             if (QueryParameters.TryGetValue("column", out column))
             {
                 column = Uri.UnescapeDataString(column);
-                if(Config.Columns.Any(item => item.String == column))
+                if (Config.Columns.Any(item => item.String == column))
                     SelectedPivot = Config.Columns.First(item => item.String == column);
             }
 
@@ -238,16 +251,12 @@ namespace Ocell
             {
                 var resource = (TwitterResource)SelectedPivot;
                 CurrentAccountName = resource.User.ScreenName.ToUpperInvariant();
-                if (DateTime.Now > lastAutoReload.AddSeconds(secondsBetweenReloads))
-                {
-                    lastAutoReload = DateTime.Now;
-                    ThreadPool.QueueUserWorkItem((context) => RaiseReload(resource));
-                }
+                ThreadPool.QueueUserWorkItem((context) => RaiseReload(resource));
                 DataTransfer.CurrentAccount = resource.User;
             }
         }
 
-        public void RaiseNavigatedTo(object sender, System.Windows.Navigation.NavigationEventArgs e) 
+        public void RaiseNavigatedTo(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             ThreadPool.QueueUserWorkItem((context) => RaiseReloadAll());
         }
