@@ -17,14 +17,15 @@ namespace Ocell.Library
 {
     // Adapted from http://www.deanchalk.me.uk/post/Thread-Safe-Dispatcher-Safe-Observable-Collection-for-WPF.aspx.
 
-    public class SafeObservable<T> : IList<T>, INotifyCollectionChanged 
+    public class SafeObservable<T> : IList<T>, INotifyCollectionChanged
     {
         private IList<T> collection = new List<T>();
         private Dispatcher dispatcher;
         public event NotifyCollectionChangedEventHandler CollectionChanged;
         private object sync = new object();
 
-        public SafeObservable(IEnumerable<T> source) : this()
+        public SafeObservable(IEnumerable<T> source)
+            : this()
         {
             collection = new List<T>(source);
         }
@@ -73,7 +74,7 @@ namespace Ocell.Library
                 int index = collection.Count;
                 if (CollectionChanged != null)
                     CollectionChanged(this,
-                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+                       new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
             }
         }
 
@@ -99,16 +100,16 @@ namespace Ocell.Library
         public bool Contains(T item)
         {
             bool result;
-            lock(sync)
+            lock (sync)
                 result = collection.Contains(item);
             return result;
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            lock(sync)
+            lock (sync)
                 collection.CopyTo(array, arrayIndex);
-            
+
         }
 
         public int Count
@@ -116,7 +117,7 @@ namespace Ocell.Library
             get
             {
                 int result;
-                lock(sync)
+                lock (sync)
                     result = collection.Count;
                 return result;
             }
@@ -169,7 +170,7 @@ namespace Ocell.Library
         public int IndexOf(T item)
         {
             int result;
-            lock(sync)
+            lock (sync)
                 result = collection.IndexOf(item);
             return result;
         }
@@ -221,7 +222,7 @@ namespace Ocell.Library
             get
             {
                 T result;
-                lock(sync)
+                lock (sync)
                     result = collection[index];
                 return result;
             }
@@ -233,7 +234,7 @@ namespace Ocell.Library
                         return;
                     var old = collection[index];
                     collection[index] = value;
-                    if(CollectionChanged != null)
+                    if (CollectionChanged != null)
                         CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, old, index));
                 }
             }
