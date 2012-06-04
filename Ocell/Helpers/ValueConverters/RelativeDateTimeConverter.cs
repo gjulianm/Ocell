@@ -17,7 +17,7 @@ namespace Ocell
         private const int Day = Hour * 24;
         private const int Year = Day * 365;
 
-        private readonly Dictionary<long, Func<TimeSpan, string>> thresholds = new Dictionary<long, Func<TimeSpan, string>>
+        private readonly static Dictionary<long, Func<TimeSpan, string>> thresholds = new Dictionary<long, Func<TimeSpan, string>>
         {
             {2, t => "a second ago"},
             {Minute,  t => String.Format("{0} seconds ago", (int)t.TotalSeconds)},
