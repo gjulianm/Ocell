@@ -45,7 +45,10 @@ namespace Ocell.Library.Filtering
             if (Filter == null)
                 Filter = "";
 
-            if (item == null || DateTime.Now > IsValidUntil)
+            if (DateTime.Now > IsValidUntil)
+                return true;
+
+            if (item == null) 
                 return false;
 
             string whatToCheck = getStringToCheck(item);
