@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,6 +15,8 @@ using Ocell.Library.Filtering;
 using System.Windows.Controls;
 using DanielVaughan;
 using DanielVaughan.Services;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace Ocell.Pages.Elements
 {
@@ -37,10 +40,18 @@ namespace Ocell.Pages.Elements
 
         void Tweet_Loaded(object sender, RoutedEventArgs e)
         {
+            Initialize();
+        }
+
+        void Initialize()
+        {
             CreateText(viewModel.Tweet);
+            viewModel.Completed = true;
+            ContentPanel.UpdateLayout();
             AdjustMargins();
 
             ContentPanel.UpdateLayout();
+            
         }
 
         private void AdjustMargins()
@@ -332,6 +343,7 @@ namespace Ocell.Pages.Elements
             this.BackKeyPress += HideMuteGrid;
             viewModel.IsMuting = true;
         }
+
 
 
     }
