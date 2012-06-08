@@ -21,36 +21,12 @@ namespace Ocell
 
         public static void WriteLastCheckDate(DateTime Date)
         {
-            IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
-            IsolatedStorageFileStream File = Storage.OpenFile(FileName, System.IO.FileMode.Create);
-            UTF8Encoding Encoding = new UTF8Encoding();
-            string DateStr;
-            byte[] bytes;
-
-            DateStr = Date.ToString("s");
-            bytes = Encoding.GetBytes(DateStr);
-
-            File.Write(bytes, 0, bytes.Length);
-            File.Close();
+            Library.DateSync.WriteLastCheckDate(Date);
         }
 
         public static DateTime GetLastCheckDate()
         {
-            IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
-            IsolatedStorageFileStream File = Storage.OpenFile(FileName, System.IO.FileMode.OpenOrCreate);
-            UTF8Encoding Encoding = new UTF8Encoding();
-            string DateStr;
-            byte[] bytes = new byte[File.Length];
-            DateTime Date;
-
-            File.Read(bytes, 0, (int)File.Length);
-            File.Close();
-            DateStr = new string(Encoding.GetChars(bytes));
-
-            if (!DateTime.TryParse(DateStr, out Date))
-                Date = DateTime.Now.ToUniversalTime();
-
-            return Date;
+            return Library.DateSync.GetLastCheckDate();
         }
 
         public static void StartPeriodicAgent()
