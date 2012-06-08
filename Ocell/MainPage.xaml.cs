@@ -15,14 +15,13 @@ using System.Threading;
 using System.Diagnostics;
 using DanielVaughan.Services;
 using DanielVaughan;
+using Microsoft.Phone.Tasks;
 
 
 namespace Ocell
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        private ObservableCollection<TwitterResource> pivots;
-        private Dictionary<string, ExtendedListBox> Lists;
         private DateTime LastErrorTime;
         private DateTime LastReloadTime;
         private bool _initialised;
@@ -51,22 +50,6 @@ namespace Ocell
             base.OnNavigatedTo(e);
         }
 
-        void ReloadColumns()
-        {
-            foreach (var pivot in Config.Columns)
-                if (!pivots.Contains(pivot))
-                    pivots.Add(pivot);
-            try
-            {
-                foreach (var column in pivots)
-                    if (!Config.Columns.Contains(column))
-                        pivots.Remove(column);
-            }
-            catch
-            {
-            }
-        }
-
         void CallLoadFunctions(object sender, RoutedEventArgs e)
         {
             if (_initialised)
@@ -79,6 +62,20 @@ namespace Ocell
             {
                 CreateTile();
                 ShowFollowMessage();
+                var list = DebugWriter.ReadAll();
+                if (list != null)
+                {
+                    EmailComposeTask email = new EmailComposeTask();
+                    email.To = "gjulian93@gmail.com";
+                    email.Subject = "Ocell Error Report";
+                    string contents = "";
+                    foreach (var line in list)
+                        contents += line + Environment.NewLine;
+                    email.Body = contents;
+                    Dispatcher.BeginInvoke(() => email.Show());
+                    DebugWriter.Clear();
+                }
+
                 LittleWatson.CheckForPreviousException();
             });
 
@@ -163,7 +160,7 @@ namespace Ocell
                 };
 
                 list.Loader.LoadCacheAsync();
-                list.Loader.Load();
+                list.AutoReload();
 
                 Dispatcher.BeginInvoke(() =>
                 {
