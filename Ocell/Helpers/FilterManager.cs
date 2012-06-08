@@ -18,7 +18,10 @@ namespace Ocell
             ColumnFilter filter = Config.Filters.FirstOrDefault(item => item.Resource == resource);
 
             if (filter != null)
+            {
+                filter.CleanOldFilters();
                 listbox.Filter = filter;
+            }
             else
                 listbox.Filter = new ColumnFilter();
 

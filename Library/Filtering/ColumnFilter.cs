@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Ocell.Library.Twitter;
 using TweetSharp;
-
+using System.Linq;
 
 namespace Ocell.Library.Filtering
 {
@@ -41,6 +41,12 @@ namespace Ocell.Library.Filtering
                     return false;
 
             return true;
+        }
+
+        public void CleanOldFilters()
+        {
+            foreach(var item in _predicates.Where(item=> item.IsValidUntil < DateTime.Now))
+                _predicates.Remove(item);
         }
 
         public Predicate<object> getPredicate()
