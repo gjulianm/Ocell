@@ -14,7 +14,7 @@ using Microsoft.Phone.Tasks;
 using System.Diagnostics;
 using Microsoft.Phone.Info;
 
-namespace Ocell
+namespace Ocell.Library
 {
     /// <summary>
     /// This class was made by Andy Pennel https://blogs.msdn.com/b/andypennell/archive/2010/11/01/error-reporting-on-windows-phone-7.aspx?Redirected=true
