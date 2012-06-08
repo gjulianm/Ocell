@@ -40,7 +40,7 @@ namespace Ocell.Library
         public static void Add(string Line)
         {
             InitializeIfNull();
-            _list.Add(DateTime.Now.ToShortTimeString() + ": " + Line);
+            _list.Add(Line);
         }
 
         public static void Save()
