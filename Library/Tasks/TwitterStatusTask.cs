@@ -24,6 +24,8 @@ namespace Ocell.Library.Tasks
             }
             catch (Exception)
             {
+                if (Error != null)
+                    Error(this, new EventArgs());
             }
         }
 
