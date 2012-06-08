@@ -12,7 +12,7 @@ using DanielVaughan.Services;
 using System.Threading;
 using Microsoft.Phone.Shell;
 
-namespace Ocell.Library
+namespace Ocell
 {
     public static class MessageServiceExtension
     {
