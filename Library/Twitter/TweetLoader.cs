@@ -8,11 +8,13 @@ using Ocell.Library;
 using System.Threading;
 using Ocell.Library.Twitter;
 using Ocell.Library.Twitter.Comparers;
-using DanielVaughan.ComponentModel;
+using System.Windows.Controls;
+using System.Windows;
+using System.ComponentModel;
 
 namespace Ocell.Library.Twitter
 {
-    public class TweetLoader : ObservableObject, IDisposable
+    public class TweetLoader : INotifyPropertyChanged, IDisposable
     {
         private int _loaded;
         private const int _toLoad = 1;
@@ -25,6 +27,8 @@ namespace Ocell.Library.Twitter
         protected TwitterResource _resource;
         private static DateTime _rateResetTime;
         private ConversationService _conversationService;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public TwitterResource Resource
         {
@@ -51,7 +55,23 @@ namespace Ocell.Library.Twitter
         public bool IsLoading
         {
             get { return _isLoading; }
-            protected set { Assign("IsLoading", ref _isLoading, value); }
+            protected set
+            {
+                if (value == _isLoading)
+                    return;
+                _isLoading = value;
+                var dispatcher = Deployment.Current.Dispatcher;
+                if (dispatcher.CheckAccess())
+                    OnPropertyChanged("IsLoading");
+                else
+                    dispatcher.BeginInvoke(() => OnPropertyChanged("IsLoading"));
+            }
+        }
+
+        protected void OnPropertyChanged(string propName)
+        {
+            if(PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
         #region Constructors
@@ -85,7 +105,7 @@ namespace Ocell.Library.Twitter
 
             Error += new OnError(CheckForRateLimit);
         }
-        #endregion 
+        #endregion
 
         #region Cache
         private void SaveToCacheThreaded()
@@ -221,7 +241,7 @@ namespace Ocell.Library.Twitter
                     _srv.ListTweetsOnHomeTimelineBefore(last, TweetsToLoadPerRequest, ReceiveTweets);
                     break;
                 case ResourceType.Mentions:
-                    _srv.ListTweetsMentioningMeBefore(last, TweetsToLoadPerRequest,  ReceiveTweets);
+                    _srv.ListTweetsMentioningMeBefore(last, TweetsToLoadPerRequest, ReceiveTweets);
                     if (LoadRetweetsAsMentions)
                     {
                         _requestsInProgress++;
@@ -329,7 +349,7 @@ namespace Ocell.Library.Twitter
             if (list.Any())
                 LastId = list.Min(item => item.Id);
 
-            
+
             if (LoadFinished != null && _resource.Type != ResourceType.Conversation)
                 LoadFinished(this, new EventArgs());
             else if (PartialLoad != null && _resource.Type == ResourceType.Conversation)
@@ -401,7 +421,7 @@ namespace Ocell.Library.Twitter
             if (LoadFinished != null)
                 LoadFinished(this, e);
         }
-        
+
         #region Events
         public event EventHandler LoadFinished;
 
