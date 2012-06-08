@@ -15,6 +15,13 @@ namespace Ocell.Pages.Elements
 {
     public class TweetModel : ViewModelBase
     {
+        bool completed;
+        public bool Completed
+        {
+            get { return completed; }
+            set { Assign("Completed", ref completed, value); }
+        }
+
         bool isMuting;
         public bool IsMuting
         {
@@ -118,8 +125,7 @@ namespace Ocell.Pages.Elements
 
         Uri ImageNavigationUri;
 
-        public TweetModel()
-            : base("Tweet")
+        public void Initialize()
         {
             if (DataTransfer.Status == null)
             {
@@ -172,7 +178,12 @@ namespace Ocell.Pages.Elements
             CreateCommands();
             
             SetImage();
+        }
 
+        public TweetModel()
+            : base("Tweet")
+        {
+            Initialize();
         }
 
         private void CreateCommands()
