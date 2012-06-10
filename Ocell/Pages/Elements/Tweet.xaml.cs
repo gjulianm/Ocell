@@ -123,6 +123,7 @@ namespace Ocell.Pages.Elements
                 FontWeight = Text.FontWeight,
                 FontStretch = Text.FontStretch,
                 FontFamily = Text.FontFamily,
+                TargetName = contextTag,
                 Margin = new Thickness(-10, -5, -10, -8)
             };
 
@@ -157,7 +158,7 @@ namespace Ocell.Pages.Elements
             item.Click += (sender, e) =>
                 {
                     var filter = FilterManager.SetupMute(FilterType.Text, "#" + Hashtag.Text);
-                    Dependency.Resolve<IMessageService>().ShowLightNotification("Muted until " + filter.IsValidUntil.ToString("f"));
+                    Dependency.Resolve<IMessageService>().ShowMessage("Muted until " + filter.IsValidUntil.ToString("f"), "");
                 };
             return CreateBaseLink("#" + Hashtag.Text, "copy hashtag", "#" + Hashtag.Text, item);
         }
@@ -171,9 +172,9 @@ namespace Ocell.Pages.Elements
             item.Click += (sender, e) =>
             {
                 var filter = FilterManager.SetupMute(FilterType.User, Mention.ScreenName);
-                Dependency.Resolve<IMessageService>().ShowLightNotification("Muted until " + filter.IsValidUntil.ToString("f"));
+                Dependency.Resolve<IMessageService>().ShowMessage("Muted until " + filter.IsValidUntil.ToString("f"), "");
             };
-            return CreateBaseLink("@" + Mention.ScreenName, "copy user name", Mention.ScreenName, item);
+            return CreateBaseLink("@" + Mention.ScreenName, "copy user name", "@" + Mention.ScreenName, item);
         }
 
         Inline CreateUrlLink(TwitterUrl URL)
@@ -188,7 +189,7 @@ namespace Ocell.Pages.Elements
                 if (Uri.TryCreate(URL.ExpandedValue, UriKind.Absolute, out uri))
                 {
                     var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
-                    Dependency.Resolve<IMessageService>().ShowLightNotification("Muted until " + filter.IsValidUntil.ToString("f"));
+                    Dependency.Resolve<IMessageService>().ShowMessage("Muted until " + filter.IsValidUntil.ToString("f"), "");
                 }
                 else
                     Dependency.Resolve<IMessageService>().ShowError("Ooops, that's not a valid URL.");
@@ -208,7 +209,7 @@ namespace Ocell.Pages.Elements
                 if (Uri.TryCreate(Media.DisplayUrl, UriKind.Absolute, out uri))
                 {
                     var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
-                    Dependency.Resolve<IMessageService>().ShowLightNotification("Muted until " + filter.IsValidUntil.ToString("f"));
+                    Dependency.Resolve<IMessageService>().ShowMessage("Muted until " + filter.IsValidUntil.ToString("f"), "");
                 }
                 else
                     Dependency.Resolve<IMessageService>().ShowError("Ooops, that's not a valid URL.");
@@ -225,7 +226,7 @@ namespace Ocell.Pages.Elements
 
         void link_Click(object sender, RoutedEventArgs e)
         {
-            Hyperlink link = sender as Hyperlink;
+            HyperlinkButton link = sender as HyperlinkButton;
             Uri uri;
             WebBrowserTask browser;
 
