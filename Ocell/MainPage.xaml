@@ -92,9 +92,9 @@
                 <u:AppBarMenuItem Text="go to user..." Click="AppBarMenuItem_Click"/>
                 <u:AppBarHyperlinkMenuItem Text="settings" NavigateUri="/Pages/Settings/Default.xaml"/>
             </u:AppBar.MenuItems>
-            <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="compose" NavigateUri="/Pages/NewTweet.xaml" />
-            <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.columns.rest.png" Text="columns" NavigateUri="/Pages/Columns/ManageColumns.xaml" />
-            <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="send DM" NavigateUri="/Pages/SelectUser.xaml"/>
+            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="compose" NavigateUri="/Pages/NewTweet.xaml" />
+            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.columns.rest.png" Text="columns" NavigateUri="/Pages/Columns/ManageColumns.xaml" />
+            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="send DM" NavigateUri="/Pages/SelectUser.xaml"/>
             <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="search" NavigateUri="/Pages/Search/EnterSearch.xaml" />
         </u:AppBar>
     </Grid>

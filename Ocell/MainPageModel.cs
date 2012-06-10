@@ -65,6 +65,8 @@ namespace Ocell
         }
         #endregion
 
+        public bool HasLoggedIn { get { return Config.Accounts.Any(); } }
+
         bool isLoading;
         public bool IsLoading
         {
@@ -177,13 +179,13 @@ namespace Ocell
             toMyProfile = new DelegateCommand((obj) =>
                 {
                     Navigate("/Pages/Elements/User.xaml?user=" + CurrentAccountName);
-                }, (obj) => CurrentAccountName != null);
+                }, (obj) => !string.IsNullOrWhiteSpace(CurrentAccountName));
 
             goToUser = new DelegateCommand((obj) =>
             {
                 IsSearching = false;
                 Navigate("/Pages/Elements/User.xaml?user=" + UserSearch);
-            });
+            }, obj => Config.Accounts.Any());
 
         }
 

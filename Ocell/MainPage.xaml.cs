@@ -74,6 +74,7 @@ namespace Ocell
                     email.Body = contents;
                     Dispatcher.BeginInvoke(() => email.Show());
                     DebugWriter.Clear();
+                    DebugWriter.Save();
                 }
 
                 LittleWatson.CheckForPreviousException();
