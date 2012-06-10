@@ -94,9 +94,6 @@ namespace Ocell.Library.Twitter
 
         protected RestRequest PrepareRestRequest(string id)
         {
-            if (_account == null)
-                throw new NullReferenceException("Account is null.");
-
             var credentials = new OAuthCredentials
             {
                 Type = OAuthType.ProtectedResource,
@@ -104,9 +101,13 @@ namespace Ocell.Library.Twitter
                 ParameterHandling = OAuthParameterHandling.HttpAuthorizationHeader,
                 ConsumerKey = SensitiveData.ConsumerToken,
                 ConsumerSecret = SensitiveData.ConsumerSecret,
-                Token = _account.Key,
-                TokenSecret = _account.Secret,
             };
+
+            if (_account != null)
+            {
+                credentials.Token = _account.Key;
+                credentials.TokenSecret = _account.Secret;
+            }
 
             RestRequest req = new RestRequest
             {
