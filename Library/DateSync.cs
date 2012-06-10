@@ -12,37 +12,53 @@ namespace Ocell.Library
         {
             IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
             IsolatedStorageFileStream File;
-            try
+
+            if (_mutex.WaitOne(1000))
             {
-                _mutex.WaitOne();
-                 File = storage.OpenFile(FileName, System.IO.FileMode.Create);
-                 File.WriteLine(date.ToString("s"));
-                 File.Close();
-                 _mutex.ReleaseMutex();
+                try
+                {
+                    using (File = storage.OpenFile(FileName, System.IO.FileMode.Create))
+                    {
+                        File.WriteLine(date.ToString("s"));
+                        File.Close();
+                    }
+                }
+                catch (Exception)
+                {
+                }
+                finally
+                {
+                    _mutex.ReleaseMutex();
+                }
             }
-            catch (IsolatedStorageException)
-            {
-                return;
-            }
+
         }
 
         public static DateTime GetLastCheckDate()
         {
             IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
-            string dateStr;
+            string dateStr = "";
 
-            try
+            if (_mutex.WaitOne(1000))
             {
-                _mutex.WaitOne();
-                IsolatedStorageFileStream File = storage.OpenFile(FileName, System.IO.FileMode.OpenOrCreate);
-                dateStr = File.ReadLine();
-                File.Close();
-                _mutex.ReleaseMutex();
+                try
+                {
+                    using (IsolatedStorageFileStream File = storage.OpenFile(FileName, System.IO.FileMode.OpenOrCreate))
+                    {
+                        dateStr = File.ReadLine();
+                    }
+
+                }
+                catch (Exception)
+                {
+
+                }
+                finally
+                {
+                    _mutex.ReleaseMutex();
+                }
             }
-            catch (Exception)
-            {
-                return DateTime.Now.ToUniversalTime();
-            }
+
 
             DateTime date;
 
