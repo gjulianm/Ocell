@@ -13,14 +13,14 @@ using Ocell.Library.ReadLater;
 using System.Linq;
 using DanielVaughan;
 using DanielVaughan.Services;
-
+using System.Collections.Generic;
 namespace Ocell.Commands
 {
     public class ReplyCommand : ICommand
     {
         public bool CanExecute(object parameter)
         {
-            return parameter is ITweetable;
+            return parameter is ITweetable && Config.Accounts.Any();
         }
 
         public void Execute(object parameter)
@@ -48,16 +48,17 @@ namespace Ocell.Commands
     {
         public bool CanExecute(object parameter)
         {
-            return parameter is TwitterStatus;
+            return parameter is ITweetable && Config.Accounts.Any() && DataTransfer.CurrentAccount != null;
         }
 
         public void Execute(object parameter)
         {
             ITweetable tweet = (ITweetable)parameter;
             DataTransfer.ReplyId = tweet.Id;
-            DataTransfer.Text = "";
+            DataTransfer.Text = "@" + tweet.Author.ScreenName + " ";
             foreach (string user in StringManipulator.GetUserNames(tweet.Text))
-                DataTransfer.Text += "@" + user + " ";
+                if(DataTransfer.CurrentAccount != null && user != DataTransfer.CurrentAccount.ScreenName)
+                    DataTransfer.Text += "@" + user + " ";
 
             Dependency.Resolve<INavigationService>().Navigate(Uris.WriteTweet);
         }
@@ -77,7 +78,7 @@ namespace Ocell.Commands
         public void Execute(object parameter)
         {
             Dependency.Resolve<IMessageService>().SetLoadingBar(true);
-            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).Retweet(((ITweetable)parameter).Id, (sts, resp) => 
+            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).Retweet(((ITweetable)parameter).Id, (sts, resp) =>
             {
                 Dependency.Resolve<IMessageService>().ShowLightNotification("Retweeted!");
             });
@@ -98,15 +99,15 @@ namespace Ocell.Commands
         public void Execute(object parameter)
         {
             TwitterStatus param = (TwitterStatus)parameter;
-            if(param.IsFavorited)
+            if (param.IsFavorited)
                 ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweet(param.Id, (sts, resp) =>
                 {
                     Dependency.Resolve<IMessageService>().ShowLightNotification("Unfavorited!");
                 });
             else
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(param.Id, (sts, resp) => 
-                { 
-                    Dependency.Resolve<IMessageService>().ShowLightNotification("Favorited!"); 
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(param.Id, (sts, resp) =>
+                {
+                    Dependency.Resolve<IMessageService>().ShowLightNotification("Favorited!");
                 });
         }
 
@@ -130,8 +131,11 @@ namespace Ocell.Commands
                     Result = MessageBox.Show("Are you sure you want to delete the account @" + User.ScreenName, "", MessageBoxButton.OKCancel);
                     if (Result == MessageBoxResult.OK)
                     {
-                        foreach(var item in Config.Columns.Where(item => item.User == User))
+                        // Make a copy: removing while iterating causes an error.
+                        var copy = new List<TwitterResource>(Config.Columns.Where(item => item.User == User));
+                        foreach (var item in copy)
                             Config.Columns.Remove(item);
+
                         Config.SaveColumns();
                         Config.Accounts.Remove(User);
                         Config.SaveAccounts();
@@ -158,11 +162,11 @@ namespace Ocell.Commands
             {
                 var isProtected = ProtectedAccounts.SwitchAccountState(parameter as UserToken);
                 string msg;
-                if(isProtected)
+                if (isProtected)
                     msg = "protected!";
                 else
                     msg = "unprotected!";
-                Dependency.Resolve<IMessageService>().ShowLightNotification("Account "+ msg);
+                Dependency.Resolve<IMessageService>().ShowLightNotification("Account " + msg);
             }
             catch (Exception)
             {
