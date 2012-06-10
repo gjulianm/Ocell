@@ -1,20 +1,9 @@
-using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.IO.IsolatedStorage;
-using System.Text;
-using Microsoft.Phone.Scheduler;
-using Microsoft.Phone.Shell;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO.IsolatedStorage;
+#if !BACKGROUND_AGENT
 using System.Linq;
+#endif
 
 namespace Ocell.Library
 {
@@ -46,7 +35,7 @@ namespace Ocell.Library
 	    {
 		    IEnumerable<string> Lines = File.ReadLines();
 		    if(Lines != null && Lines.Count() != 0)
-			    return Lines.First();
+			    return Lines.FirstOrDefault();
             return "";
 	    }
 		
