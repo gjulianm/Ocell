@@ -6,11 +6,11 @@ using System.Resources;
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie los valores de estos atributos para modificar la información
 // asociada a un ensamblado.
-[assembly: AssemblyTitle("InstapaperService")]
+[assembly: AssemblyTitle("Ocell.BackgroundAgent.Library")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("InstapaperService")]
+[assembly: AssemblyProduct("Ocell.BackgroundAgent.Library")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +21,7 @@ using System.Resources;
 [assembly: ComVisible(false)]
 
 // El siguiente GUID sirve como identificador de typelib si este proyecto se expone a COM
-[assembly: Guid("dc9cfa5c-f101-4bb6-b6a7-1e01630a1756")]
+[assembly: Guid("a68082cb-b086-4765-9cf1-29a613bf5de8")]
 
 // La información de versión de un ensamblado consta de los cuatro valores siguientes:
 //

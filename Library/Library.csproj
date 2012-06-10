@@ -61,43 +61,44 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Autocompleter.cs" />
+    <Compile Include="DateSync.cs" />
+    <Compile Include="DebugWriter.cs" />
     <Compile Include="IEnumerableExtension.cs" />
+    <Compile Include="IsolatedFileStreamExtension.cs" />
     <Compile Include="SafeObservable.cs" />
+    <Compile Include="SensitiveData.cs" />
+    <Compile Include="Tasks\TaskExecutor.cs" />
+    <Compile Include="Twitter\ServiceDispatcher.cs" />
+    <Compile Include="Notifications\TileManager.cs" />
     <Compile Include="Twitter\Cacher.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DataTransfer.cs" />
-    <Compile Include="DebugWriter.cs" />
     <Compile Include="DecisionMaker.cs" />
     <Compile Include="GlobalEvents.cs" />
-    <Compile Include="IsolatedFileStreamExtension.cs" />
     <Compile Include="Filtering\ColumnFilter.cs" />
     <Compile Include="Twitter\IProvider.cs" />
-    <Compile Include="Twitter\ListKeeper.cs" />
     <Compile Include="Twitter\LoadMoreTweetable.cs" />
-    <Compile Include="Notifications\NotificationPreferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DateSync.cs" />
     <Compile Include="Twitter\MockUserProvider.cs" />
     <Compile Include="Twitter\ProtectedAccounts.cs" />
     <Compile Include="ReadLaterCompatibility.cs" />
     <Compile Include="Twitter\ConversationService.cs" />
-    <Compile Include="SensitiveData.cs" />
-    <Compile Include="Twitter\ServiceDispatcher.cs" />
-    <Compile Include="Notifications\TileManager.cs" />
     <Compile Include="TweetFilter.cs" />
     <Compile Include="Twitter\TweetLoader.cs" />
-    <Compile Include="Tasks\TwitterStatusTask.cs" />
     <Compile Include="Twitter\Comparers\TwitterComparers.cs" />
     <Compile Include="Twitter\TwitterDraft.cs" />
-    <Compile Include="Twitter\TwitterResource.cs" />
     <Compile Include="Twitter\UsernameProvider.cs" />
-    <Compile Include="Twitter\UserToken.cs" />
+    <Compile Include="Twitter\UserTokenFiller.cs" />
     <Compile Include="Watch.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">
       <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
       <Name>Hammock.WindowsPhone</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Library.Essential\Library.CoreTypes.csproj">
+      <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
+      <Name>Library.CoreTypes</Name>
     </ProjectReference>
     <ProjectReference Include="..\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
       <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>

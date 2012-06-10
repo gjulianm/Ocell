@@ -25,7 +25,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;BACKGROUND_AGENT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -46,9 +46,7 @@
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
-    <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ScheduledAgent.cs" />
@@ -59,9 +57,13 @@
       <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
       <Name>Hammock.WindowsPhone</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Library\Library.csproj">
-      <Project>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</Project>
-      <Name>Library</Name>
+    <ProjectReference Include="..\Library.Essential\Library.CoreTypes.csproj">
+      <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
+      <Name>Library.CoreTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ocell.BackgroundAgent.Library\Ocell.BackgroundAgent.Library.csproj">
+      <Project>{742DB613-45BB-4F8F-A73F-B559901F6548}</Project>
+      <Name>Ocell.BackgroundAgent.Library</Name>
     </ProjectReference>
     <ProjectReference Include="..\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
       <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>

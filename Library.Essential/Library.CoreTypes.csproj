@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A6840CCC-134F-43B5-AB3D-3284BC385FE1}</ProjectGuid>
+    <ProjectGuid>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</ProjectGuid>
     <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ScheduledAgent</RootNamespace>
-    <AssemblyName>ScheduledAgent</AssemblyName>
+    <RootNamespace>Library.Essential</RootNamespace>
+    <AssemblyName>Library.Essential</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
@@ -18,14 +18,13 @@
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <BackgroundAgentType>ScheduledTaskAgent</BackgroundAgentType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;ESSENTIAL</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -42,16 +41,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Calcium.Phone">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Calcium SDK\Windows Phone\1.0\Libraries\Calcium.Phone.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib.WindowsPhone">
-      <HintPath>..\Ocell\Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Phone" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Ocell\Assemblies\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -60,17 +50,17 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ScheduledAgent.cs" />
+    <Compile Include="NotificationPreferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TwitterHandler.cs" />
+    <Compile Include="TwitterResource.cs" />
+    <Compile Include="TwitterStatusTask.cs" />
+    <Compile Include="UserToken.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">
       <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
       <Name>Hammock.WindowsPhone</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Library\Library.csproj">
-      <Project>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</Project>
-      <Name>Library</Name>
     </ProjectReference>
     <ProjectReference Include="..\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
       <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>

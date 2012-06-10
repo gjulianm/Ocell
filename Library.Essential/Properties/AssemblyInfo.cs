@@ -6,11 +6,11 @@ using System.Resources;
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie los valores de estos atributos para modificar la información
 // asociada a un ensamblado.
-[assembly: AssemblyTitle("ScheduledAgent")]
+[assembly: AssemblyTitle("Library.Essential")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ScheduledAgent")]
+[assembly: AssemblyProduct("Library.Essential")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +21,7 @@ using System.Resources;
 [assembly: ComVisible(false)]
 
 // El siguiente GUID sirve como identificador de typelib si este proyecto se expone a COM
-[assembly: Guid("3193932d-ec68-4277-af5c-79409f6a6fdf")]
+[assembly: Guid("01e5919f-02f9-451a-9b01-4b51bbe489bc")]
 
 // La información de versión de un ensamblado consta de los cuatro valores siguientes:
 //

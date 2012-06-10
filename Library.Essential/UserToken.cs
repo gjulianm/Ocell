@@ -1,7 +1,5 @@
-﻿using System.Net;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Ocell.Library.Notifications;
-using TweetSharp;
 
 namespace Ocell.Library.Twitter
 {
@@ -13,31 +11,7 @@ namespace Ocell.Library.Twitter
         public int? Id { get; set; }
         public string AvatarUrl { get; set; }
         public NotificationPreferences Preferences;
-        
-        public void FillUserData()
-        {
-            if (!(string.IsNullOrWhiteSpace(ScreenName) || string.IsNullOrWhiteSpace(AvatarUrl) || Id == null))
-                return;
-
-            ITwitterService srv = ServiceDispatcher.GetService(this);
-            srv.GetUserProfile(ReceiveUserProfile);
-        }
-
-        protected void ReceiveUserProfile(TwitterUser user, TwitterResponse response)
-        {
-            if (response.StatusCode != HttpStatusCode.OK)
-                return;
-
-            ScreenName = user.ScreenName;
-            Id = user.Id;
-            AvatarUrl = user.ProfileImageUrl;
-
-            if (UserDataFilled != null)
-               UserDataFilled(this);
-        }
-
-        public delegate void OnUserDataFilled(UserToken Token);
-        public event OnUserDataFilled UserDataFilled;
+      
 
         public static bool operator ==(UserToken a, UserToken b)
         {
