@@ -299,7 +299,8 @@ namespace Ocell.Settings
             };
             
             SelectedAccount = -1;
-            SelectedAccount = 0;
+            if(Config.Accounts.Count > 0)
+                SelectedAccount = 0;
             SetCommands();
         }
 
