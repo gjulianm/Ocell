@@ -124,6 +124,9 @@ namespace Ocell.Pages
 
         void NewTweet_Loaded(object sender, RoutedEventArgs e)
         {
+            if (DataTransfer.CurrentAccount == null)
+                return;
+
             if (SendingDM)
             {
                 Scheduled_cb.Visibility = Visibility.Collapsed;
