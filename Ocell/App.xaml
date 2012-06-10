@@ -70,10 +70,7 @@
                                         <BitmapImage UriSource="{Binding ConverterParameter=false, Converter={StaticResource AvatarConverter}}" CreateOptions="BackgroundCreation,DelayCreation"/>
                                     </Image.Source>
                                 </Image>
-                                <Image x:Name="RetweetedAvatar"  HorizontalAlignment="Left" Width="30" Margin="8,54,0,0" d:LayoutOverrides="HorizontalAlignment, Height" Height="30" UseLayoutRounding="False" VerticalAlignment="Top">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="{Binding ConverterParameter=true, Converter={StaticResource AvatarConverter}}" CreateOptions="IgnoreImageCache"/>
-                                    </Image.Source>
+                                <Image x:Name="RetweetedAvatar" Source="{Binding ConverterParameter=true, Converter={StaticResource AvatarConverter}}" HorizontalAlignment="Left" Width="30" Margin="8,54,0,0" d:LayoutOverrides="HorizontalAlignment, Height" Height="30" UseLayoutRounding="False" VerticalAlignment="Top">
                                 </Image>
                                 <TextBlock x:Name="Text" Text="{Binding CleanText}" Margin="86,32.356,8,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Grid.ColumnSpan="2" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight"/>
                                 <TextBlock x:Name="Name" Margin="86,0,0,0" TextWrapping="Wrap" Text="{Binding AuthorName}" VerticalAlignment="Top" FontSize="24" UseLayoutRounding="False" HorizontalAlignment="Left" Width="258"/>
