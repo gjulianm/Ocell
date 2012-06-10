@@ -162,7 +162,7 @@ namespace Ocell.Pages.Elements
 
             UsersWhoRetweeted = new ObservableCollection<ITweeter>();
 
-            ServiceDispatcher.GetCurrentService().Retweets(Tweet.Id, (statuses, response) =>
+            ServiceDispatcher.GetDefaultService().Retweets(Tweet.Id, (statuses, response) =>
             {
                 if (statuses != null && statuses.Any())
                 {
@@ -202,7 +202,6 @@ namespace Ocell.Pages.Elements
                 Config.Accounts.Any(item => item != null && item.ScreenName == Tweet.Author.ScreenName));
 
 
-
             share = new DelegateCommand((obj) => Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
                 EmailComposeTask emailComposeTask = new EmailComposeTask();
@@ -218,7 +217,7 @@ namespace Ocell.Pages.Elements
             {
                 DataTransfer.Text = "RT @" + Tweet.Author.ScreenName + ": " + Tweet.Text;
                 Navigate(Uris.WriteTweet);
-            }, obj => Tweet != null);
+            }, obj => Config.Accounts.Any() && Tweet != null);
 
             favorite = new DelegateCommand((parameter) =>
             {
