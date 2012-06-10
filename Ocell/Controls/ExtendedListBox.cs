@@ -51,7 +51,8 @@ namespace Ocell.Controls
             AutoManageErrors = true;
             _selectionChangeFired = false;
             _lastAutoReload = DateTime.MinValue;
-            _lastErrorFired = DateTime.MinValue;
+            if (_lastErrorFired == null)
+                _lastErrorFired = DateTime.MinValue;
             this.Loaded += new RoutedEventHandler(ListBox_Loaded);
             this.Unloaded += new RoutedEventHandler(ExtendedListBox_Unloaded);
             this.Compression += new OnCompression(RefreshOnPull);
@@ -359,17 +360,18 @@ namespace Ocell.Controls
         void Loader_Error(TwitterResponse response)
         {
             var messager = Dependency.Resolve<IMessageService>();
-            if (DateTime.Now > _lastErrorFired.AddSeconds(5))
+            if (DateTime.Now > _lastErrorFired.AddSeconds(10))
             {
+                _lastErrorFired = DateTime.Now;
                 if (response.RateLimitStatus.RemainingHits == 0)
                     messager.ShowError("Woops! You have spent the limit of calls to Twitter. You'll have to wait until " + response.RateLimitStatus.ResetTime.ToString("H:mm"));
                 else
                     messager.ShowError("We couldn't load the tweets: " + response.StatusDescription);
-                _lastErrorFired = DateTime.Now;
+                
             }
         }
 
-        public void AutoReload() // EL will manage tiems to avoid overcalling Twitter API
+        public void AutoReload() // EL will manage times to avoid overcalling Twitter API
         {
             if (DateTime.Now > (_lastAutoReload + _autoReloadInterval))
             {
