@@ -214,8 +214,9 @@ namespace Ocell.Settings
                     }
                 };
 
-                Token.UserDataFilled += new UserToken.OnUserDataFilled(InsertTokenIntoAccounts);
-                Token.FillUserData();
+                var filler = new UserTokenFiller(Token);
+                filler.UserDataFilled += new UserTokenFiller.OnUserDataFilled(InsertTokenIntoAccounts);
+                filler.FillUserData();
 
                 
             }
