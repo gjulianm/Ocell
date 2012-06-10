@@ -9,9 +9,11 @@ namespace Ocell.Pages.Filtering
     public partial class ManageFilter : PhoneApplicationPage
     {
         private ITweetableFilter Filter;
+        bool _initialized;
 
         public ManageFilter()
         {
+            _initialized = false;
             InitializeComponent();
             ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
             this.Loaded +=new RoutedEventHandler(ManageFilter_Loaded);
@@ -29,6 +31,8 @@ namespace Ocell.Pages.Filtering
 
         void ManageFilter_Loaded(object sender, RoutedEventArgs e)
         {
+            if (_initialized)
+                return;
             Filter = DataTransfer.Filter;
 
             if (Filter == null)
@@ -50,6 +54,8 @@ namespace Ocell.Pages.Filtering
                 Inclusion.SelectedIndex = 1;
             else
                 Inclusion.SelectedIndex = 0;
+
+            _initialized = true;
         }
 
         private void ApplicationBarIconButton_Click(object sender, System.EventArgs e)
