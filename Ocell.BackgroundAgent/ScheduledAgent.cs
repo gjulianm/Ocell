@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Windows;
 using Microsoft.Phone.Info;
@@ -51,7 +50,9 @@ namespace Ocell.BackgroundAgent
             }
         }
 
-        EventWaitHandle _waitHandle = new AutoResetEvent(false);
+        #region Threading management
+        EventWaitHandle _agentWaitHandle = new AutoResetEvent(false);
+        EventWaitHandle _stepWaitHandle = new AutoResetEvent(false);
         int _threads;
 
         private void SignalThreadStart()
@@ -62,8 +63,16 @@ namespace Ocell.BackgroundAgent
         private void SignalThreadEnd()
         {
             Interlocked.Decrement(ref _threads);
+            if (_threads <= 1)
+                _stepWaitHandle.Set();
             if (_threads <= 0)
-                _waitHandle.Set();
+                _agentWaitHandle.Set();
+        }
+
+        private void WaitForTaskToEnd()
+        {
+            if (_threads > 1)
+                _stepWaitHandle.WaitOne(5000);
         }
 
         bool IsMemoryUsageHigh()
@@ -77,7 +86,20 @@ namespace Ocell.BackgroundAgent
         {
             // Allow the scheduled agent to terminate without taking into account other threads.
             _threads = 0;
-            _waitHandle.Set();
+            _agentWaitHandle.Set();
+        }
+        #endregion
+
+        void WriteMemUsage(string message)
+        {
+#if DEBUG_SESSION
+            long used = DeviceStatus.ApplicationCurrentMemoryUsage / 1024;
+            long percentage = DeviceStatus.ApplicationCurrentMemoryUsage * 100 / DeviceStatus.ApplicationMemoryUsageLimit;
+            string toWrite = string.Format("{3}: {0} - {1} KB ({2}% of available memory)",
+                message, used, percentage, DateTime.Now.ToString("HH:mm:ss.ff"));
+            Debug.WriteLine(toWrite);
+            DebugWriter.Add(toWrite);
+#endif
         }
 
         /// <summary>
@@ -107,25 +129,15 @@ namespace Ocell.BackgroundAgent
             SignalThreadEnd();
 
             end = DateTime.Now;
-            int maxTimeout = 24000 - (end - start).Milliseconds;
+            int maxTimeout = 24000 - (int)((end - start).TotalMilliseconds);
 
-            _waitHandle.WaitOne(maxTimeout);
+            if (maxTimeout < 0)
+                maxTimeout = 1000;
+
+            _agentWaitHandle.WaitOne(maxTimeout);
             WriteMemUsage("Exit with " + _threads.ToString() + " running");
             DebugWriter.Save();
             NotifyComplete();
-        }
-
-        string contents = "";
-        void WriteMemUsage(string message)
-        {
-#if DEBUG_SESSION
-            long used = DeviceStatus.ApplicationCurrentMemoryUsage / 1024;
-            long percentage = DeviceStatus.ApplicationCurrentMemoryUsage*100 / DeviceStatus.ApplicationMemoryUsageLimit;
-            string toWrite = string.Format("{3}: {0} - {1} KB ({2}% of available memory)", 
-                message, used, percentage, DateTime.Now.ToString("HH:mm:ss.ff"));
-            Debug.WriteLine(toWrite);
-            DebugWriter.Add(toWrite);
-#endif
         }
 
         void DoWork()
@@ -133,8 +145,8 @@ namespace Ocell.BackgroundAgent
             WriteMemUsage("Scheduled agent started");
 
             SendScheduledTweets();
-
             WriteMemUsage("Scheduled tweets sent");
+
             if (IsMemoryUsageHigh())
             {
                 Thread.Sleep(100);
@@ -145,10 +157,12 @@ namespace Ocell.BackgroundAgent
                     return;
             }
 
+            WaitForTaskToEnd();
             NotifyMentionsAndMessages();
+
             WriteMemUsage("Checked for mentions and messages");
             if (IsMemoryUsageHigh())
-            {                
+            {
                 Thread.Sleep(100);
                 Config.Dispose();
                 GC.Collect();
@@ -157,29 +171,34 @@ namespace Ocell.BackgroundAgent
                     return;
             }
 
+            WaitForTaskToEnd();
             UpdateTiles();
+            GC.Collect();
+
             WriteMemUsage("Tiles updated");
         }
 
         void SendScheduledTweets()
         {
             var copyList = new List<TwitterStatusTask>(Config.TweetTasks);
-            foreach (var task in copyList)
+            foreach (TwitterStatusTask task in copyList)
             {
                 Config.TweetTasks.Remove(task);
-                task.Completed += (sender, e) => SignalThreadEnd();
-                task.Error += (sender, e) =>
+                var executor = new TaskExecutor(task);
+                executor.Completed += (sender, e) => SignalThreadEnd();
+                executor.Error += (sender, e) =>
                     {
                         Config.TweetTasks.Add(task);
                         Config.SaveTasks();
                         SignalThreadEnd();
                     };
                 SignalThreadStart();
-                task.Execute();
+                executor.Execute();
             }
             Config.SaveTasks();
         }
 
+        #region Notification
         int notifications;
         bool newMessages, newMentions;
         string from;
@@ -208,9 +227,9 @@ namespace Ocell.BackgroundAgent
             if (notifications == 1)
             {
                 if (newMentions)
-                    mainTile.BackContent = string.Format((char)8203+"@{0} mentioned you (@{1})", from, usersWithNotifications[0]);
+                    mainTile.BackContent = string.Format((char)8203 + "@{0} mentioned you (@{1})", from, usersWithNotifications[0]);
                 else
-                    mainTile.BackContent = string.Format((char)8203+"@{0} sent you (@{1}) a message", from, usersWithNotifications[0]);
+                    mainTile.BackContent = string.Format((char)8203 + "@{0} sent you (@{1}) a message", from, usersWithNotifications[0]);
             }
             else
             {
@@ -229,7 +248,7 @@ namespace Ocell.BackgroundAgent
                 mainTile.BackContent = content;
             }
             mainTile.Count = notifications;
-            ShellTile.ActiveTiles.First().Update(mainTile);
+            ShellTile.ActiveTiles.FirstOrDefault().Update(mainTile);
         }
 
         string GetChainOfNames(List<string> names)
@@ -240,7 +259,7 @@ namespace Ocell.BackgroundAgent
 
             int i = 0;
             content += names[i];
-            i++;          
+            i++;
 
             for (; i < names.Count - 1; i++)
                 content += ", " + names[i];
@@ -249,6 +268,22 @@ namespace Ocell.BackgroundAgent
                 content += " and " + names[i];
 
             return content;
+        }
+
+        bool TryRecoverContents<T>(TwitterResponse response, out T contents)
+        {
+            TwitterService service = new TwitterService();
+            try
+            {
+                contents = service.Deserialize<T>(response.Response);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                WriteMemUsage(ex.GetType().ToString() + ": " + ex.Message);
+                contents = default(T);
+                return false;
+            }
         }
 
         void NotifyMentionsAndMessages()
@@ -261,18 +296,33 @@ namespace Ocell.BackgroundAgent
 
             foreach (var user in Config.Accounts)
             {
+                var service = new TwitterService(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, user.Key, user.Secret);
                 if (user.Preferences.MentionsPreferences == NotificationType.TileAndToast
                     || user.Preferences.MentionsPreferences == NotificationType.Tile)
                 {
                     SignalThreadStart();
-                    ServiceDispatcher.GetService(user).ListTweetsMentioningMe(10, (statuses, response) => 
+
+                    service.ListTweetsMentioningMe(10, (statuses, response) =>
                         {
                             WriteMemUsage("Received mentions");
                             if (statuses == null || response.StatusCode != System.Net.HttpStatusCode.OK)
                             {
-                                WriteMemUsage("Mentions: exit with error.");
-                                SignalThreadEnd();
-                                return;
+                                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                                {
+                                    WriteMemUsage("Response OK: Trying to recover statuses...");
+                                    if (!TryRecoverContents(response, out statuses))
+                                    {
+                                        WriteMemUsage("Statuses not recovered. Exiting...");
+                                        SignalThreadEnd();
+                                        return;
+                                    }
+                                }
+                                else
+                                {
+                                    WriteMemUsage("Mentions: exit with error " + response.StatusDescription);
+                                    SignalThreadEnd();
+                                    return;
+                                }
                             }
 
                             var CheckDate = DateSync.GetLastCheckDate();
@@ -283,7 +333,7 @@ namespace Ocell.BackgroundAgent
                                 newMentions = true;
 
                                 if (newStatuses == 1)
-                                    from = statuses.Where(item => item.CreatedDate > CheckDate).First().AuthorName;
+                                    from = statuses.Where(item => item.CreatedDate > CheckDate).FirstOrDefault().AuthorName;
 
                                 if (!usersWithNotifications.Contains(user.ScreenName))
                                     usersWithNotifications.Add(user.ScreenName);
@@ -294,25 +344,38 @@ namespace Ocell.BackgroundAgent
                                     CreateToast("mention", newStatuses, from, user.ScreenName);
 
                                 BuildTile();
-                                     
+
                             }
 
                             WriteMemUsage("Mentions: Exit with " + newStatuses.ToString() + " new statuses.");
-                            SignalThreadEnd();  
+                            SignalThreadEnd();
                         });
                 }
                 if (user.Preferences.MessagesPreferences == NotificationType.TileAndToast
                     || user.Preferences.MessagesPreferences == NotificationType.Tile)
                 {
                     SignalThreadStart();
-                    ServiceDispatcher.GetService(user).ListDirectMessagesReceived(10, (statuses, response) =>
+                    service.ListDirectMessagesReceived(10, (statuses, response) =>
                     {
                         WriteMemUsage("Received messages");
                         if (statuses == null || response.StatusCode != System.Net.HttpStatusCode.OK)
                         {
-                            WriteMemUsage("Messages: exit with error.");
-                            SignalThreadEnd();
-                            return;
+                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                            {
+                                WriteMemUsage("Response OK: Trying to recover statuses...");
+                                if (!TryRecoverContents(response, out statuses))
+                                {
+                                    WriteMemUsage("Statuses not recovered. Exiting...");
+                                    SignalThreadEnd();
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                WriteMemUsage("Messages: exit with error " + response.StatusDescription);
+                                SignalThreadEnd();
+                                return;
+                            }
                         }
 
                         var CheckDate = DateSync.GetLastCheckDate();
@@ -323,7 +386,7 @@ namespace Ocell.BackgroundAgent
                             newMessages = true;
 
                             if (newStatuses == 1)
-                                from = statuses.Where(item => item.CreatedDate > CheckDate).First().AuthorName;
+                                from = statuses.Where(item => item.CreatedDate > CheckDate).FirstOrDefault().AuthorName;
 
                             if (!usersWithNotifications.Contains(user.ScreenName))
                                 usersWithNotifications.Add(user.ScreenName);
@@ -334,7 +397,7 @@ namespace Ocell.BackgroundAgent
                                 CreateToast("message", newStatuses, from, user.ScreenName);
 
                             BuildTile();
-                            
+
                         }
 
                         WriteMemUsage("Messages: Exit with " + newStatuses.ToString() + " new statuses.");
@@ -343,7 +406,9 @@ namespace Ocell.BackgroundAgent
                 }
             }
         }
+        #endregion
 
+        #region Tile updating
         void UpdateTiles()
         {
             if (Config.BackgroundLoadColumns == true)
@@ -355,39 +420,8 @@ namespace Ocell.BackgroundAgent
 
         protected void UpdateColumn(TwitterResource Resource)
         {
-            TweetLoader Loader = new TweetLoader(Resource, false);
-            Loader.Cached = false;
-            Loader.TweetsToLoadPerRequest = 1;
-            Loader.LoadFinished += (sender, e) =>
-            {
-                WriteMemUsage("Received tweet for column.");
-                if (!Loader.Source.Any())
-                {
-                    SignalThreadEnd();
-                    return;
-                }
-
-                string TileString = Uri.EscapeDataString(Loader.Resource.String);
-                ITweetable Tweet = Loader.Source[0];
-                ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault(item => item.NavigationUri.ToString().Contains(TileString));
-
-                Loader.Dispose();
-
-                if (Tile != null)
-                {
-                    StandardTileData TileData = new StandardTileData
-                    {
-                        BackContent = RemoveMention(Tweet.Text),
-                        BackTitle = Tweet.Author.ScreenName
-                    };
-                    Tile.Update(TileData);
-                }
-                SignalThreadEnd();
-            };
-            Loader.Error += (e) => SignalThreadEnd();
-
             SignalThreadStart();
-            Loader.Load();
+            Load(Resource);
         }
 
         private IEnumerable<TwitterResource> FindColumnsToUpdate()
@@ -416,5 +450,64 @@ namespace Ocell.BackgroundAgent
                 Tweet = (char)8203 + Tweet;
             return Tweet;
         }
+
+        protected void Load(TwitterResource resource)
+        {
+            var service = new TwitterService(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, resource.User.Key, resource.User.Secret);
+
+            switch (resource.Type)
+            {
+                case ResourceType.Home:
+                    service.ListTweetsOnHomeTimeline(1, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
+                    break;
+                case ResourceType.Mentions:
+                    service.ListTweetsMentioningMe(1, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
+                    break;
+                case ResourceType.Messages:
+                    service.ListDirectMessagesReceived(1, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
+                    break;
+                case ResourceType.Favorites:
+                    service.ListFavoriteTweets((status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
+                    break;
+                case ResourceType.List:
+                    service.ListTweetsOnList(resource.Data.Substring(1, resource.Data.IndexOf('/') - 1),
+                            resource.Data.Substring(resource.Data.IndexOf('/') + 1), 1, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
+                    break;
+                case ResourceType.Search:
+                    service.Search(resource.Data, 1, 20, (status, response) => ReceiveTweetable(status.Statuses.Cast<ITweetable>(), response, resource));
+                    break;
+                case ResourceType.Tweets:
+                    service.ListTweetsOnSpecifiedUserTimeline(resource.Data, 1, true, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
+                    break;
+            }
+        }
+
+        protected void ReceiveTweetable(IEnumerable<ITweetable> statuses, TwitterResponse response, TwitterResource Resource)
+        {
+            WriteMemUsage("Received tweet for column.");
+            if (statuses == null || !statuses.Any() || response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                WriteMemUsage("Exit with error");
+                SignalThreadEnd();
+                return;
+            }
+
+            string TileString = Uri.EscapeDataString(Resource.String);
+            ITweetable Tweet = statuses.FirstOrDefault();
+            ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault(item => item.NavigationUri.ToString().Contains(TileString));
+
+            if (Tile != null)
+            {
+                StandardTileData TileData = new StandardTileData
+                {
+                    BackContent = RemoveMention(Tweet.Text),
+                    BackTitle = Tweet.Author.ScreenName
+                };
+                Tile.Update(TileData);
+                WriteMemUsage("Updated tile.");
+            }
+            SignalThreadEnd();
+        }
+        #endregion
     }
 }
