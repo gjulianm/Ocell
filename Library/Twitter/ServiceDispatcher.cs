@@ -48,8 +48,13 @@ namespace Ocell.Library.Twitter
                 UserToken account = Config.Accounts[0];
                 return GetService(account);
             }
-
-            return null;
+            else
+            {
+                if (!TestSession)
+                    return new TwitterService(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret);
+                else
+                    return new MockTwitterService();
+            }
         }
 
         public static ITwitterService GetCurrentService()
