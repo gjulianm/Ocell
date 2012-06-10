@@ -2,23 +2,22 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO.IsolatedStorage;
-using TweetSharp;
-using Ocell.Library.Twitter;
-using Ocell.Library.Filtering;
+using System.Threading;
 using Ocell.Library.Tasks;
+using Ocell.Library.Twitter;
+#if !BACKGROUND_AGENT
+using Ocell.Library.Filtering;
+#endif
 
 
 namespace Ocell.Library
 {
-    public static class Config 
+    public static partial class Config
     {
-        private static object ISConfFlag = new object();
-
-        private const string AccountsKey = "ACCOUNTS";
-        private const string ColumnsKey = "COLUMNS";
+        private static Mutex _mutex = new Mutex(false, "Ocell.IsolatedStorageSettings_MUTEX");
+        private const int MutexTimeout = 1000;
+#if !BACKGROUND_AGENT
         private const string FollowMsg = "FOLLOWMSG";
-        private const string TweetTasksKey = "TWEETTASKS";
-        private const string BGLoadColumns = "BGLOADCOLUMNS";
         private const string ProtectedAccountsKey = "PROTECTEDACC";
         private const string FiltersKey = "FILTERS";
         private const string GlobalFilterKey = "GLOBALFILTER";
@@ -27,12 +26,20 @@ namespace Ocell.Library
         private const string DefaultMuteTimeKey = "DEFAULTMUTETIME";
         private const string DraftsKey = "DRAFTS";
         private const string ReadLaterCredsKey = "READLATERCREDS";
+#endif
+
+        private const string AccountsKey = "ACCOUNTS";
+        private const string ColumnsKey = "COLUMNS";
+        private const string TweetTasksKey = "TWEETTASKS";
+        private const string BGLoadColumns = "BGLOADCOLUMNS";
 
         private static List<UserToken> _accounts;
         private static ObservableCollection<TwitterResource> _columns;
-        private static bool? _followMessageShown;
         private static List<TwitterStatusTask> _tweetTasks;
         private static bool? _backgroundLoadColumns;
+
+#if !BACKGROUND_AGENT
+        private static bool? _followMessageShown;
         private static List<UserToken> _protectedAccounts;
         private static List<ColumnFilter> _filters;
         private static ColumnFilter _globalFilter;
@@ -41,7 +48,57 @@ namespace Ocell.Library
         private static TimeSpan? _defaultMuteTime;
         private static List<TwitterDraft> _drafts;
         private static ReadLaterCredentials _readLaterCredentials;
+#endif
 
+        public static bool? BackgroundLoadColumns
+        {
+            get
+            {
+                return GenericGetFromConfig<bool?>(BGLoadColumns, ref _backgroundLoadColumns);
+            }
+            set
+            {
+                GenericSaveToConfig<bool?>(BGLoadColumns, ref _backgroundLoadColumns, value);
+            }
+        }
+
+        public static List<TwitterStatusTask> TweetTasks
+        {
+            get
+            {
+                return GenericGetFromConfig<List<TwitterStatusTask>>(TweetTasksKey, ref _tweetTasks);
+            }
+            set
+            {
+                GenericSaveToConfig<List<TwitterStatusTask>>(TweetTasksKey, ref _tweetTasks, value);
+            }
+        }
+
+        public static List<UserToken> Accounts
+        {
+            get
+            {
+                return GenericGetFromConfig<List<UserToken>>(AccountsKey, ref _accounts);
+            }
+            set
+            {
+                GenericSaveToConfig<List<UserToken>>(AccountsKey, ref _accounts, value);
+            }
+        }
+
+        public static ObservableCollection<TwitterResource> Columns
+        {
+            get
+            {
+                return GenericGetFromConfig<ObservableCollection<TwitterResource>>(ColumnsKey, ref _columns);
+            }
+            set
+            {
+
+                GenericSaveToConfig<ObservableCollection<TwitterResource>>(ColumnsKey, ref _columns, value);
+            }
+        }
+#if !BACKGROUND_AGENT
         public static ReadLaterCredentials ReadLaterCredentials
         {
             get
@@ -140,55 +197,6 @@ namespace Ocell.Library
             }
         }
 
-        public static bool? BackgroundLoadColumns
-        {
-            get
-            {
-                return GenericGetFromConfig<bool?>(BGLoadColumns, ref _backgroundLoadColumns);
-            }
-            set
-            {
-                GenericSaveToConfig<bool?>(BGLoadColumns, ref _backgroundLoadColumns, value);
-            }
-        }
-
-        public static List<TwitterStatusTask> TweetTasks
-        {
-            get
-            {
-                return GenericGetFromConfig<List<TwitterStatusTask>>(TweetTasksKey, ref _tweetTasks);
-            }
-            set
-            {
-                GenericSaveToConfig<List<TwitterStatusTask>>(TweetTasksKey, ref _tweetTasks, value);
-            }
-        }
-
-        public static List<UserToken> Accounts
-        {
-            get
-            {
-                return GenericGetFromConfig<List<UserToken>>(AccountsKey, ref _accounts);
-            }
-            set
-            {
-                GenericSaveToConfig<List<UserToken>>(AccountsKey, ref _accounts, value);
-            }
-        }
-
-        public static ObservableCollection<TwitterResource> Columns
-        {
-            get
-            {
-                return GenericGetFromConfig<ObservableCollection<TwitterResource>>(ColumnsKey, ref _columns);
-            }
-            set
-            {
-
-                GenericSaveToConfig<ObservableCollection<TwitterResource>>(ColumnsKey, ref _columns, value);
-            }
-        }
-
         public static ColumnFilter FilterGlobal
         {
             get
@@ -214,12 +222,13 @@ namespace Ocell.Library
             }
 
         }
+#endif
         private static T GenericGetFromConfig<T>(string key, ref T element) where T : new()
         {
             if (element != null)
                 return element;
 
-            lock (ISConfFlag)
+            if (_mutex.WaitOne(MutexTimeout))
             {
 
                 IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
@@ -233,12 +242,18 @@ namespace Ocell.Library
                         config.Save();
                     }
                 }
-                catch (InvalidCastException)
+                catch (InvalidCastException e)
                 {
+                    e.StackTrace.ToString();
                     config.Remove(key);
+                    config.Save();
                 }
                 catch (Exception)
                 {
+                }
+                finally
+                {
+                    _mutex.ReleaseMutex();
                 }
             }
 
@@ -247,14 +262,14 @@ namespace Ocell.Library
 
             return element;
         }
-        
+
 
         private static void GenericSaveToConfig<T>(string Key, ref T element, T value) where T : new()
         {
             if (value == null)
                 return;
 
-            lock (ISConfFlag)
+            if (_mutex.WaitOne(MutexTimeout))
             {
                 IsolatedStorageSettings conf = IsolatedStorageSettings.ApplicationSettings;
 
@@ -270,6 +285,10 @@ namespace Ocell.Library
                 catch (Exception)
                 {
                     throw;
+                }
+                finally
+                {
+                    _mutex.ReleaseMutex();
                 }
             }
         }
@@ -289,9 +308,19 @@ namespace Ocell.Library
             TweetTasks = _tweetTasks;
         }
 
-        public static void SaveProtectedAccounts()
+        public static void ClearAll()
         {
-            ProtectedAccounts = _protectedAccounts;
+            if (_mutex.WaitOne(MutexTimeout))
+            {
+                try
+                {
+                    IsolatedStorageSettings.ApplicationSettings.Clear();
+                }
+                finally
+                {
+                    _mutex.ReleaseMutex();
+                }
+            }
         }
 
         public static void Dispose()
@@ -299,9 +328,24 @@ namespace Ocell.Library
             _accounts = null;
             _backgroundLoadColumns = null;
             _columns = null;
-            _followMessageShown = null;
-            _protectedAccounts = null;
             _tweetTasks = null;
+
+#if !BACKGROUND_AGENT
+            _defaultMuteTime = null;
+            _drafts = null;
+            _filters = null;
+            _followMessageShown = null;
+            _globalFilter = null;
+            _protectedAccounts = null;
+            _readLaterCredentials = null;
+            _retweetAsMentions = null;
+            _tweetsPerRequest = null;
+#endif
+        }
+#if !BACKGROUND_AGENT
+        public static void SaveProtectedAccounts()
+        {
+            ProtectedAccounts = _protectedAccounts;
         }
 
 		public static void SaveFilters()
@@ -313,11 +357,6 @@ namespace Ocell.Library
         {
             Drafts = _drafts;
         }
-
-        public static void ClearAll()
-        {
-            lock(ISConfFlag)
-                IsolatedStorageSettings.ApplicationSettings.Clear();
-        }
+#endif
     }
 }
