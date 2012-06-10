@@ -152,7 +152,6 @@ namespace Ocell.Library.Twitter
             if (!DecisionMaker.ShouldLoadCache(ref cacheList))
                 return;
 
-
             foreach (var item in cacheList)
                 if (!Source.Contains(item, comparer))
                     Source.Add(item);
@@ -165,6 +164,9 @@ namespace Ocell.Library.Twitter
         #region Loaders
         public void Load(bool Old = false)
         {
+            if (_srv == null)
+                _srv = ServiceDispatcher.GetDefaultService();
+
             if (Resource == null || _srv == null ||
                 _requestsInProgress >= 2 ||
                 _rateResetTime > DateTime.Now)
@@ -189,6 +191,7 @@ namespace Ocell.Library.Twitter
         {
             _loaded++;
             IsLoading = true;
+
             switch (Resource.Type)
             {
                 case ResourceType.Home:
@@ -277,6 +280,7 @@ namespace Ocell.Library.Twitter
         protected void ReceiveTweets(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
         {
             _requestsInProgress--;
+            IsLoading = false;
             if (statuses == null)
             {
                 if (Error != null)
@@ -290,6 +294,7 @@ namespace Ocell.Library.Twitter
         protected void ReceiveMessages(IEnumerable<TwitterDirectMessage> statuses, TwitterResponse response)
         {
             _requestsInProgress--;
+            IsLoading = false;
             if (statuses == null)
             {
                 if (Error != null)
@@ -303,6 +308,7 @@ namespace Ocell.Library.Twitter
         protected void ReceiveSearch(TwitterSearchResult result, TwitterResponse response)
         {
             _requestsInProgress--;
+            IsLoading = false;
             if (result == null || result.Statuses == null)
             {
                 if (Error != null)
