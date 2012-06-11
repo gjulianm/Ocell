@@ -11,7 +11,6 @@ namespace Ocell.Library
         private string _text;
         private bool _isAutocompleting = false;
         private int _triggerPosition;
-        private string _lastTextInserted;
         public IEnumerable<string> Strings { get; set; }
         public char Trigger { get; set; }
         public TextBox Textbox
@@ -120,7 +119,6 @@ namespace Ocell.Library
 
         private void AutocompleteText(string text)
         {
-            _lastTextInserted = text;
             int insertPosition;
             if (_textbox.SelectionStart > _text.Length)
                 insertPosition = _text.Length;

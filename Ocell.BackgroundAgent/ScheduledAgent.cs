@@ -1,6 +1,4 @@
-﻿#define DEBUG_SESSION
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -18,7 +16,7 @@ using TweetSharp;
 
 namespace Ocell.BackgroundAgent
 {
-    public class ScheduledAgent : ScheduledTaskAgent
+    public class ScheduledAgent : ScheduledTaskAgent, IDisposable
     {
         private static volatile bool _classInitialized;
 
@@ -38,6 +36,18 @@ namespace Ocell.BackgroundAgent
             }
 
             _threads = 0;
+        }
+
+        ~ScheduledAgent()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            _agentWaitHandle.Dispose();
+            _stepWaitHandle.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         /// Código para ejecutar en excepciones no controladas
@@ -92,7 +102,7 @@ namespace Ocell.BackgroundAgent
 
         void WriteMemUsage(string message)
         {
-#if DEBUG_SESSION
+#if DEBUG
             long used = DeviceStatus.ApplicationCurrentMemoryUsage / 1024;
             long percentage = DeviceStatus.ApplicationCurrentMemoryUsage * 100 / DeviceStatus.ApplicationMemoryUsageLimit;
             string toWrite = string.Format("{3}: {0} - {1} KB ({2}% of available memory)",
@@ -140,42 +150,36 @@ namespace Ocell.BackgroundAgent
             NotifyComplete();
         }
 
+        void CompleteAction(Action action)
+        {
+            WriteMemUsage("Start " + action.Method.Name);
+            action.Invoke();
+            WaitForTaskToEnd();
+            WriteMemUsage("End " + action.Method.Name);
+
+            if (IsMemoryUsageHigh())
+            {
+                WriteMemUsage("High memory usage. Recovering memory...");
+                Thread.Sleep(100);
+                Config.Dispose();
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+                WriteMemUsage("Memory recovery completed");
+
+                if (IsMemoryUsageHigh())
+                {
+                    WriteMemUsage("Not enough memory to continue. Terminating...");
+                    throw new OutOfMemoryException("Not enough memory to continue with the ScheduledAgent");
+                }
+            }
+        }
+
         void DoWork()
         {
-            WriteMemUsage("Scheduled agent started");
-
-            SendScheduledTweets();
-            WriteMemUsage("Scheduled tweets sent");
-
-            if (IsMemoryUsageHigh())
-            {
-                Thread.Sleep(100);
-                Config.Dispose();
-                GC.Collect();
-                WriteMemUsage("Disposed memory");
-                if (IsMemoryUsageHigh())
-                    return;
-            }
-
-            WaitForTaskToEnd();
-            NotifyMentionsAndMessages();
-
-            WriteMemUsage("Checked for mentions and messages");
-            if (IsMemoryUsageHigh())
-            {
-                Thread.Sleep(100);
-                Config.Dispose();
-                GC.Collect();
-                WriteMemUsage("Disposed memory");
-                if (IsMemoryUsageHigh())
-                    return;
-            }
-
-            WaitForTaskToEnd();
-            UpdateTiles();
-            GC.Collect();
-
-            WriteMemUsage("Tiles updated");
+            CompleteAction(SendScheduledTweets);
+            CompleteAction(NotifyMentionsAndMessages);
+            CompleteAction(UpdateTiles);
         }
 
         void SendScheduledTweets()
@@ -272,6 +276,7 @@ namespace Ocell.BackgroundAgent
 
         bool TryRecoverContents<T>(TwitterResponse response, out T contents)
         {
+            GC.Collect();
             TwitterService service = new TwitterService();
             try
             {
@@ -301,7 +306,9 @@ namespace Ocell.BackgroundAgent
                     || user.Preferences.MentionsPreferences == NotificationType.Tile)
                 {
                     SignalThreadStart();
-
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
                     service.ListTweetsMentioningMe(10, (statuses, response) =>
                         {
                             WriteMemUsage("Received mentions");
@@ -355,6 +362,9 @@ namespace Ocell.BackgroundAgent
                     || user.Preferences.MessagesPreferences == NotificationType.Tile)
                 {
                     SignalThreadStart();
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
                     service.ListDirectMessagesReceived(10, (statuses, response) =>
                     {
                         WriteMemUsage("Received messages");

@@ -11,7 +11,6 @@ namespace Ocell.Pages.Search
     public partial class Search : PhoneApplicationPage
     {
         private SearchModel viewModel;
-        private bool selectionChangeFired = false;
 
         public Search()
         {

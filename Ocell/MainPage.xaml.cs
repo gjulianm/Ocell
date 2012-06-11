@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using DanielVaughan;
+using DanielVaughan.Services;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Tasks;
 using Ocell.Controls;
 using Ocell.Library;
-using Ocell.Library.Filtering;
 using Ocell.Library.Notifications;
 using Ocell.Library.Twitter;
-using TweetSharp;
-using System.Threading;
-using System.Diagnostics;
-using DanielVaughan.Services;
-using DanielVaughan;
-using Microsoft.Phone.Tasks;
 
 
 namespace Ocell
@@ -62,6 +57,7 @@ namespace Ocell
             {
                 CreateTile();
                 ShowFollowMessage();
+#if DEBUG
                 var list = DebugWriter.ReadAll();
                 if (list != null)
                 {
@@ -76,7 +72,7 @@ namespace Ocell
                     DebugWriter.Clear();
                     DebugWriter.Save();
                 }
-
+#endif
                 LittleWatson.CheckForPreviousException();
             });
 

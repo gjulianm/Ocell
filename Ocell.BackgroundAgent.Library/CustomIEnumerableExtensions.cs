@@ -43,7 +43,9 @@ namespace Ocell.Library
         {
             int count = 0;
 
-            foreach (var item in list)
+            var enumerator = list.GetEnumerator();
+
+            while (enumerator.MoveNext())
                 count++;
 
             return count;

@@ -16,10 +16,6 @@ namespace Ocell.Settings
 {
     public partial class Default : PhoneApplicationPage
     {
-        private bool _selectionChangeFired;
-        private int _ProgramaticallyFiredChange = 0;
-        private bool _selectionChangeFiredPicker;
-
         public Default()
         {
             InitializeComponent();

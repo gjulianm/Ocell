@@ -1,25 +1,15 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using DanielVaughan.ComponentModel;
-using DanielVaughan;
-using DanielVaughan.Windows;
-using Ocell.Library;
 using System.Collections.Generic;
-using Ocell.Library.Twitter;
-using System.Collections.ObjectModel;
-using System.Text.RegularExpressions;
-using TweetSharp;
-using Ocell.Library;
 using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Windows.Input;
+using DanielVaughan.ComponentModel;
+using DanielVaughan.Windows;
 using Microsoft.Phone.Tasks;
+using Ocell.Library;
+using Ocell.Library.Twitter;
+using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {

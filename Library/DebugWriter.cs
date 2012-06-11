@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if DEBUG
+using System;
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 
@@ -65,3 +66,4 @@ namespace Ocell.Library
         }
     }
 }
+#endif

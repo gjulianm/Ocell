@@ -34,10 +34,11 @@ namespace Ocell.Library
                     
                     using (TextWriter output = new StreamWriter(store.CreateFile(filename)))
                     {
-                        output.WriteLine("Phone: " + DeviceStatus.DeviceName + " by " + DeviceStatus.DeviceManufacturer);
-                        output.WriteLine("Memory usage: " + (DeviceStatus.ApplicationCurrentMemoryUsage / (1024 * 1024)).ToString());
-                        output.WriteLine("Memory peak: " + (DeviceStatus.ApplicationPeakMemoryUsage / (1024 * 1024)).ToString());
-                        output.WriteLine("Firmware version: " + DeviceStatus.DeviceFirmwareVersion);
+                        output.WriteLine("Phone: {0} by {1}", DeviceStatus.DeviceName, DeviceStatus.DeviceManufacturer);
+                        output.WriteLine("Memory usage: {0} KB",(DeviceStatus.ApplicationCurrentMemoryUsage / (1024)).ToString());
+                        output.WriteLine("Memory peak: {0} KB", (DeviceStatus.ApplicationPeakMemoryUsage / (1024)).ToString());
+                        output.WriteLine("Firmware version: {0}", DeviceStatus.DeviceFirmwareVersion);
+                        output.WriteLine("Assembly name: {0}", System.Reflection.Assembly.GetExecutingAssembly().FullName);
                         output.WriteLine("");
                         output.WriteLine(extra);
                         output.WriteLine(ex.Message);

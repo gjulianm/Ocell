@@ -14,9 +14,7 @@ namespace Ocell.Pages.Elements
 {
     public partial class Conversation : PhoneApplicationPage
     {
-        private TwitterStatus LastStatus;
         private ObservableCollection<TwitterStatus> Source;
-        private bool selectionChangeFired = false;
 
         public Conversation()
         {
