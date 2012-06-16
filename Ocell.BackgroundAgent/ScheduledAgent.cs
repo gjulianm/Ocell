@@ -126,7 +126,9 @@ namespace Ocell.BackgroundAgent
             DateTime start, end;
             start = DateTime.Now;
             SignalThreadStart();
+#if DEBUG
             DebugWriter.Add("");
+#endif
             try
             {
                 DoWork();
@@ -146,7 +148,9 @@ namespace Ocell.BackgroundAgent
 
             _agentWaitHandle.WaitOne(maxTimeout);
             WriteMemUsage("Exit with " + _threads.ToString() + " running");
+#if DEBUG
             DebugWriter.Save();
+#endif
             NotifyComplete();
         }
 
