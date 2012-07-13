@@ -31,6 +31,9 @@ namespace Ocell.Library
             if (_textbox == null)
                 return;
 
+            if (_textbox.Text.Length - _text.Length > 1)
+                return; // Don't do anything if there is pasted text.
+
             if (_textbox.Text.Length > 0 && _textbox.SelectionStart > 0 && (Trigger != '\0' && _textbox.Text[_textbox.SelectionStart - 1] == Trigger))
             {
                 _isAutocompleting = true;
