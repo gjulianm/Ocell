@@ -9,6 +9,8 @@ namespace Ocell.Library
 {
     public static class IsolatedFileStreamExtension
     {		
+        // YOU IDIOT!!!! Returning on yield-return makes it read again and this causes errors! Just return List<T> 
+        //      (although you can continue returning it as IEnumerable<string>).
 	    public static IEnumerable<string> ReadLines(this IsolatedStorageFileStream File)
 	    {
             char separator = char.MaxValue;
@@ -27,13 +29,15 @@ namespace Ocell.Library
             {
                 line = contents.Substring(0, NewlineIndex);
                 contents = contents.Substring(NewlineIndex + 1);
-                yield return line;
+                Strings.Add(line);
             }
+
+            return Strings;
         }
 		
 	    public static string ReadLine(this IsolatedStorageFileStream File)
 	    {
-		    IEnumerable<string> Lines = File.ReadLines();
+		    IEnumerable<string> Lines = File.ReadLines().ToList();
 		    if(Lines != null && Lines.Count() != 0)
 			    return Lines.FirstOrDefault();
             return "";
