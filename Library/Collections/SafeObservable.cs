@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading;
 using System.Windows.Threading;
+using System.Linq;
 
 namespace Ocell.Library
 {
@@ -159,12 +160,16 @@ namespace Ocell.Library
 
         public IEnumerator<T> GetEnumerator()
         {
-            return collection.GetEnumerator();
+            IEnumerable<T> copyList;
+            lock (sync)
+                copyList = collection.ToList();
+
+            return copyList.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return collection.GetEnumerator();
+            return GetEnumerator();
         }
 
         public int IndexOf(T item)
