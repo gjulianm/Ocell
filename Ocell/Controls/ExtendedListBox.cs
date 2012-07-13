@@ -43,6 +43,8 @@ namespace Ocell.Controls
         public string NavigationUri { get; set; }
         public bool AutoManageErrors { get; set; }
 
+       
+
         public ExtendedListBox()
         {
             Loader = new TweetLoader();
@@ -57,11 +59,22 @@ namespace Ocell.Controls
             this.Unloaded += new RoutedEventHandler(ExtendedListBox_Unloaded);
             this.Compression += new OnCompression(RefreshOnPull);
             this.SelectionChanged += new SelectionChangedEventHandler(ManageNavigation);
+            this.ManipulationCompleted += new EventHandler<ManipulationCompletedEventArgs>(ScrollEnded);
 
             Loader.Error += new TweetLoader.OnError(Loader_Error);
+
             _Items = new ObservableCollection<ITweetable>();
             _ViewSource = new CollectionViewSource();
             SetupCollectionViewSource();
+        }
+
+        void ScrollEnded(object sender, ManipulationCompletedEventArgs e)
+        {
+            var sv = (ScrollViewer)FindElementRecursive(this, typeof(ScrollViewer));
+            if (sv.VerticalOffset > 0)
+                Loader.StopSourceRefresh();
+            else
+                Loader.ResumeSourceRefresh();
         }
 
         public void ScrollToTop()
@@ -103,68 +116,6 @@ namespace Ocell.Controls
             Loader.SaveToCache();
         }
 
-        protected void PopulateItemsSource(object sender, EventArgs e)
-        {
-            Dispatcher.BeginInvoke(() =>
-            {
-                try
-                {
-                    UnsafePopulateItemsSource();
-                }
-                catch (Exception)
-                {
-                }
-            });
-        }
-
-
-
-        private void UnsafePopulateItemsSource()
-        {
-            TweetEqualityComparer Comparer = new TweetEqualityComparer();
-            int loaded = 0;
-
-            foreach (var item in Loader.Source)
-            {
-                if (!_Items.Contains(item, Comparer))
-                {
-                    /*if (_Items.Count == 0)
-                        _Items.Add(item);
-                    else if(_Items[0].Id > item.Id)
-                    {
-                        if (item.Id < _Items[_Items.Count - 1].Id)
-                            _Items.Add(item);
-                        else
-                            _Items.Insert(GetInsertPositionFor(item), item);
-                    }
-                    else
-                        _Items.Insert(0, item);
-                    */
-                    _Items.Add(item);
-                    loaded++;
-                }
-                if (loaded >= 2)
-                {
-                    Thread.Sleep(10);
-                    loaded = 0;
-                }
-            }
-
-
-        }
-
-        private int GetInsertPositionFor(ITweetable item)
-        {
-            int i;
-            for (i = 0; i < _Items.Count; i++)
-            {
-                if (_Items[i].Id < item.Id)
-                    return i;
-            }
-
-            return i;
-        }
-
         public void Bind(TwitterResource Resource)
         {
             Loader.Resource = Resource;
@@ -186,6 +137,7 @@ namespace Ocell.Controls
 
         public void LoadIntermediate(LoadMoreTweetable trigger)
         {
+            Loader.AllowNextRefresh();
             Loader.LoadFrom(trigger.Id + 1);
         }
 
@@ -319,6 +271,10 @@ namespace Ocell.Controls
                 return;
 
             bool old = (e.Type == Controls.CompressionType.Bottom);
+
+            if (old)
+                Loader.AllowNextRefresh();
+
             Loader.Load(old);
         }
 

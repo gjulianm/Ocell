@@ -11,6 +11,7 @@ using Ocell.Library.Twitter.Comparers;
 using System.Windows.Controls;
 using System.Windows;
 using System.ComponentModel;
+using Ocell.Library.Collections;
 
 namespace Ocell.Library.Twitter
 {
@@ -18,6 +19,7 @@ namespace Ocell.Library.Twitter
     {
         private int _loaded;
         private const int _toLoad = 1;
+        private bool _deferringRefresh = false;
         public int TweetsToLoadPerRequest { get; set; }
         public bool Cached { get; set; }
         public bool ActivateLoadMoreButton { get; set; }
@@ -27,6 +29,7 @@ namespace Ocell.Library.Twitter
         protected TwitterResource _resource;
         private static DateTime _rateResetTime;
         private ConversationService _conversationService;
+        private bool _hasLoadMoreButton = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -50,6 +53,9 @@ namespace Ocell.Library.Twitter
         public SafeObservable<ITweetable> Source { get; protected set; }
         protected ITwitterService _srv;
         protected long LastId;
+        private Queue<ITweetable> _deferredItems = new Queue<ITweetable>();
+        private bool _allowOneRefresh = false;
+        private object _deferSync = new object();
 
         protected bool _isLoading;
         public bool IsLoading
@@ -70,7 +76,7 @@ namespace Ocell.Library.Twitter
 
         protected void OnPropertyChanged(string propName)
         {
-            if(PropertyChanged != null)
+            if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
@@ -343,14 +349,27 @@ namespace Ocell.Library.Twitter
                 return;
             }
 
-            if (Source == null)
-                Source = new SafeObservable<ITweetable>();
+            if (SourceChanging != null)
+                SourceChanging(this, new EventArgs());
 
-            TryAddLoadMoreButton(ref list);
+            lock (_deferSync)
+            {
+                if (_deferringRefresh && !_allowOneRefresh)
+                {
+                    foreach (var item in list)
+                        _deferredItems.Enqueue(item);
+                }
+                else
+                {
+                    _allowOneRefresh = false;
 
-            foreach (var status in list)
-                if (!Source.Contains(status, comparer))
-                    Source.Add(status);
+                    TryAddLoadMoreButton(list);
+
+                    foreach (var status in list)
+                        if (!Source.Contains(status, comparer))
+                            Source.Add(status);
+                }
+            }
 
             if (list.Any())
                 LastId = list.Min(item => item.Id);
@@ -367,9 +386,9 @@ namespace Ocell.Library.Twitter
         #endregion
 
         #region Load more button
-        private void TryAddLoadMoreButton(ref IEnumerable<ITweetable> received)
+        private void TryAddLoadMoreButton(IEnumerable<ITweetable> received)
         {
-            if (!ActivateLoadMoreButton)
+            if (!ActivateLoadMoreButton || _hasLoadMoreButton)
                 return;
 
             if (Source == null || !Source.Any())
@@ -392,10 +411,15 @@ namespace Ocell.Library.Twitter
             TimeSpan diff = olderTweetReceived.CreatedDate - nextTweet.CreatedDate;
 
             if (diff.TotalSeconds > 4 * avgTime)
+            {
+                _hasLoadMoreButton = true;
                 Source.Add(new LoadMoreTweetable { Id = olderTweetReceived.Id - 1 });
+            }
         }
+
         public void RemoveLoadMore()
         {
+            _hasLoadMoreButton = false;
             ITweetable item = Source.FirstOrDefault(e => e is LoadMoreTweetable);
             while (item != null)
             {
@@ -412,11 +436,6 @@ namespace Ocell.Library.Twitter
                 _rateResetTime = response.RateLimitStatus.ResetTime;
         }
 
-        protected void OrderSource()
-        {
-            Source = new SafeObservable<ITweetable>(Source.OrderByDescending(item => item.Id));
-        }
-
         public void Dispose()
         {
             Source.Clear();
@@ -428,6 +447,34 @@ namespace Ocell.Library.Twitter
                 LoadFinished(this, e);
         }
 
+        public void StopSourceRefresh()
+        {
+            lock (_deferSync)
+                _deferringRefresh = true;
+        }
+
+        public void ResumeSourceRefresh()
+        {
+            lock (_deferSync)
+            {
+                _deferringRefresh = false;
+                TryAddLoadMoreButton(_deferredItems.AsEnumerable());
+
+                while (_deferredItems.Any())
+                {
+                    var item = _deferredItems.Dequeue();
+                    if (!Source.Contains(item))
+                        Source.Add(item);
+                }
+            }
+        }
+
+        public void AllowNextRefresh()
+        {
+            lock (_deferSync)
+                _allowOneRefresh = true;
+        }
+
         #region Events
         public event EventHandler LoadFinished;
 
@@ -437,7 +484,10 @@ namespace Ocell.Library.Twitter
         public event EventHandler PartialLoad;
 
         public event EventHandler CacheLoad;
+
+        public event EventHandler SourceChanging;
         #endregion
     }
+
 
 }
