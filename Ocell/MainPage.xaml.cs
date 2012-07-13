@@ -26,12 +26,13 @@ namespace Ocell
         public MainPage()
         {
             _initialised = false;
-            InitializeComponent();
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
+            
 
             viewModel = new MainPageModel();
             DataContext = viewModel;
 
-            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            ThemeFunctions.SetBackground(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(CallLoadFunctions);
 

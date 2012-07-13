@@ -35,7 +35,7 @@ namespace Ocell
 
     public delegate void BroadcastEventHandler(object sender, BroadcastArgs e);
 
-    public class MainPageModel : ViewModelBase
+    public class MainPageModel : ExtendedViewModelBase
     {
         DateTime lastAutoReload;
         const int secondsBetweenReloads = 25;
