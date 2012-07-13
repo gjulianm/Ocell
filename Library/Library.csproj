@@ -65,14 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Autocompleter.cs" />
-    <Compile Include="Collections\SortedObservableList.cs" />
     <Compile Include="DateSync.cs" />
     <Compile Include="DebugWriter.cs" />
     <Compile Include="IEnumerableExtension.cs" />
     <Compile Include="IsolatedFileStreamExtension.cs" />
     <Compile Include="OcellTheme.cs" />
-    <Compile Include="Threading\CountdownResetEvent.cs" />
-    <Compile Include="Threading\ReadWriteLock.cs" />
     <Compile Include="Collections\SafeObservable.cs" />
     <Compile Include="SensitiveData.cs" />
     <Compile Include="Tasks\TaskExecutor.cs" />

@@ -11,7 +11,6 @@ using Ocell.Library.Twitter.Comparers;
 using System.Windows.Controls;
 using System.Windows;
 using System.ComponentModel;
-using Ocell.Library.Collections;
 
 namespace Ocell.Library.Twitter
 {
