@@ -77,6 +77,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\AssemblyInit.cs" />
     <Compile Include="Tests\Library\ConfigTest.cs" />
+    <Compile Include="Tests\Library\TwitterObjectCollectionTest.cs" />
+    <Compile Include="Tests\Library\TwitterObjectTest.cs" />
     <Compile Include="Tests\MockNavigationService.cs" />
     <Compile Include="Tests\UI\DirectMessage\SelectUserTest.cs" />
     <Compile Include="Tests\UI\Drafts\ManageDraftsTest.cs" />
@@ -121,6 +123,10 @@
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</Project>
       <Name>Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LightTwitterService\LightTwitterService.csproj">
+      <Project>{6D32BDDD-7445-4619-9474-149715C8D42E}</Project>
+      <Name>LightTwitterService</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ocell\Ocell.csproj">
       <Project>{F3B6A65D-237D-4E5E-B4A9-F9E098730119}</Project>

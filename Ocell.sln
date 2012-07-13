@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.CoreTypes", "Librar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.BackgroundAgent.Library", "Ocell.BackgroundAgent.Library\Ocell.BackgroundAgent.Library.csproj", "{742DB613-45BB-4F8F-A73F-B559901F6548}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightTwitterService", "LightTwitterService\LightTwitterService.csproj", "{6D32BDDD-7445-4619-9474-149715C8D42E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ClientProfiles|Any CPU = ClientProfiles|Any CPU
@@ -389,6 +391,42 @@ Global
 		{742DB613-45BB-4F8F-A73F-B559901F6548}.Staging|Mixed Platforms.Build.0 = Release|Any CPU
 		{742DB613-45BB-4F8F-A73F-B559901F6548}.Staging|PHP 5.3.ActiveCfg = Release|Any CPU
 		{742DB613-45BB-4F8F-A73F-B559901F6548}.Staging|x86.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.ClientProfiles|Any CPU.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.ClientProfiles|Any CPU.Build.0 = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.ClientProfiles|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.ClientProfiles|Mixed Platforms.Build.0 = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.ClientProfiles|PHP 5.3.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.ClientProfiles|x86.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Debug|PHP 5.3.ActiveCfg = Debug|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Local|Any CPU.Build.0 = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Local|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Local|Mixed Platforms.Build.0 = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Local|PHP 5.3.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Local|x86.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Production|Any CPU.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Production|Any CPU.Build.0 = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Production|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Production|Mixed Platforms.Build.0 = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Production|PHP 5.3.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Production|x86.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Release|PHP 5.3.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Release|x86.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Staging|Any CPU.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Staging|Any CPU.Build.0 = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Staging|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Staging|Mixed Platforms.Build.0 = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Staging|PHP 5.3.ActiveCfg = Release|Any CPU
+		{6D32BDDD-7445-4619-9474-149715C8D42E}.Staging|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
