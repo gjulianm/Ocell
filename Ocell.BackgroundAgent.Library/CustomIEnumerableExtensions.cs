@@ -50,5 +50,14 @@ namespace Ocell.Library
 
             return count;
         }
+
+        public static List<T> ToList<T>(this IEnumerable<T> list)
+        {
+            List<T> returned = new List<T>();
+            foreach (var item in list)
+                returned.Add(item);
+
+            return returned;
+        }
     }
 }
