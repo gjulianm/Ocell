@@ -11,6 +11,7 @@ using Ocell.Library.Notifications;
 using Ocell.Library.Tasks;
 using Ocell.Library.Twitter;
 using TweetSharp;
+using Ocell.LightTwitterService;
 
 
 
@@ -146,7 +147,13 @@ namespace Ocell.BackgroundAgent
             if (maxTimeout < 0)
                 maxTimeout = 1000;
 
-            _agentWaitHandle.WaitOne(maxTimeout);
+#if DEBUG
+            if (Debugger.IsAttached)
+                _agentWaitHandle.WaitOne();
+            else
+#endif
+                _agentWaitHandle.WaitOne(maxTimeout);
+
             WriteMemUsage("Exit with " + _threads.ToString() + " running");
 #if DEBUG
             DebugWriter.Save();
@@ -161,11 +168,11 @@ namespace Ocell.BackgroundAgent
             WaitForTaskToEnd();
             WriteMemUsage("End " + action.Method.Name);
 
-            if (IsMemoryUsageHigh())
+            if (IsMemoryUsageHigh() && !System.Diagnostics.Debugger.IsAttached)
             {
                 WriteMemUsage("High memory usage. Recovering memory...");
                 Thread.Sleep(100);
-                Config.Dispose();
+                Config.ClearStaticValues();
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
@@ -235,9 +242,11 @@ namespace Ocell.BackgroundAgent
             if (notifications == 1)
             {
                 if (newMentions)
-                    mainTile.BackContent = string.Format((char)8203 + "@{0} mentioned you (@{1})", from, usersWithNotifications[0]);
+                    mainTile.BackContent = string.Format((char)8203 + "@{0} mentioned you", from);
                 else
-                    mainTile.BackContent = string.Format((char)8203 + "@{0} sent you (@{1}) a message", from, usersWithNotifications[0]);
+                    mainTile.BackContent = string.Format((char)8203 + "@{0} sent you a message", from);
+
+                mainTile.BackTitle = usersWithNotifications[0];
             }
             else
             {
@@ -252,7 +261,7 @@ namespace Ocell.BackgroundAgent
                 else if (newMessages)
                     content += "messages";
 
-                content += " for " + GetChainOfNames(usersWithNotifications);
+                mainTile.BackTitle = "for " + GetChainOfNames(usersWithNotifications);
                 mainTile.BackContent = content;
             }
             mainTile.Count = notifications;
@@ -278,23 +287,6 @@ namespace Ocell.BackgroundAgent
             return content;
         }
 
-        bool TryRecoverContents<T>(TwitterResponse response, out T contents)
-        {
-            GC.Collect();
-            TwitterService service = new TwitterService();
-            try
-            {
-                contents = service.Deserialize<T>(response.Response);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                WriteMemUsage(ex.GetType().ToString() + ": " + ex.Message);
-                contents = default(T);
-                return false;
-            }
-        }
-
         void NotifyMentionsAndMessages()
         {
             usersWithNotifications = new List<string>();
@@ -305,60 +297,69 @@ namespace Ocell.BackgroundAgent
 
             foreach (var user in Config.Accounts)
             {
-                var service = new TwitterService(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, user.Key, user.Secret);
+                var service = new LightTwitterClient(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, user.Key, user.Secret);
                 if (user.Preferences.MentionsPreferences == NotificationType.TileAndToast
                     || user.Preferences.MentionsPreferences == NotificationType.Tile)
                 {
                     SignalThreadStart();
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                    GC.Collect();
-                    service.ListTweetsMentioningMe(10, (statuses, response) =>
+
+                    service.ListMentions(10, (statuses, response) =>
                         {
+                            GC.Collect();
+                            GC.WaitForPendingFinalizers();
+                            GC.Collect();
                             WriteMemUsage("Received mentions");
                             if (statuses == null || response.StatusCode != System.Net.HttpStatusCode.OK)
                             {
-                                if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                                {
-                                    WriteMemUsage("Response OK: Trying to recover statuses...");
-                                    if (!TryRecoverContents(response, out statuses))
-                                    {
-                                        WriteMemUsage("Statuses not recovered. Exiting...");
-                                        SignalThreadEnd();
-                                        return;
-                                    }
-                                }
-                                else
-                                {
-                                    WriteMemUsage("Mentions: exit with error " + response.StatusDescription);
-                                    SignalThreadEnd();
-                                    return;
-                                }
+                                WriteMemUsage("Mentions: exit with error " + response.StatusDescription);
+                                SignalThreadEnd();
+                                return;
                             }
 
                             var CheckDate = DateSync.GetLastCheckDate();
-                            int newStatuses = statuses.Where(item => item.CreatedDate > CheckDate).Count();
+                            var newStatuses = statuses.Where(item =>
+                            {
+                                string content;
+                                if (!item.TryGetProperty("created_at", out content))
+                                    return false;
 
-                            if (newStatuses > 0)
+                                DateTime date;
+                                const string format = "ddd MMM dd HH:mm:ss zzzz yyyy";
+                                if (!DateTime.TryParseExact(content,
+                                format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+                                    return false;
+
+                                var d = date.ToUniversalTime();
+
+                                return CheckDate < d;
+                            });
+
+                            if (newStatuses.Count() > 0)
                             {
                                 newMentions = true;
 
-                                if (newStatuses == 1)
-                                    from = statuses.Where(item => item.CreatedDate > CheckDate).FirstOrDefault().AuthorName;
+                                if (newStatuses.Count() == 1)
+                                {
+                                    string userstring ="";
+                                    if (newStatuses.FirstOrDefault().TryGetProperty("user", out userstring))
+                                        new TwitterObject(userstring).TryGetProperty("screen_name", out from);
+                                    else
+                                        from = "no_name";
+                                }
 
                                 if (!usersWithNotifications.Contains(user.ScreenName))
                                     usersWithNotifications.Add(user.ScreenName);
 
-                                notifications += newStatuses;
+                                notifications += newStatuses.Count();
 
                                 if (user.Preferences.MentionsPreferences == NotificationType.TileAndToast)
-                                    CreateToast("mention", newStatuses, from, user.ScreenName);
+                                    CreateToast("mention", newStatuses.Count(), from, user.ScreenName);
 
                                 BuildTile();
 
                             }
 
-                            WriteMemUsage("Mentions: Exit with " + newStatuses.ToString() + " new statuses.");
+                            WriteMemUsage("Mentions: Exit with " + newStatuses.Count().ToString() + " new statuses.");
                             SignalThreadEnd();
                         });
                 }
@@ -366,55 +367,60 @@ namespace Ocell.BackgroundAgent
                     || user.Preferences.MessagesPreferences == NotificationType.Tile)
                 {
                     SignalThreadStart();
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                    GC.Collect();
-                    service.ListDirectMessagesReceived(10, (statuses, response) =>
+
+                    service.ListMessages(10, (statuses, response) =>
                     {
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        GC.Collect();
                         WriteMemUsage("Received messages");
+
                         if (statuses == null || response.StatusCode != System.Net.HttpStatusCode.OK)
                         {
-                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                            {
-                                WriteMemUsage("Response OK: Trying to recover statuses...");
-                                if (!TryRecoverContents(response, out statuses))
-                                {
-                                    WriteMemUsage("Statuses not recovered. Exiting...");
-                                    SignalThreadEnd();
-                                    return;
-                                }
-                            }
-                            else
-                            {
-                                WriteMemUsage("Messages: exit with error " + response.StatusDescription);
-                                SignalThreadEnd();
-                                return;
-                            }
+                            WriteMemUsage("Messages: exit with error " + response.StatusDescription);
+                            SignalThreadEnd();
+                            return;
                         }
 
                         var CheckDate = DateSync.GetLastCheckDate();
-                        int newStatuses = statuses.Where(item => item.CreatedDate > CheckDate).Count();
+                        var newStatuses = statuses.Where(item =>
+                        {
+                            string content;
+                            if (!item.TryGetProperty("created_at", out content))
+                                return false;
 
-                        if (newStatuses > 0)
+                            DateTime date;
+                            const string format = "ddd MMM dd HH:mm:ss zzzz yyyy";
+
+                            if (!DateTime.TryParseExact(content,
+                                format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+                                return false;
+
+                            var d = date.ToUniversalTime();
+
+                            return CheckDate < d;
+                        });
+
+                        if (newStatuses.Count() > 0)
                         {
                             newMessages = true;
 
-                            if (newStatuses == 1)
-                                from = statuses.Where(item => item.CreatedDate > CheckDate).FirstOrDefault().AuthorName;
+                            if (newStatuses.Count() == 1)
+                                newStatuses.FirstOrDefault().TryGetProperty("sender_screen_name", out from);
 
                             if (!usersWithNotifications.Contains(user.ScreenName))
                                 usersWithNotifications.Add(user.ScreenName);
 
-                            notifications += newStatuses;
+                            notifications += newStatuses.Count();
 
                             if (user.Preferences.MessagesPreferences == NotificationType.TileAndToast)
-                                CreateToast("message", newStatuses, from, user.ScreenName);
+                                CreateToast("message", newStatuses.Count(), from, user.ScreenName);
 
                             BuildTile();
 
                         }
 
-                        WriteMemUsage("Messages: Exit with " + newStatuses.ToString() + " new statuses.");
+                        WriteMemUsage("Messages: Exit with " + newStatuses.Count().ToString() + " new statuses.");
                         SignalThreadEnd();
                     });
                 }

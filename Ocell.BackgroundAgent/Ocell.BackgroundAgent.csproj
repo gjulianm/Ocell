@@ -61,6 +61,10 @@
       <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
       <Name>Library.CoreTypes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LightTwitterService\LightTwitterService.csproj">
+      <Project>{6D32BDDD-7445-4619-9474-149715C8D42E}</Project>
+      <Name>LightTwitterService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ocell.BackgroundAgent.Library\Ocell.BackgroundAgent.Library.csproj">
       <Project>{742DB613-45BB-4F8F-A73F-B559901F6548}</Project>
       <Name>Ocell.BackgroundAgent.Library</Name>
