@@ -12,7 +12,6 @@ using DanielVaughan.Services;
 using DanielVaughan.Services.Implementation;
 using DanielVaughan;
 using Ocell.Library.Twitter;
-
 using DanielVaughan.InversionOfControl.Containers.SimpleContainer;
 
 namespace Ocell
@@ -34,7 +33,7 @@ namespace Ocell
             UnhandledException += Application_UnhandledException;
 
             // Inicialización de Silverlight estándar
-            InitializeComponent();
+            InitializeComponent(); 
 
             // Inicialización especifica del teléfono
             InitializePhoneApplication();
@@ -66,6 +65,12 @@ namespace Ocell
             Dependency.Register<IMessageService, MessageService>(true);
             Dependency.Register<IUserProvider, UserProvider>();
 
+            bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
+            ThemeFunctions.BackgroundBrush = Config.Background.GetBrush();
+            if (Config.Background.Type == LightOrDark.Light)
+                ThemeManager.ToLightTheme();
+            else if (Config.Background.Type == LightOrDark.Dark)
+                ThemeManager.ToDarkTheme();
         }
 
         // Código para ejecutar cuando la aplicación se inicia (p.ej. a partir de Inicio)
