@@ -19,7 +19,11 @@ namespace Ocell.Pages.Columns
         private ITwitterService _srv;
         public AddColumn()
         {
-            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
+            
+            if(ApplicationBar != null) 
+                ApplicationBar.MatchOverriddenTheme(); 
+            ThemeFunctions.SetBackground(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(AddColumn_Loaded);
            

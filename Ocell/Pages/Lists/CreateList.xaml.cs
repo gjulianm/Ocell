@@ -20,8 +20,8 @@ namespace Ocell.Pages.Lists
     {
         public CreateList()
         {
-            InitializeComponent();
-            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
+            ThemeFunctions.SetBackground(LayoutRoot);
         }
 
         private void CreateButton_Click(object sender, System.Windows.RoutedEventArgs e)

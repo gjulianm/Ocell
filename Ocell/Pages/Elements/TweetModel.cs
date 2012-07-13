@@ -13,7 +13,7 @@ using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
-    public class TweetModel : ViewModelBase
+    public class TweetModel : ExtendedViewModelBase
     {
         bool completed;
         public bool Completed
@@ -271,6 +271,9 @@ namespace Ocell.Pages.Elements
 
         void SetImage()
         {
+            if (Tweet.Entities == null)
+                return;
+
             if (Tweet.Entities.Media != null && Tweet.Entities.Media.Any())
             {
                 var photo = Tweet.Entities.Media.First();
@@ -285,7 +288,7 @@ namespace Ocell.Pages.Elements
                     if (i.EntityType == TwitterEntityType.Url)
                     {
                         var url = i as TwitterUrl;
-                        if (url != null || string.IsNullOrWhiteSpace(url.ExpandedValue))
+                        if (url != null && !string.IsNullOrWhiteSpace(url.ExpandedValue))
                         {
                             if (url.ExpandedValue.Contains("http://yfrog.com/"))
                             {

@@ -24,8 +24,12 @@ namespace Ocell.Pages.Lists
         private int _pendingCalls;
         public ListManager()
         {
-            InitializeComponent();
-            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
+            
+
+            if(ApplicationBar != null)
+                ApplicationBar.MatchOverriddenTheme(); 
+            ThemeFunctions.SetBackground(LayoutRoot);
 
             _selectionChangeFired = false;
             NewList.Click += new RoutedEventHandler(NewList_Click);

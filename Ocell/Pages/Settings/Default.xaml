@@ -84,6 +84,8 @@
 						<TextBlock HorizontalAlignment="Left" Margin="8,214,0,0" TextWrapping="Wrap" Text="Tiles" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24"/>
 						<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Tweets to load per request" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
 						<TextBox x:Name="tweetsPerReq" Margin="0,39,8,0" TextWrapping="Wrap" VerticalAlignment="Top" InputScope="Number" Text="{Binding TweetsPerRequest}"/>
+						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,279" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" Text="Backgrounds"/>
+						<Button x:Name="SetBackgrounds" Content="Set custom background" HorizontalAlignment="Left" Margin="52,598,0,0" Width="344" Command="{Binding SetCustomBackground}" VerticalAlignment="Top" />
 					</Grid>
 				</ScrollViewer>
 			</controls:PivotItem>
@@ -131,38 +133,44 @@
 			</controls:PivotItem>
 			<controls:PivotItem x:Name="pAbout" Header="about">
 				<Grid>
-					<Image Height="128" Margin="156,8,172,0" Source="OcellIcon200.png" Stretch="Fill" VerticalAlignment="Top"/>
-					<RichTextBox Margin="8,148,8,0" VerticalAlignment="Top" Height="436">
-						<Paragraph><Run Text="Ocell is a open source (ASL) twitter client for Windows Phone, developed by "/><Run Text=" "/><Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=gjulianm"><Run Text="Guillermo Julián">
-									<Run.Foreground>
-										<SolidColorBrush Color="White">
-											<SolidColorBrush.RelativeTransform>
-												<MatrixTransform Matrix="Identity"/>
-											</SolidColorBrush.RelativeTransform>
-											<SolidColorBrush.Transform>
-												<MatrixTransform Matrix="Identity"/>
-											</SolidColorBrush.Transform>
-										</SolidColorBrush>
-									</Run.Foreground>
-								</Run></Hyperlink><Run Text=" "/><Run Text=". You can follow "/><Run Text=" "/><Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=OcellApp"><Run Text="@OcellApp">
-									<Run.Foreground>
-										<SolidColorBrush Color="White">
-											<SolidColorBrush.RelativeTransform>
-												<MatrixTransform Matrix="Identity"/>
-											</SolidColorBrush.RelativeTransform>
-											<SolidColorBrush.Transform>
-												<MatrixTransform Matrix="Identity"/>
-											</SolidColorBrush.Transform>
-										</SolidColorBrush>
-									</Run.Foreground>
-								</Run><Run Text=" "/></Hyperlink><Run Text="on Twitter to receive the lastest updates about Ocell."/></Paragraph>
-						<Paragraph><Run/></Paragraph>
-						<Paragraph><Run FontWeight="Bold" Text="Tips:"/></Paragraph>
-						<Paragraph><Run Text="   - Pin your favourite columns to the start screen with the &quot;Pin to start&quot; button in the main page."/></Paragraph>
-						<Paragraph><Run/></Paragraph>
-						<Paragraph><Run Text="   - To protect accounts go to Settings -&gt; Accounts, tap and hold one account and choose &quot;Protect&quot;. Never tweet from the wrong account again!"/></Paragraph>
-						<Paragraph><Run/></Paragraph>
-					</RichTextBox>
+					<ScrollViewer Margin="8,8,8,-151" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+						<Grid>
+							<Image Height="128" Margin="148,0,0,0" Source="OcellIcon200.png" Stretch="Fill" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+							<RichTextBox Margin="0,140,0,0" VerticalAlignment="Top" Height="550" HorizontalAlignment="Left" Width="432">
+								<Paragraph><Run Text="Ocell is a open source (ASL) twitter client for Windows Phone, developed by "/><Run Text=" "/><Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=gjulianm"><Run Text="Guillermo Julián">
+											<Run.Foreground>
+												<SolidColorBrush Color="White">
+													<SolidColorBrush.RelativeTransform>
+														<MatrixTransform Matrix="Identity"/>
+													</SolidColorBrush.RelativeTransform>
+													<SolidColorBrush.Transform>
+														<MatrixTransform Matrix="Identity"/>
+													</SolidColorBrush.Transform>
+												</SolidColorBrush>
+											</Run.Foreground>
+										</Run></Hyperlink><Run Text=" "/><Run Text=". You can follow "/><Run Text=" "/><Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=OcellApp"><Run Text="@OcellApp">
+											<Run.Foreground>
+												<SolidColorBrush Color="White">
+													<SolidColorBrush.RelativeTransform>
+														<MatrixTransform Matrix="Identity"/>
+													</SolidColorBrush.RelativeTransform>
+													<SolidColorBrush.Transform>
+														<MatrixTransform Matrix="Identity"/>
+													</SolidColorBrush.Transform>
+												</SolidColorBrush>
+											</Run.Foreground>
+										</Run><Run Text=" "/></Hyperlink><Run Text="on Twitter to receive the lastest updates about Ocell."/></Paragraph>
+								<Paragraph><Run/></Paragraph>
+								<Paragraph><Run Text="Backgrounds credit: Thanks to Paul Phönixweiß (Egg), Dimitar Karaytchev (Diamond), Lauren (Floral), Sam Feyaerts (Map) and Wilmotte Bastien (Tire) for making their patterns available on subtlepattern.com."/></Paragraph>
+								<Paragraph><Run/></Paragraph>
+								<Paragraph><Run FontWeight="Bold" Text="Tips:"/></Paragraph>
+								<Paragraph><Run Text="   - Pin your favourite columns to the start screen with the &quot;Pin to start&quot; button in the main page."/></Paragraph>
+								<Paragraph><Run/></Paragraph>
+								<Paragraph><Run Text="   - To protect accounts go to Settings -&gt; Accounts, tap and hold one account and choose &quot;Protect&quot;. Never tweet from the wrong account again!"/></Paragraph>
+								<Paragraph><Run/></Paragraph>
+							</RichTextBox>
+						</Grid>
+					</ScrollViewer>
 				</Grid>
 				
 			</controls:PivotItem>

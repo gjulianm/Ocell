@@ -16,7 +16,8 @@ namespace Ocell.Pages.Elements
 
         public DMView()
         {
-            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
+            ThemeFunctions.SetBackground(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(Tweet_Loaded); 
         }

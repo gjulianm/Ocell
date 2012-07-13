@@ -14,8 +14,9 @@ namespace Ocell.Pages.Columns
     {
         public ManageColumns()
         {
-            InitializeComponent(); 
-            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
+            
+            ThemeFunctions.SetBackground(LayoutRoot);
 
             this.Loaded += new RoutedEventHandler(ManageColumns_Loaded);
         }

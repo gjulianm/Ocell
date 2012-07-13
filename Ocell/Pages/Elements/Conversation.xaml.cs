@@ -18,7 +18,8 @@ namespace Ocell.Pages.Elements
 
         public Conversation()
         {
-            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };  
+            ThemeFunctions.SetBackground(LayoutRoot);
             
             this.Loaded += new RoutedEventHandler(Conversation_Loaded);
             Source = new ObservableCollection<TwitterStatus>();

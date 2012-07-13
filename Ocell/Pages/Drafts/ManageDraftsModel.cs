@@ -18,7 +18,7 @@ using System.Collections.ObjectModel;
 
 namespace Ocell
 {
-    public class ManageDraftsModel : ViewModelBase
+    public class ManageDraftsModel : ExtendedViewModelBase
     {
         ObservableCollection<TwitterDraft> collection;
         public ObservableCollection<TwitterDraft> Collection

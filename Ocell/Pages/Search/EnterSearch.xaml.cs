@@ -19,11 +19,11 @@ namespace Ocell.Pages.Search
     {
         public EnterSearch()
         {
-            InitializeComponent();
-            
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
+                        
             DataContext = new EnterSearchModel();
             SearchQuery.TextChanged += OnTextBoxTextChanged;
-            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            ThemeFunctions.SetBackground(LayoutRoot);
         }
 
         private void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)

@@ -26,6 +26,8 @@ namespace Ocell.Library
         private const string DefaultMuteTimeKey = "DEFAULTMUTETIME";
         private const string DraftsKey = "DRAFTS";
         private const string ReadLaterCredsKey = "READLATERCREDS";
+        private const string BackgroundsKey ="BACKGROUNDS";
+        private const string FirstInitKey = "ISFIRSTINIT";
 #endif
 
         private const string AccountsKey = "ACCOUNTS";
@@ -48,6 +50,9 @@ namespace Ocell.Library
         private static TimeSpan? _defaultMuteTime;
         private static List<TwitterDraft> _drafts;
         private static ReadLaterCredentials _readLaterCredentials;
+        private static OcellTheme _backgroundUrl;
+        private static bool? _firstInit;
+        
 #endif
 
         public static bool? BackgroundLoadColumns
@@ -99,6 +104,30 @@ namespace Ocell.Library
             }
         }
 #if !BACKGROUND_AGENT
+        public static bool? FirstInit
+        {
+            get
+            {
+                return GenericGetFromConfig(FirstInitKey, ref _firstInit);
+            }
+            set
+            {
+                GenericSaveToConfig(FirstInitKey, ref _firstInit, value);
+            }
+        }
+
+        public static OcellTheme Background
+        {
+            get
+            {
+                return GenericGetFromConfig<OcellTheme>(BackgroundsKey, ref _backgroundUrl);
+            }
+            set
+            {
+                GenericSaveToConfig<OcellTheme>(BackgroundsKey, ref _backgroundUrl, value);
+            }
+        }
+
         public static ReadLaterCredentials ReadLaterCredentials
         {
             get
@@ -323,7 +352,7 @@ namespace Ocell.Library
             }
         }
 
-        public static void Dispose()
+        public static void ClearStaticValues()
         {
             _accounts = null;
             _backgroundLoadColumns = null;

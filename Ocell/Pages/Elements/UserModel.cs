@@ -13,7 +13,7 @@ using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
-    public class UserModel : ViewModelBase
+    public class UserModel : ExtendedViewModelBase
     {
         public TwitterUser User { get; set; } // Not a property, don't need Assign().
 

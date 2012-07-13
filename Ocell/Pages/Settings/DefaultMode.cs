@@ -21,7 +21,7 @@ using Ocell.Library.ReadLater.Instapaper;
 
 namespace Ocell.Settings
 {
-    public class DefaultModel : ViewModelBase
+    public class DefaultModel : ExtendedViewModelBase
     {
         bool isLoading;
         public bool IsLoading
@@ -131,6 +131,12 @@ namespace Ocell.Settings
         #endregion
 
         #region Commands
+        DelegateCommand setCustomBackground;
+        public ICommand SetCustomBackground
+        {
+            get { return setCustomBackground; }
+        }
+
         DelegateCommand pinComposeToStart;
         public ICommand PinComposeToStart
         {
@@ -157,6 +163,11 @@ namespace Ocell.Settings
 
         void SetCommands()
         {
+            setCustomBackground = new DelegateCommand((obj) =>
+            {
+                Navigate("/Pages/Settings/Backgrounds.xaml");
+            });
+
             pinComposeToStart = new DelegateCommand((obj) =>
                 {
                     SecondaryTiles.CreateComposeTile();

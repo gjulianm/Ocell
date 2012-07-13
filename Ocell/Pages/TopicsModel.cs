@@ -19,7 +19,7 @@ using TweetSharp;
 
 namespace Ocell.Pages
 {
-    public class TopicsModel : ViewModelBase
+    public class TopicsModel : ExtendedViewModelBase
     {
         bool isLoading;
         public bool IsLoading

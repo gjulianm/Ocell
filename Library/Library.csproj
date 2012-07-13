@@ -44,6 +44,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Calcium.Phone">
+      <HintPath>..\Ocell\Bin\Debug\Calcium.Phone.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib.WindowsPhone, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Ocell\Assemblies\ICSharpCode.SharpZipLib.WindowsPhone.dll</HintPath>
     </Reference>
@@ -62,11 +65,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Autocompleter.cs" />
+    <Compile Include="Collections\SortedObservableList.cs" />
     <Compile Include="DateSync.cs" />
     <Compile Include="DebugWriter.cs" />
     <Compile Include="IEnumerableExtension.cs" />
     <Compile Include="IsolatedFileStreamExtension.cs" />
-    <Compile Include="SafeObservable.cs" />
+    <Compile Include="OcellTheme.cs" />
+    <Compile Include="Threading\CountdownResetEvent.cs" />
+    <Compile Include="Threading\ReadWriteLock.cs" />
+    <Compile Include="Collections\SafeObservable.cs" />
     <Compile Include="SensitiveData.cs" />
     <Compile Include="Tasks\TaskExecutor.cs" />
     <Compile Include="Twitter\ServiceDispatcher.cs" />

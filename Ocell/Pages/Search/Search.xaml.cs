@@ -14,12 +14,11 @@ namespace Ocell.Pages.Search
 
         public Search()
         {
-            InitializeComponent();
-
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
             viewModel = new SearchModel();
             DataContext = viewModel;
 
-            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            ThemeFunctions.SetBackground(LayoutRoot);
         }
 
         private void TweetList_Loaded(object sender, RoutedEventArgs e)

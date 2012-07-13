@@ -14,7 +14,7 @@ using DanielVaughan.Windows;
 
 namespace Ocell.Pages.Search
 {
-    public class EnterSearchModel : ViewModelBase
+    public class EnterSearchModel : ExtendedViewModelBase
     {
         string query;
 

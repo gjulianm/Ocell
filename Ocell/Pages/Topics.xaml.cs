@@ -10,11 +10,11 @@ namespace Ocell.Pages
     {
         public Topics()
         {
-            InitializeComponent();
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
             DataContext = new TopicsModel();
 
-            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
-        }       
+            ThemeFunctions.SetBackground(LayoutRoot);
+        }
 
         private void TList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {

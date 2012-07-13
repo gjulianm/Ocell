@@ -14,8 +14,8 @@ namespace Ocell.Pages.Filtering
         public ManageFilter()
         {
             _initialized = false;
-            InitializeComponent();
-            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
+            ThemeFunctions.SetBackground(LayoutRoot);
             this.Loaded +=new RoutedEventHandler(ManageFilter_Loaded);
         }
 

@@ -27,7 +27,8 @@ namespace Ocell.Pages
 
         public NewTweet()
         {
-            InitializeComponent(); ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };  
+            ThemeFunctions.SetBackground(LayoutRoot);
 
             Loaded += NewTweet_Loaded;
             Unloaded += NewTweet_Unloaded;
@@ -66,6 +67,7 @@ namespace Ocell.Pages
             addPhotoButton.Text = "add photo";
             appBar.Buttons.Add(addPhotoButton);
 
+            appBar.MatchOverriddenTheme();
             ApplicationBar = appBar;
         }
 

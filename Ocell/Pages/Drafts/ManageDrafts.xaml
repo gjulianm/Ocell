@@ -9,7 +9,6 @@
 	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
 	x:Class="Ocell.ManageDrafts"
 	 xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-	
 	Orientation="Portrait"
 	shell:SystemTray.IsVisible="True"
 	shell:SystemTray.Opacity="0">

@@ -32,44 +32,46 @@
 
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
-				<Image Height="128" Margin="156,8,172,0" Source="OcellIcon200.png" Stretch="Fill" VerticalAlignment="Top"/>
-				<RichTextBox Margin="8,148,8,0" VerticalAlignment="Top" Height="436">
-                    <Paragraph>
-                        <Run Text="Ocell is a open source (ASL) twitter client for Windows Phon"/>
-                        <Run Text="e, developed by "/>
-                        <Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=gjulianm"><Run Text="Guillermo Julián">
-								<Run.Foreground>
-									<SolidColorBrush Color="White">
-										<SolidColorBrush.RelativeTransform>
-											<MatrixTransform Matrix="Identity"/>
-										</SolidColorBrush.RelativeTransform>
-										<SolidColorBrush.Transform>
-											<MatrixTransform Matrix="Identity"/>
-										</SolidColorBrush.Transform>
-									</SolidColorBrush>
-								</Run.Foreground>
-                            </Run>
-                        </Hyperlink>
-                        <Run Text=". You can follow "/>
-                        <Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=OcellApp"><Run Text="@OcellApp">
-								<Run.Foreground>
-									<SolidColorBrush Color="White">
-										<SolidColorBrush.RelativeTransform>
-											<MatrixTransform Matrix="Identity"/>
-										</SolidColorBrush.RelativeTransform>
-										<SolidColorBrush.Transform>
-											<MatrixTransform Matrix="Identity"/>
-										</SolidColorBrush.Transform>
-									</SolidColorBrush>
-								</Run.Foreground>
-							</Run><Run Text=" "/></Hyperlink><Run Text="on Twitter to receive the lastest updates about Ocell."/></Paragraph>
-					<Paragraph><Run/></Paragraph>
-					<Paragraph><Run FontWeight="Bold" Text="Tips:"/></Paragraph>
-					<Paragraph><Run Text="   - Pin your favourite columns to the start screen with the &quot;Pin to start&quot; button in the main page."/></Paragraph>
-					<Paragraph><Run/></Paragraph>
-					<Paragraph><Run Text="   - To protect accounts go to Settings -&gt; Accounts, tap and hold one account and choose &quot;Protect&quot;. Never tweet from the wrong account again!"/></Paragraph>
-					<Paragraph><Run/></Paragraph>
-				</RichTextBox>
+				<ScrollViewer Margin="8,8,8,-121">
+					<Grid>
+						<Image Height="128" Margin="148,0,0,0" Source="OcellIcon200.png" Stretch="Fill" VerticalAlignment="Top" HorizontalAlignment="Left" Width="128"/>
+						<RichTextBox Margin="0,140,0,0" VerticalAlignment="Top" Height="436" HorizontalAlignment="Left" Width="440">
+							<Paragraph><Run Text="Ocell is a open source (ASL) twitter client for Windows Phone, developed by "/><Run Text=" "/><Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=gjulianm"><Run Text="Guillermo Julián">
+										<Run.Foreground>
+											<SolidColorBrush Color="White">
+												<SolidColorBrush.RelativeTransform>
+													<MatrixTransform Matrix="Identity"/>
+												</SolidColorBrush.RelativeTransform>
+												<SolidColorBrush.Transform>
+													<MatrixTransform Matrix="Identity"/>
+												</SolidColorBrush.Transform>
+											</SolidColorBrush>
+										</Run.Foreground>
+									</Run></Hyperlink><Run Text=" "/><Run Text=". You can follow "/><Run Text=" "/><Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=OcellApp"><Run Text="@OcellApp">
+										<Run.Foreground>
+											<SolidColorBrush Color="White">
+												<SolidColorBrush.RelativeTransform>
+													<MatrixTransform Matrix="Identity"/>
+												</SolidColorBrush.RelativeTransform>
+												<SolidColorBrush.Transform>
+													<MatrixTransform Matrix="Identity"/>
+												</SolidColorBrush.Transform>
+											</SolidColorBrush>
+										</Run.Foreground>
+									</Run><Run Text=" "/></Hyperlink><Run Text="on Twitter to receive the lastest updates about Ocell."/></Paragraph>
+							<Paragraph><Run/></Paragraph>
+							<Paragraph><Run Text="Backgrounds credit: Thanks to Paul Phönixweiß (Egg), Dimitar Karaytchev (Diamond), Lauren (Floral), Sam Feyaerts (Map) and Wilmotte Bastien (Tire) for making their patterns available on subtlepattern.com."/></Paragraph>
+							<Paragraph><Run/></Paragraph>
+							<Paragraph><Run FontWeight="Bold" Text="Tips:"/></Paragraph>
+							<Paragraph><Run Text="   - Pin your favorite columns to the start screen with the &quot;Pin to start&quot; button in the main page."/></Paragraph>
+							<Paragraph><Run/></Paragraph>
+							<Paragraph><Run Text="   - To protect accounts go to Settings -&gt; Accounts, tap and hold one account and choose &quot;Protect&quot;. Never tweet from the wrong account again!"/></Paragraph>
+							<Paragraph><Run/></Paragraph>
+							<Paragraph><Run Text=""/></Paragraph>
+							<Paragraph><Run/></Paragraph>
+						</RichTextBox>
+					</Grid>
+				</ScrollViewer>
 			</Grid>
 		</Grid>
 		

@@ -22,8 +22,9 @@ namespace Ocell.Pages.Elements
 
         public User()
         {
-            InitializeComponent();
-            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
+            
+            ThemeFunctions.SetBackground(LayoutRoot);
 
             viewModel = new UserModel();
             DataContext = viewModel;
@@ -55,6 +56,17 @@ namespace Ocell.Pages.Elements
                 };
 
             TweetList.Loader.Cached = false;
+        }
+
+        private void Following_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/Elements/UserList.xaml?resource=following&user=" + viewModel.ScreenName, UriKind.Relative));
+        }
+
+        private void TextBlock_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/Elements/UserList.xaml?resource=followers&user=" + viewModel.ScreenName, UriKind.Relative));
+        
         }
     }
 }

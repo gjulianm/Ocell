@@ -8,18 +8,22 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-
+using System.Windows.Media.Imaging;
+using Ocell.Library;
 namespace Ocell
 {
+
+
     public static class ThemeFunctions
     {
-        public static void ChangeBackgroundIfLightTheme(Panel LayoutRoot)
+        public static Brush BackgroundBrush { get; set; }
+
+        public static void SetBackground(Panel LayoutRoot)
         {
-            bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
-            if (!isDarkTheme)
-            {
-                LayoutRoot.Background = new SolidColorBrush(Colors.Transparent);
-            }
+            if (BackgroundBrush == null)
+                BackgroundBrush = Config.Background.GetBrush();
+
+            LayoutRoot.Background = BackgroundBrush;
         }
     }
 }

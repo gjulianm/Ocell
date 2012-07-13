@@ -20,9 +20,9 @@
 
     <phone:PhoneApplicationPage.Resources>
 
-        
+
     </phone:PhoneApplicationPage.Resources>
-    
+
     <shell:SystemTray.ProgressIndicator>
         <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
@@ -46,10 +46,16 @@
                     <StackPanel HorizontalAlignment="Left" Margin="8,0,0,53" Orientation="Vertical" VerticalAlignment="Bottom" Width="112">
                         <TextBlock Margin="0,0,33,0" TextWrapping="Wrap" Text="tweets" FontFamily="Segoe WP Light" FontSize="29.333" d:LayoutOverrides="Width"/>
                         <TextBlock x:Name="Tweets" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Tweets}" FontFamily="Segoe WP Light"/>
-                        <TextBlock TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41"><Run Text="followers"/><LineBreak/><Run/></TextBlock>
-                        <TextBlock x:Name="Followers" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Followers}" FontFamily="Segoe WP Light"/>
-                        <TextBlock TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41" Text="following"/>
-                        <TextBlock x:Name="Following" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Following}" FontFamily="Segoe WP Light"/>
+                        
+                        <Grid Tap="TextBlock_Tap_1" toolkit:TiltEffect.IsTiltEnabled="True">
+                            <TextBlock TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41"><Run Text="followers"/><LineBreak/><Run/></TextBlock>
+                            <TextBlock x:Name="Followers" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Followers}" FontFamily="Segoe WP Light"/>
+                        </Grid>
+                        
+                        <Grid toolkit:TiltEffect.IsTiltEnabled="True" Tap="Following_Tap">
+                            <TextBlock  TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41" Text="following"/>
+                            <TextBlock  x:Name="Following" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Following}" FontFamily="Segoe WP Light"/>
+                        </Grid>
                     </StackPanel>
                 </Grid>
             </controls:PivotItem>

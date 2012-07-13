@@ -18,7 +18,7 @@ using System.Linq;
 
 namespace Ocell.Pages
 {
-    public class SelectUserModel : ViewModelBase
+    public class SelectUserModel : ExtendedViewModelBase
     {
         private IUserProvider provider;
 

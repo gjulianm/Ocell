@@ -23,7 +23,8 @@ namespace Ocell.Settings
 
         public OAuth()
         {
-            InitializeComponent();
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
+            
 
             this.Loaded += new RoutedEventHandler(OAuth_Loaded);
         }

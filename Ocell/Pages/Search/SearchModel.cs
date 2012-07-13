@@ -17,7 +17,7 @@ using System.Linq;
 
 namespace Ocell.Pages.Search
 {
-    public class SearchModel : ViewModelBase
+    public class SearchModel : ExtendedViewModelBase
     {
         string query;
         public string Query

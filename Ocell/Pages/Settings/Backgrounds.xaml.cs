@@ -13,12 +13,13 @@ using Microsoft.Phone.Controls;
 
 namespace Ocell.Pages.Settings
 {
-    public partial class About : PhoneApplicationPage
+    public partial class Backgrounds : PhoneApplicationPage
     {
-        public About()
+        public Backgrounds()
         {
-            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };  
-            ThemeFunctions.SetBackground(LayoutRoot);
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
+
+            DataContext = new BackgroundsModel();
         }
     }
 }

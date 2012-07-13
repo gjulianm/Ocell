@@ -26,8 +26,9 @@ namespace Ocell.Pages.Elements
 
         public Tweet()
         {
-            InitializeComponent();
-            ThemeFunctions.ChangeBackgroundIfLightTheme(LayoutRoot);
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };  
+            
+            ThemeFunctions.SetBackground(LayoutRoot);
 
             viewModel = new TweetModel();
             DataContext = viewModel;
@@ -41,6 +42,8 @@ namespace Ocell.Pages.Elements
         void Tweet_Loaded(object sender, RoutedEventArgs e)
         {
             Initialize();
+            if (ApplicationBar != null)
+                ApplicationBar.MatchOverriddenTheme();
         }
 
         void Initialize()
@@ -194,7 +197,10 @@ namespace Ocell.Pages.Elements
                 else
                     Dependency.Resolve<IMessageService>().ShowError("Ooops, that's not a valid URL.");
             };
-            return CreateBaseLink(TweetTextConverter.TrimUrl(URL.ExpandedValue), "copy link", URL.ExpandedValue);
+
+            string value = string.IsNullOrWhiteSpace(URL.ExpandedValue) ? URL.Value : URL.ExpandedValue;
+
+            return CreateBaseLink(TweetTextConverter.TrimUrl(value), "copy link", URL.ExpandedValue);
         }
 
         Inline CreateMediaLink(TwitterMedia Media)
