@@ -43,5 +43,17 @@ namespace Ocell.Library.Notifications
 
             ShellTile.ActiveTiles.First().Update(TileData);
         }
+
+        public static void ClearTile()
+        {
+            StandardTileData tileData = new StandardTileData
+            {
+                BackContent = "",
+                BackTitle = "",
+                Count = 0
+            };
+
+            ShellTile.ActiveTiles.First().Update(tileData);
+        }
     }
 }

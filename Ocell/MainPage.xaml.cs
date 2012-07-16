@@ -96,7 +96,7 @@ namespace Ocell
         {
             SchedulerSync.WriteLastCheckDate(DateTime.Now.ToUniversalTime());
             SchedulerSync.StartPeriodicAgent();
-            TileManager.UpdateTile(null, null); // Updating with null means it will clear the tile.
+            TileManager.ClearTile();
         }
 
         bool CheckForLogin()
