@@ -31,16 +31,14 @@ namespace Ocell.Library
             if (_textbox == null)
                 return;
 
-            if (_textbox.Text.Length - _text.Length > 1)
-                return; // Don't do anything if there is pasted text.
-
-            if (_textbox.Text.Length > 0 && _textbox.SelectionStart > 0 && (Trigger != '\0' && _textbox.Text[_textbox.SelectionStart - 1] == Trigger))
+            if (_textbox.Text.Length > 0 && _textbox.SelectionStart > 0 && _textbox.SelectionStart < _textbox.Text.Length && (Trigger != '\0' && _textbox.Text[_textbox.SelectionStart - 1] == Trigger))
             {
                 _isAutocompleting = true;
                 _triggerPosition = _textbox.SelectionStart - 1;
             }
 
             if (_textbox.SelectionStart > 0 && 
+                _textbox.SelectionStart < _textbox.Text.Length &&
                 _textbox.Text[_textbox.SelectionStart - 1] == ' ' && _text != null && 
                 _textbox.SelectionStart < _text.Length && _text[_textbox.SelectionStart] != '@' )
                 _isAutocompleting = false;
