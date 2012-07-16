@@ -8,7 +8,8 @@ namespace Ocell.Library
     {
         private const string FileName = "DateFile";
         private static Mutex _mutex = new Mutex(false, "OcellDateSync");
-        public static void WriteLastCheckDate(DateTime date)
+
+        private static void WriteDate(DateTime date, string file)
         {
             IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
             IsolatedStorageFileStream File;
@@ -17,7 +18,7 @@ namespace Ocell.Library
             {
                 try
                 {
-                    using (File = storage.OpenFile(FileName, System.IO.FileMode.Create))
+                    using (File = storage.OpenFile(file, System.IO.FileMode.Create))
                     {
                         File.WriteLine(date.ToString("s"));
                         File.Close();
@@ -31,10 +32,9 @@ namespace Ocell.Library
                     _mutex.ReleaseMutex();
                 }
             }
-
         }
 
-        public static DateTime GetLastCheckDate()
+        private static DateTime GetDate(string file)
         {
             IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
             string dateStr = "";
@@ -43,7 +43,7 @@ namespace Ocell.Library
             {
                 try
                 {
-                    using (IsolatedStorageFileStream File = storage.OpenFile(FileName, System.IO.FileMode.OpenOrCreate))
+                    using (IsolatedStorageFileStream File = storage.OpenFile(file, System.IO.FileMode.OpenOrCreate))
                     {
                         dateStr = File.ReadLine();
                     }
@@ -66,6 +66,26 @@ namespace Ocell.Library
                 date = DateTime.Now.ToUniversalTime();
 
             return date;
+        }
+
+        public static void WriteLastCheckDate(DateTime date)
+        {
+            WriteDate(date, "DateFile");
+        }
+
+        public static DateTime GetLastCheckDate()
+        {
+            return GetDate("DateFile");
+        }
+
+        public static void WriteLastToastNotificationDate(DateTime date)
+        {
+            WriteDate(date, "ToastFile");
+        }
+
+        public static DateTime GetLastToastNotificationDate()
+        {
+            return GetDate("ToastFile");
         }
     }
 }
