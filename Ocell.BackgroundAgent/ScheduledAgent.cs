@@ -88,7 +88,7 @@ namespace Ocell.BackgroundAgent
 
         bool IsMemoryUsageHigh()
         {
-            double highPercentage = 0.95;
+            double highPercentage = 0.97;
             double highMemory = DeviceStatus.ApplicationMemoryUsageLimit * highPercentage;
             return DeviceStatus.ApplicationCurrentMemoryUsage > highMemory;
         }
@@ -297,134 +297,163 @@ namespace Ocell.BackgroundAgent
 
             foreach (var user in Config.Accounts)
             {
-                var service = new LightTwitterClient(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, user.Key, user.Secret);
-                if (user.Preferences.MentionsPreferences == NotificationType.TileAndToast
-                    || user.Preferences.MentionsPreferences == NotificationType.Tile)
-                {
-                    SignalThreadStart();
-
-                    service.ListMentions(10, (statuses, response) =>
-                        {
-                            GC.Collect();
-                            GC.WaitForPendingFinalizers();
-                            GC.Collect();
-                            WriteMemUsage("Received mentions");
-                            if (statuses == null || response.StatusCode != System.Net.HttpStatusCode.OK)
-                            {
-                                WriteMemUsage("Mentions: exit with error " + response.StatusDescription);
-                                SignalThreadEnd();
-                                return;
-                            }
-
-                            var CheckDate = DateSync.GetLastCheckDate();
-                            var newStatuses = statuses.Where(item =>
-                            {
-                                string content;
-                                if (!item.TryGetProperty("created_at", out content))
-                                    return false;
-
-                                DateTime date;
-                                const string format = "ddd MMM dd HH:mm:ss zzzz yyyy";
-                                if (!DateTime.TryParseExact(content,
-                                format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
-                                    return false;
-
-                                var d = date.ToUniversalTime();
-
-                                return CheckDate < d;
-                            });
-
-                            if (newStatuses.Count() > 0)
-                            {
-                                newMentions = true;
-
-                                if (newStatuses.Count() == 1)
-                                {
-                                    string userstring ="";
-                                    if (newStatuses.FirstOrDefault().TryGetProperty("user", out userstring))
-                                        new TwitterObject(userstring).TryGetProperty("screen_name", out from);
-                                    else
-                                        from = "no_name";
-                                }
-
-                                if (!usersWithNotifications.Contains(user.ScreenName))
-                                    usersWithNotifications.Add(user.ScreenName);
-
-                                notifications += newStatuses.Count();
-
-                                if (user.Preferences.MentionsPreferences == NotificationType.TileAndToast)
-                                    CreateToast("mention", newStatuses.Count(), from, user.ScreenName);
-
-                                BuildTile();
-
-                            }
-
-                            WriteMemUsage("Mentions: Exit with " + newStatuses.Count().ToString() + " new statuses.");
-                            SignalThreadEnd();
-                        });
-                }
-                if (user.Preferences.MessagesPreferences == NotificationType.TileAndToast
-                    || user.Preferences.MessagesPreferences == NotificationType.Tile)
-                {
-                    SignalThreadStart();
-
-                    service.ListMessages(10, (statuses, response) =>
-                    {
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-                        GC.Collect();
-                        WriteMemUsage("Received messages");
-
-                        if (statuses == null || response.StatusCode != System.Net.HttpStatusCode.OK)
-                        {
-                            WriteMemUsage("Messages: exit with error " + response.StatusDescription);
-                            SignalThreadEnd();
-                            return;
-                        }
-
-                        var CheckDate = DateSync.GetLastCheckDate();
-                        var newStatuses = statuses.Where(item =>
-                        {
-                            string content;
-                            if (!item.TryGetProperty("created_at", out content))
-                                return false;
-
-                            DateTime date;
-                            const string format = "ddd MMM dd HH:mm:ss zzzz yyyy";
-
-                            if (!DateTime.TryParseExact(content,
-                                format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
-                                return false;
-
-                            var d = date.ToUniversalTime();
-
-                            return CheckDate < d;
-                        });
-
-                        if (newStatuses.Count() > 0)
-                        {
-                            newMessages = true;
-
-                            if (newStatuses.Count() == 1)
-                                newStatuses.FirstOrDefault().TryGetProperty("sender_screen_name", out from);
-
-                            if (!usersWithNotifications.Contains(user.ScreenName))
-                                usersWithNotifications.Add(user.ScreenName);
-
-                            notifications += newStatuses.Count();
-
-                            if (user.Preferences.MessagesPreferences == NotificationType.TileAndToast)
-                                CreateToast("message", newStatuses.Count(), from, user.ScreenName);
-
-                            BuildTile();
-
-                        }
-
-                        WriteMemUsage("Messages: Exit with " + newStatuses.Count().ToString() + " new statuses.");
-                        SignalThreadEnd();
-                    });
-                }
+                CheckNotificationsForUser(user);
             }
+        }
+
+        private void CheckNotificationsForUser(UserToken user)
+        {
+            var service = new LightTwitterClient(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, user.Key, user.Secret);
+            if (user.Preferences.MentionsPreferences == NotificationType.TileAndToast
+                || user.Preferences.MentionsPreferences == NotificationType.Tile)
+            {
+                SignalThreadStart();
+
+                service.ListMentions(10, (statuses, response) =>
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
+                    WriteMemUsage("Received mentions");
+                    if (statuses == null || response.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        WriteMemUsage("Mentions: exit with error " + response.StatusDescription);
+                        SignalThreadEnd();
+                        return;
+                    }
+
+                    var CheckDate = DateSync.GetLastCheckDate();
+                    var ToastDate = DateSync.GetLastToastNotificationDate();
+
+                    if (CheckDate > ToastDate)
+                        ToastDate = CheckDate;
+
+                    var newStatuses = statuses.Where(item =>
+                    {
+                        return TwitterObjectIsOlderThan(item, CheckDate);
+                    });
+
+                    var newToastStatuses = statuses.Where(item =>
+                    {
+                        return TwitterObjectIsOlderThan(item, ToastDate);
+                    });
+
+                    if (newStatuses.Count() > 0)
+                    {
+                        newMentions = true;
+
+                        if (newStatuses.Count() == 1)
+                        {
+                            string userstring = "";
+                            if (newStatuses.FirstOrDefault().TryGetProperty("user", out userstring))
+                                new TwitterObject(userstring).TryGetProperty("screen_name", out from);
+                            else
+                                from = "no_name";
+                        }
+
+                        if (!usersWithNotifications.Contains(user.ScreenName))
+                            usersWithNotifications.Add(user.ScreenName);
+
+                        notifications += newStatuses.Count();
+
+                        if (user.Preferences.MentionsPreferences == NotificationType.TileAndToast && newToastStatuses.Count() > 1)
+                        {
+                            string toastFrom, userstring = "";
+                            if (newToastStatuses.FirstOrDefault().TryGetProperty("user", out userstring))
+                                new TwitterObject(userstring).TryGetProperty("screen_name", out toastFrom);
+                            else
+                                toastFrom = "no_name";
+
+                            CreateToast("mention", newToastStatuses.Count(), toastFrom, user.ScreenName);
+                            DateSync.WriteLastToastNotificationDate(DateTime.Now.ToUniversalTime());
+                        }
+
+                        BuildTile();
+
+                    }
+
+                    WriteMemUsage("Mentions: Exit with " + newStatuses.Count().ToString() + " new statuses.");
+                    SignalThreadEnd();
+                });
+            }
+            if (user.Preferences.MessagesPreferences == NotificationType.TileAndToast
+                || user.Preferences.MessagesPreferences == NotificationType.Tile)
+            {
+                SignalThreadStart();
+
+                service.ListMessages(10, (statuses, response) =>
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
+                    WriteMemUsage("Received messages");
+
+                    if (statuses == null || response.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        WriteMemUsage("Messages: exit with error " + response.StatusDescription);
+                        SignalThreadEnd();
+                        return;
+                    }
+
+                    var CheckDate = DateSync.GetLastCheckDate();
+                    var ToastDate = DateSync.GetLastToastNotificationDate();
+
+                    var newStatuses = statuses.Where(item =>
+                    {
+                        return TwitterObjectIsOlderThan(item, CheckDate);
+                    });
+
+                    var newToastStatuses = statuses.Where(item =>
+                    {
+                        return TwitterObjectIsOlderThan(item, ToastDate);
+                    });
+
+                    if (newStatuses.Count() > 0)
+                    {
+                        newMessages = true;
+
+                        if (newStatuses.Count() == 1)
+                            newStatuses.FirstOrDefault().TryGetProperty("sender_screen_name", out from);
+
+                        if (!usersWithNotifications.Contains(user.ScreenName))
+                            usersWithNotifications.Add(user.ScreenName);
+
+                        notifications += newStatuses.Count();
+
+                        if (user.Preferences.MessagesPreferences == NotificationType.TileAndToast && newToastStatuses.Count() > 0)
+                        {
+                            string toastFrom;
+                            newStatuses.FirstOrDefault().TryGetProperty("sender_screen_name", out toastFrom);
+
+                            CreateToast("message", newToastStatuses.Count(), toastFrom, user.ScreenName);
+                            DateSync.WriteLastToastNotificationDate(DateTime.Now.ToUniversalTime());
+                        }
+
+                        BuildTile();
+
+                    }
+
+                    WriteMemUsage("Messages: Exit with " + newStatuses.Count().ToString() + " new statuses.");
+                    SignalThreadEnd();
+                });
+            }
+        }
+
+        private bool TwitterObjectIsOlderThan(TwitterObject item, DateTime date)
+        {
+            string content;
+            if (!item.TryGetProperty("created_at", out content))
+                return false;
+
+            DateTime objDate;
+            const string format = "ddd MMM dd HH:mm:ss zzzz yyyy";
+            if (!DateTime.TryParseExact(content,
+            format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out objDate))
+                return false;
+
+            var d = objDate.ToUniversalTime();
+
+            return date < d;
         }
         #endregion
 
