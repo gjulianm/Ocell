@@ -5,7 +5,6 @@
 	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.DraftSample"
 	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
 	x:Class="Ocell.ManageDrafts"
 	 xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
@@ -13,7 +12,6 @@
 	shell:SystemTray.IsVisible="True"
 	shell:SystemTray.Opacity="0">
 	<phone:PhoneApplicationPage.Resources>
-		<SampleData:DraftSample x:Key="DraftSample" d:IsDataSource="True"/>
 		<DataTemplate x:Key="DraftTemplate">
 			<Grid/>
 		</DataTemplate>
