@@ -47,6 +47,8 @@ namespace Ocell.Library.Twitter
             {
                 if (Error != null)
                     Error(this, response);
+                finish = true;
+                return;
             }
 
             if (users.NextCursor != null && users.NextCursor != 0 && _service != null)
