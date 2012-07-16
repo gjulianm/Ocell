@@ -56,12 +56,12 @@
                                     <ColumnDefinition Width="0.389*"/>
                                 </Grid.ColumnDefinitions>
                                 <toolkit:ContextMenuService.ContextMenu>
-                                    <toolkit:ContextMenu x:Name="ContextMenu">
-                                        <toolkit:MenuItem Header="reply" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Header="retweet" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Header="favorite" Command="{StaticResource FavoriteCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Header="mute user" Command="{StaticResource MuteCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Header="read later" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding}" />
+                                    <toolkit:ContextMenu Background="White" BorderBrush="Black" Foreground="Black" x:Name="ContextMenu">
+                                        <toolkit:MenuItem  Foreground="Black" Header="reply" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding}" />
+                                        <toolkit:MenuItem Foreground="Black" Header="retweet" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding}" />
+                                        <toolkit:MenuItem Foreground="Black" Header="favorite" Command="{StaticResource FavoriteCommand}" CommandParameter="{Binding}" />
+                                        <toolkit:MenuItem Foreground="Black" Header="mute user" Command="{StaticResource MuteCommand}" CommandParameter="{Binding}" />
+                                        <toolkit:MenuItem Foreground="Black" Header="read later" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding}" />
                                     </toolkit:ContextMenu>
                                 </toolkit:ContextMenuService.ContextMenu>
                                 <TextBlock x:Name="Date" Text="{Binding CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}" VerticalAlignment="Top" Margin="0,5.753,8,0" Foreground="#FF707070" Grid.Column="1" HorizontalAlignment="Right" UseLayoutRounding="False" FontFamily="Segoe WP Light"/>

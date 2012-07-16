@@ -10,9 +10,9 @@
         <DataTemplate x:Key="AccountsContextTemplate">
             <Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">
                 <toolkit:ContextMenuService.ContextMenu>
-                    <toolkit:ContextMenu x:Name="ContextMenu2">
-                        <toolkit:MenuItem Header="delete" Command="{StaticResource DeleteCommand}" CommandParameter="{Binding}" Click="MenuItem_Click" />
-                        <toolkit:MenuItem Header="{Binding Converter={StaticResource ProtectedConverter}}" Command="{StaticResource ProtectCommand}" CommandParameter="{Binding}"  Click="MenuItem_Click" />
+                    <toolkit:ContextMenu Background="White" BorderBrush="Black" Foreground="Black" x:Name="ContextMenu2">
+                        <toolkit:MenuItem Foreground="Black" Header="delete" Command="{StaticResource DeleteCommand}" CommandParameter="{Binding}" Click="MenuItem_Click" />
+                        <toolkit:MenuItem Foreground="Black" Header="{Binding Converter={StaticResource ProtectedConverter}}" Command="{StaticResource ProtectCommand}" CommandParameter="{Binding}"  Click="MenuItem_Click" />
                     </toolkit:ContextMenu>
                 </toolkit:ContextMenuService.ContextMenu>
                 <TextBlock Text="{Binding ScreenName}" Margin="89,21,8,21" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="24"/>

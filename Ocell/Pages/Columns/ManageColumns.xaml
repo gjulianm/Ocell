@@ -48,8 +48,8 @@
                     </Image.Source>
                 </Image>
 				<toolkit:ContextMenuService.ContextMenu>
-					<toolkit:ContextMenu>
-						<toolkit:MenuItem Click="menuItemClick" Tag="{Binding}" Header="delete" />
+                    <toolkit:ContextMenu  Background="White" BorderBrush="Black" Foreground="Black" >
+						<toolkit:MenuItem Foreground="Black" Click="menuItemClick" Tag="{Binding}" Header="delete" />
 					</toolkit:ContextMenu>
 				</toolkit:ContextMenuService.ContextMenu>
 			</Grid>

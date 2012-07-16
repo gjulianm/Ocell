@@ -136,7 +136,8 @@ namespace Ocell.Pages.Elements
             MenuItem item = new MenuItem
             {
                 Header = contextHeader,
-                Tag = contextTag
+                Tag = contextTag,
+                Foreground = new SolidColorBrush(Colors.Black)
             };
             item.Click += new RoutedEventHandler(CopyLink);
 
@@ -157,6 +158,7 @@ namespace Ocell.Pages.Elements
             MenuItem item = new MenuItem
             {
                 Header = "mute this hashtag",
+                Foreground = new SolidColorBrush(Colors.Black)
             };
             item.Click += (sender, e) =>
                 {
@@ -171,6 +173,7 @@ namespace Ocell.Pages.Elements
             MenuItem item = new MenuItem
             {
                 Header = "mute this user",
+                Foreground = new SolidColorBrush(Colors.Black)
             };
             item.Click += (sender, e) =>
             {
@@ -185,6 +188,7 @@ namespace Ocell.Pages.Elements
             MenuItem item = new MenuItem
             {
                 Header = "mute this domain",
+                Foreground = new SolidColorBrush(Colors.Black)
             };
             item.Click += (sender, e) =>
             {
@@ -200,7 +204,7 @@ namespace Ocell.Pages.Elements
 
             string value = string.IsNullOrWhiteSpace(URL.ExpandedValue) ? URL.Value : URL.ExpandedValue;
 
-            return CreateBaseLink(TweetTextConverter.TrimUrl(value), "copy link", URL.ExpandedValue);
+            return CreateBaseLink(TweetTextConverter.TrimUrl(value), "copy link", URL.ExpandedValue, item);
         }
 
         Inline CreateMediaLink(TwitterMedia Media)
@@ -208,6 +212,7 @@ namespace Ocell.Pages.Elements
             MenuItem item = new MenuItem
             {
                 Header = "mute this domain",
+                Foreground = new SolidColorBrush(Colors.Black)
             };
             item.Click += (sender, e) =>
             {
@@ -220,7 +225,7 @@ namespace Ocell.Pages.Elements
                 else
                     Dependency.Resolve<IMessageService>().ShowError("Ooops, that's not a valid URL.");
             };
-            return CreateBaseLink(Media.DisplayUrl, "copy link", Media.DisplayUrl);
+            return CreateBaseLink(Media.DisplayUrl, "copy link", Media.DisplayUrl, item);
         }
 
         void CopyLink(object sender, RoutedEventArgs e)
