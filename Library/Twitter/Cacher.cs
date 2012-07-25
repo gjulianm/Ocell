@@ -85,7 +85,8 @@ namespace Ocell.Library.Twitter
             string Key = GetCacheName(Resource);
             List<string> Strings = new List<string>();
 
-
+			List = List.Distinct(new TwitterStatusEqualityComparer());
+						
             try
             {
                 foreach (ITweetable Item in List)
@@ -95,6 +96,7 @@ namespace Ocell.Library.Twitter
             {
                 // Just stop adding strings when we encounter a non-TwitterStatus element.
             }
+	
 
             try
             {
