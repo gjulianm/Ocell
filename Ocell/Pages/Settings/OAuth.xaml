@@ -29,20 +29,8 @@
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <toolkit:PerformanceProgressBar HorizontalAlignment="Center" VerticalAlignment="Center" Width="344" Height="20" Margin="58,343,54,360" Name="pBar" IsIndeterminate="True" />
             <phone:WebBrowser HorizontalAlignment="Left" Name="wb" VerticalAlignment="Top" Height="717" Width="456" Navigating="wb_Navigating" Visibility="Collapsed" Navigated="wb_Navigated" />
-            <TextBlock Height="30" HorizontalAlignment="Left" Margin="159,307,0,0" Name="txtAuth" Text="Authenticating..." VerticalAlignment="Top" />
+            <TextBlock Height="30" HorizontalAlignment="Left" Margin="159,307,0,0" Name="txtAuth" Text="{Binding Strings.Authenticating, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" />
         </Grid>
     </Grid>
- 
-    <!--Código de ejemplo que muestra el uso de ApplicationBar-->
-    <!--<phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Botón 1"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Botón 2"/>
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="Elemento de menú 1"/>
-                <shell:ApplicationBarMenuItem Text="Elemento de menú 2"/>
-            </shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>-->
 
 </phone:PhoneApplicationPage>

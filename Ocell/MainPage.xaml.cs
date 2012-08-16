@@ -11,7 +11,7 @@ using Ocell.Controls;
 using Ocell.Library;
 using Ocell.Library.Notifications;
 using Ocell.Library.Twitter;
-
+using Ocell.Localization;
 
 namespace Ocell
 {
@@ -69,7 +69,7 @@ namespace Ocell
                     foreach (var line in list)
                         contents += line + Environment.NewLine;
                     email.Body = contents;
-                    Dispatcher.BeginInvoke(() => email.Show());
+                    //Dispatcher.BeginInvoke(() => email.Show());
                     DebugWriter.Clear();
                     DebugWriter.Save();
                 }
@@ -85,7 +85,7 @@ namespace Ocell
             if ((Config.FollowMessageShown == false || Config.FollowMessageShown == null) && ServiceDispatcher.CanGetServices)
             {
                 var service = Dependency.Resolve<IMessageService>();
-                bool result = service.AskYesNoQuestion("Do you want to follow @OcellApp on Twitter to receive updates?", "");
+                bool result = service.AskYesNoQuestion(Localization.Resources.FollowOcellAppMessage, "");
                 if (result)
                     ServiceDispatcher.GetDefaultService().FollowUser("OcellApp", (a, b) => { });
                 Config.FollowMessageShown = true;
@@ -104,7 +104,7 @@ namespace Ocell
             if (!Config.Accounts.Any())
             {
                 var service = Dependency.Resolve<IMessageService>();
-                bool result = service.AskYesNoQuestion("You have to log in with Twitter in order to use Ocell.", "");
+                bool result = service.AskYesNoQuestion(Localization.Resources.YouHaveToLogin, "");
                 if (result)
                     NavigationService.Navigate(Uris.LoginPage);
                 return false;

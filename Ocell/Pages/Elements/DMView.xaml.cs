@@ -27,7 +27,7 @@ namespace Ocell.Pages.Elements
             RemoveHTML conv = new RemoveHTML();
             if (DataTransfer.DM == null)
             {
-                Dispatcher.BeginInvoke(() => MessageBox.Show("Error loading the tweet. Sorry :("));
+                Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorLoadingTweet));
                 NavigationService.GoBack();
                 return;
             }
@@ -128,7 +128,7 @@ namespace Ocell.Pages.Elements
         private void receive(TwitterStatus status, TwitterResponse resp)
         {
             if (resp.StatusCode != HttpStatusCode.OK)
-                Dispatcher.BeginInvoke(() => { MessageBox.Show("An error has occurred :("); });
+                Dispatcher.BeginInvoke(() => { MessageBox.Show(Localization.Resources.ErrorMessage); });
             Dispatcher.BeginInvoke(() => { pBar.IsVisible = false; });
         }
 
@@ -137,7 +137,7 @@ namespace Ocell.Pages.Elements
         {
             EmailComposeTask emailComposeTask = new EmailComposeTask();
 
-            emailComposeTask.Subject = "Tweet from @" + status.Author.ScreenName;
+            emailComposeTask.Subject = String.Format(Localization.Resources.TweetFrom, status.Author.ScreenName);
             emailComposeTask.Body = "@" + status.Author.ScreenName + ": " + status.Text + Environment.NewLine + Environment.NewLine +
                 status.CreatedDate.ToString();
 

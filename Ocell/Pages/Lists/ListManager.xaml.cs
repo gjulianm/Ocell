@@ -26,9 +26,6 @@ namespace Ocell.Pages.Lists
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
             
-
-            if(ApplicationBar != null)
-                ApplicationBar.MatchOverriddenTheme(); 
             ThemeFunctions.SetBackground(LayoutRoot);
 
             _selectionChangeFired = false;
@@ -64,7 +61,7 @@ namespace Ocell.Pages.Lists
             {
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    Dispatcher.BeginInvoke(() => MessageBox.Show("Error loading lists"));
+                    Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorLoadingLists));
                     return;
                 }
 
@@ -83,7 +80,7 @@ namespace Ocell.Pages.Lists
             {
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    Dispatcher.BeginInvoke(() => MessageBox.Show("Error loading lists"));
+                    Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorLoadingLists));
                     return;
                 }
 
@@ -109,11 +106,11 @@ namespace Ocell.Pages.Lists
                         LoadListsIn();
                         if (response.StatusCode == HttpStatusCode.OK)
                         {
-                            Dispatcher.BeginInvoke(() => MessageBox.Show("@" + _userName + " was removed from the list " + list.FullName + "."));
+                            Dispatcher.BeginInvoke(() => MessageBox.Show(String.Format(Localization.Resources.RemovedFromList, _userName, list.FullName)));
                         }
                         else
                         {
-                            Dispatcher.BeginInvoke(() => MessageBox.Show("An error occurred :("));
+                            Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorMessage));
                         }
                         Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
                     });
@@ -142,11 +139,11 @@ namespace Ocell.Pages.Lists
                         LoadListsIn();
                         if (response.StatusCode == HttpStatusCode.OK)
                         {
-                            Dispatcher.BeginInvoke(() => MessageBox.Show("@" + _userName + " was added to the list " + list.FullName + "."));
+                            Dispatcher.BeginInvoke(() => MessageBox.Show(String.Format(Localization.Resources.AddedToList, _userName, list.FullName)));
                         }
                         else
                         {
-                            Dispatcher.BeginInvoke(() => MessageBox.Show("An error occurred :("));
+                            Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorMessage));
                         }
                         Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
                     });

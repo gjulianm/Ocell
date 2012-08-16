@@ -1,4 +1,4 @@
-﻿<phone:PhoneApplicationPage
+<phone:PhoneApplicationPage
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -67,7 +67,7 @@
         <controls:Pivot Title="{Binding CurrentAccountName, StringFormat='OCELL - {0}'}" x:Name="MainPivot" Background="{x:Null}" ItemsSource="{Binding Pivots}" SelectedItem="{Binding SelectedPivot, Mode=TwoWay}" Margin="0,50,0,0">
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding String, Converter={StaticResource ListConverter}, FallbackValue=error}" Tag="{Binding}" Tap="TextBlock_Tap" />
+                    <TextBlock Text="{Binding Title, Converter={StaticResource ListConverter}, FallbackValue=error}" Tag="{Binding}" Tap="TextBlock_Tap" />
                 </DataTemplate>
             </controls:Pivot.HeaderTemplate>
             <controls:Pivot.ItemTemplate>
@@ -77,25 +77,25 @@
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>
         <Grid x:Name="GoToUserGrid" Height="104" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <TextBlock TextWrapping="Wrap" Text="User name:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="13,8,0,0"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding Strings.Username, Source={StaticResource LocalizedResources}, StringFormat='{}{0}:'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="13,8,0,0"/>
             <TextBox x:Name="UserNameBox" TextWrapping="Wrap" d:LayoutOverrides="Height" Margin="0,32,168,0" Text="{Binding UserSearch, Mode=TwoWay}"/>
-            <Button x:Name="GoUser" Content="Go" HorizontalAlignment="Right" Margin="0,0,8,0" VerticalAlignment="Bottom" Width="156" Command="{Binding GoToUser}"/>
+            <Button x:Name="GoUser" Content="{Binding Strings.ButtonGo, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Right" Margin="0,0,8,0" VerticalAlignment="Bottom" Width="156" Command="{Binding GoToUser}"/>
         </Grid>
 
         <u:AppBar>
 
             <u:AppBar.MenuItems>
-                <u:AppBarMenuItem Text="pin column to start" Command="{Binding PinToStart}"/>
-                <u:AppBarMenuItem Text="filter this column" Command="{Binding FilterColumn}"/>
-                <u:AppBarHyperlinkMenuItem x:Name="Trending" Text="trending topics" NavigateUri="/Pages/Topics.xaml"/>
-                <u:AppBarMenuItem Text="my profile" Command="{Binding ToMyProfile}"/>
-                <u:AppBarMenuItem Text="go to user..." Click="AppBarMenuItem_Click"/>
-                <u:AppBarHyperlinkMenuItem Text="settings" NavigateUri="/Pages/Settings/Default.xaml"/>
+                <u:AppBarMenuItem Text="{Binding Strings.PinColumnStart, Source={StaticResource LocalizedResources}}" Command="{Binding PinToStart}"/>
+                <u:AppBarMenuItem Text="{Binding Strings.FilterColumn, Source={StaticResource LocalizedResources}}" Command="{Binding FilterColumn}"/>
+                <u:AppBarHyperlinkMenuItem x:Name="Trending" Text="{Binding Strings.TrendingTopics, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Topics.xaml"/>
+                <u:AppBarMenuItem Text="{Binding Strings.MyProfile, Source={StaticResource LocalizedResources}}" Command="{Binding ToMyProfile}"/>
+                <u:AppBarMenuItem Text="{Binding Strings.GoToUser, Source={StaticResource LocalizedResources}}" Click="AppBarMenuItem_Click"/>
+                <u:AppBarHyperlinkMenuItem Text="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Settings/Default.xaml"/>
             </u:AppBar.MenuItems>
-            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="compose" NavigateUri="/Pages/NewTweet.xaml" />
-            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.columns.rest.png" Text="columns" NavigateUri="/Pages/Columns/ManageColumns.xaml" />
-            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="send DM" NavigateUri="/Pages/SelectUser.xaml"/>
-            <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="search" NavigateUri="/Pages/Search/EnterSearch.xaml" />
+            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="{Binding Strings.Compose, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/NewTweet.xaml" />
+            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.columns.rest.png" Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Columns/ManageColumns.xaml" />
+            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="{Binding Strings.SendDM, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/SelectUser.xaml"/>
+            <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="{Binding Strings.Search, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Search/EnterSearch.xaml" />
         </u:AppBar>
     </Grid>
 

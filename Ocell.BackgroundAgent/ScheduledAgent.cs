@@ -12,7 +12,7 @@ using Ocell.Library.Tasks;
 using Ocell.Library.Twitter;
 using TweetSharp;
 using Ocell.LightTwitterService;
-
+using Ocell.Localization;
 
 
 namespace Ocell.BackgroundAgent
@@ -104,8 +104,12 @@ namespace Ocell.BackgroundAgent
         void WriteMemUsage(string message)
         {
 #if DEBUG
+            long percentage;
             long used = DeviceStatus.ApplicationCurrentMemoryUsage / 1024;
-            long percentage = DeviceStatus.ApplicationCurrentMemoryUsage * 100 / DeviceStatus.ApplicationMemoryUsageLimit;
+            if (DeviceStatus.ApplicationMemoryUsageLimit != 0)
+                percentage = DeviceStatus.ApplicationCurrentMemoryUsage * 100 / DeviceStatus.ApplicationMemoryUsageLimit;
+            else
+                percentage = 0;
             string toWrite = string.Format("{3}: {0} - {1} KB ({2}% of available memory)",
                 message, used, percentage, DateTime.Now.ToString("HH:mm:ss.ff"));
             Debug.WriteLine(toWrite);
@@ -221,17 +225,27 @@ namespace Ocell.BackgroundAgent
 
         void CreateToast(string type, int count, string from, string to)
         {
-            if (count > 1)
-                type += "s";
+            string toastContent = "";
+
+            if (count == 1)
+            {
+                if (type == "mention")
+                    toastContent = String.Format(Resources.NewMention, from);
+                else
+                    toastContent = String.Format(Resources.NewMessage, from);
+            }
+            else
+            {
+                if (type == "mention")
+                    toastContent = String.Format(Resources.NewXMentions, count);
+                else
+                    toastContent = String.Format(Resources.NewXMessages, count);
+            }
 
             ShellToast toast = new ShellToast();
             toast.NavigationUri = new Uri("/MainPage.xaml", UriKind.Relative);
             toast.Title = to;
-
-            if (count == 1)
-                toast.Content = string.Format("New {0} from @{1}", type, from);
-            else
-                toast.Content = string.Format("{0} new {1}", count, type);
+            toast.Content = toastContent;
 
             toast.Show();
         }
@@ -242,26 +256,24 @@ namespace Ocell.BackgroundAgent
             if (notifications == 1)
             {
                 if (newMentions)
-                    mainTile.BackContent = string.Format((char)8203 + "@{0} mentioned you", from);
+                    mainTile.BackContent = (char)8203 +String.Format(Resources.NewMention, from);
                 else
-                    mainTile.BackContent = string.Format((char)8203 + "@{0} sent you a message", from);
+                    mainTile.BackContent = (char)8203 + String.Format(Resources.NewMessage, from);
 
                 mainTile.BackTitle = usersWithNotifications[0];
             }
             else
             {
-                string content = "new ";
+                string content = "";
 
-                if (newMentions)
-                {
-                    content += "mentions";
-                    if (newMessages)
-                        content += " and messages";
-                }
+                if (newMentions && newMessages)
+                    content = Resources.NewMentionsMessages;
+                else if (newMentions)
+                    content = Resources.NewMentions;
                 else if (newMessages)
-                    content += "messages";
+                    content = Resources.NewMessages;
 
-                mainTile.BackTitle = "for " + GetChainOfNames(usersWithNotifications);
+                mainTile.BackTitle = String.Format(Resources.ForX, GetChainOfNames(usersWithNotifications));
                 mainTile.BackContent = content;
             }
             mainTile.Count = notifications;
@@ -282,7 +294,7 @@ namespace Ocell.BackgroundAgent
                 content += ", " + names[i];
 
             if (i == names.Count - 1)
-                content += " and " + names[i];
+                content += " " + Resources.And + " " + names[i];
 
             return content;
         }

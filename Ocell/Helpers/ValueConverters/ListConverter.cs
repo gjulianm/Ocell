@@ -15,7 +15,7 @@ namespace Ocell
         public object Convert(object value, Type targeType, object parameter, CultureInfo culture)
         {
             if (value == null || !(value is string))
-                return "error";
+                return Localization.Resources.Error;
 
             string str = (value as string).ToLowerInvariant();
             int posSemicolon = str.IndexOf(';');

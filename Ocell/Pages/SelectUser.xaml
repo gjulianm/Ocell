@@ -1,4 +1,4 @@
-﻿<phone:PhoneApplicationPage
+<phone:PhoneApplicationPage
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -26,7 +26,13 @@
 				<Image Margin="8,8,0,0" HorizontalAlignment="Left" Width="64" Height="64" VerticalAlignment="Top" Source="{Binding ProfileImageUrl}"/>
 			</Grid>
 		</DataTemplate>
-	</phone:PhoneApplicationPage.Resources>
+
+        <DataTemplate x:Name="FullModeItemTemplate">
+            <StackPanel Orientation="Horizontal" Margin="16 21 0 20">
+                <TextBlock Text="{Binding ScreenName}" Margin="16 0 0 0" FontSize="43" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
+            </StackPanel>
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
 <!--Código de ejemplo que muestra el uso de ApplicationBar-->
 
 	<phone:PhoneApplicationPage.FontFamily>
@@ -40,7 +46,7 @@
 	</phone:PhoneApplicationPage.Foreground>
 	
 	<shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="Downloading list of users..." x:Name="pBar" />
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding Strings.DownloadingUserList, Source={StaticResource LocalizedResources}}" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
 	
 <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
@@ -56,20 +62,20 @@
 <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
     		<StackPanel x:Name="TitlePanel" Grid.Row="0" Height="116" VerticalAlignment="Top" Margin="4,0,8,0">
     			<TextBlock x:Name="ApplicationTitle" Text="OCELL" Style="{StaticResource PhoneTextNormalStyle}"/>
-    			<TextBlock x:Name="PageTitle" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"><Run Text="send message"/></TextBlock>
+    			<TextBlock x:Name="PageTitle" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"><Run Text="{Binding Strings.SendMessage, Source={StaticResource LocalizedResources}}" /></TextBlock>
     		</StackPanel>
 
         <!--ContentPanel. Colocar aquí el contenido adicional-->
     		<Grid x:Name="ContentPanel" Margin="16,128,8,0" d:LayoutOverrides="GridBox">
-    			<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="From:" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
-                <toolkit:ListPicker x:Name="AccountsPicker" Margin="12,39,20,0" VerticalAlignment="Top" ItemsSource="{Binding Accounts}" SelectedItem="{Binding Sender, Mode=TwoWay}" ItemTemplate="{StaticResource UserFromTemplate}"/>
-    			<TextBlock HorizontalAlignment="Left" Margin="8,117,0,0" TextWrapping="Wrap" Text="To:" VerticalAlignment="Top" RenderTransformOrigin="0.667,0.926" Foreground="{StaticResource PhoneSubtleBrush}"/>
+                <TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="{Binding Strings.From, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
+                <toolkit:ListPicker x:Name="AccountsPicker" FullModeItemTemplate="{StaticResource FullModeItemTemplate}" ExpansionMode="FullScreenOnly" Margin="12,39,20,0" VerticalAlignment="Top" ItemsSource="{Binding Accounts}" SelectedItem="{Binding Sender, Mode=TwoWay}" ItemTemplate="{StaticResource UserFromTemplate}"/>
+                <TextBlock HorizontalAlignment="Left" Margin="8,117,0,0" TextWrapping="Wrap" Text="{Binding Strings.To, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" RenderTransformOrigin="0.667,0.926" Foreground="{StaticResource PhoneSubtleBrush}"/>
                 <TextBox x:Name="UserFilter" Margin="0,139,8,0" Text="{Binding UserFilter, Mode=TwoWay, UpdateSourceTrigger=Explicit}" TextWrapping="Wrap" VerticalAlignment="Top"/>
     			<ListBox x:Name="UserList" Margin="12,211,20,8" ItemsSource="{Binding Collection.View}" SelectedItem="{Binding Destinatary, Mode=TwoWay}" ItemTemplate="{StaticResource UserTemplate}" />
     		</Grid>
             
             <controls:AppBar>
-                <controls:AppBarIconButton Text="next" IconUri="/Images/Icons_White/appbar.next.rest.png" Command="{Binding GoNext}" />
+                <controls:AppBarIconButton Text="{Binding Strings.Next, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.next.rest.png" Command="{Binding GoNext}" />
             </controls:AppBar>
     	</Grid>
 

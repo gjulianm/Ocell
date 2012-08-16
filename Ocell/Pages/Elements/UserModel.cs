@@ -10,6 +10,7 @@ using Microsoft.Phone.Tasks;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using TweetSharp;
+using Ocell.Localization;
 
 namespace Ocell.Pages.Elements
 {
@@ -195,7 +196,7 @@ namespace Ocell.Pages.Elements
                         User = DataTransfer.CurrentAccount
                     });
                     Config.SaveColumns();
-                    MessageService.ShowLightNotification("User succesfully pinned.");
+                    MessageService.ShowLightNotification(Resources.UserPinned);
                     pinUser.RaiseCanExecuteChanged();
 
                 }, item => GenericCanExecute.Invoke(null) 
@@ -238,7 +239,7 @@ namespace Ocell.Pages.Elements
 
             ScreenName = userName;
 
-            BarText = "Retrieving user...";
+            BarText = Resources.RetrievingUser;
             IsLoading = true;
             ServiceDispatcher.GetDefaultService().ListUserProfilesFor(new List<string> { userName }, ReceiveUsers);
         }
@@ -249,7 +250,7 @@ namespace Ocell.Pages.Elements
             usr = Config.Accounts.FirstOrDefault(item => item != null && item.ScreenName == User.ScreenName);
             if (e.TaskResult == TaskResult.OK && User != null)
             {
-                BarText = "Uploading picture...";
+                BarText = Resources.UploadingPicture;
                 IsLoading = true;
                 ITwitterService srv = ServiceDispatcher.GetService(usr);
                 srv.UpdateProfileImage(e.OriginalFileName, e.ChosenPhoto, ReceivePhotoUpload);
@@ -261,50 +262,73 @@ namespace Ocell.Pages.Elements
             BarText = "";
             IsLoading = false;
             if (response.StatusCode == HttpStatusCode.OK)
-                MessageService.ShowLightNotification("Your profile image has been changed.");
+                MessageService.ShowLightNotification(Resources.ProfileImageChanged);
             else
-                MessageService.ShowError("An error happened while uploading your image. Verify the file is less than 700 kB of size.");
+                MessageService.ShowError(Resources.ErrorUploadingProfileImage);
         }
 
         void ReceiveFollow(TwitterUser usr, TwitterResponse response)
         {
-            string action = Followed ? "unfollow" : "follow";
+            string successMsg = "", errorMsg = "";
+
+            if (!Followed)
+            {
+                successMsg = String.Format(Resources.NowYouFollow, usr.ScreenName);
+                errorMsg = String.Format(Resources.CouldntFollow, usr.ScreenName);
+            }
+            else
+            {
+                successMsg = String.Format(Resources.NowYouUnfollow, usr.ScreenName);
+                errorMsg = String.Format(Resources.CouldntUnfollow, usr.ScreenName);
+            }
+
             IsLoading = false;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                MessageService.ShowLightNotification("Now you " + action + " " + usr.ScreenName);
+                MessageService.ShowLightNotification(successMsg);
                 Followed = !Followed;
                 followUser.RaiseCanExecuteChanged();
                 unfollowUser.RaiseCanExecuteChanged(); ;
             }
             else
-                MessageService.ShowError("We couldn't " + action + " " + User.ScreenName + ".");
+                MessageService.ShowError(errorMsg);
         }
 
         void ReceiveBlock(TwitterUser usr, TwitterResponse response)
         {
-            string action = Blocked ? "unblock" : "block";
-            string pastAction = Blocked ? "unblocked" : "blocked";
+            string successMsg = "", errorMsg = "";
+
+            if (!Blocked)
+            {
+                successMsg = String.Format(Resources.UserIsNowUnblocked, usr.ScreenName);
+                errorMsg = String.Format(Resources.CouldntUnblock, usr.ScreenName);
+            }
+            else
+            {
+                successMsg = String.Format(Resources.UserIsNowBlocked, usr.ScreenName);
+                errorMsg = String.Format(Resources.CouldntBlock, usr.ScreenName);
+            }
+
             IsLoading = false;
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                MessageService.ShowLightNotification(usr.ScreenName + " is now " + pastAction + ".");
+                MessageService.ShowLightNotification(successMsg);
                 Blocked = !Blocked;
                 block.RaiseCanExecuteChanged();
                 unblock.RaiseCanExecuteChanged();
             }
             else
-                MessageService.ShowError("We couldn't " + action + " " + User.ScreenName + ".");
+                MessageService.ShowError(errorMsg);
         }
 
         void ReceiveReportSpam(TwitterUser usr, TwitterResponse response)
         {
             IsLoading = false;
             if (response.StatusCode == HttpStatusCode.OK)
-                MessageService.ShowLightNotification("You have successfully reported and blocked " + usr.ScreenName);
+                MessageService.ShowLightNotification(String.Format(Resources.ReportedAndBlocked, usr.ScreenName));
             else
-                MessageService.ShowError("We couldn't report the user.");
+                MessageService.ShowError(String.Format(Resources.CouldntReport, usr.ScreenName));
         }
 
         void ReceiveUsers(IEnumerable<TwitterUser> users, TwitterResponse response)
@@ -313,7 +337,7 @@ namespace Ocell.Pages.Elements
             IsLoading = false;
             if (response.StatusCode != HttpStatusCode.OK || !users.Any())
             {
-                MessageService.ShowError("We couldn't find the user @" + ScreenName);
+                MessageService.ShowError(Resources.CouldntFindUser);
                 return;
             }
 
@@ -351,7 +375,7 @@ namespace Ocell.Pages.Elements
         {
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                MessageService.ShowWarning("We couldn't get your relationship with this user.");
+                MessageService.ShowWarning(Resources.CouldntGetRelationship);
                 return;
             }
 

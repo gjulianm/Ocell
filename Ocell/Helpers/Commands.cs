@@ -14,6 +14,8 @@ using System.Linq;
 using DanielVaughan;
 using DanielVaughan.Services;
 using System.Collections.Generic;
+using Ocell.Localization;
+
 namespace Ocell.Commands
 {
     public class ReplyCommand : ICommand
@@ -80,7 +82,7 @@ namespace Ocell.Commands
             Dependency.Resolve<IMessageService>().SetLoadingBar(true);
             ServiceDispatcher.GetService(DataTransfer.CurrentAccount).Retweet(((ITweetable)parameter).Id, (sts, resp) =>
             {
-                Dependency.Resolve<IMessageService>().ShowLightNotification("Retweeted!");
+                Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Retweeted);
             });
         }
 
@@ -102,12 +104,12 @@ namespace Ocell.Commands
             if (param.IsFavorited)
                 ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweet(param.Id, (sts, resp) =>
                 {
-                    Dependency.Resolve<IMessageService>().ShowLightNotification("Unfavorited!");
+                    Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Unfavorited);
                 });
             else
                 ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(param.Id, (sts, resp) =>
                 {
-                    Dependency.Resolve<IMessageService>().ShowLightNotification("Favorited!");
+                    Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Favorited);
                 });
         }
 
@@ -128,7 +130,7 @@ namespace Ocell.Commands
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
                     MessageBoxResult Result;
-                    Result = MessageBox.Show("Are you sure you want to delete the account @" + User.ScreenName, "", MessageBoxButton.OKCancel);
+                    Result = MessageBox.Show(String.Format(Resources.AskAccountDelete, User.ScreenName), "", MessageBoxButton.OKCancel);
                     if (Result == MessageBoxResult.OK)
                     {
                         // Make a copy: removing while iterating causes an error.
@@ -163,14 +165,14 @@ namespace Ocell.Commands
                 var isProtected = ProtectedAccounts.SwitchAccountState(parameter as UserToken);
                 string msg;
                 if (isProtected)
-                    msg = "protected!";
+                    msg = Resources.AccountProtected;
                 else
-                    msg = "unprotected!";
-                Dependency.Resolve<IMessageService>().ShowLightNotification("Account " + msg);
+                    msg = Resources.AccountUnprotected;
+                Dependency.Resolve<IMessageService>().ShowLightNotification(msg);
             }
             catch (Exception)
             {
-                Dependency.Resolve<IMessageService>().ShowError("We couldn't complete your petition.");
+                Dependency.Resolve<IMessageService>().ShowError(Resources.ErrorMessage);
             }
         }
 
@@ -228,7 +230,7 @@ namespace Ocell.Commands
             ITweeter author = tweet.Author;
 
             FilterManager.SetupMute(FilterType.User, author.ScreenName);
-            Dependency.Resolve<IMessageService>().ShowLightNotification("filtered!");
+            Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Filtered);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -260,7 +262,7 @@ namespace Ocell.Commands
                 service.Password = credentials.Pocket.Password;
 
                 TwitterUrl link = tweet.Entities.FirstOrDefault(item => item != null && item.EntityType == TwitterEntityType.Url) as TwitterUrl;
-                Dependency.Resolve<IMessageService>().SetLoadingBar(true, "saving for later...");
+                Dependency.Resolve<IMessageService>().SetLoadingBar(true, Resources.SavingForLater);
                 _pendingCalls++;
                 if (link != null)
                     service.AddUrl(link.ExpandedValue, tweet.Id, Callback);
@@ -277,7 +279,7 @@ namespace Ocell.Commands
                 service.Password = credentials.Instapaper.Password;
 
                 TwitterUrl link = tweet.Entities.FirstOrDefault(item => item != null && item.EntityType == TwitterEntityType.Url) as TwitterUrl;
-                Dependency.Resolve<IMessageService>().SetLoadingBar(true, "saving for later...");
+                Dependency.Resolve<IMessageService>().SetLoadingBar(true, Resources.SavingForLater);
                 _pendingCalls++;
                 if (link != null)
                     service.AddUrl(link.ExpandedValue, tweet.Text, Callback);
@@ -295,11 +297,11 @@ namespace Ocell.Commands
             _pendingCalls--;
             if (response.Result != ReadLaterResult.Accepted)
             {
-                Dependency.Resolve<IMessageService>().ShowError("There has been an error saving this tweet for later.");
+                Dependency.Resolve<IMessageService>().ShowError(Resources.ErrorSavingLater);
             }
             else if (_pendingCalls <= 0)
             {
-                Dependency.Resolve<IMessageService>().ShowLightNotification("Saved for later!");
+                Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.SavedForLater);
             }
         }
 

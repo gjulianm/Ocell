@@ -1,10 +1,11 @@
 ﻿using System;
+using Ocell.Localization;
 
 namespace Ocell.Library.Twitter
 {
     public struct TwitterResource
-    {        
-        public ResourceType Type { get; set;}
+    {
+        public ResourceType Type { get; set; }
         public UserToken User { get; set; }
         private string _data;
         public string Data
@@ -21,12 +22,60 @@ namespace Ocell.Library.Twitter
                 _data = value;
             }
         }
+
+        public string Title
+        {
+            get
+            {
+                string title;
+                switch (Type)
+                {
+                    case ResourceType.Favorites:
+                        title = Resources.Favorites;
+                        break;
+                    case ResourceType.Home:
+                        title = Resources.Home;
+                        break;
+                    case ResourceType.List:
+                        title = Data;
+                        break;
+                    case ResourceType.Mentions:
+                        title = Resources.Mentions;
+                        break;
+                    case ResourceType.Messages:
+                        title = Resources.Messages;
+                        break;
+                    case ResourceType.Search:
+                        title = Data;
+                        break;
+                    case ResourceType.Tweets:
+                        title = Data;
+                        break;
+                    case ResourceType.Conversation:
+                        title = Resources.Conversation;
+                        break;
+                    default:
+                        title = Resources.UnknownValue;
+                        break;
+                }
+
+                title = title.ToLowerInvariant();
+                int posSemicolon = title.IndexOf(';');
+                int posPoints = title.IndexOf(':');
+                int posSlash = title.IndexOf('/');
+
+                int whereToCut = Math.Max(Math.Max(posPoints, posSlash), posSemicolon) + 1;
+
+                return title.Substring(whereToCut);
+            }
+        }
+
         public string String
         {
             get
             {
-                string value; 
-                if(User != null)
+                string value;
+                if (User != null)
                     value = User.ScreenName + ";";
                 else
                     value = ";";
@@ -48,7 +97,7 @@ namespace Ocell.Library.Twitter
                         value += "Messages";
                         break;
                     case ResourceType.Search:
-                        value+= "Search:" + Data;
+                        value += "Search:" + Data;
                         break;
                     case ResourceType.Tweets:
                         value += "Tweets:" + Data;
@@ -126,11 +175,11 @@ namespace Ocell.Library.Twitter
                 Type = ResourceType.Home;
         }
 
-        public static bool operator==(TwitterResource r1, TwitterResource r2)
+        public static bool operator ==(TwitterResource r1, TwitterResource r2)
         {
             return (r1.Data == r2.Data && r1.Type == r2.Type && r1.User == r2.User);
         }
-        public static bool operator!=(TwitterResource r1, TwitterResource r2)
+        public static bool operator !=(TwitterResource r1, TwitterResource r2)
         {
             return (r1.Data != r2.Data || r1.Type != r2.Type || r1.User != r2.User);
         }
@@ -148,5 +197,5 @@ namespace Ocell.Library.Twitter
         }
     };
 
-    public enum ResourceType { Home, Mentions, Messages, List, Search, Favorites, Tweets, Conversation};
+    public enum ResourceType { Home, Mentions, Messages, List, Search, Favorites, Tweets, Conversation };
 }

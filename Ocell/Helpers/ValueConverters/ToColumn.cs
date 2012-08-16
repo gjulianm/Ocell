@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Data;
 using Ocell.Library;
 using Ocell.Library.Twitter;
-
+using Ocell.Localization;
 
 namespace Ocell
 {
@@ -16,7 +16,7 @@ namespace Ocell
         public object Convert(object value, Type targeType, object parameter, CultureInfo culture)
         {
             if (value == null || !(value is TwitterResource))
-                return "error";
+                return Resources.Error;
 
             TwitterResource resource = (TwitterResource)value;
 
@@ -28,21 +28,21 @@ namespace Ocell
             switch (resource.Type)
             {
                 case ResourceType.Search:
-                    return "Search/" + resource.Data;
+                    return Resources.Search_CapitalFirst +"/" + resource.Data;
                 case ResourceType.Tweets:
-                    return "User/@" + resource.Data;
+                    return Resources.User + "/@" + resource.Data;
                 case ResourceType.List:
-                    return "List/" + listName;
+                    return Resources.Lists + "/" + listName;
                 case ResourceType.Favorites:
-                    return "Favorites";
+                    return Resources.Favorites;
                 case ResourceType.Home:
-                    return "Home";
+                    return Resources.Home;
                 case ResourceType.Mentions:
-                    return "Mentions";
+                    return Resources.Mentions;
                 case ResourceType.Messages:
-                    return "Direct messages";
+                    return Resources.Messages;
                 default:
-                    return "Error";
+                    return Resources.Error;
             }
         }
 

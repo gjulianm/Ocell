@@ -80,7 +80,7 @@ namespace Ocell.Pages
             provider.Error += (sender, e) =>
             {
                 IsLoading = false;
-                MessageService.ShowError("An error has ocurred (" + e.StatusDescription + "), we couldn't download the user list. Please try later.");
+                MessageService.ShowError(Localization.Resources.ErrorDownloadingUsers);
             };
 
             Collection = new CollectionViewSource();

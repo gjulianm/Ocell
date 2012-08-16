@@ -9,6 +9,7 @@ using Ocell.Library;
 using TweetSharp;
 using System.Net;
 using Ocell.Library.Filtering;
+using Ocell.Localization;
 
 namespace Ocell
 {
@@ -17,13 +18,13 @@ namespace Ocell
         public object Convert(object value, Type targeType, object parameter, CultureInfo culture)
         {
             if (!(value is IncludeOrExclude))
-                return "Unknown";
+                return Resources.UnknownValue;
 
             IncludeOrExclude what = (IncludeOrExclude)value;
             if (what == IncludeOrExclude.Include)
-                return "does not contain";
+                return Resources.DoesNotContain;
             else
-                return "contains";
+                return Resources.Contains;
 
         }
 
@@ -43,15 +44,15 @@ namespace Ocell
                 switch (filter.Type)
                 {
                     case FilterType.User:
-                        return "user";
+                        return Resources.User;
                     case FilterType.Text:
-                        return "tweet text";
+                        return Resources.TweetText;
                     case FilterType.Source:
-                        return "source";
+                        return Resources.Source;
                 }
             }
 
-            return "unknown";
+            return Resources.UnknownValue;
 
         }
 
@@ -70,12 +71,12 @@ namespace Ocell
             {
                 DateTime date = (DateTime)value;
                 if (date == DateTime.MaxValue)
-                    return "forever.";
+                    return Resources.Forever + ".";
                 else
-                    return "until " + date.ToString("f") +".";
+                    return String.Format(Resources.UntilDate, date.ToString("f"));
             }
 
-            return "forever.";
+            return Resources.Forever + ".";
 
         }
 

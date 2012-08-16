@@ -16,7 +16,7 @@
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <SilverlightApplication>true</SilverlightApplication>
-    <SupportedCultures>
+    <SupportedCultures>es,en
     </SupportedCultures>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
@@ -101,11 +101,12 @@
       <DependentUpon>UserList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Elements\UserModel.cs" />
+    <Compile Include="Pages\NewTweetModel.cs" />
     <Compile Include="Pages\SelectUserModel.cs" />
     <Compile Include="Pages\Settings\Backgrounds.xaml.cs">
       <DependentUpon>Backgrounds.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Settings\DefaultMode.cs" />
+    <Compile Include="Pages\Settings\DefaultModel.cs" />
     <Compile Include="Pages\Settings\BackgroundsModel.cs" />
     <Compile Include="Pages\TopicsModel.cs" />
     <Compile Include="Notificator.cs" />
@@ -136,9 +137,6 @@
     <Compile Include="Pages\Search\EnterSearchModel.cs" />
     <Compile Include="Pages\SelectUser.xaml.cs">
       <DependentUpon>SelectUser.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Settings\About.xaml.cs">
-      <DependentUpon>About.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Topics.xaml.cs">
       <DependentUpon>Topics.xaml</DependentUpon>
@@ -253,10 +251,6 @@
     <Page Include="Pages\SelectUser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Settings\About.xaml">
-      <Generator>MSBuild:MarkupCompilePass1</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Settings\Backgrounds.xaml">
       <SubType>Designer</SubType>
@@ -479,6 +473,10 @@
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</Project>
       <Name>Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Localization\Localization.csproj">
+      <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
+      <Name>Localization</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ocell.BackgroundAgent\Ocell.BackgroundAgent.csproj">
       <Project>{38C14A5B-4940-4567-BA45-81FD8E5784DE}</Project>

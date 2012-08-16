@@ -65,6 +65,10 @@
       <Project>{6D32BDDD-7445-4619-9474-149715C8D42E}</Project>
       <Name>LightTwitterService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Localization\Localization.csproj">
+      <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ocell.BackgroundAgent.Library\Ocell.BackgroundAgent.Library.csproj">
       <Project>{742DB613-45BB-4F8F-A73F-B559901F6548}</Project>
       <Name>Ocell.BackgroundAgent.Library</Name>

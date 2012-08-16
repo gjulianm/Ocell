@@ -38,7 +38,7 @@
         <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock x:Name="ApplicationTitle" Text="OCELL" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="backgrounds" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="PageTitle" Text="{Binding Strings.Backgrounds, Source={StaticResource LocalizedResources}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel. Colocar aquí el contenido adicional-->
@@ -46,8 +46,8 @@
             <ListBox Margin="8,8,8,83" ItemTemplate="{StaticResource ItemTemplate2}" ItemsSource="{Binding BackgroundNames}" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"/></Grid>
 			
     	<controls:AppBar>
-            
-    		<controls:AppBarIconButton IconUri="/Images/Icons_White/appbar.save.rest.png" Text="save preferences" Command="{Binding SaveBackground}" />
+
+            <controls:AppBarIconButton IconUri="/Images/Icons_White/appbar.save.rest.png" Text="{Binding Strings.Save, Source={StaticResource LocalizedResources}}" Command="{Binding SaveBackground}" />
     	</controls:AppBar>
     </Grid>
 

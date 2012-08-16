@@ -1,4 +1,4 @@
-﻿<Application 
+<Application 
     x:Class="Ocell.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -15,11 +15,13 @@
     xmlns:tr="clr-namespace:Ocell.Transitions"
     xmlns:navigation="clr-namespace:System.Windows.Navigation;assembly=Microsoft.Phone"
     xmlns:u="clr-namespace:DanielVaughan.Windows.Converters;assembly=Calcium.Phone"
+    xmlns:global="clr-namespace:Ocell.Localization;assembly=Localization"
     >
 
     <!--Recursos de la aplicación-->
     <Application.Resources>
         <ResourceDictionary>
+            <global:LocalizedResources x:Key="LocalizedResources"/>
             <local:ListConverter x:Key="ListConverter"/>
             <local:RelativeDateTimeConverter x:Key="RelativeDateTimeConverter"/>
             <local:RemoveHTML x:Key="RemoveHTMLConverter" />
@@ -57,11 +59,11 @@
                                 </Grid.ColumnDefinitions>
                                 <toolkit:ContextMenuService.ContextMenu>
                                     <toolkit:ContextMenu Background="White" BorderBrush="Black" Foreground="Black" x:Name="ContextMenu">
-                                        <toolkit:MenuItem  Foreground="Black" Header="reply" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Foreground="Black" Header="retweet" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Foreground="Black" Header="favorite" Command="{StaticResource FavoriteCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Foreground="Black" Header="mute user" Command="{StaticResource MuteCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Foreground="Black" Header="read later" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding}" />
+                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding}" />
+                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Retweet, Source={StaticResource LocalizedResources}}" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding}" />
+                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Favorite., Source={StaticResource LocalizedResources}}" Command="{StaticResource FavoriteCommand}" CommandParameter="{Binding}" />
+                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.MuteUser, Source={StaticResource LocalizedResources}}" Command="{StaticResource MuteCommand}" CommandParameter="{Binding}" />
+                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.ReadLater, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding}" />
                                     </toolkit:ContextMenu>
                                 </toolkit:ContextMenuService.ContextMenu>
                                 <TextBlock x:Name="Date" Text="{Binding CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}" VerticalAlignment="Top" Margin="0,5.753,8,0" Foreground="#FF707070" Grid.Column="1" HorizontalAlignment="Right" UseLayoutRounding="False" FontFamily="Segoe WP Light"/>
@@ -87,7 +89,7 @@
                                     <ColumnDefinition Width="0.611*"/>
                                     <ColumnDefinition Width="0.389*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Foreground="{StaticResource PhoneAccentBrush}" Margin="50,8,78,8" TextWrapping="Wrap" Text="Load more..." FontSize="26.667" FontFamily="Segoe WP SemiLight"/>
+                                <TextBlock Foreground="{StaticResource PhoneAccentBrush}" Margin="50,8,78,8" TextWrapping="Wrap" Text="{Binding Strings.LoadMore, Source={StaticResource LocalizedResources}}" FontSize="26.667" FontFamily="Segoe WP SemiLight"/>
                             </Grid>
                         </DataTemplate>
                     </local:TweetTemplateSelector.LoadMoreTemplate>

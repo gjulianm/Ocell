@@ -42,7 +42,7 @@ namespace Ocell
 
             StandardTileData ComposeTile = new StandardTileData
             {
-                Title = "New tweet",
+                Title = Localization.Resources.NewTweet,
                 BackgroundImage = new Uri("/Images/ComposeTile.png", UriKind.Relative)
             };
 

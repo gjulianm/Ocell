@@ -129,7 +129,7 @@ namespace Ocell.Pages.Elements
         {
             if (DataTransfer.Status == null)
             {
-                MessageService.ShowError("We couldn't load the tweet.");
+                MessageService.ShowError(Localization.Resources.ErrorLoadingTweet);
                 GoBack();
                 return;
             }
@@ -137,7 +137,7 @@ namespace Ocell.Pages.Elements
             if (DataTransfer.Status.RetweetedStatus != null)
             {
                 Tweet = DataTransfer.Status.RetweetedStatus;
-                WhoRetweeted = " (RT by @" + DataTransfer.Status.Author.ScreenName + ")";
+                WhoRetweeted = " " + String.Format(Localization.Resources.RetweetBy, DataTransfer.Status.Author.ScreenName);
                 HasRetweets = true;
             }
             else
@@ -176,7 +176,7 @@ namespace Ocell.Pages.Elements
             });
 
             CreateCommands();
-            
+
             SetImage();
         }
 
@@ -194,9 +194,9 @@ namespace Ocell.Pages.Elements
                 ServiceDispatcher.GetService(user).DeleteTweet(Tweet.Id, (s, response) =>
                 {
                     if (response.StatusCode == HttpStatusCode.OK)
-                        MessageService.ShowMessage("Tweet deleted! (Note that it could take a few minutes to disappear completely from your streams)", "");
+                        MessageService.ShowMessage(Localization.Resources.TweetDeleted, "");
                     else
-                        MessageService.ShowError("We couldn't delete this tweet.");
+                        MessageService.ShowError(Localization.Resources.ErrorDeletingTweet);
                 });
             }, (obj) =>
                 Config.Accounts.Any(item => item != null && item.ScreenName == Tweet.Author.ScreenName));
@@ -206,7 +206,7 @@ namespace Ocell.Pages.Elements
             {
                 EmailComposeTask emailComposeTask = new EmailComposeTask();
 
-                emailComposeTask.Subject = "Tweet from @" + Tweet.Author.ScreenName;
+                emailComposeTask.Subject = String.Format(Localization.Resources.TweetFrom, Tweet.Author.ScreenName);
                 emailComposeTask.Body = "@" + Tweet.Author.ScreenName + ": " + Tweet.Text +
                     Environment.NewLine + Environment.NewLine + Tweet.CreatedDate.ToString();
 
@@ -225,13 +225,13 @@ namespace Ocell.Pages.Elements
                 if (IsFavorited)
                     ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweet(param.Id, (sts, resp) =>
                     {
-                        MessageService.ShowLightNotification("Unfavorited!");
+                        MessageService.ShowLightNotification(Localization.Resources.Unfavorited);
                         IsFavorited = false;
                     });
                 else
                     ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(param.Id, (sts, resp) =>
                     {
-                        MessageService.ShowLightNotification("Favorited!");
+                        MessageService.ShowLightNotification(Localization.Resources.Favorited);
                         IsFavorited = true;
                     });
             }, parameter => (parameter is TwitterStatus) && Config.Accounts.Count > 0 && DataTransfer.CurrentAccount != null);
@@ -242,7 +242,7 @@ namespace Ocell.Pages.Elements
             ServiceDispatcher.GetDefaultService().GetUserProfileFor(Tweet.Author.ScreenName, (user, response) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
-                        MessageService.ShowError("Couldn't get the full user profile.");
+                        MessageService.ShowError(Localization.Resources.ErrorGettingProfile);
                     Tweet.User = user;
                 });
         }
@@ -250,7 +250,7 @@ namespace Ocell.Pages.Elements
         public void ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
             IsLoading = false;
-            MessageService.ShowError("We couldn't download the image");
+            MessageService.ShowError(Localization.Resources.ErrorDownloadingImage);
         }
 
         public void ImageOpened(object sender, RoutedEventArgs e)
@@ -322,7 +322,7 @@ namespace Ocell.Pages.Elements
             {
                 HasImage = true;
                 IsLoading = true;
-                BarText = "downloading image...";
+                BarText = Localization.Resources.DownloadingImage;
             }
         }
     }

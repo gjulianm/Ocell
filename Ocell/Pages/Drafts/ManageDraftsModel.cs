@@ -1,20 +1,9 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using DanielVaughan.ComponentModel;
-using DanielVaughan;
-using DanielVaughan.Windows;
-using Ocell.Library;
-using System.Collections.Generic;
-using Ocell.Library.Twitter;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using Ocell.Library;
+using Ocell.Library.Twitter;
+using Ocell.Localization;
 
 namespace Ocell
 {
@@ -60,11 +49,11 @@ namespace Ocell
             TwitterDraft draft = grid.Tag as TwitterDraft;
             if (draft != null && Config.Drafts.Contains(draft))
             {
-                var accepts = MessageService.AskYesNoQuestion("Are you sure you want to delete this draft?", "");
+                var accepts = MessageService.AskYesNoQuestion(Resources.AskDeleteDraft, "");
                 if (accepts)
                 {
                     collection.Remove(draft);
-                    MessageService.ShowMessage("Draft deleted.", "");
+                    MessageService.ShowMessage(Resources.DraftDeleted, "");
                 }
             }
         }

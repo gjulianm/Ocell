@@ -157,37 +157,37 @@ namespace Ocell.Pages.Elements
         {
             MenuItem item = new MenuItem
             {
-                Header = "mute this hashtag",
+                Header = Localization.Resources.MuteHashtag,
                 Foreground = new SolidColorBrush(Colors.Black)
             };
             item.Click += (sender, e) =>
                 {
                     var filter = FilterManager.SetupMute(FilterType.Text, "#" + Hashtag.Text);
-                    Dependency.Resolve<IMessageService>().ShowMessage("Muted until " + filter.IsValidUntil.ToString("f"), "");
+                    Dependency.Resolve<IMessageService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
                 };
-            return CreateBaseLink("#" + Hashtag.Text, "copy hashtag", "#" + Hashtag.Text, item);
+            return CreateBaseLink("#" + Hashtag.Text, Localization.Resources.CopyHashtag, "#" + Hashtag.Text, item);
         }
 
         Inline CreateMentionLink(TwitterMention Mention)
         {
             MenuItem item = new MenuItem
             {
-                Header = "mute this user",
+                Header = Localization.Resources.MuteUser,
                 Foreground = new SolidColorBrush(Colors.Black)
             };
             item.Click += (sender, e) =>
             {
                 var filter = FilterManager.SetupMute(FilterType.User, Mention.ScreenName);
-                Dependency.Resolve<IMessageService>().ShowMessage("Muted until " + filter.IsValidUntil.ToString("f"), "");
+                    Dependency.Resolve<IMessageService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
             };
-            return CreateBaseLink("@" + Mention.ScreenName, "copy user name", "@" + Mention.ScreenName, item);
+            return CreateBaseLink("@" + Mention.ScreenName, Localization.Resources.CopyUsername, "@" + Mention.ScreenName, item);
         }
 
         Inline CreateUrlLink(TwitterUrl URL)
         {
             MenuItem item = new MenuItem
             {
-                Header = "mute this domain",
+                Header = Localization.Resources.MuteDomain,
                 Foreground = new SolidColorBrush(Colors.Black)
             };
             item.Click += (sender, e) =>
@@ -196,22 +196,22 @@ namespace Ocell.Pages.Elements
                 if (Uri.TryCreate(URL.ExpandedValue, UriKind.Absolute, out uri))
                 {
                     var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
-                    Dependency.Resolve<IMessageService>().ShowMessage("Muted until " + filter.IsValidUntil.ToString("f"), "");
+                    Dependency.Resolve<IMessageService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
                 }
                 else
-                    Dependency.Resolve<IMessageService>().ShowError("Ooops, that's not a valid URL.");
+                    Dependency.Resolve<IMessageService>().ShowError(Localization.Resources.NotValidURL);
             };
 
             string value = string.IsNullOrWhiteSpace(URL.ExpandedValue) ? URL.Value : URL.ExpandedValue;
 
-            return CreateBaseLink(TweetTextConverter.TrimUrl(value), "copy link", URL.ExpandedValue, item);
+            return CreateBaseLink(TweetTextConverter.TrimUrl(value), Localization.Resources.CopyLink, URL.ExpandedValue, item);
         }
 
         Inline CreateMediaLink(TwitterMedia Media)
         {
             MenuItem item = new MenuItem
             {
-                Header = "mute this domain",
+                Header = Localization.Resources.MuteDomain,
                 Foreground = new SolidColorBrush(Colors.Black)
             };
             item.Click += (sender, e) =>
@@ -220,12 +220,12 @@ namespace Ocell.Pages.Elements
                 if (Uri.TryCreate(Media.DisplayUrl, UriKind.Absolute, out uri))
                 {
                     var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
-                    Dependency.Resolve<IMessageService>().ShowMessage("Muted until " + filter.IsValidUntil.ToString("f"), "");
+                    Dependency.Resolve<IMessageService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
                 }
                 else
-                    Dependency.Resolve<IMessageService>().ShowError("Ooops, that's not a valid URL.");
+                    Dependency.Resolve<IMessageService>().ShowError(Localization.Resources.NotValidURL);
             };
-            return CreateBaseLink(Media.DisplayUrl, "copy link", Media.DisplayUrl, item);
+            return CreateBaseLink(Media.DisplayUrl, Localization.Resources.CopyLink, Media.DisplayUrl, item);
         }
 
         void CopyLink(object sender, RoutedEventArgs e)
@@ -307,8 +307,7 @@ namespace Ocell.Pages.Elements
         {
             var filter = FilterManager.SetupMute(FilterType.User, viewModel.Tweet.Author.ScreenName);
             Dependency.Resolve<IMessageService>().
-                ShowMessage("The user " + viewModel.Tweet.Author.ScreenName +
-                " is now muted until " + filter.IsValidUntil.ToString("f") + ".", "");
+                ShowMessage(String.Format(Localization.Resources.UserIsMutedUntil, viewModel.Tweet.Author.ScreenName, filter.IsValidUntil.ToString("f")), "");
             viewModel.IsMuting = false;
         }
 
@@ -325,11 +324,10 @@ namespace Ocell.Pages.Elements
                 }
             }
             if (message == "")
-                Dependency.Resolve<IMessageService>().ShowMessage("No hashtags to mute");
+                Dependency.Resolve<IMessageService>().ShowMessage(Localization.Resources.NoHashtagsToMute);
             else
                 Dependency.Resolve<IMessageService>().
-                ShowMessage("The hashtag(s) " + message.Substring(0, message.Length - 2) +
-                " are now muted until " + filter.IsValidUntil.ToString("f") + ".");
+                ShowMessage(String.Format(Localization.Resources.HashtagsMutedUntil, message.Substring(0, message.Length - 2), filter.IsValidUntil.ToString("f") ), "");
             viewModel.IsMuting = false;
         }
 
@@ -338,8 +336,7 @@ namespace Ocell.Pages.Elements
             RemoveHTML conv = new RemoveHTML();
             string source = conv.Convert(viewModel.Tweet.Source, null, null, null) as string;
             var filter = FilterManager.SetupMute(FilterType.Source, source);
-            Dependency.Resolve<IMessageService>().ShowMessage("The source " + source + 
-                " is now muted until " + filter.IsValidUntil.ToString("f") + ".");
+            Dependency.Resolve<IMessageService>().ShowMessage(String.Format(Localization.Resources.SourceMutedUntil, source, filter.IsValidUntil.ToString("f")), "");
             viewModel.IsMuting = false;
         }
 

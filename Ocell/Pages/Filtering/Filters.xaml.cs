@@ -78,7 +78,7 @@ namespace Ocell.Pages.Filtering
             Grid grid = sender as Grid;
             Dispatcher.BeginInvoke(() =>
             {
-                MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this filter?", "", MessageBoxButton.OKCancel);
+                MessageBoxResult result = MessageBox.Show(Localization.Resources.AskFilterDelete, "", MessageBoxButton.OKCancel);
                 if (result == MessageBoxResult.OK)
                 {
                     if (grid != null && grid.Tag is ITweetableFilter)

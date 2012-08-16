@@ -1,4 +1,4 @@
-﻿<phone:PhoneApplicationPage 
+<phone:PhoneApplicationPage 
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -28,12 +28,12 @@
 		<!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
 		<StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,64,0,29">
 			<TextBlock x:Name="ApplicationTitle" Text="OCELL" Style="{StaticResource PhoneTextNormalStyle}"/>
-			<TextBlock x:Name="PageTitle" Text="accounts" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+			<TextBlock x:Name="PageTitle" Text="{Binding Strings.Accounts, Source={StaticResource LocalizedResources}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
 		</StackPanel>
 
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 		<Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,-1,12,1">
-			<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Select one account"/><Run Text=":"/></TextBlock>
+			<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="{Binding Strings.SelectAccount, Source={StaticResource LocalizedResources}}" /><Run Text=":"/></TextBlock>
 			<ListBox x:Name="AccountsList" Margin="8,55,8,8" ItemTemplate="{StaticResource AccountsTemplate}" toolkit:TiltEffect.IsTiltEnabled="True"/>
 		</Grid>
 	</Grid>

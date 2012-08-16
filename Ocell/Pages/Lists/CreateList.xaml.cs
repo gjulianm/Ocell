@@ -39,13 +39,13 @@ namespace Ocell.Pages.Lists
                 {
                     Dispatcher.BeginInvoke(() =>
                     {
-                        MessageBox.Show("List created!");
+                        MessageBox.Show(Localization.Resources.ListCreated);
                         NavigationService.GoBack();
                     });
                 }
                 else
                 {
-                    Dispatcher.BeginInvoke(() => MessageBox.Show("Error when creating the list."));
+                    Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorCreatingList));
                 }
 
                 Dispatcher.BeginInvoke(() => pBar.IsVisible = false);

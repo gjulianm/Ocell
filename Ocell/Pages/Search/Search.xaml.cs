@@ -38,17 +38,5 @@ namespace Ocell.Pages.Search
             TweetList.AutoManageNavigation = true;
             TweetList.ActivatePullToRefresh = true;
         }
-
-        private void Add_Click(object sender, System.EventArgs e)
-        {
-            if (!Config.Columns.Contains(TweetList.Loader.Resource))
-            {
-                DataTransfer.ShouldReloadColumns = true;
-                Config.Columns.Add(TweetList.Loader.Resource);
-                Dispatcher.BeginInvoke(() => MessageBox.Show("Search column added!"));
-            }
-            else
-                Dispatcher.BeginInvoke(() => MessageBox.Show("This search is already added."));
-        }
     }
 }

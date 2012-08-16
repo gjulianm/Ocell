@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.BackgroundAgent.Libra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightTwitterService", "LightTwitterService\LightTwitterService.csproj", "{6D32BDDD-7445-4619-9474-149715C8D42E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization", "Localization\Localization.csproj", "{FAC86E98-A611-4800-B374-83E915925F6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ClientProfiles|Any CPU = ClientProfiles|Any CPU
@@ -427,6 +429,42 @@ Global
 		{6D32BDDD-7445-4619-9474-149715C8D42E}.Staging|Mixed Platforms.Build.0 = Release|Any CPU
 		{6D32BDDD-7445-4619-9474-149715C8D42E}.Staging|PHP 5.3.ActiveCfg = Release|Any CPU
 		{6D32BDDD-7445-4619-9474-149715C8D42E}.Staging|x86.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.ClientProfiles|Any CPU.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.ClientProfiles|Any CPU.Build.0 = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.ClientProfiles|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.ClientProfiles|Mixed Platforms.Build.0 = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.ClientProfiles|PHP 5.3.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.ClientProfiles|x86.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Debug|PHP 5.3.ActiveCfg = Debug|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Local|Any CPU.Build.0 = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Local|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Local|Mixed Platforms.Build.0 = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Local|PHP 5.3.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Local|x86.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Production|Any CPU.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Production|Any CPU.Build.0 = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Production|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Production|Mixed Platforms.Build.0 = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Production|PHP 5.3.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Production|x86.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Release|PHP 5.3.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Release|x86.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Staging|Any CPU.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Staging|Any CPU.Build.0 = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Staging|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Staging|Mixed Platforms.Build.0 = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Staging|PHP 5.3.ActiveCfg = Release|Any CPU
+		{FAC86E98-A611-4800-B374-83E915925F6D}.Staging|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

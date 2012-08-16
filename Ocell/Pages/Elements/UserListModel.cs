@@ -11,6 +11,7 @@ using Ocell.Library;
 using Ocell.Library.Twitter;
 using TweetSharp;
 using System.Windows.Data;
+using Ocell.Localization;
 
 namespace Ocell.Pages.Elements
 {
@@ -92,20 +93,25 @@ namespace Ocell.Pages.Elements
             user = userName;
 
             if (whatUserList == "followers")
+            {
                 ServiceDispatcher.GetCurrentService().ListFollowersOf(user, ReceiveUsers);
+                BarText = Resources.DownloadingFollowers;
+                PageTitle = Resources.Followers;
+            }
             else if (whatUserList == "following")
+            {
                 ServiceDispatcher.GetCurrentService().ListFriendsOf(user, ReceiveUsers);
+                BarText = Resources.DownloadingFollowing;
+                PageTitle = Resources.Following;
+            }
             else
             {
-                MessageService.ShowError("That's not a valid resource.");
+                MessageService.ShowError(Resources.NotValidResource);
                 GoBack();
                 return;
             }
 
-            PageTitle = whatUserList;
-
             IsLoading = true;
-            BarText = "downloading " + whatUserList + "...";
         }
 
 
@@ -113,13 +119,13 @@ namespace Ocell.Pages.Elements
         {
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                MessageService.ShowError("We couldn't find that user");
+                MessageService.ShowError(Resources.CouldntFindUser);
                 GoBack();
                 return;
             }
             else if (response.StatusCode != HttpStatusCode.OK)
             {
-                MessageService.ShowError("An error has occurred.");
+                MessageService.ShowError(Resources.ErrorMessage);
                 GoBack();
                 return;
             }

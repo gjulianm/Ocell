@@ -50,9 +50,10 @@ namespace Ocell.Pages.Search
 
             addCommand = new DelegateCommand((param) =>
                 {
-                    Config.Columns.Add(Loader.Resource);
+                    if(!Config.Columns.Contains(Loader.Resource))
+                        Config.Columns.Add(Loader.Resource);
                     Config.SaveColumns();
-                    MessageService.ShowMessage("Search column added to main page.", "");
+                    MessageService.ShowMessage(Localization.Resources.SearchColumnAdded, "");
                     DataTransfer.ShouldReloadColumns = true;                    
                     addCommand.RaiseCanExecuteChanged();
                 },

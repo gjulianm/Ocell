@@ -66,7 +66,7 @@ namespace Ocell.Pages.Settings
             saveBackground = new DelegateCommand((param) =>
             {
                 Config.Background = theme;
-                MessageService.ShowMessage("The background will change when you restart the application");
+                MessageService.ShowMessage(Localization.Resources.BackgroundChangeOnRestart);
                 GoBack();
             });
         }

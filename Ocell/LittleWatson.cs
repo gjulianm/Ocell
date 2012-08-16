@@ -13,6 +13,8 @@ using System.IO;
 using Microsoft.Phone.Tasks;
 using System.Diagnostics;
 using Microsoft.Phone.Info;
+using Ocell.Localization;
+using System.Threading;
 
 namespace Ocell.Library
 {
@@ -39,6 +41,7 @@ namespace Ocell.Library
                         output.WriteLine("Memory peak: {0} KB", (DeviceStatus.ApplicationPeakMemoryUsage / (1024)).ToString());
                         output.WriteLine("Firmware version: {0}", DeviceStatus.DeviceFirmwareVersion);
                         output.WriteLine("Assembly name: {0}", System.Reflection.Assembly.GetExecutingAssembly().FullName);
+                        output.WriteLine("Language: {0}", Thread.CurrentThread.CurrentCulture.Name);
                         output.WriteLine("");
                         output.WriteLine(extra);
                         output.WriteLine(ex.Message);
@@ -71,7 +74,7 @@ namespace Ocell.Library
                 {
                     Deployment.Current.Dispatcher.BeginInvoke(() =>
                     {
-                        if (MessageBox.Show("A problem occurred the last time you ran this application. Would you like to send an email to report it? The report contains data to help me correct the bug. It will not send any personal data.", "Problem Report", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                        if (MessageBox.Show(Resources.ErrorReportMessage, Resources.ErrorReport, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                         {
                             EmailComposeTask email = new EmailComposeTask();
                             email.To = "gjulian93@gmail.com";

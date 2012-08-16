@@ -18,7 +18,7 @@ using DanielVaughan.ComponentModel;
 using Ocell.Library;
 using DanielVaughan.Services;
 using DanielVaughan;
-
+using Ocell.Localization;
 
 namespace Ocell.Controls
 {
@@ -320,9 +320,9 @@ namespace Ocell.Controls
             {
                 _lastErrorFired = DateTime.Now;
                 if (response.RateLimitStatus.RemainingHits == 0)
-                    messager.ShowError("Woops! You have spent the limit of calls to Twitter. You'll have to wait until " + response.RateLimitStatus.ResetTime.ToString("H:mm"));
+                    messager.ShowError(String.Format(Localization.Resources.RateLimitHit, response.RateLimitStatus.ResetTime.ToString("H:mm")));
                 else
-                    messager.ShowError("We couldn't load the tweets: " + response.StatusDescription);
+                    messager.ShowError(String.Format(Localization.Resources.ErrorLoadingTweets, response.StatusDescription));
                 
             }
         }

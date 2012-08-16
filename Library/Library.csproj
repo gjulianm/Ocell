@@ -69,12 +69,12 @@
     <Compile Include="DebugWriter.cs" />
     <Compile Include="IEnumerableExtension.cs" />
     <Compile Include="IsolatedFileStreamExtension.cs" />
+    <Compile Include="Notifications\TileManager.cs" />
     <Compile Include="OcellTheme.cs" />
     <Compile Include="Collections\SafeObservable.cs" />
     <Compile Include="SensitiveData.cs" />
     <Compile Include="Tasks\TaskExecutor.cs" />
     <Compile Include="Twitter\ServiceDispatcher.cs" />
-    <Compile Include="Notifications\TileManager.cs" />
     <Compile Include="Twitter\Cacher.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DataTransfer.cs" />

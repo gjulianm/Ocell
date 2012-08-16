@@ -11,7 +11,7 @@
             <Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">
                 <toolkit:ContextMenuService.ContextMenu>
                     <toolkit:ContextMenu Background="White" BorderBrush="Black" Foreground="Black" x:Name="ContextMenu2">
-                        <toolkit:MenuItem Foreground="Black" Header="delete" Command="{StaticResource DeleteCommand}" CommandParameter="{Binding}" Click="MenuItem_Click" />
+                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Delete, Source={StaticResource LocalizedResources}}" Command="{StaticResource DeleteCommand}" CommandParameter="{Binding}" Click="MenuItem_Click" />
                         <toolkit:MenuItem Foreground="Black" Header="{Binding Converter={StaticResource ProtectedConverter}}" Command="{StaticResource ProtectCommand}" CommandParameter="{Binding}"  Click="MenuItem_Click" />
                     </toolkit:ContextMenu>
                 </toolkit:ContextMenuService.ContextMenu>
@@ -24,18 +24,6 @@
  	<shell:SystemTray.ProgressIndicator>
         <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
- 
-    <!--Código de ejemplo que muestra el uso de ApplicationBar-->
-    <!--<phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Botón 1"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Botón 2"/>
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="Elemento de menú 1"/>
-                <shell:ApplicationBarMenuItem Text="Elemento de menú 2"/>
-            </shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>-->
 
 	<phone:PhoneApplicationPage.FontFamily>
 		<StaticResource ResourceKey="PhoneFontFamilyNormal"/>
@@ -74,100 +62,73 @@
 			</Grid.Background>
 		<controls:Pivot Title="OCELL - SETTINGS" Margin="0,60,0,0">
 
-			<controls:PivotItem x:Name="pSettings" Header="settings">
+            <controls:PivotItem x:Name="pSettings" Header="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}">
 				<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 					<Grid Height="859">
-						<toolkit:ToggleSwitch x:Name="RetweetsInMentions" Header="Show retweets as mentions" VerticalAlignment="Top" IsChecked="{Binding RetweetsAsMentions, Mode=TwoWay}" Margin="0,108,0,0"/>
-						<toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="Update tiles in the background" Margin="0,247,0,0" IsChecked="{Binding BackgroundUpdateTiles, Mode=TwoWay}" VerticalAlignment="Top"/>
-						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,289" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Height="96" VerticalAlignment="Bottom"><Run Text="To add columns tiles, go to the main page and press &quot;pin column to start&quot; in the bottom bar."/><LineBreak/><Run/></TextBlock>
-						<Button x:Name="ComposePin" Content="Pin compose tile to start" HorizontalAlignment="Left" Margin="52,378,0,0" Width="344" Command="{Binding PinComposeToStart}" VerticalAlignment="Top"/>
-						<TextBlock HorizontalAlignment="Left" Margin="8,214,0,0" TextWrapping="Wrap" Text="Tiles" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24"/>
-						<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Tweets to load per request" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
+                        <toolkit:ToggleSwitch x:Name="RetweetsInMentions" Header="{Binding Strings.ShowRetweetsAsMentions, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" IsChecked="{Binding RetweetsAsMentions, Mode=TwoWay}" Margin="0,108,0,0"/>
+                        <toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="{Binding Strings.UpdateTilesInBackground, Source={StaticResource LocalizedResources}}" Margin="0,247,0,0" IsChecked="{Binding BackgroundUpdateTiles, Mode=TwoWay}" VerticalAlignment="Top"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="8,0,0,289" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Height="96" VerticalAlignment="Bottom"><Run Text="{Binding Strings.ToAddColumnTiles, Source={StaticResource LocalizedResources}}"/></TextBlock>
+						<Button x:Name="ComposePin" Content="{Binding Strings.PinToStart, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,392,0,0" Width="344" Command="{Binding PinComposeToStart}" VerticalAlignment="Top"/>
+						<TextBlock HorizontalAlignment="Left" Margin="8,214,0,0" TextWrapping="Wrap" Text="{Binding Strings.Tiles, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24"/>
+						<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="{Binding Strings.TweetsPerRequest, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
 						<TextBox x:Name="tweetsPerReq" Margin="0,39,8,0" TextWrapping="Wrap" VerticalAlignment="Top" InputScope="Number" Text="{Binding TweetsPerRequest}"/>
-						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,279" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" Text="Backgrounds"/>
-						<Button x:Name="SetBackgrounds" Content="Set custom background" HorizontalAlignment="Left" Margin="52,598,0,0" Width="344" Command="{Binding SetCustomBackground}" VerticalAlignment="Top" />
+						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,260" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" Text="{Binding Strings.Backgrounds_CapitalFirst, Source={StaticResource LocalizedResources}}" />
+						<Button x:Name="SetBackgrounds" Content="{Binding Strings.SetCustomBackground, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,617,0,0" Width="344" Command="{Binding SetCustomBackground}" VerticalAlignment="Top" />
+						<TextBlock HorizontalAlignment="Left" Margin="8,362,0,0" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Strings.ComposeTile, Source={StaticResource LocalizedResources}}" Height="26" VerticalAlignment="Top"/>
 					</Grid>
 				</ScrollViewer>
 			</controls:PivotItem>
 
-			<controls:PivotItem x:Name="pAccounts" Header="accounts" Margin="12,0">
+            <controls:PivotItem x:Name="pAccounts" Header="{Binding Strings.AccountsPivot, Source={StaticResource LocalizedResources}}" Margin="12,0">
 				<Grid Height="608" Margin="0,-9,0,0">
-					<Button Content="Add account" Height="72" Margin="35,286,34,250" x:Name="btnLogin" Width="379" Command="{Binding AddAccount}" />
+					<Button Content="{Binding Strings.AddAccount, Source={StaticResource LocalizedResources}}" Height="72" Margin="35,286,34,250" x:Name="btnLogin" Width="379" Command="{Binding AddAccount}" />
 					<TextBlock Height="30" Margin="213,6,-119,0" x:Name="UserName" VerticalAlignment="Top" Style="{StaticResource PhoneTextAccentStyle}" Foreground="{StaticResource PhoneForegroundBrush}" d:LayoutOverrides="Width" />
 					<ListBox x:Name="Users" toolkit:TiltEffect.IsTiltEnabled="True" Margin="8,40,8,0"  Height="232" VerticalAlignment="Top" ItemTemplate="{StaticResource AccountsContextTemplate}" ItemsSource="{Binding Accounts}" SelectedIndex="{Binding SelectedAccount, Mode=TwoWay}"/>
-					<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Accounts" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="8,0,0,178" TextWrapping="Wrap" VerticalAlignment="Bottom" Text="Notify mentions:" Foreground="{StaticResource PhoneSubtleBrush}"/>
+					<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="{Binding Strings.Accounts, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="8,0,0,178" TextWrapping="Wrap" VerticalAlignment="Bottom" Text="{Binding Strings.NotifyMentions, Source={StaticResource LocalizedResources}}" Foreground="{StaticResource PhoneSubtleBrush}"/>
                     <toolkit:ListPicker x:Name="MentionsPicker" Margin="7,0,9,117" VerticalAlignment="Bottom" ItemsSource="{Binding NotifyOptions}" SelectedIndex="{Binding MentionNotifyOption, Mode=TwoWay}" />
-                    <TextBlock HorizontalAlignment="Left" Margin="7,0,0,65" TextWrapping="Wrap" VerticalAlignment="Bottom" Text="Notify messages:" Foreground="{StaticResource PhoneSubtleBrush}"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="7,0,0,65" TextWrapping="Wrap" VerticalAlignment="Bottom" Text="{Binding Strings.NotifyMessages, Source={StaticResource LocalizedResources}}" Foreground="{StaticResource PhoneSubtleBrush}"/>
                     <toolkit:ListPicker x:Name="MessagesPicker" Margin="7,0,9,9" VerticalAlignment="Bottom" ItemsSource="{Binding NotifyOptions}" SelectedIndex="{Binding MessageNotifyOption, Mode=TwoWay}"/>
                 </Grid>
 			</controls:PivotItem>
-			<controls:PivotItem x:Name="pFilters" Header="filters">
+            <controls:PivotItem x:Name="pFilters" Header="{Binding Strings.Filters, Source={StaticResource LocalizedResources}}">
 				<Grid>
-					<Button x:Name="filter_btn" Content="Edit muted tweets" HorizontalAlignment="Left" Margin="52,8,0,0" Width="344" Command="{Binding EditFilters}" VerticalAlignment="Top"/>
-					<TextBlock HorizontalAlignment="Left" Margin="8,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Silence time when muting tweets:"/></TextBlock>
+					<Button x:Name="filter_btn" Content="{Binding Strings.EditMutedTweets, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,8,0,0" Width="344" Command="{Binding EditFilters}" VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="8,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="{Binding Strings.SilenceTime, Source={StaticResource LocalizedResources}}"/></TextBlock>
 					<toolkit:ListPicker x:Name="SilencePicker" Margin="8,130,8,0" VerticalAlignment="Top" SelectedIndex="{Binding SelectedMuteTime, Mode=TwoWay}">
-						<toolkit:ListPickerItem x:Name="hour" Content="1 hour"/>
-						<toolkit:ListPickerItem x:Name="hours8" Content="8 hours"/>
-						<toolkit:ListPickerItem x:Name="day" Content="1 day"/>
-						<toolkit:ListPickerItem x:Name="week" Content="1 week"/>
-						<toolkit:ListPickerItem x:Name="forever" Content="forever"/>
+						<toolkit:ListPickerItem x:Name="hour" Content="{Binding Strings.OneHour, Source={StaticResource LocalizedResources}}" />
+						<toolkit:ListPickerItem x:Name="hours8" Content="{Binding Strings.EightHours, Source={StaticResource LocalizedResources}}" />
+						<toolkit:ListPickerItem x:Name="day" Content="{Binding Strings.OneDay, Source={StaticResource LocalizedResources}}" />
+						<toolkit:ListPickerItem x:Name="week" Content="{Binding Strings.OneWeek, Source={StaticResource LocalizedResources}}" />
+						<toolkit:ListPickerItem x:Name="forever" Content="{Binding Strings.Forever, Source={StaticResource LocalizedResources}}" />
 					</toolkit:ListPicker>
 				</Grid>
 			</controls:PivotItem>
-		
-			<controls:PivotItem x:Name="pReadLater" Header="read later" Margin="12,8,12,0">
+
+            <controls:PivotItem x:Name="pReadLater" Header="{Binding Strings.ReadLater, Source={StaticResource LocalizedResources}}" Margin="12,8,12,0">
 				<Grid>
 					<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="Pocket" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontSize="24"/>
-					<TextBlock HorizontalAlignment="Left" Margin="12,51,0,0" TextWrapping="Wrap" Text="Login:" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="12,51,0,0" TextWrapping="Wrap" Text="{Binding Strings.Login, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"/>
 					<TextBox x:Name="PocketUser" Margin="0,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding PocketUser, Mode=TwoWay}"/>
-					<TextBlock HorizontalAlignment="Left" Margin="12,158,0,0" TextWrapping="Wrap" Text="Password:" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="12,158,0,0" TextWrapping="Wrap" Text="{Binding Strings.Password, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"/>
 					<PasswordBox x:Name="PocketPass" Margin="0,189,0,0" VerticalAlignment="Top" Password="{Binding PocketPassword, Mode=TwoWay}"/>
 					<TextBlock HorizontalAlignment="Left" Margin="8,265,0,0" TextWrapping="Wrap" Text="Instapaper" Foreground="{StaticResource PhoneAccentBrush}" FontSize="24" Height="38" VerticalAlignment="Top"/>
-					<TextBlock HorizontalAlignment="Left" Margin="12,307,0,0" TextWrapping="Wrap" Text="Username or email:" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="12,307,0,0" TextWrapping="Wrap" Text="{Binding Strings.UserOrMail, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"/>
                     <TextBox x:Name="IPUser" Margin="0,334,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding InstapaperUser, Mode=TwoWay}"/>
-					<TextBlock HorizontalAlignment="Left" Margin="12,410,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="Password (if you have one):"/></TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Margin="12,410,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.811,0.593" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="{Binding Strings.PasswordIfYouHave, Source={StaticResource LocalizedResources}}"/></TextBlock>
                     <PasswordBox x:Name="IPPass" Password="{Binding InstapaperPassword, Mode=TwoWay}" Margin="0,441,0,0" VerticalAlignment="Top" />
-					<Button x:Name="SaveRLBtn" Content="Save credentials" Margin="98,0,98,5" VerticalAlignment="Bottom" Command="{Binding SaveCredentials}"/>
+					<Button x:Name="SaveRLBtn" Content="{Binding Strings.SaveCredentials, Source={StaticResource LocalizedResources}}" Margin="98,0,98,5" VerticalAlignment="Bottom" Command="{Binding SaveCredentials}"/>
 				</Grid>
 			</controls:PivotItem>
-			<controls:PivotItem x:Name="pAbout" Header="about">
+            <controls:PivotItem x:Name="pAbout" Header="{Binding Strings.About, Source={StaticResource LocalizedResources}}">
 				<Grid>
 					<ScrollViewer Margin="8,8,8,-151" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 						<Grid>
 							<Image Height="128" Margin="148,0,0,0" Source="OcellIcon200.png" Stretch="Fill" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
 							<RichTextBox Margin="0,140,0,0" VerticalAlignment="Top" Height="550" HorizontalAlignment="Left" Width="432">
-								<Paragraph><Run Text="Ocell is a open source (ASL) twitter client for Windows Phone, developed by "/><Run Text=" "/><Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=gjulianm"><Run Text="Guillermo Julián">
-											<Run.Foreground>
-												<SolidColorBrush Color="White">
-													<SolidColorBrush.RelativeTransform>
-														<MatrixTransform Matrix="Identity"/>
-													</SolidColorBrush.RelativeTransform>
-													<SolidColorBrush.Transform>
-														<MatrixTransform Matrix="Identity"/>
-													</SolidColorBrush.Transform>
-												</SolidColorBrush>
-											</Run.Foreground>
-										</Run></Hyperlink><Run Text=" "/><Run Text=". You can follow "/><Run Text=" "/><Hyperlink NavigateUri="/Pages/Elements/User.xaml?user=OcellApp"><Run Text="@OcellApp">
-											<Run.Foreground>
-												<SolidColorBrush Color="White">
-													<SolidColorBrush.RelativeTransform>
-														<MatrixTransform Matrix="Identity"/>
-													</SolidColorBrush.RelativeTransform>
-													<SolidColorBrush.Transform>
-														<MatrixTransform Matrix="Identity"/>
-													</SolidColorBrush.Transform>
-												</SolidColorBrush>
-											</Run.Foreground>
-										</Run><Run Text=" "/></Hyperlink><Run Text="on Twitter to receive the lastest updates about Ocell."/></Paragraph>
+								<Paragraph><Run Text="{Binding Strings.AboutP1, Source={StaticResource LocalizedResources}}"/></Paragraph>
 								<Paragraph><Run/></Paragraph>
-								<Paragraph><Run Text="Backgrounds credit: Thanks to Paul Phönixweiß (Egg), Dimitar Karaytchev (Diamond), Lauren (Floral), Sam Feyaerts (Map) and Wilmotte Bastien (Tire) for making their patterns available on subtlepattern.com."/></Paragraph>
-								<Paragraph><Run/></Paragraph>
-								<Paragraph><Run FontWeight="Bold" Text="Tips:"/></Paragraph>
-								<Paragraph><Run Text="   - Pin your favourite columns to the start screen with the &quot;Pin to start&quot; button in the main page."/></Paragraph>
-								<Paragraph><Run/></Paragraph>
-								<Paragraph><Run Text="   - To protect accounts go to Settings -&gt; Accounts, tap and hold one account and choose &quot;Protect&quot;. Never tweet from the wrong account again!"/></Paragraph>
-								<Paragraph><Run/></Paragraph>
+								<Paragraph><Run Text="{Binding Strings.AboutP2, Source={StaticResource LocalizedResources}}"/></Paragraph>
 							</RichTextBox>
 						</Grid>
 					</ScrollViewer>

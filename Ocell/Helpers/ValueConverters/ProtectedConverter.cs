@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Data;
 using Ocell.Library;
 using Ocell.Library.Twitter;
+using Ocell.Localization;
 
 namespace Ocell
 {
@@ -18,9 +19,9 @@ namespace Ocell
                 return null;
 
             if (ProtectedAccounts.IsProtected(value as UserToken))
-                return "unprotect";
+                return Resources.Unprotect;
             else
-                return "protect";
+                return Resources.Protect;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

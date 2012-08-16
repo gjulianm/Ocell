@@ -72,7 +72,7 @@ namespace Ocell.Pages
             IsLoading = false;
             if (Response.StatusCode != HttpStatusCode.OK)
             {
-                MessageService.ShowError("Error loading trending topics. Sorry :(");
+                MessageService.ShowError(Localization.Resources.ErrorLoadingTT);
                 GoBack();
             }
 

@@ -74,6 +74,8 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PerformanceMeter.cs" />
+    <Compile Include="Tests\Library\PerformanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\AssemblyInit.cs" />
     <Compile Include="Tests\Library\ConfigTest.cs" />

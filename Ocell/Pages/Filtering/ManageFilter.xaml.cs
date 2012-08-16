@@ -36,7 +36,7 @@ namespace Ocell.Pages.Filtering
             Filter = DataTransfer.Filter;
 
             if (Filter == null)
-                MessageAndExit("We couldn't load this filter, sorry.");
+                MessageAndExit(Localization.Resources.CouldntLoadFilter);
 
             if (Filter.Type == FilterType.User)
                 Resource.SelectedIndex = 0;
@@ -70,7 +70,7 @@ namespace Ocell.Pages.Filtering
                 filter.Type = FilterType.Text;
             else
             {
-                MessageAndExit("Error saving this filter");
+                MessageAndExit(Localization.Resources.ErrorSavingFilter);
                 return;
             }
 

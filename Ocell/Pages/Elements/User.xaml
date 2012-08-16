@@ -27,7 +27,6 @@
         <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
 
-    <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
     <Grid x:Name="LayoutRoot" Margin="0,-32,0,0" >
         <Grid.Background>
             <ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
@@ -35,31 +34,31 @@
         <!--Control Pivot-->
         <controls:Pivot x:Name="pivots" Title="OCELL" Margin="0,64,0,0">
             <!--Elemento uno de Pivot-->
-            <controls:PivotItem x:Name="pvProfile" Header="profile">
-                <Grid>
+            <controls:PivotItem x:Name="pvProfile" Header="{Binding Strings.Profile, Source={StaticResource LocalizedResources}}">
+                <Grid Margin="0,-14,0,0">
                     <Image HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="124" Height="124" x:Name="Avatar" Source="{Binding Avatar}"/>
                     <TextBlock x:Name="FullName" Margin="148,0,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="300" FontSize="32" Text="{Binding Name}"/>
                     <TextBlock x:Name="ScreenName" Margin="148,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="21.333" FontFamily="Segoe WP SemiLight"><Run Text="@"/><Run Text="{Binding ScreenName}"/></TextBlock>
                     <HyperlinkButton x:Name="Website" Visibility="{Binding WebsiteEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="148,101,0,0" VerticalAlignment="Top" FontFamily="Segoe WP Light" HorizontalAlignment="Left" Content="{Binding Website}" NavigateUri="{Binding Website}"/>
 
-                    <TextBlock x:Name="Biography" Margin="8,148,8,288" TextWrapping="Wrap" FontSize="24" FontFamily="Segoe WP SemiLight" Text="{Binding Biography}"></TextBlock>
-                    <StackPanel HorizontalAlignment="Left" Margin="8,0,0,53" Orientation="Vertical" VerticalAlignment="Bottom" Width="112">
-                        <TextBlock Margin="0,0,33,0" TextWrapping="Wrap" Text="tweets" FontFamily="Segoe WP Light" FontSize="29.333" d:LayoutOverrides="Width"/>
+                    <TextBlock x:Name="Biography" Margin="8,148,8,259" TextWrapping="Wrap" FontSize="24" FontFamily="Segoe WP SemiLight" Text="{Binding Biography}" d:LayoutOverrides="VerticalAlignment"></TextBlock>
+                    <StackPanel Margin="8,0,8,8" Orientation="Vertical" VerticalAlignment="Bottom">
+                        <TextBlock TextWrapping="Wrap" Text="{Binding Strings.Tweets, Source={StaticResource LocalizedResources}}" FontFamily="Segoe WP Light" FontSize="29.333"/>
                         <TextBlock x:Name="Tweets" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Tweets}" FontFamily="Segoe WP Light"/>
 
 
-                        <TextBlock  Tap="TextBlock_Tap_1" toolkit:TiltEffect.IsTiltEnabled="True" TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41"><Run Text="followers"/><LineBreak/><Run/></TextBlock>
+                        <TextBlock  Tap="TextBlock_Tap_1" toolkit:TiltEffect.IsTiltEnabled="True" TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41"><Run Text="{Binding Strings.Followers, Source={StaticResource LocalizedResources}}" /><LineBreak/><Run/></TextBlock>
                         <TextBlock x:Name="Followers" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Followers}" FontFamily="Segoe WP Light"/>
 
 
 
-                        <TextBlock toolkit:TiltEffect.IsTiltEnabled="True" Tap="Following_Tap"  TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41" Text="following"/>
+                        <TextBlock toolkit:TiltEffect.IsTiltEnabled="True" Tap="Following_Tap"  TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41" Text="{Binding Strings.Following, Source={StaticResource LocalizedResources}}" />
                         <TextBlock  x:Name="Following" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Following}" FontFamily="Segoe WP Light"/>
 
                     </StackPanel>
                 </Grid>
             </controls:PivotItem>
-            <controls:PivotItem x:Name="pvTweets" Header="tweets">
+            <controls:PivotItem x:Name="pvTweets" Header="{Binding Strings.Tweets, Source={StaticResource LocalizedResources}}">
                 <Grid>
                     <custom:ExtendedListBox ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" 
                                             x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" />
@@ -69,18 +68,18 @@
 
         <u:AppBar>
             <u:AppBarToggleButton 
-                Command1="{Binding FollowUser}" IconUri1="/Images/Icons_White/appbar.add.rest.png" Text1="follow"
-                Command2="{Binding UnfollowUser}" IconUri2="/Images/Icons_White/appbar.minus.rest.png" Text2="unfollow"
+                Command1="{Binding FollowUser}" IconUri1="/Images/Icons_White/appbar.add.rest.png" Text1="{Binding Strings.Follow, Source={StaticResource LocalizedResources}}"
+                Command2="{Binding UnfollowUser}" IconUri2="/Images/Icons_White/appbar.minus.rest.png" Text2="{Binding Strings.Unfollow, Source={StaticResource LocalizedResources}}"
                 Toggled="{Binding Followed}"/>
-            <u:AppBarIconButton Command="{Binding PinUser}" Text="pin to main page" IconUri="/Images/Icons_White/appbar.pin.rest.png" />
+            <u:AppBarIconButton Command="{Binding PinUser}" Text="{Binding Strings.PinToMainPage, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.pin.rest.png" />
             <u:AppBar.MenuItems>
                 <u:AppBarToggleMenuItem 
-                    Command1="{Binding Block}" Text1="block"
-                    Command2="{Binding Unblock}" Text2="unblock"
+                    Command1="{Binding Block}" Text1="{Binding Strings.Block, Source={StaticResource LocalizedResources}}"
+                    Command2="{Binding Unblock}" Text2="{Binding Strings.Unblock, Source={StaticResource LocalizedResources}}"
                     Toggled="{Binding Blocked}"/>
-                <u:AppBarMenuItem Text="block &amp; report spam" Command="{Binding ReportSpam}"/>
-                <u:AppBarMenuItem Text="manage lists for user..." Command="{Binding ManageLists}"/>
-                <u:AppBarMenuItem Text="change avatar" Command="{Binding ChangeAvatar}"/>
+                <u:AppBarMenuItem Text="{Binding Strings.BlockAndReport, Source={StaticResource LocalizedResources}}" Command="{Binding ReportSpam}"/>
+                <u:AppBarMenuItem Text="{Binding Strings.ManageListsForUser, Source={StaticResource LocalizedResources}}" Command="{Binding ManageLists}"/>
+                <u:AppBarMenuItem Text="{Binding Strings.ChangeAvatar, Source={StaticResource LocalizedResources}}" Command="{Binding ChangeAvatar}"/>
             </u:AppBar.MenuItems>
         </u:AppBar>
 

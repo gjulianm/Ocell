@@ -8,116 +8,119 @@
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:ec="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions" 
     x:Class="Ocell.Pages.NewTweet"
+    xmlns:u="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
+    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
     >
-	<phone:PhoneApplicationPage.Resources>
-		<DataTemplate x:Key="HZAccountsList">
-			<Grid>
-				<Image Source="{Binding AvatarUrl}" Width="64" Height="64" Tap="Image_Tap" Opacity="0.75" Tag="{Binding}" Loaded="Image_Loaded"/>
-			</Grid>
-		</DataTemplate>
-		<Style x:Key="ListBoxStyle1" TargetType="ListBox">
-			<Setter Property="Background" Value="Transparent"/>
-			<Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
-			<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
-			<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-			<Setter Property="BorderThickness" Value="0"/>
-			<Setter Property="BorderBrush" Value="Transparent"/>
-			<Setter Property="Padding" Value="0"/>
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="ListBox">
-						<ScrollViewer x:Name="ScrollViewer" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}">
-							<ItemsPresenter/>
-						</ScrollViewer>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-		<ItemsPanelTemplate x:Key="PanelTemplate">
-			<StackPanel Orientation="Horizontal"/>
-		</ItemsPanelTemplate>
-		
-	</phone:PhoneApplicationPage.Resources>
-	
-	<phone:PhoneApplicationPage.FontFamily>
-		<StaticResource ResourceKey="PhoneFontFamilyNormal"/>
-	</phone:PhoneApplicationPage.FontFamily>
-	<phone:PhoneApplicationPage.FontSize>
-		<StaticResource ResourceKey="PhoneFontSizeNormal"/>
-	</phone:PhoneApplicationPage.FontSize>
-	<phone:PhoneApplicationPage.Foreground>
-		<StaticResource ResourceKey="PhoneForegroundBrush"/>
-	</phone:PhoneApplicationPage.Foreground>
-	
-	<toolkit:TransitionService.NavigationInTransition>
-	    <toolkit:NavigationInTransition>
-	        <toolkit:NavigationInTransition.Backward>
-	            <toolkit:TurnstileTransition Mode="BackwardIn"/>
-	        </toolkit:NavigationInTransition.Backward>
-	        <toolkit:NavigationInTransition.Forward>
-	            <toolkit:TurnstileTransition Mode="ForwardIn"/>
-	        </toolkit:NavigationInTransition.Forward>
-	    </toolkit:NavigationInTransition>
-	</toolkit:TransitionService.NavigationInTransition>
-	<toolkit:TransitionService.NavigationOutTransition>
-	    <toolkit:NavigationOutTransition>
-	        <toolkit:NavigationOutTransition.Backward>
-	            <toolkit:TurnstileTransition Mode="BackwardOut"/>
-	        </toolkit:NavigationOutTransition.Backward>
-	        <toolkit:NavigationOutTransition.Forward>
-	            <toolkit:TurnstileTransition Mode="ForwardOut"/>
-	        </toolkit:NavigationOutTransition.Forward>
-	    </toolkit:NavigationOutTransition>
-	</toolkit:TransitionService.NavigationOutTransition>
-    
-        <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="False" x:Name="pBar" />
+    <phone:PhoneApplicationPage.Resources>
+        <DataTemplate x:Key="HZAccountsList">
+            <Grid>
+                <Image Source="{Binding AvatarUrl}" Width="64" Height="64" Tap="Image_Tap" Opacity="0.75" Tag="{Binding}" Loaded="Image_Loaded"/>
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="ListBoxStyle1" TargetType="ListBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <ScrollViewer x:Name="ScrollViewer" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}">
+                            <ItemsPresenter/>
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ItemsPanelTemplate x:Key="PanelTemplate">
+            <StackPanel Orientation="Horizontal"/>
+        </ItemsPanelTemplate>
+
+    </phone:PhoneApplicationPage.Resources>
+
+    <phone:PhoneApplicationPage.FontFamily>
+        <StaticResource ResourceKey="PhoneFontFamilyNormal"/>
+    </phone:PhoneApplicationPage.FontFamily>
+    <phone:PhoneApplicationPage.FontSize>
+        <StaticResource ResourceKey="PhoneFontSizeNormal"/>
+    </phone:PhoneApplicationPage.FontSize>
+    <phone:PhoneApplicationPage.Foreground>
+        <StaticResource ResourceKey="PhoneForegroundBrush"/>
+    </phone:PhoneApplicationPage.Foreground>
+
+    <toolkit:TransitionService.NavigationInTransition>
+        <toolkit:NavigationInTransition>
+            <toolkit:NavigationInTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardIn"/>
+            </toolkit:NavigationInTransition.Backward>
+            <toolkit:NavigationInTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardIn"/>
+            </toolkit:NavigationInTransition.Forward>
+        </toolkit:NavigationInTransition>
+    </toolkit:TransitionService.NavigationInTransition>
+    <toolkit:TransitionService.NavigationOutTransition>
+        <toolkit:NavigationOutTransition>
+            <toolkit:NavigationOutTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardOut"/>
+            </toolkit:NavigationOutTransition.Backward>
+            <toolkit:NavigationOutTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardOut"/>
+            </toolkit:NavigationOutTransition.Forward>
+        </toolkit:NavigationOutTransition>
+    </toolkit:TransitionService.NavigationOutTransition>
+
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
-    
-    <!--Código de ejemplo que muestra el uso de ApplicationBar-->
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-        	<shell:ApplicationBar.MenuItems>
-        		<shell:ApplicationBarMenuItem x:Name="draftBtn" Text="drafts" Click="draft_Click"/>
-        	</shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
-    
+
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
     <Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-		
-		<Grid.Background>
-    		<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
-    	</Grid.Background>
+
+        <Grid.Background>
+            <ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
+        </Grid.Background>
 
         <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,64,0,28">
-            <TextBlock x:Name="ApplicationTitle" Style="{StaticResource PhoneTextNormalStyle}"><Run Text="OCELL"/><Run Text=" - COMPOSE"/></TextBlock>
+            <TextBlock x:Name="ApplicationTitle" Style="{StaticResource PhoneTextNormalStyle}"><Run Text="OCELL"/></TextBlock>
         </StackPanel>
         <Grid x:Name="ContentPanel" Margin="12,0,12,0" Grid.Row="1" >
-        	<ScrollViewer d:LayoutOverrides="Width, Height" HorizontalScrollBarVisibility="Disabled">
-        		<Grid>
-        			<TextBox TextWrapping="Wrap" VerticalAlignment="Top" Height="205" x:Name="Tweet" InputScope="Text" Margin="0,31,0,0" d:LayoutOverrides="VerticalAlignment" TextChanged="Tweet_TextChanged"/>
-        			<TextBlock Margin="0,4,9,0" TextWrapping="Wrap" Text="140" VerticalAlignment="Top" Foreground="#FF858585" x:Name="Count" HorizontalAlignment="Right" FontFamily="Segoe WP Light"/>
-        			<ListBox x:Name="AccountsList" SelectionMode="Multiple" Margin="12,272,12,252" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}"/>
-        			<TextBlock x:Name="TextBlockAccounts" HorizontalAlignment="Left" Margin="12,236,0,0" TextWrapping="Wrap" Text="Accounts:" Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top"/>
-        			<CheckBox x:Name="Scheduled_cb" Content="Scheduled?" Margin="8,357,216,0" VerticalAlignment="Top" Checked="Scheduled_cb_Checked" Unchecked="Scheduled_cb_Checked"/>
-        			<Grid x:Name="ScheduleGrid" Margin="8,433,20,0" Height="131" VerticalAlignment="Top" Visibility="Collapsed">
-        				<toolkit:DatePicker x:Name="datePicker" Margin="0,27,0,31" HorizontalAlignment="Left" Width="208" d:LayoutOverrides="Height"/>
-        				<toolkit:TimePicker x:Name="timePicker" HorizontalAlignment="Right" Margin="0,27,0,31" Width="208" d:LayoutOverrides="Height"/>
-        				<TextBlock HorizontalAlignment="Left" Margin="14,0,0,0" TextWrapping="Wrap" Text="Date:" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
-        				<TextBlock Margin="0,0,147,0" TextWrapping="Wrap" Text="Time:" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" HorizontalAlignment="Right" RenderTransformOrigin="0.128,0.422"/>
-        				<TextBlock x:Name="aboutScheduling" HorizontalAlignment="Left" TextWrapping="Wrap" Text="About tweet scheduling..." VerticalAlignment="Bottom" Margin="14,0,0,8" TextDecorations="Underline" Foreground="{StaticResource PhoneAccentBrush}" Tap="aboutScheduling_Tap"/>
-        			</Grid>
-        		</Grid>
-        	</ScrollViewer>
+            <ScrollViewer d:LayoutOverrides="Width, Height" HorizontalScrollBarVisibility="Disabled">
+                <Grid>
+                    <TextBox Text="{Binding TweetText, Mode=TwoWay}" x:Name="TweetBox" TextWrapping="Wrap" VerticalAlignment="Top" Height="205" InputScope="Text" Margin="0,31,0,0" d:LayoutOverrides="VerticalAlignment"/>
+                    <TextBlock Margin="0,4,9,0" TextWrapping="Wrap" Text="{Binding RemainingChars}" VerticalAlignment="Top" Foreground="#FF858585" HorizontalAlignment="Right" FontFamily="Segoe WP Light"/>
+                    <ListBox x:Name="ListAccounts" ItemsSource="{Binding AccountList}" SelectionMode="Multiple" Visibility="{Binding IsDM, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Collapsed}" Margin="12,272,12,252" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}" SelectionChanged="ListBox_SelectionChanged"/>
+                    <TextBlock Text="{Binding Strings.Accounts, Source={StaticResource LocalizedResources}, StringFormat='{}{0}:'}" Visibility="{Binding IsDM, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Collapsed}" HorizontalAlignment="Left" Margin="12,236,0,0" TextWrapping="Wrap"  Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top"/>
+                    <CheckBox IsChecked="{Binding IsScheduled, Mode=TwoWay}" Visibility="{Binding IsDM, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Collapsed}" Content="{Binding Strings.ScheduledQuestion, Source={StaticResource LocalizedResources}}" Margin="8,357,216,0" VerticalAlignment="Top" />
+                    <Grid Margin="8,433,20,0" Height="131" VerticalAlignment="Top" Visibility="{Binding IsScheduled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <toolkit:DatePicker Value="{Binding ScheduledDate, Mode=TwoWay}" Margin="0,27,0,31" HorizontalAlignment="Left" Width="208" d:LayoutOverrides="Height"/>
+                        <toolkit:TimePicker Value="{Binding ScheduledTime, Mode=TwoWay}" HorizontalAlignment="Right" Margin="0,27,0,31" Width="208" d:LayoutOverrides="Height"/>
+                        <TextBlock Text="{Binding Strings.Date, StringFormat='{}{0}:', Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="14,0,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
+                        <TextBlock Text="{Binding Strings.Time, StringFormat='{}{0}:', Source={StaticResource LocalizedResources}}" Margin="0,0,147,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" HorizontalAlignment="Right" RenderTransformOrigin="0.128,0.422"/>
+                        <TextBlock Text="{Binding String.AboutScheduling, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Bottom" Margin="14,0,0,8" TextDecorations="Underline" Foreground="{StaticResource PhoneAccentBrush}" Tap="aboutScheduling_Tap"/>
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+
+            <u:AppBar>
+                <u:AppBarToggleButton Toggled="{Binding IsScheduled}"
+                    Text1="{Binding Strings.Send, Source={StaticResource LocalizedResources}}" IconUri1="/Images/Icons_White/appbar.sendmail.rest.png" Command1="{Binding SendTweet}"
+                    Text2="{Binding Strings.Schedule, Source={StaticResource LocalizedResources}}" IconUri2="/Images/Icons_White/appbar.alarm.rest.png" Command2="{Binding ScheduleTweet}" />
+                <u:AppBarIconButton Text="{Binding Strings.AddImage, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.feature.camera.rest.png" Command="{Binding SelectImage}" />
+                <u:AppBarIconButton Text="{Binding Strings.SaveDraft, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.save.rest.png" Command="{Binding SaveDraft}" />
+                <u:AppBar.MenuItems>
+                    <u:AppBarHyperlinkMenuItem Text="{Binding Strings.Drafts, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Drafts/ManageDrafts.xaml" />
+                </u:AppBar.MenuItems>
+            </u:AppBar>
         </Grid>
 
         <!--ContentPanel. Colocar aquí el contenido adicional-->

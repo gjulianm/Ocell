@@ -11,6 +11,7 @@ using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Library.Notifications;
 using System.Text;
+using Ocell.Localization;
 
 namespace Ocell.Settings
 {
@@ -48,7 +49,7 @@ namespace Ocell.Settings
             // Use Hammock to create a rest client
             var client = new RestClient
             {
-                Authority = "http://api.twitter.com",
+                Authority = "https://api.twitter.com",
                 Credentials = credentials
             };
 
@@ -68,7 +69,7 @@ namespace Ocell.Settings
             {
                 Dispatcher.BeginInvoke(() =>
                 {
-                    MessageBox.Show("An error happened while trying to get auth URL. Please contact @OcellApp if this happens frequently.");
+                    MessageBox.Show(Localization.Resources.ErrorAuthURL);
                     if (NavigationService.CanGoBack)
                         NavigationService.GoBack();
                 });
@@ -87,7 +88,7 @@ namespace Ocell.Settings
             {
                 Dispatcher.BeginInvoke(() =>
                 {
-                    MessageBox.Show("An error happened while trying to get auth URL. Please contact @OcellApp if this happens frequently.");
+                    MessageBox.Show(Localization.Resources.ErrorAuthURL);
                     if (NavigationService.CanGoBack)
                         NavigationService.GoBack();
                 });
@@ -96,7 +97,7 @@ namespace Ocell.Settings
             _requestToken = request_token;
             _requestSecret = token_secret;
 
-            Dispatcher.BeginInvoke(() => { wb.Navigate(new Uri("http://api.twitter.com/oauth/authorize?oauth_token=" + request_token)); });
+            Dispatcher.BeginInvoke(() => { wb.Navigate(new Uri("https://api.twitter.com/oauth/authorize?oauth_token=" + request_token)); });
         }
 
         private string GetQueryString(string Query)
@@ -141,7 +142,7 @@ namespace Ocell.Settings
                 {
                     Dispatcher.BeginInvoke(() =>
                     {
-                        MessageBox.Show("An error happened while trying to get client tokens. Try again, and please contact @OcellApp if this happens frequently.");
+                        MessageBox.Show(Localization.Resources.ErrorClientTokens);
                         if (NavigationService.CanGoBack)
                             NavigationService.GoBack();
                     });
@@ -172,7 +173,7 @@ namespace Ocell.Settings
             // Use Hammock to create a rest client
             var client = new RestClient
             {
-                Authority = "http://api.twitter.com",
+                Authority = "https://api.twitter.com",
                 Credentials = credentials
             };
 
@@ -193,7 +194,7 @@ namespace Ocell.Settings
             {
                 Dispatcher.BeginInvoke(() =>
                 {
-                    MessageBox.Show("An error happened while trying to get user tokens. Try again, and please contact @OcellApp if this happens frequently.");
+                    MessageBox.Show(Localization.Resources.ErrorClientTokens);
                     if (NavigationService.CanGoBack)
                         NavigationService.GoBack();
                 });
@@ -223,7 +224,7 @@ namespace Ocell.Settings
             }
             catch (Exception)
             {
-                Dispatcher.BeginInvoke(() => MessageBox.Show("An error happened while trying to get user tokens. Try again, and please contact @OcellApp if this happens frequently."));
+                Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorClientTokens));
             }
         }
 
