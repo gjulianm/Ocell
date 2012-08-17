@@ -17,6 +17,7 @@ using System.Threading;
 namespace Ocell.Testing
 {
     [TestClass]
+    [Tag("Performance")]
     public class PerformanceTests
     {
         List<TwitterStatus> GenerateRandomCollectionOfSize(long size, Func<TwitterStatus> RandomGenerator)
@@ -35,23 +36,22 @@ namespace Ocell.Testing
             Func<TwitterStatus> randomGen = () => new TwitterStatus { Id = (new Random()).Next(0, 9000000) };
             Action<IEnumerable<TwitterStatus>> unionMethod = collection =>
             {
-                var source = GenerateRandomCollectionOfSize(40, randomGen);
-                collection.ToList().Union(source, new TwitterStatusEqualityComparer());
+                var source = GenerateRandomCollectionOfSize(100, randomGen);
+                source.Union(collection, new TwitterStatusEqualityComparer()).ToList();
             };
 
             Action<IEnumerable<TwitterStatus>> addMethod = collection =>
             {
-                var source = GenerateRandomCollectionOfSize(40, randomGen);
-                var list = collection.ToList();
+                var source = GenerateRandomCollectionOfSize(100, randomGen);
                 var comparer = new TwitterStatusEqualityComparer();
-                foreach (var element in source)
-                    if (!list.Contains(element, comparer))
-                        list.Add(element);
+                foreach (var element in collection)
+                    if (!source.Contains(element, comparer))
+                        source.Add(element);
             };
 
             var meter = new EnumerableMethodPerfMeter<TwitterStatus>(unionMethod, addMethod, randomGen);
 
-            string report = meter.MeasureVariantSizePerformance(2);
+            string report = meter.MeasureVariantSizePerformance(4);
 
             Assert.AreEqual(0, 0, report);
             Debug.WriteLine(report);
@@ -63,22 +63,21 @@ namespace Ocell.Testing
             Func<TwitterStatus> randomGen = () => new TwitterStatus { Id = (new Random()).Next(0, 9000000) };
             Action<IEnumerable<TwitterStatus>> unionMethod = collection =>
             {
-                var source = GenerateRandomCollectionOfSize(40, randomGen);
-                collection.ToList().Union(source);
+                var source = GenerateRandomCollectionOfSize(100, randomGen);
+                source.Union(collection).ToList();
             };
 
             Action<IEnumerable<TwitterStatus>> addMethod = collection =>
             {
-                var source = GenerateRandomCollectionOfSize(40, randomGen);
-                var list = collection.ToList();
-                foreach (var element in source)
-                    if (!list.Contains(element))
-                        list.Add(element);
+                var source = GenerateRandomCollectionOfSize(100, randomGen);
+                foreach (var element in collection)
+                    if (!source.Contains(element))
+                        source.Add(element);
             };
 
             var meter = new EnumerableMethodPerfMeter<TwitterStatus>(unionMethod, addMethod, randomGen);
 
-            string report = meter.MeasureVariantSizePerformance(2);
+            string report = meter.MeasureVariantSizePerformance(4);
             Assert.AreEqual(0, 0, report);
             Debug.WriteLine(report);
         }
@@ -89,19 +88,19 @@ namespace Ocell.Testing
             Func<TwitterStatus> randomGen = () => new TwitterStatus { Id = (new Random()).Next(0, 9000000) };
             Action<IEnumerable<TwitterStatus>> withoutComparer = collection =>
             {
-                var source = GenerateRandomCollectionOfSize(40, randomGen);
-                collection.Union(source);
+                var source = GenerateRandomCollectionOfSize(100, randomGen);
+                source.Union(collection).ToList();
             };
 
             Action<IEnumerable<TwitterStatus>> withComparer = collection =>
             {
-                var source = GenerateRandomCollectionOfSize(40, randomGen);
-                collection.ToList().Union(source, new TwitterStatusEqualityComparer());
+                var source = GenerateRandomCollectionOfSize(100, randomGen);
+                source.Union(collection, new TwitterStatusEqualityComparer()).ToList();
             };
 
             var meter = new EnumerableMethodPerfMeter<TwitterStatus>(withComparer, withoutComparer, randomGen);
 
-            string report = meter.MeasureVariantSizePerformance(2);
+            string report = meter.MeasureVariantSizePerformance(4);
             Assert.AreEqual(0, 0, report);
             Debug.WriteLine(report);
         }
@@ -112,25 +111,51 @@ namespace Ocell.Testing
             Action<IEnumerable<TwitterStatus>> withoutComparer = collection =>
             {
                 var source = GenerateRandomCollectionOfSize(40, randomGen);
-                var list = collection.ToList();
-                foreach (var element in source)
-                    if (!list.Contains(element))
-                        list.Add(element);
+                foreach (var element in collection)
+                    if (!source.Contains(element))
+                        source.Add(element);
             };
 
             Action<IEnumerable<TwitterStatus>> withComparer = collection =>
             {
                 var source = GenerateRandomCollectionOfSize(40, randomGen);
-                var list = collection.ToList();
                 var comparer = new TwitterStatusEqualityComparer();
-                foreach (var element in source)
-                    if (!list.Contains(element, comparer))
-                        list.Add(element);
+                foreach (var element in collection)
+                    if (!source.Contains(element, comparer))
+                        source.Add(element);
             };
 
             var meter = new EnumerableMethodPerfMeter<TwitterStatus>(withComparer, withoutComparer, randomGen);
 
-            string report = meter.MeasureVariantSizePerformance(2);
+            string report = meter.MeasureVariantSizePerformance(4);
+            Assert.AreEqual(0, 0, report);
+            Debug.WriteLine(report);
+        }
+
+        [TestMethod]
+        public void TestIntersectThenAdd()
+        {
+            Func<TwitterStatus> randomGen = () => new TwitterStatus { Id = (new Random()).Next(0, 9000000) };
+            Action<IEnumerable<TwitterStatus>> intersect = collection =>
+            {
+                var source = GenerateRandomCollectionOfSize(40, randomGen);
+                collection = collection.Except(source);
+                foreach (var element in collection)
+                    source.Add(element);
+            };
+
+            Action<IEnumerable<TwitterStatus>> addMethod = collection =>
+            {
+                var source = GenerateRandomCollectionOfSize(40, randomGen);
+
+                foreach (var element in collection)
+                    if (!source.Contains(element))
+                        source.Add(element);
+            };
+
+            var meter = new EnumerableMethodPerfMeter<TwitterStatus>(addMethod, intersect, randomGen);
+
+            string report = meter.MeasureVariantSizePerformance(4);
             Assert.AreEqual(0, 0, report);
             Debug.WriteLine(report);
         }
