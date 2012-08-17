@@ -85,7 +85,7 @@ namespace Ocell.Library.Twitter
             string Key = GetCacheName(Resource);
             List<string> Strings = new List<string>();
 
-			List = List.Distinct();
+			List = List.Distinct(new TwitterStatusEqualityComparer());
 						
             try
             {

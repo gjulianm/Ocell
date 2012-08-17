@@ -364,10 +364,9 @@ namespace Ocell.Library.Twitter
 
                     TryAddLoadMoreButton(list);
 
-                    list = list.Except(Source);
-
                     foreach (var status in list)
-                        Source.Add(status);
+                        if (!Source.Contains(status, comparer))
+                            Source.Add(status);
                 }
             }
 
@@ -458,12 +457,14 @@ namespace Ocell.Library.Twitter
             lock (_deferSync)
             {
                 _deferringRefresh = false;
+                TryAddLoadMoreButton(_deferredItems.AsEnumerable());
 
-                var list = _deferredItems.AsEnumerable().Except(Source);
-                TryAddLoadMoreButton(list);
-
-                foreach(var element in list)
-                    Source.Add(element);
+                while (_deferredItems.Any())
+                {
+                    var item = _deferredItems.Dequeue();
+                    if (!Source.Contains(item))
+                        Source.Add(item);
+                }
             }
         }
 

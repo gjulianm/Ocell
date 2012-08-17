@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net;
 using TweetSharp;
-using System.Linq;
-using System.IO;
-using Ocell.Library;
-using System.IO.IsolatedStorage;
 
 namespace Ocell.Library.Twitter
 {
@@ -83,88 +79,61 @@ namespace Ocell.Library.Twitter
 
     public class UsernameProvider
     {
-        private static Dictionary<UserToken, IList<string>> dicUsers = new Dictionary<UserToken,IList<string>>();
-        private static Dictionary<UserToken, bool> finishedUsers = new Dictionary<UserToken,bool>();
-
-        public IList<string> Usernames
-        {
-            get
-            {
-                IList<string> list;
-                if (dicUsers.TryGetValue(User, out list))
-                    return list;
-                else
-                    return new List<string>();
-            }
-        }
-
+        public IList<string> Usernames { get; protected set; }
         public UserToken User { get; set; }
+        private ITwitterService _service;
         private bool _stop;
-
-        public static void FillUserNames(IEnumerable<UserToken> users)
-        {
-            foreach (var user in users)
-            {
-                var temp = user;
-                finishedUsers[temp] = false;
-                dicUsers[temp] = GetUserCache(temp).ToList();
-                ServiceDispatcher.GetService(temp).ListFriends(-1, (list, response) => ReceiveFriends(list, response, temp));
-            }
-        }
 
         public UsernameProvider()
         {
+            Usernames = new List<string>();
             _stop = false;
+        }
+
+        private void GetService()
+        {
+            if (User == null)
+                _service = ServiceDispatcher.GetDefaultService();
+            else
+                _service = ServiceDispatcher.GetService(User);
         }
 
         public void Start()
         {
-            bool userFinished;
-            if (!finishedUsers.TryGetValue(User, out userFinished) || !userFinished)
-                UsernameProvider.FillUserNames(new List<UserToken> { User });
+            if (_service == null)
+                GetService();
+
+            _service.ListFriends(-1, ReceiveFriends);
         }
 
-        private static void ReceiveFriends(TwitterCursorList<TwitterUser> friends, TwitterResponse response, UserToken user)
+        private void ReceiveFriends(TwitterCursorList<TwitterUser> friends, TwitterResponse response)
         {
-            if (friends == null || response.StatusCode != HttpStatusCode.OK)     
-                return;
-
-            if (dicUsers.ContainsKey(user))
-                dicUsers[user] = dicUsers[user].Union(friends.Select(x => x.ScreenName)).ToList();
-            else
-                dicUsers[user] = friends.Select(x => x.ScreenName).ToList();
-
-            if (friends.NextCursor != null && friends.NextCursor != 0)
-                ServiceDispatcher.GetService(user).ListFriends((long)friends.NextCursor, (l, r) => ReceiveFriends(l, r, user));
-            else
+            if (friends == null || response.StatusCode != HttpStatusCode.OK)
             {
-                finishedUsers[user] = true;
-                SaveUserCache(user, dicUsers[user]);
+                if (Error != null)
+                    Error(this, response);
+                return;
             }
 
-            
+            if (_stop)
+            {
+                _stop = false;
+                return;
+            }
+
+            if (friends.NextCursor != null && friends.NextCursor != 0 && _service != null)
+                _service.ListFriends((long)friends.NextCursor, ReceiveFriends);
+
+            if (Usernames == null)
+                Usernames = new List<string>();
+
+            foreach (var user in friends)
+                Usernames.Add(user.ScreenName);
         }
 
         public void Stop()
         {
             _stop = true;
-        }
-
-        private static IEnumerable<string> GetUserCache(UserToken user)
-        {
-            string filename = "AUTOCOMPLETECACHE" + user.ScreenName;
-            IsolatedStorageFileStream file = IsolatedStorageFile.GetUserStoreForApplication().OpenFile(filename, FileMode.OpenOrCreate);
-            var list = file.ReadLines().ToList();
-            file.Close();
-            return list;
-        }
-
-        private static void SaveUserCache(UserToken user, IEnumerable<string> names)
-        {
-            string filename = "AUTOCOMPLETECACHE" + user.ScreenName;
-            IsolatedStorageFileStream file = IsolatedStorageFile.GetUserStoreForApplication().OpenFile(filename, FileMode.Create);
-            file.WriteLines(names);
-            file.Close();
         }
 
         public event OnError Error;
