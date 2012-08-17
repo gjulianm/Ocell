@@ -58,6 +58,7 @@ namespace Ocell
             {
                 CreateTile();
                 ShowFollowMessage();
+                UsernameProvider.FillUserNames(Config.Accounts);
 #if DEBUG
                 var list = DebugWriter.ReadAll();
                 if (list != null)
