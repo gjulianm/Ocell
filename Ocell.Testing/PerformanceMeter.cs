@@ -86,11 +86,11 @@ namespace Ocell.Testing
             return cron.ElapsedMilliseconds;
         }
 
-        private long MeasureAverageRunningTime(Action<IEnumerable<T>> method, IEnumerable<T> collection, int resolution)
+        private double MeasureAverageRunningTime(Action<IEnumerable<T>> method, IEnumerable<T> collection, int resolution)
         {
             int numExecutions = (int)Math.Pow(10, resolution / 2);
 
-            long total = 0;
+            double total = 0;
 
             for (int i = 0; i < numExecutions; i++)
                 total += MeasureRunningTime(method, collection);
@@ -125,10 +125,10 @@ namespace Ocell.Testing
             string report = "";
 
             var sizes = GetCollectionSizesForResolution(resolution).ToList();
-            long diffSum = 0;
+            double diffSum = 0;
 
             int quarterNum = 0;
-            var quarters = new List<long> {0, 0, 0, 0};
+            var quarters = new List<double> {0, 0, 0, 0};
             var quarterSize = new List<int> { 0, 0, 0, 0 };
             int thisQuarterSize = 1;
 
@@ -140,10 +140,10 @@ namespace Ocell.Testing
                 var size = sizes.ElementAt(i);
                 var collection = GenerateRandomCollectionOfSize(size);
 
-                long runningTime1 = MeasureAverageRunningTime(_method1, collection, resolution);
-                long runningTime2 = MeasureAverageRunningTime(_method2, collection, resolution);
+                double runningTime1 = MeasureAverageRunningTime(_method1, collection, resolution);
+                double runningTime2 = MeasureAverageRunningTime(_method2, collection, resolution);
 
-                long diff = runningTime1 - runningTime2;
+                double diff = runningTime1 - runningTime2;
 
                 if (i >= ((double)sizes.Count() / 4) * (quarterNum + 1))
                 {
@@ -163,13 +163,16 @@ namespace Ocell.Testing
 
             quarters = quarters.Select((s, i) => s / (quarterSize[i] == 0 ? 1 : quarterSize[i])).ToList();
 
+            int faster = diffSum < 0 ? 1 : 2;
+
             report += String.Format("Final average difference: {0}\n" +
+                "Faster method: {5}\n" +
                 "Average difference in quarters:\n" +
-                "\tQ1: {1}\n" +
-                "\tQ2: {2}\n" +
-                "\tQ3: {3}\n" +
-                "\tQ4: {4}\n", diffSum / sizes.Count(), quarters[0],
-                quarters[1], quarters[2], quarters[3]);
+                "\tQ1: {1} ms\n" +
+                "\tQ2: {2} ms\n" +
+                "\tQ3: {3} ms\n" +
+                "\tQ4: {4} ms\n", diffSum / sizes.Count(), quarters[0],
+                quarters[1], quarters[2], quarters[3], faster);
 
             return report;
         }
