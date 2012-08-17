@@ -10,7 +10,7 @@ using DanielVaughan.ComponentModel;
 
 namespace Ocell
 {
-    public  class ExtendedViewModelBase : ViewModelBase
+    public class ExtendedViewModelBase : ViewModelBase
     {
         public ExtendedViewModelBase(string message)
             : base(message)
@@ -31,7 +31,11 @@ namespace Ocell
         {
             try
             {
-                base.GoBack();
+                var dispatcher = Deployment.Current.Dispatcher;
+                if (dispatcher.CheckAccess())
+                    base.GoBack();
+                else
+                    dispatcher.BeginInvoke(GoBack);
             }
             catch (Exception)
             {

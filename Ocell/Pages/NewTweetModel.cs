@@ -32,7 +32,7 @@ using System.Xml.Linq;
 
 namespace Ocell.Pages
 {
-    public class NewTweetModel : ViewModelBase
+    public class NewTweetModel : ExtendedViewModelBase
     {
         bool uploadingPhoto;
 

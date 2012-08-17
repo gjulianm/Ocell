@@ -232,12 +232,15 @@ namespace Ocell.Settings
         {
             TwitterResource Home = new TwitterResource { Type = ResourceType.Home, User = user };
             TwitterResource Mentions = new TwitterResource { Type = ResourceType.Mentions, User = user };
+            TwitterResource Messages = new TwitterResource { Type = ResourceType.Messages, User = user };
             Dispatcher.BeginInvoke(() =>
             {
                 if (!Config.Columns.Contains(Home))
                     Config.Columns.Add(Home);
                 if (!Config.Columns.Contains(Mentions))
                     Config.Columns.Add(Mentions);
+                if (!Config.Columns.Contains(Messages))
+                    Config.Columns.Add(Messages);
                 Config.SaveColumns();
             });
         }
