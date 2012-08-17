@@ -82,13 +82,11 @@ namespace Ocell.Pages
                 ListAccounts.SelectedItems.Add(DataTransfer.CurrentAccount);
             }
 
-            _provider = new UsernameProvider();
-            _provider.User = DataTransfer.CurrentAccount;
+            
             _completer = new Autocompleter();
+            _completer.User = DataTransfer.CurrentAccount;
             _completer.Textbox = TweetBox;
             _completer.Trigger = '@';
-            _completer.Strings = _provider.Usernames;
-            _provider.Start();
         }
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -102,8 +100,7 @@ namespace Ocell.Pages
 
             if (img.Opacity == 1)
             {
-                _provider.User = img.Tag as UserToken;
-                _provider.Start();
+                _completer.User = img.Tag as UserToken;
             }
         }
 
