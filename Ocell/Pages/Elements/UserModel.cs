@@ -387,6 +387,9 @@ namespace Ocell.Pages.Elements
 
         void ReceiveBlockedUsers(IEnumerable<int> blockedIds, TwitterResponse response)
         {
+            if (blockedIds == null)
+                blockedIds = new List<int>();
+
             Blocked = blockedIds.Any() && blockedIds.Contains(User.Id);
 
             block.RaiseCanExecuteChanged();

@@ -64,7 +64,7 @@ namespace Ocell
 
             if (!(value is TwitterStatus))
             {
-                if ((string)parameter == "false")
+                if ((string)parameter == "false" && ((ITweetable)value).Author != null)
                     return ((ITweetable)value).Author.ProfileImageUrl;
                 else
                     return "";
@@ -76,16 +76,18 @@ namespace Ocell
             {
                 if (Status.RetweetedStatus != null)
                     return Status.RetweetedStatus.Author.ProfileImageUrl;
-                else
+                else if(Status.Author != null)
                     return Status.Author.ProfileImageUrl;
             }
             else
             {
-                if (Status.RetweetedStatus != null)
+                if (Status.RetweetedStatus != null && Status.RetweetedStatus.Author != null)
                     return Status.Author.ProfileImageUrl;
                 else
                     return "";
             }
+
+            return "";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
