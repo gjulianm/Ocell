@@ -65,6 +65,9 @@ namespace Ocell.Pages.Elements
 
         private void CreateText(ITweetable Status)
         {
+            if (Status == null)
+                return;
+
             var paragraph = new Paragraph();
             var runs = new List<Inline>();
 
@@ -74,32 +77,35 @@ namespace Ocell.Pages.Elements
             string PreviousText;
             int i = 0;
 
-            foreach (var Entity in viewModel.Tweet.Entities)
+            if (viewModel.Tweet.Entities != null)
             {
-                if (Entity.StartIndex > i)
+                foreach (var Entity in viewModel.Tweet.Entities)
                 {
-                    PreviousText = TweetText.Substring(i, Entity.StartIndex - i);
-                    runs.Add(new Run { Text = HttpUtility.HtmlDecode(PreviousText) });
-                }
+                    if (Entity.StartIndex > i)
+                    {
+                        PreviousText = TweetText.Substring(i, Entity.StartIndex - i);
+                        runs.Add(new Run { Text = HttpUtility.HtmlDecode(PreviousText) });
+                    }
 
-                i = Entity.EndIndex;
+                    i = Entity.EndIndex;
 
-                switch (Entity.EntityType)
-                {
-                    case TwitterEntityType.HashTag:
-                        runs.Add(CreateHashtagLink((TwitterHashTag)Entity));
-                        break;
+                    switch (Entity.EntityType)
+                    {
+                        case TwitterEntityType.HashTag:
+                            runs.Add(CreateHashtagLink((TwitterHashTag)Entity));
+                            break;
 
-                    case TwitterEntityType.Mention:
-                        runs.Add(CreateMentionLink((TwitterMention)Entity));
-                        break;
+                        case TwitterEntityType.Mention:
+                            runs.Add(CreateMentionLink((TwitterMention)Entity));
+                            break;
 
-                    case TwitterEntityType.Url:
-                        runs.Add(CreateUrlLink((TwitterUrl)Entity));
-                        break;
-                    case TwitterEntityType.Media:
-                        runs.Add(CreateMediaLink((TwitterMedia)Entity));
-                        break;
+                        case TwitterEntityType.Url:
+                            runs.Add(CreateUrlLink((TwitterUrl)Entity));
+                            break;
+                        case TwitterEntityType.Media:
+                            runs.Add(CreateMediaLink((TwitterMedia)Entity));
+                            break;
+                    }
                 }
             }
 
@@ -204,7 +210,7 @@ namespace Ocell.Pages.Elements
 
             string value = string.IsNullOrWhiteSpace(URL.ExpandedValue) ? URL.Value : URL.ExpandedValue;
 
-            return CreateBaseLink(TweetTextConverter.TrimUrl(value), Localization.Resources.CopyLink, URL.ExpandedValue, item);
+            return CreateBaseLink(TweetTextConverter.TrimUrl(value), Localization.Resources.CopyLink, value, item);
         }
 
         Inline CreateMediaLink(TwitterMedia Media)
@@ -225,6 +231,7 @@ namespace Ocell.Pages.Elements
                 else
                     Dependency.Resolve<IMessageService>().ShowError(Localization.Resources.NotValidURL);
             };
+
             return CreateBaseLink(Media.DisplayUrl, Localization.Resources.CopyLink, Media.DisplayUrl, item);
         }
 
