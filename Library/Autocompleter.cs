@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using Ocell.Library;
+using Ocell.Library.Twitter;
 
 namespace Ocell.Library
 {
     public class Autocompleter
     {
+        private UsernameProvider _provider = new UsernameProvider();
         private TextBox _textbox;
         private string _text;
         private bool _isAutocompleting = false;
         private int _triggerPosition;
-        public IEnumerable<string> Strings { get; set; }
+        public UserToken User { get { return _provider.User; } set { _provider.User = value; } }
         public char Trigger { get; set; }
         public TextBox Textbox
         {
@@ -31,7 +34,7 @@ namespace Ocell.Library
             if (_textbox == null)
                 return;
 
-            if (_textbox.Text.Length > 0 && _textbox.SelectionStart > 0 && _textbox.SelectionStart < _textbox.Text.Length && (Trigger != '\0' && _textbox.Text[_textbox.SelectionStart - 1] == Trigger))
+            if (_textbox.Text.Length > 0 && _textbox.SelectionStart > 0 && _textbox.SelectionStart <= _textbox.Text.Length && (Trigger != '\0' && _textbox.Text[_textbox.SelectionStart - 1] == Trigger))
             {
                 _isAutocompleting = true;
                 _triggerPosition = _textbox.SelectionStart - 1;
@@ -55,7 +58,7 @@ namespace Ocell.Library
             if (!_text.Contains(Trigger) && Trigger != '\0')
                 return true;
 
-            if (_textbox.SelectionStart <= _text.Length && _text[_textbox.SelectionStart - 1] == ' ')
+            if (_textbox.SelectionStart <= _text.Length && _textbox.SelectionStart > 0 && _text[_textbox.SelectionStart - 1] == ' ')
                 return true;
 
             return false;
@@ -113,9 +116,8 @@ namespace Ocell.Library
 
         private string GetFirstUserCoincidentWith(string chunk)
         {
-            if (Strings == null)
-                return null;
-            return Strings.FirstOrDefault(item => item.IndexOf(chunk) == 0);
+            return _provider.Usernames.FirstOrDefault(item => 
+                item.IndexOf(chunk, StringComparison.InvariantCultureIgnoreCase) == 0);
         }
 
         private void AutocompleteText(string text)

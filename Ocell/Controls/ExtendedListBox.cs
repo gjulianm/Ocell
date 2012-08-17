@@ -58,6 +58,7 @@ namespace Ocell.Controls
             this.Loaded += new RoutedEventHandler(ListBox_Loaded);
             this.Unloaded += new RoutedEventHandler(ExtendedListBox_Unloaded);
             this.Compression += new OnCompression(RefreshOnPull);
+            this.Compression += new OnCompression(UndeferRefresh);
             this.SelectionChanged += new SelectionChangedEventHandler(ManageNavigation);
             this.ManipulationCompleted += new EventHandler<ManipulationCompletedEventArgs>(ScrollEnded);
 
@@ -68,13 +69,17 @@ namespace Ocell.Controls
             SetupCollectionViewSource();
         }
 
-        void ScrollEnded(object sender, ManipulationCompletedEventArgs e)
+        void UndeferRefresh(object sender, CompressionEventArgs e)
         {
-            var sv = (ScrollViewer)FindElementRecursive(this, typeof(ScrollViewer));
-            if (sv.VerticalOffset > 0)
-                Loader.StopSourceRefresh();
-            else
+            if (e.Type == CompressionType.Top)
                 Loader.ResumeSourceRefresh();
+        }
+
+        void ScrollEnded(object sender, ManipulationCompletedEventArgs e)
+        {            
+            var sv = (ScrollViewer)FindElementRecursive(this, typeof(ScrollViewer));
+            if (sv.VerticalOffset > 0.3)
+                Loader.StopSourceRefresh();
         }
 
         public void ScrollToTop()
@@ -84,6 +89,8 @@ namespace Ocell.Controls
                 DoScrollToTop();
             else
                 dispatcher.BeginInvoke(DoScrollToTop);
+
+            Loader.ResumeSourceRefresh();
         }
 
         private void DoScrollToTop()
