@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProfilerSession Type="MemoryPerformanceAnalysis" Name="Ocell634697840140610000">
+  <TargetApplication Name="Ocell" SourceProject="Ocell.csproj" Type="WindowsPhone71">
+    <ApplicationBinary Path="Bin\Release\Ocell.xap" Timestamp="3/31/2012 1:01:06 PM" />
+    <ApplicationIconPath Path="" />
+    <SymbolPaths>
+      <Path Value="Bin\Release\" />
+    </SymbolPaths>
+  </TargetApplication>
+  <Settings>
+    <Probe Name="Visual">
+      <CollectElementLevelCosting Enabled="False" />
+      <CollectSnapshots Enabled="False" Interval="" Resampling="" />
+      <CollectMediaEvents Enabled="False" />
+      <CollectCacheDetails Enabled="False" />
+    </Probe>
+    <Probe Name="Code">
+      <SampleCallStack Enabled="False" Depth="" Interval="" />
+      <CollectPerformanceCounters Enabled="False" />
+    </Probe>
+    <Probe Name="Memory">
+      <MemoryCallStack Enabled="True" Depth="4" />
+      <ObjectTree Enabled="True" Interval="5" />
+    </Probe>
+  </Settings>
+  <Data>
+    <Logs>
+      <File Type="NativeFormat" Path="PerformanceLogs\Ocell634697840140610000\tmp1FEF.tmp" />
+    </Logs>
+  </Data>
+  <TargetDeviceSettings OSVersion="7.10.8107" AvailablePhysicalMemoryAtStartup="127873024" ProcessorArchitectureType="Arm" ProcessorInformation="Armv4ifp" IsEmulator="False" />
+</ProfilerSession>
