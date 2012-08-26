@@ -99,24 +99,10 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Ocell.Common\Localization\ResourceBinder.cs">
-      <Link>ResourceBinder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\Ocell.Common\Localization\Resources.Designer.cs">
-      <Link>Resources.Designer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\Ocell.Common\Localization\Resources.es.Designer.cs">
-      <Link>Resources.es.Designer.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PRIResource Include="..\..\..\Ocell.Common\Localization\Resources.es.resx">
-      <Link>Resources.es.resx</Link>
-    </PRIResource>
-    <PRIResource Include="..\..\..\Ocell.Common\Localization\Resources.resx">
-      <Link>Resources.resx</Link>
-    </PRIResource>
+    <PRIResource Include="en\Resources.resw" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

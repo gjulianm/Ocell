@@ -150,8 +150,8 @@
     <Compile Include="..\..\Ocell.Common\Library\IEnumerableExtension.cs">
       <Link>IEnumerableExtension.cs</Link>
     </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\IsolatedFileStreamExtension.cs">
-      <Link>IsolatedFileStreamExtension.cs</Link>
+    <Compile Include="..\..\Ocell.Common\Library\Localizer.cs">
+      <Link>Localizer.cs</Link>
     </Compile>
     <Compile Include="..\..\Ocell.Common\Library\Notifications\NotificationPreferences.cs">
       <Link>Notifications\NotificationPreferences.cs</Link>
@@ -219,10 +219,19 @@
     <Compile Include="..\..\Ocell.Common\Library\Twitter\UserTokenFiller.cs">
       <Link>Twitter\UserTokenFiller.cs</Link>
     </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Watch.cs">
-      <Link>Watch.cs</Link>
+    <Compile Include="..\..\Ocell.Common\SensitiveData.cs">
+      <Link>SensitiveData.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Ocell.Windows8\packages\Newtonsoft.Json.4.5.8\lib\winrt45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

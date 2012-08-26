@@ -1,5 +1,4 @@
 ﻿using System;
-using Ocell.Localization;
 
 namespace Ocell.Library.Twitter
 {
@@ -31,19 +30,19 @@ namespace Ocell.Library.Twitter
                 switch (Type)
                 {
                     case ResourceType.Favorites:
-                        title = Resources.Favorites;
+                        title = Localizer.GetString("Favorites");
                         break;
                     case ResourceType.Home:
-                        title = Resources.Home;
+                        title = Localizer.GetString("Home");
                         break;
                     case ResourceType.List:
                         title = Data;
                         break;
                     case ResourceType.Mentions:
-                        title = Resources.Mentions;
+                        title = Localizer.GetString("Mentions");
                         break;
                     case ResourceType.Messages:
-                        title = Resources.Messages;
+                        title = Localizer.GetString("Messages");
                         break;
                     case ResourceType.Search:
                         title = Data;
@@ -52,10 +51,10 @@ namespace Ocell.Library.Twitter
                         title = Data;
                         break;
                     case ResourceType.Conversation:
-                        title = Resources.Conversation;
+                        title = Localizer.GetString("Conversation");
                         break;
                     default:
-                        title = Resources.UnknownValue;
+                        title = Localizer.GetString("UnknownValue");
                         break;
                 }
 

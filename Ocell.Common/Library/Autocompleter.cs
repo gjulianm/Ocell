@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
 using Ocell.Library;
 using Ocell.Library.Twitter;
+
+#if !METRO
+using System.Windows.Controls;
+#else
+using Windows.UI.Xaml.Controls;
+#endif
 
 namespace Ocell.Library
 {
@@ -117,7 +122,11 @@ namespace Ocell.Library
         private string GetFirstUserCoincidentWith(string chunk)
         {
             return _provider.Usernames.FirstOrDefault(item => 
+#if !METRO
                 item.IndexOf(chunk, StringComparison.InvariantCultureIgnoreCase) == 0);
+#else
+                item.IndexOf(chunk, StringComparison.OrdinalIgnoreCase) == 0);
+#endif
         }
 
         private void AutocompleteText(string text)

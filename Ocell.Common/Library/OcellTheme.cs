@@ -51,7 +51,7 @@ namespace Ocell.Library
                     case BackgroundType.None:
                         return "";
                     case BackgroundType.ThemeDependant:
-                        bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
+                        bool isDarkTheme = ((Visibility)Application.Current.Localizer.GetString("")"PhoneDarkThemeVisibility"] == Visibility.Visible);
                         if (isDarkTheme)
                             return "/Images/Backgrounds/Fabric.png";
                         else
