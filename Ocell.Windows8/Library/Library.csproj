@@ -108,6 +108,10 @@
       <Project>{fdab8b55-b400-478b-94bc-21eb50937eb4}</Project>
       <Name>Tweetsharp.Metro</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ocell.Windows8\Localization\Localization.csproj">
+      <Project>{c992d586-a20e-4fd9-94d0-2d43e081bad1}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Ocell.Common\Library\Autocompleter.cs">
@@ -133,6 +137,9 @@
     </Compile>
     <Compile Include="..\..\Ocell.Common\Library\DecisionMaker.cs">
       <Link>DecisionMaker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Ocell.Common\Library\FileAbstractor.cs">
+      <Link>FileAbstractor.cs</Link>
     </Compile>
     <Compile Include="..\..\Ocell.Common\Library\Filtering\ColumnFilter.cs">
       <Link>Filtering\ColumnFilter.cs</Link>

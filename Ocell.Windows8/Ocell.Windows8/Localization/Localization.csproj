@@ -6,10 +6,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>44c45438-fd6f-4b03-9b97-9fbfa220a76b</ProjectGuid>
+    <ProjectGuid>{C992D586-A20E-4FD9-94D0-2D43E081BAD1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Localization</RootNamespace>
+    <RootNamespace>Ocell.Localization</RootNamespace>
     <AssemblyName>Localization</AssemblyName>
     <DefaultLanguage>es-ES</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
@@ -99,11 +99,24 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Compile Include="..\..\..\Ocell.Common\Localization\ResourceBinder.cs">
+      <Link>ResourceBinder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Ocell.Common\Localization\Resources.Designer.cs">
+      <Link>Resources.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Ocell.Common\Localization\Resources.es.Designer.cs">
+      <Link>Resources.es.Designer.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PRIResource Include="..\..\..\Ocell.Common\Localization\Resources.es.resx">
+      <Link>Resources.es.resx</Link>
+    </PRIResource>
+    <PRIResource Include="..\..\..\Ocell.Common\Localization\Resources.resx">
+      <Link>Resources.resx</Link>
+    </PRIResource>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
@@ -116,5 +129,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-
 </Project>
