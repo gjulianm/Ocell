@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4F3C4395-BDE1-42B3-91FF-4EDA0087C45D}</ProjectGuid>
+    <ProjectGuid>{097A63CA-9DD8-4712-856B-D7178F546D2D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ocell.Library</RootNamespace>
-    <AssemblyName>Library</AssemblyName>
+    <AssemblyName>APIs</AssemblyName>
     <DefaultLanguage>es-ES</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -100,120 +100,23 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\..\Ocell.Common\hammock\src\Hammock.Metro\Hammock.Metro.csproj">
+    <ProjectReference Include="..\..\..\Ocell.Common\hammock\src\Hammock.Metro\Hammock.Metro.csproj">
       <Project>{beaa164d-406b-44e6-a35e-d97d69ff06cd}</Project>
       <Name>Hammock.Metro</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.Common\tweetsharp\src\net45\Tweetsharp.Metro\Tweetsharp.Metro.csproj">
-      <Project>{fdab8b55-b400-478b-94bc-21eb50937eb4}</Project>
-      <Name>Tweetsharp.Metro</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Ocell.Common\Library\Autocompleter.cs">
-      <Link>Autocompleter.cs</Link>
+    <Compile Include="..\..\..\Ocell.Common\APIs\ReadLater\Instapaper\InstapaperService.cs">
+      <Link>Instapaper\InstapaperService.cs</Link>
     </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Collections\SafeObservable.cs">
-      <Link>Collections\SafeObservable.cs</Link>
+    <Compile Include="..\..\..\Ocell.Common\APIs\ReadLater\IReadLaterService.cs">
+      <Link>IReadLaterService.cs</Link>
     </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Config.cs">
-      <Link>Config.cs</Link>
+    <Compile Include="..\..\..\Ocell.Common\APIs\ReadLater\Pocket\PocketService.cs">
+      <Link>Pocket\PocketService.cs</Link>
     </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\CustomIEnumerableExtensions.cs">
-      <Link>CustomIEnumerableExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\DataTransfer.cs">
-      <Link>DataTransfer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\DateSync.cs">
-      <Link>DateSync.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\DebugWriter.cs">
-      <Link>DebugWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\DecisionMaker.cs">
-      <Link>DecisionMaker.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Filtering\ColumnFilter.cs">
-      <Link>Filtering\ColumnFilter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\GlobalEvents.cs">
-      <Link>GlobalEvents.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\IEnumerableExtension.cs">
-      <Link>IEnumerableExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\IsolatedFileStreamExtension.cs">
-      <Link>IsolatedFileStreamExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Notifications\NotificationPreferences.cs">
-      <Link>Notifications\NotificationPreferences.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Notifications\TileManager.cs">
-      <Link>Notifications\TileManager.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\OcellTheme.cs">
-      <Link>OcellTheme.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\ReadLaterCompatibility.cs">
-      <Link>ReadLaterCompatibility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Tasks\TaskExecutor.cs">
-      <Link>Tasks\TaskExecutor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Tasks\TwitterStatusTask.cs">
-      <Link>Tasks\TwitterStatusTask.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\TweetFilter.cs">
-      <Link>TweetFilter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\TwitterHandler.cs">
-      <Link>TwitterHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\Cacher.cs">
-      <Link>Twitter\Cacher.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\Comparers\TwitterComparers.cs">
-      <Link>Twitter\TwitterComparers.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\ConversationService.cs">
-      <Link>Twitter\ConversationService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\IProvider.cs">
-      <Link>Twitter\IProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\LoadMoreTweetable.cs">
-      <Link>Twitter\LoadMoreTweetable.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\MockUserProvider.cs">
-      <Link>Twitter\MockUserProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\ProtectedAccounts.cs">
-      <Link>Twitter\ProtectedAccounts.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\ServiceDispatcher.cs">
-      <Link>Twitter\ServiceDispatcher.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\TweetLoader.cs">
-      <Link>Twitter\TweetLoader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\TwitterDraft.cs">
-      <Link>Twitter\TwitterDraft.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\TwitterResource.cs">
-      <Link>Twitter\TwitterResource.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\UsernameProvider.cs">
-      <Link>Twitter\UsernameProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\UserToken.cs">
-      <Link>Twitter\UserToken.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\UserTokenFiller.cs">
-      <Link>Twitter\UserTokenFiller.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Watch.cs">
-      <Link>Watch.cs</Link>
+    <Compile Include="..\..\..\Ocell.Common\APIs\ReadLater\ReadLaterResponse.cs">
+      <Link>ReadLaterResponse.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
