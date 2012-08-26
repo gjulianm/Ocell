@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.Threading;
-
+#if METRO
+using System.Threading.Tasks;
+#endif
 namespace Ocell.Library
 {
     public static class GlobalEvents
@@ -18,10 +11,17 @@ namespace Ocell.Library
 
         public static void FireFiltersChanged(object sender, EventArgs e)
         {
+#if !METRO
             ThreadPool.QueueUserWorkItem((threadcontext) => {
                 if (FiltersChanged != null)
                     FiltersChanged(sender, e);
             });
+#else
+            Task.Run(() => {
+                if (FiltersChanged != null)
+                    FiltersChanged(sender, e);
+            });
+#endif
         }
     }
 }
