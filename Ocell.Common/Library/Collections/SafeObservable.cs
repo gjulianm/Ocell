@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading;
-using System.Windows.Threading;
 using System.Linq;
+
+#if WINDOWS_PHONE
+using System.Windows.Threading;
+#elif METRO
+using System.Threading.Tasks;
+#endif
 
 namespace Ocell.Library
 {
@@ -61,7 +57,11 @@ namespace Ocell.Library
                 added++;
                 if (added >= 5)
                 {
+#if METRO
+                    Task.Delay(10).RunSynchronously();
+#else
                     Thread.Sleep(10);
+#endif
                     added = 0;
                 }
             }
