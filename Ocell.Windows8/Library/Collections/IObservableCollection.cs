@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ocell.Library.Collections
 {
-    public interface IObservableCollection<T> : IEnumerable<T>, INotifyCollectionChanged
+    public interface IObservableCollection<T> : IReadOnlyList<T>, INotifyCollectionChanged
     {
     }
 }
