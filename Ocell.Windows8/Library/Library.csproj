@@ -123,9 +123,6 @@
     <Compile Include="..\..\Ocell.Common\Library\Config.cs">
       <Link>Config.cs</Link>
     </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\CustomIEnumerableExtensions.cs">
-      <Link>CustomIEnumerableExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\..\Ocell.Common\Library\DataTransfer.cs">
       <Link>DataTransfer.cs</Link>
     </Compile>
@@ -219,17 +216,16 @@
     <Compile Include="..\..\Ocell.Common\SensitiveData.cs">
       <Link>SensitiveData.cs</Link>
     </Compile>
-    <Compile Include="IPropertySetExtensions.cs" />
+    <Compile Include="..\..\Ocell.WindowsPhone\Ocell\Helpers\StatusConverter.cs">
+      <Link>StatusConverter.cs</Link>
+    </Compile>
+    <Compile Include="Collections\CollectionView.cs" />
+    <Compile Include="Collections\FilteredSortedCollection.cs" />
+    <Compile Include="Collections\IObservableCollection.cs" />
+    <Compile Include="Collections\SortDescription.cs" />
+    <Compile Include="Extensions\IPropertySetExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StringExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Ocell.Windows8\packages\Newtonsoft.Json.4.5.8\lib\winrt45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="Extensions\StringExtensions.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
