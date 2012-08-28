@@ -1,16 +1,10 @@
-﻿using System;
+﻿using Ocell.Library.Twitter.Comparers;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using TweetSharp;
-using Ocell.Library;
-using System.Threading;
-using Ocell.Library.Twitter;
-using Ocell.Library.Twitter.Comparers;
-using System.Windows.Controls;
-using System.Windows;
-using System.ComponentModel;
 
 namespace Ocell.Library.Twitter
 {
@@ -65,11 +59,15 @@ namespace Ocell.Library.Twitter
                 if (value == _isLoading)
                     return;
                 _isLoading = value;
+#if !METRO
                 var dispatcher = Deployment.Current.Dispatcher;
                 if (dispatcher.CheckAccess())
                     OnPropertyChanged("IsLoading");
                 else
                     dispatcher.BeginInvoke(() => OnPropertyChanged("IsLoading"));
+#else
+                OnPropertyChanged("IsLoading");
+#endif
             }
         }
 
@@ -115,14 +113,22 @@ namespace Ocell.Library.Twitter
         #region Cache
         private void SaveToCacheThreaded()
         {
+#if WINDOWS_PHONE
             ThreadPool.QueueUserWorkItem((threadContext) => SaveToCache());
+#else
+            System.Threading.Tasks.Task.Run(() => SaveToCache());
+#endif
         }
         public void LoadCacheAsync()
         {
+#if WINDOWS_PHONE
             ThreadPool.QueueUserWorkItem((threadContext) =>
                 {
                     LoadCache();
                 });
+#else
+            System.Threading.Tasks.Task.Run(() => LoadCache());
+#endif
         }
         public void SaveToCache()
         {
@@ -226,7 +232,7 @@ namespace Ocell.Library.Twitter
                     _srv.Search(Resource.Data, 1, 20, ReceiveSearch);
                     break;
                 case ResourceType.Tweets:
-                    _srv.ListTweetsOnSpecifiedUserTimeline(Resource.Data, TweetsToLoadPerRequest, true, ReceiveTweets);
+                    _srv.ListTweetsOnSpecifiedUserTimeline(Resource.Data, TweetsToLoadPerRequest, ReceiveTweets);
                     break;
                 case ResourceType.Conversation:
                     _conversationService.GetConversationForStatus(Resource.Data, ReceiveTweets);
@@ -272,7 +278,7 @@ namespace Ocell.Library.Twitter
                     _srv.SearchBefore(last, Resource.Data, ReceiveSearch);
                     break;
                 case ResourceType.Tweets:
-                    _srv.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, last, true, ReceiveTweets);
+                    _srv.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, last,  ReceiveTweets);
                     break;
                 case ResourceType.Conversation:
                     _conversationService.GetConversationForStatus(Resource.Data, ReceiveTweets);
