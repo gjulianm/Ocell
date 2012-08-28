@@ -123,7 +123,7 @@ namespace Ocell.Pages.Elements
                 GoBack();
                 return;
             }
-            else if (response.StatusCode != HttpStatusCode.OK)
+            else if (response.StatusCode != HttpStatusCode.OK || users == null)
             {
                 MessageService.ShowError(Resources.ErrorMessage);
                 GoBack();
