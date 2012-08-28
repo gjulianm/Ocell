@@ -168,6 +168,13 @@ namespace Ocell.Pages.Elements
         {
             get { return changeAvatar; }
         }
+
+        DelegateCommand navigateTo;
+        public ICommand NavigateTo
+        {
+            get { return navigateTo; }
+        }
+
         #endregion
 
         public UserModel()
@@ -228,6 +235,13 @@ namespace Ocell.Pages.Elements
                     task.Show();
                 }, (obj) => GenericCanExecute.Invoke(null) && IsOwner);
 
+            navigateTo = new DelegateCommand((url) =>
+                {
+                    var task = new WebBrowserTask();
+                    task.Uri = new Uri((string)url, UriKind.Absolute);
+                    task.Show();
+                }, (url) => url is string && Uri.IsWellFormedUriString(url as string, UriKind.Absolute));
+
             manageLists = new DelegateCommand((obj) => Navigate("/Pages/Lists/ListManager.xaml?user=" + User.ScreenName),
                 GenericCanExecute);
         }
@@ -270,6 +284,12 @@ namespace Ocell.Pages.Elements
         void ReceiveFollow(TwitterUser usr, TwitterResponse response)
         {
             string successMsg = "", errorMsg = "";
+
+            if (usr == null)
+            {
+                MessageService.ShowError(Resources.ErrorMessage);
+                return;
+            }
 
             if (!Followed)
             {
