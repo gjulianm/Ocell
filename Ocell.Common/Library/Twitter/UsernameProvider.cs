@@ -6,7 +6,6 @@ using TweetSharp;
 using System.Linq;
 using System.IO;
 using Ocell.Library;
-using System.IO.IsolatedStorage;
 
 namespace Ocell.Library.Twitter
 {
@@ -153,18 +152,14 @@ namespace Ocell.Library.Twitter
         private static IEnumerable<string> GetUserCache(UserToken user)
         {
             string filename = "AUTOCOMPLETECACHE" + user.ScreenName;
-            IsolatedStorageFileStream file = IsolatedStorageFile.GetUserStoreForApplication().OpenFile(filename, FileMode.OpenOrCreate);
-            var list = file.ReadLines().ToList();
-            file.Close();
+            var list = FileAbstractor.ReadLinesOfFile(filename).ToList();
             return list;
         }
 
         private static void SaveUserCache(UserToken user, IEnumerable<string> names)
         {
             string filename = "AUTOCOMPLETECACHE" + user.ScreenName;
-            IsolatedStorageFileStream file = IsolatedStorageFile.GetUserStoreForApplication().OpenFile(filename, FileMode.Create);
-            file.WriteLines(names);
-            file.Close();
+            FileAbstractor.WriteLinesToFile(names, filename);
         }
 
         public event OnError Error;
