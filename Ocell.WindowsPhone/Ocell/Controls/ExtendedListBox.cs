@@ -4,33 +4,44 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.ComponentModel;
+using Ocell.Library.Filtering;
+using Ocell.Library.Twitter;
+using Ocell.Library.Twitter.Comparers;
+using TweetSharp;
+using Ocell.Library.Collections;
+using Ocell.Library;
+
+#if WINDOWS_PHONE
+using DanielVaughan.ComponentModel;
+using DanielVaughan.Services;
+using DanielVaughan;
+using Ocell.Localization;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using Ocell.Library.Filtering;
-using Ocell.Library.Twitter;
-using Ocell.Library.Twitter.Comparers;
-using TweetSharp;
-using System.ComponentModel;
-using DanielVaughan.ComponentModel;
-using Ocell.Library;
-using DanielVaughan.Services;
-using DanielVaughan;
-using Ocell.Localization;
+#else
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Input;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Media;
+#endif
 
 namespace Ocell.Controls
 {
-    public class ExtendedListBox : ListBox
+    public class ExtendedListBox : ListView
     {
         // Compression states: Thanks to http://blogs.msdn.com/b/slmperf/archive/2011/06/30/windows-phone-mango-change-listbox-how-to-detect-compression-end-of-scroll-states.aspx
 
         private bool _isBouncy = false;
         private bool _alreadyHookedScrollEvents = false;
         public TweetLoader Loader;
-        protected ObservableCollection<ITweetable> _Items;
-        protected CollectionViewSource _ViewSource;
+        protected CollectionView<ITweetable> _ViewSource;
         private ColumnFilter _filter;
         protected bool _isLoading;
         protected bool _selectionChangeFired;
@@ -60,12 +71,11 @@ namespace Ocell.Controls
             this.Compression += new OnCompression(RefreshOnPull);
             this.Compression += new OnCompression(UndeferRefresh);
             this.SelectionChanged += new SelectionChangedEventHandler(ManageNavigation);
-            this.ManipulationCompleted += new EventHandler<ManipulationCompletedEventArgs>(ScrollEnded);
+            this.ManipulationCompleted += ScrollEnded;
 
             Loader.Error += new TweetLoader.OnError(Loader_Error);
 
-            _Items = new ObservableCollection<ITweetable>();
-            _ViewSource = new CollectionViewSource();
+            _ViewSource = new CollectionView<ITweetable>();
             SetupCollectionViewSource();
         }
 
@@ -75,7 +85,11 @@ namespace Ocell.Controls
                 Loader.ResumeSourceRefresh();
         }
 
+#if WINDOWS_PHONE
         void ScrollEnded(object sender, ManipulationCompletedEventArgs e)
+#else
+        void ScrollEnded(object sender, ManipulationCompletedRoutedEventArgs e)
+#endif
         {            
             var sv = (ScrollViewer)FindElementRecursive(this, typeof(ScrollViewer));
             if (sv.VerticalOffset > 0.3)
@@ -84,11 +98,13 @@ namespace Ocell.Controls
 
         public void ScrollToTop()
         {
+#if WINDOWS_PHONE
             var dispatcher = Deployment.Current.Dispatcher;
-            if (dispatcher.CheckAccess())
-                DoScrollToTop();
-            else
+            if (!dispatcher.CheckAccess())
                 dispatcher.BeginInvoke(DoScrollToTop);
+            else
+#endif
+                DoScrollToTop();
 
             Loader.ResumeSourceRefresh();
         }
@@ -101,13 +117,17 @@ namespace Ocell.Controls
         }
 
         private void SetupCollectionViewSource()
-        {
-            _ViewSource.Source = Loader.Source;
-            ItemsSource = _ViewSource.View;
-            System.ComponentModel.SortDescription Sorter = new System.ComponentModel.SortDescription();
+        {        
+#if WINDOWS_PHONE
+            SortDescription Sorter = new System.ComponentModel.SortDescription();
             Sorter.PropertyName = "Id";
             Sorter.Direction = System.ComponentModel.ListSortDirection.Descending;
             _ViewSource.SortDescriptions.Add(Sorter);
+            _ViewSource.Source = Loader.Source;
+#else
+            _ViewSource.Source = Loader.Source;
+#endif
+            ItemsSource = Loader.Source;
         }
 
         private void SetTag()
@@ -138,7 +158,7 @@ namespace Ocell.Controls
             {
                 _filter = value;
                 if (_filter != null)
-                    _ViewSource.View.Filter = _filter.getPredicate();
+                    _ViewSource.Filter = _filter.getPredicate();
             }
         }
 
@@ -150,19 +170,13 @@ namespace Ocell.Controls
 
         public void RemoveLoadMore()
         {
-            ITweetable item = _Items.FirstOrDefault(e => e is LoadMoreTweetable);
-            while (item != null)
-            {
-                _Items.Remove(item);
-                item = _Items.FirstOrDefault(e => e is LoadMoreTweetable);
-            }
-
             Loader.RemoveLoadMore();
         }
 
         #region Scroll Events
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
+#if !METRO
             ScrollBar sb = null;
             ScrollViewer sv = null;
             if (_alreadyHookedScrollEvents)
@@ -182,12 +196,12 @@ namespace Ocell.Controls
                     VisualStateGroup vgroup = FindVisualState(element, "VerticalCompression");
                     VisualStateGroup hgroup = FindVisualState(element, "HorizontalCompression");
                     if (vgroup != null)
-                        vgroup.CurrentStateChanging += new EventHandler<VisualStateChangedEventArgs>(vgroup_CurrentStateChanging);
+                        vgroup.CurrentStateChanging += vgroup_CurrentStateChanging;
                     if (hgroup != null)
-                        hgroup.CurrentStateChanging += new EventHandler<VisualStateChangedEventArgs>(hgroup_CurrentStateChanging);
+                        hgroup.CurrentStateChanging += hgroup_CurrentStateChanging;
                 }
             }
-
+#endif
             SetTag();
         }
 
@@ -263,7 +277,7 @@ namespace Ocell.Controls
             if (element == null)
                 return null;
 
-            IList groups = VisualStateManager.GetVisualStateGroups(element);
+            var groups = VisualStateManager.GetVisualStateGroups(element);
             foreach (VisualStateGroup group in groups)
                 if (group.Name == name)
                     return group;
@@ -290,8 +304,11 @@ namespace Ocell.Controls
             if (!AutoManageNavigation)
                 return;
 
+#if WINDOWS_PHONE
             INavigationService NavigationService = Dependency.Resolve<INavigationService>();
-
+#else
+            var NavigationService = (Frame)Window.Current.Content;
+#endif
             if (!_selectionChangeFired)
             {
                 DataTransfer.Status = e.AddedItems[0] as TwitterStatus;
@@ -300,7 +317,13 @@ namespace Ocell.Controls
                 _selectionChangeFired = true;
                 SelectedItem = null;
 
-                if (e.AddedItems[0] is TwitterStatus)
+#if WINDOWS_PHONE
+                if (e.AddedItems[0] is LoadMoreTweetable)
+                {
+                    LoadIntermediate(e.AddedItems[0] as LoadMoreTweetable);
+                    RemoveLoadMore();
+                }
+                else if (e.AddedItems[0] is TwitterStatus)
                     NavigationService.Navigate(Uris.ViewTweet);
                 else if (e.AddedItems[0] is TwitterDirectMessage)
                     NavigationService.Navigate(Uris.ViewDM);
@@ -310,11 +333,8 @@ namespace Ocell.Controls
                     DataTransfer.Status = StatusConverter.SearchToStatus(e.AddedItems[0] as TwitterSearchStatus);
                     NavigationService.Navigate(Uris.ViewTweet);
                 }
-                else if (e.AddedItems[0] is LoadMoreTweetable)
-                {
-                    LoadIntermediate(e.AddedItems[0] as LoadMoreTweetable);
-                    RemoveLoadMore();
-                }
+#else
+#endif
             }
             else
                 _selectionChangeFired = false;
@@ -322,6 +342,7 @@ namespace Ocell.Controls
 
         void Loader_Error(TwitterResponse response)
         {
+#if WINDOWS_PHONE
             var messager = Dependency.Resolve<IMessageService>();
             if (DateTime.Now > _lastErrorFired.AddSeconds(10))
             {
@@ -332,6 +353,8 @@ namespace Ocell.Controls
                     messager.ShowError(String.Format(Localization.Resources.ErrorLoadingTweets, response.StatusDescription));
                 
             }
+#else
+#endif
         }
 
         public void AutoReload() // EL will manage times to avoid overcalling Twitter API
