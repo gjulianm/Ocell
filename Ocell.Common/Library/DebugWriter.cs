@@ -10,21 +10,13 @@ namespace Ocell.Library
     {
         private static List<string> _list;
 
-#if METRO
-        private static async void InitializeIfNull()
-#else
         private static void InitializeIfNull()
-#endif
         {
             if (_list == null)
             {
                 try
                 {
-#if METRO
-                    _list = (await FileAbstractor.ReadLinesOfFile("Debug")).ToList();
-#else
-                    _list = FileAbstractor.ReadLinesOfFile("Debug");
-#endif
+                    _list = FileAbstractor.ReadLinesOfFile("Debug").ToList();
                 }
                 catch (Exception)
                 {
