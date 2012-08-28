@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using TweetSharp;
+using System.Linq;
 
 namespace Ocell.Library.Twitter
 {
