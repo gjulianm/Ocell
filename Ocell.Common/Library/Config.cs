@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO.IsolatedStorage;
+
 using System.Threading;
 using Ocell.Library.Tasks;
 using Ocell.Library.Twitter;
 #if !BACKGROUND_AGENT
 using Ocell.Library.Filtering;
 #endif
-
-
+#if WINDOWS_PHONE
+using System.IO.IsolatedStorage;
+#endif
 namespace Ocell.Library
 {
     public static partial class Config
@@ -50,7 +51,9 @@ namespace Ocell.Library
         private static TimeSpan? _defaultMuteTime;
         private static List<TwitterDraft> _drafts;
         private static ReadLaterCredentials _readLaterCredentials;
+#if !METRO
         private static OcellTheme _backgroundUrl;
+#endif
         private static bool? _firstInit;
         
 #endif
@@ -116,6 +119,7 @@ namespace Ocell.Library
             }
         }
 
+#if !METRO
         public static OcellTheme Background
         {
             get
@@ -127,6 +131,7 @@ namespace Ocell.Library
                 GenericSaveToConfig<OcellTheme>(BackgroundsKey, ref _backgroundUrl, value);
             }
         }
+#endif
 
         public static ReadLaterCredentials ReadLaterCredentials
         {
@@ -259,8 +264,11 @@ namespace Ocell.Library
 
             if (_mutex.WaitOne(MutexTimeout))
             {
-
-                IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
+#if WINDOWS_PHONE
+                var config = IsolatedStorageSettings.ApplicationSettings;
+#else
+                var config = Windows.Storage.ApplicationData.Current.LocalSettings.Values;
+#endif
 
                 try
                 {
@@ -300,16 +308,20 @@ namespace Ocell.Library
 
             if (_mutex.WaitOne(MutexTimeout))
             {
-                IsolatedStorageSettings conf = IsolatedStorageSettings.ApplicationSettings;
+#if WINDOWS_PHONE
+                var config = IsolatedStorageSettings.ApplicationSettings;
+#else
+                var config = Windows.Storage.ApplicationData.Current.LocalSettings.Values;
+#endif
 
                 try
                 {
                     element = value;
-                    if (conf.Contains(Key))
-                        conf[Key] = value;
+                    if (config.ContainsKey(Key))
+                        config[Key] = value;
                     else
-                        conf.Add(Key, value);
-                    conf.Save();
+                        config.Add(Key, value);
+                    config.Save();
                 }
                 catch (Exception)
                 {
@@ -343,7 +355,11 @@ namespace Ocell.Library
             {
                 try
                 {
+#if WINDOWS_PHONE
                     IsolatedStorageSettings.ApplicationSettings.Clear();
+#else
+                    Windows.Storage.ApplicationData.Current.LocalSettings.Values.Clear();
+#endif
                 }
                 finally
                 {
