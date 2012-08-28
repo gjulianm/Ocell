@@ -1,17 +1,10 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+﻿#if WINDOWS_PHONE
+using System;
 using System.Windows.Media.Imaging;
 
 namespace Ocell.Library
 {
+
     public enum LightOrDark { SystemDefault, Light, Dark, };
     public enum BackgroundType { ThemeDependant = 0, None = 1, BlackFabric = 2, GrayEgg = 3, BlackTiled = 4, Tire = 5, Floral = 6, Map = 7, Diamond = 8 };
 
@@ -88,3 +81,4 @@ namespace Ocell.Library
 
 
 }
+#endif
