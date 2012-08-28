@@ -343,7 +343,7 @@ namespace Ocell.Pages
             req.AddFile("media", e.OriginalFileName, e.ChosenPhoto);
             req.AddField("key", "1abb1622666934158f4c2047f0822d0a");
             req.AddField("message", TweetText);
-            req.AddField("consumer_token", SensitiveData.ConsumerToken);
+            req.AddField("consumer_token", Ocell.Library.SensitiveData.ConsumerToken);
             req.AddField("consumer_secret", SensitiveData.ConsumerSecret);
             req.AddField("oauth_token", DataTransfer.CurrentAccount.Key);
             req.AddField("oauth_secret", DataTransfer.CurrentAccount.Secret);
