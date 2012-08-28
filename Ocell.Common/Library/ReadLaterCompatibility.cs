@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Collections.Generic;
+#if WINDOWS_PHONE
 using System.Security.Cryptography;
+#else
+using Windows.Security.Cryptography.DataProtection;
+using System.Runtime.InteropServices.WindowsRuntime;
+#endif
 
 namespace Ocell.Library
 {
@@ -25,7 +20,14 @@ namespace Ocell.Library
                     return null;
                 else
                 {
+#if WINDOWS_PHONE
                     byte[] unencryptedBytes = ProtectedData.Unprotect(_encryptedPass, null);
+#else
+                    var provider = new DataProtectionProvider("OCELL");
+                    var unprotectTask = provider.UnprotectAsync(_encryptedPass.AsBuffer()).AsTask();
+                    unprotectTask.Wait();
+                    byte[] unencryptedBytes = unprotectTask.Result.ToArray();
+#endif
                     return System.Text.Encoding.UTF8.GetString(unencryptedBytes, 0, unencryptedBytes.Length);
                 }
             }
@@ -36,7 +38,14 @@ namespace Ocell.Library
                 else
                 {
                     byte[] unencryptedBytes = System.Text.Encoding.UTF8.GetBytes(value);
+#if WINDOWS_PHONE
                     _encryptedPass = ProtectedData.Protect(unencryptedBytes, null);
+#else
+                    var provider = new DataProtectionProvider("OCELL");
+                    var protectTask = provider.ProtectAsync(_encryptedPass.AsBuffer()).AsTask();
+                    protectTask.Wait();
+                    _encryptedPass = protectTask.Result.ToArray();
+#endif
                 }
             }
         }
