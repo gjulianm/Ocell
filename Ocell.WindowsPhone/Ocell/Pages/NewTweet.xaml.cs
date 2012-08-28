@@ -21,7 +21,6 @@ namespace Ocell.Pages
     {
         protected bool SendingDM;
         public ApplicationBarIconButton SendButton;
-        private UsernameProvider _provider;
         private Autocompleter _completer;
         NewTweetModel viewModel = new NewTweetModel();
 
@@ -29,7 +28,11 @@ namespace Ocell.Pages
         public NewTweet()
         {
             InitializeComponent(); 
-            Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
+            Loaded += (sender, e) => { 
+                if (ApplicationBar != null) 
+                    ApplicationBar.MatchOverriddenTheme();
+                viewModel.TryLoadDraft();
+            }; 
 
             ThemeFunctions.SetBackground(LayoutRoot);
             DataContext = viewModel;
@@ -50,11 +53,7 @@ namespace Ocell.Pages
 
         void NewTweet_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (_provider != null)
-            {
-                _provider.Stop();
-                _provider.Usernames.Clear();
-            }
+
             DataTransfer.Text = viewModel.TweetText;
             DataTransfer.ReplyingDM = false;
             if (DataTransfer.Draft != null)
@@ -72,14 +71,17 @@ namespace Ocell.Pages
                 NavigationService.RemoveBackEntry();
             }
 
-            if (DataTransfer.Draft != null)
+            if (ListAccounts.SelectedItems != null)
             {
-                foreach (var account in DataTransfer.Draft.Accounts)
-                    ListAccounts.SelectedItems.Add(account);
-            }
-            else
-            {
-                ListAccounts.SelectedItems.Add(DataTransfer.CurrentAccount);
+                if (DataTransfer.Draft != null)
+                {
+                    foreach (var account in DataTransfer.Draft.Accounts)
+                        ListAccounts.SelectedItems.Add(account);
+                }
+                else
+                {
+                    ListAccounts.SelectedItems.Add(DataTransfer.CurrentAccount);
+                }
             }
 
             

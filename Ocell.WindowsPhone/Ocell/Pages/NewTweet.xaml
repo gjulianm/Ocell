@@ -106,7 +106,7 @@
                         <toolkit:TimePicker Value="{Binding ScheduledTime, Mode=TwoWay}" HorizontalAlignment="Right" Margin="0,27,0,31" Width="208" d:LayoutOverrides="Height"/>
                         <TextBlock Text="{Binding Strings.Date, StringFormat='{}{0}:', Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="14,0,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
                         <TextBlock Text="{Binding Strings.Time, StringFormat='{}{0}:', Source={StaticResource LocalizedResources}}" Margin="0,0,147,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" HorizontalAlignment="Right" RenderTransformOrigin="0.128,0.422"/>
-                        <TextBlock Text="{Binding String.AboutScheduling, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Bottom" Margin="14,0,0,8" TextDecorations="Underline" Foreground="{StaticResource PhoneAccentBrush}" Tap="aboutScheduling_Tap"/>
+                        <TextBlock Text="{Binding Strings.AboutScheduling, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Bottom" Margin="14,0,0,8" TextDecorations="Underline" Foreground="{StaticResource PhoneAccentBrush}" Tap="aboutScheduling_Tap"/>
                     </Grid>
                 </Grid>
             </ScrollViewer>

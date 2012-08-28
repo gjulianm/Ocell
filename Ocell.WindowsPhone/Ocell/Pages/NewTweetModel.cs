@@ -185,7 +185,7 @@ namespace Ocell.Pages
             SetupCommands();
         }
 
-        void TryLoadDraft()
+        public void TryLoadDraft()
         {
             TwitterDraft draft = DataTransfer.Draft;
             if (draft != null)
