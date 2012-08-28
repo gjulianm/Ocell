@@ -147,9 +147,6 @@
     <Compile Include="..\..\Ocell.Common\Library\GlobalEvents.cs">
       <Link>GlobalEvents.cs</Link>
     </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\IEnumerableExtension.cs">
-      <Link>IEnumerableExtension.cs</Link>
-    </Compile>
     <Compile Include="..\..\Ocell.Common\Library\Localizer.cs">
       <Link>Localizer.cs</Link>
     </Compile>
@@ -222,6 +219,7 @@
     <Compile Include="..\..\Ocell.Common\SensitiveData.cs">
       <Link>SensitiveData.cs</Link>
     </Compile>
+    <Compile Include="IPropertySetExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>

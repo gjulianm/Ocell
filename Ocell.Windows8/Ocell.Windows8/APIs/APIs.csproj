@@ -118,6 +118,9 @@
     <Compile Include="..\..\..\Ocell.Common\APIs\ReadLater\ReadLaterResponse.cs">
       <Link>ReadLaterResponse.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\Ocell.Common\SensitiveData.cs">
+      <Link>SensitiveData.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
