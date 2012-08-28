@@ -20,18 +20,9 @@ namespace Ocell.Library
             FileAbstractor.WriteContentsToFile(date.ToString("s"), file);
         }
 
-#if !METRO
         private static DateTime GetDate(string file)
-#else 
-        private static async Task<DateTime> GetDate(string file)
-#endif
         {
-#if !METRO
             string dateStr = FileAbstractor.ReadContentsOfFile(file);
-#else
-            string dateStr = await FileAbstractor.ReadContentsOfFile(file);
-#endif
-
 
             DateTime date;
 
@@ -51,7 +42,6 @@ namespace Ocell.Library
             WriteDate(date, "ToastFile");
         }
 
-#if !METRO
         public static DateTime GetLastCheckDate()
         {
             return GetDate("DateFile");
@@ -61,16 +51,5 @@ namespace Ocell.Library
         {
             return GetDate("ToastFile");
         }
-#else
-        public async static Task<DateTime> GetLastCheckDate()
-        {
-            return await GetDate("DateFile");
-        }
-
-        public async static Task<DateTime> GetLastToastNotificationDate()
-        {
-            return await GetDate("ToastFile");
-        }
-#endif
     }
 }
