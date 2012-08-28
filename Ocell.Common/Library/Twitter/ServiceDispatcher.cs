@@ -28,11 +28,15 @@ namespace Ocell.Library.Twitter
                     return _list[account.Key];
             }
 
+#if WINDOWS_PHONE
             ITwitterService srv;
             if (TestSession)
                 srv = new MockTwitterService();
             else
                 srv = new TwitterService();
+#else
+            TwitterService srv = new TwitterService();
+#endif
 
             srv.AuthenticateWith(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, account.Key, account.Secret);
 
@@ -50,10 +54,14 @@ namespace Ocell.Library.Twitter
             }
             else
             {
+#if WINDOWS_PHONE
                 if (!TestSession)
                     return new TwitterService(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret);
                 else
                     return new MockTwitterService();
+#else
+                return new TwitterService(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret);
+#endif
             }
         }
 
