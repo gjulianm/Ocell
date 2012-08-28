@@ -73,9 +73,9 @@ namespace Ocell.Pages
 
             if (ListAccounts.SelectedItems != null)
             {
-                if (DataTransfer.Draft != null)
+                if (DataTransfer.Draft != null && DataTransfer.Draft.Accounts != null)
                 {
-                    foreach (var account in DataTransfer.Draft.Accounts)
+                    foreach (var account in DataTransfer.Draft.Accounts.Where(x => x != null))
                         ListAccounts.SelectedItems.Add(account);
                 }
                 else
