@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using TweetSharp;
+#if WINDOWS_PHONE
 using Microsoft.Phone.Shell;
+#else
+#endif
 
 namespace Ocell.Library.Notifications
 {
@@ -10,6 +13,7 @@ namespace Ocell.Library.Notifications
     {
         public static void ClearTile()
         {
+#if WINDOWS_PHONE
             StandardTileData tileData = new StandardTileData
             {
                 BackContent = "",
@@ -18,6 +22,9 @@ namespace Ocell.Library.Notifications
             };
 
             ShellTile.ActiveTiles.First().Update(tileData);
+#else
+            //TODO: Clear W8 tile here.
+#endif
         }
     }
 }
