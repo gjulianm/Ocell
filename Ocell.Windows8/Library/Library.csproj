@@ -221,8 +221,10 @@
     </Compile>
     <Compile Include="Collections\CollectionView.cs" />
     <Compile Include="Collections\FilteredSortedCollection.cs" />
+    <Compile Include="Collections\FilteredSortedObservable.cs" />
     <Compile Include="Collections\IObservableCollection.cs" />
     <Compile Include="Collections\SortDescription.cs" />
+    <Compile Include="Collections\SortedList.cs" />
     <Compile Include="Extensions\IPropertySetExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
