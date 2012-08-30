@@ -360,6 +360,8 @@ namespace Ocell.Library.Twitter
             }
             catch (Exception)
             {
+                if (Error != null)
+                    Error(response);
             }
         }
         private void UnsafeGenericReceive(IEnumerable<ITweetable> list, TwitterResponse response)
