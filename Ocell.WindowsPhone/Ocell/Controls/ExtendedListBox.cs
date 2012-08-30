@@ -41,7 +41,7 @@ namespace Ocell.Controls
         private bool _isBouncy = false;
         private bool _alreadyHookedScrollEvents = false;
         public TweetLoader Loader;
-        protected CollectionView<ITweetable> _ViewSource;
+        protected CollectionViewSource _ViewSource;
         private ColumnFilter _filter;
         protected bool _isLoading;
         protected bool _selectionChangeFired;
@@ -54,7 +54,7 @@ namespace Ocell.Controls
         public string NavigationUri { get; set; }
         public bool AutoManageErrors { get; set; }
 
-       
+
 
         public ExtendedListBox()
         {
@@ -75,7 +75,7 @@ namespace Ocell.Controls
 
             Loader.Error += new TweetLoader.OnError(Loader_Error);
 
-            _ViewSource = new CollectionView<ITweetable>();
+            _ViewSource = new CollectionViewSource();
             SetupCollectionViewSource();
         }
 
@@ -90,7 +90,7 @@ namespace Ocell.Controls
 #else
         void ScrollEnded(object sender, ManipulationCompletedRoutedEventArgs e)
 #endif
-        {            
+        {
             var sv = (ScrollViewer)FindElementRecursive(this, typeof(ScrollViewer));
             if (sv.VerticalOffset > 0.3)
                 Loader.StopSourceRefresh();
@@ -104,7 +104,7 @@ namespace Ocell.Controls
                 dispatcher.BeginInvoke(DoScrollToTop);
             else
 #endif
-                DoScrollToTop();
+            DoScrollToTop();
 
             Loader.ResumeSourceRefresh();
         }
@@ -117,17 +117,17 @@ namespace Ocell.Controls
         }
 
         private void SetupCollectionViewSource()
-        {        
+        {
 #if WINDOWS_PHONE
             SortDescription Sorter = new System.ComponentModel.SortDescription();
             Sorter.PropertyName = "Id";
             Sorter.Direction = System.ComponentModel.ListSortDirection.Descending;
             _ViewSource.SortDescriptions.Add(Sorter);
             _ViewSource.Source = Loader.Source;
+            ItemsSource = _ViewSource.View;
 #else
-            _ViewSource.Source = Loader.Source;
-#endif
             ItemsSource = Loader.Source;
+#endif
         }
 
         private void SetTag()
@@ -156,9 +156,18 @@ namespace Ocell.Controls
             }
             set
             {
+                if (_filter == value)
+                    return;
+
                 _filter = value;
                 if (_filter != null)
+                {
+#if WINDOWS_PHONE
                     _ViewSource.Filter = _filter.getPredicate();
+#else
+                    Loader.Source.Filter = x => _filter.getPredicate().Invoke(x);
+#endif
+                }
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Ocell.Library.Twitter.Comparers;
+﻿using Ocell.Library.Collections;
+using Ocell.Library.Twitter.Comparers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,12 +44,18 @@ namespace Ocell.Library.Twitter
                 _conversationService.Finished += ConversationFinished;
             }
         }
+
+#if WINDOWS_PHONE
         public SafeObservable<ITweetable> Source { get; protected set; }
+#else
+        public FilteredSortedObservable<ITweetable> Source { get; protected set; }
+#endif
         protected ITwitterService _srv;
         protected long LastId;
         private Queue<ITweetable> _deferredItems = new Queue<ITweetable>();
         private bool _allowOneRefresh = false;
         private object _deferSync = new object();
+        private object listSync = new object();
 
         protected bool _isLoading;
         public bool IsLoading
@@ -98,7 +105,15 @@ namespace Ocell.Library.Twitter
             TweetsToLoadPerRequest = 40;
             CacheSize = 40;
             _loaded = 0;
-            Source = new SafeObservable<ITweetable>();
+
+            lock (listSync)
+            {
+#if WINDOWS_PHONE
+                Source = new SafeObservable<ITweetable>();
+#else
+                Source = new FilteredSortedObservable<ITweetable>(new TweetComparer());
+            }
+#endif
             LastId = 0;
             Cached = true;
             ActivateLoadMoreButton = false;
@@ -140,9 +155,13 @@ namespace Ocell.Library.Twitter
 
             if (Source.First().GetType() == typeof(TwitterStatus))
             {
+                IEnumerable<TwitterStatus> list;
+
+                lock (listSync)
+                    list = Source.Cast<TwitterStatus>().Take(CacheSize).ToList();
                 try
                 {
-                    Cacher.SaveToCache(Resource, Source.OrderByDescending(item => item.Id).Cast<TwitterStatus>().Take(CacheSize));
+                    Cacher.SaveToCache(Resource, list);
                 }
                 catch (Exception)
                 {
@@ -163,9 +182,10 @@ namespace Ocell.Library.Twitter
             if (!DecisionMaker.ShouldLoadCache(ref cacheList))
                 return;
 
-            foreach (var item in cacheList)
-                if (!Source.Contains(item, comparer))
-                    Source.Add(item);
+            lock (listSync)
+                foreach (var item in cacheList)
+                    if (!Source.Contains(item, comparer))
+                        Source.Add(item);
 
             if (CacheLoad != null)
                 CacheLoad(this, new EventArgs());
@@ -278,7 +298,7 @@ namespace Ocell.Library.Twitter
                     _srv.SearchBefore(last, Resource.Data, ReceiveSearch);
                     break;
                 case ResourceType.Tweets:
-                    _srv.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, last,  ReceiveTweets);
+                    _srv.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, last, ReceiveTweets);
                     break;
                 case ResourceType.Conversation:
                     _conversationService.GetConversationForStatus(Resource.Data, ReceiveTweets);
@@ -370,10 +390,13 @@ namespace Ocell.Library.Twitter
 
                     TryAddLoadMoreButton(list);
 
-                    list = list.Except(Source);
+                    lock (listSync)
+                    {
+                        list = list.Except(Source);
 
-                    foreach (var status in list)
-                        Source.Add(status);
+                        foreach (var status in list)
+                            Source.Add(status);
+                    }
                 }
             }
 
@@ -468,7 +491,7 @@ namespace Ocell.Library.Twitter
                 var list = _deferredItems.AsEnumerable().Except(Source);
                 TryAddLoadMoreButton(list);
 
-                foreach(var element in list)
+                foreach (var element in list)
                     Source.Add(element);
             }
         }
