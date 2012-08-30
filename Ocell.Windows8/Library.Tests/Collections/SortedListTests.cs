@@ -28,7 +28,7 @@ namespace Library.Tests
         public void TestSort()
         {
             var sorted = new FilteredSortedObservable<int>(GenerateList(DefaultSize));
-            
+
             for (int i = 1; i < sorted.Count; i++)
                 Assert.IsTrue(sorted[i] > sorted[i - 1]);
         }
@@ -72,11 +72,6 @@ namespace Library.Tests
 
             sorted.Add(3);
             Assert.IsTrue(isRaised);
-
-            isRaised = false;
-
-            sorted.Remove(3);
-            Assert.IsTrue(isRaised);
         }
 
         [TestMethod]
@@ -86,7 +81,7 @@ namespace Library.Tests
             var sorted = new FilteredSortedObservable<int>(list);
 
             Assert.AreEqual(list.Count, sorted.Count);
-            
+
             sorted.Filter = x => x > 3;
 
             Assert.AreEqual(4, sorted.Count);
