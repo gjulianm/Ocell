@@ -65,16 +65,22 @@
             <controls:PivotItem x:Name="pSettings" Header="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}">
 				<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 					<Grid Height="859">
-                        <toolkit:ToggleSwitch x:Name="RetweetsInMentions" Header="{Binding Strings.ShowRetweetsAsMentions, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" IsChecked="{Binding RetweetsAsMentions, Mode=TwoWay}" Margin="0,108,0,0"/>
-                        <toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="{Binding Strings.UpdateTilesInBackground, Source={StaticResource LocalizedResources}}" Margin="0,247,0,0" IsChecked="{Binding BackgroundUpdateTiles, Mode=TwoWay}" VerticalAlignment="Top"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="8,0,0,289" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Height="96" VerticalAlignment="Bottom"><Run Text="{Binding Strings.ToAddColumnTiles, Source={StaticResource LocalizedResources}}"/></TextBlock>
-						<Button x:Name="ComposePin" Content="{Binding Strings.PinToStart, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,392,0,0" Width="344" Command="{Binding PinComposeToStart}" VerticalAlignment="Top"/>
-						<TextBlock HorizontalAlignment="Left" Margin="8,214,0,0" TextWrapping="Wrap" Text="{Binding Strings.Tiles, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24"/>
+                        <toolkit:ToggleSwitch x:Name="RetweetsInMentions" Header="{Binding Strings.ShowRetweetsAsMentions, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" IsChecked="{Binding RetweetsAsMentions, Mode=TwoWay}" Margin="0,222,0,0"/>
+                        <toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="{Binding Strings.UpdateTilesInBackground, Source={StaticResource LocalizedResources}}" Margin="0,361,0,387" IsChecked="{Binding BackgroundUpdateTiles, Mode=TwoWay}" d:LayoutOverrides="Height"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="8,0,0,175" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Height="96" VerticalAlignment="Bottom"><Run Text="{Binding Strings.ToAddColumnTiles, Source={StaticResource LocalizedResources}}"/></TextBlock>
+						<Button x:Name="ComposePin" Content="{Binding Strings.PinToStart, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,506,0,0" Width="344" Command="{Binding PinComposeToStart}" VerticalAlignment="Top"/>
+						<TextBlock HorizontalAlignment="Left" Margin="8,328,0,0" TextWrapping="Wrap" Text="{Binding Strings.Tiles, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24"/>
 						<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="{Binding Strings.TweetsPerRequest, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
 						<TextBox x:Name="tweetsPerReq" Margin="0,39,8,0" TextWrapping="Wrap" VerticalAlignment="Top" InputScope="Number" Text="{Binding TweetsPerRequest, Mode=TwoWay}"/>
-						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,260" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" Text="{Binding Strings.Backgrounds_CapitalFirst, Source={StaticResource LocalizedResources}}" />
-						<Button x:Name="SetBackgrounds" Content="{Binding Strings.SetCustomBackground, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,617,0,0" Width="344" Command="{Binding SetCustomBackground}" VerticalAlignment="Top" />
-						<TextBlock HorizontalAlignment="Left" Margin="8,362,0,0" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Strings.ComposeTile, Source={StaticResource LocalizedResources}}" Height="26" VerticalAlignment="Top"/>
+						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,146" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" Text="{Binding Strings.Backgrounds_CapitalFirst, Source={StaticResource LocalizedResources}}" />
+						<Button x:Name="SetBackgrounds" Content="{Binding Strings.SetCustomBackground, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,731,0,0" Width="344" Command="{Binding SetCustomBackground}" VerticalAlignment="Top" />
+						<TextBlock HorizontalAlignment="Left" Margin="8,0,0,357" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Strings.ComposeTile, Source={StaticResource LocalizedResources}}" Height="26" VerticalAlignment="Bottom"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="8,115,0,0" TextWrapping="Wrap" Text="{Binding Strings.FontSize, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
+						<toolkit:ListPicker Margin="12,146,21,0" VerticalAlignment="Top" SelectedIndex="{Binding SelectedFontSize, Mode=TwoWay}">
+                            <toolkit:ListPickerItem Content="{Binding Strings.Small, Source={StaticResource LocalizedResources}}"/>
+                            <toolkit:ListPickerItem Content="{Binding Strings.Medium, Source={StaticResource LocalizedResources}}"/>
+                            <toolkit:ListPickerItem Content="{Binding Strings.Big, Source={StaticResource LocalizedResources}}" Margin="0,0,16,0"/>
+						</toolkit:ListPicker>
 					</Grid>
 				</ScrollViewer>
 			</controls:PivotItem>

@@ -1,0 +1,52 @@
+<Ocell:TwitterResourceCollection xmlns:Ocell="clr-namespace:Ocell" xmlns:Ocell_Library_Twitter="clr-namespace:Ocell.Library.Twitter;assembly=Library.Essential" Capacity="74">
+	<Ocell_Library_Twitter:TwitterResource Data="Nam maecenas class praesent" String="Cras duis curabitur" Type="Mentions" Title="Vestibulum aliquam integer">
+		<Ocell_Library_Twitter:TwitterResource.User>
+			<Ocell_Library_Twitter:UserToken AvatarUrl="Nunc amet adipiscing" Key="Phasellus aenean curae" ScreenName="Ante arcu diam eget" Secret="Consequat donec parturient accumsan"/>
+		</Ocell_Library_Twitter:TwitterResource.User>
+	</Ocell_Library_Twitter:TwitterResource>
+	<Ocell_Library_Twitter:TwitterResource Data="Sed quisque" String="Bibendum vivamus convallis dis" Type="Tweets" Title="Dictumst mauris">
+		<Ocell_Library_Twitter:TwitterResource.User>
+			<Ocell_Library_Twitter:UserToken AvatarUrl="Vestibulum vestibulum" Key="Eleifend etiam" ScreenName="Nullam aptent elit fusce dignissim" Secret="Facilisi aliquam"/>
+		</Ocell_Library_Twitter:TwitterResource.User>
+	</Ocell_Library_Twitter:TwitterResource>
+	<Ocell_Library_Twitter:TwitterResource Data="Enim faucibus elementum adipiscing" String="Auctor habitant inceptos" Type="Mentions" Title="Congue parturient facilisis interdum">
+		<Ocell_Library_Twitter:TwitterResource.User>
+			<Ocell_Library_Twitter:UserToken AvatarUrl="Lobortis fermentum fringilla aliquet nascetur" Key="Blandit commodo erat eros" ScreenName="Cursus vestibulum pharetra" Secret="Lorem est nibh hac"/>
+		</Ocell_Library_Twitter:TwitterResource.User>
+	</Ocell_Library_Twitter:TwitterResource>
+	<Ocell_Library_Twitter:TwitterResource Data="Vestibulum habitasse" String="Adipiscing parturient morbi nisi placerat" Type="Home" Title="Hendrerit vestibulum nulla pulvinar nisl">
+		<Ocell_Library_Twitter:TwitterResource.User>
+			<Ocell_Library_Twitter:UserToken AvatarUrl="Vestibulum leo sagittis senectus" Key="Sociosqu proin augue himenaeos conubia" ScreenName="Imperdiet malesuada suscipit" Secret="Torquent cubilia dictum"/>
+		</Ocell_Library_Twitter:TwitterResource.User>
+	</Ocell_Library_Twitter:TwitterResource>
+	<Ocell_Library_Twitter:TwitterResource Data="Mus nunc" String="Nec lectus adipiscing" Type="Favorites" Title="Dolor dapibus">
+		<Ocell_Library_Twitter:TwitterResource.User>
+			<Ocell_Library_Twitter:UserToken AvatarUrl="Penatibus ultrices non porttitor" Key="Fames egestas per parturient vehicula" ScreenName="Felis vestibulum ipsum justo odio" Secret="Volutpat orci sed"/>
+		</Ocell_Library_Twitter:TwitterResource.User>
+	</Ocell_Library_Twitter:TwitterResource>
+	<Ocell_Library_Twitter:TwitterResource Data="Vestibulum tincidunt lacus euismod" String="Sem adipiscing lorem pede maecenas" Type="Messages" Title="Praesent feugiat">
+		<Ocell_Library_Twitter:TwitterResource.User>
+			<Ocell_Library_Twitter:UserToken AvatarUrl="Gravida parturient tristique" Key="Ultricies vestibulum magna massa sit" ScreenName="Accumsan venenatis vestibulum vulputate" Secret="Curabitur iaculis quam lacinia"/>
+		</Ocell_Library_Twitter:TwitterResource.User>
+	</Ocell_Library_Twitter:TwitterResource>
+	<Ocell_Library_Twitter:TwitterResource Data="Bibendum libero metus morbi" String="Neque vel nam laoreet sed" Type="Mentions" Title="Dis est dictumst">
+		<Ocell_Library_Twitter:TwitterResource.User>
+			<Ocell_Library_Twitter:UserToken AvatarUrl="Eleifend facilisi natoque posuere" Key="Phasellus potenti" ScreenName="Ligula faucibus" Secret="Litora quis netus adipiscing parturient"/>
+		</Ocell_Library_Twitter:TwitterResource.User>
+	</Ocell_Library_Twitter:TwitterResource>
+	<Ocell_Library_Twitter:TwitterResource Data="Habitant luctus urna hac leo" String="Pretium vestibulum consequat" Type="Conversation" Title="Nulla rhoncus convallis magnis">
+		<Ocell_Library_Twitter:TwitterResource.User>
+			<Ocell_Library_Twitter:UserToken AvatarUrl="Mattis cras sodales" Key="Vestibulum porta" ScreenName="Inceptos adipiscing purus" Secret="Viverra risus parturient duis"/>
+		</Ocell_Library_Twitter:TwitterResource.User>
+	</Ocell_Library_Twitter:TwitterResource>
+	<Ocell_Library_Twitter:TwitterResource Data="Mauris vestibulum nunc amet" String="Mollis ante aliquam mus" Type="Tweets" Title="Velit montes interdum integer">
+		<Ocell_Library_Twitter:TwitterResource.User>
+			<Ocell_Library_Twitter:UserToken AvatarUrl="Dignissim nostra nec" Key="Ornare arcu" ScreenName="Elementum platea" Secret="Non facilisis per vitae class"/>
+		</Ocell_Library_Twitter:TwitterResource.User>
+	</Ocell_Library_Twitter:TwitterResource>
+	<Ocell_Library_Twitter:TwitterResource Data="Vestibulum fermentum" String="Sed primis" Type="Messages" Title="Rutrum lobortis curae">
+		<Ocell_Library_Twitter:TwitterResource.User>
+			<Ocell_Library_Twitter:UserToken AvatarUrl="Donec sapien" Key="Adipiscing quisque" ScreenName="Sem etiam nascetur semper diam" Secret="Sit fringilla"/>
+		</Ocell_Library_Twitter:TwitterResource.User>
+	</Ocell_Library_Twitter:TwitterResource>
+</Ocell:TwitterResourceCollection>

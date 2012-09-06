@@ -1056,4 +1056,19 @@
   <data name="AnotherString" xml:space="preserve">
     <value />
   </data>
+  <data name="Big" xml:space="preserve">
+    <value>Big</value>
+  </data>
+  <data name="FontSize" xml:space="preserve">
+    <value>Font size:</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="RTBy" xml:space="preserve">
+    <value>RT by </value>
+  </data>
+  <data name="Small" xml:space="preserve">
+    <value>Small</value>
+  </data>
 </root>

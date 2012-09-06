@@ -67,6 +67,13 @@ namespace Ocell.Settings
         }
 
         #region Fields
+        int selectedFontSize;
+        public int SelectedFontSize
+        {
+            get { return selectedFontSize; }
+            set { Assign("SelectedFontSize", ref selectedFontSize, value); }
+        }
+
         bool retweetsAsMentions;
         public bool RetweetsAsMentions
         {
@@ -246,14 +253,35 @@ namespace Ocell.Settings
         }
         #endregion
 
+        int FontSizeToIndex(int size)
+        {
+            if (size == 18)
+                return 0;
+            else if (size == 26)
+                return 2;
+            else
+                return 1;
+        }
+
+        int IndexToFontSize(int index)
+        {
+            if (index == 0)
+                return 18;
+            else if (index == 2)
+                return 26;
+            else
+                return 20;
+        }
+
         public DefaultModel()
             : base("Default")
         {
-
+            SelectedFontSize = FontSizeToIndex(((GlobalSettings)App.Current.Resources["GlobalSettings"]).
+                            TweetFontSize);
             RetweetsAsMentions = Config.RetweetAsMentions == true;
             BackgroundUpdateTiles = Config.BackgroundLoadColumns == true;
             if (Config.TweetsPerRequest == null)
-                Config.TweetsPerRequest = 30;
+                Config.TweetsPerRequest = 40;
             TweetsPerRequest = Config.TweetsPerRequest.ToString();
             Accounts = new SafeObservable<UserToken>(Config.Accounts);
             NotifyOptions = new List<string> { Resources.None, Resources.OnlyTile, Resources.ToastAndTile };
@@ -306,6 +334,10 @@ namespace Ocell.Settings
                         break;
                     case "SelectedMuteTime":
                         Config.DefaultMuteTime = SelectedFilterToTimeSpan(SelectedMuteTime);
+                        break;
+                    case "SelectedFontSize":
+                        ((GlobalSettings)App.Current.Resources["GlobalSettings"]).
+                            TweetFontSize = IndexToFontSize(SelectedFontSize);
                         break;
                 }
             };

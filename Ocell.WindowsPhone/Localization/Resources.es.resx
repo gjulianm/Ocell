@@ -1056,4 +1056,19 @@
   <data name="AnotherThingy" xml:space="preserve">
     <value />
   </data>
+  <data name="Big" xml:space="preserve">
+    <value>Grande</value>
+  </data>
+  <data name="FontSize" xml:space="preserve">
+    <value>Tamaño de fuente:</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Medio</value>
+  </data>
+  <data name="RTBy" xml:space="preserve">
+    <value>RT por </value>
+  </data>
+  <data name="Small" xml:space="preserve">
+    <value>Pequeño</value>
+  </data>
 </root>

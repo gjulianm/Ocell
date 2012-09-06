@@ -223,6 +223,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a .
+        /// </summary>
+        public static string AnotherString {
+            get {
+                return ResourceManager.GetString("AnotherString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a a second ago.
         /// </summary>
         public static string ASecondAgo {
@@ -300,6 +309,15 @@ namespace Ocell.Localization {
         public static string Backgrounds_CapitalFirst {
             get {
                 return ResourceManager.GetString("Backgrounds_CapitalFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Big.
+        /// </summary>
+        public static string Big {
+            get {
+                return ResourceManager.GetString("Big", resourceCulture);
             }
         }
         
@@ -988,6 +1006,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Font size:.
+        /// </summary>
+        public static string FontSize {
+            get {
+                return ResourceManager.GetString("FontSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a forever.
         /// </summary>
         public static string Forever {
@@ -1155,6 +1182,15 @@ namespace Ocell.Localization {
         public static string ManageListsForUser {
             get {
                 return ResourceManager.GetString("ManageListsForUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Medium.
+        /// </summary>
+        public static string Medium {
+            get {
+                return ResourceManager.GetString("Medium", resourceCulture);
             }
         }
         
@@ -1654,6 +1690,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a RT by .
+        /// </summary>
+        public static string RTBy {
+            get {
+                return ResourceManager.GetString("RTBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a save.
         /// </summary>
         public static string Save {
@@ -1848,6 +1893,15 @@ namespace Ocell.Localization {
         public static string SilenceTime {
             get {
                 return ResourceManager.GetString("SilenceTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Small.
+        /// </summary>
+        public static string Small {
+            get {
+                return ResourceManager.GetString("Small", resourceCulture);
             }
         }
         

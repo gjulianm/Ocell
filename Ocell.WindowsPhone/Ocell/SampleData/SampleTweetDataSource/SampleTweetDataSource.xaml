@@ -1,0 +1,19 @@
+﻿<!--
+      *********    NO MODIFIQUE ESTE ARCHIVO     *********
+      Este archivo se regenera mediante una herramienta de diseño.
+       Si realiza cambios en este archivo, puede causar errores.
+-->
+<SampleData:SampleTweetDataSource xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.SampleTweetDataSource" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <SampleData:SampleTweetDataSource.Collection>
+    <SampleData:Item Author_Name="Aliquam cras integer duis" CleanText="True" />
+    <SampleData:Item Author_Name="Aenean maecenas" CleanText="False" />
+    <SampleData:Item Author_Name="Nunc amet ante arcu" CleanText="True" />
+    <SampleData:Item Author_Name="Class praesent accumsan diam" CleanText="False" />
+    <SampleData:Item Author_Name="Mauris eget elit" CleanText="True" />
+    <SampleData:Item Author_Name="Nam nullam enim aptent" CleanText="False" />
+    <SampleData:Item Author_Name="Curae bibendum" CleanText="True" />
+    <SampleData:Item Author_Name="Sed quisque erat dictumst" CleanText="False" />
+    <SampleData:Item Author_Name="Eleifend auctor" CleanText="True" />
+    <SampleData:Item Author_Name="Eros congue dis cursus" CleanText="False" />
+  </SampleData:SampleTweetDataSource.Collection>
+</SampleData:SampleTweetDataSource>
