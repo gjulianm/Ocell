@@ -25,6 +25,7 @@ namespace Ocell.Controls
     public class ExtendedListBox : ListBox
     {
         // Compression states: Thanks to http://blogs.msdn.com/b/slmperf/archive/2011/06/30/windows-phone-mango-change-listbox-how-to-detect-compression-end-of-scroll-states.aspx
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private bool _isBouncy = false;
         private bool _alreadyHookedScrollEvents = false;
@@ -42,8 +43,6 @@ namespace Ocell.Controls
         public bool AutoManageNavigation { get; set; }
         public string NavigationUri { get; set; }
         public bool AutoManageErrors { get; set; }
-
-       
 
         public ExtendedListBox()
         {
@@ -67,6 +66,14 @@ namespace Ocell.Controls
             _Items = new ObservableCollection<ITweetable>();
             _ViewSource = new CollectionViewSource();
             SetupCollectionViewSource();
+        }
+
+        private void ListBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!_alreadyHookedScrollEvents)
+                HookScrollEvent();
+
+            SetTag();
         }
 
         void UndeferRefresh(object sender, CompressionEventArgs e)
@@ -161,12 +168,13 @@ namespace Ocell.Controls
         }
 
         #region Scroll Events
-        private void ListBox_Loaded(object sender, RoutedEventArgs e)
+        
+
+        private void HookScrollEvent()
         {
             ScrollBar sb = null;
             ScrollViewer sv = null;
-            if (_alreadyHookedScrollEvents)
-                return;
+
 
             _alreadyHookedScrollEvents = true;
             this.AddHandler(ExtendedListBox.ManipulationCompletedEvent, (EventHandler<ManipulationCompletedEventArgs>)LB_ManipulationCompleted, true);
@@ -187,8 +195,6 @@ namespace Ocell.Controls
                         hgroup.CurrentStateChanging += new EventHandler<VisualStateChangedEventArgs>(hgroup_CurrentStateChanging);
                 }
             }
-
-            SetTag();
         }
 
         private void hgroup_CurrentStateChanging(object sender, VisualStateChangedEventArgs e)

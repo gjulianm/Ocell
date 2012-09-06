@@ -14,5 +14,6 @@ namespace Ocell.Library.Twitter
         public string RawSource { get; set; }
         public string AuthorName { get; set; }
         public string CleanText { get; set; }
+        public bool IsRetweeted { get { return false; } }
     }
 }

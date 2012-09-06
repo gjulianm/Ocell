@@ -28,6 +28,7 @@ namespace Ocell.Library
         private const string ReadLaterCredsKey = "READLATERCREDS";
         private const string BackgroundsKey ="BACKGROUNDS";
         private const string FirstInitKey = "ISFIRSTINIT";
+        private const string FontSizeKey ="FONTSIZE";
 #endif
 
         private const string AccountsKey = "ACCOUNTS";
@@ -52,8 +53,10 @@ namespace Ocell.Library
         private static ReadLaterCredentials _readLaterCredentials;
         private static OcellTheme _backgroundUrl;
         private static bool? _firstInit;
-        
+        private static int? _fontSize;
 #endif
+
+        
 
         public static bool? BackgroundLoadColumns
         {
@@ -104,6 +107,18 @@ namespace Ocell.Library
             }
         }
 #if !BACKGROUND_AGENT
+        public static int? FontSize
+        {
+            get
+            {
+                return GenericGetFromConfig<int?>(FontSizeKey, ref _fontSize);
+            }
+            set
+            {
+                GenericSaveToConfig<int?>(FontSizeKey, ref _fontSize, value);
+            }
+        }
+
         public static bool? FirstInit
         {
             get
@@ -271,9 +286,8 @@ namespace Ocell.Library
                         config.Save();
                     }
                 }
-                catch (InvalidCastException e)
+                catch (InvalidCastException)
                 {
-                    e.StackTrace.ToString();
                     config.Remove(key);
                     config.Save();
                 }

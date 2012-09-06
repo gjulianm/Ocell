@@ -1,5 +1,4 @@
-<Application 
-    x:Class="Ocell.App"
+﻿<Application
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,162 +7,16 @@
     xmlns:img="clr-namespace:System.Windows.Media.Imaging;assembly=System.Windows"
 	xmlns:local="clr-namespace:Ocell" 
 	xmlns:commands="clr-namespace:Ocell.Commands"
-    mc:Ignorable="d"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
     xmlns:tr="clr-namespace:Ocell.Transitions"
     xmlns:navigation="clr-namespace:System.Windows.Navigation;assembly=Microsoft.Phone"
     xmlns:u="clr-namespace:DanielVaughan.Windows.Converters;assembly=Calcium.Phone"
-    xmlns:global="clr-namespace:Ocell.Localization;assembly=Localization"
+    xmlns:global="clr-namespace:Ocell.Localization;assembly=Localization" 
+    x:Class="Ocell.App"
+    mc:Ignorable="d"
     >
-
-    <!--Recursos de la aplicación-->
-    <Application.Resources>
-        <ResourceDictionary>
-            <global:LocalizedResources x:Key="LocalizedResources"/>
-            <local:ListConverter x:Key="ListConverter"/>
-            <local:RelativeDateTimeConverter x:Key="RelativeDateTimeConverter"/>
-            <local:RemoveHTML x:Key="RemoveHTMLConverter" />
-            <commands:FavoriteCommand x:Key="FavoriteCommand" />
-            <commands:ReplyAllCommand x:Key="ReplyAllCommand"/>
-            <commands:ReplyCommand x:Key="ReplyCommand"/>
-            <commands:RetweetCommand x:Key="RetweetCommand"/>
-            <commands:ReadLaterCommand x:Key="ReadLaterCommand"/>
-            <local:ToColumn x:Key="ToColumnConverter" />
-            <local:IncludeExcludeConverter x:Key="IncludeExcludeConverter" />
-            <local:FilterTypeConverter x:Key="FilterTypeConverter" />
-            <local:TweetTextConverter x:Key="TweetTextConverter"/>
-            <local:SizeConverter x:Key="SizeConverter"/>
-            <local:AvatarConverter x:Key="AvatarConverter"/>
-            <local:ScreenNameConverter x:Key="ScreenNameConverter"/>
-            <local:MarginConverter x:Key="MarginConverter"/>
-            <commands:DeleteCommand x:Key="DeleteCommand" />
-            <commands:ProtectCommand x:Key="ProtectCommand" />
-            <local:ProtectedConverter x:Key="ProtectedConverter"/>
-            <commands:MuteCommand x:Key="MuteCommand"/>
-            <local:FilterDateConverter x:Key="FilterDateConverter" />
-            <u:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-
-            <DataTemplate x:Key="TweetTemplate">
-                <local:TweetTemplateSelector Content="{Binding}" Margin="0" HorizontalContentAlignment="Stretch" >
-                    <local:TweetTemplateSelector.UsualTemplate>
-                        <DataTemplate>
-                            <Grid HorizontalAlignment="Stretch" Tag="{Binding Id}" Margin="0,3,0,12" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache">
-                                <i:Interaction.Behaviors>
-                                    <tr:OnLoadedOpacityTransitionBehavior/>
-                                </i:Interaction.Behaviors>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="0.611*"/>
-                                    <ColumnDefinition Width="0.389*"/>
-                                </Grid.ColumnDefinitions>
-                                <toolkit:ContextMenuService.ContextMenu>
-                                    <toolkit:ContextMenu Background="White" BorderBrush="Black" Foreground="Black" x:Name="ContextMenu">
-                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Retweet, Source={StaticResource LocalizedResources}}" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Favorite., Source={StaticResource LocalizedResources}}" Command="{StaticResource FavoriteCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.MuteUser, Source={StaticResource LocalizedResources}}" Command="{StaticResource MuteCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.ReadLater, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding}" />
-                                    </toolkit:ContextMenu>
-                                </toolkit:ContextMenuService.ContextMenu>
-                                <TextBlock x:Name="Date" Text="{Binding CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}" VerticalAlignment="Top" Margin="0,5.753,8,0" Foreground="#FF707070" Grid.Column="1" HorizontalAlignment="Right" UseLayoutRounding="False" FontFamily="Segoe WP Light"/>
-                                <Image x:Name="Avatar" HorizontalAlignment="Left" Width="{Binding Converter={StaticResource SizeConverter}}" Margin="{Binding Converter={StaticResource MarginConverter}}" d:LayoutOverrides="HorizontalAlignment, Height" Height="{Binding Converter={StaticResource SizeConverter}}" UseLayoutRounding="False" VerticalAlignment="Top">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="{Binding ConverterParameter=false, Converter={StaticResource AvatarConverter}}" CreateOptions="BackgroundCreation,DelayCreation"/>
-                                    </Image.Source>
-                                </Image>
-                                <Image x:Name="RetweetedAvatar" Source="{Binding ConverterParameter=true, Converter={StaticResource AvatarConverter}}" HorizontalAlignment="Left" Width="30" Margin="8,54,0,0" d:LayoutOverrides="HorizontalAlignment, Height" Height="30" UseLayoutRounding="False" VerticalAlignment="Top">
-                                </Image>
-                                <TextBlock x:Name="Text" Text="{Binding CleanText}" Margin="86,32.356,8,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Grid.ColumnSpan="2" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight"/>
-                                <TextBlock x:Name="Name" Margin="86,0,0,0" TextWrapping="Wrap" Text="{Binding AuthorName}" VerticalAlignment="Top" FontSize="24" UseLayoutRounding="False" HorizontalAlignment="Left" Width="258"/>
-                            </Grid>
-                        </DataTemplate>
-                    </local:TweetTemplateSelector.UsualTemplate>
-                    <local:TweetTemplateSelector.LoadMoreTemplate>
-                        <DataTemplate>
-                            <Grid HorizontalAlignment="Stretch" Margin="0,3,0,12" Tag="{Binding Id}" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache" Height="53" d:LayoutOverrides="VerticalMargin">
-                                <i:Interaction.Behaviors>
-                                    <tr:OnLoadedOpacityTransitionBehavior/>
-                                </i:Interaction.Behaviors>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="0.611*"/>
-                                    <ColumnDefinition Width="0.389*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Foreground="{StaticResource PhoneAccentBrush}" Margin="50,8,78,8" TextWrapping="Wrap" Text="{Binding Strings.LoadMore, Source={StaticResource LocalizedResources}}" FontSize="26.667" FontFamily="Segoe WP SemiLight"/>
-                            </Grid>
-                        </DataTemplate>
-                    </local:TweetTemplateSelector.LoadMoreTemplate>
-                </local:TweetTemplateSelector>
-            </DataTemplate>
-
-            <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
-                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            </Style>
-
-
-
-
-            <DataTemplate x:Key="AccountsTemplate">
-                <Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">
-                    <TextBlock Text="{Binding ScreenName}" Margin="89,21,8,21" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="24"/>
-                    <Image Margin="8,8,0,0" HorizontalAlignment="Left" Width="64" Height="64" VerticalAlignment="Top" Source="{Binding AvatarUrl}"/>
-                </Grid>
-            </DataTemplate>
-
-            <Style TargetType="ScrollViewer">
-                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
-                <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Padding" Value="0"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="BorderBrush" Value="Transparent"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ScrollViewer">
-                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup x:Name="ScrollStates">
-                                        <VisualStateGroup.Transitions>
-                                            <VisualTransition GeneratedDuration="00:00:00.5"/>
-                                        </VisualStateGroup.Transitions>
-                                        <VisualState x:Name="Scrolling">
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
-                                                <DoubleAnimation Storyboard.TargetName="HorizontalScrollBar" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="NotScrolling"/>
-                                    </VisualStateGroup>
-                                    <VisualStateGroup x:Name="VerticalCompression">
-                                        <VisualState x:Name="NoVerticalCompression"/>
-                                        <VisualState x:Name="CompressionTop"/>
-                                        <VisualState x:Name="CompressionBottom"/>
-                                    </VisualStateGroup>
-                                    <VisualStateGroup x:Name="HorizontalCompression">
-                                        <VisualState x:Name="NoHorizontalCompression"/>
-                                        <VisualState x:Name="CompressionLeft"/>
-                                        <VisualState x:Name="CompressionRight"/>
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
-                                <Grid Margin="{TemplateBinding Padding}">
-                                    <ScrollContentPresenter x:Name="ScrollContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
-                                    <ScrollBar x:Name="VerticalScrollBar" IsHitTestVisible="False" Height="Auto" Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" IsTabStop="False" Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Value="{TemplateBinding VerticalOffset}" Orientation="Vertical" ViewportSize="{TemplateBinding ViewportHeight}" />
-                                    <ScrollBar x:Name="HorizontalScrollBar" IsHitTestVisible="False" Width="Auto" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" IsTabStop="False" Maximum="{TemplateBinding ScrollableWidth}" Minimum="0" Value="{TemplateBinding HorizontalOffset}" Orientation="Horizontal" ViewportSize="{TemplateBinding ViewportWidth}" />
-                                </Grid>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </ResourceDictionary>
-    </Application.Resources>
-
-    <Application.ApplicationLifetimeObjects>
-        <!--Objeto requerido que controla los eventos de duración de la aplicación-->
-        <shell:PhoneApplicationService 
-            Launching="Application_Launching" Closing="Application_Closing" 
-            Activated="Application_Activated" Deactivated="Application_Deactivated"/>
-    </Application.ApplicationLifetimeObjects>
 
     <!--<Application.RootVisual>
         <phone:PhoneApplicationFrame x:Name="RootFrame">
@@ -173,6 +26,152 @@
                 </navigation:UriMapper>
             </phone:PhoneApplicationFrame.UriMapper>
         </phone:PhoneApplicationFrame>
-    </Application.RootVisual>-->
+    </Application.RootVisual>--><!--Recursos de la aplicaciÃ³n-->
+    <Application.Resources>
+        <ResourceDictionary>
+        	<global:LocalizedResources x:Key="LocalizedResources"/>
+        	<local:ListConverter x:Key="ListConverter"/>
+        	<local:RelativeDateTimeConverter x:Key="RelativeDateTimeConverter"/>
+        	<local:RemoveHTML x:Key="RemoveHTMLConverter" />
+        	<commands:FavoriteCommand x:Key="FavoriteCommand" />
+        	<commands:ReplyAllCommand x:Key="ReplyAllCommand"/>
+        	<commands:ReplyCommand x:Key="ReplyCommand"/>
+        	<commands:RetweetCommand x:Key="RetweetCommand"/>
+        	<commands:ReadLaterCommand x:Key="ReadLaterCommand"/>
+        	<local:ToColumn x:Key="ToColumnConverter" />
+        	<local:IncludeExcludeConverter x:Key="IncludeExcludeConverter" />
+        	<local:FilterTypeConverter x:Key="FilterTypeConverter" />
+        	<local:TweetTextConverter x:Key="TweetTextConverter"/>
+        	<local:SizeConverter x:Key="SizeConverter"/>
+        	<local:AvatarConverter x:Key="AvatarConverter"/>
+        	<local:ScreenNameConverter x:Key="ScreenNameConverter"/>
+        	<local:MarginConverter x:Key="MarginConverter"/>
+        	<commands:DeleteCommand x:Key="DeleteCommand" />
+        	<commands:ProtectCommand x:Key="ProtectCommand" />
+        	<local:ProtectedConverter x:Key="ProtectedConverter"/>
+        	<commands:MuteCommand x:Key="MuteCommand"/>
+        	<local:FilterDateConverter x:Key="FilterDateConverter" />
+        	<u:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <local:GlobalSettings x:Key="GlobalSettings" />
+
+        	<DataTemplate x:Key="TweetTemplate">
+        		<local:TweetTemplateSelector Content="{Binding}" Margin="0" HorizontalContentAlignment="Stretch" >
+        			<local:TweetTemplateSelector.UsualTemplate>
+        				<DataTemplate>
+        					<Grid HorizontalAlignment="Stretch" Tag="{Binding Id}" Margin="0,3,0,12" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache">
+        						<i:Interaction.Behaviors>
+        							<tr:OnLoadedOpacityTransitionBehavior/>
+        						</i:Interaction.Behaviors>
+        						<Grid.ColumnDefinitions>
+        							<ColumnDefinition Width="0.611*"/>
+        							<ColumnDefinition Width="0.389*"/>
+        						</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto" />
+									<RowDefinition Height="Auto" />
+								</Grid.RowDefinitions>
+        						<toolkit:ContextMenuService.ContextMenu>
+        							<toolkit:ContextMenu Background="White" BorderBrush="Black" Foreground="Black" x:Name="ContextMenu">
+        								<toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding}" />
+        								<toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Retweet, Source={StaticResource LocalizedResources}}" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding}" />
+        								<toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Favorite., Source={StaticResource LocalizedResources}}" Command="{StaticResource FavoriteCommand}" CommandParameter="{Binding}" />
+        								<toolkit:MenuItem Foreground="Black" Header="{Binding Strings.MuteUser, Source={StaticResource LocalizedResources}}" Command="{StaticResource MuteCommand}" CommandParameter="{Binding}" />
+        								<toolkit:MenuItem Foreground="Black" Header="{Binding Strings.ReadLater, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding}" />
+        							</toolkit:ContextMenu>
+        						</toolkit:ContextMenuService.ContextMenu>
+        						<TextBlock Grid.Row="0" x:Name="Date" Text="{Binding CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}" VerticalAlignment="Top" Margin="0,5.753,8,0" Foreground="#FF707070" Grid.Column="1" HorizontalAlignment="Right" UseLayoutRounding="False" FontFamily="Segoe WP Light"/>
+        						<Image x:Name="Avatar" HorizontalAlignment="Left" Width="{Binding Converter={StaticResource SizeConverter}}" Margin="{Binding Converter={StaticResource MarginConverter}}" d:LayoutOverrides="HorizontalAlignment, Height" Height="{Binding Converter={StaticResource SizeConverter}}" UseLayoutRounding="False" VerticalAlignment="Top">
+        							<Image.Source>
+        								<BitmapImage UriSource="{Binding ConverterParameter=false, Converter={StaticResource AvatarConverter}}" CreateOptions="BackgroundCreation,DelayCreation"/>
+        							</Image.Source>
+        						</Image>
+        						<Image x:Name="RetweetedAvatar" Source="{Binding ConverterParameter=true, Converter={StaticResource AvatarConverter}}" HorizontalAlignment="Left" Width="30" Margin="8,54,0,0" d:LayoutOverrides="HorizontalAlignment, Height" Height="30" UseLayoutRounding="False" VerticalAlignment="Top"/>
+        						<TextBlock x:Name="Text" Grid.Row="0" Text="{Binding CleanText}" Margin="86,32.356,8,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Grid.ColumnSpan="2" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="{Binding TweetFontSize, Source={StaticResource GlobalSettings}}"/>
+        						<TextBlock x:Name="Name" Grid.Row="0" Margin="86,0,0,0" TextWrapping="Wrap" Text="{Binding AuthorName}" VerticalAlignment="Top" FontSize="24" UseLayoutRounding="False" HorizontalAlignment="Left" Width="258"/>
+        						<TextBlock x:Name="RTBy" Grid.Row="1" Margin="86,5,0,0" Foreground="#FF707070" Visibility="{Binding IsRetweeted, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Segoe WP SemiLight"><Run Text="{Binding Strings.RTBy, Source={StaticResource LocalizedResources}}" /><Run Text="{Binding Author.ScreenName}" /></TextBlock>
+							</Grid>
+        				</DataTemplate>
+        			</local:TweetTemplateSelector.UsualTemplate>
+        			<local:TweetTemplateSelector.LoadMoreTemplate>
+        				<DataTemplate>
+        					<Grid HorizontalAlignment="Stretch" Margin="0,3,0,12" Tag="{Binding Id}" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache" Height="53" d:LayoutOverrides="VerticalMargin">
+        						<i:Interaction.Behaviors>
+        							<tr:OnLoadedOpacityTransitionBehavior/>
+        						</i:Interaction.Behaviors>
+        						<TextBlock Foreground="{StaticResource PhoneAccentBrush}" Margin="50,8,78,8" TextWrapping="Wrap" Text="{Binding Strings.LoadMore, Source={StaticResource LocalizedResources}}" FontSize="26.667" FontFamily="Segoe WP SemiLight"/>
+        					</Grid>
+        				</DataTemplate>
+        			</local:TweetTemplateSelector.LoadMoreTemplate>
+        		</local:TweetTemplateSelector>
+        	</DataTemplate>
+
+        	<Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
+        		<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        	</Style>
+
+
+
+
+        	<DataTemplate x:Key="AccountsTemplate">
+        		<Grid Height="80" Width="444" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="80">
+        			<TextBlock Text="{Binding ScreenName}" Margin="89,21,8,21" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="24"/>
+        			<Image Margin="8,8,0,0" HorizontalAlignment="Left" Width="64" Height="64" VerticalAlignment="Top" Source="{Binding AvatarUrl}"/>
+        		</Grid>
+        	</DataTemplate>
+
+        	<Style TargetType="ScrollViewer">
+        		<Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        		<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+        		<Setter Property="Background" Value="Transparent"/>
+        		<Setter Property="Padding" Value="0"/>
+        		<Setter Property="BorderThickness" Value="0"/>
+        		<Setter Property="BorderBrush" Value="Transparent"/>
+        		<Setter Property="Template">
+        			<Setter.Value>
+        				<ControlTemplate TargetType="ScrollViewer">
+        					<Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+        						<VisualStateManager.VisualStateGroups>
+        							<VisualStateGroup x:Name="ScrollStates">
+        								<VisualStateGroup.Transitions>
+        									<VisualTransition GeneratedDuration="00:00:00.5"/>
+        								</VisualStateGroup.Transitions>
+        								<VisualState x:Name="Scrolling">
+        									<Storyboard>
+        										<DoubleAnimation Storyboard.TargetName="VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
+        										<DoubleAnimation Storyboard.TargetName="HorizontalScrollBar" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
+        									</Storyboard>
+        								</VisualState>
+        								<VisualState x:Name="NotScrolling"/>
+        							</VisualStateGroup>
+        							<VisualStateGroup x:Name="VerticalCompression">
+        								<VisualState x:Name="NoVerticalCompression"/>
+        								<VisualState x:Name="CompressionTop"/>
+        								<VisualState x:Name="CompressionBottom"/>
+        							</VisualStateGroup>
+        							<VisualStateGroup x:Name="HorizontalCompression">
+        								<VisualState x:Name="NoHorizontalCompression"/>
+        								<VisualState x:Name="CompressionLeft"/>
+        								<VisualState x:Name="CompressionRight"/>
+        							</VisualStateGroup>
+        						</VisualStateManager.VisualStateGroups>
+        						<Grid Margin="{TemplateBinding Padding}">
+        							<ScrollContentPresenter x:Name="ScrollContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
+        							<ScrollBar x:Name="VerticalScrollBar" IsHitTestVisible="False" Height="Auto" Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" IsTabStop="False" Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Value="{TemplateBinding VerticalOffset}" Orientation="Vertical" ViewportSize="{TemplateBinding ViewportHeight}" />
+        							<ScrollBar x:Name="HorizontalScrollBar" IsHitTestVisible="False" Width="Auto" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" IsTabStop="False" Maximum="{TemplateBinding ScrollableWidth}" Minimum="0" Value="{TemplateBinding HorizontalOffset}" Orientation="Horizontal" ViewportSize="{TemplateBinding ViewportWidth}" />
+        						</Grid>
+        					</Border>
+        				</ControlTemplate>
+        			</Setter.Value>
+        		</Setter>
+        	</Style>
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.ApplicationLifetimeObjects>
+        <!--Objeto requerido que controla los eventos de duraciÃ³n de la aplicaciÃ³n-->
+    	<shell:PhoneApplicationService 
+    		Launching="Application_Launching" Closing="Application_Closing" 
+    		Activated="Application_Activated" Deactivated="Application_Deactivated"/>
+    </Application.ApplicationLifetimeObjects>
 
 </Application>

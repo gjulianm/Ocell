@@ -208,10 +208,12 @@ namespace Ocell.Library.Twitter
             else
                 LoadNew();
         }
+
         public void LoadFrom(long Id)
         {
             LoadOld(Id);
         }
+
         protected void LoadNew()
         {
             loaded++;
@@ -253,6 +255,7 @@ namespace Ocell.Library.Twitter
                     break;
             }
         }
+
         protected void LoadOld(long last = 0)
         {
             loaded++;
