@@ -336,7 +336,11 @@ namespace Ocell.Pages
             IsLoading = true;
             BarText = Resources.UploadingPicture;
 
-            ITwitterService srv = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+            TwitterService srv = ServiceDispatcher.GetService(DataTransfer.CurrentAccount) as TwitterService;
+            
+            if (srv == null)
+                return; // Dirty trick: it will never be null if we're not testing.
+
             RestRequest req = srv.PrepareEchoRequest();
             RestClient client = new RestClient { Authority = "http://api.twitpic.com/", VersionPath = "1" };
 

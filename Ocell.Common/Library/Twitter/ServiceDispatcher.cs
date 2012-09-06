@@ -32,9 +32,11 @@ namespace Ocell.Library.Twitter
             if (TestSession)
                 srv = new MockTwitterService();
             else
-                srv = new TwitterService();
-
-            srv.AuthenticateWith(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, account.Key, account.Secret);
+            {
+                var tempSrv = new TwitterService();
+                tempSrv.AuthenticateWith(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, account.Key, account.Secret);
+                srv = tempSrv;
+            }            
 
             lock(_lockFlag)
                 _list.Add(account.Key, srv);
