@@ -10,7 +10,7 @@
     xmlns:custom="clr-namespace:Ocell.Controls"
 	x:Class="Ocell.MainPage" 
     xmlns:u="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
-    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
     SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
@@ -38,7 +38,17 @@
     </toolkit:TransitionService.NavigationOutTransition>
 
     <phone:PhoneApplicationPage.Resources>
+        <Storyboard x:Name="ShowLeft">
+            <DoubleAnimation
+        Storyboard.TargetProperty="(Grid.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="RecoverDialog"
+        Duration="0:0:0.8" To="0" />
+        </Storyboard>
 
+        <Storyboard x:Name="HideLeft">
+            <DoubleAnimation 
+                Storyboard.TargetProperty="(Grid.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="RecoverDialog"
+                Duration="0:0:0.8" To="800" />
+        </Storyboard>
     </phone:PhoneApplicationPage.Resources>
 
     <phone:PhoneApplicationPage.FontFamily>
@@ -59,12 +69,12 @@
 
 
     <!--LayoutRoot es la cuadrÃ­cula raÃ­z donde se coloca todo el contenido de la pÃ¡gina-->
-    <Grid x:Name="LayoutRoot" CacheMode="BitmapCache" Margin="0,-32,0,0">
+    <Grid x:Name="LayoutRoot" CacheMode="BitmapCache" Margin="0,-32,0,0" d:IsLocked="True">
         <Grid.Background>
             <ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
         </Grid.Background>
         <!--Control Pivot-->
-        <controls:Pivot Title="{Binding CurrentAccountName, StringFormat='OCELL - {0}'}" x:Name="MainPivot" Background="{x:Null}" ItemsSource="{Binding Pivots}" SelectedItem="{Binding SelectedPivot, Mode=TwoWay}" Margin="0,50,0,0">
+        <controls:Pivot Title="{Binding CurrentAccountName, StringFormat='OCELL - {0}'}" x:Name="MainPivot" Background="{x:Null}" ItemsSource="{Binding Pivots}" SelectedItem="{Binding SelectedPivot, Mode=TwoWay}" Margin="0,50,0,0" d:IsLocked="True">
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Title, Converter={StaticResource ListConverter}, FallbackValue=error}" Tag="{Binding}" Tap="TextBlock_Tap" />
@@ -76,13 +86,13 @@
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>
-        <Grid x:Name="GoToUserGrid" Height="104" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <TextBlock TextWrapping="Wrap" Text="{Binding Strings.Username, Source={StaticResource LocalizedResources}, StringFormat='{}{0}:'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="13,8,0,0"/>
-            <TextBox x:Name="UserNameBox" TextWrapping="Wrap" d:LayoutOverrides="Height" Margin="0,32,168,0" Text="{Binding UserSearch, Mode=TwoWay}"/>
-            <Button x:Name="GoUser" Content="{Binding Strings.ButtonGo, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Right" Margin="0,0,8,0" VerticalAlignment="Bottom" Width="156" Command="{Binding GoToUser}"/>
+        <Grid x:Name="GoToUserGrid" Height="104" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True">
+            <TextBlock TextWrapping="Wrap" Text="{Binding Strings.Username, Source={StaticResource LocalizedResources}, StringFormat='{}{0}:'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="13,8,0,0" d:IsLocked="True"/>
+            <TextBox x:Name="UserNameBox" TextWrapping="Wrap" d:LayoutOverrides="Height" Margin="0,32,168,0" Text="{Binding UserSearch, Mode=TwoWay}" d:IsLocked="True"/>
+            <Button x:Name="GoUser" Content="{Binding Strings.ButtonGo, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Right" Margin="0,0,8,0" VerticalAlignment="Bottom" Width="156" Command="{Binding GoToUser}" d:IsLocked="True"/>
         </Grid>
 
-        <u:AppBar>
+        <u:AppBar d:IsLocked="True">
 
             <u:AppBar.MenuItems>
                 <u:AppBarMenuItem Text="{Binding Strings.PinColumnStart, Source={StaticResource LocalizedResources}}" Command="{Binding PinToStart}"/>
@@ -92,11 +102,18 @@
                 <u:AppBarMenuItem Text="{Binding Strings.GoToUser, Source={StaticResource LocalizedResources}}" Click="AppBarMenuItem_Click"/>
                 <u:AppBarHyperlinkMenuItem Text="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Settings/Default.xaml"/>
             </u:AppBar.MenuItems>
-            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="{Binding Strings.Compose, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/NewTweet.xaml" />
-            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.columns.rest.png" Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Columns/ManageColumns.xaml" />
-            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="{Binding Strings.SendDM, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/SelectUser.xaml"/>
-            <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="{Binding Strings.Search, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Search/EnterSearch.xaml" />
+            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="{Binding Strings.Compose, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/NewTweet.xaml" d:IsLocked="True" />
+            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.columns.rest.png" Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Columns/ManageColumns.xaml" d:IsLocked="True" />
+            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="{Binding Strings.SendDM, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/SelectUser.xaml" d:IsLocked="True"/>
+            <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="{Binding Strings.Search, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Search/EnterSearch.xaml" d:IsLocked="True" />
         </u:AppBar>
+        
+        <Grid x:Name="RecoverDialog" Height="65" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="480,0,0,0" d:IsLocked="True" toolkit:TiltEffect.IsTiltEnabled="True">
+            <Grid.RenderTransform>
+                <TranslateTransform X="{Binding Width, ElementName=LayoutRoot}" Y="0" />
+            </Grid.RenderTransform>
+            <TextBlock Margin="8"  toolkit:TiltEffect.IsTiltEnabled="True" TextWrapping="Wrap" Text="{Binding Strings.RecoverReadPosition, Source={StaticResource LocalizedResources}}"  VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe WP Light" FontSize="26.667" d:IsLocked="True"/>
+        </Grid>
     </Grid>
 
 </phone:PhoneApplicationPage>
