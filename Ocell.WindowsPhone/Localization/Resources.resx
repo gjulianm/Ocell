@@ -1071,4 +1071,7 @@
   <data name="Small" xml:space="preserve">
     <value>Small</value>
   </data>
+  <data name="RecoverReadPosition" xml:space="preserve">
+    <value>resume last reading position?</value>
+  </data>
 </root>

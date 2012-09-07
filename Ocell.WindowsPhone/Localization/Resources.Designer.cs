@@ -1591,6 +1591,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a resume last reading position?.
+        /// </summary>
+        public static string RecoverReadPosition {
+            get {
+                return ResourceManager.GetString("RecoverReadPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a refresh.
         /// </summary>
         public static string Refresh {
