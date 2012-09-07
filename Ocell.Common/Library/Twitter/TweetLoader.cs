@@ -133,23 +133,43 @@ namespace Ocell.Library.Twitter
         }
 
         #region Cache
-        private void SaveToCacheThreaded()
+        public void SaveToCacheAsync()
         {
             ThreadPool.QueueUserWorkItem((threadContext) => SaveToCache());
         }
+
         public void LoadCacheAsync()
         {
-            ThreadPool.QueueUserWorkItem((threadContext) =>
-                {
-                    LoadCache();
-                });
+            ThreadPool.QueueUserWorkItem((threadContext) => LoadCache());
         }
-        public void SaveToCache()
+
+        public void SaveToCacheAsync(IList<ITweetable> viewport)
+        {
+            ThreadPool.QueueUserWorkItem((context) => SaveToCache(viewport));
+        }
+
+        public void SaveToCache(IList<ITweetable> viewport)
         {
             if (!Cached)
                 return;
 
-            if (Source.Count == 0)
+            var toSave = viewport
+                .Concat(Source.OrderByDescending(x => x.Id).Take(CacheSize))
+                .OfType<TwitterStatus>()
+                .OrderByDescending(x => x.Id);
+
+            try
+            {
+                Cacher.SaveToCache(Resource, toSave);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public void SaveToCache()
+        {
+            if (!Cached || Source.Count == 0)
                 return;
 
             if (Source.First().GetType() == typeof(TwitterStatus))
@@ -164,6 +184,7 @@ namespace Ocell.Library.Twitter
                 }
             }
         }
+
         public void LoadCache()
         {
             if (!Cached || Resource.User == null)
@@ -406,7 +427,7 @@ namespace Ocell.Library.Twitter
                 PartialLoad(this, new EventArgs()); // When loading conversations, calls to this function will be partial.
 
 
-            SaveToCacheThreaded();
+            SaveToCacheAsync();
         }
         #endregion
 
