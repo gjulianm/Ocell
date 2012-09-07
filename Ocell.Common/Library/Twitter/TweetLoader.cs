@@ -173,10 +173,6 @@ namespace Ocell.Library.Twitter
 
             IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id);
 
-
-            if (!DecisionMaker.ShouldLoadCache(ref cacheList))
-                return;
-
             foreach (var item in cacheList)
                 if (!Source.Contains(item, comparer))
                     Source.Add(item);
@@ -448,16 +444,10 @@ namespace Ocell.Library.Twitter
             }
         }
 
-        public void RemoveLoadMore()
+        public void RemoveLoadMore(LoadMoreTweetable item)
         {
-            hasLoadMoreButton = false;
-            ITweetable item = Source.FirstOrDefault(e => e is LoadMoreTweetable);
-            while (item != null)
-            {
-                Source.Remove(item);
-                item = Source.FirstOrDefault(e => e is LoadMoreTweetable);
-            }
-
+            var toRemove = Source.FirstOrDefault(x => x.Id == item.Id);
+            Source.Remove(item);
         }
         #endregion
 
