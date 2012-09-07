@@ -1,8 +1,10 @@
 ﻿using System.Windows.Input;
 using Ocell.Library.Notifications;
+using System.Diagnostics;
 
 namespace Ocell.Library.Twitter
 {
+    [DebuggerDisplay("{ScreenName}")]
     public class UserToken
     {
         public string Key {get; set;}

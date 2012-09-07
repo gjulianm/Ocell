@@ -1,8 +1,10 @@
 ﻿using System;
 using Ocell.Localization;
+using System.Diagnostics;
 
 namespace Ocell.Library.Twitter
 {
+    [DebuggerDisplay("{String}")]
     public struct TwitterResource
     {
         public ResourceType Type { get; set; }
