@@ -19,43 +19,60 @@ using Ocell.Library;
 using DanielVaughan.Services;
 using DanielVaughan;
 using Ocell.Localization;
+using System.Collections.Generic;
 
 namespace Ocell.Controls
 {
     public class ExtendedListBox : ListBox
     {
         // Compression states: Thanks to http://blogs.msdn.com/b/slmperf/archive/2011/06/30/windows-phone-mango-change-listbox-how-to-detect-compression-end-of-scroll-states.aspx
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        private bool _isBouncy = false;
-        private bool _alreadyHookedScrollEvents = false;
+        private bool isBouncy = false;
+        private bool alreadyHookedScrollEvents = false;
         public TweetLoader Loader;
-        protected ObservableCollection<ITweetable> _Items;
-        protected CollectionViewSource _ViewSource;
-        private ColumnFilter _filter;
-        protected bool _isLoading;
-        protected bool _selectionChangeFired;
-        protected DateTime _lastAutoReload;
-        protected TimeSpan _autoReloadInterval = TimeSpan.FromSeconds(60);
-        protected static DateTime _lastErrorFired;
+        protected CollectionViewSource viewSource;
+        private ColumnFilter filter;
+        protected bool isLoading;
+        protected bool selectionChangeFired;
+        protected DateTime lastAutoReload;
+        protected TimeSpan autoReloadInterval = TimeSpan.FromSeconds(60);
+        protected static DateTime lastErrorFired;
 
         public bool ActivatePullToRefresh { get; set; }
         public bool AutoManageNavigation { get; set; }
         public string NavigationUri { get; set; }
         public bool AutoManageErrors { get; set; }
 
+        public ColumnFilter Filter
+        {
+            get
+            {
+                return filter;
+            }
+            set
+            {
+                filter = value;
+                if (filter != null)
+                    viewSource.View.Filter = filter.getPredicate();
+            }
+        }
+
+        #region Setup
         public ExtendedListBox()
         {
             Loader = new TweetLoader();
+            viewSource = new CollectionViewSource();
+
             ActivatePullToRefresh = true;
             AutoManageNavigation = true;
             AutoManageErrors = true;
-            _selectionChangeFired = false;
-            _lastAutoReload = DateTime.MinValue;
-            if (_lastErrorFired == null)
-                _lastErrorFired = DateTime.MinValue;
+
+            selectionChangeFired = false;
+            lastAutoReload = DateTime.MinValue;
+            if (lastErrorFired == null)
+                lastErrorFired = DateTime.MinValue;
+
             this.Loaded += new RoutedEventHandler(ListBox_Loaded);
-            this.Unloaded += new RoutedEventHandler(ExtendedListBox_Unloaded);
             this.Compression += new OnCompression(RefreshOnPull);
             this.Compression += new OnCompression(UndeferRefresh);
             this.SelectionChanged += new SelectionChangedEventHandler(ManageNavigation);
@@ -63,19 +80,60 @@ namespace Ocell.Controls
 
             Loader.Error += new TweetLoader.OnError(Loader_Error);
 
-            _Items = new ObservableCollection<ITweetable>();
-            _ViewSource = new CollectionViewSource();
             SetupCollectionViewSource();
         }
 
-        private void ListBox_Loaded(object sender, RoutedEventArgs e)
+        private void SetupCollectionViewSource()
         {
-            if (!_alreadyHookedScrollEvents)
+            viewSource.Source = Loader.Source;
+            ItemsSource = viewSource.View;
+            System.ComponentModel.SortDescription Sorter = new System.ComponentModel.SortDescription();
+            Sorter.PropertyName = "Id";
+            Sorter.Direction = System.ComponentModel.ListSortDirection.Descending;
+            viewSource.SortDescriptions.Add(Sorter);
+        }
+
+        private void SetTag()
+        {
+            if (this.Tag != null && this.Tag is string)
+                Loader.Resource = new TwitterResource() { String = this.Tag as string };
+            else if (this.Tag is TwitterResource)
+                Loader.Resource = (TwitterResource)this.Tag;
+        }
+
+        public void Bind(TwitterResource Resource)
+        {
+            Loader.Resource = Resource;
+        }
+        #endregion
+
+        #region Tweetloader communication
+        void Loader_Error(TwitterResponse response)
+        {
+            var messager = Dependency.Resolve<IMessageService>();
+            if (DateTime.Now > lastErrorFired.AddSeconds(10))
+            {
+                lastErrorFired = DateTime.Now;
+                if (response.RateLimitStatus.RemainingHits == 0)
+                    messager.ShowError(String.Format(Localization.Resources.RateLimitHit, response.RateLimitStatus.ResetTime.ToString("H:mm")));
+                else
+                    messager.ShowError(String.Format(Localization.Resources.ErrorLoadingTweets, response.StatusDescription));
+
+            }
+        }
+        #endregion
+
+        #region Listbox Events
+        void ListBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!alreadyHookedScrollEvents)
                 HookScrollEvent();
 
             SetTag();
         }
+        #endregion
 
+        #region Refresh deferral
         void UndeferRefresh(object sender, CompressionEventArgs e)
         {
             if (e.Type == CompressionType.Top)
@@ -83,12 +141,14 @@ namespace Ocell.Controls
         }
 
         void ScrollEnded(object sender, ManipulationCompletedEventArgs e)
-        {            
+        {
             var sv = (ScrollViewer)FindElementRecursive(this, typeof(ScrollViewer));
             if (sv.VerticalOffset > 0.3)
                 Loader.StopSourceRefresh();
         }
+        #endregion
 
+        #region Scroll to top
         public void ScrollToTop()
         {
             var dispatcher = Deployment.Current.Dispatcher;
@@ -106,77 +166,28 @@ namespace Ocell.Controls
             if (first != null)
                 ScrollIntoView(first);
         }
+        #endregion
 
-        private void SetupCollectionViewSource()
-        {
-            _ViewSource.Source = Loader.Source;
-            ItemsSource = _ViewSource.View;
-            System.ComponentModel.SortDescription Sorter = new System.ComponentModel.SortDescription();
-            Sorter.PropertyName = "Id";
-            Sorter.Direction = System.ComponentModel.ListSortDirection.Descending;
-            _ViewSource.SortDescriptions.Add(Sorter);
-        }
-
-        private void SetTag()
-        {
-            if (this.Tag != null && this.Tag is string)
-                Loader.Resource = new TwitterResource() { String = this.Tag as string };
-            else if (this.Tag is TwitterResource)
-                Loader.Resource = (TwitterResource)this.Tag;
-        }
-
-        void ExtendedListBox_Unloaded(object sender, RoutedEventArgs e)
-        {
-            Loader.SaveToCache();
-        }
-
-        public void Bind(TwitterResource Resource)
-        {
-            Loader.Resource = Resource;
-        }
-
-        public ColumnFilter Filter
-        {
-            get
-            {
-                return _filter;
-            }
-            set
-            {
-                _filter = value;
-                if (_filter != null)
-                    _ViewSource.View.Filter = _filter.getPredicate();
-            }
-        }
-
+        #region Load More
         public void LoadIntermediate(LoadMoreTweetable trigger)
         {
             Loader.AllowNextRefresh();
             Loader.LoadFrom(trigger.Id + 1);
         }
 
-        public void RemoveLoadMore()
+        public void RemoveLoadMore(LoadMoreTweetable item)
         {
-            ITweetable item = _Items.FirstOrDefault(e => e is LoadMoreTweetable);
-            while (item != null)
-            {
-                _Items.Remove(item);
-                item = _Items.FirstOrDefault(e => e is LoadMoreTweetable);
-            }
-
-            Loader.RemoveLoadMore();
+            Loader.RemoveLoadMore(item);
         }
+        #endregion
 
         #region Scroll Events
-        
-
         private void HookScrollEvent()
         {
             ScrollBar sb = null;
             ScrollViewer sv = null;
 
-
-            _alreadyHookedScrollEvents = true;
+            alreadyHookedScrollEvents = true;
             this.AddHandler(ExtendedListBox.ManipulationCompletedEvent, (EventHandler<ManipulationCompletedEventArgs>)LB_ManipulationCompleted, true);
             sb = (ScrollBar)FindElementRecursive(this, typeof(ScrollBar));
             sv = (ScrollViewer)FindElementRecursive(this, typeof(ScrollViewer));
@@ -201,20 +212,20 @@ namespace Ocell.Controls
         {
             if (e.NewState.Name == "CompressionLeft")
             {
-                _isBouncy = true;
+                isBouncy = true;
                 if (Compression != null)
                     Compression(this, new CompressionEventArgs(CompressionType.Left));
             }
 
             if (e.NewState.Name == "CompressionRight")
             {
-                _isBouncy = true;
+                isBouncy = true;
                 if (Compression != null)
                     Compression(this, new CompressionEventArgs(CompressionType.Right));
             }
             if (e.NewState.Name == "NoHorizontalCompression")
             {
-                _isBouncy = false;
+                isBouncy = false;
             }
         }
 
@@ -222,24 +233,24 @@ namespace Ocell.Controls
         {
             if (e.NewState.Name == "CompressionTop")
             {
-                _isBouncy = true;
+                isBouncy = true;
                 if (Compression != null)
                     Compression(this, new CompressionEventArgs(CompressionType.Top));
             }
             else if (e.NewState.Name == "CompressionBottom")
             {
-                _isBouncy = true;
+                isBouncy = true;
                 if (Compression != null)
                     Compression(this, new CompressionEventArgs(CompressionType.Bottom));
             }
             else if (e.NewState.Name == "NoVerticalCompression")
-                _isBouncy = false;
+                isBouncy = false;
         }
 
         private void LB_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
         {
-            if (_isBouncy)
-                _isBouncy = false;
+            if (isBouncy)
+                isBouncy = false;
         }
 
         private UIElement FindElementRecursive(FrameworkElement parent, Type targetType)
@@ -278,6 +289,7 @@ namespace Ocell.Controls
         }
         #endregion
 
+        #region Auto managers
         void RefreshOnPull(object sender, CompressionEventArgs e)
         {
             if (!ActivatePullToRefresh)
@@ -298,12 +310,12 @@ namespace Ocell.Controls
 
             INavigationService NavigationService = Dependency.Resolve<INavigationService>();
 
-            if (!_selectionChangeFired)
+            if (!selectionChangeFired)
             {
                 DataTransfer.Status = e.AddedItems[0] as TwitterStatus;
                 DataTransfer.DM = e.AddedItems[0] as TwitterDirectMessage;
 
-                _selectionChangeFired = true;
+                selectionChangeFired = true;
                 SelectedItem = null;
 
                 if (e.AddedItems[0] is TwitterStatus)
@@ -319,38 +331,27 @@ namespace Ocell.Controls
                 else if (e.AddedItems[0] is LoadMoreTweetable)
                 {
                     LoadIntermediate(e.AddedItems[0] as LoadMoreTweetable);
-                    RemoveLoadMore();
+                    RemoveLoadMore(e.AddedItems[0] as LoadMoreTweetable);
                 }
             }
             else
-                _selectionChangeFired = false;
-        }
-
-        void Loader_Error(TwitterResponse response)
-        {
-            var messager = Dependency.Resolve<IMessageService>();
-            if (DateTime.Now > _lastErrorFired.AddSeconds(10))
-            {
-                _lastErrorFired = DateTime.Now;
-                if (response.RateLimitStatus.RemainingHits == 0)
-                    messager.ShowError(String.Format(Localization.Resources.RateLimitHit, response.RateLimitStatus.ResetTime.ToString("H:mm")));
-                else
-                    messager.ShowError(String.Format(Localization.Resources.ErrorLoadingTweets, response.StatusDescription));
-                
-            }
+                selectionChangeFired = false;
         }
 
         public void AutoReload() // EL will manage times to avoid overcalling Twitter API
         {
-            if (DateTime.Now > (_lastAutoReload + _autoReloadInterval))
+            if (DateTime.Now > (lastAutoReload + autoReloadInterval))
             {
                 Loader.Load();
-                _lastAutoReload = DateTime.Now;
+                lastAutoReload = DateTime.Now;
             }
         }
+        #endregion
 
         public delegate void OnCompression(object sender, CompressionEventArgs e);
         public event OnCompression Compression;
+
+        public event EventHandler IssueResumePositionPrompt;
     }
 
     public class CompressionEventArgs : EventArgs
