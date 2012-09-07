@@ -79,10 +79,13 @@ namespace Ocell.Controls
             this.SelectionChanged += new SelectionChangedEventHandler(ManageNavigation);
             this.ManipulationCompleted += new EventHandler<ManipulationCompletedEventArgs>(ScrollEnded);
 
-            Loader.Error += new TweetLoader.OnError(Loader_Error);
+            ExtendedListBox.SaveViewports += this.SaveInstanceViewport;
 
+            Loader.Error += new TweetLoader.OnError(Loader_Error);
+            Loader.CacheLoad += new EventHandler(Loader_CacheLoad);
             SetupCollectionViewSource();
         }
+
 
         private void SetupCollectionViewSource()
         {
@@ -122,6 +125,14 @@ namespace Ocell.Controls
 
             }
         }
+
+
+        void Loader_CacheLoad(object sender, EventArgs e)
+        {
+            TryTriggerResumeReading();
+        }
+
+        public event EventHandler ReadyToResumePosition;
         #endregion
 
         #region Listbox Events
@@ -146,6 +157,8 @@ namespace Ocell.Controls
             var sv = (ScrollViewer)FindElementRecursive(this, typeof(ScrollViewer));
             if (sv.VerticalOffset > 0.3)
                 Loader.StopSourceRefresh();
+
+            SaveReadingPosition();
         }
         #endregion
 
@@ -191,7 +204,7 @@ namespace Ocell.Controls
                 SaveViewports(null, null);
         }
 
-        protected void SaveInstanceViewport()
+        protected void SaveInstanceViewport(object sender, EventArgs e)
         {
             Loader.SaveToCache(GetVisibleItems());
         }
@@ -199,6 +212,40 @@ namespace Ocell.Controls
         public IList<ITweetable> GetVisibleItems()
         {
             return this.Descendants().OfType<ListBoxItem>().Select(x => x.DataContext).OfType<ITweetable>().ToList();
+        }
+
+        
+        #endregion
+
+        #region Reading position
+        public void TryTriggerResumeReading()
+        {
+            long id;
+            if (Config.ReadPositions.TryGetValue(Loader.Resource.String, out id)
+                && Loader.Source.Any(item => item.Id == id))
+            {
+                if (ReadyToResumePosition != null)
+                    ReadyToResumePosition(this, new EventArgs());
+            }
+        }
+
+        void SaveReadingPosition()
+        {
+            var viewport = GetVisibleItems();
+            var middle = viewport[viewport.Count / 2];
+            Config.ReadPositions[Loader.Resource.String] = middle.Id;
+        }
+
+        public void ResumeReadPosition()
+        {
+            long id;
+            if(!Config.ReadPositions.TryGetValue(Loader.Resource.String, out id))
+                return;
+
+            var item = Loader.Source.FirstOrDefault(x => x.Id == id);
+
+            if (item != null)
+                ScrollIntoView(item);
         }
         #endregion
 
@@ -371,8 +418,6 @@ namespace Ocell.Controls
 
         public delegate void OnCompression(object sender, CompressionEventArgs e);
         public event OnCompression Compression;
-
-        public event EventHandler IssueResumePositionPrompt;
     }
 
     public class CompressionEventArgs : EventArgs

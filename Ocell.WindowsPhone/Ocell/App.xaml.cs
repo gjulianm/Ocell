@@ -85,12 +85,14 @@ namespace Ocell
         // Este código no se ejecutará cuando la aplicación se inicie por primera vez
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
+            
         }
 
         // Código para ejecutar cuando la aplicación se desactiva (se envía a segundo plano)
         // Este código no se ejecutará cuando la aplicación se cierre
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
+            Controls.ExtendedListBox.RaiseSaveViewports();
             Config.SaveReadPositions();
             Config.SaveAccounts();
             Config.SaveColumns();
@@ -100,6 +102,7 @@ namespace Ocell
         // Este código no se ejecutará cuando la aplicación se desactive
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
+            Controls.ExtendedListBox.RaiseSaveViewports();
             Config.SaveReadPositions();
             Config.SaveAccounts();
             Config.SaveColumns();

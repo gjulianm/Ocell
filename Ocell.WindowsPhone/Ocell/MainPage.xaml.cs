@@ -12,6 +12,8 @@ using Ocell.Library;
 using Ocell.Library.Notifications;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using System.Windows.Media.Animation;
+using System.Windows.Media;
 
 namespace Ocell
 {
@@ -27,7 +29,7 @@ namespace Ocell
         {
             _initialised = false;
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            
+
 
             viewModel = new MainPageModel();
             DataContext = viewModel;
@@ -51,7 +53,7 @@ namespace Ocell
             if (_initialised)
                 return;
 
-            if(!CheckForLogin())
+            if (!CheckForLogin())
                 return;
 
             ThreadPool.QueueUserWorkItem((threadContext) =>
@@ -114,6 +116,7 @@ namespace Ocell
                 return true;
         }
 
+
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
             ExtendedListBox list = sender as ExtendedListBox;
@@ -146,6 +149,7 @@ namespace Ocell
                             viewModel.LoadingCount--;
                     }
                 };
+
                 viewModel.ScrollToTop += (sender1, e1) =>
                 {
                     if (e1.BroadcastAll || e1.Resource == Resource)
@@ -156,6 +160,29 @@ namespace Ocell
                 {
                     if (e1.BroadcastAll || e1.Resource == Resource)
                         ThreadPool.QueueUserWorkItem((context) => list.AutoReload());
+                };
+
+                viewModel.CheckIfCanResumePosition += (sender1, e1) =>
+                {
+                    if (e1.Resource == list.Loader.Resource)
+                        list.TryTriggerResumeReading();
+                };
+
+                list.ReadyToResumePosition += (sender1, e1) =>
+                {
+                    var resource = (TwitterResource)viewModel.SelectedPivot;
+                    if (list.Loader.Resource == resource)
+                    {
+                        Dispatcher.BeginInvoke(() =>
+                        {
+                            long id;
+                            if (Config.ReadPositions.TryGetValue(resource.String, out id)
+                                && !list.GetVisibleItems().Any(x => x.Id == id))
+                            {
+                                ShowResumePositionPrompt(list);
+                            }
+                        });
+                    }
                 };
 
                 list.Loader.LoadCacheAsync();
@@ -169,6 +196,84 @@ namespace Ocell
 
                 GlobalEvents.FiltersChanged += (sender1, e1) => Dispatcher.BeginInvoke(() => FilterManager.SetupFilter(list));
             });
+        }
+
+        ExtendedListBox currentShowingList;
+        private void RecoverDialog_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            if (currentShowingList != null)
+                currentShowingList.ResumeReadPosition();
+
+            HideResumePositionPrompt();
+        }
+
+
+        bool recoverDialogShown = false;
+        void ShowResumePositionPrompt(ExtendedListBox list)
+        {
+            currentShowingList = list;
+
+            if (recoverDialogShown)
+                return;
+
+            Storyboard storyboard = new Storyboard();
+            TranslateTransform trans = new TranslateTransform() { X = 0, Y = 0 };
+            RecoverDialog.RenderTransformOrigin = new Point(0, 0);
+            RecoverDialog.RenderTransform = trans;
+
+            DoubleAnimation moveAnim = new DoubleAnimation();
+            moveAnim.Duration = TimeSpan.FromMilliseconds(400);
+            moveAnim.From = 0;
+            moveAnim.To = -480;
+
+            var easing = new QuadraticEase();
+            easing.EasingMode = EasingMode.EaseOut;
+
+            moveAnim.EasingFunction = easing;
+
+            Storyboard.SetTarget(moveAnim, RecoverDialog);
+            Storyboard.SetTargetProperty(moveAnim, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+            storyboard.Completed += (sender, e) =>
+            {
+                HideResumePositionPrompt(true);
+            };
+            storyboard.Children.Add(moveAnim);
+            storyboard.Begin();
+
+            recoverDialogShown = true;
+        }
+
+        void HideResumePositionPrompt(bool delay = false)
+        {
+            if (!recoverDialogShown)
+                return;
+
+            Storyboard storyboard = new Storyboard();
+            TranslateTransform trans = new TranslateTransform() { X = 0, Y = 0 };
+            RecoverDialog.RenderTransformOrigin = new Point(0, 0);
+            RecoverDialog.RenderTransform = trans;
+
+            DoubleAnimation moveAnim = new DoubleAnimation();
+            moveAnim.Duration = TimeSpan.FromMilliseconds(400);
+            moveAnim.To = 0;
+
+            var easing = new QuadraticEase();
+            easing.EasingMode = EasingMode.EaseOut;
+
+            moveAnim.EasingFunction = easing;
+
+            Storyboard.SetTarget(moveAnim, RecoverDialog);
+            Storyboard.SetTargetProperty(moveAnim, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+            storyboard.Children.Add(moveAnim);
+
+            if (delay)
+                ThreadPool.QueueUserWorkItem((callback) =>
+                    {
+                        Thread.Sleep(14000);
+                        Dispatcher.InvokeIfRequired(storyboard.Begin);
+                    });
+            else
+                storyboard.Begin();
         }
 
         void CheckForFilterUpdate(object sender, RoutedEventArgs e)
@@ -188,7 +293,7 @@ namespace Ocell
 
         private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
         {
-            
+
         }
 
         protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
@@ -196,12 +301,16 @@ namespace Ocell
             DataTransfer.IsGlobalFilter = false;
             base.OnNavigatedFrom(e);
         }
-
         private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             var box = sender as TextBlock;
             if (box != null && box.Tag is TwitterResource)
                 viewModel.RaiseScrollToTop((TwitterResource)box.Tag);
+        }
+
+        void storyboard_Completed(object sender, EventArgs e)
+        {
+
         }
 
         private void myprofile_Click(object sender, System.EventArgs e)
@@ -224,5 +333,7 @@ namespace Ocell
             viewModel.IsSearching = true;
             this.BackKeyPress += HideUserGrid;
         }
+
+
     }
 }

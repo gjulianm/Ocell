@@ -63,6 +63,14 @@ namespace Ocell
             if (temp != null)
                 temp(this, new BroadcastArgs(Config.Columns.FirstOrDefault(), true));
         }
+
+        public event BroadcastEventHandler CheckIfCanResumePosition;
+        private void RaiseCheckIfCanResumePosition(TwitterResource resource)
+        {
+            var temp = CheckIfCanResumePosition;
+            if (temp != null)
+                temp(this, new BroadcastArgs(resource, false));
+        }
         #endregion
 
         public bool HasLoggedIn { get { return Config.Accounts.Any(); } }
@@ -254,6 +262,7 @@ namespace Ocell
                 CurrentAccountName = resource.User.ScreenName.ToUpperInvariant();
                 ThreadPool.QueueUserWorkItem((context) => RaiseReload(resource));
                 DataTransfer.CurrentAccount = resource.User;
+                RaiseCheckIfCanResumePosition(resource);
             }
         }
 

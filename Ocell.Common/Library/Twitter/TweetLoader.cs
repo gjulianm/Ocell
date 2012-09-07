@@ -19,7 +19,7 @@ namespace Ocell.Library.Twitter
         int loaded;
         const int TO_LOAD = 1;
         int requestsInProgress;
-        long LastId; 
+        long LastId;
 
         public SafeObservable<ITweetable> Source { get; protected set; }
 
@@ -61,8 +61,8 @@ namespace Ocell.Library.Twitter
                 else
                     dispatcher.BeginInvoke(() => OnPropertyChanged("IsLoading"));
             }
-        } 
-        
+        }
+
         protected ITwitterService service;
         protected ConversationService conversationService;
 
@@ -73,7 +73,7 @@ namespace Ocell.Library.Twitter
         public bool LoadRetweetsAsMentions { get; set; }
         public int CacheSize { get; set; }
         public bool LoadRTsOnLists { get; set; }
-        #endregion       
+        #endregion
 
         #region INotifyPropertyChanged methods
         public event PropertyChangedEventHandler PropertyChanged;
@@ -194,9 +194,10 @@ namespace Ocell.Library.Twitter
 
             IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id);
 
-            foreach (var item in cacheList)
-                if (!Source.Contains(item, comparer))
-                    Source.Add(item);
+            var toAdd = AddLoadMoreButtons(cacheList.Cast<ITweetable>()).Except(Source);
+
+            foreach (var item in toAdd)
+                Source.Add(item);
 
             if (CacheLoad != null)
                 CacheLoad(this, new EventArgs());
@@ -432,11 +433,27 @@ namespace Ocell.Library.Twitter
         #endregion
 
         #region Load more button
-        bool hasLoadMoreButton = false;
+        IEnumerable<ITweetable> AddLoadMoreButtons(IEnumerable<ITweetable> cache)
+        {
+            var list = cache.ToList();
+
+            double sumTime = 0;
+
+            for (int i = 1; i < list.Count; i++)
+            {
+                double diff = Math.Abs((list[i].CreatedDate - list[i - 1].CreatedDate).TotalSeconds);
+
+                if (sumTime != 0 && i > 1
+                    && diff > 10 * (sumTime / (i - 1)))
+                    yield return new LoadMoreTweetable { Id = list[i].Id + 1 };
+
+                yield return list[i];
+            }
+        }
 
         private void TryAddLoadMoreButton(IEnumerable<ITweetable> received)
         {
-            if (!ActivateLoadMoreButton || hasLoadMoreButton)
+            if (!ActivateLoadMoreButton)
                 return;
 
             if (Source == null || !Source.Any())
@@ -460,7 +477,6 @@ namespace Ocell.Library.Twitter
 
             if (diff.TotalSeconds > 4 * avgTime)
             {
-                hasLoadMoreButton = true;
                 Source.Add(new LoadMoreTweetable { Id = olderTweetReceived.Id - 1 });
             }
         }
@@ -502,7 +518,7 @@ namespace Ocell.Library.Twitter
                 var list = _deferredItems.AsEnumerable().Except(Source);
                 TryAddLoadMoreButton(list);
 
-                foreach(var element in list)
+                foreach (var element in list)
                     Source.Add(element);
             }
         }

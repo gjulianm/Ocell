@@ -108,11 +108,11 @@
             <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="{Binding Strings.Search, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Search/EnterSearch.xaml" />
         </u:AppBar>
 
-        <Grid x:Name="RecoverDialog" Height="65" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,-484,0" toolkit:TiltEffect.IsTiltEnabled="True" Width="480" HorizontalAlignment="Right">
+        <Grid x:Name="RecoverDialog" Tap="RecoverDialog_Tap" Height="65" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,-484,0" toolkit:TiltEffect.IsTiltEnabled="True" Width="480" HorizontalAlignment="Right">
             <Grid.RenderTransform>
                 <TranslateTransform X="{Binding Width, ElementName=LayoutRoot}" Y="0" />
             </Grid.RenderTransform>
-            <TextBlock Margin="8"  local:MetroInMotion.Tilt="2"  Text="{Binding Strings.RecoverReadPosition, Source={StaticResource LocalizedResources}}"  VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe WP Light" FontSize="26.667" />
+            <TextBlock Margin="8"  local:MetroInMotion.Tilt="2" Text="{Binding Strings.RecoverReadPosition, Source={StaticResource LocalizedResources}}"  VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe WP Light" FontSize="26.667" />
         </Grid>
     </Grid>
 
