@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading;
-using System.Windows.Threading;
 using System.Linq;
+
+#if WINDOWS_PHONE
+using System.Windows.Threading;
+using System.Windows;
+#elif METRO
+using System.Threading.Tasks;
+#endif
 
 namespace Ocell.Library
 {
@@ -21,7 +18,9 @@ namespace Ocell.Library
     public class SafeObservable<T> : IList<T>, INotifyCollectionChanged
     {
         private IList<T> collection = new List<T>();
+#if WINDOWS_PHONE
         private Dispatcher dispatcher;
+#endif
         public event NotifyCollectionChangedEventHandler CollectionChanged;
         private object sync = new object();
 
@@ -33,69 +32,108 @@ namespace Ocell.Library
 
         public SafeObservable()
         {
+#if WINDOWS_PHONE
             dispatcher = Deployment.Current.Dispatcher;
+#endif
         }
+
+        #region Event raisers.
+        void RaiseCollectionReset()
+        {
+            var copy = CollectionChanged;
+            if (copy != null)
+            {
+#if WINDOWS_PHONE
+                if (!dispatcher.CheckAccess())
+                    dispatcher.BeginInvoke(RaiseCollectionReset);
+                else
+#endif
+                    copy(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            }
+        }
+
+        void RaiseCollectionAdd(T item, int index)
+        {
+            var copy = CollectionChanged;
+            if (copy != null)
+            {
+#if WINDOWS_PHONE
+                if (!dispatcher.CheckAccess())
+                    dispatcher.BeginInvoke(() => RaiseCollectionAdd(item, index));
+                else
+#endif
+                    copy(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+            }
+        }
+
+        void RaiseCollectionRemove(T item, int index)
+        {
+            var copy = CollectionChanged;
+            if (copy != null)
+            {
+#if WINDOWS_PHONE
+                if (!dispatcher.CheckAccess())
+                    dispatcher.BeginInvoke(() => RaiseCollectionRemove(item, index));
+                else
+#endif
+                    copy(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
+            }
+        }
+
+        void RaiseCollectionReplace(T value, T old, int index)
+        {
+            var copy = CollectionChanged;
+            if (copy != null)
+            {
+#if WINDOWS_PHONE
+                if (!dispatcher.CheckAccess())
+                    dispatcher.BeginInvoke(() => RaiseCollectionReplace(value, old, index));
+                else
+#endif
+                    copy(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, old, index));
+            }
+        }
+        #endregion
 
         public void Add(T item)
         {
-            if (dispatcher.CheckAccess())
-                DoAdd(item);
-            else
-                dispatcher.BeginInvoke((Action)(() => { DoAdd(item); }));
+            int index;
+
+            lock (sync)
+            {
+                collection.Add(item);
+                index = collection.Count;
+            }
+
+            RaiseCollectionAdd(item, index);
         }
 
         public void BulkAdd(IEnumerable<T> items)
         {
-            if (dispatcher.CheckAccess())
-                DoBulkAdd(items);
-            else
-                dispatcher.BeginInvoke(() => DoBulkAdd(items));
-        }
-
-        private void DoBulkAdd(IEnumerable<T> items)
-        {
             int added = 0;
             foreach (var item in items)
             {
-                DoAdd(item);
+                Add(item);
                 added++;
                 if (added >= 5)
                 {
+#if METRO
+                    Task.Delay(10).RunSynchronously();
+#else
                     Thread.Sleep(10);
+#endif
                     added = 0;
                 }
             }
         }
 
-        private void DoAdd(T item)
-        {
-            lock (sync)
-            {
-                collection.Add(item);
-                int index = collection.Count;
-                if (CollectionChanged != null)
-                    CollectionChanged(this,
-                       new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
-            }
-        }
 
         public void Clear()
         {
-            if (dispatcher.CheckAccess())
-                DoClear();
-            else
-                dispatcher.BeginInvoke((Action)(() => { DoClear(); }));
-        }
-
-        private void DoClear()
-        {
             lock (sync)
-            {
                 collection.Clear();
-                if (CollectionChanged != null)
-                    CollectionChanged(this,
-                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            }
+
+            RaiseCollectionReset();
         }
 
         public bool Contains(T item)
@@ -131,30 +169,20 @@ namespace Ocell.Library
 
         public bool Remove(T item)
         {
-            if (dispatcher.CheckAccess())
-                return DoRemove(item);
-            else
-            {
-                dispatcher.BeginInvoke(() => DoRemove(item));
-                return true; // I KNOW.
-            }
-        }
-
-        private bool DoRemove(T item)
-        {
             bool result;
+            int index;
             lock (sync)
             {
-                var index = collection.IndexOf(item);
+                index = collection.IndexOf(item);
                 if (index == -1)
-                {
                     return false;
-                }
+
                 result = collection.Remove(item);
-                if (result && CollectionChanged != null)
-                    CollectionChanged(this, new
-                        NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
             }
+
+            if (result)
+                RaiseCollectionRemove(item, index);
+
             return result;
         }
 
@@ -182,44 +210,26 @@ namespace Ocell.Library
 
         public void Insert(int index, T item)
         {
-            if (dispatcher.CheckAccess())
-                DoInsert(index, item);
-            else
-                dispatcher.BeginInvoke((Action)(() => { DoInsert(index, item); }));
-        }
-
-        private void DoInsert(int index, T item)
-        {
             lock (sync)
-            {
                 collection.Insert(index, item);
-                if (CollectionChanged != null)
-                    CollectionChanged(this,
-                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
-            }
+
+            RaiseCollectionAdd(item, index);
         }
 
         public void RemoveAt(int index)
         {
-            if (dispatcher.CheckAccess())
-                DoRemoveAt(index);
-            else
-                dispatcher.BeginInvoke((Action)(() => { DoRemoveAt(index); }));
-        }
-
-        private void DoRemoveAt(int index)
-        {
+            T item;
             lock (sync)
             {
                 if (collection.Count == 0 || collection.Count <= index)
                 {
                     return;
                 }
+                item = collection[index];
                 collection.RemoveAt(index);
-                if (CollectionChanged != null)
-                    CollectionChanged(this,
-                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
+
+            RaiseCollectionRemove(item, index);
         }
 
         public T this[int index]
@@ -233,15 +243,16 @@ namespace Ocell.Library
             }
             set
             {
+                T old;
                 lock (sync)
                 {
                     if (collection.Count == 0 || collection.Count <= index || collection[index].Equals(value))
                         return;
-                    var old = collection[index];
+                    old = collection[index];
                     collection[index] = value;
-                    if (CollectionChanged != null)
-                        CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, old, index));
                 }
+
+                RaiseCollectionReplace(value, old, index);
             }
 
         }
