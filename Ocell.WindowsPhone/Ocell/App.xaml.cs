@@ -33,7 +33,7 @@ namespace Ocell
             UnhandledException += Application_UnhandledException;
 
             // Inicialización de Silverlight estándar
-            InitializeComponent(); 
+            InitializeComponent();
 
             // Inicialización especifica del teléfono
             InitializePhoneApplication();
@@ -78,7 +78,7 @@ namespace Ocell
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
             // Load configuration. 
-            
+
         }
 
         // Código para ejecutar cuando la aplicación se activa (se trae a primer plano)
@@ -91,6 +91,7 @@ namespace Ocell
         // Este código no se ejecutará cuando la aplicación se cierre
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
+            Config.SaveReadPositions();
             Config.SaveAccounts();
             Config.SaveColumns();
         }
@@ -99,6 +100,7 @@ namespace Ocell
         // Este código no se ejecutará cuando la aplicación se desactive
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
+            Config.SaveReadPositions();
             Config.SaveAccounts();
             Config.SaveColumns();
         }
