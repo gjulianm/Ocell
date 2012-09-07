@@ -125,7 +125,6 @@ namespace Ocell
             get { return userSearch; }
             set { Assign("UserSearch", ref userSearch, value); }
         }
-
         #region Commands
         DelegateCommand pinToStart;
         public ICommand PinToStart
@@ -160,7 +159,7 @@ namespace Ocell
                     if (SecondaryTiles.ColumnTileIsCreated(column))
                         MessageService.ShowError("This column is already pinned.");
                     else
-                        SecondaryTiles.CreateColumnTile(column);
+                        SecondaryTiles.CreateColumnTile(column);                    
                 }, (obj) => SelectedPivot != null);
 
             filterColumn = new DelegateCommand((obj) =>
