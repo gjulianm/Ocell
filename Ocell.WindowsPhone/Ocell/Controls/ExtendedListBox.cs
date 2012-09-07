@@ -20,6 +20,7 @@ using DanielVaughan.Services;
 using DanielVaughan;
 using Ocell.Localization;
 using System.Collections.Generic;
+using LinqToVisualTree;
 
 namespace Ocell.Controls
 {
@@ -178,6 +179,26 @@ namespace Ocell.Controls
         public void RemoveLoadMore(LoadMoreTweetable item)
         {
             Loader.RemoveLoadMore(item);
+        }
+        #endregion
+
+        #region Viewport
+        protected static event EventHandler SaveViewports;
+
+        public static void RaiseSaveViewports()
+        {
+            if (SaveViewports != null)
+                SaveViewports(null, null);
+        }
+
+        protected void SaveInstanceViewport()
+        {
+            Loader.SaveToCache(GetVisibleItems());
+        }
+
+        public IList<ITweetable> GetVisibleItems()
+        {
+            return this.Descendants().OfType<ListBoxItem>().Select(x => x.DataContext).OfType<ITweetable>().ToList();
         }
         #endregion
 
