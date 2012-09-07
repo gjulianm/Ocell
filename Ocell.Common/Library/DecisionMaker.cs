@@ -49,31 +49,5 @@ namespace Ocell.Library
 
             return ((int)sum) / TweetsToAnalyze;
         }
-
-        public static bool ShouldLoadCache(ref IEnumerable<TwitterStatus> List)
-        {
-  
-            /*int AverageTimeBetweenTweets;
-            int CurrentDifference;
-            /*
-             * Supposing we get ~20 tweets per time, this is an acceptable value
-             *  so the user does not lose too many tweets.
-             *
-            int MaxTimesDifference = 20;
-
-            if(List == null || List.Count() == 0)
-                return false;
-
-            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
-                return true;
-             * 
-            AverageTimeBetweenTweets = GetAvgTimeBetweenTweets(List);
-            CurrentDifference = (int)Math.Abs((DateTime.Now.ToUniversalTime() - List.First().CreatedDate).TotalSeconds);
-
-            return CurrentDifference < MaxTimesDifference * AverageTimeBetweenTweets;*/
-
-            // ALWAYS load cache.
-            return true; 
-        }
     }
 }
