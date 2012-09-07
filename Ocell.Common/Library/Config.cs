@@ -29,6 +29,7 @@ namespace Ocell.Library
         private const string BackgroundsKey ="BACKGROUNDS";
         private const string FirstInitKey = "ISFIRSTINIT";
         private const string FontSizeKey ="FONTSIZE";
+        private const string ReadPositionsKey = "READPOSITIONS";
 #endif
 
         private const string AccountsKey = "ACCOUNTS";
@@ -54,9 +55,8 @@ namespace Ocell.Library
         private static OcellTheme _backgroundUrl;
         private static bool? _firstInit;
         private static int? _fontSize;
-#endif
-
-        
+        private static Dictionary<string, long> _readPositions;
+#endif        
 
         public static bool? BackgroundLoadColumns
         {
@@ -107,6 +107,18 @@ namespace Ocell.Library
             }
         }
 #if !BACKGROUND_AGENT
+        public static Dictionary<string, long> ReadPositions
+        {
+            get
+            {
+                return GenericGetFromConfig(ReadPositionsKey, ref _readPositions);
+            }
+            set
+            {
+                GenericSaveToConfig(ReadPositionsKey, ref _readPositions, value);
+            }
+        }
+        
         public static int? FontSize
         {
             get
@@ -399,6 +411,11 @@ namespace Ocell.Library
         public static void SaveDrafts()
         {
             Drafts = _drafts;
+        }
+
+        public static void SaveReadPositions()
+        {
+            ReadPositions = _readPositions;
         }
 #endif
     }
