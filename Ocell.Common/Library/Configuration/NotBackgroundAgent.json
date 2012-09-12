@@ -12,3 +12,5 @@
  int?, FONTSIZE, FontSize, 20
  Dictionary<string& long>, READPOSITIONS, ReadPositions
  bool?, RECOVERREAD, RecoverReadPositions, true
+ bool?, GEOLOC_ENABLED, EnabledGeolocation
+ bool?, GEOTAG_TWEETS, TweetGeotagging, true

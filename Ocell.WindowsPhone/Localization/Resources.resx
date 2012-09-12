@@ -1074,6 +1074,27 @@
   <data name="RecoverReadPosition" xml:space="preserve">
     <value>resume last reading position?</value>
   </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="AskAccessGrantGeolocation" xml:space="preserve">
+    <value>Do you grant Ocell access to your location? This will enable tweet geotagging and localized Trending Topics.</value>
+  </data>
+  <data name="ChangeGeolocSetting" xml:space="preserve">
+    <value>You will be able to change this setting anytime in the Settings page.</value>
+  </data>
+  <data name="Deny" xml:space="preserve">
+    <value>Deny</value>
+  </data>
+  <data name="Geolocation" xml:space="preserve">
+    <value>Geolocation</value>
+  </data>
+  <data name="Geotagging" xml:space="preserve">
+    <value>Geotagging</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy policy: Ocell will not save your localization in any register or file in your phone. Ocell will not send your location to any Internet server, except to Twitter.com and for the purposes exposed above (tweet geotagging and localization of Trending Topics).</value>
+  </data>
   <data name="ShowResumeButton" xml:space="preserve">
     <value>Show "Resume reading" button</value>
   </data>

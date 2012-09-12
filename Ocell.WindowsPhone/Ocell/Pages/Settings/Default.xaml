@@ -64,9 +64,9 @@
 
             <controls:PivotItem x:Name="pSettings" Header="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}">
 				<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-					<Grid Height="1088">
+					<Grid Height="1200">
 						<Grid.RowDefinitions>
-							<RowDefinition Height="414"/>
+							<RowDefinition Height="484"/>
 							<RowDefinition Height="363"/>
 							<RowDefinition Height="192"/>
 						</Grid.RowDefinitions>
@@ -79,6 +79,7 @@
 							<toolkit:ListPickerItem Content="{Binding Strings.Big, Source={StaticResource LocalizedResources}}" Margin="0,0,16,0"/>
 						</toolkit:ListPicker>
                         <toolkit:ToggleSwitch x:Name="RetweetsInMentions" Header="{Binding Strings.ShowRetweetsAsMentions, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" IsChecked="{Binding RetweetsAsMentions, Mode=TwoWay}" Margin="0,222,0,-54"/>
+						<toolkit:ToggleSwitch x:Name="RecoverPositionSwitch" Header="{Binding Strings.ShowResumeButton, Source={StaticResource LocalizedResources}}" IsChecked="{Binding ShowResumePositionButton, Mode=TwoWay}" Margin="0,311,0,-33" VerticalAlignment="Top"/>
 						<TextBlock x:Name="TilesTitle" HorizontalAlignment="Left" Margin="8,10,0,0" TextWrapping="Wrap" Text="{Binding Strings.Tiles, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" Grid.Row="1"/>
                         <toolkit:ToggleSwitch x:Name="ColumnUpdate" Header="{Binding Strings.UpdateTilesInBackground, Source={StaticResource LocalizedResources}}" Margin="0,43,0,187.5" IsChecked="{Binding BackgroundUpdateTiles, Mode=TwoWay}" d:LayoutOverrides="Height" Grid.Row="1"/>
 						<TextBlock x:Name="ComposeTileText" HorizontalAlignment="Left" Margin="8,158,0,161.5" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Strings.ComposeTile, Source={StaticResource LocalizedResources}}" Grid.Row="1"/>
@@ -86,7 +87,7 @@
                         <TextBlock x:Name="ToAddColumnTiles" HorizontalAlignment="Left" Margin="8,270,0,0" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Grid.Row="1" Height="84" VerticalAlignment="Top"><Run Text="{Binding Strings.ToAddColumnTiles, Source={StaticResource LocalizedResources}}"/></TextBlock>
 						<TextBlock x:Name="BackgroundTitle" HorizontalAlignment="Left" Margin="8,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" Text="{Binding Strings.Backgrounds_CapitalFirst, Source={StaticResource LocalizedResources}}" Grid.Row="2" />
 						<Button x:Name="SetBackgrounds" Content="{Binding Strings.SetCustomBackground, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,47,0,0" Width="344" Command="{Binding SetCustomBackground}" VerticalAlignment="Top" Grid.Row="2" d:LayoutOverrides="VerticalAlignment, GridBox" />
-						<toolkit:ToggleSwitch x:Name="RecoverPositionSwitch" Header="{Binding Strings.ShowResumeButton, Source={StaticResource LocalizedResources}}" IsChecked="{Binding ShowResumePositionButton, Mode=TwoWay}" Margin="0,311,0,-33" VerticalAlignment="Top"/>
+						<toolkit:ToggleSwitch Header="{Binding Strings.Geotagging, Source={StaticResource LocalizedResources}}" Margin="0,393,0,-57" IsChecked="{Binding GeoTaggingEnabled, Mode=TwoWay}" VerticalAlignment="Top"/>
 					</Grid>
 				</ScrollViewer>
 			</controls:PivotItem>

@@ -57,6 +57,9 @@ namespace Ocell
             if (!CheckForLogin())
                 return;
 
+            if (!GeolocationPrompt())
+                return;
+
             CreateStoryboards();
 
             ThreadPool.QueueUserWorkItem((threadContext) =>
@@ -84,6 +87,16 @@ namespace Ocell
             });
 
             _initialised = true;
+        }
+
+        bool GeolocationPrompt()
+        {
+            if (Config.EnabledGeolocation == null)
+            {
+                NavigationService.Navigate(new Uri("/Pages/Settings/AskGeolocation.xaml", UriKind.Relative));
+                return false;
+            }
+            return true;
         }
 
         void ShowFollowMessage()

@@ -29,6 +29,7 @@ using TweetSharp;
 using System.Xml;
 using System.Windows.Data;
 using System.Xml.Linq;
+using System.Device.Location;
 
 namespace Ocell.Pages
 {
@@ -120,6 +121,13 @@ namespace Ocell.Pages
             get { return selectedAccounts; }
             set { Assign("SelectedAccounts", ref selectedAccounts, value); }
         }
+
+        bool isGeotagged;
+        public bool IsGeotagged
+        {
+            get { return isGeotagged; }
+            set { Assign("IsGeotagged", ref isGeotagged, value); }
+        }
         #endregion
 
         #region Commands
@@ -148,11 +156,15 @@ namespace Ocell.Pages
         }
         #endregion
 
+        GeoCoordinateWatcher geoWatcher = new GeoCoordinateWatcher();
+
         public NewTweetModel()
             : base("NewTweet")
         {
             SelectedAccounts = new List<object>();
             AccountList = Config.Accounts.ToList();
+            IsGeotagged = Config.EnabledGeolocation == true &&
+                (Config.TweetGeotagging == true || Config.TweetGeotagging == null);
 
             this.PropertyChanged += (sender, e) =>
             {
@@ -170,6 +182,9 @@ namespace Ocell.Pages
                     case "UsesTwitlonger":
                         RaiseExecuteChanged();
                         break;
+                    case "IsGeotagged":
+                        Config.TweetGeotagging = IsGeotagged;
+                        break;
                 }
             };
 
@@ -181,6 +196,9 @@ namespace Ocell.Pages
             ScheduledTime = date;
 
             TryLoadDraft();
+
+            if (Config.EnabledGeolocation == true)
+                geoWatcher.Start();
 
             SetupCommands();
         }
@@ -235,8 +253,17 @@ namespace Ocell.Pages
             }
             else
             {
-                foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
-                    ServiceDispatcher.GetService(account).SendTweet(TweetText, DataTransfer.ReplyId, ReceiveResponse);
+                if (IsGeotagged)
+                {
+                    var location = geoWatcher.Position.Location;
+                    foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
+                        ServiceDispatcher.GetService(account).SendTweet(TweetText, DataTransfer.ReplyId, location.Latitude, location.Longitude, ReceiveResponse);
+                }
+                else
+                {
+                    foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
+                        ServiceDispatcher.GetService(account).SendTweet(TweetText, DataTransfer.ReplyId, ReceiveResponse);
+                }
             }
 
             if (DataTransfer.Draft != null)
@@ -337,7 +364,7 @@ namespace Ocell.Pages
             BarText = Resources.UploadingPicture;
 
             TwitterService srv = ServiceDispatcher.GetService(DataTransfer.CurrentAccount) as TwitterService;
-            
+
             if (srv == null)
                 return; // Dirty trick: it will never be null if we're not testing.
 
@@ -382,7 +409,7 @@ namespace Ocell.Pages
 
         public void SaveAsDraft(object param)
         {
-            TwitterDraft draft = CreateDraft(); 
+            TwitterDraft draft = CreateDraft();
 
             Config.Drafts.Add(draft);
             Config.Drafts = Config.Drafts;

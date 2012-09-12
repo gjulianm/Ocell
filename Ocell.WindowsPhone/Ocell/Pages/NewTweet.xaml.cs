@@ -1,19 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Net;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Linq;
-using Hammock;
+using System.Windows.Data;
+using DanielVaughan;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using Microsoft.Phone.Tasks;
-using TweetSharp;
-using System.Collections.Generic;
 using Ocell.Library;
 using Ocell.Library.Twitter;
-using Ocell.Library.Tasks;
-using System.Windows.Data;
 
 namespace Ocell.Pages
 {
@@ -27,20 +20,36 @@ namespace Ocell.Pages
 
         public NewTweet()
         {
-            InitializeComponent(); 
-            Loaded += (sender, e) => { 
-                if (ApplicationBar != null) 
+            InitializeComponent();
+            Loaded += (sender, e) =>
+            {
+                if (ApplicationBar != null)
                     ApplicationBar.MatchOverriddenTheme();
                 viewModel.TryLoadDraft();
-            }; 
+            };
 
             ThemeFunctions.SetBackground(LayoutRoot);
             DataContext = viewModel;
 
             Loaded += NewTweet_Loaded;
             Unloaded += NewTweet_Unloaded;
-
             TweetBox.TextChanged += OnTextBoxTextChanged;
+
+            GeolocImg.Tap += (sender, e) =>
+                {
+                    viewModel.IsGeotagged = !viewModel.IsGeotagged;
+                };
+
+            viewModel.PropertyChanged += (sender, e) =>
+                {
+                    if (e.PropertyName == "IsGeotagged")
+                    {
+                        if (viewModel.IsGeotagged)
+                            Dispatcher.InvokeIfRequired(EnableGeoloc.Begin);
+                        else
+                            Dispatcher.InvokeIfRequired(DisableGeoloc.Begin);
+                    }
+                };
         }
 
         private void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)
@@ -64,7 +73,7 @@ namespace Ocell.Pages
         }
 
         void NewTweet_Loaded(object sender, RoutedEventArgs e)
-        {          
+        {
             string RemoveBack;
             if (NavigationContext.QueryString.TryGetValue("removeBack", out RemoveBack) || RemoveBack == "1")
             {
@@ -84,7 +93,7 @@ namespace Ocell.Pages
                 }
             }
 
-            
+
             _completer = new Autocompleter();
             _completer.User = DataTransfer.CurrentAccount;
             _completer.Textbox = TweetBox;

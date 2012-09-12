@@ -1,0 +1,39 @@
+﻿<phone:PhoneApplicationPage 
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
+	x:Class="Ocell.AskGeolocation"
+	FontFamily="{StaticResource PhoneFontFamilyNormal}"
+	FontSize="{StaticResource PhoneFontSizeNormal}"
+	Foreground="{StaticResource PhoneForegroundBrush}"
+	Orientation="Portrait"
+	shell:SystemTray.IsVisible="False">
+
+	<!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
+	<Grid x:Name="LayoutRoot" Background="Transparent">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		
+		<!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
+
+		<!--ContentPanel: coloque aquí el contenido adicional-->
+		<Grid x:Name="ContentPanel" Grid.Row="1" Margin="0,0,0,214" Background="{StaticResource PhoneChromeBrush}">
+			<Grid Margin="10,18,8,8">
+				<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="{Binding Strings.Geolocation, Source={StaticResource LocalizedResources}}" FontSize="29.333" VerticalAlignment="Top" FontFamily="Segoe WP Semibold"/>
+				<TextBlock Margin="8,47,0,0" TextWrapping="Wrap"  HorizontalAlignment="Left" Width="446" FontFamily="Segoe WP SemiLight" FontSize="22.667" VerticalAlignment="Top">
+					<Run Text="{Binding Strings.AskAccessGrantGeolocation, Source={StaticResource LocalizedResources}}" /><LineBreak /><LineBreak />
+					<Run Text="{Binding Strings.PrivacyPolicy, Source={StaticResource LocalizedResources}}" /><LineBreak /><LineBreak />
+					<Run Text="{Binding Strings.ChangeGeolocSetting, Source={StaticResource LocalizedResources}}" /><LineBreak /><LineBreak />
+				</TextBlock>
+				<Button x:Name="AcceptBtn" Content="{Binding Strings.Accept, Source={StaticResource LocalizedResources}}" Margin="0,0,0,8" HorizontalAlignment="Left" Width="234" Click="AcceptBtn_Click" VerticalAlignment="Bottom"/>
+				<Button x:Name="CancelBtn" Content="{Binding Strings.Deny, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Right" Margin="0,0,0,8" Width="234" Click="CancelBtn_Click" VerticalAlignment="Bottom"/>
+				</Grid>
+		</Grid>
+	</Grid>
+</phone:PhoneApplicationPage>

@@ -289,6 +289,32 @@ namespace Ocell.Library
 				GenericSaveToConfig<bool?>("RECOVERREAD", ref _RecoverReadPositions, value);
 			}
 		}
+
+		private static bool? _EnabledGeolocation;
+		public static bool? EnabledGeolocation
+		{
+			get 
+			{
+				return GenericGetFromConfig<bool?>("GEOLOC_ENABLED", ref _EnabledGeolocation);
+			}
+			set
+			{
+				GenericSaveToConfig<bool?>("GEOLOC_ENABLED", ref _EnabledGeolocation, value);
+			}
+		}
+
+		private static bool? _TweetGeotagging;
+		public static bool? TweetGeotagging
+		{
+			get 
+			{
+				return GenericGetFromConfig<bool?>("GEOTAG_TWEETS", ref _TweetGeotagging);
+			}
+			set
+			{
+				GenericSaveToConfig<bool?>("GEOTAG_TWEETS", ref _TweetGeotagging, value);
+			}
+		}
 	#endif
 	#endregion
 
@@ -314,6 +340,8 @@ namespace Ocell.Library
 			_FontSize = null;
 			_ReadPositions = null;
 			_RecoverReadPositions = null;
+			_EnabledGeolocation = null;
+			_TweetGeotagging = null;
 #endif
 		}
 
@@ -329,6 +357,7 @@ namespace Ocell.Library
 			defaultValues.Add("TWEETSXREQ", 40);
 			defaultValues.Add("FONTSIZE", 20);
 			defaultValues.Add("RECOVERREAD", true);
+			defaultValues.Add("GEOTAG_TWEETS", true);
 #endif
 		}
 	}

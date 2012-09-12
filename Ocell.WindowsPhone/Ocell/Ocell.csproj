@@ -64,10 +64,8 @@
     <Reference Include="Microsoft.Phone.Controls, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Interop" />
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Calcium SDK\Windows Phone\1.0\Libraries\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.3.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -106,6 +104,9 @@
     <Compile Include="Pages\Elements\UserModel.cs" />
     <Compile Include="Pages\NewTweetModel.cs" />
     <Compile Include="Pages\SelectUserModel.cs" />
+    <Compile Include="Pages\Settings\AskGeolocation.xaml.cs">
+      <DependentUpon>AskGeolocation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Settings\Backgrounds.xaml.cs">
       <DependentUpon>Backgrounds.xaml</DependentUpon>
     </Compile>
@@ -259,6 +260,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Settings\AskGeolocation.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\Settings\Backgrounds.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -407,6 +412,9 @@
     <EmbeddedResource Include="Images\Icons_White\appbar.new.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <Content Include="Images\Icons_White\appbar.map.position.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Icons_White\appbar.next.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

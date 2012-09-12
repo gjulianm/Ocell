@@ -106,6 +106,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Accept.
+        /// </summary>
+        public static string Accept {
+            get {
+                return ResourceManager.GetString("Accept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a account protected!.
         /// </summary>
         public static string AccountProtected {
@@ -241,6 +250,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Do you grant Ocell access to your location? This will enable tweet geotagging and localized Trending Topics..
+        /// </summary>
+        public static string AskAccessGrantGeolocation {
+            get {
+                return ResourceManager.GetString("AskAccessGrantGeolocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Are you sure you want to delete the account @{0}?.
         /// </summary>
         public static string AskAccountDelete {
@@ -354,6 +372,15 @@ namespace Ocell.Localization {
         public static string ChangeAvatar {
             get {
                 return ResourceManager.GetString("ChangeAvatar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You will be able to change this setting anytime in the Settings page..
+        /// </summary>
+        public static string ChangeGeolocSetting {
+            get {
+                return ResourceManager.GetString("ChangeGeolocSetting", resourceCulture);
             }
         }
         
@@ -588,6 +615,15 @@ namespace Ocell.Localization {
         public static string DeleteTweet {
             get {
                 return ResourceManager.GetString("DeleteTweet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Deny.
+        /// </summary>
+        public static string Deny {
+            get {
+                return ResourceManager.GetString("Deny", resourceCulture);
             }
         }
         
@@ -1038,6 +1074,24 @@ namespace Ocell.Localization {
         public static string From {
             get {
                 return ResourceManager.GetString("From", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Geolocation.
+        /// </summary>
+        public static string Geolocation {
+            get {
+                return ResourceManager.GetString("Geolocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Geotagging.
+        /// </summary>
+        public static string Geotagging {
+            get {
+                return ResourceManager.GetString("Geotagging", resourceCulture);
             }
         }
         
@@ -1524,6 +1578,15 @@ namespace Ocell.Localization {
         public static string PinToStart {
             get {
                 return ResourceManager.GetString("PinToStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Privacy policy: Ocell will not save your localization in any register or file in your phone. Ocell will not send your location to any Internet server, except to Twitter.com and for the purposes exposed above (tweet geotagging and localization of Trending Topics)..
+        /// </summary>
+        public static string PrivacyPolicy {
+            get {
+                return ResourceManager.GetString("PrivacyPolicy", resourceCulture);
             }
         }
         

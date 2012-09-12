@@ -38,12 +38,7 @@ namespace Ocell.Settings
             set { Assign("BarText", ref barText, value); }
         }
 
-        bool showResumePositionButton;
-        public bool ShowResumePositionButton
-        {
-            get { return showResumePositionButton; }
-            set { Assign("ShowResumePositionButton", ref showResumePositionButton, value); }
-        }
+        
 
         string instapaperUser;
         public string InstapaperUser
@@ -142,6 +137,20 @@ namespace Ocell.Settings
         {
             get { return accounts; }
             set { Assign("Accounts", ref accounts, value); }
+        }
+
+        bool showResumePositionButton;
+        public bool ShowResumePositionButton
+        {
+            get { return showResumePositionButton; }
+            set { Assign("ShowResumePositionButton", ref showResumePositionButton, value); }
+        }
+
+        bool geoTaggingEnabled;
+        public bool GeoTaggingEnabled
+        {
+            get { return geoTaggingEnabled; }
+            set { Assign("GeoTaggingEnabled", ref geoTaggingEnabled, value); }
         }
         #endregion
 
@@ -294,6 +303,7 @@ namespace Ocell.Settings
             NotifyOptions = new List<string> { Resources.None, Resources.OnlyTile, Resources.ToastAndTile };
             SelectedMuteTime = TimeSpanToSelectedFilter((TimeSpan)Config.DefaultMuteTime);
             ShowResumePositionButton = Config.RecoverReadPositions == true;
+            GeoTaggingEnabled = Config.EnabledGeolocation == true;
 
             if (Config.ReadLaterCredentials.Instapaper != null)
             {
