@@ -1,0 +1,177 @@
+﻿<#@ template language="C#" hostspecific="True" #>
+<#@ output extension=".generated.cs" #>
+<#@ assembly name="System.Core.dll" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Linq" #>
+<#
+
+	string absolutePathBA = Host.ResolvePath("BackgroundAgent.json");
+	string absolutePathNotBA = Host.ResolvePath("NotBackgroundAgent.json");
+
+	var BAProps = Helper.CreatePropertiesFrom(absolutePathBA);
+	var NotBAProps = Helper.CreatePropertiesFrom(absolutePathNotBA);
+#>
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Hammock;
+using Hammock.Web;
+using Ocell.Library.Twitter;
+using Ocell.Library.Tasks;
+
+#if !BACKGROUND_AGENT
+using Ocell.Library.Filtering;
+#endif
+
+
+namespace Ocell.Library
+{
+	public static partial class Config
+	{	
+	#region Properties for Background Agent and main app
+<# foreach(ConfigProperty prop in BAProps) { #>
+
+		private static <#= prop.Type #> _<#= prop.Name #>;
+		public static <#= prop.Type #> <#= prop.Name #>
+		{
+			get 
+			{
+				return GenericGetFromConfig<<#= prop.Type #>>("<#= prop.Key #>", ref _<#= prop.Name #>);
+			}
+			set
+			{
+				GenericSaveToConfig<<#= prop.Type #>>("<#= prop.Key #>", ref _<#= prop.Name #>, value);
+			}
+		}
+<# if(prop.Type.Contains("List<") || prop.Type.Contains("Collection<") || prop.Type.Contains("Dictionary<")) { #>
+
+		public static void Save<#= prop.Name #>()
+		{
+			<#= prop.Name #> = _<#= prop.Name #>;
+		}
+<# } #>
+<# } #>
+	#endregion
+
+	#region Properties only for main app
+	#if !BACKGROUND_AGENT
+<# foreach(ConfigProperty prop in NotBAProps) { #>
+
+		private static <#= prop.Type #> _<#= prop.Name #>;
+		public static <#= prop.Type #> <#= prop.Name #>
+		{
+			get 
+			{
+				return GenericGetFromConfig<<#= prop.Type #>>("<#= prop.Key #>", ref _<#= prop.Name #>);
+			}
+			set
+			{
+				GenericSaveToConfig<<#= prop.Type #>>("<#= prop.Key #>", ref _<#= prop.Name #>, value);
+			}
+		}
+<# if(prop.Type.Contains("List<") || prop.Type.Contains("Collection<") || prop.Type.Contains("Dictionary<")) { #>
+
+		public static void Save<#= prop.Name #>()
+		{
+			<#= prop.Name #> = _<#= prop.Name #>;
+		}
+<# } #>
+<# } #>
+	#endif
+	#endregion
+
+		public static void ClearStaticValues()
+		{
+<# foreach(ConfigProperty prop in BAProps) { #>
+			_<#= prop.Name #> = null;
+<# } #>
+
+#if !BACKGROUND_AGENT
+<# foreach(ConfigProperty prop in NotBAProps) { #>
+			_<#= prop.Name #> = null;
+<# } #>
+#endif
+		}
+
+		static void GenerateDefaultDictionary()
+		{
+			defaultValues = new Dictionary<string, object>();
+
+<# foreach(ConfigProperty prop in BAProps) { #>
+<# if(prop.Default != "") { #>
+			defaultValues.Add("<#= prop.Key #>", <#= prop.Default #>);
+<# } #>
+<# } #>
+
+#if !BACKGROUND_AGENT
+<# foreach(ConfigProperty prop in NotBAProps) { #>
+<# if(prop.Default != "") { #>
+			defaultValues.Add("<#= prop.Key #>", <#= prop.Default #>);
+<# } #>
+<# } #>
+#endif
+		}
+	}
+}
+<#+
+
+	internal class ConfigProperty
+	{
+		public string Type
+		{
+			get; private set;
+		}
+		public string Name
+		{
+			get; private set;
+		}
+		public string Key
+		{
+			get; private set;
+		}
+
+		public string Default
+		{
+			get; private set;
+		}
+
+		public ConfigProperty(string line)
+		{
+		     var parts = line.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+			 Type = parts[0].Trim().Replace('&', ',');
+			 
+			 Key = parts[1].Trim();
+			 
+			 Name = parts[2].Trim();
+
+			 if(parts.Length > 3)
+				Default = parts[3].Trim();
+			 else
+				Default = "";
+		}
+	}
+
+	
+	internal class Helper
+	{
+		public static List<ConfigProperty> CreatePropertiesFrom(string absolutePath)
+		{
+			
+			string contents = File.ReadAllText(absolutePath);
+			var methods = new List<ConfigProperty>();
+
+			var lines = contents.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+			lines = lines.Where(l => !l.StartsWith("//")).ToArray(); // <-- Ignore comments
+
+			foreach(var line in lines)
+			{
+				var method = new ConfigProperty(line);
+				methods.Add(method);
+			}
+
+			return methods;
+		}
+	}
+#>

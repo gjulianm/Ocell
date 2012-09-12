@@ -70,8 +70,14 @@
     <Compile Include="..\..\Ocell.Common\Library\Collections\SafeObservable.cs">
       <Link>Collections\SafeObservable.cs</Link>
     </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Config.cs">
-      <Link>Config.cs</Link>
+    <Compile Include="..\..\Ocell.Common\Library\Configuration\Config.cs">
+      <Link>Configuration\Config.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Ocell.Common\Library\Configuration\Config.generated.cs">
+      <Link>Configuration\Config.generated.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Config.tt</DependentUpon>
     </Compile>
     <Compile Include="..\..\Ocell.Common\Library\DataTransfer.cs">
       <Link>DataTransfer.cs</Link>
@@ -85,6 +91,9 @@
     <Compile Include="..\..\Ocell.Common\Library\DecisionMaker.cs">
       <Link>DecisionMaker.cs</Link>
     </Compile>
+    <Compile Include="..\..\Ocell.Common\Library\FileAbstractor.cs">
+      <Link>FileAbstractor.cs</Link>
+    </Compile>
     <Compile Include="..\..\Ocell.Common\Library\Filtering\ColumnFilter.cs">
       <Link>Filtering\ColumnFilter.cs</Link>
     </Compile>
@@ -93,9 +102,6 @@
     </Compile>
     <Compile Include="..\..\Ocell.Common\Library\IEnumerableExtension.cs">
       <Link>IEnumerableExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\IsolatedFileStreamExtension.cs">
-      <Link>IsolatedFileStreamExtension.cs</Link>
     </Compile>
     <Compile Include="..\..\Ocell.Common\Library\Notifications\TileManager.cs">
       <Link>Notifications\TileManager.cs</Link>
@@ -170,7 +176,22 @@
       <Name>TweetSharp.WindowsPhone.Mango</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Ocell.Common\Library\Configuration\BackgroundAgent.json">
+      <Link>Configuration\BackgroundAgent.json</Link>
+    </None>
+    <None Include="..\..\Ocell.Common\Library\Configuration\Config.tt">
+      <Link>Configuration\Config.tt</Link>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Config.generated.cs</LastGenOutput>
+    </None>
+    <None Include="..\..\Ocell.Common\Library\Configuration\NotBackgroundAgent.json">
+      <Link>Configuration\NotBackgroundAgent.json</Link>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions />
