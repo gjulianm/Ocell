@@ -92,6 +92,13 @@ namespace Ocell.Pages.Elements
             set { Assign("WhoRetweeted", ref whoRetweeted, value); }
         }
 
+        string hdAvatar;
+        public string HdAvatar
+        {
+            get { return hdAvatar; }
+            set { Assign("HdAvatar", ref hdAvatar, value); }
+        }
+
         DelegateCommand deleteTweet;
         public ICommand DeleteTweet
         {
@@ -145,6 +152,8 @@ namespace Ocell.Pages.Elements
                 Tweet = DataTransfer.Status;
                 WhoRetweeted = "";
             }
+
+            HdAvatar = String.Format("https://api.twitter.com/1/users/profile_image?screen_name={0}&size=bigger", Tweet.Author.ScreenName);
 
             HasReplies = (Tweet.InReplyToStatusId != null);
             HasImage = (Tweet.Entities != null && Tweet.Entities.Media.Any());

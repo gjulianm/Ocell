@@ -363,7 +363,7 @@ namespace Ocell.Pages.Elements
 
             User = users.First();
 
-            Avatar = User.ProfileImageUrl;
+            Avatar = String.Format("https://api.twitter.com/1/users/profile_image?screen_name={0}&size=bigger", User.ScreenName); ;
             Name = User.Name;
             ScreenName = User.ScreenName;
             Website = User.Url;

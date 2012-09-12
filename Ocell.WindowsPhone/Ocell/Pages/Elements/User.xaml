@@ -7,7 +7,8 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:custom="clr-namespace:Ocell.Controls"
-	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    xmlns:local="clr-namespace:Ocell" 
+	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
 	x:Class="Ocell.Pages.Elements.User"
     xmlns:u="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
@@ -19,23 +20,13 @@
 	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache">
 
     <phone:PhoneApplicationPage.Resources>
-
-
-    	<DataTemplate x:Key="ItemTemplate">
-    		<StackPanel>
-    			<TextBlock Text="{Binding Property1}"/>
-    			<CheckBox IsChecked="{Binding Property2, Mode=TwoWay}"/>
-    		</StackPanel>
-    	</DataTemplate>
-
-
     </phone:PhoneApplicationPage.Resources>
 
     <shell:SystemTray.ProgressIndicator>
         <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
 
-    <Grid x:Name="LayoutRoot" Margin="0,-32,0,0" DataContext="{Binding Source={StaticResource SampleTweetDataSource}}" >
+    <Grid x:Name="LayoutRoot" Margin="0,-32,0,0" >
         <Grid.Background>
             <ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
         </Grid.Background>
@@ -55,12 +46,12 @@
                         <TextBlock x:Name="Tweets" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Tweets}" FontFamily="Segoe WP Light"/>
 
 
-                        <TextBlock  Tap="TextBlock_Tap_1" toolkit:TiltEffect.IsTiltEnabled="True" TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41"><Run Text="{Binding Strings.Followers, Source={StaticResource LocalizedResources}}" /><LineBreak/><Run/></TextBlock>
+                        <TextBlock  Tap="TextBlock_Tap_1" local:MetroInMotion.Tilt="2" TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41"><Run Text="{Binding Strings.Followers, Source={StaticResource LocalizedResources}}" /><LineBreak/><Run/></TextBlock>
                         <TextBlock x:Name="Followers" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Followers}" FontFamily="Segoe WP Light"/>
 
 
 
-                        <TextBlock toolkit:TiltEffect.IsTiltEnabled="True" Tap="Following_Tap"  TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41" Text="{Binding Strings.Following, Source={StaticResource LocalizedResources}}" />
+                        <TextBlock local:MetroInMotion.Tilt="2" Tap="Following_Tap"  TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41" Text="{Binding Strings.Following, Source={StaticResource LocalizedResources}}" />
                         <TextBlock  x:Name="Following" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Following}" FontFamily="Segoe WP Light"/>
 
                     </StackPanel>
@@ -69,7 +60,7 @@
             <controls:PivotItem x:Name="pvTweets" Header="{Binding Strings.Tweets, Source={StaticResource LocalizedResources}}">
                 <Grid>
                     <custom:ExtendedListBox ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" 
-                                            x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" ItemsSource="{Binding Collection}" />
+                                            x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" />
                 </Grid>
             </controls:PivotItem>
         </controls:Pivot>
