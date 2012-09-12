@@ -30,7 +30,6 @@ namespace Ocell
             _initialised = false;
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
 
-
             viewModel = new MainPageModel();
             DataContext = viewModel;
 
@@ -44,7 +43,9 @@ namespace Ocell
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            viewModel.RaiseNavigatedTo(this, e);
+            string column;
+            NavigationContext.QueryString.TryGetValue("column", out column);
+            viewModel.RaiseNavigatedTo(this, e, column);
             base.OnNavigatedTo(e);
         }
 
@@ -56,13 +57,15 @@ namespace Ocell
             if (!CheckForLogin())
                 return;
 
+            CreateStoryboards();
+
             ThreadPool.QueueUserWorkItem((threadContext) =>
             {
                 CreateTile();
                 ShowFollowMessage();
                 UsernameProvider.FillUserNames(Config.Accounts);
 #if DEBUG
-                var list = DebugWriter.ReadAll();
+                var list = Logger.ReadAll();
                 if (list != null)
                 {
                     EmailComposeTask email = new EmailComposeTask();
@@ -73,8 +76,8 @@ namespace Ocell
                         contents += line + Environment.NewLine;
                     email.Body = contents;
                     //Dispatcher.BeginInvoke(() => email.Show());
-                    DebugWriter.Clear();
-                    DebugWriter.Save();
+                    Logger.Clear();
+                    Logger.Save();
                 }
 #endif
                 LittleWatson.CheckForPreviousException();
@@ -116,7 +119,7 @@ namespace Ocell
                 return true;
         }
 
-
+        int loadedLists = 0;
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
             ExtendedListBox list = sender as ExtendedListBox;
@@ -185,7 +188,14 @@ namespace Ocell
                     }
                 };
 
-                list.Loader.LoadCacheAsync();
+                // Performance trick. In the first load, the first column will be loaded as fast as possible.
+                // Then, when the three first columns are loaded, just load cache inmediately for following columns.
+                if (list.Loader.Resource == (TwitterResource)viewModel.SelectedPivot || loadedLists >= 3)
+                    list.Loader.LoadCacheAsync();
+                else
+                    list.Loader.DeferredCacheLoad();
+                loadedLists++;
+
                 list.AutoReload();
 
                 Dispatcher.BeginInvoke(() =>
@@ -198,15 +208,46 @@ namespace Ocell
             });
         }
 
+        #region RecoverDialog
+        Storyboard SbShowDialog;
+        Storyboard SbHideDialog;
+
+        void CreateStoryboards()
+        {
+            TranslateTransform trans = new TranslateTransform() { X = 0, Y = 0 };
+            RecoverDialog.RenderTransformOrigin = new Point(0, 0);
+            RecoverDialog.RenderTransform = trans;
+
+            SbShowDialog = new Storyboard();
+            DoubleAnimation showAnim = new DoubleAnimation();
+            showAnim.Duration = TimeSpan.FromMilliseconds(400);
+            showAnim.To = -480;
+            var easing = new QuadraticEase();
+            easing.EasingMode = EasingMode.EaseOut;
+            showAnim.EasingFunction = easing;
+            Storyboard.SetTarget(showAnim, RecoverDialog);
+            Storyboard.SetTargetProperty(showAnim, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+            SbShowDialog.Children.Add(showAnim);
+            SbShowDialog.Completed += new EventHandler(SbShowDialog_Completed);
+
+            SbHideDialog = new Storyboard();
+            DoubleAnimation hideAnim = new DoubleAnimation();
+            hideAnim.Duration = TimeSpan.FromMilliseconds(400);
+            hideAnim.To = 0;
+            hideAnim.EasingFunction = easing;
+            Storyboard.SetTarget(hideAnim, RecoverDialog);
+            Storyboard.SetTargetProperty(hideAnim, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+            SbHideDialog.Children.Add(hideAnim);
+        }
+
         ExtendedListBox currentShowingList;
         private void RecoverDialog_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
+            HideResumePositionPrompt();
+
             if (currentShowingList != null)
                 currentShowingList.ResumeReadPosition();
-
-            HideResumePositionPrompt();
         }
-
 
         bool recoverDialogShown = false;
         void ShowResumePositionPrompt(ExtendedListBox list)
@@ -216,31 +257,15 @@ namespace Ocell
             if (recoverDialogShown)
                 return;
 
-            Storyboard storyboard = new Storyboard();
-            TranslateTransform trans = new TranslateTransform() { X = 0, Y = 0 };
-            RecoverDialog.RenderTransformOrigin = new Point(0, 0);
-            RecoverDialog.RenderTransform = trans;
-
-            DoubleAnimation moveAnim = new DoubleAnimation();
-            moveAnim.Duration = TimeSpan.FromMilliseconds(400);
-            moveAnim.From = 0;
-            moveAnim.To = -480;
-
-            var easing = new QuadraticEase();
-            easing.EasingMode = EasingMode.EaseOut;
-
-            moveAnim.EasingFunction = easing;
-
-            Storyboard.SetTarget(moveAnim, RecoverDialog);
-            Storyboard.SetTargetProperty(moveAnim, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
-            storyboard.Completed += (sender, e) =>
-            {
-                HideResumePositionPrompt(true);
-            };
-            storyboard.Children.Add(moveAnim);
-            storyboard.Begin();
+            SbShowDialog.BeginTime = TimeSpan.FromSeconds(2);
+            SbShowDialog.Begin();
 
             recoverDialogShown = true;
+        }
+
+        void SbShowDialog_Completed(object sender, EventArgs e)
+        {
+            HideResumePositionPrompt(true);
         }
 
         void HideResumePositionPrompt(bool delay = false)
@@ -248,33 +273,14 @@ namespace Ocell
             if (!recoverDialogShown)
                 return;
 
-            Storyboard storyboard = new Storyboard();
-            TranslateTransform trans = new TranslateTransform() { X = 0, Y = 0 };
-            RecoverDialog.RenderTransformOrigin = new Point(0, 0);
-            RecoverDialog.RenderTransform = trans;
-
-            DoubleAnimation moveAnim = new DoubleAnimation();
-            moveAnim.Duration = TimeSpan.FromMilliseconds(400);
-            moveAnim.To = 0;
-
-            var easing = new QuadraticEase();
-            easing.EasingMode = EasingMode.EaseOut;
-
-            moveAnim.EasingFunction = easing;
-
-            Storyboard.SetTarget(moveAnim, RecoverDialog);
-            Storyboard.SetTargetProperty(moveAnim, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
-            storyboard.Children.Add(moveAnim);
-
             if (delay)
-                ThreadPool.QueueUserWorkItem((callback) =>
-                    {
-                        Thread.Sleep(14000);
-                        Dispatcher.InvokeIfRequired(storyboard.Begin);
-                    });
+                SbHideDialog.BeginTime = TimeSpan.FromSeconds(6);
             else
-                storyboard.Begin();
+                SbHideDialog.BeginTime = TimeSpan.FromSeconds(0);
+
+            SbHideDialog.Begin();
         }
+        #endregion
 
         void CheckForFilterUpdate(object sender, RoutedEventArgs e)
         {

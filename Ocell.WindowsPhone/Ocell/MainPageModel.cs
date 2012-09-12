@@ -243,13 +243,7 @@ namespace Ocell
                         UpdatePivot();
                 };
 
-            string column;
-            if (QueryParameters.TryGetValue("column", out column))
-            {
-                column = Uri.UnescapeDataString(column);
-                if (Config.Columns.Any(item => item.String == column))
-                    SelectedPivot = Config.Columns.First(item => item.String == column);
-            }
+            
 
             SetUpCommands();
         }
@@ -266,9 +260,26 @@ namespace Ocell
             }
         }
 
-        public void RaiseNavigatedTo(object sender, System.Windows.Navigation.NavigationEventArgs e)
-        {
+        bool firstNavigation = true;
+        public void RaiseNavigatedTo(object sender, System.Windows.Navigation.NavigationEventArgs e, string column)
+        {            
             ThreadPool.QueueUserWorkItem((context) => RaiseReloadAll());
+
+            if (firstNavigation)
+            {
+                if (!string.IsNullOrWhiteSpace(column))
+                {
+                    column = Uri.UnescapeDataString(column);
+
+                    if (Config.Columns.Any(item => item.String == column))
+                        SelectedPivot = Config.Columns.First(item => item.String == column);
+                }
+                else
+                {
+                    SelectedPivot = Config.Columns.FirstOrDefault();
+                }
+                firstNavigation = false;
+            }
         }
     }
 }
