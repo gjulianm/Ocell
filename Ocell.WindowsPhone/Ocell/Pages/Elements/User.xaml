@@ -46,7 +46,7 @@
                         <TextBlock x:Name="Tweets" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Tweets}" FontFamily="Segoe WP Light"/>
 
 
-                        <TextBlock  Tap="TextBlock_Tap_1" local:MetroInMotion.Tilt="2" TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41"><Run Text="{Binding Strings.Followers, Source={StaticResource LocalizedResources}}" /><LineBreak/><Run/></TextBlock>
+                        <TextBlock  Tap="TextBlock_Tap_1" local:MetroInMotion.Tilt="3" TextWrapping="Wrap" FontFamily="Segoe WP Light" FontSize="29.333" Height="41"><Run Text="{Binding Strings.Followers, Source={StaticResource LocalizedResources}}" /><LineBreak/><Run/></TextBlock>
                         <TextBlock x:Name="Followers" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Followers}" FontFamily="Segoe WP Light"/>
 
 

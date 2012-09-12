@@ -90,7 +90,7 @@
         <Grid x:Name="ContentPanel" Margin="12,-15,8,8" Grid.Row="1" Visibility="{Binding Completed, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ScrollViewer Margin="1,0,12,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
                 <Grid VerticalAlignment="Top" Height="798">
-                    <Grid Height="99" Margin="7,0,117,0" VerticalAlignment="Top" Tap="Grid_Tap" local:MetroInMotion.Tilt="2">
+                    <Grid Height="99" Margin="7,0,117,0" VerticalAlignment="Top" Tap="Grid_Tap" local:MetroInMotion.Tilt="3">
                         <Image x:Name="Avatar" HorizontalAlignment="Left" Margin="0,8,0,0" Width="85" RenderTransformOrigin="0.475,0.52" Source="{Binding HdAvatar}"/>
                         <TextBlock x:Name="FName" Margin="94,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" FontSize="32" HorizontalAlignment="Left" Text="{Binding Tweet.User.Name}" Width="238"/>
                         <TextBlock x:Name="SName" Margin="94,42,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="21.333" FontFamily="Segoe WP SemiLight"><Run Text="@"/><Run Text="{Binding Tweet.Author.ScreenName}"/><Run Text="{Binding WhoRetweeted}"/></TextBlock>
