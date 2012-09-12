@@ -77,8 +77,6 @@ namespace Ocell
         // Este código no se ejecutará cuando la aplicación se reactive
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
-            // Load configuration. 
-
         }
 
         // Código para ejecutar cuando la aplicación se activa (se trae a primer plano)

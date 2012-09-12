@@ -153,18 +153,13 @@ namespace Ocell.Library.Twitter
         private static IEnumerable<string> GetUserCache(UserToken user)
         {
             string filename = "AUTOCOMPLETECACHE" + user.ScreenName;
-            IsolatedStorageFileStream file = IsolatedStorageFile.GetUserStoreForApplication().OpenFile(filename, FileMode.OpenOrCreate);
-            var list = file.ReadLines().ToList();
-            file.Close();
-            return list;
+            return FileAbstractor.ReadLinesOfFile(filename);
         }
 
         private static void SaveUserCache(UserToken user, IEnumerable<string> names)
         {
             string filename = "AUTOCOMPLETECACHE" + user.ScreenName;
-            IsolatedStorageFileStream file = IsolatedStorageFile.GetUserStoreForApplication().OpenFile(filename, FileMode.Create);
-            file.WriteLines(names);
-            file.Close();
+            FileAbstractor.WriteLinesToFile(names, filename);
         }
 
         public event OnError Error;

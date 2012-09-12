@@ -1,6 +1,12 @@
 ﻿using System;
-using System.IO.IsolatedStorage;
 using System.Threading;
+
+#if METRO
+using Windows.Storage;
+using System.Threading.Tasks;
+#else
+using System.IO.IsolatedStorage;
+#endif
 
 namespace Ocell.Library
 {
@@ -11,54 +17,12 @@ namespace Ocell.Library
 
         private static void WriteDate(DateTime date, string file)
         {
-            IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
-            IsolatedStorageFileStream File;
-
-            if (_mutex.WaitOne(1000))
-            {
-                try
-                {
-                    using (File = storage.OpenFile(file, System.IO.FileMode.Create))
-                    {
-                        File.WriteLine(date.ToString("s"));
-                        File.Close();
-                    }
-                }
-                catch (Exception)
-                {
-                }
-                finally
-                {
-                    _mutex.ReleaseMutex();
-                }
-            }
+            FileAbstractor.WriteContentsToFile(date.ToString("s"), file);
         }
 
         private static DateTime GetDate(string file)
         {
-            IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
-            string dateStr = "";
-
-            if (_mutex.WaitOne(1000))
-            {
-                try
-                {
-                    using (IsolatedStorageFileStream File = storage.OpenFile(file, System.IO.FileMode.OpenOrCreate))
-                    {
-                        dateStr = File.ReadLine();
-                    }
-
-                }
-                catch (Exception)
-                {
-
-                }
-                finally
-                {
-                    _mutex.ReleaseMutex();
-                }
-            }
-
+            string dateStr = FileAbstractor.ReadContentsOfFile(file);
 
             DateTime date;
 
@@ -73,14 +37,14 @@ namespace Ocell.Library
             WriteDate(date, "DateFile");
         }
 
-        public static DateTime GetLastCheckDate()
-        {
-            return GetDate("DateFile");
-        }
-
         public static void WriteLastToastNotificationDate(DateTime date)
         {
             WriteDate(date, "ToastFile");
+        }
+
+        public static DateTime GetLastCheckDate()
+        {
+            return GetDate("DateFile");
         }
 
         public static DateTime GetLastToastNotificationDate()

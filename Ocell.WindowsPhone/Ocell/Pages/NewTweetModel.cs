@@ -314,7 +314,7 @@ namespace Ocell.Pages
                 task.Accounts.Add(user);
 
             Config.TweetTasks.Add(task);
-            Config.SaveTasks();
+            Config.SaveTweetTasks();
 
             MessageService.ShowMessage(Resources.MessageScheduled, "");
             GoBack();
