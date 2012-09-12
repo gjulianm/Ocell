@@ -1092,8 +1092,14 @@
   <data name="Geotagging" xml:space="preserve">
     <value>Geoetiquetado</value>
   </data>
+  <data name="Global" xml:space="preserve">
+    <value>global</value>
+  </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Política de privacidad: Ocell no guardará tu localización en ningún registro o fichero en tu teléfono. Ocell no enviará tu localización a ningún servidor en internet, salvo a Twitter.com para los propósitos especificados antes (geoetiquetado de tweets y Trending Topics localizados).</value>
+  </data>
+  <data name="ShowGlobalTopics" xml:space="preserve">
+    <value>mostrar trending topics globales...</value>
   </data>
   <data name="ShowResumeButton" xml:space="preserve">
     <value>Activar "seguir donde lo dejé"</value>

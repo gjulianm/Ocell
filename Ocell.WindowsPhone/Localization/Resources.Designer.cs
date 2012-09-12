@@ -1096,6 +1096,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a global.
+        /// </summary>
+        public static string Global {
+            get {
+                return ResourceManager.GetString("Global", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a go to user....
         /// </summary>
         public static string GoToUser {
@@ -1947,6 +1956,15 @@ namespace Ocell.Localization {
         public static string Share {
             get {
                 return ResourceManager.GetString("Share", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a show global trending topics....
+        /// </summary>
+        public static string ShowGlobalTopics {
+            get {
+                return ResourceManager.GetString("ShowGlobalTopics", resourceCulture);
             }
         }
         

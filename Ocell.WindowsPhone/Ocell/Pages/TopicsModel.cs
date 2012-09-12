@@ -16,16 +16,27 @@ using System.Collections.Generic;
 using Ocell.Library.Twitter;
 using System.Collections.ObjectModel;
 using TweetSharp;
+using System.Device.Location;
+using System.Linq;
 
 namespace Ocell.Pages
 {
     public class TopicsModel : ExtendedViewModelBase
     {
+        GeoCoordinateWatcher geoWatcher;
+
         bool isLoading;
         public bool IsLoading
         {
             get { return isLoading; }
             set { Assign("IsLoading", ref isLoading, value); }
+        }
+
+        string placeName;
+        public string PlaceName
+        {
+            get { return placeName; }
+            set { Assign("PlaceName", ref placeName, value); }
         }
 
         object listSelection;
@@ -48,6 +59,12 @@ namespace Ocell.Pages
             get { return refresh; }
         }
 
+        DelegateCommand showGlobal;
+        public ICommand ShowGlobal
+        {
+            get { return showGlobal; }
+        }
+
         public TopicsModel()
             : base("TrendingTopics")
         {
@@ -57,14 +74,43 @@ namespace Ocell.Pages
                         OnSelectionChanged();
                 };
 
+            geoWatcher = new GeoCoordinateWatcher();
+            if (Config.EnabledGeolocation == true)
+                geoWatcher.Start();
+
             refresh = new DelegateCommand((obj) => GetTopics());
+            showGlobal = new DelegateCommand((obj) => GetTopics(false));
             GetTopics();
         }
 
-        private void GetTopics()
+        private void GetTopics(bool useGeolocation = true)
         {
             IsLoading = true;
+            if (Config.EnabledGeolocation == true && useGeolocation)
+            {
+                var location = geoWatcher.Position.Location;
+                ServiceDispatcher.GetCurrentService().ListAvailableTrendsLocations(location.Latitude, location.Longitude,
+                    ReceiveLocations);
+            }
+            else
+            {
             ServiceDispatcher.GetDefaultService().ListLocalTrendsFor(1, ReceiveTrends);
+                PlaceName = Localization.Resources.Global;
+            }
+        }
+
+        void ReceiveLocations(IEnumerable<WhereOnEarthLocation> locations, TwitterResponse response)
+        {
+            if (response.StatusCode != HttpStatusCode.OK || locations == null || !locations.Any())
+            {
+                ServiceDispatcher.GetDefaultService().ListLocalTrendsFor(1, ReceiveTrends);
+                PlaceName = Localization.Resources.Global;
+            }
+            else
+            {
+                ServiceDispatcher.GetDefaultService().ListLocalTrendsFor(locations.FirstOrDefault().WoeId, ReceiveTrends);
+                PlaceName = locations.FirstOrDefault().Name;
+            }
         }
 
         private void ReceiveTrends(TweetSharp.TwitterTrends Trends, TweetSharp.TwitterResponse Response)

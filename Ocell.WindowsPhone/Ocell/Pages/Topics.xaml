@@ -1,4 +1,4 @@
-<phone:PhoneApplicationPage 
+﻿<phone:PhoneApplicationPage 
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -33,7 +33,7 @@
         <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding Strings.DownloadingTopics, Source={StaticResource LocalizedResources}}" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator> 
 
-	<!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
+	<!--LayoutRoot es la cuadrÃ­cula raÃ­z donde se coloca todo el contenido de la pÃ¡gina-->
 	<Grid x:Name="LayoutRoot" Margin="0,-24,0,0">
 		<Grid.Background>
 			<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
@@ -44,22 +44,25 @@
 		</Grid.RowDefinitions>
 		
 		<Grid Margin="12,64,0,0" Grid.RowSpan="2">
-<!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
+<!--TitlePanel contiene el nombre de la aplicaciÃ³n y el tÃ­tulo de la pÃ¡gina-->
 			<StackPanel x:Name="TitlePanel" Grid.Row="0" Height="116" VerticalAlignment="Top">
-				<TextBlock x:Name="ApplicationTitle" Text="OCELL" Style="{StaticResource PhoneTextNormalStyle}"/>
-				<TextBlock x:Name="PageTitle" Text="{Binding Strings.Trending, Source={StaticResource LocalizedResources}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+				<TextBlock x:Name="ApplicationTitle" Style="{StaticResource PhoneTextNormalStyle}"><Run Text="OCELL"/><Run Text=" - TRENDING TOPICS"/></TextBlock>
+				<TextBlock x:Name="PageTitle" Margin="9,-7,0,0" Text="{Binding PlaceName}" Style="{StaticResource PhoneTextTitle1Style}"/>
 			</StackPanel>
 
-		<!--ContentPanel: coloque aquí el contenido adicional-->
+		<!--ContentPanel: coloque aquÃ­ el contenido adicional-->
 			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
 				<ListBox x:Name="TList" Margin="28,8,8,8" SelectedItem="{Binding ListSelection, Mode=TwoWay}" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}" SelectionChanged="TList_SelectionChanged"/>
 			</Grid>
             
-            <controls:AppBar>
+            <controls:AppBar d:IsHidden="True">
                 <controls:AppBarIconButton Command="{Binding Refresh}" IconUri="/Images/Icons_White/appbar.refresh.rest.png" Text="{Binding Strings.Refresh, Source={StaticResource LocalizedResources}}" />
+                <controls:AppBar.MenuItems>
+                    <controls:AppBarMenuItem Command="{Binding ShowGlobal}" Text="{Binding Strings.ShowGlobalTopics, Source={StaticResource LocalizedResources}}" />
+                </controls:AppBar.MenuItems>
             </controls:AppBar>
 		</Grid>
 		
-		<!--TitlePanel contiene el nombre de la aplicación y el título de la página--><!--ContentPanel: coloque aquí el contenido adicional-->
+		<!--TitlePanel contiene el nombre de la aplicaciÃ³n y el tÃ­tulo de la pÃ¡gina--><!--ContentPanel: coloque aquÃ­ el contenido adicional-->
 	</Grid>
 </phone:PhoneApplicationPage>
