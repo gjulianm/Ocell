@@ -1888,6 +1888,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Show &quot;Resume reading&quot; button.
+        /// </summary>
+        public static string ShowResumeButton {
+            get {
+                return ResourceManager.GetString("ShowResumeButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Show retweets as mentions.
         /// </summary>
         public static string ShowRetweetsAsMentions {
