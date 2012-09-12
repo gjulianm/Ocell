@@ -101,9 +101,9 @@ namespace Ocell.BackgroundAgent
         }
         #endregion
 
+        [Conditional("DEBUG")]
         void WriteMemUsage(string message)
         {
-#if DEBUG
             long percentage;
             long used = DeviceStatus.ApplicationCurrentMemoryUsage / 1024;
             if (DeviceStatus.ApplicationMemoryUsageLimit != 0)
@@ -113,8 +113,7 @@ namespace Ocell.BackgroundAgent
             string toWrite = string.Format("{3}: {0} - {1} KB ({2}% of available memory)",
                 message, used, percentage, DateTime.Now.ToString("HH:mm:ss.ff"));
             Debug.WriteLine(toWrite);
-            DebugWriter.Add(toWrite);
-#endif
+            Logger.Add(toWrite);
         }
 
         /// <summary>
@@ -131,9 +130,9 @@ namespace Ocell.BackgroundAgent
             DateTime start, end;
             start = DateTime.Now;
             SignalThreadStart();
-#if DEBUG
-            DebugWriter.Add("");
-#endif
+
+            Logger.Add("");
+
             try
             {
                 DoWork();
@@ -151,17 +150,15 @@ namespace Ocell.BackgroundAgent
             if (maxTimeout < 0)
                 maxTimeout = 1000;
 
-#if DEBUG
             if (Debugger.IsAttached)
                 _agentWaitHandle.WaitOne();
             else
-#endif
                 _agentWaitHandle.WaitOne(maxTimeout);
 
             WriteMemUsage("Exit with " + _threads.ToString() + " running");
-#if DEBUG
-            DebugWriter.Save();
-#endif
+
+            Logger.Save();
+
             NotifyComplete();
         }
 
@@ -208,13 +205,13 @@ namespace Ocell.BackgroundAgent
                 executor.Error += (sender, e) =>
                     {
                         Config.TweetTasks.Add(task);
-                        Config.SaveTasks();
+                        Config.SaveTweetTasks();
                         SignalThreadEnd();
                     };
                 SignalThreadStart();
                 executor.Execute();
             }
-            Config.SaveTasks();
+            Config.SaveTweetTasks();
         }
 
         #region Notification

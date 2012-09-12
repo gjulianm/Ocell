@@ -1,13 +1,4 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.Diagnostics;
 
 namespace Ocell.Library
@@ -21,6 +12,20 @@ namespace Ocell.Library
             function();
             watch.Stop();
             Debug.WriteLine("Method " + function.Method.Name +" took " + watch.ElapsedMilliseconds + " ms.");
+
+        }
+
+        public static Stopwatch StartTrack()
+        {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            return watch;
+        }
+
+        public static void EndTrack(Stopwatch watch, string action = "-NONE-")
+        {
+            watch.Stop();
+            Debug.WriteLine("Time for function {0}: {1} ms", action, watch.ElapsedMilliseconds);
         }
     }
 }

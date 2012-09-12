@@ -5,6 +5,7 @@ using TweetSharp;
 using System.Linq;
 using Ocell.Library.Twitter.Comparers;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Ocell.Library.Twitter
 {
@@ -26,84 +27,20 @@ namespace Ocell.Library.Twitter
             return Key;
         }
 
-        private static IEnumerable<string> ReadContentsOf(string filename)
-        {
-            IEnumerable<string> List = null;
-
-            using (var mutex = new Mutex(false, "Ocell" + filename))
-            {
-                if (!mutex.WaitOne(100))
-                    return new List<string>();
-
-                IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
-                using (IsolatedStorageFileStream file = storage.OpenFile(filename, System.IO.FileMode.OpenOrCreate))
-                {
-
-                    try
-                    {
-                        List = new List<string>(file.ReadLines()); // We have to create the list now to avoid reading it when the file is closed.
-                        file.Close();
-                        return List;
-                    }
-                    catch (Exception)
-                    {
-                        return new List<string>();
-                    }
-                }
-            }
-        }
-
-        private static void SaveContentsIn(string filename, IEnumerable<string> strings, System.IO.FileMode Mode)
-        {
-            using (var mutex = new Mutex(false, "Ocell" + filename))
-            {
-                if (!mutex.WaitOne(100))
-                    return;
-
-                IsolatedStorageFile Storage = IsolatedStorageFile.GetUserStoreForApplication();
-                try
-                {
-                    IsolatedStorageFileStream File = Storage.OpenFile(filename, Mode);
-                    File.WriteLines(strings);
-                    File.Close();
-                }
-                catch (Exception)
-                {
-                    return;
-                }
-            }
-        }
-
-        public static void SaveToCache(TwitterResource Resource, IEnumerable<TwitterStatus> List)
-        {
-            _saveToCache(Resource, List, System.IO.FileMode.Create);
-        }
-
-        private static void _saveToCache(TwitterResource Resource, IEnumerable<TwitterStatus> List, System.IO.FileMode Mode)
+        public static void SaveToCache(TwitterResource resource, IEnumerable<TwitterStatus> list)
         {
             IsolatedStorageSettings Config = IsolatedStorageSettings.ApplicationSettings;
-            string Key = GetCacheName(Resource);
-            List<string> Strings = new List<string>();
+            string fileName = GetCacheName(resource);
+            IEnumerable<string> strings;
 
-			List = List.Distinct();
-						
             try
             {
-                foreach (ITweetable Item in List)
-                    Strings.Add(Item.RawSource);
+                strings = list.Distinct().OfType<TwitterStatus>().Select(item => item.RawSource);
+                FileAbstractor.WriteBlocksToFile(strings, fileName);
             }
             catch (InvalidCastException)
             {
                 // Just stop adding strings when we encounter a non-TwitterStatus element.
-            }
-	
-
-            try
-            {
-                SaveContentsIn(Key, Strings, Mode);
-            }
-            catch (Exception)
-            {
             }
         }
 
@@ -117,36 +54,45 @@ namespace Ocell.Library.Twitter
 
         public static IEnumerable<TwitterStatus> GetFromCache(TwitterResource Resource)
         {
-            List<TwitterStatus> List = new List<TwitterStatus>();
-            IsolatedStorageSettings Config = IsolatedStorageSettings.ApplicationSettings;
-            IEnumerable<string> Strings;
+            var track = TimeTracker.StartTrack();
+            List<TwitterStatus> list = new List<TwitterStatus>();
+            IEnumerable<string> strings;
 
-            string Key = GetCacheName(Resource);
-            TwitterStatus Item;
+            string fileName = GetCacheName(Resource);
+            TwitterStatus item = default(TwitterStatus);
             TwitterService DefaultService = new TwitterService();
+            Stopwatch watch = new Stopwatch();
 
             try
             {
-                Strings = ReadContentsOf(Key);
+                var t1 = TimeTracker.StartTrack();
+                strings = FileAbstractor.ReadBlocksOfFile(fileName);
+                TimeTracker.EndTrack(t1, "ReadBlocksOfFile");
             }
             catch (Exception)
             {
-                return new List<TwitterStatus>();
+                yield break;
             }
 
-            foreach (string Raw in Strings)
+            var t2 = TimeTracker.StartTrack();
+            foreach (string rawSource in strings)
             {
+                bool deserializeSuccess = true;
                 try
                 {
-                    Item = DefaultService.Deserialize<TwitterStatus>(Raw);
-                    List.Add(Item);
+                    item = DefaultService.Deserialize<TwitterStatus>(rawSource);
                 }
                 catch (Exception)
                 {
+                    deserializeSuccess = false;
                 }
-            }
 
-            return List.OrderByDescending(item => item.Id); ;
+                if (deserializeSuccess)
+                    yield return item;
+            }
+            TimeTracker.EndTrack(t2, "Deserialization");
+
+            TimeTracker.EndTrack(track, "GetCache");
         }
     }
 }

@@ -232,7 +232,12 @@ namespace Ocell.Controls
         void SaveReadingPosition()
         {
             var viewport = GetVisibleItems();
-            var middle = viewport[viewport.Count / 2];
+            int middleIndex = viewport.Count / 2;
+
+            if (middleIndex >= viewport.Count)
+                return;
+            
+            var middle = viewport[middleIndex];
             Config.ReadPositions[Loader.Resource.String] = middle.Id;
         }
 

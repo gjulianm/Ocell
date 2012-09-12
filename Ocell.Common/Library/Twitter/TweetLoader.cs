@@ -11,6 +11,7 @@ using Ocell.Library.Twitter.Comparers;
 using System.Windows.Controls;
 using System.Windows;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Ocell.Library.Twitter
 {
@@ -143,6 +144,11 @@ namespace Ocell.Library.Twitter
             ThreadPool.QueueUserWorkItem((threadContext) => LoadCache());
         }
 
+        public void DeferredCacheLoad()
+        {
+            new Timer((context) => LoadCache(), null, 1000, Timeout.Infinite);
+        }
+
         public void SaveToCacheAsync(IList<ITweetable> viewport)
         {
             ThreadPool.QueueUserWorkItem((context) => SaveToCache(viewport));
@@ -190,14 +196,30 @@ namespace Ocell.Library.Twitter
             if (!Cached || Resource.User == null)
                 return;
 
-            TweetEqualityComparer comparer = new TweetEqualityComparer();
+            var t = TimeTracker.StartTrack();
 
-            IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id);
+            var t1 = TimeTracker.StartTrack();
+            IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id).ToList();
+            TimeTracker.EndTrack(t1, "GetFromCache && Order");
 
+            var t2 = TimeTracker.StartTrack();
             var toAdd = AddLoadMoreButtons(cacheList.Cast<ITweetable>()).Except(Source);
+            TimeTracker.EndTrack(t2, "AddLoadMore && except");
+
+            var t3 = TimeTracker.StartTrack();
+            int added = 0;
 
             foreach (var item in toAdd)
+            {
                 Source.Add(item);
+                added++;
+                if (added == 10)
+                    Thread.Sleep(100);
+            }
+
+            TimeTracker.EndTrack(t3, "Add to source");
+
+            TimeTracker.EndTrack(t, "LoadCache");
 
             if (CacheLoad != null)
                 CacheLoad(this, new EventArgs());
