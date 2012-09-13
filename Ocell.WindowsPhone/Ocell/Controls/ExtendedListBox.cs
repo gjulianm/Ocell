@@ -250,7 +250,10 @@ namespace Ocell.Controls
             var item = Loader.Source.FirstOrDefault(x => x.Id == id);
 
             if (item != null)
+            {
+                Loader.StopSourceRefresh();
                 ScrollIntoView(item);
+            }
         }
         #endregion
 
