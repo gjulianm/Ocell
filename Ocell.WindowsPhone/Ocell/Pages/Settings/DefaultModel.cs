@@ -322,7 +322,7 @@ namespace Ocell.Settings
 #if OCELL_FULL
             PushAvailable = true;
 #else
-            PushAvailable =  false;
+            PushAvailable = false;
 #endif
             PushEnabled = Config.PushEnabled == true;
 
@@ -381,10 +381,15 @@ namespace Ocell.Settings
                     case "ShowResumePositionButton":
                         Config.RecoverReadPositions = ShowResumePositionButton;
                         break;
+                    case "GeoTaggingEnabled":
+                        Config.EnabledGeolocation = GeoTaggingEnabled;
+                        break;
                     case "PushEnabled":
                         Config.PushEnabled = PushEnabled;
                         if (PushEnabled == false)
                             PushNotifications.UnregisterPushChannel();
+                        else
+                            PushNotifications.RegisterPushChannel();
                         break;
                 }
             };

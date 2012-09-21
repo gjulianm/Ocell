@@ -128,6 +128,13 @@ namespace Ocell.Pages
             get { return isGeotagged; }
             set { Assign("IsGeotagged", ref isGeotagged, value); }
         }
+
+        bool geotagEnabled;
+        public bool GeotagEnabled
+        {
+            get { return geotagEnabled; }
+            set { Assign("GeotagEnabled", ref geotagEnabled, value); }
+        }
         #endregion
 
         #region Commands
@@ -165,6 +172,7 @@ namespace Ocell.Pages
             AccountList = Config.Accounts.ToList();
             IsGeotagged = Config.EnabledGeolocation == true &&
                 (Config.TweetGeotagging == true || Config.TweetGeotagging == null);
+            GeotagEnabled = Config.EnabledGeolocation == true;
 
             this.PropertyChanged += (sender, e) =>
             {

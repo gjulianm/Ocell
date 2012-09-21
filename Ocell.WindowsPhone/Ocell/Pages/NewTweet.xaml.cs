@@ -62,7 +62,6 @@ namespace Ocell.Pages
 
         void NewTweet_Unloaded(object sender, RoutedEventArgs e)
         {
-
             DataTransfer.Text = viewModel.TweetText;
             DataTransfer.ReplyingDM = false;
             if (DataTransfer.Draft != null)
@@ -98,6 +97,12 @@ namespace Ocell.Pages
             _completer.User = DataTransfer.CurrentAccount;
             _completer.Textbox = TweetBox;
             _completer.Trigger = '@';
+
+            // Update the UI.
+            if (viewModel.IsGeotagged)
+                Dispatcher.InvokeIfRequired(EnableGeoloc.Begin);
+            else
+                Dispatcher.InvokeIfRequired(DisableGeoloc.Begin);
         }
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)

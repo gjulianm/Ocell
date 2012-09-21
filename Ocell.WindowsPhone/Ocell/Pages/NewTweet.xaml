@@ -109,7 +109,7 @@
         <Grid x:Name="ContentPanel" Margin="12,0,12,0" Grid.Row="1" >
             <ScrollViewer d:LayoutOverrides="Width, Height" HorizontalScrollBarVisibility="Disabled">
                 <Grid>
-                    <Image x:Name="GeolocImg" HorizontalAlignment="Left" Height="48" Source="/Images/Icons_White/appbar.map.position.rest.png" Stretch="Fill" Width="48" VerticalAlignment="Top" d:LayoutOverrides="Height" Margin="0,-4,0,0"/>
+                    <Image x:Name="GeolocImg" HorizontalAlignment="Left" Visibility="{Binding GeotagEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" Height="48" Source="/Images/Icons_White/appbar.map.position.rest.png" Stretch="Fill" Width="48" VerticalAlignment="Top" d:LayoutOverrides="Height" Margin="0,-4,0,0"/>
 					<TextBox Text="{Binding TweetText, Mode=TwoWay}" x:Name="TweetBox" TextWrapping="Wrap" VerticalAlignment="Top" Height="205" InputScope="Text" Margin="0,31,0,0" d:LayoutOverrides="VerticalAlignment"/>
                     <TextBlock Margin="0,4,9,0" TextWrapping="Wrap" Text="{Binding RemainingChars}" VerticalAlignment="Top" Foreground="#FF858585" HorizontalAlignment="Right" FontFamily="Segoe WP Light"/>
                     <ListBox x:Name="ListAccounts" ItemsSource="{Binding AccountList}" SelectionMode="Multiple" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="12,272,12,252" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}" SelectionChanged="ListBox_SelectionChanged"/>
