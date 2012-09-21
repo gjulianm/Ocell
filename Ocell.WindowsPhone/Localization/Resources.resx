@@ -1104,4 +1104,10 @@
   <data name="ShowResumeButton" xml:space="preserve">
     <value>Show "Resume reading" button</value>
   </data>
+  <data name="AskEnablePush" xml:space="preserve">
+    <value>Do you want to enable push notifications in Ocell?</value>
+  </data>
+  <data name="PushEnabled" xml:space="preserve">
+    <value>Push notifications</value>
+  </data>
 </root>

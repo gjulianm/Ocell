@@ -49,6 +49,13 @@ namespace Ocell
             base.OnNavigatedTo(e);
         }
 
+        bool AskForPushPermission()
+        {
+            var result = Dependency.Resolve<IMessageService>().AskYesNoQuestion(Localization.Resources.AskEnablePush);
+            Config.PushEnabled = result;
+            return result;
+        }
+
         void CallLoadFunctions(object sender, RoutedEventArgs e)
         {
             if (_initialised)
@@ -66,6 +73,8 @@ namespace Ocell
             {
                 CreateTile();
                 ShowFollowMessage();
+                if(Config.PushEnabled == true || (Config.PushEnabled == null  && AskForPushPermission()))
+                    PushNotifications.RegisterPushChannel();
                 UsernameProvider.FillUserNames(Config.Accounts);
 #if DEBUG
                 var list = Logger.ReadAll();

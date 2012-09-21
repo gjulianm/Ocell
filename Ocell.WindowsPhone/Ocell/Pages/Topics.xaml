@@ -58,7 +58,7 @@
             <controls:AppBar d:IsHidden="True">
                 <controls:AppBarIconButton Command="{Binding Refresh}" IconUri="/Images/Icons_White/appbar.refresh.rest.png" Text="{Binding Strings.Refresh, Source={StaticResource LocalizedResources}}" />
                 <controls:AppBar.MenuItems>
-                    <controls:AppBarMenuItem Command="{Binding ShowGlobal}" Text="{Binding Strings.ShowGlobalTopics, Source={StaticResource LocalizedStrings}}" />
+                    <controls:AppBarMenuItem Command="{Binding ShowGlobal}" Text="{Binding Strings.ShowGlobalTopics, Source={StaticResource LocalizedResources}}" />
                 </controls:AppBar.MenuItems>
             </controls:AppBar>
 		</Grid>

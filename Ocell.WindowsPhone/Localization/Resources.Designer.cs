@@ -277,6 +277,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Do you want to enable push notifications in Ocell?.
+        /// </summary>
+        public static string AskEnablePush {
+            get {
+                return ResourceManager.GetString("AskEnablePush", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Are you sure you want to delete this filter?.
         /// </summary>
         public static string AskFilterDelete {
@@ -1641,6 +1650,15 @@ namespace Ocell.Localization {
         public static string Public {
             get {
                 return ResourceManager.GetString("Public", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Push notifications.
+        /// </summary>
+        public static string PushEnabled {
+            get {
+                return ResourceManager.GetString("PushEnabled", resourceCulture);
             }
         }
         

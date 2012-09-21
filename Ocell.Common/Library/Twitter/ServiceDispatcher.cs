@@ -7,16 +7,17 @@ namespace Ocell.Library.Twitter
     public static class ServiceDispatcher 
     {
         private static object _lockFlag = new object();
-        private static Dictionary<string, ITwitterService> _list;
+        private static Dictionary<string, ITwitterService> _services;
+        private static Dictionary<string, StreamingClient> _clients = new Dictionary<string, StreamingClient>();
 
         public static bool TestSession { get; set; }
 
-        public static ITwitterService GetService(UserToken account)
+        public static StreamingClient GetStreamingService(UserToken account)
         {
             lock (_lockFlag)
             {
-                if (_list == null)
-                    _list = new Dictionary<string, ITwitterService>();
+                if (_clients == null)
+                    _clients = new Dictionary<string, StreamingClient>();
             }
 
             if (account == null || account.Key == null)
@@ -24,8 +25,33 @@ namespace Ocell.Library.Twitter
 
             lock (_lockFlag)
             {
-                if (_list.ContainsKey(account.Key))
-                    return _list[account.Key];
+                if (_clients.ContainsKey(account.Key))
+                    return _clients[account.Key];
+            }
+
+            var srv = new StreamingClient(account);
+
+            lock (_lockFlag)
+                _clients.Add(account.Key, srv);
+
+            return srv;
+        }
+
+        public static ITwitterService GetService(UserToken account)
+        {
+            lock (_lockFlag)
+            {
+                if (_services == null)
+                    _services = new Dictionary<string, ITwitterService>();
+            }
+
+            if (account == null || account.Key == null)
+                return null;
+
+            lock (_lockFlag)
+            {
+                if (_services.ContainsKey(account.Key))
+                    return _services[account.Key];
             }
 
             ITwitterService srv;
@@ -39,7 +65,7 @@ namespace Ocell.Library.Twitter
             }            
 
             lock(_lockFlag)
-                _list.Add(account.Key, srv);
+                _services.Add(account.Key, srv);
             return srv;
         }
 
@@ -74,7 +100,7 @@ namespace Ocell.Library.Twitter
 
         public static void Dispose()
         {
-            _list.Clear();
+            _services.Clear();
         }
     }
 }

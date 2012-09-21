@@ -115,5 +115,25 @@ namespace Ocell.Library
                 return defaultValues;
             }
         }
+
+        const string pushEnabledKey = "PUSHENABLED";
+        static bool? pushEnabled;
+        public static bool? PushEnabled
+        {
+            get
+            {
+#if OCELL_FULL
+                return GenericGetFromConfig(pushEnabledKey, ref pushEnabled);
+#else
+                return false;
+#endif
+            }
+            set
+            {
+#if OCELL_FULL
+                GenericSaveToConfig(pushEnabledKey, ref pushEnabled, value);
+#endif
+            }
+        }
     }
 }

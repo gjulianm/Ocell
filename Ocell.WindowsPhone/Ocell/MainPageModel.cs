@@ -18,6 +18,7 @@ using System.Linq;
 using Ocell.Library.Filtering;
 using System.Collections.Specialized;
 using System.Windows;
+using Microsoft.Phone.Tasks;
 
 namespace Ocell
 {
@@ -157,6 +158,12 @@ namespace Ocell
         {
             get { return goToUser; }
         }
+
+        DelegateCommand feedback;
+        public ICommand Feedback
+        {
+            get { return feedback; }
+        }
         #endregion
 
         private void SetUpCommands()
@@ -193,6 +200,15 @@ namespace Ocell
                 IsSearching = false;
                 Navigate("/Pages/Elements/User.xaml?user=" + UserSearch);
             }, obj => Config.Accounts.Any());
+
+            feedback = new DelegateCommand((obj) =>
+                {
+                    var task = new EmailComposeTask();
+                    task.Subject = "Ocell - Beta feedback";
+                    task.To = "gjulian93@gmail.com";
+
+                    Deployment.Current.Dispatcher.InvokeIfRequired(task.Show);
+                });
 
         }
 
@@ -276,7 +292,8 @@ namespace Ocell
                 }
                 else
                 {
-                    SelectedPivot = Config.Columns.FirstOrDefault();
+                    if(Config.Columns.Any())
+                        SelectedPivot = Config.Columns.First();
                 }
                 firstNavigation = false;
             }

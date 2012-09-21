@@ -94,14 +94,20 @@
 
             <controls:PivotItem x:Name="pAccounts" Header="{Binding Strings.AccountsPivot, Source={StaticResource LocalizedResources}}" Margin="12,0">
 				<Grid Height="608" Margin="0,-9,0,0">
-					<Button Content="{Binding Strings.AddAccount, Source={StaticResource LocalizedResources}}" Height="72" Margin="35,286,34,250" x:Name="btnLogin" Width="379" Command="{Binding AddAccount}" />
-					<TextBlock Height="30" Margin="213,6,-119,0" x:Name="UserName" VerticalAlignment="Top" Style="{StaticResource PhoneTextAccentStyle}" Foreground="{StaticResource PhoneForegroundBrush}" d:LayoutOverrides="Width" />
-					<ListBox x:Name="Users" toolkit:TiltEffect.IsTiltEnabled="True" Margin="8,40,8,0"  Height="232" VerticalAlignment="Top" ItemTemplate="{StaticResource AccountsContextTemplate}" ItemsSource="{Binding Accounts}" SelectedIndex="{Binding SelectedAccount, Mode=TwoWay}"/>
-					<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="{Binding Strings.Accounts, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="8,0,0,178" TextWrapping="Wrap" VerticalAlignment="Bottom" Text="{Binding Strings.NotifyMentions, Source={StaticResource LocalizedResources}}" Foreground="{StaticResource PhoneSubtleBrush}"/>
-                    <toolkit:ListPicker x:Name="MentionsPicker" Margin="7,0,9,117" VerticalAlignment="Bottom" ItemsSource="{Binding NotifyOptions}" SelectedIndex="{Binding MentionNotifyOption, Mode=TwoWay}" />
-                    <TextBlock HorizontalAlignment="Left" Margin="7,0,0,65" TextWrapping="Wrap" VerticalAlignment="Bottom" Text="{Binding Strings.NotifyMessages, Source={StaticResource LocalizedResources}}" Foreground="{StaticResource PhoneSubtleBrush}"/>
-                    <toolkit:ListPicker x:Name="MessagesPicker" Margin="7,0,9,9" VerticalAlignment="Bottom" ItemsSource="{Binding NotifyOptions}" SelectedIndex="{Binding MessageNotifyOption, Mode=TwoWay}"/>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="0.599*"/>
+						<RowDefinition Height="0.401*"/>
+					</Grid.RowDefinitions>
+					<Button Content="{Binding Strings.AddAccount, Source={StaticResource LocalizedResources}}" Height="72" Margin="35,0,34,6" x:Name="btnLogin" Width="379" Command="{Binding AddAccount}" VerticalAlignment="Bottom" d:LayoutOverrides="Height" Grid.Row="0" />
+					<ListBox x:Name="Users" toolkit:TiltEffect.IsTiltEnabled="True" Margin="8,40,8,92" ItemTemplate="{StaticResource AccountsContextTemplate}" ItemsSource="{Binding Accounts}" SelectedIndex="{Binding SelectedAccount, Mode=TwoWay}" Grid.Row="0"/>
+					<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="{Binding Strings.Accounts, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" Grid.Row="0"/>
+					<Grid Margin="7,39,9,9" Grid.Row="1" Visibility="{Binding PushAvailable, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Collapsed}">
+						<TextBlock HorizontalAlignment="Left" Margin="1,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Strings.NotifyMentions, Source={StaticResource LocalizedResources}}" Foreground="{StaticResource PhoneSubtleBrush}"/>
+						<toolkit:ListPicker x:Name="MentionsPicker" Margin="0,28,0,0" ItemsSource="{Binding NotifyOptions}" SelectedIndex="{Binding MentionNotifyOption, Mode=TwoWay}" VerticalAlignment="Top" />
+						<TextBlock HorizontalAlignment="Left" Margin="0,0,0,56" TextWrapping="Wrap" VerticalAlignment="Bottom" Text="{Binding Strings.NotifyMessages, Source={StaticResource LocalizedResources}}" Foreground="{StaticResource PhoneSubtleBrush}"/>
+						<toolkit:ListPicker x:Name="MessagesPicker" Margin="0" VerticalAlignment="Bottom" ItemsSource="{Binding NotifyOptions}" SelectedIndex="{Binding MessageNotifyOption, Mode=TwoWay}"/>
+					</Grid>
+                    <toolkit:ToggleSwitch Header="{Binding Strings.PushEnabled, Source={StaticResource LocalizedResources}}" IsChecked="{Binding PushEnabled, Mode=TwoWay}" Visibility="{Binding PushAvailable, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Visible}" Margin="8,8,8,0" Grid.Row="1" VerticalAlignment="Top"/>
                 </Grid>
 			</controls:PivotItem>
             <controls:PivotItem x:Name="pFilters" Header="{Binding Strings.Filters, Source={StaticResource LocalizedResources}}">

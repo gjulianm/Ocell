@@ -222,6 +222,9 @@ namespace Ocell.BackgroundAgent
 
         void CreateToast(string type, int count, string from, string to)
         {
+            if (Config.PushEnabled == true)
+                return; // Don't repeat toast notifications when push is enabled.
+            
             string toastContent = "";
 
             if (count == 1)

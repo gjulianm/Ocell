@@ -83,6 +83,20 @@ namespace Ocell.Settings
             set { Assign("RetweetsAsMentions", ref retweetsAsMentions, value); }
         }
 
+        bool pushAvailable;
+        public bool PushAvailable
+        {
+            get { return pushAvailable; }
+            set { Assign("PushAvailable", ref pushAvailable, value); }
+        }
+
+        bool pushEnabled;
+        public bool PushEnabled
+        {
+            get { return pushEnabled; }
+            set { Assign("PushEnabled", ref pushEnabled, value); }
+        }
+
         bool backgroundUpdateTiles;
         public bool BackgroundUpdateTiles
         {
@@ -304,6 +318,13 @@ namespace Ocell.Settings
             SelectedMuteTime = TimeSpanToSelectedFilter((TimeSpan)Config.DefaultMuteTime);
             ShowResumePositionButton = Config.RecoverReadPositions == true;
             GeoTaggingEnabled = Config.EnabledGeolocation == true;
+            
+#if OCELL_FULL
+            PushAvailable = true;
+#else
+            PushAvailable =  false;
+#endif
+            PushEnabled = Config.PushEnabled == true;
 
             if (Config.ReadLaterCredentials.Instapaper != null)
             {
@@ -359,6 +380,11 @@ namespace Ocell.Settings
                         break;
                     case "ShowResumePositionButton":
                         Config.RecoverReadPositions = ShowResumePositionButton;
+                        break;
+                    case "PushEnabled":
+                        Config.PushEnabled = PushEnabled;
+                        if (PushEnabled == false)
+                            PushNotifications.UnregisterPushChannel();
                         break;
                 }
             };
