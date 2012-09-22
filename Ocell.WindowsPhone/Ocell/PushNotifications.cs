@@ -23,6 +23,9 @@ namespace Ocell
                 channel.BindToShellToast();
             }
 
+            if (channel.ChannelUri == null)
+                return;
+
             foreach(var user in Config.Accounts)
                 SendRegistrationToServer(user, channel.ChannelUri.ToString());
         }
