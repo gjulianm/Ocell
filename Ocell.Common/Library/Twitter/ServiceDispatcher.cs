@@ -8,34 +8,8 @@ namespace Ocell.Library.Twitter
     {
         private static object _lockFlag = new object();
         private static Dictionary<string, ITwitterService> _services;
-        private static Dictionary<string, StreamingClient> _clients = new Dictionary<string, StreamingClient>();
 
         public static bool TestSession { get; set; }
-
-        public static StreamingClient GetStreamingService(UserToken account)
-        {
-            lock (_lockFlag)
-            {
-                if (_clients == null)
-                    _clients = new Dictionary<string, StreamingClient>();
-            }
-
-            if (account == null || account.Key == null)
-                return null;
-
-            lock (_lockFlag)
-            {
-                if (_clients.ContainsKey(account.Key))
-                    return _clients[account.Key];
-            }
-
-            var srv = new StreamingClient(account);
-
-            lock (_lockFlag)
-                _clients.Add(account.Key, srv);
-
-            return srv;
-        }
 
         public static ITwitterService GetService(UserToken account)
         {

@@ -66,7 +66,6 @@ namespace Ocell.Library.Twitter
 
         protected ITwitterService service;
         protected ConversationService conversationService;
-        protected StreamingClient streamer;
 
         #region Settings
         public int TweetsToLoadPerRequest { get; set; }
