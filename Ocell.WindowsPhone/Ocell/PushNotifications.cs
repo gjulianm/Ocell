@@ -4,6 +4,7 @@ using Microsoft.Phone.Notification;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using System.Diagnostics;
+using System.IO;
 
 namespace Ocell
 {
@@ -40,7 +41,7 @@ namespace Ocell
 
             var response = request.BeginGetResponse((result) => 
             {
-            }, null);
+            }, request);
         }
 
         public static void UnregisterPushChannel()
@@ -65,7 +66,7 @@ namespace Ocell
 
             var response = request.BeginGetResponse((result) =>
             {
-            }, null);
+            }, request);
         }
     }
 }
