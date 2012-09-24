@@ -113,6 +113,7 @@
     <Compile Include="MainPageModel.cs" />
     <Compile Include="MessageServiceExtension.cs" />
     <Compile Include="MetroInMotion.cs" />
+    <Compile Include="Pages\Columns\AddColumnModel.cs" />
     <Compile Include="Pages\Elements\UserListModel.cs" />
     <Compile Include="Pages\Elements\TweetModel.cs" />
     <Compile Include="Pages\Elements\UserList.xaml.cs">
