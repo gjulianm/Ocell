@@ -29,20 +29,6 @@ namespace Ocell.Pages.Elements
             set { Assign("IsMuting", ref isMuting, value); }
         }
 
-        bool isLoading;
-        public bool IsLoading
-        {
-            get { return isLoading; }
-            set { Assign("IsLoading", ref isLoading, value); }
-        }
-
-        string barText;
-        public string BarText
-        {
-            get { return barText; }
-            set { Assign("BarText", ref barText, value); }
-        }
-
         TwitterStatus tweet;
         public TwitterStatus Tweet
         {

@@ -36,12 +36,6 @@ namespace Ocell.Pages
             set { Assign("Sender", ref sender, value); }
         }
 
-        bool isLoading;
-        public bool IsLoading
-        {
-            get { return isLoading; }
-            set { Assign("IsLoading", ref isLoading, value); }
-        }
 
         object destinatary;
         public object Destinatary

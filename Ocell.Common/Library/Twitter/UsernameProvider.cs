@@ -99,7 +99,6 @@ namespace Ocell.Library.Twitter
         }
 
         public UserToken User { get; set; }
-        private bool _stop;
 
         public static void FillUserNames(IEnumerable<UserToken> users)
         {
@@ -114,7 +113,6 @@ namespace Ocell.Library.Twitter
 
         public UsernameProvider()
         {
-            _stop = false;
         }
 
         public void Start()
@@ -143,11 +141,6 @@ namespace Ocell.Library.Twitter
             }
 
             
-        }
-
-        public void Stop()
-        {
-            _stop = true;
         }
 
         private static IEnumerable<string> GetUserCache(UserToken user)

@@ -907,6 +907,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a There&apos;s no selected account..
+        /// </summary>
+        public static string ErrorNoAccount {
+            get {
+                return ResourceManager.GetString("ErrorNoAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Error report.
         /// </summary>
         public static string ErrorReport {

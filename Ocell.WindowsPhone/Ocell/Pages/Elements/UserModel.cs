@@ -18,20 +18,6 @@ namespace Ocell.Pages.Elements
     {
         public TwitterUser User { get; set; } // Not a property, don't need Assign().
 
-        bool isLoading;
-        public bool IsLoading
-        {
-            get { return isLoading; }
-            set { Assign("IsLoading", ref isLoading, value); }
-        }
-
-        string barText;
-        public string BarText
-        {
-            get { return barText; }
-            set { Assign("BarText", ref barText, value); }
-        }
-
         bool followed;
         public bool Followed
         {

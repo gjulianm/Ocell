@@ -1,62 +1,30 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Data;
-using System.Windows.Input;
-using DanielVaughan.ComponentModel;
-using DanielVaughan.Windows;
-using TweetSharp;
-using Ocell.Library;
-using Ocell.Library.Twitter;
-using System.Collections.Generic;
-using System;
-using System.ComponentModel;
-using System.Threading;
-using DanielVaughan;
-using DanielVaughan.InversionOfControl;
-using DanielVaughan.Net;
-using DanielVaughan.Services;
-using System.Linq;
+﻿using System;
 using System.Collections;
-using Ocell.Localization;
-using System.Net;
-using Ocell.Library.Twitter;
-using Ocell.Library.Tasks;
-using Microsoft.Phone.Tasks;
-using Hammock;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using Microsoft.Phone.Tasks;
-using TweetSharp;
-using System.Xml;
-using System.Windows.Data;
-using System.Xml.Linq;
+using System.Collections.Generic;
 using System.Device.Location;
+using System.Linq;
+using System.Net;
+using System.Windows.Input;
+using System.Xml.Linq;
+using DanielVaughan.Windows;
+using Hammock;
+using Microsoft.Phone.Tasks;
+using Ocell.Library;
+using Ocell.Library.Tasks;
+using Ocell.Library.Twitter;
+using Ocell.Localization;
+using TweetSharp;
 
 namespace Ocell.Pages
 {
     public class NewTweetModel : ExtendedViewModelBase
     {
-        bool uploadingPhoto;
-
         #region Fields
         IEnumerable<UserToken> accountList;
         public IEnumerable<UserToken> AccountList
         {
             get { return accountList; }
             set { Assign("AccountList", ref accountList, value); }
-        }
-
-        bool isLoading;
-        public bool IsLoading
-        {
-            get { return isLoading; }
-            set { Assign("IsLoading", ref isLoading, value); }
-        }
-
-        string barText;
-        public string BarText
-        {
-            get { return barText; }
-            set { Assign("BarText", ref barText, value); }
         }
 
         bool isDM;

@@ -1110,4 +1110,7 @@
   <data name="PushEnabled" xml:space="preserve">
     <value>Push notifications</value>
   </data>
+  <data name="ErrorNoAccount" xml:space="preserve">
+    <value>There's no selected account.</value>
+  </data>
 </root>

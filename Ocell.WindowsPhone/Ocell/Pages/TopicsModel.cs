@@ -25,13 +25,6 @@ namespace Ocell.Pages
     {
         GeoCoordinateWatcher geoWatcher;
 
-        bool isLoading;
-        public bool IsLoading
-        {
-            get { return isLoading; }
-            set { Assign("IsLoading", ref isLoading, value); }
-        }
-
         string placeName;
         public string PlaceName
         {

@@ -76,13 +76,6 @@ namespace Ocell
 
         public bool HasLoggedIn { get { return Config.Accounts.Any(); } }
 
-        bool isLoading;
-        public bool IsLoading
-        {
-            get { return isLoading; }
-            set { Assign("IsLoading", ref isLoading, value); }
-        }
-
         int loadingCount;
         public int LoadingCount
         {

@@ -8,7 +8,6 @@ namespace Ocell.Library.Tasks
     public class TaskExecutor
     {
         public TwitterStatusTask Task { get; set; }
-        TwitterResponse _error = null;
         int PendingCalls;
 
         public TaskExecutor(TwitterStatusTask task)
