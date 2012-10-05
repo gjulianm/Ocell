@@ -73,11 +73,7 @@
                         <TextBlock x:Name="TweetsPerReqText" HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="{Binding Strings.TweetsPerRequest, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
 						<TextBox x:Name="tweetsPerReq" Margin="0,39,8,0" TextWrapping="Wrap" VerticalAlignment="Top" InputScope="Number" Text="{Binding TweetsPerRequest, Mode=TwoWay}"/>
                         <TextBlock x:Name="FontSizeBlock" HorizontalAlignment="Left" Margin="8,115,0,0" TextWrapping="Wrap" Text="{Binding Strings.FontSize, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
-						<toolkit:ListPicker x:Name="SizePicker" Margin="12,146,21,0" VerticalAlignment="Top" SelectedIndex="{Binding SelectedFontSize, Mode=TwoWay}" Grid.Row="0">
-							<toolkit:ListPickerItem Content="{Binding Strings.Small, Source={StaticResource LocalizedResources}}"/>
-							<toolkit:ListPickerItem Content="{Binding Strings.Medium, Source={StaticResource LocalizedResources}}"/>
-							<toolkit:ListPickerItem Content="{Binding Strings.Big, Source={StaticResource LocalizedResources}}" Margin="0,0,16,0"/>
-						</toolkit:ListPicker>
+						
                         <toolkit:ToggleSwitch x:Name="RetweetsInMentions" Header="{Binding Strings.ShowRetweetsAsMentions, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" IsChecked="{Binding RetweetsAsMentions, Mode=TwoWay}" Margin="0,222,0,-54"/>
 						<toolkit:ToggleSwitch x:Name="RecoverPositionSwitch" Header="{Binding Strings.ShowResumeButton, Source={StaticResource LocalizedResources}}" IsChecked="{Binding ShowResumePositionButton, Mode=TwoWay}" Margin="0,311,0,-33" VerticalAlignment="Top"/>
 						<TextBlock x:Name="TilesTitle" HorizontalAlignment="Left" Margin="8,10,0,0" TextWrapping="Wrap" Text="{Binding Strings.Tiles, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" Grid.Row="1"/>
@@ -88,6 +84,12 @@
 						<TextBlock x:Name="BackgroundTitle" HorizontalAlignment="Left" Margin="8,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" Text="{Binding Strings.Backgrounds_CapitalFirst, Source={StaticResource LocalizedResources}}" Grid.Row="2" />
 						<Button x:Name="SetBackgrounds" Content="{Binding Strings.SetCustomBackground, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,47,0,0" Width="344" Command="{Binding SetCustomBackground}" VerticalAlignment="Top" Grid.Row="2" d:LayoutOverrides="VerticalAlignment, GridBox" />
 						<toolkit:ToggleSwitch Header="{Binding Strings.Geotagging, Source={StaticResource LocalizedResources}}" Margin="0,393,0,-57" IsChecked="{Binding GeoTaggingEnabled, Mode=TwoWay}" VerticalAlignment="Top"/>
+						
+						<toolkit:ListPicker x:Name="SizePicker" Margin="12,146,21,0" VerticalAlignment="Top" SelectedIndex="{Binding SelectedFontSize, Mode=TwoWay}" Grid.Row="0">
+							<toolkit:ListPickerItem Content="{Binding Strings.Small, Source={StaticResource LocalizedResources}}"/>
+							<toolkit:ListPickerItem Content="{Binding Strings.Medium, Source={StaticResource LocalizedResources}}"/>
+							<toolkit:ListPickerItem Content="{Binding Strings.Big, Source={StaticResource LocalizedResources}}" Margin="0,0,16,0"/>
+						</toolkit:ListPicker>
 					</Grid>
 				</ScrollViewer>
 			</controls:PivotItem>
@@ -112,8 +114,6 @@
 			</controls:PivotItem>
             <controls:PivotItem x:Name="pFilters" Header="{Binding Strings.Filters, Source={StaticResource LocalizedResources}}">
 				<Grid>
-					<Button x:Name="filter_btn" Content="{Binding Strings.EditMutedTweets, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,8,0,0" Width="344" Command="{Binding EditFilters}" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="8,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="{Binding Strings.SilenceTime, Source={StaticResource LocalizedResources}}"/></TextBlock>
 					<toolkit:ListPicker x:Name="SilencePicker" Margin="8,130,8,0" VerticalAlignment="Top" SelectedIndex="{Binding SelectedMuteTime, Mode=TwoWay}">
 						<toolkit:ListPickerItem x:Name="hour" Content="{Binding Strings.OneHour, Source={StaticResource LocalizedResources}}" />
 						<toolkit:ListPickerItem x:Name="hours8" Content="{Binding Strings.EightHours, Source={StaticResource LocalizedResources}}" />
@@ -121,6 +121,10 @@
 						<toolkit:ListPickerItem x:Name="week" Content="{Binding Strings.OneWeek, Source={StaticResource LocalizedResources}}" />
 						<toolkit:ListPickerItem x:Name="forever" Content="{Binding Strings.Forever, Source={StaticResource LocalizedResources}}" />
 					</toolkit:ListPicker>
+					
+					<Button x:Name="filter_btn" Content="{Binding Strings.EditMutedTweets, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,8,0,0" Width="344" Command="{Binding EditFilters}" VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="8,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"><Run Text="{Binding Strings.SilenceTime, Source={StaticResource LocalizedResources}}"/></TextBlock>
+					
 				</Grid>
 			</controls:PivotItem>
 

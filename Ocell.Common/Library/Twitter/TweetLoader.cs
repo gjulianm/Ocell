@@ -20,7 +20,7 @@ namespace Ocell.Library.Twitter
         int loaded;
         const int TO_LOAD = 1;
         int requestsInProgress;
-        long LastId;
+        long lastId = 0;
 
         public SafeObservable<ITweetable> Source { get; protected set; }
 
@@ -106,7 +106,6 @@ namespace Ocell.Library.Twitter
         {
             loaded = 0;
             Source = new SafeObservable<ITweetable>();
-            LastId = 0;
             requestsInProgress = 0;
 
             if (_rateResetTime == null)
@@ -120,7 +119,7 @@ namespace Ocell.Library.Twitter
         void LoadDefaultSettings()
         {
             TweetsToLoadPerRequest = 40;
-            CacheSize = 40;
+            CacheSize = 10;
             Cached = true;
             ActivateLoadMoreButton = false;
             LoadRTsOnLists = true;
@@ -160,7 +159,7 @@ namespace Ocell.Library.Twitter
                 return;
 
             var toSave = viewport
-                .Concat(Source.OrderByDescending(x => x.Id).Take(CacheSize))
+                .Union(Source.OrderByDescending(x => x.Id).Take(CacheSize))
                 .OfType<TwitterStatus>()
                 .OrderByDescending(x => x.Id);
 
@@ -182,7 +181,7 @@ namespace Ocell.Library.Twitter
             {
                 try
                 {
-                    Cacher.SaveToCache(Resource, Source.OrderByDescending(item => item.Id).Cast<TwitterStatus>().Take(CacheSize));
+                    Cacher.SaveToCache(Resource, Source.OrderByDescending(item => item.Id).OfType<TwitterStatus>().Take(CacheSize));
                 }
                 catch (Exception)
                 {
@@ -244,7 +243,7 @@ namespace Ocell.Library.Twitter
             requestsInProgress++;
 
             if (Old)
-                LoadOld();
+                LoadOld(lastId);
             else
                 LoadNew();
         }
@@ -370,7 +369,15 @@ namespace Ocell.Library.Twitter
                 return;
             }
 
-            GenericReceive(statuses.Cast<ITweetable>(), response);
+            if (statuses.Any())
+                lastId = statuses.Min(x => x.Id);
+
+            if (Resource.Type == ResourceType.Messages && !string.IsNullOrWhiteSpace(Resource.Data))
+                GenericReceive(statuses.Where(x => x.SenderScreenName == Resource.Data || x.RecipientScreenName == Resource.Data)
+                    .Cast<ITweetable>(),
+                    response);
+            else
+                GenericReceive(statuses.Cast<ITweetable>(), response);
         }
 
         protected void ReceiveSearch(TwitterSearchResult result, TwitterResponse response)
@@ -420,6 +427,26 @@ namespace Ocell.Library.Twitter
             if (SourceChanging != null)
                 SourceChanging(this, new EventArgs());
 
+            if (list.Any())
+            {
+                if (list.FirstOrDefault() is TwitterDirectMessage 
+                    && (Resource.Type == ResourceType.Messages && string.IsNullOrWhiteSpace(Resource.Data)))
+                    LoadMessages(list.OfType<TwitterDirectMessage>());
+                else
+                    LoadTweetables(list);
+            }
+
+            if (LoadFinished != null && _resource.Type != ResourceType.Conversation)
+                LoadFinished(this, new EventArgs());
+            else if (PartialLoad != null && _resource.Type == ResourceType.Conversation)
+                PartialLoad(this, new EventArgs()); // When loading conversations, calls to this function will be partial.
+
+
+            SaveToCacheAsync();
+        }
+
+        private void LoadTweetables(IEnumerable<ITweetable> list)
+        {
             lock (_deferSync)
             {
                 if (_deferringRefresh && !_allowOneRefresh)
@@ -439,18 +466,21 @@ namespace Ocell.Library.Twitter
                         Source.Add(status);
                 }
             }
+        }
 
-            if (list.Any())
-                LastId = list.Min(item => item.Id);
+        private void LoadMessages(IEnumerable<TwitterDirectMessage> messages)
+        {
+            var groups = Source.OfType<GroupedDM>();
+            foreach (var msg in messages)
+            {
+                var pairId = msg.GetPairName(Resource.User);
+                var group = groups.FirstOrDefault(x => x.ConverserNames.First == pairId || x.ConverserNames.Second == pairId);
 
-
-            if (LoadFinished != null && _resource.Type != ResourceType.Conversation)
-                LoadFinished(this, new EventArgs());
-            else if (PartialLoad != null && _resource.Type == ResourceType.Conversation)
-                PartialLoad(this, new EventArgs()); // When loading conversations, calls to this function will be partial.
-
-
-            SaveToCacheAsync();
+                if (group != null && !group.Messages.Contains(msg))
+                    group.Messages.Add(msg);
+                else
+                    Source.Add(new GroupedDM(msg, Resource.User));
+            }
         }
         #endregion
 

@@ -114,6 +114,10 @@
     <Compile Include="MessageServiceExtension.cs" />
     <Compile Include="MetroInMotion.cs" />
     <Compile Include="Pages\Columns\AddColumnModel.cs" />
+    <Compile Include="Pages\Elements\DMConversationModel.cs" />
+    <Compile Include="Pages\Elements\DMConversation.xaml.cs">
+      <DependentUpon>DMConversation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Elements\UserListModel.cs" />
     <Compile Include="Pages\Elements\TweetModel.cs" />
     <Compile Include="Pages\Elements\UserList.xaml.cs">
@@ -236,6 +240,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Elements\Conversation.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Elements\DMConversation.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>

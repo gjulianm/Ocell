@@ -32,5 +32,6 @@ namespace Ocell
         public static Uri AddColumn = new Uri("/Pages/Columns/AddColumn.xaml", UriKind.Relative);
         public static Uri CreateList = new Uri("/Pages/Lists/CreateList.xaml", UriKind.Relative);
         public static Uri ManageDrafts = new Uri("/Pages/Drafts/ManageDrafts.xaml", UriKind.Relative);
+        public static Uri DMConversation = new Uri("/Pages/Elements/DMConversation.xaml", UriKind.Relative);
     }
 }

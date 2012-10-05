@@ -36,5 +36,6 @@ namespace Ocell.Library
         public static bool ShouldReloadColumns;
         public static bool ShouldReloadFilters = false;
         public static TwitterDraft Draft;
+        public static GroupedDM DMGroup;
     }
 }

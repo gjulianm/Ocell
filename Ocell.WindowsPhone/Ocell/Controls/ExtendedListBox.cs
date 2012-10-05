@@ -398,7 +398,11 @@ namespace Ocell.Controls
                     NavigationService.Navigate(Uris.ViewTweet);
                 else if (e.AddedItems[0] is TwitterDirectMessage)
                     NavigationService.Navigate(Uris.ViewDM);
-
+                else if (e.AddedItems[0] is GroupedDM)
+                {
+                    DataTransfer.DMGroup = e.AddedItems[0] as GroupedDM;
+                    NavigationService.Navigate(Uris.DMConversation);
+                }
                 else if (e.AddedItems[0] is TwitterSearchStatus)
                 {
                     DataTransfer.Status = StatusConverter.SearchToStatus(e.AddedItems[0] as TwitterSearchStatus);
