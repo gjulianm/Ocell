@@ -37,8 +37,9 @@
                 <Grid Margin="0,-14,0,0">
                     <Image HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="124" Height="124" x:Name="Avatar" Source="{Binding Avatar}"/>
                     <TextBlock x:Name="FullName" Margin="148,0,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="300" FontSize="32" Text="{Binding Name}"/>
+                    <TextBlock Height="36" Margin="148,108,8,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" FontFamily="Segoe WP Light" Text="{Binding RelationshipText}"/>
                     <TextBlock x:Name="ScreenName" Margin="148,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="21.333" FontFamily="Segoe WP SemiLight"><Run Text="@"/><Run Text="{Binding ScreenName}"/></TextBlock>
-                    <HyperlinkButton x:Name="Website" Visibility="{Binding WebsiteEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="148,101,0,0" VerticalAlignment="Top" FontFamily="Segoe WP Light" HorizontalAlignment="Left" Content="{Binding Website}" Command="{Binding NavigateTo}" CommandParameter="{Binding Website}"/>
+                    <HyperlinkButton x:Name="Website" Visibility="{Binding WebsiteEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="138,77,0,0" VerticalAlignment="Top" FontFamily="Segoe WP Light" HorizontalAlignment="Left" Content="{Binding Website}" Command="{Binding NavigateTo}" CommandParameter="{Binding Website}"/>
 
                     <TextBlock x:Name="Biography" Margin="8,148,8,259" TextWrapping="Wrap" FontSize="24" FontFamily="Segoe WP SemiLight" Text="{Binding Biography}" d:LayoutOverrides="VerticalAlignment"></TextBlock>
                     <StackPanel Margin="8,0,8,8" Orientation="Vertical" VerticalAlignment="Bottom">

@@ -18,11 +18,27 @@ namespace Ocell.Pages.Elements
     {
         public TwitterUser User { get; set; } // Not a property, don't need Assign().
 
+        bool friendshipRetrieved;
+
         bool followed;
         public bool Followed
         {
             get { return followed; }
             set { Assign("Followed", ref followed, value); }
+        }
+
+        bool followsMe;
+        public bool FollowsMe
+        {
+            get { return followsMe; }
+            set { Assign("FollowsMe", ref followsMe, value); }
+        }
+
+        string relationshipText;
+        public string RelationshipText
+        {
+            get { return relationshipText; }
+            set { Assign("RelationshipText", ref relationshipText, value); }
         }
 
         bool blocked;
@@ -230,6 +246,24 @@ namespace Ocell.Pages.Elements
 
             manageLists = new DelegateCommand((obj) => Navigate("/Pages/Lists/ListManager.xaml?user=" + User.ScreenName),
                 GenericCanExecute);
+
+            this.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == "FollowsMe")
+                    UpdateRelationshipText();
+                if (e.PropertyName == "ScreenName")
+                    UpdateRelationshipText();
+            };
+        }
+
+        private void UpdateRelationshipText()
+        {
+            if (!friendshipRetrieved)
+                RelationshipText = "";
+            else if (FollowsMe)
+                RelationshipText = String.Format(Resources.XFollowsY, ScreenName, DataTransfer.CurrentAccount.ScreenName);
+            else
+                RelationshipText = String.Format(Resources.XNotFollowsY, ScreenName, DataTransfer.CurrentAccount.ScreenName);
         }
 
         public void Loaded(string userName)
@@ -379,6 +413,7 @@ namespace Ocell.Pages.Elements
 
         void ReceiveFriendshipInfo(TwitterFriendship friendship, TwitterResponse response)
         {
+            friendshipRetrieved = true;
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 MessageService.ShowWarning(Resources.CouldntGetRelationship);
@@ -386,7 +421,8 @@ namespace Ocell.Pages.Elements
             }
 
             Followed = friendship.Relationship.Source.Following;
-
+            FollowsMe = friendship.Relationship.Source.FollowedBy;
+            UpdateRelationshipText();
             followUser.RaiseCanExecuteChanged();
             unfollowUser.RaiseCanExecuteChanged();
         }
