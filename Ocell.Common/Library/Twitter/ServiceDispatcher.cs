@@ -64,6 +64,16 @@ namespace Ocell.Library.Twitter
             return GetService(DataTransfer.CurrentAccount);
         }
 
+        public static Sharplonger.TwitlongerService GetTwitlongerService(UserToken user)
+        {
+            return GetTwitlongerService(user.ScreenName);
+        }
+
+        public static Sharplonger.TwitlongerService GetTwitlongerService(string user)
+        {
+            return new Sharplonger.TwitlongerService(SensitiveData.TwitlongerAppName, SensitiveData.TwitlongerApiKey, user);
+        }
+
         public static bool CanGetServices
         {
             get
