@@ -304,6 +304,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a As this message is more than 140 characters long, we will use Twitlonger to send it. Do you agree?.
+        /// </summary>
+        public static string AskTwitlonger {
+            get {
+                return ResourceManager.GetString("AskTwitlonger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Authenticating....
         /// </summary>
         public static string Authenticating {
@@ -813,6 +822,15 @@ namespace Ocell.Localization {
         public static string ErrorCreatingList {
             get {
                 return ResourceManager.GetString("ErrorCreatingList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a An error has happened while trying to create the Twitlonger post..
+        /// </summary>
+        public static string ErrorCreatingTwitlonger {
+            get {
+                return ResourceManager.GetString("ErrorCreatingTwitlonger", resourceCulture);
             }
         }
         
@@ -2275,6 +2293,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a sending to Twitlonger....
+        /// </summary>
+        public static string UploadingTwitlonger {
+            get {
+                return ResourceManager.GetString("UploadingTwitlonger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a User.
         /// </summary>
         public static string User {
@@ -2383,6 +2410,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a {0} follows you.
+        /// </summary>
+        public static string XFollowsY {
+            get {
+                return ResourceManager.GetString("XFollowsY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a {0} hours ago.
         /// </summary>
         public static string XHoursAgo {
@@ -2406,6 +2442,15 @@ namespace Ocell.Localization {
         public static string XMonthsAgo {
             get {
                 return ResourceManager.GetString("XMonthsAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} does not follow you.
+        /// </summary>
+        public static string XNotFollowsY {
+            get {
+                return ResourceManager.GetString("XNotFollowsY", resourceCulture);
             }
         }
         

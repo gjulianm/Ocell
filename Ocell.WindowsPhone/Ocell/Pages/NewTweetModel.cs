@@ -14,6 +14,8 @@ using Ocell.Library.Tasks;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
 using TweetSharp;
+using Sharplonger;
+using System.Windows.Media;
 
 namespace Ocell.Pages
 {
@@ -46,6 +48,20 @@ namespace Ocell.Pages
         {
             get { return remainingChars; }
             set { Assign("RemainingChars", ref remainingChars, value); }
+        }
+
+        string remainingCharsStr;
+        public string RemainingCharsStr
+        {
+            get { return remainingCharsStr; }
+            set { Assign("RemainingCharsStr", ref remainingCharsStr, value); }
+        }
+
+        Brush remainingCharsColor;
+        public Brush RemainingCharsColor
+        {
+            get { return remainingCharsColor; }
+            set { Assign("RemainingCharsColor", ref remainingCharsColor, value); }
         }
 
         bool usesTwitlonger;
@@ -132,6 +148,7 @@ namespace Ocell.Pages
         #endregion
 
         GeoCoordinateWatcher geoWatcher = new GeoCoordinateWatcher();
+        int requestsLeft;
 
         public NewTweetModel()
             : base("NewTweet")
@@ -161,6 +178,9 @@ namespace Ocell.Pages
                     case "IsGeotagged":
                         Config.TweetGeotagging = IsGeotagged;
                         break;
+                    case "RemainingChars":
+                        SetRemainingChars();
+                        break;
                 }
             };
 
@@ -177,6 +197,28 @@ namespace Ocell.Pages
                 geoWatcher.Start();
 
             SetupCommands();
+        }
+
+        Brush redBrush = new SolidColorBrush(Colors.Red);
+        void SetRemainingChars()
+        {
+            if (RemainingChars >= 0)
+            {
+                RemainingCharsStr = RemainingChars.ToString();
+                RemainingCharsColor = App.Current.Resources["PhoneSubtleBrush"] as Brush;
+            }
+            else if (RemainingChars >= -10)
+            {
+                RemainingCharsStr = RemainingChars.ToString();
+                UsesTwitlonger = true;
+                RemainingCharsColor = redBrush;
+            }
+            else
+            {
+                RemainingCharsStr = "Twitlonger";
+                UsesTwitlonger = true;
+                RemainingCharsColor = App.Current.Resources["PhoneSubtleBrush"] as Brush;
+            }
         }
 
         public void TryLoadDraft()
@@ -220,6 +262,8 @@ namespace Ocell.Pages
             if (!CheckProtectedAccounts())
                 return;
 
+            requestsLeft = 0;
+
             BarText = Resources.SendingTweet;
             IsLoading = true;
 
@@ -232,13 +276,36 @@ namespace Ocell.Pages
                 if (IsGeotagged)
                 {
                     var location = geoWatcher.Position.Location;
+
                     foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
-                        ServiceDispatcher.GetService(account).SendTweet(TweetText, DataTransfer.ReplyId, location.Latitude, location.Longitude, ReceiveResponse);
+                    {
+                        ServiceDispatcher.GetService(account).SendTweet(TweetText, DataTransfer.ReplyId,
+                            location.Latitude, location.Longitude, ReceiveResponse);
+                        requestsLeft++;
+                    }
+                }
+                else if (UsesTwitlonger)
+                {
+                    if (!EnsureTwitlonger())
+                    {
+                        IsLoading = false;
+                        return;
+                    }
+
+                    BarText = Resources.UploadingTwitlonger;
+                    foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
+                    {
+                        ServiceDispatcher.GetTwitlongerService(account).PostUpdate(TweetText, ReceiveTLResponse);
+                        requestsLeft++;
+                    }
                 }
                 else
                 {
                     foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
+                    {
                         ServiceDispatcher.GetService(account).SendTweet(TweetText, DataTransfer.ReplyId, ReceiveResponse);
+                        requestsLeft++;
+                    }
                 }
             }
 
@@ -252,19 +319,85 @@ namespace Ocell.Pages
             }
         }
 
+        bool EnsureTwitlonger()
+        {
+            return MessageService.AskOkCancelQuestion(Resources.AskTwitlonger);
+        }
+
+        object dicLock = new object();
+        Dictionary<string, string> TwitlongerIds = new Dictionary<string, string>();
+
+        void ReceiveTLResponse(TwitlongerPost post, TwitlongerResponse response)
+        {
+            if (response.StatusCode != HttpStatusCode.OK || post == null || post.Post == null || string.IsNullOrEmpty(post.Post.Content) || response.Sender == null)
+            {
+                IsLoading = false;
+                MessageService.ShowError(Resources.ErrorCreatingTwitlonger);
+                return;
+            }
+
+            BarText = Resources.SendingTweet;
+
+            string name = response.Sender.Username;
+
+            var account = Config.Accounts.FirstOrDefault(x => x.ScreenName == name);
+
+            if (account == null)
+            {
+                IsLoading = false;
+                MessageService.ShowError(Resources.ErrorCreatingTwitlonger);
+                return;
+            }
+
+            lock (dicLock)
+                TwitlongerIds.Add(name, post.Post.Id);
+
+            if (IsGeotagged)
+            {
+                var location = geoWatcher.Position.Location;
+                ServiceDispatcher.GetService(account).SendTweet(post.Post.Content, DataTransfer.ReplyId,
+                    location.Latitude, location.Longitude, ReceiveResponse);
+            }
+            else
+            {
+                ServiceDispatcher.GetService(account).SendTweet(post.Post.Content, DataTransfer.ReplyId, ReceiveResponse);
+            }
+        }
+
         void ReceiveResponse(TwitterStatus status, TwitterResponse response)
         {
-            IsLoading = false;
+            requestsLeft--;
+
+            if (requestsLeft <= 0)
+                IsLoading = false;
+
             if (response.StatusCode == HttpStatusCode.Forbidden)
                 MessageService.ShowError(Resources.ErrorDuplicateTweet);
             else if (response.StatusCode != HttpStatusCode.OK)
                 MessageService.ShowError(Resources.ErrorMessage);
-            else
+            else 
             {
-                TweetText = "";
-                DataTransfer.Text = "";
-                GoBack();
+                TryAssociateWithTLId(status.Author.ScreenName, status.Id);
+                if (requestsLeft <= 0)
+                {
+                    TweetText = "";
+                    DataTransfer.Text = "";
+                    GoBack();
+                }
             }
+        }
+
+        void TryAssociateWithTLId(string name, long tweetId)
+        {
+            if (!UsesTwitlonger)
+                return;
+
+            string id = null;
+            lock (dicLock)
+                TwitlongerIds.Where(x => x.Key == name).Select(x => x.Value).FirstOrDefault();
+
+            if (id != null)
+                ServiceDispatcher.GetTwitlongerService(name).SetId(id, tweetId, null);
         }
 
         void ReceiveDM(TwitterDirectMessage DM, TwitterResponse response)

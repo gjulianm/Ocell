@@ -1113,4 +1113,19 @@
   <data name="ErrorNoAccount" xml:space="preserve">
     <value>There's no selected account.</value>
   </data>
+  <data name="AskTwitlonger" xml:space="preserve">
+    <value>As this message is more than 140 characters long, we will use Twitlonger to send it. Do you agree?</value>
+  </data>
+  <data name="ErrorCreatingTwitlonger" xml:space="preserve">
+    <value>An error has happened while trying to create the Twitlonger post.</value>
+  </data>
+  <data name="UploadingTwitlonger" xml:space="preserve">
+    <value>sending to Twitlonger...</value>
+  </data>
+  <data name="XFollowsY" xml:space="preserve">
+    <value>{0} follows you</value>
+  </data>
+  <data name="XNotFollowsY" xml:space="preserve">
+    <value>{0} does not follow you</value>
+  </data>
 </root>
