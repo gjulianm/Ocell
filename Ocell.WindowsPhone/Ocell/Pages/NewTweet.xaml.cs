@@ -122,10 +122,10 @@ namespace Ocell.Pages
 
         private void UpdateOpacity(Image img)
         {
-            if (img.Opacity == 0.75)
+            if (img.Opacity == 0.55)
                 img.Opacity = 1;
             else
-                img.Opacity = 0.75;
+                img.Opacity = 0.55;
 
             img.UpdateLayout();
         }
@@ -149,6 +149,12 @@ namespace Ocell.Pages
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             viewModel.SelectedAccounts = (sender as ListBox).SelectedItems;
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            TweetBox.Focus();
+            base.OnNavigatedTo(e);
         }
     }
 }
