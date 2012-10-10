@@ -189,6 +189,10 @@
       <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
       <Name>Hammock.WindowsPhone</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.Common\Sharplonger\Sharplonger.csproj">
+      <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>
+      <Name>Sharplonger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Library.Essential\Library.CoreTypes.csproj">
       <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
       <Name>Library.CoreTypes</Name>

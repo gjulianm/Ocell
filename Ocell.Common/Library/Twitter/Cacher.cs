@@ -6,6 +6,8 @@ using System.Linq;
 using Ocell.Library.Twitter.Comparers;
 using System.Threading;
 using System.Diagnostics;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace Ocell.Library.Twitter
 {
@@ -31,68 +33,44 @@ namespace Ocell.Library.Twitter
         {
             IsolatedStorageSettings Config = IsolatedStorageSettings.ApplicationSettings;
             string fileName = GetCacheName(resource);
-            IEnumerable<string> strings;
+            var serializer = new JsonSerializer();
 
             try
             {
-                strings = list.Distinct().OfType<TwitterStatus>().Select(item => item.RawSource);
-                FileAbstractor.WriteBlocksToFile(strings, fileName);
+                using (var stream = new StringWriter())
+                {
+                    serializer.Serialize(stream, list.Distinct().OfType<TwitterStatus>());
+                    FileAbstractor.WriteContentsToFile(stream.ToString(), fileName);
+                }                
             }
-            catch (InvalidCastException)
+            catch (Exception)
             {
-                // Just stop adding strings when we encounter a non-TwitterStatus element.
-            }
-        }
-
-        public static void AppendToCache(TwitterResource Resource, IEnumerable<TwitterStatus> List)
-        {
-            IEnumerable<TwitterStatus> CurrentCache = GetFromCache(Resource);
-            TwitterStatusEqualityComparer Comparer = new TwitterStatusEqualityComparer();
-            CurrentCache = CurrentCache.Concat(List).OrderBy(item => item.Id).Distinct(Comparer);
-            SaveToCache(Resource, CurrentCache);
+            }            
         }
 
         public static IEnumerable<TwitterStatus> GetFromCache(TwitterResource Resource)
         {
-            var track = TimeTracker.StartTrack();
-            List<TwitterStatus> list = new List<TwitterStatus>();
-            IEnumerable<string> strings;
-
             string fileName = GetCacheName(Resource);
-            TwitterStatus item = default(TwitterStatus);
-            TwitterService DefaultService = new TwitterService();
-            Stopwatch watch = new Stopwatch();
+            var serializer = new JsonSerializer();
+            string contents = FileAbstractor.ReadContentsOfFile(fileName);
+            IEnumerable<TwitterStatus> statuses;
 
             try
             {
-                var t1 = TimeTracker.StartTrack();
-                strings = FileAbstractor.ReadBlocksOfFile(fileName);
-                TimeTracker.EndTrack(t1, "ReadBlocksOfFile");
+                using (var stream = new StringReader(contents))
+                {
+                    using (var reader = new JsonTextReader(stream))
+                    {
+                        statuses = serializer.Deserialize<IEnumerable<TwitterStatus>>(reader);
+                    }
+                }
             }
             catch (Exception)
             {
-                yield break;
+                return new List<TwitterStatus>();
             }
 
-            var t2 = TimeTracker.StartTrack();
-            foreach (string rawSource in strings)
-            {
-                bool deserializeSuccess = true;
-                try
-                {
-                    item = DefaultService.Deserialize<TwitterStatus>(rawSource);
-                }
-                catch (Exception)
-                {
-                    deserializeSuccess = false;
-                }
-
-                if (deserializeSuccess)
-                    yield return item;
-            }
-            TimeTracker.EndTrack(t2, "Deserialization");
-
-            TimeTracker.EndTrack(track, "GetCache");
+            return statuses ?? new List<TwitterStatus>();
         }
     }
 }
