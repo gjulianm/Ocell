@@ -1,0 +1,12 @@
+[submodule "Ocell.Common/Sharplonger"]
+	path = Ocell.Common/Sharplonger
+	url = git@github.com:gjulianm/Sharplonger.git
+[submodule "Ocell.Common/hammock"]
+	path = Ocell.Common/hammock
+	url = git@github.com:gjulianm/hammock.git
+[submodule "Ocell.Common/tweetsharp"]
+	path = Ocell.Common/tweetsharp
+	url = git@github.com:gjulianm/tweetsharp.git
+[submodule "Ocell.Common/BufferApp-csapi"]
+	path = Ocell.Common/BufferApp-csapi
+	url = git@github.com:gjulianm/BufferApp-csapi.git
