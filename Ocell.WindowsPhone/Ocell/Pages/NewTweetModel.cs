@@ -170,16 +170,13 @@ namespace Ocell.Pages
                         RaiseExecuteChanged();
                         break;
                     case "TweetText":
-                        RemainingChars = 140 - TweetText.Length;
+                        SetRemainingChars();
                         break;
                     case "UsesTwitlonger":
                         RaiseExecuteChanged();
                         break;
                     case "IsGeotagged":
                         Config.TweetGeotagging = IsGeotagged;
-                        break;
-                    case "RemainingChars":
-                        SetRemainingChars();
                         break;
                 }
             };
@@ -199,9 +196,18 @@ namespace Ocell.Pages
             SetupCommands();
         }
 
+        const int ShortUrlLength = 20;
         Brush redBrush = new SolidColorBrush(Colors.Red);
         void SetRemainingChars()
         {
+            var txtLen = TweetText == null ? 0 : TweetText.Length;
+ 
+            foreach (var url in GetUrls(TweetText))
+                if (url.Length > ShortUrlLength)
+                    txtLen -= url.Length - ShortUrlLength;
+
+            RemainingChars = txtLen;
+
             if (RemainingChars >= 0)
             {
                 RemainingCharsStr = RemainingChars.ToString();
@@ -553,6 +559,16 @@ namespace Ocell.Pages
             draft.ReplyId = DataTransfer.ReplyId;
 
             return draft;
+        }
+
+        IEnumerable<string> GetUrls(string text)
+        {
+            if (text == null)
+                yield break;
+
+            foreach (var word in text.Split(' '))
+                if (Uri.IsWellFormedUriString(word, UriKind.Absolute))
+                    yield return word;
         }
 
         bool CheckProtectedAccounts()
