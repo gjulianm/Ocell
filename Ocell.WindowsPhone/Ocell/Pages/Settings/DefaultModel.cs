@@ -190,6 +190,7 @@ namespace Ocell.Settings
                 Navigate("/Pages/Settings/Backgrounds.xaml");
             });
 
+             
             pinComposeToStart = new DelegateCommand((obj) =>
                 {
                     SecondaryTiles.CreateComposeTile();
