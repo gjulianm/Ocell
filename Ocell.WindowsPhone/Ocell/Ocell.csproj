@@ -134,6 +134,8 @@
     </Compile>
     <Compile Include="Pages\Settings\DefaultModel.cs" />
     <Compile Include="Pages\Settings\BackgroundsModel.cs" />
+    <Compile Include="Pages\Settings\OAuthModel.cs" />
+    <Compile Include="Pages\Settings\TwitterOAuthModel.cs" />
     <Compile Include="Pages\TopicsModel.cs" />
     <Compile Include="Notificator.cs" />
     <Compile Include="Pages\Columns\SelectAccount.xaml.cs">

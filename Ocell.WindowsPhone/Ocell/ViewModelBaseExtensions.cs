@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Net;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
 using DanielVaughan.ComponentModel;
 
 namespace Ocell
@@ -24,6 +18,11 @@ namespace Ocell
         {
             get { return barText; }
             set { Assign("BarText", ref barText, value);}
+        }
+
+        public ExtendedViewModelBase()
+            : base()
+        {
         }
 
         public ExtendedViewModelBase(string message)
