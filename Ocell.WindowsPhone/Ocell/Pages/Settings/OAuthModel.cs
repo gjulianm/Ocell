@@ -86,14 +86,20 @@ namespace Ocell.Pages.Settings
         /// Builds the credentials for getting the full tokens.
         /// </summary>
         /// <param name="parameters">Parameters from the authorization reponse.</param>
-        /// <returns>Credentials.</returns>
-        protected abstract IWebCredentials GetCredentials(NameValueCollection parameters);
+        /// <returns>Credentials. By default, it returns null.</returns>
+        protected virtual IWebCredentials GetCredentials(NameValueCollection parameters)
+        {
+            return null;
+        }
 
         /// <summary>
         /// Builds the credentials for getting the auth tokens. Should only be used on OAuth 1.
         /// </summary>
-        /// <returns>Credentials.</returns>
-        protected abstract IWebCredentials GetAuthorizationTokenCredentials();
+        /// <returns>Credentials. By default, it returns null</returns>
+        protected virtual IWebCredentials GetAuthorizationTokenCredentials()
+        {
+            return null;
+        }
 
         /// <summary>
         /// Creates the request for getting the full tokens.
@@ -104,9 +110,14 @@ namespace Ocell.Pages.Settings
 
         /// <summary>
         /// Creates the request for getting the auth tokens. Should only be used on OAuth 1.
+        /// As this function won't be used much, it's implemented with return null to avoid
+        /// having a bunch of useless functions implemented on OAuth 2 models.
         /// </summary>
         /// <returns>RestRequest</returns>
-        protected abstract RestRequest CreateAuthTokensRequest();
+        protected virtual RestRequest CreateAuthTokensRequest()
+        {
+            return null;
+        }
 
         /// <summary>
         /// This function is called when the used is authenticated and the OAuth flow is over.
@@ -116,9 +127,12 @@ namespace Ocell.Pages.Settings
         
         /// <summary>
         /// Pre process the auth tokens parameters. Should only be used on OAuth 1.
+        /// Implemented as an empty method to avoid cluttering on OAuth 2 models.
         /// </summary>
         /// <param name="collection">Collection of parameters.</param>
-        protected abstract void PreProcessTokenResponse(NameValueCollection collection);
+        protected virtual void PreProcessTokenResponse(NameValueCollection collection)
+        {
+        }
         #endregion
 
         #region Tools

@@ -29,6 +29,7 @@ namespace Ocell.Pages.Settings
         {
             callbackUrl = "http://www.google.es";
             APIAuthority = "https://api.twitter.com";
+            Version = OAuthVersion.OAuthV1;
         }
 
         protected override IWebCredentials  GetAuthorizationTokenCredentials()
