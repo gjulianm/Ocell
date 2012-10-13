@@ -29,6 +29,7 @@ namespace Ocell.Pages.Settings
         {
             callbackUrl = "http://www.google.es";
             APIAuthority = "https://api.twitter.com";
+            AuthAutority = "https://api.twitter.com";
             Version = OAuthVersion.OAuthV1;
         }
 
@@ -104,8 +105,10 @@ namespace Ocell.Pages.Settings
             return request;
         }
 
-        protected override void PostProcess(NameValueCollection parameters)
+        protected override void PostProcess(string contents)
         {
+            var parameters = System.Web.HttpUtility.ParseQueryString(contents);
+
             if (!parameters.AllKeys.Contains("oauth_token") || !parameters.AllKeys.Contains("oauth_token_secret"))
             {
                 MessageService.ShowError(Localization.Resources.ErrorClientTokens);

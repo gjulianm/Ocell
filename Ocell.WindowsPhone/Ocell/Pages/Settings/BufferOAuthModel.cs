@@ -3,6 +3,8 @@ using Hammock.Silverlight.Compat;
 using Ocell.Library;
 using Hammock;
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Ocell.Pages.Settings
 {
@@ -12,6 +14,7 @@ namespace Ocell.Pages.Settings
         {
             APIAuthority = "https://api.bufferapp.com";
             callbackUrl = "http://ocell.nuncaalaprimera.com";
+            AuthAutority = "https://bufferapp.com";
             Version = OAuthVersion.OAuthV2;
         }
 
@@ -43,10 +46,16 @@ namespace Ocell.Pages.Settings
             return request;
         }
 
-        protected override void PostProcess(NameValueCollection parameters)
+        protected override void PostProcess(string contents)
         {
-            if (!parameters.AllKeys.Contains("access_token"))
-                return;
+            var response = JObject.Parse(contents);
+
+            if (response["access_token"] != null)
+            {
+                string accessToken = response["access_token"].ToString();
+
+                // Do nasty things with accessToken here.
+            }
         }
     }
 }

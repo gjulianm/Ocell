@@ -196,7 +196,10 @@ namespace Ocell.Settings
                     pinComposeToStart.RaiseCanExecuteChanged();
                 }, (obj) => !SecondaryTiles.ComposeTileIsCreated());
 
-            addAccount = new DelegateCommand((obj) => Navigate(Uris.LoginPage));
+            addAccount = new DelegateCommand((obj) => {
+                OAuth.Type = AuthType.Twitter;
+                Navigate(Uris.LoginPage);
+            });
 
             editFilters = new DelegateCommand((obj) =>
                 {

@@ -34,6 +34,9 @@ namespace Ocell.Settings
                 case AuthType.Twitter:
                     viewModel = new TwitterOAuthModel();
                     break;
+                case AuthType.Buffer:
+                    viewModel = new BufferOAuthModel();
+                    break;
                 default:
                     throw new NotImplementedException(string.Format("Type {0} unknown", Type));
             }
@@ -41,7 +44,9 @@ namespace Ocell.Settings
             wb.Navigated += (sender, e) => viewModel.BrowserNavigated(e);
             wb.Navigating += (sender, e) => viewModel.BrowserNavigating(e);
             this.Loaded += (sender, e) => viewModel.PageLoaded();
-            viewModel.Navigate += (sender, e) => Dispatcher.InvokeIfRequired(() => wb.Navigate(e));
+            viewModel.BrowserNavigate += (sender, e) => Dispatcher.InvokeIfRequired(() => wb.Navigate(e));
+
+            DataContext = viewModel;
         }               
     }
 }

@@ -24,6 +24,7 @@ namespace Ocell.Pages.Settings
     {
         protected string callbackUrl = "";
         protected string APIAuthority = "";
+        protected string AuthAutority = "";
 
         protected OAuthVersion Version = OAuthVersion.OAuthV1;
 
@@ -35,17 +36,17 @@ namespace Ocell.Pages.Settings
             set { Assign("BrowserVisible", ref browserVisible, value); }
         }
 
-        public event Navigator Navigate;
+        public event Navigator BrowserNavigate;
         public void RaiseNavigate(Uri uri)
         {
-            if (Navigate != null)
-                Navigate(this, uri);
+            if (BrowserNavigate != null)
+                BrowserNavigate(this, uri);
         }
 
         public virtual void BrowserNavigating(NavigatingEventArgs e)
         {
-            if (e != null && e.Uri != null && !string.IsNullOrEmpty(e.Uri.Host) 
-                && e.Uri.Host.Contains(callbackUrl))
+            if (e != null && e.Uri != null && !string.IsNullOrEmpty(e.Uri.Host)
+                && e.Uri.AbsoluteUri.StartsWith(callbackUrl))
             {
                 e.Cancel = true;
                 BrowserVisible = false;
@@ -55,7 +56,7 @@ namespace Ocell.Pages.Settings
 
         public virtual void BrowserNavigated(NavigationEventArgs e)
         {
-            if (e.Uri.Host.Contains(APIAuthority))
+            if (e.Uri.AbsoluteUri.StartsWith(AuthAutority))
                 BrowserVisible = true;
         }
 
@@ -123,7 +124,7 @@ namespace Ocell.Pages.Settings
         /// This function is called when the used is authenticated and the OAuth flow is over.
         /// </summary>
         /// <param name="parameters">Collection of parameters from the tokens callback.</param>
-        protected abstract void PostProcess(NameValueCollection parameters);
+        protected abstract void PostProcess(string contents);
         
         /// <summary>
         /// Pre process the auth tokens parameters. Should only be used on OAuth 1.
@@ -244,9 +245,7 @@ namespace Ocell.Pages.Settings
 
             try
             {
-                var collection = System.Web.HttpUtility.ParseQueryString(response.Content);
-
-                PostProcess(collection);
+                PostProcess(response.Content);
             }
             catch (Exception)
             {

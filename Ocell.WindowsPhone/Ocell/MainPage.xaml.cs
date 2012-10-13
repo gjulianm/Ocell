@@ -14,6 +14,7 @@ using Ocell.Library.Twitter;
 using Ocell.Localization;
 using System.Windows.Media.Animation;
 using System.Windows.Media;
+using Ocell.Settings;
 
 namespace Ocell
 {
@@ -134,7 +135,10 @@ namespace Ocell
                 var service = Dependency.Resolve<IMessageService>();
                 bool result = service.AskYesNoQuestion(Localization.Resources.YouHaveToLogin, "");
                 if (result)
+                {
+                    OAuth.Type = AuthType.Twitter;
                     NavigationService.Navigate(Uris.LoginPage);
+                }
                 return false;
             }
             else
