@@ -16,6 +16,7 @@ using Ocell.Localization;
 using TweetSharp;
 using Sharplonger;
 using System.Windows.Media;
+using BufferAPI;
 
 namespace Ocell.Pages
 {
@@ -145,6 +146,12 @@ namespace Ocell.Pages
         {
             get { return selectImage; }
         }
+
+        DelegateCommand sendBuffer;
+        public ICommand SendBuffer
+        {
+            get { return sendBuffer; }
+        }
         #endregion
 
         GeoCoordinateWatcher geoWatcher = new GeoCoordinateWatcher();
@@ -201,7 +208,7 @@ namespace Ocell.Pages
         void SetRemainingChars()
         {
             var txtLen = TweetText == null ? 0 : TweetText.Length;
- 
+
             foreach (var url in GetUrls(TweetText))
                 if (url.Length > ShortUrlLength)
                     txtLen -= url.Length - ShortUrlLength;
@@ -253,6 +260,7 @@ namespace Ocell.Pages
             scheduleTweet = new DelegateCommand(Schedule, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !IsLoading);
             selectImage = new DelegateCommand(StartImageChooser, (param) => SelectedAccounts.Count > 0 && !IsLoading);
             saveDraft = new DelegateCommand(SaveAsDraft, (param) => !IsLoading);
+            sendBuffer = new DelegateCommand(SendBufferUpdate, (param) => !IsLoading && SelectedAccounts.Count > 0 && Config.BufferProfiles.Count > 0);
         }
 
         void RaiseExecuteChanged()
@@ -261,6 +269,27 @@ namespace Ocell.Pages
             scheduleTweet.RaiseCanExecuteChanged();
             selectImage.RaiseCanExecuteChanged();
             saveDraft.RaiseCanExecuteChanged();
+        }
+
+        void SendBufferUpdate(object param)
+        {
+            List<string> profiles = new List<string>();
+            
+            foreach (var account in SelectedAccounts.Cast<UserToken>())
+            {
+                var profile = Config.BufferProfiles.Where(x => x.ServiceUsername == account.ScreenName).FirstOrDefault();
+
+                if (profile != null)
+                    profiles.Add(profile.Id);
+            }
+
+            var service = ServiceDispatcher.GetBufferService();
+
+            if (service != null)
+            {
+                IsLoading = true;
+                service.PostUpdate(TweetText, profiles, ReceiveBufferResponse);
+            }
         }
 
         void Send(object param)
@@ -323,6 +352,20 @@ namespace Ocell.Pages
                 DataTransfer.Draft = null;
                 Config.SaveDrafts();
             }
+        }
+
+        public void ReceiveBufferResponse(BufferUpdateCreation updates, BufferResponse response)
+        {
+            IsLoading = false;
+            if (response.StatusCode != HttpStatusCode.OK || updates == null || !updates.Success)
+            {
+                MessageService.ShowError(Resources.ErrorCreatingBuffer);
+                return;
+            }
+
+            TweetText = "";
+            DataTransfer.Text = "";
+            GoBack();
         }
 
         bool EnsureTwitlonger()
@@ -388,7 +431,7 @@ namespace Ocell.Pages
                 MessageService.ShowError(Resources.ErrorDuplicateTweet);
             else if (response.StatusCode != HttpStatusCode.OK)
                 MessageService.ShowError(Resources.ErrorMessage);
-            else 
+            else
             {
                 TryAssociateWithTLId(status.Author.ScreenName, status.Id);
                 if (requestsLeft <= 0)

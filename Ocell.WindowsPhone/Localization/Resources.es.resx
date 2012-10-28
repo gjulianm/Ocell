@@ -1128,4 +1128,13 @@
   <data name="XNotFollowsY" xml:space="preserve">
     <value>{0} no te sigue</value>
   </data>
+  <data name="ErrorBufferProfiles" xml:space="preserve">
+    <value>Error recuperando los perfiles de Buffer.</value>
+  </data>
+  <data name="ErrorCreatingBuffer" xml:space="preserve">
+    <value>Error creando actualización en Buffer.</value>
+  </data>
+  <data name="NoBufferProfilesAdded" xml:space="preserve">
+    <value>Ningún perfil de Buffer concuerda con las cuentas de Twitter que tienes en Ocell.</value>
+  </data>
 </root>

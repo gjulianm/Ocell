@@ -1128,4 +1128,13 @@
   <data name="XNotFollowsY" xml:space="preserve">
     <value>{0} does not follow you</value>
   </data>
+  <data name="ErrorBufferProfiles" xml:space="preserve">
+    <value>Error retrieving Buffer profiles.</value>
+  </data>
+  <data name="ErrorCreatingBuffer" xml:space="preserve">
+    <value>Error creating Buffer update.</value>
+  </data>
+  <data name="NoBufferProfilesAdded" xml:space="preserve">
+    <value>You don't have a Buffer profile for any of the Twitter accounts configured with Ocell.</value>
+  </data>
 </root>

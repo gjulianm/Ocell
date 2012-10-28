@@ -5,6 +5,8 @@ using Hammock;
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using BufferAPI;
+using System.Collections.Generic;
 
 namespace Ocell.Pages.Settings
 {
@@ -54,7 +56,40 @@ namespace Ocell.Pages.Settings
             {
                 string accessToken = response["access_token"].ToString();
 
-                // Do nasty things with accessToken here.
+                Config.BufferAccessToken = accessToken;
+
+                var service = new BufferService(accessToken);
+                service.GetProfiles(ReceiveProfiles);
+            }
+            else
+            {
+                MessageService.ShowError(Localization.Resources.ErrorBufferProfiles);
+            }
+        }
+
+        void ReceiveProfiles(IEnumerable<BufferProfile> profiles, BufferResponse response)
+        {
+
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                MessageService.ShowError(Localization.Resources.ErrorBufferProfiles);
+                return;
+            }
+
+            bool added = false;
+
+            foreach (var profile in profiles)
+            {
+                if (Config.Accounts.Any(x => x.ScreenName == profile.ServiceUsername))
+                {
+                    added = true;
+                    Config.BufferProfiles.Add(profile);
+                }
+            }
+
+            if (!added)
+            {
+                MessageService.ShowWarning(Localization.Resources.NoBufferProfilesAdded);
             }
         }
     }

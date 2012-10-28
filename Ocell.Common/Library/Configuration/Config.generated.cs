@@ -5,6 +5,7 @@ using Hammock;
 using Hammock.Web;
 using Ocell.Library.Twitter;
 using Ocell.Library.Tasks;
+using BufferAPI;
 
 #if !BACKGROUND_AGENT
 using Ocell.Library.Filtering;
@@ -315,6 +316,37 @@ namespace Ocell.Library
 				GenericSaveToConfig<bool?>("GEOTAG_TWEETS", ref _TweetGeotagging, value);
 			}
 		}
+
+		private static List<BufferProfile> _BufferProfiles;
+		public static List<BufferProfile> BufferProfiles
+		{
+			get 
+			{
+				return GenericGetFromConfig<List<BufferProfile>>("BUFFER_PROFILES", ref _BufferProfiles);
+			}
+			set
+			{
+				GenericSaveToConfig<List<BufferProfile>>("BUFFER_PROFILES", ref _BufferProfiles, value);
+			}
+		}
+
+		public static void SaveBufferProfiles()
+		{
+			BufferProfiles = _BufferProfiles;
+		}
+
+		private static string _BufferAccessToken;
+		public static string BufferAccessToken
+		{
+			get 
+			{
+				return GenericGetFromConfig<string>("BUFFER_ACCESS_TOKEN", ref _BufferAccessToken);
+			}
+			set
+			{
+				GenericSaveToConfig<string>("BUFFER_ACCESS_TOKEN", ref _BufferAccessToken, value);
+			}
+		}
 	#endif
 	#endregion
 
@@ -342,6 +374,8 @@ namespace Ocell.Library
 			_RecoverReadPositions = null;
 			_EnabledGeolocation = null;
 			_TweetGeotagging = null;
+			_BufferProfiles = null;
+			_BufferAccessToken = null;
 #endif
 		}
 

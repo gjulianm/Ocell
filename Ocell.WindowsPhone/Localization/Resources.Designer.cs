@@ -808,11 +808,29 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Error retrieving Buffer profiles..
+        /// </summary>
+        public static string ErrorBufferProfiles {
+            get {
+                return ResourceManager.GetString("ErrorBufferProfiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a An error happened while trying to get client tokens. Try again, and please contact @OcellApp if this happens frequently..
         /// </summary>
         public static string ErrorClientTokens {
             get {
                 return ResourceManager.GetString("ErrorClientTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Error creating Buffer update..
+        /// </summary>
+        public static string ErrorCreatingBuffer {
+            get {
+                return ResourceManager.GetString("ErrorCreatingBuffer", resourceCulture);
             }
         }
         
@@ -1461,6 +1479,15 @@ namespace Ocell.Localization {
         public static string Next {
             get {
                 return ResourceManager.GetString("Next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You don&apos;t have a Buffer profile for any of the Twitter accounts configured with Ocell..
+        /// </summary>
+        public static string NoBufferProfilesAdded {
+            get {
+                return ResourceManager.GetString("NoBufferProfilesAdded", resourceCulture);
             }
         }
         

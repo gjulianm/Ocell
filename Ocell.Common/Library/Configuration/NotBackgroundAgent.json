@@ -14,3 +14,5 @@
  bool?, RECOVERREAD, RecoverReadPositions, true
  bool?, GEOLOC_ENABLED, EnabledGeolocation
  bool?, GEOTAG_TWEETS, TweetGeotagging, true
+ List<BufferProfile>, BUFFER_PROFILES, BufferProfiles
+ string, BUFFER_ACCESS_TOKEN, BufferAccessToken

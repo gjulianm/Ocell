@@ -508,6 +508,10 @@
     <Folder Include="Images\Icons_Black\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Ocell.Common\BufferApp-csapi\BufferApp-csapi.csproj">
+      <Project>{DA0A3ABD-AE02-4254-95A0-418B57BC02F6}</Project>
+      <Name>BufferApp-csapi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Ocell.Common\hammock\src\net40\Hammock.WindowsPhone\Hammock.WindowsPhone.csproj">
       <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
       <Name>Hammock.WindowsPhone</Name>

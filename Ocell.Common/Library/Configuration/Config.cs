@@ -17,21 +17,20 @@ namespace Ocell.Library
         private static Mutex _mutex = new Mutex(false, "Ocell.IsolatedStorageSettings_MUTEX");
         private const int MutexTimeout = 1000;
 
-        private static T GenericGetFromConfig<T>(string key, ref T element) where T : new()
+        private static T GenericGetFromConfig<T>(string key, ref T element) 
         {
             if (element != null)
                 return element;
 
             if (_mutex.WaitOne(MutexTimeout))
             {
-
                 IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
 
                 try
                 {
                     if (!config.TryGetValue<T>(key, out element))
                     {
-                        element = new T();
+                        element = default(T);
 
                         if (DefaultValues.ContainsKey(key))
                             element = (T)DefaultValues[key];
@@ -42,7 +41,7 @@ namespace Ocell.Library
                 }
                 catch (InvalidCastException)
                 {
-                    element = new T();
+                    element = default(T);
                     config.Remove(key);
                     config.Save();
                 }
@@ -56,12 +55,12 @@ namespace Ocell.Library
             }
 
             if (element == null)
-                element = new T();
+                element = default(T);
 
             return element;
         }
 
-        private static void GenericSaveToConfig<T>(string Key, ref T element, T value) where T : new()
+        private static void GenericSaveToConfig<T>(string Key, ref T element, T value) 
         {
             if (value == null)
                 return;
