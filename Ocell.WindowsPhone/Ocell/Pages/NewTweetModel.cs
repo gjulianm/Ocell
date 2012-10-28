@@ -355,8 +355,15 @@ namespace Ocell.Pages
                 return;
             }
 
-            lock (dicLock)
-                TwitlongerIds.Add(name, post.Post.Id);
+            try
+            {
+                lock (dicLock)
+                    TwitlongerIds.Add(name, post.Post.Id);
+            }
+            catch
+            {
+                // TODO: Sometimes, this gives a weird OutOfRange exception. Don't know why, investigate it.
+            }
 
             if (IsGeotagged)
             {
@@ -400,7 +407,7 @@ namespace Ocell.Pages
 
             string id = null;
             lock (dicLock)
-                TwitlongerIds.Where(x => x.Key == name).Select(x => x.Value).FirstOrDefault();
+                TwitlongerIds.TryGetValue(name, out id);
 
             if (id != null)
                 ServiceDispatcher.GetTwitlongerService(name).SetId(id, tweetId, null);
