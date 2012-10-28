@@ -258,5 +258,10 @@ namespace Ocell.Library
             WriteContentsToFile(contents, fileName);
         }
 
+        public static Stream GetFileStream(string fileName)
+        {
+            var storage = IsolatedStorageFile.GetUserStoreForApplication();
+            return storage.OpenFile(fileName, System.IO.FileMode.OpenOrCreate);
+        }
     }
 }

@@ -8,11 +8,18 @@ using System.Threading;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using System.IO;
+using Polenter.Serialization;
+using System.Text;
 
 namespace Ocell.Library.Twitter
 {
     public static class Cacher
     {
+        static SharpSerializerBinarySettings SerializerSettings = new SharpSerializerBinarySettings
+        {
+            Mode = BinarySerializationMode.SizeOptimized
+        };
+
         private static string RemoveSymbols(string str)
         {
             string copy = "";
@@ -30,46 +37,62 @@ namespace Ocell.Library.Twitter
         }
 
         public static void SaveToCache(TwitterResource resource, IEnumerable<TwitterStatus> list)
-        {
-            IsolatedStorageSettings Config = IsolatedStorageSettings.ApplicationSettings;
+        { 
             string fileName = GetCacheName(resource);
-            var serializer = new JsonSerializer();
+            
 
-            try
+            var serializer = new SharpSerializer(SerializerSettings);
+            Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName);
+
+            if (mutex.WaitOne(1000))
             {
-                using (var stream = new StringWriter())
+                try
                 {
-                    serializer.Serialize(stream, list.Distinct().OfType<TwitterStatus>());
-                    FileAbstractor.WriteContentsToFile(stream.ToString(), fileName);
-                }                
-            }
-            catch (Exception)
-            {
-            }            
-        }
-
-        public static IEnumerable<TwitterStatus> GetFromCache(TwitterResource Resource)
-        {
-            string fileName = GetCacheName(Resource);
-            var serializer = new JsonSerializer();
-            string contents = FileAbstractor.ReadContentsOfFile(fileName);
-            IEnumerable<TwitterStatus> statuses;
-
-            try
-            {
-                using (var stream = new StringReader(contents))
-                {
-                    using (var reader = new JsonTextReader(stream))
+                    using (var stream = FileAbstractor.GetFileStream(fileName))
                     {
-                        statuses = serializer.Deserialize<IEnumerable<TwitterStatus>>(reader);
+                        serializer.Serialize(list.Distinct().OfType<TwitterStatus>().ToList(), stream);
                     }
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+                finally
+                {
+                    mutex.ReleaseMutex();
+                }
             }
-            catch (Exception)
+            
+            mutex.Dispose();
+        }
+
+        public static IEnumerable<TwitterStatus> GetFromCache(TwitterResource resource)
+        {
+            string fileName = GetCacheName(resource);
+            var serializer = new SharpSerializer(SerializerSettings);
+            Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName);
+            IEnumerable<TwitterStatus> statuses = null;
+
+            if (mutex.WaitOne(1000))
             {
-                return new List<TwitterStatus>();
+                try
+                {
+                    using (var stream = FileAbstractor.GetFileStream(fileName))
+                    {
+                        statuses = serializer.Deserialize(stream) as IEnumerable<TwitterStatus>;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+                finally
+                {
+                    mutex.ReleaseMutex();
+                }
             }
 
+            mutex.Dispose();
             return statuses ?? new List<TwitterStatus>();
         }
     }

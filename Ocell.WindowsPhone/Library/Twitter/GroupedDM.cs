@@ -21,13 +21,6 @@ namespace Ocell.Library.Twitter
     {
         long lastId;
         UserToken user;
-        public GroupedDM(UserToken mainUser)
-        {
-            user = mainUser;
-            Messages = new SafeObservable<TwitterDirectMessage>();
-            lastId = -1;
-            Messages.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(MessagesChanged);
-        }
 
         void MessagesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -62,6 +55,14 @@ namespace Ocell.Library.Twitter
                         OnPropertyChanged("Author.ProfileImageUrl");
                     });
             }
+        }
+
+        public GroupedDM(UserToken mainUser)
+        {
+            user = mainUser;
+            Messages = new SafeObservable<TwitterDirectMessage>();
+            lastId = -1;
+            Messages.CollectionChanged += MessagesChanged;
         }
 
         public GroupedDM(IEnumerable<TwitterDirectMessage> list, UserToken mainUser)

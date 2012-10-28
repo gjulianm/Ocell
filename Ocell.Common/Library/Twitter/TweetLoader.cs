@@ -119,7 +119,7 @@ namespace Ocell.Library.Twitter
         void LoadDefaultSettings()
         {
             TweetsToLoadPerRequest = 40;
-            CacheSize = 10;
+            CacheSize = 30;
             Cached = true;
             ActivateLoadMoreButton = false;
             LoadRTsOnLists = true;
@@ -198,12 +198,12 @@ namespace Ocell.Library.Twitter
             var t = TimeTracker.StartTrack();
 
             var t1 = TimeTracker.StartTrack();
-            IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource).OrderByDescending(item => item.Id).ToList();
-            TimeTracker.EndTrack(t1, "GetFromCache && Order");
+            IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource);
+            TimeTracker.EndTrack(t1, "GetFromCache");
 
             var t2 = TimeTracker.StartTrack();
-            var toAdd = AddLoadMoreButtons(cacheList.Cast<ITweetable>()).Except(Source);
-            TimeTracker.EndTrack(t2, "AddLoadMore && except");
+            var toAdd = AddLoadMoreButtons(cacheList.OrderByDescending(x => x.Id).Cast<ITweetable>()).Except(Source);
+            TimeTracker.EndTrack(t2, "AddLoadMore, order && except");
 
             var t3 = TimeTracker.StartTrack();
             int added = 0;
@@ -488,15 +488,17 @@ namespace Ocell.Library.Twitter
         IEnumerable<ITweetable> AddLoadMoreButtons(IEnumerable<ITweetable> cache)
         {
             var list = cache.ToList();
-
+            int avgTime = DecisionMaker.GetAvgTimeBetweenTweets(Source);
             double sumTime = 0;
 
             for (int i = 1; i < list.Count; i++)
             {
                 double diff = Math.Abs((list[i].CreatedDate - list[i - 1].CreatedDate).TotalSeconds);
+                sumTime += diff;
 
                 if (sumTime != 0 && i > 1
-                    && diff > 10 * (sumTime / (i - 1)))
+                    && diff > 10 * (sumTime / (i - 1)) && diff > 5*avgTime
+                    && diff > 200)
                     yield return new LoadMoreTweetable { Id = list[i].Id + 1 };
 
                 yield return list[i];
@@ -527,7 +529,7 @@ namespace Ocell.Library.Twitter
             int avgTime = DecisionMaker.GetAvgTimeBetweenTweets(Source);
             TimeSpan diff = olderTweetReceived.CreatedDate - nextTweet.CreatedDate;
 
-            if (diff.TotalSeconds > 4 * avgTime)
+            if (diff.TotalSeconds > 4 * avgTime && !(nextTweet is LoadMoreTweetable))
             {
                 Source.Add(new LoadMoreTweetable { Id = olderTweetReceived.Id - 1 });
             }

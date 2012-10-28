@@ -10,3 +10,6 @@
 [submodule "Ocell.Common/BufferApp-csapi"]
 	path = Ocell.Common/BufferApp-csapi
 	url = git@github.com:gjulianm/BufferApp-csapi.git
+[submodule "Ocell.Common/SharpSerializer"]
+	path = Ocell.Common/SharpSerializer
+	url = git@github.com:gjulianm/SharpSerializer.git

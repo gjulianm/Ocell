@@ -71,9 +71,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Ocell\Assemblies\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Polenter.SharpSerializer.Silverlight">
-      <HintPath>..\packages\SharpSerializer.2.18\lib\sl4-windowsphone71\Polenter.SharpSerializer.Silverlight.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
@@ -192,6 +189,10 @@
     <ProjectReference Include="..\..\Ocell.Common\Sharplonger\Sharplonger.csproj">
       <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>
       <Name>Sharplonger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.Common\SharpSerializer\SharpSerializer.Library.Silverlight\SharpSerializer.Library.Silverlight.csproj">
+      <Project>{4096DECB-F198-492A-AFC2-51671C802277}</Project>
+      <Name>SharpSerializer.Library.Silverlight</Name>
     </ProjectReference>
     <ProjectReference Include="..\Library.Essential\Library.CoreTypes.csproj">
       <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
