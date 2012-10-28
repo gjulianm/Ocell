@@ -18,7 +18,7 @@
     <phone:PhoneApplicationPage.Resources>
     	<DataTemplate x:Key="HZAccountsList">
     		<Grid>
-    			<Image Source="{Binding AvatarUrl}" Width="64" Height="64" Tap="Image_Tap" Opacity="0.75" Tag="{Binding}" Loaded="Image_Loaded"/>
+    			<Image Source="{Binding AvatarUrl}" Width="64" Height="64" Tap="Image_Tap" Opacity="0.55" Tag="{Binding}" Loaded="Image_Loaded"/>
     		</Grid>
     	</DataTemplate>
     	<Style x:Key="ListBoxStyle1" TargetType="ListBox">

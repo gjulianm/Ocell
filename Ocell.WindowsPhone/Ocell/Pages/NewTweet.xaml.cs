@@ -122,7 +122,7 @@ namespace Ocell.Pages
 
         private void UpdateOpacity(Image img)
         {
-            if (img.Opacity == 0.55)
+            if (img.Opacity < 0.60) // FUCK FLOAT.
                 img.Opacity = 1;
             else
                 img.Opacity = 0.55;
@@ -137,7 +137,8 @@ namespace Ocell.Pages
                 return;
 
             UserToken usr = img.Tag as UserToken;
-            if (usr == DataTransfer.CurrentAccount || (DataTransfer.Draft != null && DataTransfer.Draft.Accounts.Contains(usr)))
+            if (usr == DataTransfer.CurrentAccount 
+                || (DataTransfer.Draft != null && DataTransfer.Draft.Accounts.Contains(usr)))
                 UpdateOpacity(img);
         }
 
