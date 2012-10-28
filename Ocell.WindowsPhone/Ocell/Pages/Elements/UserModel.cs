@@ -19,6 +19,11 @@ namespace Ocell.Pages.Elements
         public TwitterUser User { get; set; } // Not a property, don't need Assign().
 
         bool friendshipRetrieved;
+        public bool FriendshipRetrieved
+        {
+            get { return friendshipRetrieved; }
+            set { Assign("FriendshipRetrieved", ref friendshipRetrieved, value); }
+        }
 
         bool followed;
         public bool Followed
@@ -182,19 +187,20 @@ namespace Ocell.Pages.Elements
         public UserModel()
             : base("User")
         {
+            User = null;
             GenericCanExecute = (obj) => User != null && DataTransfer.CurrentAccount != null;
-
+ 
             followUser = new DelegateCommand((obj) =>
             {
                 IsLoading = true;
                 ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FollowUser(User.Id, ReceiveFollow);
-            }, GenericCanExecute);
+            }, x => FriendshipRetrieved && GenericCanExecute.Invoke(null));
 
             unfollowUser = new DelegateCommand((obj) =>
             {
                 IsLoading = true;
                 ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfollowUser(User.Id, ReceiveFollow);
-            }, GenericCanExecute);
+            }, x => FriendshipRetrieved && GenericCanExecute.Invoke(null));
 
             pinUser = new DelegateCommand((obj) =>
                 {
@@ -258,7 +264,7 @@ namespace Ocell.Pages.Elements
 
         private void UpdateRelationshipText()
         {
-            if (!friendshipRetrieved)
+            if (!FriendshipRetrieved)
                 RelationshipText = "";
             else if (FollowsMe)
                 RelationshipText = String.Format(Resources.XFollowsY, ScreenName, DataTransfer.CurrentAccount.ScreenName);
@@ -413,7 +419,7 @@ namespace Ocell.Pages.Elements
 
         void ReceiveFriendshipInfo(TwitterFriendship friendship, TwitterResponse response)
         {
-            friendshipRetrieved = true;
+            FriendshipRetrieved = true;
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 MessageService.ShowWarning(Resources.CouldntGetRelationship);
