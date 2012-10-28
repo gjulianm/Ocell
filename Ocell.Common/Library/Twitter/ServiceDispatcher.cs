@@ -36,10 +36,18 @@ namespace Ocell.Library.Twitter
                 var tempSrv = new TwitterService();
                 tempSrv.AuthenticateWith(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, account.Key, account.Secret);
                 srv = tempSrv;
-            }            
+            }
 
-            lock(_lockFlag)
-                _services.Add(account.Key, srv);
+            try
+            {
+                lock (_lockFlag)
+                    _services.Add(account.Key, srv);
+            }
+            catch
+            {
+                // Again, this sometimes gives some weird exceptions. Investigate!
+            }
+            
             return srv;
         }
 
