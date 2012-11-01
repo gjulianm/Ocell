@@ -147,10 +147,10 @@ namespace Ocell.Pages
             get { return selectImage; }
         }
 
-        DelegateCommand sendBuffer;
-        public ICommand SendBuffer
+        DelegateCommand sendWithBuffer;
+        public ICommand SendWithBuffer
         {
-            get { return sendBuffer; }
+            get { return sendWithBuffer; }
         }
         #endregion
 
@@ -260,7 +260,7 @@ namespace Ocell.Pages
             scheduleTweet = new DelegateCommand(Schedule, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !IsLoading);
             selectImage = new DelegateCommand(StartImageChooser, (param) => SelectedAccounts.Count > 0 && !IsLoading);
             saveDraft = new DelegateCommand(SaveAsDraft, (param) => !IsLoading);
-            sendBuffer = new DelegateCommand(SendBufferUpdate, (param) => !IsLoading && SelectedAccounts.Count > 0 && Config.BufferProfiles.Count > 0);
+            sendWithBuffer = new DelegateCommand(SendBufferUpdate, (param) => !IsLoading && SelectedAccounts.Count > 0);
         }
 
         void RaiseExecuteChanged()
@@ -269,10 +269,28 @@ namespace Ocell.Pages
             scheduleTweet.RaiseCanExecuteChanged();
             selectImage.RaiseCanExecuteChanged();
             saveDraft.RaiseCanExecuteChanged();
+            sendWithBuffer.RaiseCanExecuteChanged();
+        }
+
+        void AskBufferLogin()
+        {
+            var result = MessageService.AskYesNoQuestion(Resources.NoBufferConfigured);
+
+            if (result)
+            {
+                Ocell.Settings.OAuth.Type = Ocell.Settings.AuthType.Buffer;
+                Navigate(Uris.LoginPage);
+            }
         }
 
         void SendBufferUpdate(object param)
         {
+            if (Config.BufferProfiles.Count == 0)
+            {
+                AskBufferLogin();
+                return;
+            }
+
             List<string> profiles = new List<string>();
             
             foreach (var account in SelectedAccounts.Cast<UserToken>())
@@ -365,6 +383,7 @@ namespace Ocell.Pages
 
             TweetText = "";
             DataTransfer.Text = "";
+            MessageService.ShowMessage(Resources.BufferUpdateSent);
             GoBack();
         }
 

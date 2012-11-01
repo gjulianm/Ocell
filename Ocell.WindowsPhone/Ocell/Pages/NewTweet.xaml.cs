@@ -88,7 +88,8 @@ namespace Ocell.Pages
                 }
                 else
                 {
-                    ListAccounts.SelectedItems.Add(DataTransfer.CurrentAccount);
+                    if(!ListAccounts.SelectedItems.Contains(DataTransfer.CurrentAccount))
+                        ListAccounts.SelectedItems.Add(DataTransfer.CurrentAccount);
                 }
             }
 

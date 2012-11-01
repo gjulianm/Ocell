@@ -5,10 +5,10 @@ using Hammock;
 using Hammock.Web;
 using Ocell.Library.Twitter;
 using Ocell.Library.Tasks;
-using BufferAPI;
 
 #if !BACKGROUND_AGENT
 using Ocell.Library.Filtering;
+using BufferAPI;
 #endif
 
 

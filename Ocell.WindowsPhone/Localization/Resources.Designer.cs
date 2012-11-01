@@ -376,6 +376,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Tweet sent to Buffer!.
+        /// </summary>
+        public static string BufferUpdateSent {
+            get {
+                return ResourceManager.GetString("BufferUpdateSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Go.
         /// </summary>
         public static string ButtonGo {
@@ -1479,6 +1488,15 @@ namespace Ocell.Localization {
         public static string Next {
             get {
                 return ResourceManager.GetString("Next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Seems that you haven&apos;t configured any Buffer account. Do you want to do it now?.
+        /// </summary>
+        public static string NoBufferConfigured {
+            get {
+                return ResourceManager.GetString("NoBufferConfigured", resourceCulture);
             }
         }
         

@@ -1137,4 +1137,10 @@
   <data name="NoBufferProfilesAdded" xml:space="preserve">
     <value>You don't have a Buffer profile for any of the Twitter accounts configured with Ocell.</value>
   </data>
+  <data name="BufferUpdateSent" xml:space="preserve">
+    <value>Tweet sent to Buffer!</value>
+  </data>
+  <data name="NoBufferConfigured" xml:space="preserve">
+    <value>Seems that you haven't configured any Buffer account. Do you want to do it now?</value>
+  </data>
 </root>

@@ -69,16 +69,16 @@ namespace Ocell.Pages.Settings
 
         void ReceiveProfiles(IEnumerable<BufferProfile> profiles, BufferResponse response)
         {
-
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK || profiles == null)
             {
                 MessageService.ShowError(Localization.Resources.ErrorBufferProfiles);
+                GoBack();
                 return;
             }
 
             bool added = false;
 
-            foreach (var profile in profiles)
+            foreach (var profile in profiles.Where(x => x.Service.ToLowerInvariant() == "twitter"))
             {
                 if (Config.Accounts.Any(x => x.ScreenName == profile.ServiceUsername))
                 {
@@ -87,10 +87,14 @@ namespace Ocell.Pages.Settings
                 }
             }
 
+            Config.SaveBufferProfiles();
+
             if (!added)
             {
                 MessageService.ShowWarning(Localization.Resources.NoBufferProfilesAdded);
             }
+
+            GoBack();
         }
     }
 }

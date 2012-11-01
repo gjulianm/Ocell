@@ -12,12 +12,30 @@ using Ocell.Library.Filtering;
 
 namespace Ocell.Library
 {
+    public static class TypeExtensions
+    {
+        public static bool HasParameterlessConstructor(this Type type)
+        {
+            return type.GetConstructor(Type.EmptyTypes) != null;
+        }
+    }
+
     public static partial class Config
     {
         private static Mutex _mutex = new Mutex(false, "Ocell.IsolatedStorageSettings_MUTEX");
         private const int MutexTimeout = 1000;
 
-        private static T GenericGetFromConfig<T>(string key, ref T element) 
+        private static T CreateDefault<T>()
+        {
+            var type = typeof(T);
+
+            if (type.HasParameterlessConstructor())
+                return Activator.CreateInstance<T>();
+            else
+                return default(T);
+        }
+
+        private static T GenericGetFromConfig<T>(string key, ref T element)
         {
             if (element != null)
                 return element;
@@ -30,7 +48,7 @@ namespace Ocell.Library
                 {
                     if (!config.TryGetValue<T>(key, out element))
                     {
-                        element = default(T);
+                        element = CreateDefault<T>();
 
                         if (DefaultValues.ContainsKey(key))
                             element = (T)DefaultValues[key];
@@ -41,7 +59,7 @@ namespace Ocell.Library
                 }
                 catch (InvalidCastException)
                 {
-                    element = default(T);
+                    element = CreateDefault<T>();
                     config.Remove(key);
                     config.Save();
                 }
@@ -55,12 +73,12 @@ namespace Ocell.Library
             }
 
             if (element == null)
-                element = default(T);
+                element = CreateDefault<T>();
 
             return element;
         }
 
-        private static void GenericSaveToConfig<T>(string Key, ref T element, T value) 
+        private static void GenericSaveToConfig<T>(string Key, ref T element, T value)
         {
             if (value == null)
                 return;

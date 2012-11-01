@@ -213,9 +213,6 @@ namespace Ocell
                         });
                     }
                 };
-
-                // Performance trick. In the first load, the first column will be loaded as fast as possible.
-                // Then, when the three first columns are loaded, just load cache inmediately for following columns.
                 
                 list.Loader.LoadCacheAsync();
 
