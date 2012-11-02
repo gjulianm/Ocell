@@ -40,6 +40,17 @@ namespace Ocell
 
             LastErrorTime = DateTime.MinValue;
             LastReloadTime = DateTime.MinValue;
+
+            GestureService.GetGestureListener(RecoverDialog).Flick += new EventHandler<FlickGestureEventArgs>(RecoverDiagFlick);
+        }
+
+        void RecoverDiagFlick(object sender, FlickGestureEventArgs e)
+        {
+            if (e.Direction == System.Windows.Controls.Orientation.Horizontal && e.HorizontalVelocity > 0)
+            {
+                HideResumePositionPrompt(false);
+                e.Handled = true;
+            }
         }
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
@@ -213,7 +224,7 @@ namespace Ocell
                         });
                     }
                 };
-                
+
                 list.Loader.LoadCacheAsync();
 
                 list.AutoReload();
