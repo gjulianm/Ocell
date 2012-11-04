@@ -17,6 +17,7 @@ using TweetSharp;
 using Sharplonger;
 using System.Windows.Media;
 using BufferAPI;
+using System.Windows.Controls;
 
 namespace Ocell.Pages
 {
@@ -120,6 +121,31 @@ namespace Ocell.Pages
             get { return geotagEnabled; }
             set { Assign("GeotagEnabled", ref geotagEnabled, value); }
         }
+
+        bool isSuggestingUsers;
+        public bool IsSuggestingUsers
+        {
+            get { return isSuggestingUsers; }
+            set { Assign("IsSuggestingUsers", ref isSuggestingUsers, value); }
+        }
+
+        public SafeObservable<string> Suggestions
+        {
+            get
+            {
+                if (Completer != null)
+                    return Completer.Suggestions;
+                else
+                    return new SafeObservable<string>();
+            }
+        }
+
+        Autocompleter completer;
+        public Autocompleter Completer
+        {
+            get { return completer; }
+            set { Assign("Completer", ref completer, value); }
+        }
         #endregion
 
         #region Commands
@@ -185,6 +211,9 @@ namespace Ocell.Pages
                     case "IsGeotagged":
                         Config.TweetGeotagging = IsGeotagged;
                         break;
+                    case "Completer":
+                        UpdateAutocompleter();
+                        break;
                 }
             };
 
@@ -202,6 +231,8 @@ namespace Ocell.Pages
 
             SetupCommands();
         }
+
+        
 
         const int ShortUrlLength = 20;
         Brush redBrush = new SolidColorBrush(Colors.Red);
@@ -654,5 +685,20 @@ namespace Ocell.Pages
 
             return true;
         }
+
+        #region User suggestions
+        void UpdateAutocompleter()
+        {
+            OnPropertyChanged("Suggestions");
+            if (Completer != null)
+            {
+                Completer.PropertyChanged += (sender, e) =>
+                {
+                    if (e.PropertyName == "IsAutocompleting")
+                        IsSuggestingUsers = Completer.IsAutocompleting;
+                };
+            }
+        }
+        #endregion
     }
 }

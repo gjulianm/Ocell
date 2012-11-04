@@ -4,18 +4,29 @@ using System.Linq;
 using System.Windows.Controls;
 using Ocell.Library;
 using Ocell.Library.Twitter;
+using DanielVaughan.ComponentModel;
+using System.Windows;
+using DanielVaughan;
 
 namespace Ocell.Library
 {
-    public class Autocompleter
+    public class Autocompleter : ObservableObject
     {
         private UsernameProvider _provider = new UsernameProvider();
         private TextBox _textbox;
         private string _text;
-        private bool _isAutocompleting = false;
+        
+        bool isAutocompleting;
+        public bool IsAutocompleting
+        {
+            get { return isAutocompleting; }
+            set { Assign("IsAutocompleting", ref isAutocompleting, value); }
+        }
         private int _triggerPosition;
         public UserToken User { get { return _provider.User; } set { _provider.User = value; } }
         public char Trigger { get; set; }
+        public SafeObservable<string> Suggestions { get; protected set; }
+        string written;
         public TextBox Textbox
         {
             get
@@ -29,6 +40,12 @@ namespace Ocell.Library
             }
         }
 
+        public Autocompleter()
+        {
+            Suggestions = new SafeObservable<string>();
+            IsAutocompleting = false;
+        }
+
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
             if (_textbox == null)
@@ -36,7 +53,7 @@ namespace Ocell.Library
 
             if (_textbox.Text.Length > 0 && _textbox.SelectionStart > 0 && _textbox.SelectionStart <= _textbox.Text.Length && (Trigger != '\0' && _textbox.Text[_textbox.SelectionStart - 1] == Trigger))
             {
-                _isAutocompleting = true;
+                IsAutocompleting = true;
                 _triggerPosition = _textbox.SelectionStart - 1;
             }
 
@@ -44,9 +61,9 @@ namespace Ocell.Library
                 _textbox.SelectionStart < _textbox.Text.Length &&
                 _textbox.Text[_textbox.SelectionStart - 1] == ' ' && _text != null && 
                 _textbox.SelectionStart < _text.Length && _text[_textbox.SelectionStart] != '@' )
-                _isAutocompleting = false;
+                IsAutocompleting = false;
 
-            if (_isAutocompleting)
+            if (IsAutocompleting)
                 UpdateAutocomplete();
         }
 
@@ -73,22 +90,23 @@ namespace Ocell.Library
 
             _text = _textbox.Text;
 
-            RemovePreviousAutocompleted();
-
             if (ShouldStopAutocompleting())
             {
-                UpdateTextbox();
-                _isAutocompleting = false;
+                IsAutocompleting = false;
                 return;
             }
 
-            string written = GetTextWrittenByUser();
-            string firstUser = GetFirstUserCoincidentWith(written);
+            written = GetTextWrittenByUser();
 
-            if (firstUser != null)
-                AutocompleteText(firstUser.Substring(written.Length));
+            Suggestions.Clear();
 
-            UpdateTextbox();
+            foreach (var user in _provider.Usernames
+                .Where(x => x.IndexOf(written, StringComparison.InvariantCultureIgnoreCase) != -1)
+                .Take(20)
+                .OrderBy(x => x))
+            {
+                Suggestions.Add(user);
+            }
         }
 
         private void RemovePreviousAutocompleted()
@@ -136,6 +154,25 @@ namespace Ocell.Library
             int oldSelStart = _textbox.SelectionStart;
             _textbox.Text = _text;
             _textbox.SelectionStart = oldSelStart;
+        }
+
+        public void UserChoseElement(string name)
+        {
+            IsAutocompleting = false;
+            written = "";
+
+            // Remove the user text written until now.
+            var nextSpace = _text.IndexOf(' ', _triggerPosition);
+
+
+            var newText = _text.Substring(0, _triggerPosition + 1) + name;
+            
+            if(nextSpace != -1)
+                newText += _text.Substring(nextSpace);
+
+            _text = newText;
+
+            Deployment.Current.Dispatcher.InvokeIfRequired(() => _textbox.Text = _text);
         }
     }
 }

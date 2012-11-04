@@ -172,8 +172,14 @@
     </Compile>
     <Compile Include="PushNotifications.cs" />
     <Compile Include="SampleCollections.cs" />
+    <Compile Include="SampleData\SampleNames\SampleNames.xaml.cs">
+      <DependentUpon>SampleNames.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SampleData\SampleTweetDataSource\SampleTweetDataSource.xaml.cs">
       <DependentUpon>SampleTweetDataSource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SampleData\UsernameSampleDataSource\UsernameSampleDataSource.xaml.cs">
+      <DependentUpon>UsernameSampleDataSource.xaml</DependentUpon>
     </Compile>
     <Compile Include="SchedulerSync.cs" />
     <Compile Include="ThemeFunctions.cs" />
@@ -322,7 +328,15 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <DesignTimeOnly Include="SampleData\SampleNames\SampleNames.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </DesignTimeOnly>
     <Page Include="SampleData\SampleTweetDataSource\SampleTweetDataSource.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SampleData\UsernameSampleDataSource\UsernameSampleDataSource.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -334,6 +348,8 @@
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />
     <DesignTimeOnly Include="SampleData\SampleTweetDataSource\SampleTweetDataSource.xsd" />
+    <DesignTimeOnly Include="SampleData\UsernameSampleDataSource\UsernameSampleDataSource.xsd" />
+    <DesignTimeOnly Include="SampleData\SampleNames\SampleNames.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\Backgrounds\Diamond.png">

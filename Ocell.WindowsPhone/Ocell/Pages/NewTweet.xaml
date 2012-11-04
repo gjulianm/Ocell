@@ -12,7 +12,7 @@
     xmlns:Ocell_Transitions="clr-namespace:Ocell.Transitions"
     x:Class="Ocell.Pages.NewTweet"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
+    mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
     >
     <phone:PhoneApplicationPage.Resources>
@@ -52,6 +52,19 @@
     		<DoubleAnimation Storyboard.TargetName="GeolocImg" Storyboard.TargetProperty="Opacity"
     			To="0.5" Duration="0:0:0.5" />
     	</Storyboard>
+    	<DataTemplate x:Key="SuggestionTemplate">
+    		<Grid/>
+    	</DataTemplate>
+    	<DataTemplate x:Key="ItemTemplate">
+    		<StackPanel>
+    			<TextBlock Text="{Binding}" Height="33" VerticalAlignment="Top" Width="124" FontFamily="Segoe WP Light" Margin="8,8,2,0" HorizontalAlignment="Left"/>
+    		</StackPanel>
+    	</DataTemplate>
+    	<DataTemplate x:Key="ItemTemplate1">
+    		<StackPanel>
+    			<TextBlock Text="{Binding}" Margin="8,9,4,0" FontSize="24" FontFamily="Segoe WP SemiLight"/>
+    		</StackPanel>
+    	</DataTemplate>
     </phone:PhoneApplicationPage.Resources>
 
     <phone:PhoneApplicationPage.FontFamily>
@@ -90,7 +103,7 @@
     </shell:SystemTray.ProgressIndicator>
 
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
-    <Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
+    <Grid x:Name="LayoutRoot" Margin="0,-32,0,0" d:DataContext="{Binding Source={StaticResource SampleNames}}">
         <Grid.RowDefinitions>
         	<RowDefinition Height="Auto"/>
         	<RowDefinition Height="*"/>
@@ -110,9 +123,10 @@
             <ScrollViewer d:LayoutOverrides="Width, Height" HorizontalScrollBarVisibility="Disabled">
                 <Grid>
                     <Image x:Name="GeolocImg" HorizontalAlignment="Left" Visibility="{Binding GeotagEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" Height="48" Source="/Images/Icons_White/appbar.map.position.rest.png" Stretch="Fill" Width="48" VerticalAlignment="Top" d:LayoutOverrides="Height" Margin="0,-4,0,0"/>
+                    <ListBox x:Name="UserSuggestions" ItemsSource="{Binding Suggestions}" SelectionMode="Multiple" Visibility="{Binding IsSuggestingUsers, ConverterParameter=Visible, Converter={StaticResource BooleanToVisibilityConverter}}" SelectionChanged="UserSuggestions_SelectionChanged" Margin="12,171,12,0" ItemTemplate="{StaticResource ItemTemplate1}" ItemsPanel="{StaticResource PanelTemplate}" Height="54" VerticalAlignment="Top" Background="{StaticResource PhoneChromeBrush}" Canvas.ZIndex="1" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
 					<TextBox Text="{Binding TweetText, Mode=TwoWay}" x:Name="TweetBox" TextWrapping="Wrap" VerticalAlignment="Top" Height="205" InputScope="Text" Margin="0,31,0,0" d:LayoutOverrides="VerticalAlignment"/>
                     <TextBlock Margin="0,4,9,0" TextWrapping="Wrap" Text="{Binding RemainingCharsStr}" VerticalAlignment="Top" Foreground="{Binding RemainingCharsColor}" HorizontalAlignment="Right" FontFamily="Segoe WP Light"/>
-                    <ListBox x:Name="ListAccounts" ItemsSource="{Binding AccountList}" SelectionMode="Multiple" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="12,272,12,252" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}" SelectionChanged="ListBox_SelectionChanged"/>
+                    <ListBox x:Name="ListAccounts" ItemsSource="{Binding AccountList}" SelectionMode="Multiple" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="12,272,12,252" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}" SelectionChanged="ListBox_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
                     <TextBlock Text="{Binding Strings.Accounts, Source={StaticResource LocalizedResources}, StringFormat=\{0\}:}" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Left" Margin="12,236,0,0" TextWrapping="Wrap"  Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top"/>
                     <CheckBox IsChecked="{Binding IsScheduled, Mode=TwoWay}" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" Content="{Binding Strings.ScheduledQuestion, Source={StaticResource LocalizedResources}}" Margin="8,357,216,0" VerticalAlignment="Top" />
                     <Grid Margin="8,433,20,0" Height="131" VerticalAlignment="Top" Visibility="{Binding IsScheduled, Converter={StaticResource BooleanToVisibilityConverter}}">

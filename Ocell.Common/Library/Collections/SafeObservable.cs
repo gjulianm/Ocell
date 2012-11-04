@@ -72,6 +72,7 @@ namespace Ocell.Library
             if (copy != null)
             {
 #if WINDOWS_PHONE
+
                 if (!dispatcher.CheckAccess())
                     dispatcher.BeginInvoke(() => RaiseCollectionRemove(item, index));
                 else

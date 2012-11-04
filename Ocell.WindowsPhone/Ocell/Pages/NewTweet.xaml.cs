@@ -55,9 +55,10 @@ namespace Ocell.Pages
         private void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
+            
             // Update the binding source
             BindingExpression bindingExpr = textBox.GetBindingExpression(TextBox.TextProperty);
-            bindingExpr.UpdateSource();
+            bindingExpr.UpdateSource();            
         }
 
         void NewTweet_Unloaded(object sender, RoutedEventArgs e)
@@ -98,6 +99,7 @@ namespace Ocell.Pages
             _completer.User = DataTransfer.CurrentAccount;
             _completer.Textbox = TweetBox;
             _completer.Trigger = '@';
+            viewModel.Completer = _completer;
 
             // Update the UI.
             if (viewModel.IsGeotagged)
@@ -157,6 +159,18 @@ namespace Ocell.Pages
         {
             TweetBox.Focus();
             base.OnNavigatedTo(e);
+        }
+
+        private void UserSuggestions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selected = UserSuggestions.SelectedItem as string;
+
+            if (string.IsNullOrWhiteSpace(selected))
+                return;
+
+            _completer.UserChoseElement(selected);
+
+            UserSuggestions.SelectedItem = null;
         }
     }
 }
