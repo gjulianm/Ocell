@@ -172,15 +172,6 @@
     </Compile>
     <Compile Include="PushNotifications.cs" />
     <Compile Include="SampleCollections.cs" />
-    <Compile Include="SampleData\SampleNames\SampleNames.xaml.cs">
-      <DependentUpon>SampleNames.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SampleData\SampleTweetDataSource\SampleTweetDataSource.xaml.cs">
-      <DependentUpon>SampleTweetDataSource.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SampleData\UsernameSampleDataSource\UsernameSampleDataSource.xaml.cs">
-      <DependentUpon>UsernameSampleDataSource.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SchedulerSync.cs" />
     <Compile Include="ThemeFunctions.cs" />
     <Compile Include="Tiles\SecondaryTiles.cs" />
@@ -328,18 +319,6 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <DesignTimeOnly Include="SampleData\SampleNames\SampleNames.xaml">
-      <Generator>MSBuild:MarkupCompilePass1</Generator>
-      <SubType>Designer</SubType>
-    </DesignTimeOnly>
-    <Page Include="SampleData\SampleTweetDataSource\SampleTweetDataSource.xaml">
-      <Generator>MSBuild:MarkupCompilePass1</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SampleData\UsernameSampleDataSource\UsernameSampleDataSource.xaml">
-      <Generator>MSBuild:MarkupCompilePass1</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <None Include="Ocell_2012_03_18_19_41_51.sap" />
@@ -347,9 +326,6 @@
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />
-    <DesignTimeOnly Include="SampleData\SampleTweetDataSource\SampleTweetDataSource.xsd" />
-    <DesignTimeOnly Include="SampleData\UsernameSampleDataSource\UsernameSampleDataSource.xsd" />
-    <DesignTimeOnly Include="SampleData\SampleNames\SampleNames.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\Backgrounds\Diamond.png">
@@ -563,11 +539,6 @@
       <Project>{38C14A5B-4940-4567-BA45-81FD8E5784DE}</Project>
       <Name>Ocell.BackgroundAgent</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <DesignData Include="SampleData\TwitterResourceCollectionSampleData.xaml">
-      <Generator>MSBuild:MarkupCompilePass1</Generator>
-    </DesignData>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />

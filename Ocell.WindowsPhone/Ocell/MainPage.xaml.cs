@@ -25,7 +25,6 @@ namespace Ocell
         private bool _initialised;
         private MainPageModel viewModel;
 
-        // Constructora
         public MainPage()
         {
             _initialised = false;
@@ -41,16 +40,14 @@ namespace Ocell
             LastErrorTime = DateTime.MinValue;
             LastReloadTime = DateTime.MinValue;
 
-            GestureService.GetGestureListener(RecoverDialog).Flick += new EventHandler<FlickGestureEventArgs>(RecoverDiagFlick);
+            SetupRecoverDialogGestures();
         }
 
-        void RecoverDiagFlick(object sender, FlickGestureEventArgs e)
+        #region Page events
+        protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
         {
-            if (e.Direction == System.Windows.Controls.Orientation.Horizontal && e.HorizontalVelocity > 0)
-            {
-                HideResumePositionPrompt(false);
-                e.Handled = true;
-            }
+            DataTransfer.IsGlobalFilter = false;
+            base.OnNavigatedFrom(e);
         }
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
@@ -59,13 +56,6 @@ namespace Ocell
             NavigationContext.QueryString.TryGetValue("column", out column);
             viewModel.RaiseNavigatedTo(this, e, column);
             base.OnNavigatedTo(e);
-        }
-
-        bool AskForPushPermission()
-        {
-            var result = Dependency.Resolve<IMessageService>().AskYesNoQuestion(Localization.Resources.AskEnablePush);
-            Config.PushEnabled = result;
-            return result;
         }
 
         void CallLoadFunctions(object sender, RoutedEventArgs e)
@@ -85,7 +75,7 @@ namespace Ocell
             {
                 CreateTile();
                 ShowFollowMessage();
-                if(Config.PushEnabled == true || (Config.PushEnabled == null  && AskForPushPermission()))
+                if (Config.PushEnabled == true || (Config.PushEnabled == null && AskForPushPermission()))
                     PushNotifications.RegisterPushChannel();
                 UsernameProvider.FillUserNames(Config.Accounts);
 #if DEBUG
@@ -108,6 +98,15 @@ namespace Ocell
             });
 
             _initialised = true;
+        } 
+        #endregion
+
+        #region Prompts
+        bool AskForPushPermission()
+        {
+            var result = Dependency.Resolve<IMessageService>().AskYesNoQuestion(Localization.Resources.AskEnablePush);
+            Config.PushEnabled = result;
+            return result;
         }
 
         bool GeolocationPrompt()
@@ -118,25 +117,6 @@ namespace Ocell
                 return false;
             }
             return true;
-        }
-
-        void ShowFollowMessage()
-        {
-            if ((Config.FollowMessageShown == false || Config.FollowMessageShown == null) && ServiceDispatcher.CanGetServices)
-            {
-                var service = Dependency.Resolve<IMessageService>();
-                bool result = service.AskYesNoQuestion(Localization.Resources.FollowOcellAppMessage, "");
-                if (result)
-                    ServiceDispatcher.GetDefaultService().FollowUser("OcellApp", (a, b) => { });
-                Config.FollowMessageShown = true;
-            }
-        }
-
-        void CreateTile()
-        {
-            SchedulerSync.WriteLastCheckDate(DateTime.Now.ToUniversalTime());
-            SchedulerSync.StartPeriodicAgent();
-            TileManager.ClearTile();
         }
 
         bool CheckForLogin()
@@ -156,6 +136,20 @@ namespace Ocell
                 return true;
         }
 
+        void ShowFollowMessage()
+        {
+            if ((Config.FollowMessageShown == false || Config.FollowMessageShown == null) && ServiceDispatcher.CanGetServices)
+            {
+                var service = Dependency.Resolve<IMessageService>();
+                bool result = service.AskYesNoQuestion(Localization.Resources.FollowOcellAppMessage, "");
+                if (result)
+                    ServiceDispatcher.GetDefaultService().FollowUser("OcellApp", (a, b) => { });
+                Config.FollowMessageShown = true;
+            }
+        }
+        #endregion
+
+        #region List management
         int loadedLists = 0;
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
@@ -239,15 +233,28 @@ namespace Ocell
             });
         }
 
+        void CheckForFilterUpdate(object sender, RoutedEventArgs e)
+        {
+            ExtendedListBox list = sender as ExtendedListBox;
+            if (list != null && ((DataTransfer.ShouldReloadFilters && DataTransfer.cFilter.Resource == list.Loader.Resource) || DataTransfer.IsGlobalFilter))
+            {
+                FilterManager.SetupFilter(list);
+                DataTransfer.ShouldReloadFilters = false;
+            }
+        }
+#endregion
+
         #region RecoverDialog
         Storyboard SbShowDialog;
         Storyboard SbHideDialog;
 
+        TranslateTransform trans;
         void CreateStoryboards()
         {
-            TranslateTransform trans = new TranslateTransform() { X = 0, Y = 0 };
+            trans = new TranslateTransform() { X = 0, Y = 0 };
             RecoverDialog.RenderTransformOrigin = new Point(0, 0);
             RecoverDialog.RenderTransform = trans;
+            trans = RecoverDialog.RenderTransform as TranslateTransform;
 
             SbShowDialog = new Storyboard();
             DoubleAnimation showAnim = new DoubleAnimation();
@@ -311,52 +318,42 @@ namespace Ocell
 
             SbHideDialog.Begin();
         }
-        #endregion
 
-        void CheckForFilterUpdate(object sender, RoutedEventArgs e)
+        void SetupRecoverDialogGestures()
         {
-            ExtendedListBox list = sender as ExtendedListBox;
-            if (list != null && ((DataTransfer.ShouldReloadFilters && DataTransfer.cFilter.Resource == list.Loader.Resource) || DataTransfer.IsGlobalFilter))
+            var gestureListener = GestureService.GetGestureListener(RecoverDialog);
+            gestureListener.DragDelta += RecoverDiag_DragDelta;
+            gestureListener.DragCompleted += RecoverDiag_DragEnd;
+        }
+
+        void RecoverDiag_DragDelta(object sender, DragDeltaGestureEventArgs e)
+        {
+            ((TranslateTransform)RecoverDialog.RenderTransform).X += e.HorizontalChange;
+        }
+
+        void RecoverDiag_DragEnd(object sender, DragCompletedGestureEventArgs e)
+        {
+            if (e.Direction == System.Windows.Controls.Orientation.Horizontal && e.HorizontalChange > 0)
             {
-                FilterManager.SetupFilter(list);
-                DataTransfer.ShouldReloadFilters = false;
+                // Nice, it was a flick which moved the dialog to the right. Now, let's see if the user moved it enough to hide it.
+                var moveNeeded = 0.40; // 40% of the dialog must have been moved to the right.
+                var actualMove = e.HorizontalChange / RecoverDialog.Width;
+
+
+                if (actualMove >= moveNeeded)
+                    HideResumePositionPrompt(false);
+                else
+                {
+                    SbShowDialog.BeginTime = TimeSpan.FromSeconds(0);
+                    SbShowDialog.Begin();
+                }
+
+                e.Handled = true;
             }
         }
+        #endregion
 
-        private void menuItem1_Click(object sender, EventArgs e)
-        {
-            NavigationService.Navigate(Uris.Settings);
-        }
-
-        private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
-        {
-
-        }
-
-        protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
-        {
-            DataTransfer.IsGlobalFilter = false;
-            base.OnNavigatedFrom(e);
-        }
-        private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            var box = sender as TextBlock;
-            if (box != null && box.Tag is TwitterResource)
-                viewModel.RaiseScrollToTop((TwitterResource)box.Tag);
-        }
-
-        void storyboard_Completed(object sender, EventArgs e)
-        {
-
-        }
-
-        private void myprofile_Click(object sender, System.EventArgs e)
-        {
-            if (DataTransfer.CurrentAccount != null)
-                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + DataTransfer.CurrentAccount.ScreenName, UriKind.Relative));
-        }
-
-
+        #region UserGrid
         private void HideUserGrid(object sender, System.ComponentModel.CancelEventArgs e)
         {
             viewModel.IsSearching = false;
@@ -370,7 +367,20 @@ namespace Ocell
             viewModel.IsSearching = true;
             this.BackKeyPress += HideUserGrid;
         }
+        #endregion
 
+        void CreateTile()
+        {
+            SchedulerSync.WriteLastCheckDate(DateTime.Now.ToUniversalTime());
+            SchedulerSync.StartPeriodicAgent();
+            TileManager.ClearTile();
+        }
 
+        private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            var box = sender as TextBlock;
+            if (box != null && box.Tag is TwitterResource)
+                viewModel.RaiseScrollToTop((TwitterResource)box.Tag);
+        }
     }
 }
