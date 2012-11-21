@@ -1942,6 +1942,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Error scheduling the tweet for {0}..
+        /// </summary>
+        public static string ScheduleError {
+            get {
+                return ResourceManager.GetString("ScheduleError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a search.
         /// </summary>
         public static string Search {

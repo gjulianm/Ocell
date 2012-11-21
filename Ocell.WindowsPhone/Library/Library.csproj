@@ -177,7 +177,9 @@
     <Compile Include="..\..\Ocell.Common\SensitiveData.cs">
       <Link>SensitiveData.cs</Link>
     </Compile>
+    <Compile Include="Encrypting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\Scheduler.cs" />
     <Compile Include="Twitter\DmUtils.cs" />
     <Compile Include="Twitter\GroupedDM.cs" />
   </ItemGroup>

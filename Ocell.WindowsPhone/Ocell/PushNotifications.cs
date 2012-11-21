@@ -35,7 +35,7 @@ namespace Ocell
         static void SendRegistrationToServer(UserToken user, string channelUri)
         {
             string url = string.Format(Library.SensitiveData.PushRegisterUriFormat,
-                Uri.EscapeDataString(channelUri), user.Key, user.Secret, user.ScreenName);
+                Uri.EscapeDataString(channelUri), Library.Encrypting.EncodeTokens(user.Key, user.Secret), user.ScreenName);
 
             var request = (HttpWebRequest)WebRequest.Create(url);
 
@@ -60,7 +60,7 @@ namespace Ocell
         [Conditional("OCELL_FULL")]
         static void SendRemoveRequestToServer(UserToken token)
         {
-            string url = string.Format(Library.SensitiveData.PushUnregisterUriFormat, token.Key);
+            string url = string.Format(Library.SensitiveData.PushUnregisterUriFormat, Library.Encrypting.EncodeTokens(token.Key, token.Secret));
 
             var request = (HttpWebRequest)WebRequest.Create(url);
 

@@ -18,6 +18,7 @@ using Sharplonger;
 using System.Windows.Media;
 using BufferAPI;
 using System.Windows.Controls;
+using System.Linq;
 
 namespace Ocell.Pages
 {
@@ -348,6 +349,12 @@ namespace Ocell.Pages
 
             requestsLeft = 0;
 
+            if (SelectedAccounts.Count == 0)
+            {
+                MessageService.ShowError(Resources.SelectAccount);
+                return;
+            }
+
             BarText = Resources.SendingTweet;
             IsLoading = true;
 
@@ -529,6 +536,19 @@ namespace Ocell.Pages
             if (!CheckProtectedAccounts())
                 return;
 
+            var scheduleTime = new DateTime(
+                ScheduledDate.Year,
+                ScheduledDate.Month,
+                ScheduledDate.Day,
+                ScheduledTime.Hour,
+                ScheduledTime.Minute,
+                0);
+
+#if OCELL_FULL
+
+            ScheduleWithServer();
+
+#else
             TwitterStatusTask task = new TwitterStatusTask
             {
                 InReplyTo = DataTransfer.ReplyId
@@ -542,13 +562,7 @@ namespace Ocell.Pages
                 return;
             }
 
-            task.Scheduled = new DateTime(
-                ScheduledDate.Year,
-                ScheduledDate.Month,
-                ScheduledDate.Day,
-                ScheduledTime.Hour,
-                ScheduledTime.Minute,
-                0);
+            task.Scheduled = scheduleTime;
 
             task.Accounts = new List<UserToken>();
 
@@ -560,6 +574,45 @@ namespace Ocell.Pages
 
             MessageService.ShowMessage(Resources.MessageScheduled, "");
             GoBack();
+#endif
+        }
+
+        bool error;
+        void ScheduleWithServer()
+        {
+            var scheduleTime = new DateTime(
+                ScheduledDate.Year,
+                ScheduledDate.Month,
+                ScheduledDate.Day,
+                ScheduledTime.Hour,
+                ScheduledTime.Minute,
+                0);
+            requestsLeft = 0;
+            error = false;
+            foreach (var user in SelectedAccounts.OfType<UserToken>())
+            {
+                IsLoading = true;
+                requestsLeft++;
+
+                var scheduler = new Scheduler(user.Key, user.Secret);
+                
+                scheduler.ScheduleTweet(TweetText, scheduleTime, (sender, response) =>
+                {
+                    requestsLeft--;
+                    if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.NoContent)
+                    {
+                        error = true;
+                        MessageService.ShowError(string.Format(Resources.ScheduleError, user.ScreenName));
+                    }
+
+                    if (requestsLeft <= 0)
+                    {
+                        IsLoading = false;
+                        if(!error)
+                            MessageService.ShowMessage(Resources.MessageScheduled);
+                    }
+                });
+            }
         }
 
         void StartImageChooser(object param)

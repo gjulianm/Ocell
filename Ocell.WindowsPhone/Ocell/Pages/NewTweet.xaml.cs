@@ -111,15 +111,24 @@ namespace Ocell.Pages
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             Image img = sender as Image;
-
+            
             if (img == null)
                 return;
+
+            var user = img.Tag as UserToken;
 
             UpdateOpacity(img);
 
             if (img.Opacity == 1)
             {
-                _completer.User = img.Tag as UserToken;
+                _completer.User = user;
+                if (!viewModel.SelectedAccounts.Contains(user))
+                    viewModel.SelectedAccounts.Add(user);
+            }
+            else
+            {
+                if (viewModel.SelectedAccounts.Contains(user))
+                    viewModel.SelectedAccounts.Remove(user);
             }
         }
 
