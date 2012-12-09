@@ -608,8 +608,11 @@ namespace Ocell.Pages
                     if (requestsLeft <= 0)
                     {
                         IsLoading = false;
-                        if(!error)
+                        if (!error)
+                        {
                             MessageService.ShowMessage(Resources.MessageScheduled);
+                            GoBack();
+                        }
                     }
                 });
             }
