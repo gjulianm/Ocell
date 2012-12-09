@@ -47,16 +47,6 @@ namespace Ocell.Pages.Columns
             Config.SaveColumns();
         }
 
-        private void ApplicationBarIconButton_Click(object sender, System.EventArgs e)
-        {
-            NavigationService.Navigate(Uris.SelectUserForColumn);
-        }
-
-        private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
-        {
-            NavigationService.Navigate(Uris.Settings);
-        }
-
         private void MainList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             (sender as ListBox).SelectedIndex = -1;

@@ -10,12 +10,12 @@ namespace Ocell.Pages.Search
 {
     public partial class Search : PhoneApplicationPage
     {
-        private SearchModel viewModel;
+        private ResourceViewModel viewModel;
 
         public Search()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            viewModel = new SearchModel();
+            viewModel = new ResourceViewModel();
             DataContext = viewModel;
 
             ThemeFunctions.SetBackground(LayoutRoot);
@@ -23,16 +23,6 @@ namespace Ocell.Pages.Search
 
         private void TweetList_Loaded(object sender, RoutedEventArgs e)
         {
-            string query;
-            if (!NavigationContext.QueryString.TryGetValue("q", out query) || string.IsNullOrWhiteSpace(query))
-                if ((query = DataTransfer.Search) == null)
-                    NavigationService.GoBack();
-
-            string fromForm;
-            if (NavigationContext.QueryString.TryGetValue("form", out fromForm) && fromForm == "1")
-                NavigationService.RemoveBackEntry();
-
-            viewModel.Query = query;
             viewModel.Loader = TweetList.Loader;
 
             TweetList.AutoManageNavigation = true;

@@ -53,6 +53,7 @@
         	<local:FilterDateConverter x:Key="FilterDateConverter" />
         	<u:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <local:GlobalSettings x:Key="GlobalSettings" />
+            <local:ResourceTypeConverter x:Key="ResourceTypeConverter" />
 
         	<DataTemplate x:Key="TweetTemplate">
         		<local:TweetTemplateSelector Content="{Binding}" Margin="0" HorizontalContentAlignment="Stretch" >

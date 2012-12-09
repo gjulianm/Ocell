@@ -101,10 +101,11 @@
                 <u:AppBarMenuItem Text="{Binding Strings.MyProfile, Source={StaticResource LocalizedResources}}" Command="{Binding ToMyProfile}"/>
                 <u:AppBarMenuItem Text="{Binding Strings.GoToUser, Source={StaticResource LocalizedResources}}" Click="AppBarMenuItem_Click"/>
                 <u:AppBarHyperlinkMenuItem Text="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Settings/Default.xaml"/>
+                <u:AppBarHyperlinkMenuItem Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Columns/ManageColumns.xaml" />
                 <u:AppBarMenuItem Text="feedback" Command="{Binding Feedback}" />
             </u:AppBar.MenuItems>
             <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="{Binding Strings.Compose, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/NewTweet.xaml" />
-            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.columns.rest.png" Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Columns/ManageColumns.xaml" />
+            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.camera.flash.png" Text="{Binding Strings.QuickView, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Columns/ColumnView.xaml" />
             <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="{Binding Strings.SendDM, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/SelectUser.xaml"/>
             <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="{Binding Strings.Search, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Search/EnterSearch.xaml" />
         </u:AppBar>

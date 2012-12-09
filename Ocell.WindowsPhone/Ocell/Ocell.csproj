@@ -26,7 +26,7 @@
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <Utf8Output>true</Utf8Output>
-    <ExpressionBlendVersion>4.0.30816.0</ExpressionBlendVersion>
+    <ExpressionBlendVersion>5.0.30924.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -106,6 +106,7 @@
     <Compile Include="Helpers\ValueConverters\ListConverter.cs" />
     <Compile Include="Helpers\ValueConverters\ProtectedConverter.cs" />
     <Compile Include="Helpers\ValueConverters\RelativeDateTimeConverter.cs" />
+    <Compile Include="Helpers\ValueConverters\ResourceTypeConverter.cs" />
     <Compile Include="Helpers\ValueConverters\ToColumn.cs" />
     <Compile Include="Helpers\ValueConverters\TweetTextConverter.cs" />
     <Compile Include="LinqToVisualTree.cs" />
@@ -114,6 +115,10 @@
     <Compile Include="MessageServiceExtension.cs" />
     <Compile Include="MetroInMotion.cs" />
     <Compile Include="Pages\Columns\AddColumnModel.cs" />
+    <Compile Include="Pages\Columns\ColumnViewModel.cs" />
+    <Compile Include="Pages\Columns\ColumnView.xaml.cs">
+      <DependentUpon>ColumnView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Elements\DMConversationModel.cs" />
     <Compile Include="Pages\Elements\DMConversation.xaml.cs">
       <DependentUpon>DMConversation.xaml</DependentUpon>
@@ -152,7 +157,7 @@
     <Compile Include="Pages\Lists\ListManager.xaml.cs">
       <DependentUpon>ListManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Search\SearchModel.cs" />
+    <Compile Include="Pages\ResourceViewModel.cs" />
     <Compile Include="Pages\Search\EnterSearch.xaml.cs">
       <DependentUpon>EnterSearch.xaml</DependentUpon>
     </Compile>
@@ -196,8 +201,8 @@
     <Compile Include="Pages\NewTweet.xaml.cs">
       <DependentUpon>NewTweet.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Search\Search.xaml.cs">
-      <DependentUpon>Search.xaml</DependentUpon>
+    <Compile Include="Pages\ResourceView.xaml.cs">
+      <DependentUpon>ResourceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings\Default.xaml.cs">
       <DependentUpon>Default.xaml</DependentUpon>
@@ -226,6 +231,10 @@
     <Page Include="Pages\Columns\AddColumn.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Columns\ColumnView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Columns\ManageColumns.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -279,7 +288,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Search\Search.xaml">
+    <Page Include="Pages\ResourceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -382,6 +391,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Images\Icons_White\appbar.bufferapp.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.camera.flash.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <Content Include="Images\Icons_White\appbar.check.rest.png">

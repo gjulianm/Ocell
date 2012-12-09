@@ -17,13 +17,15 @@ using System.Linq;
 
 namespace Ocell.Pages.Search
 {
-    public class SearchModel : ExtendedViewModelBase
+    public class ResourceViewModel : ExtendedViewModelBase
     {
-        string query;
-        public string Query
+        public static TwitterResource Resource;
+
+        string pageTitle;
+        public string PageTitle
         {
-            get { return query; }
-            set { Assign("Query", ref query, value); }
+            get { return pageTitle; }
+            set { Assign("PageTitle", ref pageTitle, value); }
         }
 
         TweetLoader loader;
@@ -39,9 +41,11 @@ namespace Ocell.Pages.Search
             get { return addCommand; }
         }
 
-        public SearchModel()
+        public ResourceViewModel()
             : base("Search")
         {
+            PageTitle = Resource.Title;
+
             this.PropertyChanged += (sender, property) =>
                 {
                     if (property.PropertyName == "Loader")
@@ -50,24 +54,19 @@ namespace Ocell.Pages.Search
 
             addCommand = new DelegateCommand((param) =>
                 {
-                    if(!Config.Columns.Contains(Loader.Resource))
+                    if (!Config.Columns.Contains(Loader.Resource))
                         Config.Columns.Add(Loader.Resource);
                     Config.SaveColumns();
-                    MessageService.ShowMessage(Localization.Resources.SearchColumnAdded, "");
-                    DataTransfer.ShouldReloadColumns = true;                    
+                    MessageService.ShowMessage(Localization.Resources.ColumnAdded, "");
+                    DataTransfer.ShouldReloadColumns = true;
                     addCommand.RaiseCanExecuteChanged();
                 },
-                (param) => !string.IsNullOrWhiteSpace(Query) && !Config.Columns.Any((column) => column.Type == ResourceType.Search && column.Data == Query));
+                (param) => !Config.Columns.Contains(Resource));
         }
 
         public void UpdateTweetLoader()
         {
-            Loader.Resource = new TwitterResource 
-            { 
-                User = DataTransfer.CurrentAccount == null ? DataTransfer.CurrentAccount : Config.Accounts[0],
-                Data = Query, 
-                Type = ResourceType.Search 
-            };
+            Loader.Resource = Resource;
             Loader.Load();
         }
     }

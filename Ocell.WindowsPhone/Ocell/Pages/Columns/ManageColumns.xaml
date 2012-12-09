@@ -81,7 +81,7 @@
     	</Grid>
 
         <u:AppBar>
-                <u:AppBarIconButton IconUri="/Images/Icons_White/appbar.new.rest.png" Text="{Binding Strings.Add, Source={StaticResource LocalizedResources}}" Click="ApplicationBarIconButton_Click"/>
+                <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.new.rest.png" Text="{Binding Strings.Add, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Columns/ColumnView.xaml"/>
         </u:AppBar>
     </Grid>
  

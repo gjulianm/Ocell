@@ -1,0 +1,54 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="Ocell.Pages.Columns.ColumnView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    xmlns:custom="clr-namespace:Ocell.Controls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:c="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache">
+
+    <phone:PhoneApplicationPage.Resources>
+        <DataTemplate x:Key="ResourceTemplate">
+            <StackPanel>
+                <TextBlock Margin="20,8,8,0"  FontFamily="Segoe WP Light" FontSize="32"><Run Text="{Binding Type, Converter={StaticResource ResourceTypeConverter}}" /><Run Text="{Binding Title}" /></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
+    
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" x:Name="pBar" />
+    </shell:SystemTray.ProgressIndicator>
+    <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
+    <Grid x:Name="LayoutRoot" CacheMode="BitmapCache" Margin="0,-32,0,0">
+        <!--Control Pivot-->
+        <controls:Pivot Title="OCELL" Background="{x:Null}" ItemsSource="{Binding Pivots}" Margin="0,50,0,0">
+            <controls:Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Username}"/>
+                </DataTemplate>
+            </controls:Pivot.HeaderTemplate>
+            <controls:Pivot.ItemTemplate>
+                <DataTemplate>
+                    <custom:ExtendedListBox SelectedItem="{Binding SelectedResource, Mode=TwoWay}" ItemsSource="{Binding Resources}" ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource ResourceTemplate}"/>
+                </DataTemplate>
+            </controls:Pivot.ItemTemplate>
+        </controls:Pivot>
+
+        <c:AppBar>
+            <c:AppBarToggleButton   IconUri1="/Images/Icons_White/appbar.add.rest.png" Text1="{Binding Strings.EnableQuickAdd, Source={StaticResource LocalizedResources}}" Command1="{Binding EnableQuickAdd}"
+                                    IconUri2="/Images/Icons_White/appbar.check.rest.png" Text2="{Binding Strings.DisableQuickAdd, Source={StaticResource LocalizedResources}}" Command2="{Binding DisableQuickAdd}"
+                                    Toggled="{Binding FastAddMode}" />
+        </c:AppBar>
+    </Grid>
+
+</phone:PhoneApplicationPage>

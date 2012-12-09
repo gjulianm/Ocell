@@ -76,7 +76,7 @@ namespace Ocell
                 CreateTile();
                 ShowFollowMessage();
                 if (Config.PushEnabled == true || (Config.PushEnabled == null && AskForPushPermission()))
-                    PushNotifications.RegisterPushChannel();
+                    PushNotifications.AutoRegisterForNotifications();
                 UsernameProvider.FillUserNames(Config.Accounts);
 #if DEBUG
                 var list = Logger.ReadAll();
@@ -173,6 +173,7 @@ namespace Ocell
                 list.Loader.ActivateLoadMoreButton = true;
                 list.Loader.TweetsToLoadPerRequest = (int)Config.TweetsPerRequest;
                 list.Loader.LoadRetweetsAsMentions = (bool)Config.RetweetAsMentions;
+
                 list.Loader.PropertyChanged += (sender1, e1) =>
                 {
                     if (e1.PropertyName == "IsLoading")
@@ -204,13 +205,13 @@ namespace Ocell
 
                 list.ReadyToResumePosition += (sender1, e1) =>
                 {
-                    var resource = (TwitterResource)viewModel.SelectedPivot;
-                    if (list.Loader.Resource == resource)
+                    var selectedPivot = (TwitterResource)viewModel.SelectedPivot;
+                    if (list.Loader.Resource == selectedPivot)
                     {
                         Dispatcher.BeginInvoke(() =>
                         {
                             long id;
-                            if (Config.ReadPositions.TryGetValue(resource.String, out id)
+                            if (Config.ReadPositions.TryGetValue(selectedPivot.String, out id)
                                 && !list.GetVisibleItems().Any(x => x.Id == id))
                             {
                                 ShowResumePositionPrompt(list);

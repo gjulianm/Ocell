@@ -11,6 +11,9 @@ using System.Windows.Shapes;
 using DanielVaughan.ComponentModel;
 using DanielVaughan;
 using DanielVaughan.Windows;
+using Ocell.Library.Twitter;
+using Ocell.Library;
+using System.Linq;
 
 namespace Ocell.Pages.Search
 {
@@ -50,7 +53,15 @@ namespace Ocell.Pages.Search
 
             buttonClick = new DelegateCommand((obj) =>
                 {
-                    Navigate(new Uri("/Pages/Search/Search.xaml?form=1&q=" + Uri.EscapeDataString(Query), UriKind.Relative));
+                    var resource = new TwitterResource
+                    {
+                        User = DataTransfer.CurrentAccount ?? Config.Accounts.FirstOrDefault(),
+                        Type = ResourceType.Search,
+                        Data = Query
+                    };
+
+                    ResourceViewModel.Resource = resource;
+                    Navigate(Uris.ResourceView);
                 }, (obj) => !string.IsNullOrWhiteSpace(Query));
         }
     }

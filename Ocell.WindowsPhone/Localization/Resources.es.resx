@@ -1146,4 +1146,22 @@
   <data name="ScheduleError" xml:space="preserve">
     <value>Error programando el tweet de {0}.</value>
   </data>
+  <data name="AskAddColumn" xml:space="preserve">
+    <value>¿Quieres añadir la columna {0} a la página principal?</value>
+  </data>
+  <data name="ColumnAdded" xml:space="preserve">
+    <value>Columna añadida.</value>
+  </data>
+  <data name="DisableQuickAdd" xml:space="preserve">
+    <value>desactivar añadido rápido</value>
+  </data>
+  <data name="EnableQuickAdd" xml:space="preserve">
+    <value>activar añadido rápido</value>
+  </data>
+  <data name="ErrorDownloadingSearches" xml:space="preserve">
+    <value>No hemos podido descargar tus búsquedas guardadas.</value>
+  </data>
+  <data name="QuickView" xml:space="preserve">
+    <value>vista rápida</value>
+  </data>
 </root>
