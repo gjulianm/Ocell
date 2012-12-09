@@ -15,12 +15,12 @@ namespace Ocell.Testing.Tests.UI.Search
     [Tag("UI")]
     public class SearchTest
     {
-        private SearchModel viewModel;
+        private ResourceViewModel viewModel;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            viewModel = new SearchModel();
+            viewModel = new ResourceViewModel();
             Config.Columns.Clear();
         }
 
@@ -29,7 +29,7 @@ namespace Ocell.Testing.Tests.UI.Search
         public void CheckButtonActivation()
         {
             string testQuery = "test";
-            viewModel.Query = testQuery;
+            viewModel.PageTitle = testQuery;
             Config.Columns.Clear();
             Assert.IsTrue(viewModel.AddCommand.CanExecute(null));
             Config.Columns.Add(new Ocell.Library.Twitter.TwitterResource { Data = testQuery, Type = Ocell.Library.Twitter.ResourceType.Tweets });
