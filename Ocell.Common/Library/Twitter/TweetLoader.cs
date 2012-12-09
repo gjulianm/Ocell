@@ -195,30 +195,17 @@ namespace Ocell.Library.Twitter
             if (!Cached || Resource.User == null)
                 return;
 
-            var t = TimeTracker.StartTrack();
-
-            var t1 = TimeTracker.StartTrack();
             IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource);
-            TimeTracker.EndTrack(t1, "GetFromCache");
-
-            var t2 = TimeTracker.StartTrack();
             var toAdd = AddLoadMoreButtons(cacheList.OrderByDescending(x => x.Id).Cast<ITweetable>()).Except(Source);
-            TimeTracker.EndTrack(t2, "AddLoadMore, order && except");
 
-            var t3 = TimeTracker.StartTrack();
             int added = 0;
-
             foreach (var item in toAdd)
             {
                 Source.Add(item);
                 added++;
                 if (added == 10)
-                    Thread.Sleep(100);
+                    Thread.Sleep(100); // Making pauses allows the UI to refresh better.
             }
-
-            TimeTracker.EndTrack(t3, "Add to source");
-
-            TimeTracker.EndTrack(t, "LoadCache");
 
             if (CacheLoad != null)
                 CacheLoad(this, new EventArgs());
