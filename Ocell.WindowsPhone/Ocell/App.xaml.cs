@@ -77,13 +77,14 @@ namespace Ocell
         // Este código no se ejecutará cuando la aplicación se reactive
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            TrialInformation.ReloadTrialInfo();
         }
 
         // Código para ejecutar cuando la aplicación se activa (se trae a primer plano)
         // Este código no se ejecutará cuando la aplicación se inicie por primera vez
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
-            
+            TrialInformation.ReloadTrialInfo();
         }
 
         // Código para ejecutar cuando la aplicación se desactiva (se envía a segundo plano)

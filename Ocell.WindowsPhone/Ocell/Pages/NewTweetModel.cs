@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Device.Location;
-using System.Linq;
-using System.Net;
-using System.Windows.Input;
-using System.Xml.Linq;
+﻿using BufferAPI;
 using DanielVaughan.Windows;
 using Hammock;
 using Microsoft.Phone.Tasks;
@@ -13,12 +6,17 @@ using Ocell.Library;
 using Ocell.Library.Tasks;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
-using TweetSharp;
 using Sharplonger;
-using System.Windows.Media;
-using BufferAPI;
-using System.Windows.Controls;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Device.Location;
 using System.Linq;
+using System.Net;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Xml.Linq;
+using TweetSharp;
 
 namespace Ocell.Pages
 {
@@ -317,6 +315,12 @@ namespace Ocell.Pages
 
         void SendBufferUpdate(object param)
         {
+            if (!TrialInformation.IsFullFeatured)
+            {
+                TrialInformation.ShowBuyDialog();
+                return;
+            }
+
             if (Config.BufferProfiles.Count == 0)
             {
                 AskBufferLogin();
@@ -544,11 +548,14 @@ namespace Ocell.Pages
                 ScheduledTime.Minute,
                 0);
 
-#if OCELL_FULL
+            if(TrialInformation.IsFullFeatured)
+                ScheduleWithServer(scheduledTime);
+            else
+                ScheduleWithBackgroundAgent(scheduleTime);
+        }
 
-            ScheduleWithServer();
-
-#else
+        private void ScheduleWithBackgroundAgent(DateTime scheduleTime)
+        {
             TwitterStatusTask task = new TwitterStatusTask
             {
                 InReplyTo = DataTransfer.ReplyId
@@ -574,19 +581,11 @@ namespace Ocell.Pages
 
             MessageService.ShowMessage(Resources.MessageScheduled, "");
             GoBack();
-#endif
         }
 
         bool error;
-        void ScheduleWithServer()
+        void ScheduleWithServer(DateTime scheduleTime)
         {
-            var scheduleTime = new DateTime(
-                ScheduledDate.Year,
-                ScheduledDate.Month,
-                ScheduledDate.Day,
-                ScheduledTime.Hour,
-                ScheduledTime.Minute,
-                0);
             requestsLeft = 0;
             error = false;
             foreach (var user in SelectedAccounts.OfType<UserToken>())

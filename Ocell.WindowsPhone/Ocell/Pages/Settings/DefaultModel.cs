@@ -295,12 +295,9 @@ namespace Ocell.Settings
             SelectedMuteTime = TimeSpanToSelectedFilter((TimeSpan)Config.DefaultMuteTime);
             ShowResumePositionButton = Config.RecoverReadPositions == true;
             GeoTaggingEnabled = Config.EnabledGeolocation == true;
-            
-#if OCELL_FULL
-            PushAvailable = true;
-#else
-            PushAvailable = false;
-#endif
+
+            PushAvailable = TrialInformation.IsFullFeatured;
+
             PushEnabled = PushAvailable && (Config.PushEnabled == true);
 
             if (Config.ReadLaterCredentials.Instapaper != null)
@@ -373,6 +370,16 @@ namespace Ocell.Settings
                         Config.EnabledGeolocation = GeoTaggingEnabled;
                         break;
                     case "PushEnabled":
+                        if (!TrialInformation.IsFullFeatured)
+                        {
+                            if (PushEnabled)
+                            {
+                                TrialInformation.ShowBuyDialog();
+                                PushEnabled = false;
+                            }
+                            return;
+                        }
+
                         Config.PushEnabled = PushEnabled;
                         if (PushEnabled == false)
                             PushNotifications.UnregisterAll();

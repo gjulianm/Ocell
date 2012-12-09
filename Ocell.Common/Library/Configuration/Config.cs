@@ -48,10 +48,10 @@ namespace Ocell.Library
                 {
                     if (!config.TryGetValue<T>(key, out element))
                     {
-                        element = CreateDefault<T>();
-
                         if (DefaultValues.ContainsKey(key))
                             element = (T)DefaultValues[key];
+                        else
+                            element = CreateDefault<T>();
 
                         config.Add(key, element);
                         config.Save();

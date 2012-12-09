@@ -76,6 +76,11 @@ namespace Ocell
 
         public bool HasLoggedIn { get { return Config.Accounts.Any(); } }
 
+        public void RaiseLoggedInChange()
+        {
+            OnPropertyChanged("HasLoggedIn");
+        }
+
         int loadingCount;
         public int LoadingCount
         {

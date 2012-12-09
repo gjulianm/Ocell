@@ -347,6 +347,19 @@ namespace Ocell.Library
 				GenericSaveToConfig<string>("BUFFER_ACCESS_TOKEN", ref _BufferAccessToken, value);
 			}
 		}
+
+		private static DateTime? _TrialStart;
+		public static DateTime? TrialStart
+		{
+			get 
+			{
+				return GenericGetFromConfig<DateTime?>("TRIAL_INSTALLED_TIME", ref _TrialStart);
+			}
+			set
+			{
+				GenericSaveToConfig<DateTime?>("TRIAL_INSTALLED_TIME", ref _TrialStart, value);
+			}
+		}
 	#endif
 	#endregion
 
@@ -376,6 +389,7 @@ namespace Ocell.Library
 			_TweetGeotagging = null;
 			_BufferProfiles = null;
 			_BufferAccessToken = null;
+			_TrialStart = null;
 #endif
 		}
 
@@ -392,6 +406,7 @@ namespace Ocell.Library
 			defaultValues.Add("FONTSIZE", 20);
 			defaultValues.Add("RECOVERREAD", true);
 			defaultValues.Add("GEOTAG_TWEETS", true);
+			defaultValues.Add("TRIAL_INSTALLED_TIME", DateTime.MaxValue);
 #endif
 		}
 	}

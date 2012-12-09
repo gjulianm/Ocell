@@ -277,6 +277,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Oops, it seems that this feature is only available in the full version of Ocell Pro. Click OK if you want to purchase it. Thanks!.
+        /// </summary>
+        public static string AskBuyFullVersion {
+            get {
+                return ResourceManager.GetString("AskBuyFullVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Are you sure you want to delete this draft?.
         /// </summary>
         public static string AskDeleteDraft {
@@ -2082,6 +2091,15 @@ namespace Ocell.Localization {
         public static string SendMessage {
             get {
                 return ResourceManager.GetString("SendMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a send to Buffer.
+        /// </summary>
+        public static string SendWithBuffer {
+            get {
+                return ResourceManager.GetString("SendWithBuffer", resourceCulture);
             }
         }
         

@@ -122,8 +122,8 @@ namespace Ocell.Pages.Settings
                 Secret = parameters["oauth_token_secret"],
                 Preferences = new NotificationPreferences
                 {
-                    MentionsPreferences = NotificationType.Tile,
-                    MessagesPreferences = NotificationType.Tile
+                    MentionsPreferences = NotificationType.TileAndToast,
+                    MessagesPreferences = NotificationType.TileAndToast
                 }
             };
 

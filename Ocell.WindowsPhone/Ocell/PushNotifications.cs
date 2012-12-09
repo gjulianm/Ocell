@@ -24,7 +24,7 @@ namespace Ocell
 
         public static void AutoRegisterForNotifications()
         {
-            if(Config.PushEnabled != true)
+            if(Config.PushEnabled != true || !TrialInformation.IsFullFeatured)
                 return;
          
             HttpNotificationChannel channel;

@@ -16,3 +16,4 @@
  bool?, GEOTAG_TWEETS, TweetGeotagging, true
  List<BufferProfile>, BUFFER_PROFILES, BufferProfiles
  string, BUFFER_ACCESS_TOKEN, BufferAccessToken
+ DateTime?, TRIAL_INSTALLED_TIME, TrialStart, DateTime.MaxValue

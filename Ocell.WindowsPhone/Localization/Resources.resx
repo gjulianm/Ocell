@@ -1164,4 +1164,10 @@
   <data name="QuickView" xml:space="preserve">
     <value>quick view</value>
   </data>
+  <data name="AskBuyFullVersion" xml:space="preserve">
+    <value>Oops, it seems that this feature is only available in the full version of Ocell Pro. Click OK if you want to purchase it. Thanks!</value>
+  </data>
+  <data name="SendWithBuffer" xml:space="preserve">
+    <value>send to Buffer</value>
+  </data>
 </root>

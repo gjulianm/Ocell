@@ -32,6 +32,6 @@ using System.Resources;
 //
 // Puede especificar todos los valores o usar los valores predeterminados de número de compilación y revisión 
 // mediante el carácter '*', como se muestra a continuación:
-[assembly: AssemblyVersion("3.9.4")]
-[assembly: AssemblyFileVersion("3.9.4")]
+[assembly: AssemblyVersion("4.0.0")]
+[assembly: AssemblyFileVersion("4.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

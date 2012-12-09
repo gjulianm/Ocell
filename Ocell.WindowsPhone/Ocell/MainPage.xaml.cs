@@ -65,6 +65,8 @@ namespace Ocell
 
             if (!CheckForLogin())
                 return;
+            
+            viewModel.RaiseLoggedInChange();
 
             if (!GeolocationPrompt())
                 return;
@@ -104,6 +106,9 @@ namespace Ocell
         #region Prompts
         bool AskForPushPermission()
         {
+            if (!TrialInformation.IsFullFeatured)
+                return false;
+
             var result = Dependency.Resolve<IMessageService>().AskYesNoQuestion(Localization.Resources.AskEnablePush);
             Config.PushEnabled = result;
             return result;
