@@ -23,32 +23,35 @@ namespace Ocell.Library.Twitter
             if (account == null || account.Key == null)
                 return null;
 
+            ITwitterService srv;
+            
             lock (_lockFlag)
             {
                 if (_services.ContainsKey(account.Key))
                     return _services[account.Key];
-            }
 
-            ITwitterService srv;
-            if (TestSession)
-                srv = new MockTwitterService();
-            else
-            {
-                var tempSrv = new TwitterService();
-                tempSrv.AuthenticateWith(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, account.Key, account.Secret);
-                srv = tempSrv;
-            }
 
-            try
-            {
-                lock (_lockFlag)
+                
+                if (TestSession)
+                    srv = new MockTwitterService();
+                else
+                {
+                    var tempSrv = new TwitterService();
+                    tempSrv.AuthenticateWith(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, account.Key, account.Secret);
+                    srv = tempSrv;
+                }
+
+                try
+                {
+
                     _services.Add(account.Key, srv);
+                }
+                catch
+                {
+                    // Again, this sometimes gives some weird exceptions. Investigate!
+                }
             }
-            catch
-            {
-                // Again, this sometimes gives some weird exceptions. Investigate!
-            }
-            
+
             return srv;
         }
 
