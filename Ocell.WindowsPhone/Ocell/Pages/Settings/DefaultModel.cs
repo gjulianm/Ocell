@@ -301,7 +301,7 @@ namespace Ocell.Settings
 #else
             PushAvailable = false;
 #endif
-            PushEnabled = Config.PushEnabled == true;
+            PushEnabled = PushAvailable && (Config.PushEnabled == true);
 
             if (Config.ReadLaterCredentials.Instapaper != null)
             {
@@ -333,19 +333,30 @@ namespace Ocell.Settings
                     case "SelectedAccount":
                         if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Count)
                         {
-                            MentionNotifyOption = (int)Config.Accounts[SelectedAccount].Preferences.MentionsPreferences;
-                            MessageNotifyOption = (int)Config.Accounts[SelectedAccount].Preferences.MessagesPreferences;
+                            int newOption;
+
+                            newOption = (int)Config.Accounts[SelectedAccount].Preferences.MentionsPreferences;
+                            if (newOption != MentionNotifyOption)
+                            {
+                                mentionFirstChange = true;
+                                MentionNotifyOption = newOption;
+                            }
+
+                            newOption = (int)Config.Accounts[SelectedAccount].Preferences.MessagesPreferences;
+                            if (newOption != MessageNotifyOption)
+                            {
+                                messageFirstChange = true;
+                                MessageNotifyOption = newOption;
+                            }
                         }
                         break;
                     case "MentionNotifyOption":
                         if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Count)
-                            Config.Accounts[SelectedAccount].Preferences.MentionsPreferences =
-                                (NotificationType)MentionNotifyOption;
+                            SetMentionNotifyPref((NotificationType)MentionNotifyOption, SelectedAccount);
                         break;
                     case "MessageNotifyOption":
                         if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Count)
-                            Config.Accounts[SelectedAccount].Preferences.MessagesPreferences =
-                                (NotificationType)MessageNotifyOption;
+                            SetMessageNotifyPref((NotificationType)MessageNotifyOption, SelectedAccount);
                         Config.SaveAccounts();
                         break;
                     case "SelectedMuteTime":
@@ -364,9 +375,9 @@ namespace Ocell.Settings
                     case "PushEnabled":
                         Config.PushEnabled = PushEnabled;
                         if (PushEnabled == false)
-                            PushNotifications.UnregisterPushChannel();
+                            PushNotifications.UnregisterAll();
                         else
-                            PushNotifications.RegisterPushChannel();
+                            PushNotifications.AutoRegisterForNotifications();
                         break;
                 }
             };
@@ -375,6 +386,40 @@ namespace Ocell.Settings
             if(Config.Accounts.Count > 0)
                 SelectedAccount = 0;
             SetCommands();
+        }
+
+        bool mentionFirstChange = true;
+        void SetMentionNotifyPref(NotificationType type, int account)
+        {
+            if (mentionFirstChange)
+            {
+                mentionFirstChange = false;
+                return;
+            }
+
+            Config.Accounts[account].Preferences.MentionsPreferences = type;
+
+            if (type == NotificationType.None)
+                PushNotifications.UnregisterPushChannel(Config.Accounts[account], "mentions");
+            else
+                PushNotifications.RegisterPushChannel(Config.Accounts[account], "mentions");
+        }
+
+        bool messageFirstChange = true;
+        void SetMessageNotifyPref(NotificationType type, int account)
+        {
+            if (messageFirstChange)
+            {
+                messageFirstChange = false;
+                return;
+            }
+
+            Config.Accounts[account].Preferences.MessagesPreferences = type;
+
+            if (type == NotificationType.None)
+                PushNotifications.UnregisterPushChannel(Config.Accounts[account], "messages");
+            else
+                PushNotifications.RegisterPushChannel(Config.Accounts[account], "messages");
         }
 
         TimeSpan SelectedFilterToTimeSpan(int index)
