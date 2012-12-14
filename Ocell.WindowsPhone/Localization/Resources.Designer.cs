@@ -1204,7 +1204,7 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Geotagging.
+        ///   Busca una cadena traducida similar a Enable geolocalization.
         /// </summary>
         public static string Geotagging {
             get {

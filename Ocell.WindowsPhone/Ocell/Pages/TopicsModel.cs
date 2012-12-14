@@ -18,6 +18,7 @@ using System.Collections.ObjectModel;
 using TweetSharp;
 using System.Device.Location;
 using System.Linq;
+using Ocell.Pages.Search;
 
 namespace Ocell.Pages
 {
@@ -127,8 +128,14 @@ namespace Ocell.Pages
 
             ListSelection = null;
 
-            string EscapedQuery = Uri.EscapeDataString(trend.Name);
-            Navigate("/Pages/Search/Search.xaml?q=" + EscapedQuery);            
+            var resource = new TwitterResource
+               {
+                   Data = trend.Name,
+                   Type = ResourceType.Search,
+                   User = DataTransfer.CurrentAccount
+               };
+            ResourceViewModel.Resource = resource;
+            Navigate(Uris.ResourceView);
         }
     }
 }

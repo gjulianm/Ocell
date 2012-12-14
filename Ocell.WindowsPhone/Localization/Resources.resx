@@ -1090,7 +1090,7 @@
     <value>Geolocation</value>
   </data>
   <data name="Geotagging" xml:space="preserve">
-    <value>Geotagging</value>
+    <value>Enable geolocalization</value>
   </data>
   <data name="Global" xml:space="preserve">
     <value>global</value>
