@@ -113,3 +113,6 @@ Resources/*
 
 # Private data.
 SensitiveData.cs
+
+# ZIP Backups. 
+_backups/

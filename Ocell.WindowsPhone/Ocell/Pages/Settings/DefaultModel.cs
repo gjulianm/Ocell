@@ -172,6 +172,12 @@ namespace Ocell.Settings
             get { return saveCredentials; }
         }
 
+        DelegateCommand showPrivacyPolicy;
+        public ICommand ShowPrivacyPolicy
+        {
+            get { return showPrivacyPolicy; }
+        }
+
         void SetCommands()
         {
             setCustomBackground = new DelegateCommand((obj) =>
@@ -179,7 +185,11 @@ namespace Ocell.Settings
                 Navigate("/Pages/Settings/Backgrounds.xaml");
             });
 
-             
+            showPrivacyPolicy = new DelegateCommand((obj) =>
+            {
+                MessageService.ShowMessage(Resources.PrivacyPolicy);
+            });
+
             pinComposeToStart = new DelegateCommand((obj) =>
                 {
                     SecondaryTiles.CreateComposeTile();
