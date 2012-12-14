@@ -105,6 +105,9 @@
     <Compile Include="..\..\Ocell.Common\Library\DecisionMaker.cs">
       <Link>DecisionMaker.cs</Link>
     </Compile>
+    <Compile Include="..\..\Ocell.Common\Library\Encrypting.cs">
+      <Link>Encrypting.cs</Link>
+    </Compile>
     <Compile Include="..\..\Ocell.Common\Library\FileAbstractor.cs">
       <Link>FileAbstractor.cs</Link>
     </Compile>
@@ -141,6 +144,12 @@
     <Compile Include="..\..\Ocell.Common\Library\Twitter\ConversationService.cs">
       <Link>Twitter\ConversationService.cs</Link>
     </Compile>
+    <Compile Include="..\..\Ocell.Common\Library\Twitter\DmUtils.cs">
+      <Link>Twitter\DmUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Ocell.Common\Library\Twitter\GroupedDM.cs">
+      <Link>Twitter\GroupedDM.cs</Link>
+    </Compile>
     <Compile Include="..\..\Ocell.Common\Library\Twitter\IProvider.cs">
       <Link>Twitter\IProvider.cs</Link>
     </Compile>
@@ -174,12 +183,9 @@
     <Compile Include="..\..\Ocell.Common\SensitiveData.cs">
       <Link>SensitiveData.cs</Link>
     </Compile>
-    <Compile Include="Encrypting.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\Scheduler.cs" />
-    <Compile Include="Twitter\DmUtils.cs" />
-    <Compile Include="Twitter\GroupedDM.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Ocell.Common\BufferAPI\BufferAPI.csproj">
