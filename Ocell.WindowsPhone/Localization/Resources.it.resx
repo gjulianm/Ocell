@@ -400,7 +400,7 @@
   <data name="Description" xml:space="preserve">
     <value>Descrizione</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\CreateList.xaml</comment>
-  </data>  
+  </data>
   <data name="Public" xml:space="preserve">
     <value>Pubblico</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\CreateList.xaml</comment>
@@ -1145,5 +1145,23 @@
   </data>
   <data name="ScheduleError" xml:space="preserve">
     <value>Errore nello schedulare il tweet per {0}.</value>
+  </data>
+  <data name="Privacy_policy" xml:space="preserve">
+    <value>Politica sulla privacy</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Codici:</value>
+  </data>
+  <data name="CodeInvalid" xml:space="preserve">
+    <value>Non è stato possibile convalidare il codice. Assicurarsi di essere connesso a Internet e che il codice sia correttamente copiato.</value>
+  </data>
+  <data name="CodeValid" xml:space="preserve">
+    <value>Questo codice è valido. Complimenti, avete sbloccato Ocell Pro! Buon divertimento!</value>
+  </data>
+  <data name="CouponCodes" xml:space="preserve">
+    <value>Codici promozionali</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>Convalidare</value>
   </data>
 </root>

@@ -430,6 +430,33 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Code.
+        /// </summary>
+        public static string Code {
+            get {
+                return ResourceManager.GetString("Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a We couldn&apos;t validate your code. Ensure you&apos;re connected to Internet and that the code is correctly copied..
+        /// </summary>
+        public static string CodeInvalid {
+            get {
+                return ResourceManager.GetString("CodeInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a This code is valid. Congratulations, you have unlocked Ocell Pro! Enjoy!.
+        /// </summary>
+        public static string CodeValid {
+            get {
+                return ResourceManager.GetString("CodeValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Column added..
         /// </summary>
         public static string ColumnAdded {
@@ -606,6 +633,15 @@ namespace Ocell.Localization {
         public static string CouldntUnfollow {
             get {
                 return ResourceManager.GetString("CouldntUnfollow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Redeem codes.
+        /// </summary>
+        public static string CouponCodes {
+            get {
+                return ResourceManager.GetString("CouponCodes", resourceCulture);
             }
         }
         
@@ -853,7 +889,7 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a An error happened while trying to get auth URL. Please contact @OcellApp if this happens frequently..
+        ///   Busca una cadena traducida similar a An error happened while trying to get auth URL. Ensure that the time on your phone is correct, and try changing the network (Wifi or mobile). Please contact @OcellApp if this happens frequently..
         /// </summary>
         public static string ErrorAuthURL {
             get {
@@ -1726,6 +1762,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Privacy policy.
+        /// </summary>
+        public static string Privacy_Policy {
+            get {
+                return ResourceManager.GetString("Privacy_Policy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Privacy policy: Ocell will not save your localization in any register or file in your phone. Ocell will not send your location to any Internet server, except to Twitter.com and for the purposes exposed above (tweet geotagging and localization of Trending Topics)..
         /// </summary>
         public static string PrivacyPolicy {
@@ -2496,6 +2541,15 @@ namespace Ocell.Localization {
         public static string UsersWhoRetweeted {
             get {
                 return ResourceManager.GetString("UsersWhoRetweeted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Validate.
+        /// </summary>
+        public static string Validate {
+            get {
+                return ResourceManager.GetString("Validate", resourceCulture);
             }
         }
         

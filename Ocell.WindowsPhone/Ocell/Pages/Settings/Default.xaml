@@ -63,7 +63,7 @@
 		<controls:Pivot Title="OCELL - SETTINGS" Margin="0,60,0,0">
 
             <controls:PivotItem x:Name="pSettings" Header="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}">
-				<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+				<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled" Padding="0">
 					<Grid Height="1200">
 						<Grid.RowDefinitions>
 							<RowDefinition Height="484"/>
@@ -82,14 +82,16 @@
 						<TextBlock x:Name="ComposeTileText" HorizontalAlignment="Left" Margin="8,0,0,81" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Strings.ComposeTile, Source={StaticResource LocalizedResources}}" Grid.Row="1" Height="44" VerticalAlignment="Bottom"/>
 						<Button x:Name="ComposePin" Content="{Binding Strings.PinToStart, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,269,0,0" Width="344" Command="{Binding PinComposeToStart}" Grid.Row="1" VerticalAlignment="Top"/>
                         <TextBlock x:Name="ToAddColumnTiles" HorizontalAlignment="Left" Margin="8,-13,0,0" TextWrapping="Wrap" Width="432" Foreground="{StaticResource PhoneSubtleBrush}" Grid.Row="2" Height="84" VerticalAlignment="Top" d:LayoutOverrides="VerticalAlignment"><Run Text="{Binding Strings.ToAddColumnTiles, Source={StaticResource LocalizedResources}}"/></TextBlock>
-						<TextBlock x:Name="BackgroundTitle" HorizontalAlignment="Left" Margin="8,93,0,70" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" Text="{Binding Strings.Backgrounds_CapitalFirst, Source={StaticResource LocalizedResources}}" Grid.Row="2" d:LayoutOverrides="Height" />
-						<Button x:Name="SetBackgrounds" Content="{Binding Strings.SetCustomBackground, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,127,0,0" Width="344" Command="{Binding SetCustomBackground}" VerticalAlignment="Top" Grid.Row="2" d:LayoutOverrides="GridBox" />
+						<TextBlock x:Name="BackgroundTitle" HorizontalAlignment="Left" Margin="8,93,0,65" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}" FontFamily="Segoe WP Semibold" FontSize="24" Text="{Binding Strings.Backgrounds_CapitalFirst, Source={StaticResource LocalizedResources}}" Grid.Row="2" />
+						<Button x:Name="SetBackgrounds" Content="{Binding Strings.SetCustomBackground, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="52,127,0,-8" Width="344" Command="{Binding SetCustomBackground}" VerticalAlignment="Top" Grid.Row="2" Height="73" />
 						
 						<toolkit:ListPicker x:Name="SizePicker" Margin="12,146,21,0" VerticalAlignment="Top" SelectedIndex="{Binding SelectedFontSize, Mode=TwoWay}" Grid.Row="0">
 							<toolkit:ListPickerItem Content="{Binding Strings.Small, Source={StaticResource LocalizedResources}}"/>
 							<toolkit:ListPickerItem Content="{Binding Strings.Medium, Source={StaticResource LocalizedResources}}"/>
 							<toolkit:ListPickerItem Content="{Binding Strings.Big, Source={StaticResource LocalizedResources}}" Margin="0,0,16,0"/>
 						</toolkit:ListPicker>
+						<HyperlinkButton Content="{Binding Strings.Privacy_Policy, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Height="32" Margin="0,200,0,-40" Grid.Row="2" VerticalAlignment="Top" Width="438" HorizontalContentAlignment="Left" Command="{Binding ShowPrivacyPolicy}"/>
+						<HyperlinkButton Content="{Binding Strings.CouponCodes, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Height="28" Margin="0,237,0,-73" Grid.Row="2" VerticalAlignment="Top" Width="448" HorizontalContentAlignment="Left" NavigateUri="/Pages/Settings/CouponCodes.xaml" />
 					</Grid>
 				</ScrollViewer>
 			</controls:PivotItem>

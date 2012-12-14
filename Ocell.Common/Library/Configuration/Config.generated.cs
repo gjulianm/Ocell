@@ -360,6 +360,19 @@ namespace Ocell.Library
 				GenericSaveToConfig<DateTime?>("TRIAL_INSTALLED_TIME", ref _TrialStart, value);
 			}
 		}
+
+		private static bool? _CouponCodeValidated;
+		public static bool? CouponCodeValidated
+		{
+			get 
+			{
+				return GenericGetFromConfig<bool?>("COUPON_CODE", ref _CouponCodeValidated);
+			}
+			set
+			{
+				GenericSaveToConfig<bool?>("COUPON_CODE", ref _CouponCodeValidated, value);
+			}
+		}
 	#endif
 	#endregion
 
@@ -390,6 +403,7 @@ namespace Ocell.Library
 			_BufferProfiles = null;
 			_BufferAccessToken = null;
 			_TrialStart = null;
+			_CouponCodeValidated = null;
 #endif
 		}
 
@@ -407,6 +421,7 @@ namespace Ocell.Library
 			defaultValues.Add("RECOVERREAD", true);
 			defaultValues.Add("GEOTAG_TWEETS", true);
 			defaultValues.Add("TRIAL_INSTALLED_TIME", DateTime.MaxValue);
+			defaultValues.Add("COUPON_CODE", false);
 #endif
 		}
 	}

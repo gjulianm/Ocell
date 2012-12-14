@@ -756,7 +756,7 @@
     <comment>DefaultModel, eg: Credentials for Instapaper saved.</comment>
   </data>
   <data name="ErrorAuthURL" xml:space="preserve">
-    <value>An error happened while trying to get auth URL. Please contact @OcellApp if this happens frequently.</value>
+    <value>An error happened while trying to get auth URL. Ensure that the time on your phone is correct, and try changing the network (Wifi or mobile). Please contact @OcellApp if this happens frequently.</value>
     <comment>OAuth.xaml.cs</comment>
   </data>
   <data name="ErrorClientTokens" xml:space="preserve">
@@ -1169,5 +1169,23 @@
   </data>
   <data name="SendWithBuffer" xml:space="preserve">
     <value>send to Buffer</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="CodeInvalid" xml:space="preserve">
+    <value>We couldn't validate your code. Ensure you're connected to Internet and that the code is correctly copied.</value>
+  </data>
+  <data name="CodeValid" xml:space="preserve">
+    <value>This code is valid. Congratulations, you have unlocked Ocell Pro! Enjoy!</value>
+  </data>
+  <data name="CouponCodes" xml:space="preserve">
+    <value>Redeem codes</value>
+  </data>
+  <data name="Privacy_Policy" xml:space="preserve">
+    <value>Privacy policy</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>Validate</value>
   </data>
 </root>

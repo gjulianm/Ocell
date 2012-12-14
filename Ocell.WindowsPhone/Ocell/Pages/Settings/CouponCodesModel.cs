@@ -1,0 +1,84 @@
+﻿using System;
+using System.Net;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Ink;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
+using DanielVaughan.ComponentModel;
+using DanielVaughan;
+using DanielVaughan.Windows;
+using Ocell.Library;
+using System.Collections.Generic;
+using Ocell.Localization;
+
+namespace Ocell.Pages.Settings
+{
+    public class CouponCodesModel : ExtendedViewModelBase
+    {
+        string code;
+        public string Code
+        {
+            get { return code; }
+            set { Assign("Code", ref code, value); }
+        }
+
+        DelegateCommand validate;
+        public ICommand Validate
+        {
+            get { return validate; }
+        }
+
+        public CouponCodesModel()
+            : base("Backgrounds")
+        {
+            validate = new DelegateCommand(ValidateCode, x => !IsLoading);
+            Code = "";
+        }
+
+        void ValidateCode(object param)
+        {
+            if (String.IsNullOrWhiteSpace(Code))
+            {
+                MessageService.ShowError(Resources.CodeInvalid);
+                return;
+            }
+
+            var query = String.Format(SensitiveData.ValidateCodeFormat, Code);
+
+            var request = (HttpWebRequest)WebRequest.Create(query);
+
+            IsLoading = true;
+            validate.RaiseCanExecuteChanged();
+            request.BeginGetResponse((result) =>
+            {
+                bool failed = false; // Easy, no need to complicate here
+                HttpWebResponse response = null;
+                try
+                {
+                    response = (HttpWebResponse)request.EndGetResponse(result);
+                }
+                catch (Exception)
+                {
+                    failed = true;
+                }
+
+                IsLoading = false;
+                validate.RaiseCanExecuteChanged();
+                if (failed || response.StatusCode != HttpStatusCode.OK)
+                {
+                    MessageService.ShowError(Resources.CodeInvalid);
+                }
+                else
+                {
+                    Config.CouponCodeValidated = true;
+                    MessageService.ShowMessage(Resources.CodeValid);
+                    GoBack();
+                }
+            }, null);
+        }
+    }
+}

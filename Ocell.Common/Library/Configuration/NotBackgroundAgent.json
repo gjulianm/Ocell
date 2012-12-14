@@ -17,3 +17,4 @@
  List<BufferProfile>, BUFFER_PROFILES, BufferProfiles
  string, BUFFER_ACCESS_TOKEN, BufferAccessToken
  DateTime?, TRIAL_INSTALLED_TIME, TrialStart, DateTime.MaxValue
+ bool?, COUPON_CODE, CouponCodeValidated, false
