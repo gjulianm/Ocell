@@ -20,9 +20,30 @@ namespace Ocell
             set { Assign("BarText", ref barText, value);}
         }
 
+        bool isWP7;
+        public bool IsWP7
+        {
+            get { return isWP7; }
+            set { Assign("IsWP7", ref isWP7, value); }
+        }
+
+        bool isWP8;
+        public bool IsWP8
+        {
+            get { return isWP8; }
+            set { Assign("IsWP8", ref isWP8, value); }
+        }
+
         public ExtendedViewModelBase()
             : base()
         {
+#if WP8
+            IsWP8 = true;
+            IsWP7 = false;
+#elif WP7
+            IsWP8 = false;
+            IsWP7 = true;
+#endif
         }
 
         public ExtendedViewModelBase(string message)

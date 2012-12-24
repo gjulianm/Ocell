@@ -103,9 +103,9 @@
       <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
       <Name>TweetSharp.WindowsPhone.Mango</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Library.Essential\Library.CoreTypes.csproj">
+    <ProjectReference Include="..\Library.Essential\Ocell.Library.CoreTypes.csproj">
       <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
-      <Name>Library.CoreTypes</Name>
+      <Name>Ocell.Library.CoreTypes</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
