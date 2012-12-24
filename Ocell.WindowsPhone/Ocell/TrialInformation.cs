@@ -50,7 +50,7 @@ namespace Ocell
         {
             get
             {
-                return IsFull && (!IsTrial || !TrialExpired);
+                return IsFull && (!IsTrial || !TrialExpired || Config.CouponCodeValidated == true);
             }
         }
 

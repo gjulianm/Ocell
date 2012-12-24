@@ -31,7 +31,7 @@
         <!--ContentPanel. Colocar aquí el contenido adicional-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
         	<TextBlock HorizontalAlignment="Left" Margin="203,38,0,0" TextWrapping="Wrap" Text="{Binding Strings.Code, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top"/>
-        	<TextBox x:Name="CodeBox" HorizontalAlignment="Left" Height="72" Margin="1,70,-1,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="456" Text="{Binding Code, Mode=TwoWay}"/>
+        	<TextBox x:Name="CodeBox" HorizontalAlignment="Left" Height="72" Margin="1,70,-1,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="456" Text="{Binding Code, Mode=TwoWay}" InputScope="Number"/>
         	<Button Content="{Binding Strings.Validate, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="120,147,0,0" VerticalAlignment="Top" Width="218" Command="{Binding Validate}"/>
 
         </Grid>

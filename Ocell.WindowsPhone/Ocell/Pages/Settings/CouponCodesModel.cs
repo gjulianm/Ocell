@@ -61,7 +61,7 @@ namespace Ocell.Pages.Settings
                 {
                     response = (HttpWebResponse)request.EndGetResponse(result);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     failed = true;
                 }

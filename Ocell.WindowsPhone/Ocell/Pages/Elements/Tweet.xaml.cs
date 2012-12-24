@@ -51,16 +51,9 @@ namespace Ocell.Pages.Elements
             CreateText(viewModel.Tweet);
             viewModel.Completed = true;
             ContentPanel.UpdateLayout();
-            AdjustMargins();
 
             ContentPanel.UpdateLayout();
             
-        }
-
-        private void AdjustMargins()
-        {
-            SecondBlock.Margin = new Thickness(SecondBlock.Margin.Left, Text.ActualHeight + Text.Margin.Top + 10,
-                SecondBlock.Margin.Right, SecondBlock.Margin.Bottom);
         }
 
         private void CreateText(ITweetable Status)

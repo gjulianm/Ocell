@@ -57,6 +57,13 @@ namespace Ocell.Pages.Elements
             set { Assign("HasImage", ref hasImage, value); }
         }
 
+        int retweetCount;
+        public int RetweetCount
+        {
+            get { return retweetCount; }
+            set { Assign("RetweetCount", ref retweetCount, value); }
+        }
+
         ObservableCollection<ITweeter> usersWhoRetweeted;
         public ObservableCollection<ITweeter> UsersWhoRetweeted
         {
@@ -167,6 +174,7 @@ namespace Ocell.Pages.Elements
                         foreach (var rt in statuses)
                             UsersWhoRetweeted.Add(rt.Author);
                     });
+                    RetweetCount = UsersWhoRetweeted.Count;
                 }
             });
 
