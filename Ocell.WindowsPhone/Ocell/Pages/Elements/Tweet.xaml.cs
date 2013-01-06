@@ -269,7 +269,7 @@ namespace Ocell.Pages.Elements
                     Data = link.TargetName
                 };
 
-                NavigationService.Navigate(new Uri("/Pages/Elements/ResourceView.xaml", UriKind.Relative));
+                NavigationService.Navigate(Uris.ResourceView);
             }
 
         }
