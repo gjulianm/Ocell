@@ -42,7 +42,7 @@ namespace Ocell.Library
                         output.WriteLine("Firmware version: {0}", DeviceStatus.DeviceFirmwareVersion);
                         output.WriteLine("Assembly name: {0}", System.Reflection.Assembly.GetExecutingAssembly().FullName);
                         output.WriteLine("Language: {0}", Thread.CurrentThread.CurrentCulture.Name);
-                        output.WriteLine("");
+                        output.WriteLine("State: {0}", TrialInformation.State);
                         output.WriteLine(extra);
                         output.WriteLine(ex.Message);
                         output.WriteLine(ex.StackTrace);                        

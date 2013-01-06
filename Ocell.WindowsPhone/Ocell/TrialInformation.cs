@@ -79,5 +79,29 @@ namespace Ocell
                 }
             });
         }
+
+        public static string State
+        {
+            get
+            {
+                string state = "";
+                ReloadTrialInfo();
+
+                if (IsFull)
+                {
+                    state += "F";
+                    if (IsTrial)
+                        state += "T";
+                    if (IsTrial && TrialExpired)
+                        state += "E";
+                }
+                else
+                {
+                    state += "L";
+                }
+
+                return state;
+            }
+        }
     }
 }
