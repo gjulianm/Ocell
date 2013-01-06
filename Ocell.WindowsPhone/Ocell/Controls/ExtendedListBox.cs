@@ -115,11 +115,15 @@ namespace Ocell.Controls
         void Loader_Error(TwitterResponse response)
         {
             var messager = Dependency.Resolve<IMessageService>();
-            if (DateTime.Now > lastErrorFired.AddSeconds(10))
+            if (DateTime.Now > lastErrorFired.AddSeconds(10) && !string.IsNullOrWhiteSpace(response.StatusDescription))
             {
                 lastErrorFired = DateTime.Now;
                 if (response.RateLimitStatus.RemainingHits == 0)
                     messager.ShowError(String.Format(Localization.Resources.RateLimitHit, response.RateLimitStatus.ResetTime.ToString("H:mm")));
+                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound && Loader.Resource.Type == ResourceType.List)
+                {
+                    messager.ShowError(String.Format(Localization.Resources.ListDeleted, Loader.Resource.Data));
+                }
                 else
                     messager.ShowError(String.Format(Localization.Resources.ErrorLoadingTweets, response.StatusDescription));
 
