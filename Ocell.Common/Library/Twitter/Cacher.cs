@@ -62,8 +62,6 @@ namespace Ocell.Library.Twitter
                     mutex.ReleaseMutex();
                 }
             }
-            
-            mutex.Dispose();
         }
 
         public static IEnumerable<TwitterStatus> GetFromCache(TwitterResource resource)
@@ -92,7 +90,6 @@ namespace Ocell.Library.Twitter
                 }
             }
 
-            mutex.Dispose();
             return statuses ?? new List<TwitterStatus>();
         }
     }
