@@ -1188,4 +1188,7 @@
   <data name="Validate" xml:space="preserve">
     <value>Validate</value>
   </data>
+  <data name="ListDeleted" xml:space="preserve">
+    <value>It seems that the list {0} has been deleted on Twitter. If you want to delete it from Ocell, go to "columns" and long-press it to delete.</value>
+  </data>
 </root>

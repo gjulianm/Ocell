@@ -1188,4 +1188,7 @@
   <data name="Validate" xml:space="preserve">
     <value>Validar</value>
   </data>
+  <data name="ListDeleted" xml:space="preserve">
+    <value>Parece que la lista {0} ha sido borrada en Twitter. Si quieres borrarla también en Ocell, ve a "columnas" y mantén la lista pulsada para borrarla.</value>
+  </data>
 </root>

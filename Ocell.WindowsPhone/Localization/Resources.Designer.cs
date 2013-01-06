@@ -1348,6 +1348,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a It seems that the list {0} has been deleted on Twitter. If you want to delete it from Ocell, go to &quot;columns&quot; and long-press it to delete..
+        /// </summary>
+        public static string ListDeleted {
+            get {
+                return ResourceManager.GetString("ListDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Lists.
         /// </summary>
         public static string Lists {
