@@ -10,6 +10,27 @@ using DanielVaughan;
 
 namespace Ocell.Library
 {
+    public static class StringExtensions
+    {
+        /// <summary>
+        /// Returns the number of characters between a position on the string and the first appearance of a character.
+        /// </summary>
+        /// <param name="str">String</param>
+        /// <param name="end">Ending character</param>
+        /// <param name="startIndex">Where to start searching</param>
+        /// <returns>Length until the end character position or until the end of the string if end wasn't found.</returns>
+        /// <example>"this is @example for me".LengthUntil(' ', 8) => 7</example>
+        public static int LengthUntil(this string str, char end, int startIndex)
+        {
+            int endIndex = str.IndexOf(end, startIndex);
+
+            if (endIndex == -1)
+                return str.Length - startIndex - 1;
+            else
+                return endIndex - startIndex - 1;
+        }
+    }
+
     public class Autocompleter : ObservableObject
     {
         private UsernameProvider _provider = new UsernameProvider();
@@ -76,6 +97,10 @@ namespace Ocell.Library
                 return true;
 
             if (_textbox.SelectionStart <= _text.Length && _textbox.SelectionStart > 0 && _text[_textbox.SelectionStart - 1] == ' ')
+                return true;
+
+            int spaceIndex = _text.IndexOf(' ', _triggerPosition);
+            if (_textbox.SelectionStart <= _triggerPosition || (spaceIndex != -1 && _textbox.SelectionStart > spaceIndex))
                 return true;
 
             return false;
