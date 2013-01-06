@@ -463,10 +463,10 @@ namespace Ocell.Library.Twitter
                 var pairId = msg.GetPairName(Resource.User);
                 var group = groups.FirstOrDefault(x => x.ConverserNames.First == pairId || x.ConverserNames.Second == pairId);
 
-                if (group != null && !group.Messages.Contains(msg))
-                    group.Messages.Add(msg);
-                else
+                if(group == null)
                     Source.Add(new GroupedDM(msg, Resource.User));
+                else if (!group.Messages.Contains(msg))
+                    group.Messages.Add(msg);
             }
         }
         #endregion
