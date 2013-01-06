@@ -262,8 +262,14 @@ namespace Ocell.Pages.Elements
                 NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + link.TargetName.Substring(0), UriKind.Relative));
             else if (link.TargetName[0] == '#')
             {
-                DataTransfer.Search = link.TargetName;
-                NavigationService.Navigate(new Uri("/Pages/Search/Search.xaml?q=" + link.TargetName, UriKind.Relative));
+                Ocell.Pages.Search.ResourceViewModel.Resource = new TwitterResource
+                {
+                    User = DataTransfer.CurrentAccount,
+                    Type = ResourceType.Search,
+                    Data = link.TargetName
+                };
+
+                NavigationService.Navigate(new Uri("/Pages/Elements/ResourceView.xaml", UriKind.Relative));
             }
 
         }
