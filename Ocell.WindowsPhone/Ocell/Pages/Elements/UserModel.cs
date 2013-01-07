@@ -372,9 +372,9 @@ namespace Ocell.Pages.Elements
         {
             IsLoading = false;
             if (response.StatusCode == HttpStatusCode.OK)
-                MessageService.ShowLightNotification(String.Format(Resources.ReportedAndBlocked, usr.ScreenName));
+                MessageService.ShowLightNotification(String.Format(Resources.ReportedAndBlocked, User.ScreenName));
             else
-                MessageService.ShowError(String.Format(Resources.CouldntReport, usr.ScreenName));
+                MessageService.ShowError(String.Format(Resources.CouldntReport, User.ScreenName));
         }
 
         void ReceiveUsers(IEnumerable<TwitterUser> users, TwitterResponse response)
