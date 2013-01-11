@@ -89,25 +89,30 @@
         <!--ContentPanel. Colocar aquÃ­ el contenido adicional-->
         <Grid x:Name="ContentPanel" Margin="12,-15,8,8" Grid.Row="1" Visibility="{Binding Completed, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ScrollViewer Margin="1,0,12,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
-                <Grid VerticalAlignment="Top" Height="798">
-                    <Grid Height="99" Margin="7,0,117,0" VerticalAlignment="Top" Tap="Grid_Tap" local:MetroInMotion.Tilt="3">
+                <Grid VerticalAlignment="Top">
+                	<Grid.RowDefinitions>
+                		<RowDefinition Height="Auto"/>
+                		<RowDefinition Height="Auto"/>
+                		<RowDefinition Height="Auto"/>
+                		<RowDefinition Height="Auto"/>
+                		<RowDefinition Height="Auto"/>
+                		<RowDefinition Height="Auto"/>
+                	</Grid.RowDefinitions>
+                    <Grid Height="99" Margin="7,0,0,0" VerticalAlignment="Top" Tap="Grid_Tap" local:MetroInMotion.Tilt="3">
                         <Image x:Name="Avatar" HorizontalAlignment="Left" Margin="0,8,0,0" Width="85" RenderTransformOrigin="0.475,0.52" Source="{Binding HdAvatar}"/>
-                        <TextBlock x:Name="FName" Margin="94,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" FontSize="32" HorizontalAlignment="Left" Text="{Binding Tweet.User.Name}" Width="238"/>
-                        <TextBlock x:Name="SName" Margin="94,42,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="21.333" FontFamily="Segoe WP SemiLight"><Run Text="@"/><Run Text="{Binding Tweet.Author.ScreenName}"/><Run Text="{Binding WhoRetweeted}"/></TextBlock>
+                        <TextBlock x:Name="FName" Margin="94,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" FontSize="32" HorizontalAlignment="Left" Text="{Binding Tweet.User.Name}" Width="346"/>
+                        <TextBlock x:Name="SName" Margin="94,42,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="21.333" FontFamily="Segoe WP SemiLight" Width="346"><Run Text="@"/><Run Text="{Binding Tweet.Author.ScreenName}"/><Run Text="{Binding WhoRetweeted}"/></TextBlock>
                     </Grid>
-                    <RichTextBox x:Name="Text" TextWrapping="Wrap" HorizontalAlignment="Left" Width="440" FontSize="29.333" VerticalAlignment="Top" Margin="0,110,0,0" IsReadOnly="True" FontFamily="Segoe WP SemiLight"  />
-                    <Grid x:Name="SecondBlock" Height="646" Margin="8,0" VerticalAlignment="Top">
-                        <TextBlock x:Name="ViaDate" HorizontalAlignment="Right" Margin="0,8,14,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18.667" Foreground="#FFABABAB" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP Light" d:LayoutOverrides="VerticalAlignment" Height="28">
-                            <Run Text="{Binding Tweet.CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}"/>
-                            <Run Text="{Binding Strings.Via, Source={StaticResource LocalizedResources}}" />
-                            <Run Text="{Binding Tweet.Source, Converter={StaticResource RemoveHTMLConverter}}" />
-                        </TextBlock>
-                        <TextBlock x:Name="Replies" toolkit:TiltEffect.IsTiltEnabled="True" Tap="Replies_Tap" Margin="0,40,13,0" TextWrapping="Wrap" Text="{Binding Strings.Conversation_CapitalFirst, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" FontSize="21.333" Foreground="{StaticResource PhoneAccentBrush}" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP" HorizontalAlignment="Right" Visibility="{Binding HasReplies, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                        <TextBlock x:Name="usersText" Margin="8,76,8,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" Visibility="{Binding HasRetweets, Converter={StaticResource BooleanToVisibilityConverter}}"><Run Text="{Binding Strings.UsersWhoRetweeted, Source={StaticResource LocalizedResources}}"/><Run Text=":"/></TextBlock>
-                        <ListBox x:Name="RTList" ItemsSource="{Binding UsersWhoRetweeted}" Margin="8,107,14,0" Height="65"  VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ItemsPanel="{StaticResource PanelTemplate}" ItemTemplate="{StaticResource RetweetUserTemplate}" Visibility="{Binding HasRetweets, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        </ListBox>
-                        <Image x:Name="img" Margin="15,182,15,0" VerticalAlignment="Top" Width="415" Visibility="{Binding HasImage, Converter={StaticResource BooleanToVisibilityConverter}}" Source="{Binding ImageSource}"/>
-                    </Grid>
+                    <RichTextBox x:Name="Text" TextWrapping="Wrap" HorizontalAlignment="Left" Width="440" FontSize="29.333" VerticalAlignment="Top" Margin="0" IsReadOnly="True" FontFamily="Segoe WP SemiLight" Grid.Row="1"  />
+                    <TextBlock x:Name="ViaDate" HorizontalAlignment="Right" Margin="0,8,24,0" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="18.667" Foreground="#FFABABAB" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP Light" Height="28" Width="423" Grid.Row="2" TextAlignment="Right">
+                    	<Run Text="{Binding Tweet.CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}"/>
+                    	<Run Text="{Binding Strings.Via, Source={StaticResource LocalizedResources}}" />
+                    	<Run Text="{Binding Tweet.Source, Converter={StaticResource RemoveHTMLConverter}}" />
+                    </TextBlock>
+                    <TextBlock x:Name="Replies" toolkit:TiltEffect.IsTiltEnabled="True" Tap="Replies_Tap" Margin="0,0,24,0" TextWrapping="Wrap" Text="{Binding Strings.Conversation_CapitalFirst, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" FontSize="21.333" Foreground="{StaticResource PhoneAccentBrush}" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP" HorizontalAlignment="Right" Visibility="{Binding HasReplies, Converter={StaticResource BooleanToVisibilityConverter}}" Height="28" Width="423" Grid.Row="3" TextAlignment="Right"/>
+                    <TextBlock x:Name="usersText" Margin="8,8,24,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" Visibility="{Binding HasRetweets, Converter={StaticResource BooleanToVisibilityConverter}}" Height="27" Grid.Row="4"><Run Text="{Binding Strings.UsersWhoRetweeted, Source={StaticResource LocalizedResources}}"/><Run Text=" ("/><Run Text="{Binding RetweetCount}"/><Run Text="):"/></TextBlock>
+                    <ListBox x:Name="RTList" ItemsSource="{Binding UsersWhoRetweeted}" Margin="8,38,30,0" Height="65"  VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ItemsPanel="{StaticResource PanelTemplate}" ItemTemplate="{StaticResource RetweetUserTemplate}" Visibility="{Binding HasRetweets, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="4"/>
+                    <Image x:Name="img" Margin="15,15,17,0" VerticalAlignment="Top" Visibility="{Binding HasImage, Converter={StaticResource BooleanToVisibilityConverter}}" Source="{Binding ImageSource}" Grid.Row="5"/>
                 </Grid>
             </ScrollViewer>
             <Grid x:Name="MuteGrid" Height="91" VerticalAlignment="Bottom" Margin="-12,0,-8,-11" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsMuting, Converter={StaticResource BooleanToVisibilityConverter}}">

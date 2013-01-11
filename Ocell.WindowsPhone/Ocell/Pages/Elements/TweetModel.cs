@@ -64,6 +64,13 @@ namespace Ocell.Pages.Elements
             set { Assign("UsersWhoRetweeted", ref usersWhoRetweeted, value); }
         }
 
+        int retweetCount;
+        public int RetweetCount
+        {
+            get { return retweetCount; }
+            set { Assign("RetweetCount", ref retweetCount, value); }        }
+
+
         bool hasRetweets;
         public bool HasRetweets
         {
@@ -156,6 +163,11 @@ namespace Ocell.Pages.Elements
                 FillUser();
 
             UsersWhoRetweeted = new ObservableCollection<ITweeter>();
+
+            UsersWhoRetweeted.CollectionChanged += (s, e) =>
+            {
+                RetweetCount = UsersWhoRetweeted.Count;
+            };
 
             ServiceDispatcher.GetDefaultService().Retweets(Tweet.Id, (statuses, response) =>
             {
