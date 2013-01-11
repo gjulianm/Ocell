@@ -35,7 +35,7 @@
             <!--Elemento uno de Pivot-->
             <controls:PivotItem x:Name="pvProfile" Header="{Binding Strings.Profile, Source={StaticResource LocalizedResources}}">
                 <Grid Margin="0,-14,0,0">
-                    <Image HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="124" Height="124" x:Name="Avatar" Source="{Binding Avatar}"/>
+                    <Image HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="124" Height="124" x:Name="Avatar" Source="{Binding Avatar}" Tap="Avatar_Tap_1" local:MetroInMotion.Tilt="3"/>
                     <TextBlock x:Name="FullName" Margin="148,0,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="300" FontSize="32" Text="{Binding Name}"/>
                     <TextBlock Height="36" Margin="148,108,8,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" FontFamily="Segoe WP Light" Text="{Binding RelationshipText}"/>
                     <TextBlock x:Name="ScreenName" Margin="148,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="21.333" FontFamily="Segoe WP SemiLight"><Run Text="@"/><Run Text="{Binding ScreenName}"/></TextBlock>

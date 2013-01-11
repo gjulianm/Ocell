@@ -68,5 +68,12 @@ namespace Ocell.Pages.Elements
             NavigationService.Navigate(new Uri("/Pages/Elements/UserList.xaml?resource=followers&user=" + viewModel.ScreenName, UriKind.Relative));
         
         }
+
+        private void Avatar_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            WebBrowserTask wb = new WebBrowserTask();
+            wb.Uri = new Uri(viewModel.Avatar, UriKind.Absolute);
+            wb.Show();
+        }
     }
 }
