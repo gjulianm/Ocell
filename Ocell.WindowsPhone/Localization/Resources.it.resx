@@ -1167,4 +1167,7 @@
   <data name="ListDeleted" xml:space="preserve">
     <value>Sembra che la lista {0} è stato eliminato in Twitter. Se si desidera eliminare anche Ocell, andare a "colonne" e tenere premuto per cancellare.</value>
   </data>
+  <data name="SendWithBuffer" xml:space="preserve">
+    <value>invia a Buffer</value>
+  </data>
 </root>
