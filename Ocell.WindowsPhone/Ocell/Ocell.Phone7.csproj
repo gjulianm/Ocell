@@ -141,9 +141,6 @@
     <Compile Include="Pages\Elements\UserModel.cs" />
     <Compile Include="Pages\NewTweetModel.cs" />
     <Compile Include="Pages\SelectUserModel.cs" />
-    <Compile Include="Pages\Settings\AskGeolocation.xaml.cs">
-      <DependentUpon>AskGeolocation.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Settings\Backgrounds.xaml.cs">
       <DependentUpon>Backgrounds.xaml</DependentUpon>
     </Compile>
@@ -310,10 +307,6 @@
     <Page Include="Pages\SelectUser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Settings\AskGeolocation.xaml">
-      <Generator>MSBuild:MarkupCompilePass1</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Settings\Backgrounds.xaml">
       <SubType>Designer</SubType>
