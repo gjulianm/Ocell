@@ -243,7 +243,7 @@ namespace Ocell.Pages
                 if (url.Length > ShortUrlLength)
                     txtLen -= url.Length - ShortUrlLength;
 
-            RemainingChars = txtLen;
+            RemainingChars = 140 - txtLen;
 
             if (RemainingChars >= 0)
             {
