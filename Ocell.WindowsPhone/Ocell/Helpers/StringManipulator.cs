@@ -1,29 +1,17 @@
 ﻿using System.Collections.Generic;
-
+using System.Text.RegularExpressions;
+using System.Linq;
 namespace Ocell
 {
     public static class StringManipulator
     {
         public static IEnumerable<string> GetUserNames(string text)
         {
-            int i;
-            string user = "";
-            bool onUser = false;
-            List<string> list = new List<string>();
-
-            for (i = 0; i < text.Length; i++)
-            {
-                if (!onUser)
-                    onUser = (text[i] == '@');
-                else if (text[i] == ' ')
-                {
-                    onUser = false;
-                    yield return user;
-                    user = "";
-                }
-                else
-                    user += text[i];
-            }
+            // I was too lazy to build the Regex myself, so Google is my friend. Source: http://shahmirj.com/blog/extracting-twitter-usertags-using-regex.
+            var regex = new Regex("(?<=^|(?<=[^a-zA-Z0-9-_\\.]))@([A-Za-z]+[A-Za-z0-9_]+)");
+            
+            foreach(Match match in regex.Matches(text))
+                yield return match.Value;
         }
 
         public static string RemoveHtmlTags(string text) 

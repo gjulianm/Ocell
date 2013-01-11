@@ -59,8 +59,8 @@ namespace Ocell.Commands
             DataTransfer.ReplyId = tweet.Id;
             DataTransfer.Text = "@" + tweet.Author.ScreenName + " ";
             foreach (string user in StringManipulator.GetUserNames(tweet.Text))
-                if(DataTransfer.CurrentAccount != null && user != DataTransfer.CurrentAccount.ScreenName)
-                    DataTransfer.Text += "@" + user + " ";
+                if(DataTransfer.CurrentAccount != null && user != "@" + DataTransfer.CurrentAccount.ScreenName)
+                    DataTransfer.Text += user + " ";
 
             Dependency.Resolve<INavigationService>().Navigate(Uris.WriteTweet);
         }
