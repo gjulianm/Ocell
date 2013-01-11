@@ -221,19 +221,19 @@ namespace Ocell.Pages.Elements
                 {
                     IsLoading = true;
                     ServiceDispatcher.GetService(DataTransfer.CurrentAccount).BlockUser(User.Id, ReceiveBlock);
-                }, GenericCanExecute);
+                }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
             unblock = new DelegateCommand((obj) =>
                 {
                     IsLoading = true;
                     ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnblockUser(User.Id, ReceiveBlock);
-                }, GenericCanExecute);
+                }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
             reportSpam = new DelegateCommand((obj) =>
             {
                 IsLoading = true;
                 ServiceDispatcher.GetService(DataTransfer.CurrentAccount).ReportSpam(User.Id, ReceiveReportSpam);
-            }, GenericCanExecute);
+            }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
             changeAvatar = new DelegateCommand((obj) =>
                 {
@@ -264,7 +264,7 @@ namespace Ocell.Pages.Elements
 
         private void UpdateRelationshipText()
         {
-            if (!FriendshipRetrieved)
+            if (!FriendshipRetrieved || IsOwner)
                 RelationshipText = "";
             else if (FollowsMe)
                 RelationshipText = String.Format(Resources.XFollowsY, ScreenName, DataTransfer.CurrentAccount.ScreenName);
@@ -346,13 +346,13 @@ namespace Ocell.Pages.Elements
 
             if (!Blocked)
             {
-                successMsg = String.Format(Resources.UserIsNowUnblocked, usr.ScreenName);
-                errorMsg = String.Format(Resources.CouldntUnblock, usr.ScreenName);
+                successMsg = String.Format(Resources.UserIsNowUnblocked, User.ScreenName);
+                errorMsg = String.Format(Resources.CouldntUnblock, User.ScreenName);
             }
             else
             {
-                successMsg = String.Format(Resources.UserIsNowBlocked, usr.ScreenName);
-                errorMsg = String.Format(Resources.CouldntBlock, usr.ScreenName);
+                successMsg = String.Format(Resources.UserIsNowBlocked, User.ScreenName);
+                errorMsg = String.Format(Resources.CouldntBlock, User.ScreenName);
             }
 
             IsLoading = false;
