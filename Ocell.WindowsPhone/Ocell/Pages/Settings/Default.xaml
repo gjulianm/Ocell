@@ -91,7 +91,7 @@
 							<toolkit:ListPickerItem Content="{Binding Strings.Big, Source={StaticResource LocalizedResources}}" Margin="0,0,16,0"/>
 						</toolkit:ListPicker>
 						<HyperlinkButton Content="{Binding Strings.Privacy_Policy, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Height="32" Margin="0,200,0,-40" Grid.Row="2" VerticalAlignment="Top" Width="438" HorizontalContentAlignment="Left" Command="{Binding ShowPrivacyPolicy}"/>
-						<HyperlinkButton Content="{Binding Strings.CouponCodes, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Height="28" Margin="0,237,0,-73" Grid.Row="2" VerticalAlignment="Top" Width="448" HorizontalContentAlignment="Left" NavigateUri="/Pages/Settings/CouponCodes.xaml" />
+						<HyperlinkButton Content="{Binding Strings.CouponCodes, Source={StaticResource LocalizedResources}}" Visibility="{Binding IsFull, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Left" Height="28" Margin="0,237,0,-73" Grid.Row="2" VerticalAlignment="Top" Width="448" HorizontalContentAlignment="Left" NavigateUri="/Pages/Settings/CouponCodes.xaml" />
 					</Grid>
 				</ScrollViewer>
 			</controls:PivotItem>

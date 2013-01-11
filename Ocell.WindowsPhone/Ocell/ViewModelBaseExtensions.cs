@@ -46,9 +46,33 @@ namespace Ocell
 #endif
         }
 
+        bool isFull;
+        public bool IsFull
+        {
+            get { return isFull; }
+            set { Assign("IsFull", ref isFull, value); }
+        }
+
+        bool isFullFeatured;
+        public bool IsFullFeatured
+        {
+            get { return isFullFeatured; }
+            set { Assign("IsFullFeatured", ref isFullFeatured, value); }
+        }
+
         public ExtendedViewModelBase(string message)
             : base(message)
         {
+            TrialInformation.ReloadTrialInfo();
+            IsFull = TrialInformation.IsFull;
+            IsFullFeatured = TrialInformation.IsFullFeatured;
+#if WP8
+            IsWP8 = true;
+            IsWP7 = false;
+#elif WP7
+            IsWP8 = false;
+            IsWP7 = true;
+#endif
         }
 
         /* I'll go to hell for this, probably. 
