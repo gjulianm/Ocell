@@ -68,8 +68,7 @@ namespace Ocell
             
             viewModel.RaiseLoggedInChange();
 
-            if (!GeolocationPrompt())
-                return;
+            GeolocationPrompt();
 
             CreateStoryboards();
 
@@ -114,14 +113,18 @@ namespace Ocell
             return result;
         }
 
-        bool GeolocationPrompt()
+        void GeolocationPrompt()
         {
-            if (Config.EnabledGeolocation == null)
-            {
-                NavigationService.Navigate(new Uri("/Pages/Settings/AskGeolocation.xaml", UriKind.Relative));
-                return false;
-            }
-            return true;
+            if (Config.EnabledGeolocation != null)
+                return;
+
+            string boxText = Localization.Resources.AskAccessGrantGeolocation + Environment.NewLine + Environment.NewLine;
+            boxText += Localization.Resources.PrivacyPolicy + Environment.NewLine + Environment.NewLine;
+            boxText += Localization.Resources.ChangeGeolocSetting;
+
+            var result = MessageBox.Show(boxText, Localization.Resources.Geolocation, MessageBoxButton.OKCancel);
+
+            Config.EnabledGeolocation = result == MessageBoxResult.OK;
         }
 
         bool CheckForLogin()
