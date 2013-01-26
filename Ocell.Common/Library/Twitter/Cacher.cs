@@ -39,7 +39,6 @@ namespace Ocell.Library.Twitter
         public static void SaveToCache(TwitterResource resource, IEnumerable<TwitterStatus> list)
         { 
             string fileName = GetCacheName(resource);
-            
 
             var serializer = new SharpSerializer(SerializerSettings);
             Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName);

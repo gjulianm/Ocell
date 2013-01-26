@@ -373,6 +373,19 @@ namespace Ocell.Library
 				GenericSaveToConfig<bool?>("COUPON_CODE", ref _CouponCodeValidated, value);
 			}
 		}
+
+		private static ColumnReloadOptions? _ReloadOptions;
+		public static ColumnReloadOptions? ReloadOptions
+		{
+			get 
+			{
+				return GenericGetFromConfig<ColumnReloadOptions?>("RELOAD_OPS", ref _ReloadOptions);
+			}
+			set
+			{
+				GenericSaveToConfig<ColumnReloadOptions?>("RELOAD_OPS", ref _ReloadOptions, value);
+			}
+		}
 	#endif
 	#endregion
 
@@ -404,6 +417,7 @@ namespace Ocell.Library
 			_BufferAccessToken = null;
 			_TrialStart = null;
 			_CouponCodeValidated = null;
+			_ReloadOptions = null;
 #endif
 		}
 
@@ -422,6 +436,7 @@ namespace Ocell.Library
 			defaultValues.Add("GEOTAG_TWEETS", true);
 			defaultValues.Add("TRIAL_INSTALLED_TIME", DateTime.MaxValue);
 			defaultValues.Add("COUPON_CODE", false);
+			defaultValues.Add("RELOAD_OPS", ColumnReloadOptions.KeepPosition);
 #endif
 		}
 	}

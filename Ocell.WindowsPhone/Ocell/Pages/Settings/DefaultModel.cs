@@ -139,6 +139,13 @@ namespace Ocell.Settings
             get { return geoTaggingEnabled; }
             set { Assign("GeoTaggingEnabled", ref geoTaggingEnabled, value); }
         }
+
+        int selectedReloadOption;
+        public int SelectedReloadOption
+        {
+            get { return selectedReloadOption; }
+            set { Assign("SelectedReloadOption", ref selectedReloadOption, value); }
+        }
         #endregion
 
         #region Commands
@@ -305,6 +312,7 @@ namespace Ocell.Settings
             SelectedMuteTime = TimeSpanToSelectedFilter((TimeSpan)Config.DefaultMuteTime);
             ShowResumePositionButton = Config.RecoverReadPositions == true;
             GeoTaggingEnabled = Config.EnabledGeolocation == true;
+            SelectedReloadOption = (int)Config.ReloadOptions;
 
             PushAvailable = TrialInformation.IsFullFeatured;
 
@@ -395,6 +403,9 @@ namespace Ocell.Settings
                             PushNotifications.UnregisterAll();
                         else
                             PushNotifications.AutoRegisterForNotifications();
+                        break;
+                    case "SelectedReloadOption":
+                        Config.ReloadOptions = (ColumnReloadOptions)SelectedReloadOption;
                         break;
                 }
             };

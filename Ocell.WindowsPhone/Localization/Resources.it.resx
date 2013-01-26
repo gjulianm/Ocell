@@ -1173,4 +1173,16 @@
   <data name="SendWithBuffer" xml:space="preserve">
     <value>invia a Buffer</value>
   </data>
+  <data name="AskPosition" xml:space="preserve">
+    <value>Chiedi a me</value>
+  </data>
+  <data name="ShowLastTweet" xml:space="preserve">
+    <value>Continua da dove</value>
+  </data>
+  <data name="ToNewTweets" xml:space="preserve">
+    <value>Mostra l'ultimo tweet</value>
+  </data>
+  <data name="WhenAppStart" xml:space="preserve">
+    <value>Quando Ocell si avvia ...</value>
+  </data>
 </root>

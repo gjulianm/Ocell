@@ -1191,4 +1191,16 @@
   <data name="ListDeleted" xml:space="preserve">
     <value>It seems that the list {0} has been deleted on Twitter. If you want to delete it from Ocell, go to "columns" and long-press it to delete.</value>
   </data>
+  <data name="AskPosition" xml:space="preserve">
+    <value>Ask me</value>
+  </data>
+  <data name="ShowLastTweet" xml:space="preserve">
+    <value>Continue where I left</value>
+  </data>
+  <data name="ToNewTweets" xml:space="preserve">
+    <value>Show the last tweet</value>
+  </data>
+  <data name="WhenAppStart" xml:space="preserve">
+    <value>When the app starts...</value>
+  </data>
 </root>

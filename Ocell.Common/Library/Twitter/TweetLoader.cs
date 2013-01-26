@@ -198,14 +198,8 @@ namespace Ocell.Library.Twitter
             IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource);
             var toAdd = AddLoadMoreButtons(cacheList.OrderByDescending(x => x.Id).Cast<ITweetable>()).Except(Source);
 
-            int added = 0;
             foreach (var item in toAdd)
-            {
                 Source.Add(item);
-                added++;
-                if (added == 10)
-                    Thread.Sleep(100); // Making pauses allows the UI to refresh better.
-            }
 
             if (CacheLoad != null)
                 CacheLoad(this, new EventArgs());
@@ -416,7 +410,7 @@ namespace Ocell.Library.Twitter
 
             if (list.Any())
             {
-                if (list.FirstOrDefault() is TwitterDirectMessage 
+                if (list.FirstOrDefault() is TwitterDirectMessage
                     && (Resource.Type == ResourceType.Messages && string.IsNullOrWhiteSpace(Resource.Data)))
                     LoadMessages(list.OfType<TwitterDirectMessage>());
                 else
@@ -434,25 +428,12 @@ namespace Ocell.Library.Twitter
 
         private void LoadTweetables(IEnumerable<ITweetable> list)
         {
-            lock (_deferSync)
-            {
-                if (_deferringRefresh && !_allowOneRefresh)
-                {
-                    foreach (var item in list)
-                        _deferredItems.Enqueue(item);
-                }
-                else
-                {
-                    _allowOneRefresh = false;
+            TryAddLoadMoreButton(list);
 
-                    TryAddLoadMoreButton(list);
+            list = list.Except(Source);
 
-                    list = list.Except(Source);
-
-                    foreach (var status in list)
-                        Source.Add(status);
-                }
-            }
+            foreach (var status in list)
+                Source.Add(status);
         }
 
         private void LoadMessages(IEnumerable<TwitterDirectMessage> messages)
@@ -463,7 +444,7 @@ namespace Ocell.Library.Twitter
                 var pairId = msg.GetPairName(Resource.User);
                 var group = groups.FirstOrDefault(x => x.ConverserNames.First == pairId || x.ConverserNames.Second == pairId);
 
-                if(group == null)
+                if (group == null)
                     Source.Add(new GroupedDM(msg, Resource.User));
                 else if (!group.Messages.Contains(msg))
                     group.Messages.Add(msg);
@@ -484,7 +465,7 @@ namespace Ocell.Library.Twitter
                 sumTime += diff;
 
                 if (sumTime != 0 && i > 1
-                    && diff > 10 * (sumTime / (i - 1)) && diff > 5*avgTime
+                    && diff > 10 * (sumTime / (i - 1)) && diff > 5 * avgTime
                     && diff > 200)
                     yield return new LoadMoreTweetable { Id = list[i].Id + 1 };
 

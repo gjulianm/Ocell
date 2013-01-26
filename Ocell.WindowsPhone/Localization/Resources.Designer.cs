@@ -313,6 +313,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Ask me.
+        /// </summary>
+        public static string AskPosition {
+            get {
+                return ResourceManager.GetString("AskPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Are you sure you want to tweet from the protected account @{0}?.
         /// </summary>
         public static string AskTweetProtectedAccount {
@@ -2194,6 +2203,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Continue where I left.
+        /// </summary>
+        public static string ShowLastTweet {
+            get {
+                return ResourceManager.GetString("ShowLastTweet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Show &quot;Resume reading&quot; button.
         /// </summary>
         public static string ShowResumeButton {
@@ -2325,6 +2343,15 @@ namespace Ocell.Localization {
         public static string ToastAndTile {
             get {
                 return ResourceManager.GetString("ToastAndTile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Show the last tweet.
+        /// </summary>
+        public static string ToNewTweets {
+            get {
+                return ResourceManager.GetString("ToNewTweets", resourceCulture);
             }
         }
         
@@ -2586,6 +2613,15 @@ namespace Ocell.Localization {
         public static string WhatToMute {
             get {
                 return ResourceManager.GetString("WhatToMute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a When the app starts....
+        /// </summary>
+        public static string WhenAppStart {
+            get {
+                return ResourceManager.GetString("WhenAppStart", resourceCulture);
             }
         }
         

@@ -84,6 +84,9 @@
     <Compile Include="..\..\Ocell.Common\Library\Collections\SafeObservable.cs">
       <Link>Collections\SafeObservable.cs</Link>
     </Compile>
+    <Compile Include="..\..\Ocell.Common\Library\ColumnReloadOptions.cs">
+      <Link>ColumnReloadOptions.cs</Link>
+    </Compile>
     <Compile Include="..\..\Ocell.Common\Library\Configuration\Config.cs">
       <Link>Configuration\Config.cs</Link>
     </Compile>

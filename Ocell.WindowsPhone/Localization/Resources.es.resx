@@ -1191,4 +1191,16 @@
   <data name="ListDeleted" xml:space="preserve">
     <value>Parece que la lista {0} ha sido borrada en Twitter. Si quieres borrarla también en Ocell, ve a "columnas" y mantén la lista pulsada para borrarla.</value>
   </data>
+  <data name="AskPosition" xml:space="preserve">
+    <value>Preguntarme</value>
+  </data>
+  <data name="ShowLastTweet" xml:space="preserve">
+    <value>Seguir donde lo había dejado</value>
+  </data>
+  <data name="ToNewTweets" xml:space="preserve">
+    <value>Ir al último tweet</value>
+  </data>
+  <data name="WhenAppStart" xml:space="preserve">
+    <value>Cuando la aplicación se abra...</value>
+  </data>
 </root>
