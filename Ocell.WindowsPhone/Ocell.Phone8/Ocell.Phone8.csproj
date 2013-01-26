@@ -344,10 +344,6 @@
     <Compile Include="..\Ocell\Pages\SelectUserModel.cs">
       <Link>Pages\SelectUserModel.cs</Link>
     </Compile>
-    <Compile Include="..\Ocell\Pages\Settings\AskGeolocation.xaml.cs">
-      <Link>Pages\Settings\AskGeolocation.xaml.cs</Link>
-      <DependentUpon>AskGeolocation.xaml</DependentUpon>
-    </Compile>
     <Compile Include="..\Ocell\Pages\Settings\Backgrounds.xaml.cs">
       <Link>Pages\Settings\Backgrounds.xaml.cs</Link>
       <DependentUpon>Backgrounds.xaml</DependentUpon>
@@ -735,11 +731,6 @@
     <Page Include="..\Ocell\Pages\SelectUser.xaml">
       <Link>Pages\SelectUser.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\Ocell\Pages\Settings\AskGeolocation.xaml">
-      <Link>Pages\Settings\AskGeolocation.xaml</Link>
-      <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="..\Ocell\Pages\Settings\Backgrounds.xaml">

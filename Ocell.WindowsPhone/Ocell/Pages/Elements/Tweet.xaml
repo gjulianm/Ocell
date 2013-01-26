@@ -104,7 +104,7 @@
                         <TextBlock x:Name="SName" Margin="94,42,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="21.333" FontFamily="Segoe WP SemiLight" Width="346"><Run Text="@"/><Run Text="{Binding Tweet.Author.ScreenName}"/><Run Text="{Binding WhoRetweeted}"/></TextBlock>
                     </Grid>
                     <RichTextBox x:Name="Text" TextWrapping="Wrap" HorizontalAlignment="Left" Width="440" FontSize="29.333" VerticalAlignment="Top" Margin="0" IsReadOnly="True" FontFamily="Segoe WP SemiLight" Grid.Row="1"  />
-                    <TextBlock x:Name="ViaDate" HorizontalAlignment="Right" Margin="0,8,24,0" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="18.667" Foreground="#FFABABAB" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP Light" Height="28" Width="423" Grid.Row="2" TextAlignment="Right">
+                    <TextBlock x:Name="ViaDate" HorizontalAlignment="Right" Margin="0,12,24,0" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="18.667" Foreground="#FFABABAB" RenderTransformOrigin="0.501,0.5" Padding="0" FontFamily="Segoe WP Light" Height="28" Width="423" Grid.Row="2" TextAlignment="Right">
                     	<Run Text="{Binding Tweet.CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}"/>
                     	<Run Text="{Binding Strings.Via, Source={StaticResource LocalizedResources}}" />
                     	<Run Text="{Binding Tweet.Source, Converter={StaticResource RemoveHTMLConverter}}" />

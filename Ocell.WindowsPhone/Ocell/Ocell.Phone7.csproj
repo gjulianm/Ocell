@@ -107,6 +107,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ScrollController.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Helpers\FilterManager.cs" />
     <Compile Include="Helpers\TemplateSelector.cs" />

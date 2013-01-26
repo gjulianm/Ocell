@@ -39,7 +39,7 @@
             </controls:Pivot.HeaderTemplate>
             <controls:Pivot.ItemTemplate>
                 <DataTemplate>
-                    <custom:ExtendedListBox SelectedItem="{Binding SelectedResource, Mode=TwoWay}" ItemsSource="{Binding Resources}" ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource ResourceTemplate}"/>
+                    <custom:ExtendedListBox SelectedItem="{Binding SelectedResource, Mode=TwoWay}" ItemsSource="{Binding Resources}" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource ResourceTemplate}"/>
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>

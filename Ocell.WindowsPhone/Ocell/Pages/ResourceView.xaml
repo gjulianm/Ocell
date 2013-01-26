@@ -37,7 +37,7 @@
 
         <!--ContentPanel. Colocar aquí el contenido adicional-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <custom:ExtendedListBox ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" Loaded="TweetList_Loaded"/>
+            <custom:ExtendedListBox  toolkit:TiltEffect.IsTiltEnabled="True" x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" Loaded="TweetList_Loaded"/>
         </Grid>
 
         <controls:AppBar>

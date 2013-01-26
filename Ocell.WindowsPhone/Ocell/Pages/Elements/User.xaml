@@ -60,7 +60,7 @@
             </controls:PivotItem>
             <controls:PivotItem x:Name="pvTweets" Header="{Binding Strings.Tweets, Source={StaticResource LocalizedResources}}">
                 <Grid>
-                    <custom:ExtendedListBox ItemContainerStyle="{StaticResource ListBoxItemStyle}" toolkit:TiltEffect.IsTiltEnabled="True" 
+                    <custom:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True" 
                                             x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" />
                 </Grid>
             </controls:PivotItem>
