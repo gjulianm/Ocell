@@ -11,9 +11,15 @@ namespace Ocell.Pages
         public Topics()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
-            DataContext = new TopicsModel();
-
+            var viewModel = new TopicsModel();
+            DataContext = viewModel;
+            viewModel.ShowLocationsPicker += viewModel_ShowLocationsPicker;
             ThemeFunctions.SetBackground(LayoutRoot);
+        }
+
+        void viewModel_ShowLocationsPicker(object sender, EventArgs e)
+        {
+            LocPicker.Open();
         }
 
         private void TList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

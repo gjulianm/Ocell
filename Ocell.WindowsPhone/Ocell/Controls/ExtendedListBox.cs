@@ -427,10 +427,10 @@ namespace Ocell.Controls
 
             bool old = (e.Type == Controls.CompressionType.Bottom);
 
-            if (old)
-                Loader.AllowNextRefresh();
-
-            scrollController.LoadCalled();
+            if (!old)
+                scrollController.LoadCalled();
+            else
+                scrollController.LoadCalled(-2);
             Loader.Load(old);
         }
 

@@ -55,7 +55,7 @@ namespace Ocell.Controls.ScrollControl
 
             var scrollPos = scrollViewer.VerticalOffset;
 
-            if (scrollPos + scrollOffsetMargin > loadCallScrollPosition)
+            if (scrollPos + scrollOffsetMargin > loadCallScrollPosition && loadCallScrollPosition != -2)
                 MaintainViewport();
 
             lastExtentHeight = scrollViewer.ExtentHeight;

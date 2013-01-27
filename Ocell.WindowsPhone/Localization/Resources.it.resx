@@ -1176,6 +1176,9 @@
   <data name="AskPosition" xml:space="preserve">
     <value>Chiedi a me</value>
   </data>
+  <data name="AvailableLocations" xml:space="preserve">
+    <value>posizioni disponibili</value>
+  </data>
   <data name="ShowLastTweet" xml:space="preserve">
     <value>Continua da dove</value>
   </data>

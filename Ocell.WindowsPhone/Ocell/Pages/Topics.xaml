@@ -5,8 +5,9 @@
 	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
     xmlns:controls="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
+	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
 	x:Class="Ocell.Pages.Topics"
 	Orientation="Portrait"
 	shell:SystemTray.IsVisible="True"
@@ -16,6 +17,11 @@
 		<DataTemplate x:Key="ItemTemplate">
 			<StackPanel>
 				<TextBlock Text="{Binding Name}" FontFamily="Segoe WP Semibold" FontSize="29.333" Height="40"/>
+			</StackPanel>
+		</DataTemplate>
+		<DataTemplate x:Key="FullModeTemplate">
+			<StackPanel>
+				<TextBlock Text="{Binding}" FontFamily="Segoe WP Light" FontSize="30" Height="40"/>
 			</StackPanel>
 		</DataTemplate>
 	</phone:PhoneApplicationPage.Resources>
@@ -56,11 +62,13 @@
 			</Grid>
             
             <controls:AppBar d:IsHidden="True">
-                <controls:AppBarIconButton Command="{Binding Refresh}" IconUri="/Images/Icons_White/appbar.refresh.rest.png" Text="{Binding Strings.Refresh, Source={StaticResource LocalizedResources}}" />
                 <controls:AppBar.MenuItems>
                     <controls:AppBarMenuItem Command="{Binding ShowGlobal}" Text="{Binding Strings.ShowGlobalTopics, Source={StaticResource LocalizedResources}}" />
-                </controls:AppBar.MenuItems>
+					<controls:AppBarMenuItem Command="{Binding ShowLocations}" Text="{Binding Strings.AvailableLocations, Source={StaticResource LocalizedResources}}" />
+				</controls:AppBar.MenuItems>
+                <controls:AppBarIconButton Command="{Binding Refresh}" IconUri="/Images/Icons_White/appbar.refresh.rest.png" Text="{Binding Strings.Refresh, Source={StaticResource LocalizedResources}}" />
             </controls:AppBar>
+			<toolkit:ListPicker FullModeItemTemplate="{StaticResource FullModeTemplate}" x:Name="LocPicker" ItemsSource="{Binding Locations}" Visibility="Collapsed" SelectedItem="{Binding SelectedLocation, Mode=TwoWay}"/>
 		</Grid>
 		
 		<!--TitlePanel contiene el nombre de la aplicaciÃ³n y el tÃ­tulo de la pÃ¡gina--><!--ContentPanel: coloque aquÃ­ el contenido adicional-->

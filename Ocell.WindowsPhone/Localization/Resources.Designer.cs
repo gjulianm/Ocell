@@ -349,6 +349,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a available locations.
+        /// </summary>
+        public static string AvailableLocations {
+            get {
+                return ResourceManager.GetString("AvailableLocations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a The background will change when you restart the application..
         /// </summary>
         public static string BackgroundChangeOnRestart {

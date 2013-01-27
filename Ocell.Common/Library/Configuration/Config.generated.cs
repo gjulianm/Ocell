@@ -386,6 +386,32 @@ namespace Ocell.Library
 				GenericSaveToConfig<ColumnReloadOptions?>("RELOAD_OPS", ref _ReloadOptions, value);
 			}
 		}
+
+		private static string _TopicPlace;
+		public static string TopicPlace
+		{
+			get 
+			{
+				return GenericGetFromConfig<string>("TOPICS_NAME", ref _TopicPlace);
+			}
+			set
+			{
+				GenericSaveToConfig<string>("TOPICS_NAME", ref _TopicPlace, value);
+			}
+		}
+
+		private static long? _TopicPlaceId;
+		public static long? TopicPlaceId
+		{
+			get 
+			{
+				return GenericGetFromConfig<long?>("TOPICS_ID", ref _TopicPlaceId);
+			}
+			set
+			{
+				GenericSaveToConfig<long?>("TOPICS_ID", ref _TopicPlaceId, value);
+			}
+		}
 	#endif
 	#endregion
 
@@ -418,6 +444,8 @@ namespace Ocell.Library
 			_TrialStart = null;
 			_CouponCodeValidated = null;
 			_ReloadOptions = null;
+			_TopicPlace = null;
+			_TopicPlaceId = null;
 #endif
 		}
 
@@ -437,6 +465,7 @@ namespace Ocell.Library
 			defaultValues.Add("TRIAL_INSTALLED_TIME", DateTime.MaxValue);
 			defaultValues.Add("COUPON_CODE", false);
 			defaultValues.Add("RELOAD_OPS", ColumnReloadOptions.KeepPosition);
+			defaultValues.Add("TOPICS_ID", -1);
 #endif
 		}
 	}

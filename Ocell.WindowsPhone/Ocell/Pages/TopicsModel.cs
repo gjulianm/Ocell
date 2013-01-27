@@ -47,6 +47,22 @@ namespace Ocell.Pages
             set { Assign("Collection", ref collection, value); }
         }
 
+        ObservableCollection<string> locations;
+        public ObservableCollection<string> Locations
+        {
+            get { return locations; }
+            set { Assign("Locations", ref locations, value); }
+        }
+
+        string selectedLocation;
+        public string SelectedLocation
+        {
+            get { return selectedLocation; }
+            set { Assign("SelectedLocation", ref selectedLocation, value); }
+        }
+
+        Dictionary<string, long> LocationMap;
+
         DelegateCommand refresh;
         public ICommand Refresh
         {
@@ -59,6 +75,15 @@ namespace Ocell.Pages
             get { return showGlobal; }
         }
 
+        DelegateCommand showLocations;
+        public ICommand ShowLocations
+        {
+            get { return showLocations; }
+        }
+
+
+        long currentLocation = 1;
+
         public TopicsModel()
             : base("TrendingTopics")
         {
@@ -66,45 +91,86 @@ namespace Ocell.Pages
                 {
                     if (e.PropertyName == "ListSelection")
                         OnSelectionChanged();
+                    if (e.PropertyName == "SelectedLocation")
+                        UserChoseLocation();
                 };
 
             geoWatcher = new GeoCoordinateWatcher();
             if (Config.EnabledGeolocation == true)
                 geoWatcher.Start();
 
+            Locations = new ObservableCollection<string>();
+            LocationMap = new Dictionary<string, long>();
             refresh = new DelegateCommand((obj) => GetTopics());
-            showGlobal = new DelegateCommand((obj) => GetTopics(false));
-            GetTopics();
+            showGlobal = new DelegateCommand((obj) => { currentLocation = 1; PlaceName = Localization.Resources.Global; GetTopics(); });
+            showLocations = new DelegateCommand((obj) => RaiseShowLocations(), (obj) => Locations.Any());
+            
+            ServiceDispatcher.GetCurrentService().ListAvailableTrendsLocations(ReceiveLocations);
+
+            IsLoading = true;
+            if (Config.EnabledGeolocation == true && (Config.TopicPlaceId == -1 || Config.TopicPlaceId == null))
+                ServiceDispatcher.GetCurrentService().ListAvailableTrendsLocations(geoWatcher.Position.Location.Latitude, geoWatcher.Position.Location.Longitude, ReceiveMyLocation);
+            else
+            {
+                currentLocation = Config.TopicPlaceId.HasValue ? (long)Config.TopicPlaceId : 1;
+                PlaceName = Config.TopicPlace;
+                GetTopics();
+            }
         }
 
-        private void GetTopics(bool useGeolocation = true)
+        public event EventHandler ShowLocationsPicker;
+
+        private void RaiseShowLocations()
+        {
+            if (ShowLocationsPicker != null)
+                ShowLocationsPicker(this, new EventArgs());
+        }
+
+        private void ReceiveMyLocation(IEnumerable<WhereOnEarthLocation> locs, TwitterResponse resp)
+        {
+            if (resp.StatusCode == HttpStatusCode.OK && locs != null && locs.Any())
+            {
+                var loc = locs.First();
+                PlaceName = loc.Name;
+                currentLocation = loc.WoeId;
+                Config.TopicPlace = PlaceName;
+                Config.TopicPlaceId = currentLocation;
+                GetTopics();
+            }
+        }
+
+        private void GetTopics()
         {
             IsLoading = true;
-            if (Config.EnabledGeolocation == true && useGeolocation)
+            ServiceDispatcher.GetCurrentService().ListLocalTrendsFor(currentLocation, ReceiveTrends);
+        }
+
+        private void ReceiveLocations(IEnumerable<WhereOnEarthLocation> locs, TwitterResponse resp)
+        {
+            if (resp.StatusCode == HttpStatusCode.OK && locs != null && locs.Any())
             {
-                var location = geoWatcher.Position.Location;
-                ServiceDispatcher.GetCurrentService().ListAvailableTrendsLocations(location.Latitude, location.Longitude,
-                    ReceiveLocations);
-            }
-            else
-            {
-            ServiceDispatcher.GetDefaultService().ListLocalTrendsFor(1, ReceiveTrends);
-                PlaceName = Localization.Resources.Global;
+                Deployment.Current.Dispatcher.InvokeIfRequired(() =>
+                {
+                    foreach (var loc in locs.OrderBy(x => x.Name))
+                    {
+                        if (!Locations.Contains(loc.Name))
+                            Locations.Add(loc.Name);
+
+                        if (!LocationMap.ContainsKey(loc.Name))
+                            LocationMap.Add(loc.Name, loc.WoeId);
+                    }
+                    showLocations.RaiseCanExecuteChanged();
+                });
             }
         }
 
-        void ReceiveLocations(IEnumerable<WhereOnEarthLocation> locations, TwitterResponse response)
+        void UserChoseLocation()
         {
-            if (response.StatusCode != HttpStatusCode.OK || locations == null || !locations.Any())
-            {
-                ServiceDispatcher.GetDefaultService().ListLocalTrendsFor(1, ReceiveTrends);
-                PlaceName = Localization.Resources.Global;
-            }
-            else
-            {
-                ServiceDispatcher.GetDefaultService().ListLocalTrendsFor(locations.FirstOrDefault().WoeId, ReceiveTrends);
-                PlaceName = locations.FirstOrDefault().Name;
-            }
+            PlaceName = SelectedLocation;
+            LocationMap.TryGetValue(SelectedLocation, out currentLocation);
+            Config.TopicPlace = PlaceName;
+            Config.TopicPlaceId = currentLocation;
+            GetTopics();
         }
 
         private void ReceiveTrends(TweetSharp.TwitterTrends Trends, TweetSharp.TwitterResponse Response)

@@ -19,3 +19,5 @@
  DateTime?, TRIAL_INSTALLED_TIME, TrialStart, DateTime.MaxValue
  bool?, COUPON_CODE, CouponCodeValidated, false
  ColumnReloadOptions?, RELOAD_OPS, ReloadOptions, ColumnReloadOptions.KeepPosition
+ string, TOPICS_NAME, TopicPlace
+ long?, TOPICS_ID, TopicPlaceId, -1
