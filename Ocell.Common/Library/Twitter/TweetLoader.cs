@@ -51,7 +51,7 @@ namespace Ocell.Library.Twitter
         public bool IsLoading
         {
             get { return _isLoading; }
-            protected set
+            set
             {
                 if (value == _isLoading)
                     return;

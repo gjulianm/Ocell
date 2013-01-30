@@ -32,7 +32,7 @@ namespace Ocell.Controls.ScrollControl
             listbox = list;
             listbox.LayoutUpdated += OnLayoutUpdate;
             scrollViewer = listbox.Descendants().OfType<ScrollViewer>().FirstOrDefault();
-            scrollOffsetMargin = 2;
+            scrollOffsetMargin = 0.5 * scrollViewer.ViewportHeight;
 
             Bound = true;
         }
@@ -55,7 +55,7 @@ namespace Ocell.Controls.ScrollControl
 
             var scrollPos = scrollViewer.VerticalOffset;
 
-            if (scrollPos + scrollOffsetMargin > loadCallScrollPosition && loadCallScrollPosition != -2)
+            if ((scrollPos + scrollOffsetMargin > loadCallScrollPosition && loadCallScrollPosition != -2) || loadCallScrollPosition == 0)
                 MaintainViewport();
 
             lastExtentHeight = scrollViewer.ExtentHeight;

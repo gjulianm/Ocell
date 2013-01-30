@@ -43,6 +43,18 @@ namespace Ocell.Controls
         protected IScrollController scrollController;
         private bool goTopOnNextLoad = false;
 
+        ScrollViewer sv;
+        private ScrollViewer scrollViewer
+        {
+            get
+            {
+                if (sv == null)
+                    sv = this.Descendants().OfType<ScrollViewer>().FirstOrDefault();
+
+                return sv;
+            }
+        }
+
         public bool ActivatePullToRefresh { get; set; }
         public bool AutoManageNavigation { get; set; }
         public string NavigationUri { get; set; }
@@ -199,10 +211,7 @@ namespace Ocell.Controls
 
         private void DoScrollToTop()
         {
-            var sv = this.Descendants().OfType<ScrollViewer>().FirstOrDefault();
-
-            if (sv != null)
-                sv.ScrollToVerticalOffset(0);
+            scrollViewer.ScrollToVerticalOffset(0);
         }
         #endregion
 
@@ -236,12 +245,7 @@ namespace Ocell.Controls
 
         public IList<ITweetable> GetVisibleItems()
         {
-            var sv =  this.Descendants().OfType<ScrollViewer>().FirstOrDefault();
-
-            if (sv == null)
-                return Loader.Source.Take(30).ToList(); // Fallback just in case.
-
-            var elementOffset = (int)sv.VerticalOffset;
+            var elementOffset = (int)scrollViewer.VerticalOffset;
 
             if (elementOffset < Loader.Source.Count)
             {
@@ -268,16 +272,24 @@ namespace Ocell.Controls
         void ScrollEnded(object sender, ManipulationCompletedEventArgs e)
         {
             SaveReadingPosition();
+            CheckInfiniteScroll();
+        }
+
+        private void CheckInfiniteScroll()
+        {
+            var distToBottom = scrollViewer.ExtentHeight - scrollViewer.VerticalOffset;
+            const double trigger = 25;
+
+            if (distToBottom > 0 && distToBottom < trigger)
+            {
+                Loader.Load(true);
+                Loader.IsLoading = false; // Supress the progress bar.
+            }
         }
 
         void SaveReadingPosition()
         {
-            var sv = this.Descendants().OfType<ScrollViewer>().FirstOrDefault();
-
-            if (sv == null)
-                return;
-
-            var elementOffset = (int)sv.VerticalOffset;
+            var elementOffset = (int)scrollViewer.VerticalOffset;
 
             if (elementOffset < Loader.Source.Count)
             {
