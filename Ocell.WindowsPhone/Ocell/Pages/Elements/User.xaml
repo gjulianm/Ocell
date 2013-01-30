@@ -64,6 +64,12 @@
                                             x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" />
                 </Grid>
             </controls:PivotItem>
+            <controls:PivotItem Header="{Binding Strings.Mentions, Source={StaticResource LocalizedResources}, Converter={StaticResource FirstToLowerConverter}}">
+                <Grid>
+                    <custom:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True" 
+                                           x:Name="MentionsList" ItemTemplate="{StaticResource TweetTemplate}" />
+                </Grid>
+            </controls:PivotItem>
         </controls:Pivot>
 
         <u:AppBar>

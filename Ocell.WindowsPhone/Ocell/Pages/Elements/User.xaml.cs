@@ -44,8 +44,10 @@ namespace Ocell.Pages.Elements
             {
                 if (e.PropertyName == "ScreenName")
                 {
-                    TweetList.Bind(new TwitterResource { String = "Tweets:" + viewModel.ScreenName, User = DataTransfer.CurrentAccount });
+                    TweetList.Bind(new TwitterResource { String = "Tweets:" + viewModel.ScreenName, User = DataTransfer.CurrentAccount});
                     TweetList.Loader.Load();
+                    MentionsList.Bind(new TwitterResource { Data = "@" + viewModel.ScreenName, Type = ResourceType.Search, User = DataTransfer.CurrentAccount });
+                    MentionsList.Loader.Load();
                 }
             };
 
@@ -55,7 +57,14 @@ namespace Ocell.Pages.Elements
                         viewModel.IsLoading = TweetList.Loader.IsLoading;
                 };
 
+            MentionsList.Loader.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == "IsLoading")
+                    viewModel.IsLoading = MentionsList.Loader.IsLoading;
+            };
+
             TweetList.Loader.Cached = false;
+            MentionsList.Loader.Cached = false;
         }
 
         private void Following_Tap(object sender, System.Windows.Input.GestureEventArgs e)
