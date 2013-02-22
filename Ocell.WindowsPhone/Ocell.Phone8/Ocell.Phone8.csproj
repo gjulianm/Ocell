@@ -162,6 +162,9 @@
     <Compile Include="..\Ocell\Controls\ExtendedListBox.cs">
       <Link>Controls\ExtendedListBox.cs</Link>
     </Compile>
+    <Compile Include="..\Ocell\Controls\ScrollController.cs">
+      <Link>Controls\ScrollController.cs</Link>
+    </Compile>
     <Compile Include="..\Ocell\Globals.cs">
       <Link>Globals.cs</Link>
     </Compile>
@@ -170,9 +173,6 @@
     </Compile>
     <Compile Include="..\Ocell\Helpers\FilterManager.cs">
       <Link>Helpers\FilterManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Ocell\Helpers\StatusConverter.cs">
-      <Link>Helpers\StatusConverter.cs</Link>
     </Compile>
     <Compile Include="..\Ocell\Helpers\StringManipulator.cs">
       <Link>Helpers\StringManipulator.cs</Link>
@@ -779,7 +779,7 @@
       <Project>{4096DECB-F198-492A-AFC2-51671C802277}</Project>
       <Name>SharpSerializer.Library.Silverlight</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.Common\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
+    <ProjectReference Include="..\..\Ocell.Common\tweetsharp\src\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
       <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
       <Name>TweetSharp.WindowsPhone.Mango</Name>
     </ProjectReference>

@@ -65,6 +65,9 @@
       <HintPath>..\..\Ocell.Common\lib_dll\Calcium.Phone.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Phone" />
+    <Reference Include="Microsoft.Phone.Controls.Toolkit">
+      <HintPath>..\packages\WPtoolkit.4.2012.10.30\lib\sl4-windowsphone71\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json.WindowsPhone">
       <HintPath>..\..\Ocell.Common\lib_dll\Newtonsoft.Json.WindowsPhone.dll</HintPath>
     </Reference>
@@ -83,6 +86,9 @@
     </Compile>
     <Compile Include="..\..\Ocell.Common\Library\Collections\SafeObservable.cs">
       <Link>Collections\SafeObservable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Ocell.Common\Library\Collections\SortedFilteredObservable.cs">
+      <Link>Collections\SortedFilteredObservable.cs</Link>
     </Compile>
     <Compile Include="..\..\Ocell.Common\Library\ColumnReloadOptions.cs">
       <Link>ColumnReloadOptions.cs</Link>
@@ -159,9 +165,6 @@
     <Compile Include="..\..\Ocell.Common\Library\Twitter\LoadMoreTweetable.cs">
       <Link>Twitter\LoadMoreTweetable.cs</Link>
     </Compile>
-    <Compile Include="..\..\Ocell.Common\Library\Twitter\MockUserProvider.cs">
-      <Link>Twitter\MockUserProvider.cs</Link>
-    </Compile>
     <Compile Include="..\..\Ocell.Common\Library\Twitter\ProtectedAccounts.cs">
       <Link>Twitter\ProtectedAccounts.cs</Link>
     </Compile>
@@ -207,13 +210,13 @@
       <Project>{4096DECB-F198-492A-AFC2-51671C802277}</Project>
       <Name>SharpSerializer.Library.Silverlight</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.Common\tweetsharp\src\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
+      <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
+      <Name>TweetSharp.WindowsPhone.Mango</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Library.Essential\Ocell.Library.CoreTypes.csproj">
       <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
       <Name>Ocell.Library.CoreTypes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.Common\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
-      <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
-      <Name>TweetSharp.WindowsPhone.Mango</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +235,13 @@
       <Link>Configuration\NotBackgroundAgent.json</Link>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="README_FIRST.txt" />
+    <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Delete.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Select.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />

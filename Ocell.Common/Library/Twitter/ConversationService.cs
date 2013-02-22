@@ -89,7 +89,7 @@ namespace Ocell.Library.Twitter
 
             ITwitterService srv = ServiceDispatcher.GetService(_account);
             _pendingCalls++;
-            srv.GetTweet(Id, ReceiveSingleTweet);
+            srv.GetTweet(new GetTweetOptions { Id = Id }, ReceiveSingleTweet);
         }
 
         protected RestRequest PrepareRestRequest(string id)
@@ -120,7 +120,7 @@ namespace Ocell.Library.Twitter
         protected RestClient GetRestClient()
         {
             RestClient client = new RestClient();
-            client.Authority = Globals.RestAPIAuthority;
+            client.Authority = Globals.Authority;
             client.VersionPath = "1";
 
             return client;
@@ -133,7 +133,7 @@ namespace Ocell.Library.Twitter
             if (response.StatusCode != HttpStatusCode.OK || response.ContentLength == 0)
             {
                 if (action != null)
-                    action.Invoke(new List<TwitterStatus>(), new TwitterResponse(response));
+                    action.Invoke(new List<TwitterStatus>(), new TwitterResponse(response, null));
                 TryFinish();
                 return;
             }

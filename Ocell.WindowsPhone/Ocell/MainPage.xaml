@@ -97,11 +97,11 @@
             <u:AppBar.MenuItems>
                 <u:AppBarMenuItem Text="{Binding Strings.PinColumnStart, Source={StaticResource LocalizedResources}}" Command="{Binding PinToStart}"/>
                 <u:AppBarMenuItem Text="{Binding Strings.FilterColumn, Source={StaticResource LocalizedResources}}" Command="{Binding FilterColumn}"/>
-                <u:AppBarHyperlinkMenuItem x:Name="Trending" Text="{Binding Strings.TrendingTopics, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Topics.xaml"/>
+                <u:AppBarHyperlinkMenuItem x:Name="Trending" IsEnabled="{Binding HasLoggedIn}" Text="{Binding Strings.TrendingTopics, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Topics.xaml"/>
                 <u:AppBarMenuItem Text="{Binding Strings.MyProfile, Source={StaticResource LocalizedResources}}" Command="{Binding ToMyProfile}"/>
                 <u:AppBarMenuItem Text="{Binding Strings.GoToUser, Source={StaticResource LocalizedResources}}" Click="AppBarMenuItem_Click"/>
-                <u:AppBarHyperlinkMenuItem Text="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Settings/Default.xaml"/>
-                <u:AppBarHyperlinkMenuItem Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Columns/ManageColumns.xaml" />
+                <u:AppBarHyperlinkMenuItem Text="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" NavigateUri="/Pages/Settings/Default.xaml"/>
+                <u:AppBarHyperlinkMenuItem Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" NavigateUri="/Pages/Columns/ManageColumns.xaml" />
                 <u:AppBarMenuItem Text="feedback" Command="{Binding Feedback}" />
             </u:AppBar.MenuItems>
             <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="{Binding Strings.Compose, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/NewTweet.xaml" />

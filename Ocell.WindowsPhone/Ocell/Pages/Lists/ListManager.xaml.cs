@@ -24,8 +24,8 @@ namespace Ocell.Pages.Lists
         private int _pendingCalls;
         public ListManager()
         {
-            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
-            
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
+
             ThemeFunctions.SetBackground(LayoutRoot);
 
             _selectionChangeFired = false;
@@ -57,7 +57,7 @@ namespace Ocell.Pages.Lists
         {
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
             _pendingCalls++;
-            _srv.ListListsFor(DataTransfer.CurrentAccount.ScreenName, -1, (lists, response) =>
+            _srv.ListListsFor(new ListListsForOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }, (lists, response) =>
             {
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
@@ -67,7 +67,7 @@ namespace Ocell.Pages.Lists
 
                 Dispatcher.BeginInvoke(() => ListsUser.ItemsSource = lists);
                 _pendingCalls--;
-                if(_pendingCalls <= 0)
+                if (_pendingCalls <= 0)
                     Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
             });
         }
@@ -76,7 +76,7 @@ namespace Ocell.Pages.Lists
         {
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
             _pendingCalls++;
-            _srv.ListListMembershipsFor(_userName, true, -1, (lists, response) =>
+            _srv.ListListMembershipsFor(new ListListMembershipsForOptions { ScreenName = _userName, FilterToOwnedLists = true, Cursor = -1 }, (lists, response) =>
             {
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
@@ -101,7 +101,7 @@ namespace Ocell.Pages.Lists
                 if (list != null)
                 {
                     Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-                    _srv.RemoveListMember(list.User.ScreenName, list.Slug, _userName, (user, response) =>
+                    _srv.RemoveListMember(new RemoveListMemberOptions { OwnerScreenName = list.User.ScreenName, Slug = list.Slug, ScreenName = _userName }, (user, response) =>
                     {
                         LoadListsIn();
                         if (response.StatusCode == HttpStatusCode.OK)
@@ -134,7 +134,7 @@ namespace Ocell.Pages.Lists
                 if (list != null)
                 {
                     Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-                    _srv.AddListMember(list.User.ScreenName, list.Slug, _userName, (user, response) =>
+                    _srv.AddListMember(new AddListMemberOptions { ScreenName = list.User.ScreenName, Slug = list.Slug, OwnerScreenName = _userName }, (user, response) =>
                     {
                         LoadListsIn();
                         if (response.StatusCode == HttpStatusCode.OK)

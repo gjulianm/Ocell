@@ -196,7 +196,6 @@
     <Compile Include="Transitions\OpacityTransition.cs" />
     <Compile Include="Controls\ExtendedListBox.cs" />
     <Compile Include="Helpers\Commands.cs" />
-    <Compile Include="Helpers\StatusConverter.cs" />
     <Compile Include="Helpers\StringManipulator.cs" />
     <Compile Include="Pages\Columns\AddColumn.xaml.cs">
       <DependentUpon>AddColumn.xaml</DependentUpon>
@@ -530,7 +529,7 @@
       <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>
       <Name>Ocell.Sharplonger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.Common\tweetsharp\src\net40\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
+    <ProjectReference Include="..\..\Ocell.Common\tweetsharp\src\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
       <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
       <Name>TweetSharp.WindowsPhone.Mango</Name>
     </ProjectReference>

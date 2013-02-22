@@ -12,17 +12,18 @@ using System.Windows.Controls;
 using System.Windows;
 using System.ComponentModel;
 using System.Diagnostics;
+using Ocell.Library.Collections;
 
 namespace Ocell.Library.Twitter
 {
-    public class TweetLoader : INotifyPropertyChanged, IDisposable
+    public class TweetLoader : INotifyPropertyChanged
     {
         int loaded;
         const int TO_LOAD = 1;
         int requestsInProgress;
         long lastId = 0;
 
-        public SafeObservable<ITweetable> Source { get; protected set; }
+        public SortedFilteredObservable<ITweetable> Source { get; protected set; }
 
         TwitterResource _resource;
         public TwitterResource Resource
@@ -105,7 +106,7 @@ namespace Ocell.Library.Twitter
         public TweetLoader()
         {
             loaded = 0;
-            Source = new SafeObservable<ITweetable>();
+            Source = new SortedFilteredObservable<ITweetable>(new TweetComparer());
             requestsInProgress = 0;
 
             if (_rateResetTime == null)
@@ -242,33 +243,38 @@ namespace Ocell.Library.Twitter
             switch (Resource.Type)
             {
                 case ResourceType.Home:
-                    service.ListTweetsOnHomeTimeline(TweetsToLoadPerRequest, ReceiveTweets);
+                    service.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true }, ReceiveTweets);
                     break;
                 case ResourceType.Mentions:
-                    service.ListTweetsMentioningMe(TweetsToLoadPerRequest, ReceiveTweets);
+                    service.ListTweetsMentioningMe(new ListTweetsMentioningMeOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true }, ReceiveTweets);
                     if (LoadRetweetsAsMentions)
                     {
                         requestsInProgress++;
-                        service.ListRetweetsOfMyTweets(TweetsToLoadPerRequest, ReceiveTweets);
+                        service.ListRetweetsOfMyTweets(new ListRetweetsOfMyTweetsOptions { IncludeUserEntities = true, Count = TweetsToLoadPerRequest }, ReceiveTweets);
                     }
                     break;
                 case ResourceType.Messages:
                     requestsInProgress++;
-                    service.ListDirectMessagesReceived(TweetsToLoadPerRequest, ReceiveMessages);
-                    service.ListDirectMessagesSent(TweetsToLoadPerRequest, ReceiveMessages);
+                    service.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions { Count = TweetsToLoadPerRequest }, ReceiveMessages);
+                    service.ListDirectMessagesSent(new ListDirectMessagesSentOptions { Count = TweetsToLoadPerRequest }, ReceiveMessages);
                     break;
                 case ResourceType.Favorites:
-                    service.ListFavoriteTweets(ReceiveTweets);
+                    service.ListFavoriteTweets(new ListFavoriteTweetsOptions { Count = TweetsToLoadPerRequest }, ReceiveTweets);
                     break;
                 case ResourceType.List:
-                    service.ListTweetsOnList(Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
-                            Resource.Data.Substring(Resource.Data.IndexOf('/') + 1), LoadRTsOnLists, TweetsToLoadPerRequest, ReceiveTweets);
+                    service.ListTweetsOnList(new ListTweetsOnListOptions
+                    {
+                        IncludeRts = LoadRTsOnLists,
+                        Count = TweetsToLoadPerRequest,
+                        OwnerScreenName = Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
+                        Slug = Resource.Data.Substring(Resource.Data.IndexOf('/') + 1)
+                    }, ReceiveTweets);
                     break;
                 case ResourceType.Search:
-                    service.Search(Resource.Data, 1, 20, ReceiveSearch);
+                    service.Search(new SearchOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true, Q = Resource.Data }, ReceiveSearch);
                     break;
                 case ResourceType.Tweets:
-                    service.ListTweetsOnSpecifiedUserTimeline(Resource.Data, TweetsToLoadPerRequest, true, ReceiveTweets);
+                    service.ListTweetsOnUserTimeline(new ListTweetsOnUserTimelineOptions { Count = TweetsToLoadPerRequest, ScreenName = Resource.Data, IncludeRts = true }, ReceiveTweets);
                     break;
                 case ResourceType.Conversation:
                     conversationService.GetConversationForStatus(Resource.Data, ReceiveTweets);
@@ -289,33 +295,39 @@ namespace Ocell.Library.Twitter
             switch (Resource.Type)
             {
                 case ResourceType.Home:
-                    service.ListTweetsOnHomeTimelineBefore(last, TweetsToLoadPerRequest, ReceiveTweets);
+                    service.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true, MaxId = last }, ReceiveTweets);
                     break;
                 case ResourceType.Mentions:
-                    service.ListTweetsMentioningMeBefore(last, TweetsToLoadPerRequest, ReceiveTweets);
+                    service.ListTweetsMentioningMe(new ListTweetsMentioningMeOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true, MaxId = last }, ReceiveTweets);
                     if (LoadRetweetsAsMentions)
                     {
                         requestsInProgress++;
-                        service.ListRetweetsOfMyTweetsBefore(last, TweetsToLoadPerRequest, ReceiveTweets);
+                        service.ListRetweetsOfMyTweets(new ListRetweetsOfMyTweetsOptions { IncludeUserEntities = true, Count = TweetsToLoadPerRequest, MaxId = last }, ReceiveTweets);
                     }
                     break;
                 case ResourceType.Messages:
                     requestsInProgress++;
-                    service.ListDirectMessagesReceivedBefore(last, TweetsToLoadPerRequest, ReceiveMessages);
-                    service.ListDirectMessagesSentBefore(last, TweetsToLoadPerRequest, ReceiveMessages);
+                    service.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions { Count = TweetsToLoadPerRequest, MaxId = last }, ReceiveMessages);
+                    service.ListDirectMessagesSent(new ListDirectMessagesSentOptions { Count = TweetsToLoadPerRequest, MaxId = last }, ReceiveMessages);
                     break;
                 case ResourceType.Favorites:
-                    service.ListFavoriteTweets(ReceiveTweets);
+                    service.ListFavoriteTweets(new ListFavoriteTweetsOptions { Count = TweetsToLoadPerRequest, MaxId = last }, ReceiveTweets);
                     break;
                 case ResourceType.List:
-                    service.ListTweetsOnListBefore(Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
-                            Resource.Data.Substring(Resource.Data.IndexOf('/') + 1), last, LoadRTsOnLists, TweetsToLoadPerRequest, ReceiveTweets);
+                    service.ListTweetsOnList(new ListTweetsOnListOptions
+                    {
+                        IncludeRts = LoadRTsOnLists,
+                        Count = TweetsToLoadPerRequest,
+                        OwnerScreenName = Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
+                        Slug = Resource.Data.Substring(Resource.Data.IndexOf('/') + 1),
+                        MaxId = last
+                    }, ReceiveTweets);
                     break;
                 case ResourceType.Search:
-                    service.SearchBefore(last, Resource.Data, ReceiveSearch);
+                    service.Search(new SearchOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true, Q = Resource.Data, MaxId = last }, ReceiveSearch);
                     break;
                 case ResourceType.Tweets:
-                    service.ListTweetsOnSpecifiedUserTimelineBefore(Resource.Data, last, true, ReceiveTweets);
+                    service.ListTweetsOnUserTimeline(new ListTweetsOnUserTimelineOptions { Count = TweetsToLoadPerRequest, ScreenName = Resource.Data, IncludeRts = true, MaxId = last }, ReceiveTweets);
                     break;
                 case ResourceType.Conversation:
                     conversationService.GetConversationForStatus(Resource.Data, ReceiveTweets);

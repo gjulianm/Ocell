@@ -189,17 +189,17 @@ namespace Ocell.Pages.Elements
         {
             User = null;
             GenericCanExecute = (obj) => User != null && DataTransfer.CurrentAccount != null;
- 
+
             followUser = new DelegateCommand((obj) =>
             {
                 IsLoading = true;
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FollowUser(User.Id, ReceiveFollow);
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FollowUser(new FollowUserOptions { UserId = User.Id }, ReceiveFollow);
             }, x => FriendshipRetrieved && GenericCanExecute.Invoke(null));
 
             unfollowUser = new DelegateCommand((obj) =>
             {
                 IsLoading = true;
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfollowUser(User.Id, ReceiveFollow);
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfollowUser(new UnfollowUserOptions { UserId = User.Id }, ReceiveFollow);
             }, x => FriendshipRetrieved && GenericCanExecute.Invoke(null));
 
             pinUser = new DelegateCommand((obj) =>
@@ -214,25 +214,25 @@ namespace Ocell.Pages.Elements
                     MessageService.ShowLightNotification(Resources.UserPinned);
                     pinUser.RaiseCanExecuteChanged();
 
-                }, item => GenericCanExecute.Invoke(null) 
+                }, item => GenericCanExecute.Invoke(null)
                     && !Config.Columns.Any(o => o.Type == ResourceType.Tweets && o.Data == User.ScreenName));
 
             block = new DelegateCommand((obj) =>
                 {
                     IsLoading = true;
-                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).BlockUser(User.Id, ReceiveBlock);
+                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).BlockUser(new BlockUserOptions { UserId = User.Id }, ReceiveBlock);
                 }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
             unblock = new DelegateCommand((obj) =>
                 {
                     IsLoading = true;
-                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnblockUser(User.Id, ReceiveBlock);
+                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnblockUser(new UnblockUserOptions { UserId = User.Id }, ReceiveBlock);
                 }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
             reportSpam = new DelegateCommand((obj) =>
             {
                 IsLoading = true;
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).ReportSpam(User.Id, ReceiveReportSpam);
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).ReportSpam(new ReportSpamOptions { UserId = User.Id }, ReceiveReportSpam);
             }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
             changeAvatar = new DelegateCommand((obj) =>
@@ -281,7 +281,7 @@ namespace Ocell.Pages.Elements
 
             BarText = Resources.RetrievingUser;
             IsLoading = true;
-            ServiceDispatcher.GetDefaultService().ListUserProfilesFor(new List<string> { userName }, ReceiveUsers);
+            ServiceDispatcher.GetDefaultService().ListUserProfilesFor(new ListUserProfilesForOptions { ScreenName = new List<string> { userName } }, ReceiveUsers);
         }
 
         void task_Completed(object sender, PhotoResult e)
@@ -293,7 +293,7 @@ namespace Ocell.Pages.Elements
                 BarText = Resources.UploadingPicture;
                 IsLoading = true;
                 ITwitterService srv = ServiceDispatcher.GetService(usr);
-                srv.UpdateProfileImage(e.OriginalFileName, e.ChosenPhoto, ReceivePhotoUpload);
+                srv.UpdateProfileImage(new UpdateProfileImageOptions { ImagePath = e.OriginalFileName }, ReceivePhotoUpload);
             }
         }
 
@@ -403,8 +403,8 @@ namespace Ocell.Pages.Elements
             if (DataTransfer.CurrentAccount != null)
             {
                 var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
-                service.GetFriendshipInfo((int)DataTransfer.CurrentAccount.Id, User.Id, ReceiveFriendshipInfo);
-                service.ListBlockedUserIds(ReceiveBlockedUsers);
+                service.GetFriendshipInfo(new GetFriendshipInfoOptions { SourceScreenName = DataTransfer.CurrentAccount.ScreenName, TargetScreenName = User.ScreenName }, ReceiveFriendshipInfo);
+                service.ListBlockedUserIds(new ListBlockedUserIdsOptions { Cursor = -1 }, ReceiveBlockedUsers);
             }
 
             followUser.RaiseCanExecuteChanged();
@@ -433,10 +433,10 @@ namespace Ocell.Pages.Elements
             unfollowUser.RaiseCanExecuteChanged();
         }
 
-        void ReceiveBlockedUsers(IEnumerable<int> blockedIds, TwitterResponse response)
+        void ReceiveBlockedUsers(IEnumerable<long> blockedIds, TwitterResponse response)
         {
             if (blockedIds == null)
-                blockedIds = new List<int>();
+                blockedIds = new List<long>();
 
             Blocked = blockedIds.Any() && blockedIds.Contains(User.Id);
 

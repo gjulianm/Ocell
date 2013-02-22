@@ -15,6 +15,7 @@ using Ocell.Localization;
 using System.Windows.Media.Animation;
 using System.Windows.Media;
 using Ocell.Settings;
+using TweetSharp;
 
 namespace Ocell
 {
@@ -151,7 +152,7 @@ namespace Ocell
                 var service = Dependency.Resolve<IMessageService>();
                 bool result = service.AskYesNoQuestion(Localization.Resources.FollowOcellAppMessage, "");
                 if (result)
-                    ServiceDispatcher.GetDefaultService().FollowUser("OcellApp", (a, b) => { });
+                    ServiceDispatcher.GetDefaultService().FollowUser(new FollowUserOptions{ ScreenName = "OcellApp" }, (a, b) => { });
                 Config.FollowMessageShown = true;
             }
         }
@@ -207,7 +208,7 @@ namespace Ocell
 
                 viewModel.CheckIfCanResumePosition += (sender1, e1) =>
                 {
-                    if (e1.Resource == list.Loader.Resource)
+                    if (e1.Resource == list.Loader.Resource && Config.ReloadOptions == ColumnReloadOptions.AskPosition)
                         list.TryTriggerResumeReading();
                 };
 

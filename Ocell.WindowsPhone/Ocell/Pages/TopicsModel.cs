@@ -105,11 +105,11 @@ namespace Ocell.Pages
             showGlobal = new DelegateCommand((obj) => { currentLocation = 1; PlaceName = Localization.Resources.Global; GetTopics(); });
             showLocations = new DelegateCommand((obj) => RaiseShowLocations(), (obj) => Locations.Any());
             
-            ServiceDispatcher.GetCurrentService().ListAvailableTrendsLocations(ReceiveLocations);
+            ServiceDispatcher.GetCurrentService().ListAvailableTrendsLocations(new ListAvailableTrendsLocationsOptions { }, ReceiveLocations);
 
             IsLoading = true;
             if (Config.EnabledGeolocation == true && (Config.TopicPlaceId == -1 || Config.TopicPlaceId == null))
-                ServiceDispatcher.GetCurrentService().ListAvailableTrendsLocations(geoWatcher.Position.Location.Latitude, geoWatcher.Position.Location.Longitude, ReceiveMyLocation);
+                ServiceDispatcher.GetCurrentService().ListClosestTrendsLocations(new ListClosestTrendsLocationsOptions{ Lat = geoWatcher.Position.Location.Latitude, Long = geoWatcher.Position.Location.Longitude }, ReceiveMyLocation);
             else
             {
                 currentLocation = Config.TopicPlaceId.HasValue ? (long)Config.TopicPlaceId : 1;
@@ -142,7 +142,7 @@ namespace Ocell.Pages
         private void GetTopics()
         {
             IsLoading = true;
-            ServiceDispatcher.GetCurrentService().ListLocalTrendsFor(currentLocation, ReceiveTrends);
+            ServiceDispatcher.GetCurrentService().ListLocalTrendsFor(new ListLocalTrendsForOptions { Id = (int)currentLocation }, ReceiveTrends);
         }
 
         private void ReceiveLocations(IEnumerable<WhereOnEarthLocation> locs, TwitterResponse resp)

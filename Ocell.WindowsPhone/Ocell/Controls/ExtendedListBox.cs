@@ -70,7 +70,7 @@ namespace Ocell.Controls
             {
                 filter = value;
                 if (filter != null)
-                    viewSource.View.Filter = filter.getPredicate();
+                    Loader.Source.Filter = filter.GetPredicate();
             }
         }
 
@@ -118,12 +118,7 @@ namespace Ocell.Controls
 
         private void SetupCollectionViewSource()
         {
-            viewSource.Source = Loader.Source;
-            ItemsSource = viewSource.View;
-            System.ComponentModel.SortDescription Sorter = new System.ComponentModel.SortDescription();
-            Sorter.PropertyName = "Id";
-            Sorter.Direction = System.ComponentModel.ListSortDirection.Descending;
-            viewSource.SortDescriptions.Add(Sorter);
+            ItemsSource = Loader.Source;
         }
 
         private void SetTag()
@@ -469,11 +464,6 @@ namespace Ocell.Controls
                 {
                     DataTransfer.DMGroup = e.AddedItems[0] as GroupedDM;
                     NavigationService.Navigate(Uris.DMConversation);
-                }
-                else if (e.AddedItems[0] is TwitterSearchStatus)
-                {
-                    DataTransfer.Status = StatusConverter.SearchToStatus(e.AddedItems[0] as TwitterSearchStatus);
-                    NavigationService.Navigate(Uris.ViewTweet);
                 }
                 else if (e.AddedItems[0] is LoadMoreTweetable)
                 {

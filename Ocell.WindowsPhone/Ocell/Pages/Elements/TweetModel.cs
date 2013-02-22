@@ -169,7 +169,7 @@ namespace Ocell.Pages.Elements
                 RetweetCount = UsersWhoRetweeted.Count;
             };
 
-            ServiceDispatcher.GetDefaultService().Retweets(Tweet.Id, (statuses, response) =>
+            ServiceDispatcher.GetDefaultService().Retweets(new RetweetsOptions { Id = Tweet.Id }, (statuses, response) =>
             {
                 if (statuses != null && statuses.Any())
                 {
@@ -198,7 +198,7 @@ namespace Ocell.Pages.Elements
             deleteTweet = new DelegateCommand((obj) =>
             {
                 var user = Config.Accounts.FirstOrDefault(item => item != null && item.ScreenName == Tweet.Author.ScreenName);
-                ServiceDispatcher.GetService(user).DeleteTweet(Tweet.Id, (s, response) =>
+                ServiceDispatcher.GetService(user).DeleteTweet(new DeleteTweetOptions { Id = Tweet.Id }, (s, response) =>
                 {
                     if (response.StatusCode == HttpStatusCode.OK)
                         MessageService.ShowMessage(Localization.Resources.TweetDeleted, "");
@@ -230,13 +230,13 @@ namespace Ocell.Pages.Elements
             {
                 TwitterStatus param = (TwitterStatus)parameter;
                 if (IsFavorited)
-                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweet(param.Id, (sts, resp) =>
+                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweet(new UnfavoriteTweetOptions { Id = param.Id }, (sts, resp) =>
                     {
                         MessageService.ShowLightNotification(Localization.Resources.Unfavorited);
                         IsFavorited = false;
                     });
                 else
-                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(param.Id, (sts, resp) =>
+                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(new FavoriteTweetOptions { Id = param.Id }, (sts, resp) =>
                     {
                         MessageService.ShowLightNotification(Localization.Resources.Favorited);
                         IsFavorited = true;
@@ -246,7 +246,7 @@ namespace Ocell.Pages.Elements
 
         void FillUser()
         {
-            ServiceDispatcher.GetDefaultService().GetUserProfileFor(Tweet.Author.ScreenName, (user, response) =>
+            ServiceDispatcher.GetDefaultService().GetUserProfileFor(new GetUserProfileForOptions { ScreenName = Tweet.Author.ScreenName }, (user, response) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                         MessageService.ShowError(Localization.Resources.ErrorGettingProfile);

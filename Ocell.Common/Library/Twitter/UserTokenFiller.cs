@@ -28,7 +28,7 @@ namespace Ocell.Library.Twitter
 
             ITwitterService srv = ServiceDispatcher.GetService(Token);
 
-            srv.GetUserProfile(ReceiveUserProfile);
+            srv.GetUserProfile(new GetUserProfileOptions { IncludeEntities = true }, ReceiveUserProfile);
         }
 
         protected void ReceiveUserProfile(TwitterUser user, TwitterResponse response)

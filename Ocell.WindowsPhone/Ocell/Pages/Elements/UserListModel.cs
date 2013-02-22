@@ -80,13 +80,13 @@ namespace Ocell.Pages.Elements
 
             if (whatUserList == "followers")
             {
-                ServiceDispatcher.GetCurrentService().ListFollowersOf(user, ReceiveUsers);
+                ServiceDispatcher.GetCurrentService().ListFollowers(new ListFollowersOptions { ScreenName = user, IncludeUserEntities = true }, ReceiveUsers);
                 BarText = Resources.DownloadingFollowers;
                 PageTitle = Resources.Followers;
             }
             else if (whatUserList == "following")
             {
-                ServiceDispatcher.GetCurrentService().ListFriendsOf(user, ReceiveUsers);
+                ServiceDispatcher.GetCurrentService().ListFriends(new ListFriendsOptions { ScreenName = user, IncludeUserEntities = true }, ReceiveUsers);
                 BarText = Resources.DownloadingFollowing;
                 PageTitle = Resources.Following;
             }
@@ -123,9 +123,9 @@ namespace Ocell.Pages.Elements
             if (users.NextCursor != null && users.NextCursor != 0)
             {
                 if (whatUserList == "followers")
-                    ServiceDispatcher.GetCurrentService().ListFollowersOf(user, ReceiveUsers);
+                    ServiceDispatcher.GetCurrentService().ListFollowers(new ListFollowersOptions { ScreenName = user }, ReceiveUsers);
                 else if (whatUserList == "following")
-                    ServiceDispatcher.GetCurrentService().ListFriendsOf(user, ReceiveUsers);
+                    ServiceDispatcher.GetCurrentService().ListFriends(new ListFriendsOptions { ScreenName = user }, ReceiveUsers);
             }
             else
             {

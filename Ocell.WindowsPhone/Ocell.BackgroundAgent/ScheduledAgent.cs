@@ -14,7 +14,6 @@ using TweetSharp;
 using Ocell.LightTwitterService;
 using Ocell.Localization;
 
-
 namespace Ocell.BackgroundAgent
 {
     public class ScheduledAgent : ScheduledTaskAgent, IDisposable
@@ -130,7 +129,7 @@ namespace Ocell.BackgroundAgent
             DateTime start, end;
             start = DateTime.Now;
             SignalThreadStart();
-
+            return;
             Logger.Add("");
 
             try
@@ -515,30 +514,35 @@ namespace Ocell.BackgroundAgent
         protected void Load(TwitterResource resource)
         {
             var service = new TwitterService(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, resource.User.Key, resource.User.Secret);
-
+            ;
             switch (resource.Type)
             {
                 case ResourceType.Home:
-                    service.ListTweetsOnHomeTimeline(1, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
+                    service.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions { Count = 1, IncludeEntities = true }, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
                     break;
                 case ResourceType.Mentions:
-                    service.ListTweetsMentioningMe(1, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
+                    service.ListTweetsMentioningMe(new ListTweetsMentioningMeOptions { Count = 1, IncludeEntities = true }, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
                     break;
                 case ResourceType.Messages:
-                    service.ListDirectMessagesReceived(1, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
+                    service.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions { Count = 1 }, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
                     break;
                 case ResourceType.Favorites:
-                    service.ListFavoriteTweets((status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
+                    service.ListFavoriteTweets(new ListFavoriteTweetsOptions { Count = 1 }, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
                     break;
                 case ResourceType.List:
-                    service.ListTweetsOnList(resource.Data.Substring(1, resource.Data.IndexOf('/') - 1),
-                            resource.Data.Substring(resource.Data.IndexOf('/') + 1), 1, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
+                    service.ListTweetsOnList(new ListTweetsOnListOptions
+                    {
+                        IncludeRts = false,
+                        Count = 1,
+                        OwnerScreenName = resource.Data.Substring(1, resource.Data.IndexOf('/') - 1),
+                        Slug = resource.Data.Substring(resource.Data.IndexOf('/') + 1)
+                    }, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
                     break;
                 case ResourceType.Search:
-                    service.Search(resource.Data, 1, 20, (status, response) => ReceiveTweetable(status.Statuses.Cast<ITweetable>(), response, resource));
+                    service.Search(new SearchOptions { Count = 1, IncludeEntities = true, Q = resource.Data }, (status, response) => ReceiveTweetable(status.Statuses.Cast<ITweetable>(), response, resource));
                     break;
                 case ResourceType.Tweets:
-                    service.ListTweetsOnSpecifiedUserTimeline(resource.Data, 1, true, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
+                    service.ListTweetsOnUserTimeline(new ListTweetsOnUserTimelineOptions { Count = 1, ScreenName = resource.Data, IncludeRts = true }, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
                     break;
             }
         }

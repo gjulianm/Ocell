@@ -5,7 +5,7 @@ using BufferAPI;
 
 namespace Ocell.Library.Twitter
 {
-    public static class ServiceDispatcher 
+    public static class ServiceDispatcher
     {
         private static object _lockFlag = new object();
         private static Dictionary<string, ITwitterService> _services;
@@ -24,22 +24,16 @@ namespace Ocell.Library.Twitter
                 return null;
 
             ITwitterService srv;
-            
+
             lock (_lockFlag)
             {
                 if (_services.ContainsKey(account.Key))
                     return _services[account.Key];
 
+                var _srv = new TwitterService();
+                _srv.AuthenticateWith(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, account.Key, account.Secret);
 
-                
-                if (TestSession)
-                    srv = new MockTwitterService();
-                else
-                {
-                    var tempSrv = new TwitterService();
-                    tempSrv.AuthenticateWith(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, account.Key, account.Secret);
-                    srv = tempSrv;
-                }
+                srv = _srv;
 
                 try
                 {
@@ -64,10 +58,7 @@ namespace Ocell.Library.Twitter
             }
             else
             {
-                if (!TestSession)
-                    return new TwitterService(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret);
-                else
-                    return new MockTwitterService();
+                return new TwitterService(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret);
             }
         }
 

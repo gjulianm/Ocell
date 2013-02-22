@@ -80,7 +80,7 @@ namespace Ocell.Commands
         public void Execute(object parameter)
         {
             Dependency.Resolve<IMessageService>().SetLoadingBar(true);
-            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).Retweet(((ITweetable)parameter).Id, (sts, resp) =>
+            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).Retweet(new RetweetOptions { Id = ((ITweetable)parameter).Id }, (sts, resp) =>
             {
                 Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Retweeted);
             });
@@ -102,12 +102,12 @@ namespace Ocell.Commands
         {
             TwitterStatus param = (TwitterStatus)parameter;
             if (param.IsFavorited)
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweet(param.Id, (sts, resp) =>
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweet(new UnfavoriteTweetOptions { Id = param.Id }, (sts, resp) =>
                 {
                     Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Unfavorited);
                 });
             else
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(param.Id, (sts, resp) =>
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(new FavoriteTweetOptions { Id = param.Id }, (sts, resp) =>
                 {
                     Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Favorited);
                 });

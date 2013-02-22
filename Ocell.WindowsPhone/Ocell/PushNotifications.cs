@@ -10,6 +10,8 @@ using System.Text;
 using Hammock;
 using Hammock.Web;
 using Ocell.Library.Notifications;
+using DanielVaughan.Services;
+using DanielVaughan;
 
 namespace Ocell
 {
@@ -116,9 +118,15 @@ namespace Ocell
 
             var request = (HttpWebRequest)WebRequest.Create(url);
 
-            var response = request.BeginGetResponse((result) => 
+            try
             {
-            }, request);
+                var response = request.BeginGetResponse((result) =>
+                {
+                }, request);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         [Conditional("OCELL_FULL")]
@@ -146,11 +154,27 @@ namespace Ocell
 
             var request = new RestRequest();
             request.Path = Library.SensitiveData.PushRegisterPostUriFormat;
-            request.Method = WebMethod.Get;
+            request.Method = WebMethod.Post;
             request.AddHeader("Content-Type", "application/json");
             request.AddPostContent(Encoding.UTF8.GetBytes(postContents));
-            
-            new RestClient().BeginRequest(request);
+
+            try
+            {
+                new RestClient().BeginRequest(request, (req, resp, s) => 
+                {
+                    ReportRegisterToUser(resp);
+                });
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        [Conditional("DEBUG")]
+        private static void ReportRegisterToUser(RestResponse resp)
+        {
+            string msg = string.Format("Response from push server: {0}", resp.StatusCode);
+            Dependency.Resolve<IMessageService>().ShowMessage(msg);
         }
 
         public static void UnregisterPushChannel(UserToken user, string type)
@@ -173,9 +197,15 @@ namespace Ocell
 
             var request = (HttpWebRequest)WebRequest.Create(url);
 
-            var response = request.BeginGetResponse((result) =>
+            try
             {
-            }, request);
+                var response = request.BeginGetResponse((result) =>
+                {
+                }, request);
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

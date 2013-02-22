@@ -66,7 +66,7 @@ namespace Ocell.Pages.Columns
                         if (e.PropertyName == "IsLoading")
                         {
                             var p = sender as ColumnViewPivotModel;
-                            
+
                             if (p == null)
                                 return;
 
@@ -175,9 +175,9 @@ namespace Ocell.Pages.Columns
         {
             if (Config.Columns.Contains(resource))
                 MessageService.ShowError(Localization.Resources.ColumnAlreadyPinned);
-            else if(MessageService.AskYesNoQuestion(String.Format(Localization.Resources.AskAddColumn, resource.Title)))
+            else if (MessageService.AskYesNoQuestion(String.Format(Localization.Resources.AskAddColumn, resource.Title)))
             {
-                Config.Columns.Add(resource); 
+                Config.Columns.Add(resource);
                 Config.SaveColumns();
                 DataTransfer.ShouldReloadColumns = true;
             }
@@ -207,8 +207,8 @@ namespace Ocell.Pages.Columns
                 var service = ServiceDispatcher.GetService(user);
 
                 loading += 2;
-                service.ListListsFor(user.ScreenName, -1, ReceiveLists);
-                service.ListListSubscriptionsFor(user.ScreenName, ReceiveLists);
+                service.ListListsFor(new ListListsForOptions { ScreenName = user.ScreenName }, ReceiveLists);
+                service.ListSubscriptions(new ListSubscriptionsOptions { ScreenName = user.ScreenName }, ReceiveLists);
             }
         }
 
@@ -245,7 +245,7 @@ namespace Ocell.Pages.Columns
                     listsCache.Add(item);
             }
 
-            
+
         }
 
         void GetSearches()
@@ -266,7 +266,7 @@ namespace Ocell.Pages.Columns
                 var service = ServiceDispatcher.GetService(user);
 
                 loading++;
-                service.ListSavedSearches(ReceiveSearches);
+                service.ListSavedSearches(new ListSavedSearchesOptions(), ReceiveSearches);
             }
         }
 

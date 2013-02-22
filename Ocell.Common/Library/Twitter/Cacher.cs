@@ -76,7 +76,8 @@ namespace Ocell.Library.Twitter
                 {
                     using (var stream = FileAbstractor.GetFileStream(fileName))
                     {
-                        statuses = serializer.Deserialize(stream) as IEnumerable<TwitterStatus>;
+                        if(stream.Length != 0)
+                            statuses = serializer.Deserialize(stream) as IEnumerable<TwitterStatus>;
                     }
                 }
                 catch (Exception ex)

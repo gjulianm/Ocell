@@ -22,7 +22,7 @@ namespace Ocell.Library
         private Dispatcher dispatcher;
 #endif
         public event NotifyCollectionChangedEventHandler CollectionChanged;
-        private object sync = new object();
+        protected object sync = new object();
 
         public SafeObservable(IEnumerable<T> source)
             : this()
@@ -96,7 +96,7 @@ namespace Ocell.Library
         }
         #endregion
 
-        public void Add(T item)
+        public virtual void Add(T item)
         {
             int index;
 
@@ -129,7 +129,7 @@ namespace Ocell.Library
         }
 
 
-        public void Clear()
+        public virtual void Clear()
         {
             lock (sync)
                 collection.Clear();
@@ -137,7 +137,7 @@ namespace Ocell.Library
             RaiseCollectionReset();
         }
 
-        public bool Contains(T item)
+        public virtual bool Contains(T item)
         {
             bool result;
             lock (sync)
@@ -145,7 +145,7 @@ namespace Ocell.Library
             return result;
         }
 
-        public void CopyTo(T[] array, int arrayIndex)
+        public virtual void CopyTo(T[] array, int arrayIndex)
         {
             lock (sync)
                 collection.CopyTo(array, arrayIndex);

@@ -33,14 +33,14 @@ namespace Ocell.Library.Filtering
                 return false;
 
             foreach(var filter in _predicates)
-                if(filter.Evaluate(tweet) == false)
-                    return false;
+                if(filter.Evaluate(tweet) == true)
+                    return true;
 
             if (Global != null)
-                if (Global.Evaluate(item) == false)
-                    return false;
+                if (Global.Evaluate(item) == true)
+                    return true;
 
-            return true;
+            return false;
         }
 
         public void CleanOldFilters()
@@ -49,9 +49,9 @@ namespace Ocell.Library.Filtering
                 _predicates.Remove(item);
         }
 
-        public Predicate<object> getPredicate()
+        public Predicate<ITweetable> GetPredicate()
         {
-             return new Predicate<object>(Evaluate);
+            return new Predicate<ITweetable>(Evaluate);
         }
 
         public void AddFilter(ITweetableFilter predicate)

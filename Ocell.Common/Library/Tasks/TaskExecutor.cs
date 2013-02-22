@@ -5,6 +5,8 @@ using Ocell.Library.Twitter;
 
 namespace Ocell.Library.Tasks
 {
+    public delegate void TwitterHandler(object sender, TwitterResponse response);
+
     public class TaskExecutor
     {
         public TwitterStatusTask Task { get; set; }
@@ -53,7 +55,7 @@ namespace Ocell.Library.Tasks
 #else
                 ITwitterService service = ServiceDispatcher.GetService(user);
 #endif
-                service.SendTweet(Task.Text, Task.InReplyTo, ReceiveResponse);
+                service.SendTweet(new SendTweetOptions { Status = Task.Text, InReplyToStatusId = Task.InReplyTo }, ReceiveResponse);
                 PendingCalls++;
             }
             if (PendingCalls == 0 && Completed != null)

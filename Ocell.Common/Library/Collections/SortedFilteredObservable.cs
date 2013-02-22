@@ -12,6 +12,7 @@ namespace Ocell.Library.Collections
     {
         IComparer<T> Comparer;
         SafeObservable<T> discardedItems;
+
         public SortedFilteredObservable(IComparer<T> comparer)
             : base()
         {
@@ -28,7 +29,7 @@ namespace Ocell.Library.Collections
                 filter = value;
 
                 ReevaluateInList();
-                ReevaluateDiscarded();                
+                ReevaluateDiscarded();
             }
         }
 
@@ -92,28 +93,7 @@ namespace Ocell.Library.Collections
                 OrderedInsert(item);
         }
 
-        public override void BulkAdd(IEnumerable<T> items)
-        {
-            int added = 0;
-            foreach (var item in items)
-            {
-                Add(item);
-                added++;
-                if (added >= 5)
-                {
-#if METRO
-                    Task.Delay(10).RunSynchronously();
-#else
-                    Thread.Sleep(10);
-#endif
-                    added = 0;
-                }
-            }
-        }
-
-
-
-        public object this[int index]
+        object IList.this[int index]
         {
             get
             {
@@ -126,35 +106,35 @@ namespace Ocell.Library.Collections
             }
         }
 
-        public int Add(object value)
+        int IList.Add(object value)
         {
             if (value is T)
-                base.Add((T)value);
+                Add((T)value);
             return Count - 1;
         }
 
-        public bool Contains(object value)
+        bool IList.Contains(object value)
         {
-            return (value is T) && base.Contains((T)value);
+            return (value is T) && Contains((T)value);
         }
 
-        public int IndexOf(object value)
+        int IList.IndexOf(object value)
         {
             return value is T
-                ? base.IndexOf((T)value)
+                ? IndexOf((T)value)
                 : -1;
         }
 
-        public void Insert(int index, object value)
+        void IList.Insert(int index, object value)
         {
             if (value is T)
-                base.Insert(index, (T)value);
+                Insert(index, (T)value);
         }
 
-        public void Remove(object value)
+        void IList.Remove(object value)
         {
             if (value is T)
-                base.Remove((T)value);
+                Remove((T)value);
         }
 
         public bool IsSynchronized { get { return true; } }

@@ -27,13 +27,13 @@ namespace Ocell.Pages.Lists
         private void CreateButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             ITwitterService srv = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
-            string mode;
+            TwitterListMode mode;
             if (PublicBtn.IsChecked == true)
-                mode = "public";
+                mode = TwitterListMode.Public;
             else
-                mode = "private";
+                mode = TwitterListMode.Private;
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-            srv.CreateList(DataTransfer.CurrentAccount.ScreenName, ListName.Text, ListDescp.Text, mode, (list, response) =>
+            srv.CreateList(new CreateListOptions { ListOwner = DataTransfer.CurrentAccount.ScreenName, Name = ListName.Text, Description = ListDescp.Text, Mode = mode }, (list, response) =>
             {
                 if (response.StatusCode == HttpStatusCode.OK)
                 {

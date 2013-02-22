@@ -39,9 +39,9 @@ namespace Ocell.Library.Twitter
                 GetService();
 
             if(GetFollowing)
-                _service.ListFriends(-1, ReceiveList);
+                _service.ListFriends(new ListFriendsOptions { ScreenName = User.ScreenName, Cursor = -1 }, ReceiveList);
             if (GetFollowers)
-                _service.ListFollowers(-1, ReceiveList);
+                _service.ListFollowers(new ListFollowersOptions { ScreenName = User.ScreenName, Cursor = -1 }, ReceiveList);
         }
 
         private void ReceiveList(TwitterCursorList<TwitterUser> users, TwitterResponse response)
@@ -58,9 +58,9 @@ namespace Ocell.Library.Twitter
             if (users.NextCursor != null && users.NextCursor != 0 && _service != null)
             {
                 if (GetFollowing)
-                    _service.ListFriends((long)users.NextCursor, ReceiveList);
+                    _service.ListFriends(new ListFriendsOptions { ScreenName = User.ScreenName, Cursor = (long)users.NextCursor }, ReceiveList);
                 if (GetFollowers)
-                    _service.ListFollowers((long)users.NextCursor, ReceiveList);
+                    _service.ListFollowers(new ListFollowersOptions { ScreenName = User.ScreenName, Cursor = (long)users.NextCursor }, ReceiveList);
             }
             else
                 finish = true;
@@ -107,7 +107,7 @@ namespace Ocell.Library.Twitter
                 var temp = user;
                 finishedUsers[temp] = false;
                 dicUsers[temp] = GetUserCache(temp).ToList();
-                ServiceDispatcher.GetService(temp).ListFriends(-1, (list, response) => ReceiveFriends(list, response, temp));
+                ServiceDispatcher.GetService(temp).ListFriends(new ListFriendsOptions { ScreenName = temp.ScreenName, Cursor = -1 }, (list, response) => ReceiveFriends(list, response, temp));
             }
         }
 
@@ -133,7 +133,7 @@ namespace Ocell.Library.Twitter
                 dicUsers[user] = friends.Select(x => x.ScreenName).ToList();
 
             if (friends.NextCursor != null && friends.NextCursor != 0)
-                ServiceDispatcher.GetService(user).ListFriends((long)friends.NextCursor, (l, r) => ReceiveFriends(l, r, user));
+                ServiceDispatcher.GetService(user).ListFriends(new ListFriendsOptions { ScreenName = user.ScreenName, Cursor = (long)friends.NextCursor }, (l, r) => ReceiveFriends(l, r, user));
             else
             {
                 finishedUsers[user] = true;

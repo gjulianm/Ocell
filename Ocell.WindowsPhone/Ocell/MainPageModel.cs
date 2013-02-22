@@ -267,6 +267,10 @@ namespace Ocell
             if (SelectedPivot is TwitterResource)
             {
                 var resource = (TwitterResource)SelectedPivot;
+
+                if (resource.User == null)
+                    return;
+
                 CurrentAccountName = resource.User.ScreenName.ToUpperInvariant();
                 ThreadPool.QueueUserWorkItem((context) => RaiseReload(resource));
                 DataTransfer.CurrentAccount = resource.User;

@@ -28,8 +28,6 @@ namespace Ocell.Library.Filtering
                 case FilterType.Source:
                     if (item is TwitterStatus)
                         return (item as TwitterStatus).Source.ToLowerInvariant();
-                    else if (item is TwitterSearchStatus)
-                        return (item as TwitterSearchStatus).Source.ToLowerInvariant();
                     else
                         return "";
                 case FilterType.Text:
@@ -46,7 +44,7 @@ namespace Ocell.Library.Filtering
                 Filter = "";
 
             if (DateTime.Now > IsValidUntil)
-                return true;
+                return false;
 
             if (item == null) 
                 return false;
@@ -56,9 +54,9 @@ namespace Ocell.Library.Filtering
             bool result = whatToCheck.Contains(Filter.ToLowerInvariant());
 
             if (Inclusion == IncludeOrExclude.Exclude)
-                return !result;
-            else
                 return result;
+            else
+                return !result;
         }
 
         public override int GetHashCode()

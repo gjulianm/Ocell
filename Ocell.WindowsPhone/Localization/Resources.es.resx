@@ -1018,7 +1018,7 @@
     <value>Nombre de usuario o correo:</value>
   </data>
   <data name="UsersWhoRetweeted" xml:space="preserve">
-    <value>Usuarios que han retwitteado:</value>
+    <value>Usuarios que han retwitteado</value>
   </data>
   <data name="WhatToMute" xml:space="preserve">
     <value>¿Qué quieres silenciar?</value>

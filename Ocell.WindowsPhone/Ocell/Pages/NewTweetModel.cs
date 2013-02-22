@@ -231,7 +231,7 @@ namespace Ocell.Pages
             SetupCommands();
         }
 
-        
+
 
         const int ShortUrlLength = 20;
         Brush redBrush = new SolidColorBrush(Colors.Red);
@@ -328,7 +328,7 @@ namespace Ocell.Pages
             }
 
             List<string> profiles = new List<string>();
-            
+
             foreach (var account in SelectedAccounts.Cast<UserToken>())
             {
                 var profile = Config.BufferProfiles.Where(x => x.ServiceUsername == account.ScreenName).FirstOrDefault();
@@ -364,7 +364,7 @@ namespace Ocell.Pages
 
             if (IsDM)
             {
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).SendDirectMessage((int)DataTransfer.DMDestinationId, TweetText, ReceiveDM);
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).SendDirectMessage(new SendDirectMessageOptions { UserId = (int)DataTransfer.DMDestinationId, Text = TweetText }, ReceiveDM);
             }
             else
             {
@@ -374,8 +374,13 @@ namespace Ocell.Pages
 
                     foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
                     {
-                        ServiceDispatcher.GetService(account).SendTweet(TweetText, DataTransfer.ReplyId,
-                            location.Latitude, location.Longitude, ReceiveResponse);
+                        ServiceDispatcher.GetService(account).SendTweet(new SendTweetOptions
+                        {
+                            Status = TweetText,
+                            InReplyToStatusId = DataTransfer.ReplyId,
+                            Lat = location.Latitude,
+                            Long = location.Longitude
+                        }, ReceiveResponse);
                         requestsLeft++;
                     }
                 }
@@ -398,7 +403,7 @@ namespace Ocell.Pages
                 {
                     foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
                     {
-                        ServiceDispatcher.GetService(account).SendTweet(TweetText, DataTransfer.ReplyId, ReceiveResponse);
+                        ServiceDispatcher.GetService(account).SendTweet(new SendTweetOptions { Status = TweetText, InReplyToStatusId = DataTransfer.ReplyId }, ReceiveResponse);
                         requestsLeft++;
                     }
                 }
@@ -472,12 +477,17 @@ namespace Ocell.Pages
             if (IsGeotagged)
             {
                 var location = geoWatcher.Position.Location;
-                ServiceDispatcher.GetService(account).SendTweet(post.Post.Content, DataTransfer.ReplyId,
-                    location.Latitude, location.Longitude, ReceiveResponse);
+                ServiceDispatcher.GetService(account).SendTweet(new SendTweetOptions
+                {
+                    Status = post.Post.Content,
+                    InReplyToStatusId = DataTransfer.ReplyId,
+                    Lat = location.Latitude,
+                    Long = location.Longitude
+                }, ReceiveResponse);
             }
             else
             {
-                ServiceDispatcher.GetService(account).SendTweet(post.Post.Content, DataTransfer.ReplyId, ReceiveResponse);
+                ServiceDispatcher.GetService(account).SendTweet(new SendTweetOptions { Status = post.Post.Content, InReplyToStatusId = DataTransfer.ReplyId }, ReceiveResponse);
             }
         }
 
@@ -548,7 +558,7 @@ namespace Ocell.Pages
                 ScheduledTime.Minute,
                 0);
 
-            if(TrialInformation.IsFullFeatured)
+            if (TrialInformation.IsFullFeatured)
                 ScheduleWithServer(scheduledTime);
             else
                 ScheduleWithBackgroundAgent(scheduleTime);
@@ -594,7 +604,7 @@ namespace Ocell.Pages
                 requestsLeft++;
 
                 var scheduler = new Scheduler(user.Key, user.Secret);
-                
+
                 scheduler.ScheduleTweet(TweetText, scheduleTime, (sender, response) =>
                 {
                     requestsLeft--;

@@ -97,8 +97,8 @@ namespace Ocell.Pages.Columns
             BarText = Localization.Resources.LoadingLists;
 
             loading = 2;
-            service.ListListsFor(DataTransfer.CurrentAccount.ScreenName, -1, ReceiveLists);
-            service.ListListSubscriptionsFor(DataTransfer.CurrentAccount.ScreenName, ReceiveLists);
+            service.ListListsFor(new ListListsForOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }, ReceiveLists);
+            service.ListSubscriptions(new ListSubscriptionsOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }, ReceiveLists);
         }
 
         private void CreateCoreList()

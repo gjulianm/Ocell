@@ -10,7 +10,7 @@ namespace Ocell.Library.Twitter
         public string Key {get; set;}
         public string Secret { get; set; }
         public string ScreenName { get; set; }
-        public int? Id { get; set; }
+        public long? Id { get; set; }
         public string AvatarUrl { get; set; }
         public NotificationPreferences Preferences;
       
