@@ -13,6 +13,7 @@ using DanielVaughan.Services.Implementation;
 using DanielVaughan;
 using Ocell.Library.Twitter;
 using DanielVaughan.InversionOfControl.Containers.SimpleContainer;
+using Ocell.Controls;
 
 namespace Ocell
 {
@@ -64,6 +65,9 @@ namespace Ocell
             Dependency.Register<INavigationService, FrameNavigationService>(true);
             Dependency.Register<IMessageService, MessageService>(true);
             Dependency.Register<IUserProvider, UserProvider>();
+            Dependency.Register<IScrollController, WP7ScrollController>();
+            Dependency.Register<IReadingPositionManager, WP7ReadingPositionManager>();
+            Dependency.Register<IInfiniteScroller, WP7InfiniteScroller>();
 
             bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
             ThemeFunctions.BackgroundBrush = Config.Background.GetBrush();

@@ -162,8 +162,14 @@
     <Compile Include="..\Ocell\Controls\ExtendedListBox.cs">
       <Link>Controls\ExtendedListBox.cs</Link>
     </Compile>
-    <Compile Include="..\Ocell\Controls\ScrollController.cs">
-      <Link>Controls\ScrollController.cs</Link>
+    <Compile Include="..\Ocell\Controls\Interfaces\IInfiniteScroller.cs">
+      <Link>Controls\Interfaces\IInfiniteScroller.cs</Link>
+    </Compile>
+    <Compile Include="..\Ocell\Controls\Interfaces\IReadingPositionManager.cs">
+      <Link>Controls\Interfaces\IReadingPositionManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Ocell\Controls\Interfaces\IScrollController.cs">
+      <Link>Controls\Interfaces\IScrollController.cs</Link>
     </Compile>
     <Compile Include="..\Ocell\Globals.cs">
       <Link>Globals.cs</Link>
@@ -415,6 +421,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ReadingPositionManager.cs" />
+    <Compile Include="Controls\ScrollController.cs" />
+    <Compile Include="Controls\WP8InfiniteScroller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

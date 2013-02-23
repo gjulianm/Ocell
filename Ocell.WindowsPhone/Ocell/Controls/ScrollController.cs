@@ -3,15 +3,8 @@ using System;
 using System.Linq;
 using System.Windows.Controls;
 
-namespace Ocell.Controls.ScrollControl
+namespace Ocell.Controls
 {
-    public interface IScrollController
-    {
-        void Bind(ExtendedListBox list);
-        void LoadCalled(int position = -1);
-        bool Bound { get; set; }
-    }
-
     public class WP7ScrollController : IScrollController
     {
         double loadCallScrollPosition;
@@ -79,22 +72,5 @@ namespace Ocell.Controls.ScrollControl
         }
 
         public bool Bound { get; set; }
-    }
-
-    /// <summary>
-    /// WP8 doesn't need a scroll controller, so just create a dummy one.
-    /// </summary>
-    public class DummyScrollController : IScrollController
-    {
-        public bool Bound { get; set; }
-
-        public void Bind(ExtendedListBox list)
-        {
-            Bound = true;
-        }
-
-        public void LoadCalled(int position = -1)
-        {
-        }
     }
 }

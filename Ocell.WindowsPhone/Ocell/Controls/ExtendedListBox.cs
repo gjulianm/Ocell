@@ -21,7 +21,7 @@ using DanielVaughan;
 using Ocell.Localization;
 using System.Collections.Generic;
 using LinqToVisualTree;
-using Ocell.Controls.ScrollControl;
+using Ocell.Controls;
 using Microsoft.Phone.Controls;
 
 namespace Ocell.Controls
@@ -41,6 +41,8 @@ namespace Ocell.Controls
         protected TimeSpan autoReloadInterval = TimeSpan.FromSeconds(60);
         protected static DateTime lastErrorFired;
         protected IScrollController scrollController;
+        protected IReadingPositionManager readingPosManager;
+        protected IInfiniteScroller infiniteScroller;
         private bool goTopOnNextLoad = false;
 
         ScrollViewer sv;
@@ -92,7 +94,6 @@ namespace Ocell.Controls
             this.Loaded += new RoutedEventHandler(ListBox_Loaded);
             this.Compression += new OnCompression(RefreshOnPull);
             this.SelectionChanged += new SelectionChangedEventHandler(ManageNavigation);
-            this.ManipulationCompleted += new EventHandler<ManipulationCompletedEventArgs>(ScrollEnded);
 
             ExtendedListBox.SaveViewports += this.SaveInstanceViewport;
 
@@ -100,20 +101,13 @@ namespace Ocell.Controls
             Loader.CacheLoad += new EventHandler(Loader_CacheLoad);
             Loader.LoadFinished += Loader_LoadFinished;
             SetupCollectionViewSource();
-#if WP7
+
             this.Background = new SolidColorBrush(Colors.Transparent);
-            this.IsFlatList = true;
-#endif
 
-
-#if WP7
-            scrollController = new WP7ScrollController();
-#elif WP8
-            scrollController = new DummyScrollController();
-#endif
+            scrollController = Dependency.Resolve<IScrollController>();
+            readingPosManager = Dependency.Resolve<IReadingPositionManager>();
+            infiniteScroller = Dependency.Resolve<IInfiniteScroller>();
         }
-
-        
 
 
         private void SetupCollectionViewSource()
@@ -136,6 +130,17 @@ namespace Ocell.Controls
         #endregion
 
         #region Tweetloader communication
+        public void Load()
+        {
+            TODO
+        }
+
+        public void LoadOld()
+        {
+            TODO
+        }
+
+
         void Loader_Error(TwitterResponse response)
         {
             var messager = Dependency.Resolve<IMessageService>();
@@ -145,12 +150,9 @@ namespace Ocell.Controls
                 if (response.RateLimitStatus.RemainingHits == 0)
                     messager.ShowError(String.Format(Localization.Resources.RateLimitHit, response.RateLimitStatus.ResetTime.ToString("H:mm")));
                 else if (response.StatusCode == System.Net.HttpStatusCode.NotFound && Loader.Resource.Type == ResourceType.List)
-                {
                     messager.ShowError(String.Format(Localization.Resources.ListDeleted, Loader.Resource.Data));
-                }
                 else
                     messager.ShowError(String.Format(Localization.Resources.ErrorLoadingTweets, response.StatusDescription));
-
             }
         }
 
@@ -160,10 +162,19 @@ namespace Ocell.Controls
             if (Config.ReloadOptions == ColumnReloadOptions.AskPosition)
                 TryTriggerResumeReading();
             else if (Config.ReloadOptions == ColumnReloadOptions.KeepPosition)
-                ResumeReadPosition();
+                readingPosManager.RecoverPosition();
             else
                 goTopOnNextLoad = true;
 
+        }
+
+        void TryTriggerResumeReading()
+        {
+            if (readingPosManager.CanRecoverPosition())
+            {
+                if (ReadyToResumePosition != null)
+                    ReadyToResumePosition(this, new EventArgs());
+            }
         }
 
         void Loader_LoadFinished(object sender, EventArgs e)
@@ -175,7 +186,6 @@ namespace Ocell.Controls
             }
         }
 
-
         public event EventHandler ReadyToResumePosition;
         #endregion
 
@@ -184,6 +194,12 @@ namespace Ocell.Controls
         {
             if (!scrollController.Bound)
                 scrollController.Bind(this);
+
+            if (!readingPosManager.Bound)
+                readingPosManager.Bind(this);
+
+            if (!infiniteScroller.Bound)
+                infiniteScroller.Bind(this);
 
             if (!alreadyHookedScrollEvents)
                 HookScrollEvent();
@@ -261,61 +277,6 @@ namespace Ocell.Controls
             }
 
         }        
-        #endregion
-
-        #region Reading position
-        void ScrollEnded(object sender, ManipulationCompletedEventArgs e)
-        {
-            SaveReadingPosition();
-            CheckInfiniteScroll();
-        }
-
-        private void CheckInfiniteScroll()
-        {
-            var distToBottom = scrollViewer.ExtentHeight - scrollViewer.VerticalOffset;
-            const double trigger = 25;
-
-            if (distToBottom > 0 && distToBottom < trigger)
-            {
-                Loader.Load(true);
-                Loader.IsLoading = false; // Supress the progress bar.
-            }
-        }
-
-        void SaveReadingPosition()
-        {
-            var elementOffset = (int)scrollViewer.VerticalOffset;
-
-            if (elementOffset < Loader.Source.Count)
-            {
-                var element = Loader.Source.OrderByDescending(x => x.Id).ElementAt(elementOffset);
-                Config.ReadPositions[Loader.Resource.String] = element.Id;
-                Config.SaveReadPositions();
-            }
-        }
-
-        public void TryTriggerResumeReading()
-        {
-            long id;
-            if (Config.ReadPositions.TryGetValue(Loader.Resource.String, out id)
-                && Loader.Source.Any(item => item.Id == id))
-            {
-                if (ReadyToResumePosition != null)
-                    ReadyToResumePosition(this, new EventArgs());
-            }
-        }
-
-        public void ResumeReadPosition()
-        {
-            long id;
-            if(!Config.ReadPositions.TryGetValue(Loader.Resource.String, out id))
-                return;
-
-            var item = Loader.Source.FirstOrDefault(x => x.Id == id);
-
-            if (item != null)
-                Dispatcher.InvokeIfRequired(() => ScrollTo(item));
-        }
         #endregion
 
         #region Scroll Events

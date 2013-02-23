@@ -56,10 +56,10 @@
             <local:ResourceTypeConverter x:Key="ResourceTypeConverter" />
 
         	<DataTemplate x:Key="TweetTemplate">
-        		<local:TweetTemplateSelector Content="{Binding}" Margin="0" HorizontalContentAlignment="Stretch" >
+        		<local:TweetTemplateSelector Content="{Binding}" Margin="0" Width="Auto" HorizontalContentAlignment="Stretch" >
         			<local:TweetTemplateSelector.UsualTemplate>
         				<DataTemplate>
-        					<Grid HorizontalAlignment="Stretch" Tag="{Binding Id}" Margin="0,3,0,12" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache">
+        					<Grid HorizontalAlignment="Stretch" Width="Auto" Tag="{Binding Id}" Margin="0,3,0,12" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache">
         						<i:Interaction.Behaviors>
         							<tr:OnLoadedOpacityTransitionBehavior/>
         						</i:Interaction.Behaviors>
