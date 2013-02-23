@@ -777,8 +777,8 @@
       <Name>Ocell.Buffer</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj">
-      <Project>{3059FD1C-4B4B-4460-A0D4-53C84CCE6CAC}</Project>
-      <Name>Hammock.WindowsPhone</Name>
+      <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>
+      <Name>Hammock.WindowsPhone.Mango</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.APIs\Ocell.Sharplonger\Ocell.Sharplonger.csproj">
       <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>
@@ -806,7 +806,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.Library\Ocell.Localization\Ocell.Localization.csproj">
       <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
-      <Name>Localization</Name>
+      <Name>Ocell.Localization</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ocell.BackgroundAgent\Ocell.BackgroundAgent.csproj">
       <Project>{38C14A5B-4940-4567-BA45-81FD8E5784DE}</Project>

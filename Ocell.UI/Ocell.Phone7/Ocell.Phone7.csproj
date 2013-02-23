@@ -544,7 +544,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.Library\Ocell.Localization\Ocell.Localization.csproj">
       <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
-      <Name>Localization</Name>
+      <Name>Ocell.Localization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj">
       <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>

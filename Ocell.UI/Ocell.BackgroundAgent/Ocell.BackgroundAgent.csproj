@@ -80,7 +80,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.Library\Ocell.Localization\Ocell.Localization.csproj">
       <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
-      <Name>Localization</Name>
+      <Name>Ocell.Localization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.Library\Ocell.BackgroundAgent.Library\Ocell.BackgroundAgent.Library.csproj">
       <Project>{742DB613-45BB-4F8F-A73F-B559901F6548}</Project>
