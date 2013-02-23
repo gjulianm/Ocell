@@ -1,0 +1,572 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F3B6A65D-237D-4E5E-B4A9-F9E098730119}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ocell</RootNamespace>
+    <AssemblyName>Ocell</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>es%3ben%3bit</SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>Ocell.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>Ocell.App</SilverlightAppEntry>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>5.0.30924.0</ExpressionBlendVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP7;OCELL_FULL</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP7;OCELL_FULL</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>ExtendedDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Lite|AnyCPU'">
+    <OutputPath>bin\Release_Lite\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP7;</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>Bin\Release\Ocell.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExtendedDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug_Lite|AnyCPU'">
+    <OutputPath>bin\Debug_Lite\</OutputPath>
+    <DefineConstants>SILVERLIGHT;WINDOWS_PHONE;WP7;</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Calcium.Phone">
+      <HintPath>..\..\Ocell.Common\lib_dll\Calcium.Phone.dll</HintPath>
+    </Reference>
+    <Reference Include="JeffWilcox.PhoneThemeManager">
+      <HintPath>..\packages\PhoneThemeManager.1.3.2\lib\sl4-windowsphone71\JeffWilcox.PhoneThemeManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=3.7.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Phone" />
+    <Reference Include="Microsoft.Phone.Controls, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Phone.Controls.Toolkit">
+      <HintPath>..\packages\WPtoolkit.4.2012.10.30\lib\sl4-windowsphone71\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Phone.Interop" />
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Calcium SDK\Windows Phone\1.0\Libraries\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.WindowsPhone">
+      <HintPath>..\..\Ocell.Common\lib_dll\Newtonsoft.Json.WindowsPhone.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Device" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Interactivity, Version=3.8.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="mscorlib.extensions" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Interfaces\IInfiniteScroller.cs" />
+    <Compile Include="Controls\Interfaces\IReadingPositionManager.cs" />
+    <Compile Include="Controls\Interfaces\IScrollController.cs" />
+    <Compile Include="Controls\ReadingPositionManager.cs" />
+    <Compile Include="Controls\ScrollController.cs" />
+    <Compile Include="Controls\WP7InfiniteScroller.cs" />
+    <Compile Include="Globals.cs" />
+    <Compile Include="Helpers\FilterManager.cs" />
+    <Compile Include="Helpers\TemplateSelector.cs" />
+    <Compile Include="Helpers\ValueConverters\AvatarImageManager.cs" />
+    <Compile Include="Helpers\ValueConverters\FirstToUpper.cs" />
+    <Compile Include="Helpers\ValueConverters\ITweetableFilterConverter.cs" />
+    <Compile Include="Helpers\ValueConverters\ListConverter.cs" />
+    <Compile Include="Helpers\ValueConverters\ProtectedConverter.cs" />
+    <Compile Include="Helpers\ValueConverters\RelativeDateTimeConverter.cs" />
+    <Compile Include="Helpers\ValueConverters\ResourceTypeConverter.cs" />
+    <Compile Include="Helpers\ValueConverters\ToColumn.cs" />
+    <Compile Include="Helpers\ValueConverters\TweetTextConverter.cs" />
+    <Compile Include="LinqToVisualTree.cs" />
+    <Compile Include="LittleWatson.cs" />
+    <Compile Include="MainPageModel.cs" />
+    <Compile Include="MessageServiceExtension.cs" />
+    <Compile Include="MetroInMotion.cs" />
+    <Compile Include="Pages\Columns\AddColumnModel.cs" />
+    <Compile Include="Pages\Columns\ColumnViewModel.cs" />
+    <Compile Include="Pages\Columns\ColumnView.xaml.cs">
+      <DependentUpon>ColumnView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Elements\DMConversationModel.cs" />
+    <Compile Include="Pages\Elements\DMConversation.xaml.cs">
+      <DependentUpon>DMConversation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Elements\UserListModel.cs" />
+    <Compile Include="Pages\Elements\TweetModel.cs" />
+    <Compile Include="Pages\Elements\UserList.xaml.cs">
+      <DependentUpon>UserList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Elements\UserModel.cs" />
+    <Compile Include="Pages\NewTweetModel.cs" />
+    <Compile Include="Pages\SelectUserModel.cs" />
+    <Compile Include="Pages\Settings\Backgrounds.xaml.cs">
+      <DependentUpon>Backgrounds.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\BufferOAuthModel.cs" />
+    <Compile Include="Pages\Settings\CouponCodesModel.cs" />
+    <Compile Include="Pages\Settings\CouponCodes.xaml.cs">
+      <DependentUpon>CouponCodes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\DefaultModel.cs" />
+    <Compile Include="Pages\Settings\BackgroundsModel.cs" />
+    <Compile Include="Pages\Settings\OAuthModel.cs" />
+    <Compile Include="Pages\Settings\TwitterOAuthModel.cs" />
+    <Compile Include="Pages\TopicsModel.cs" />
+    <Compile Include="Notificator.cs" />
+    <Compile Include="Pages\Columns\SelectAccount.xaml.cs">
+      <DependentUpon>SelectAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Drafts\ManageDraftsModel.cs" />
+    <Compile Include="Pages\Drafts\ManageDrafts.xaml.cs">
+      <DependentUpon>ManageDrafts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Lists\CreateList.xaml.cs">
+      <DependentUpon>CreateList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Lists\ListManager.xaml.cs">
+      <DependentUpon>ListManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ResourceViewModel.cs" />
+    <Compile Include="Pages\Search\EnterSearch.xaml.cs">
+      <DependentUpon>EnterSearch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Filtering\Filters.xaml.cs">
+      <DependentUpon>Filters.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Filtering\ManageFilter.xaml.cs">
+      <DependentUpon>ManageFilter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Pages.cs" />
+    <Compile Include="Pages\Search\EnterSearchModel.cs" />
+    <Compile Include="Pages\SelectUser.xaml.cs">
+      <DependentUpon>SelectUser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Topics.xaml.cs">
+      <DependentUpon>Topics.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PushNotifications.cs" />
+    <Compile Include="SampleCollections.cs" />
+    <Compile Include="SchedulerSync.cs" />
+    <Compile Include="ThemeFunctions.cs" />
+    <Compile Include="Tiles\SecondaryTiles.cs" />
+    <Compile Include="Transitions\Behaviours.cs" />
+    <Compile Include="Transitions\OpacityTransition.cs" />
+    <Compile Include="Controls\ExtendedListBox.cs" />
+    <Compile Include="Helpers\Commands.cs" />
+    <Compile Include="Helpers\StringManipulator.cs" />
+    <Compile Include="Pages\Columns\AddColumn.xaml.cs">
+      <DependentUpon>AddColumn.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Columns\ManageColumns.xaml.cs">
+      <DependentUpon>ManageColumns.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Elements\Conversation.xaml.cs">
+      <DependentUpon>Conversation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Elements\DMView.xaml.cs">
+      <DependentUpon>DMView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\NewTweet.xaml.cs">
+      <DependentUpon>NewTweet.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ResourceView.xaml.cs">
+      <DependentUpon>ResourceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\Default.xaml.cs">
+      <DependentUpon>Default.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\OAuth.xaml.cs">
+      <DependentUpon>OAuth.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Elements\Tweet.xaml.cs">
+      <DependentUpon>Tweet.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Elements\User.xaml.cs">
+      <DependentUpon>User.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Helpers\ValueConverters\RemoveHTML.cs" />
+    <Compile Include="TrialInformation.cs" />
+    <Compile Include="ViewModelBaseExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="Pages\Columns\AddColumn.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Columns\ColumnView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Columns\ManageColumns.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Drafts\ManageDrafts.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Elements\Conversation.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Elements\DMConversation.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Elements\DMView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Elements\UserList.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Lists\CreateList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Lists\ListManager.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Search\EnterSearch.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Filtering\Filters.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Filtering\ManageFilter.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\NewTweet.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\ResourceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SelectUser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Backgrounds.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\CouponCodes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Default.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Settings\OAuth.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Columns\SelectAccount.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Topics.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Elements\Tweet.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Elements\User.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Ocell_2012_03_18_19_41_51.sap" />
+    <None Include="Ocell_2012_04_11_23_33_33.sap" />
+    <None Include="packages.config" />
+    <None Include="Properties\AppManifest.xml" />
+    <None Include="Properties\WMAppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\Backgrounds\Diamond.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Backgrounds\Fabric.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ApplicationIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Pages\Settings\OcellIcon200.png" />
+    <Content Include="Images\Backgrounds\BlackTiled.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Backgrounds\Floral.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Backgrounds\Gray.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Backgrounds\Map.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Backgrounds\Tire.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Icons_White\appbar.add.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Images\Icons_White\appbar.back.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.basecircle.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.cancel.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Images\Icons_White\appbar.alarm.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Images\Icons_White\appbar.bufferapp.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.camera.flash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Images\Icons_White\appbar.check.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Images\Icons_White\appbar.close.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.delete.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.download.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.edit.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.favs.addto.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.favs.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.feature.camera.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Images\ColumnTile.png" />
+    <Content Include="Images\ComposeTile.png" />
+    <EmbeddedResource Include="Images\Icons_White\appbar.columns.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.favs.remove.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Images\Icons_White\appbar.feature.email.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Icons_White\appbar.feature.search.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Images\Icons_White\appbar.feature.settings.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.feature.video.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.folder.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.minus.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.new.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Images\Icons_White\appbar.map.position.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Icons_White\appbar.next.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Images\Icons_White\appbar.overflowdots.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.questionmark.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.refresh.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.reply.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.replyall.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Images\Icons_White\appbar.pin.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Icons_White\appbar.save.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Images\Icons_White\appbar.share.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.stop.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.sync.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.transport.ff.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.transport.pause.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.transport.play.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.transport.rew.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.upload.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Icons_White\appbar.retweet.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Resource Include="Images\BirdGray.png" />
+    <Resource Include="Images\ReplyBtn.png" />
+    <Resource Include="Images\RtBtn.png" />
+    <Content Include="Images\Icons_White\appbar.sendmail.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SplashScreenImage.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\Icons_Black\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Ocell.APIs\Ocell.Buffer\Ocell.Buffer.csproj">
+      <Project>{4186D1D2-C419-4DA2-A1D8-5F56E5AAA30D}</Project>
+      <Name>Ocell.Buffer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.APIs\Ocell.Sharplonger\Ocell.Sharplonger.csproj">
+      <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>
+      <Name>Ocell.Sharplonger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.APIs\Ocell.ReadLater\Ocell.ReadLater.csproj">
+      <Project>{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}</Project>
+      <Name>Ocell.ReadLater</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.Library\Ocell.Library.CoreTypes\Ocell.Library.CoreTypes.csproj">
+      <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
+      <Name>Ocell.Library.CoreTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.Library\Ocell.Library\Ocell.Library.csproj">
+      <Project>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</Project>
+      <Name>Ocell.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.Library\Ocell.Localization\Ocell.Localization.csproj">
+      <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj">
+      <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>
+      <Name>Hammock.WindowsPhone.Mango</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
+      <Project>{35BC2453-9CAD-4508-9C8C-BF06A9223761}</Project>
+      <Name>TweetSharp.WindowsPhone.Mango</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ocell.BackgroundAgent\Ocell.BackgroundAgent.csproj">
+      <Project>{38C14A5B-4940-4567-BA45-81FD8E5784DE}</Project>
+      <Name>Ocell.BackgroundAgent</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions />
+</Project>

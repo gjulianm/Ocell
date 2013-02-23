@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ocell.Library</RootNamespace>
+    <AssemblyName>Ocell.Library</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.30816.0</ExpressionBlendVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;OCELL_FULL</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;OCELL_FULL</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Lite|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Release_Lite\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>Bin\Debug\Library.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>..\Minimum.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Calcium.Phone">
+      <HintPath>..\..\Ocell.ThirdParty\lib_dll\Calcium.Phone.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Phone" />
+    <Reference Include="Newtonsoft.Json.WindowsPhone">
+      <HintPath>..\..\Ocell.ThirdParty\lib_dll\Newtonsoft.Json.WindowsPhone.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="mscorlib.extensions" />
+    <Reference Include="System.Xml.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SensitiveData.cs">
+      <Link>SensitiveData.cs</Link>
+    </Compile>
+    <Compile Include="Autocompleter.cs">
+    </Compile>
+    <Compile Include="Collections\SafeObservable.cs">
+    </Compile>
+    <Compile Include="Collections\SortedFilteredObservable.cs">
+    </Compile>
+    <Compile Include="ColumnReloadOptions.cs">
+    </Compile>
+    <Compile Include="Configuration\Config.cs">
+    </Compile>
+    <Compile Include="Configuration\Config.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Config.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataTransfer.cs">
+    </Compile>
+    <Compile Include="DateSync.cs">
+    </Compile>
+    <Compile Include="DebugWriter.cs">
+    </Compile>
+    <Compile Include="DecisionMaker.cs">
+    </Compile>
+    <Compile Include="Encrypting.cs">
+    </Compile>
+    <Compile Include="FileAbstractor.cs">
+    </Compile>
+    <Compile Include="Filtering\ColumnFilter.cs">
+    </Compile>
+    <Compile Include="GlobalEvents.cs">
+    </Compile>
+    <Compile Include="IEnumerableExtension.cs">
+    </Compile>
+    <Compile Include="Notifications\TileManager.cs">
+    </Compile>
+    <Compile Include="OcellTheme.cs">
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadLaterCompatibility.cs">
+    </Compile>
+    <Compile Include="Tasks\TaskExecutor.cs">
+    </Compile>
+    <Compile Include="TweetFilter.cs">
+    </Compile>
+    <Compile Include="Twitter\Cacher.cs">
+    </Compile>
+    <Compile Include="Twitter\Comparers\TwitterComparers.cs">
+    </Compile>
+    <Compile Include="Twitter\ConversationService.cs">
+    </Compile>
+    <Compile Include="Twitter\DmUtils.cs">
+    </Compile>
+    <Compile Include="Twitter\GroupedDM.cs">
+    </Compile>
+    <Compile Include="Twitter\IProvider.cs">
+    </Compile>
+    <Compile Include="Twitter\LoadMoreTweetable.cs">
+    </Compile>
+    <Compile Include="Twitter\ProtectedAccounts.cs">
+    </Compile>
+    <Compile Include="Twitter\ServiceDispatcher.cs">
+    </Compile>
+    <Compile Include="Twitter\TweetLoader.cs">
+    </Compile>
+    <Compile Include="Twitter\TwitterDraft.cs">
+    </Compile>
+    <Compile Include="Twitter\UsernameProvider.cs">
+    </Compile>
+    <Compile Include="Twitter\UserTokenFiller.cs">
+    </Compile>
+    <Compile Include="Watch.cs">
+    </Compile>
+    <Compile Include="Tasks\Scheduler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Ocell.APIs\Ocell.Buffer\Ocell.Buffer.csproj">
+      <Project>{4186D1D2-C419-4DA2-A1D8-5F56E5AAA30D}</Project>
+      <Name>Ocell.Buffer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.APIs\Ocell.Sharplonger\Ocell.Sharplonger.csproj">
+      <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>
+      <Name>Ocell.Sharplonger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj">
+      <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>
+      <Name>Hammock.WindowsPhone.Mango</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.ThirdParty\SharpSerializer\SharpSerializer.Library.Silverlight\SharpSerializer.Library.Silverlight.csproj">
+      <Project>{3008493B-1E7B-445A-9C3B-144B75E362DB}</Project>
+      <Name>SharpSerializer.Library.Silverlight</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
+      <Project>{35BC2453-9CAD-4508-9C8C-BF06A9223761}</Project>
+      <Name>TweetSharp.WindowsPhone.Mango</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ocell.Library.CoreTypes\Ocell.Library.CoreTypes.csproj">
+      <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
+      <Name>Ocell.Library.CoreTypes</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Configuration\BackgroundAgent.json">
+    </None>
+    <None Include="Configuration\Config.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Config.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Configuration\NotBackgroundAgent.json">
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
