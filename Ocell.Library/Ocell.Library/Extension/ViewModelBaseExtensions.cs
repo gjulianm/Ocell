@@ -1,6 +1,6 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using DanielVaughan.ComponentModel;
+using System;
 
 namespace Ocell
 {

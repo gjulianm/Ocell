@@ -40,7 +40,7 @@ namespace Ocell.Controls
 
             if (distToBottom > 0 && distToBottom < trigger)
             {
-                lb.Loader.Load(true);
+                lb.LoadOld();
                 lb.Loader.IsLoading = false; // Supress the progress bar.
             }
         }

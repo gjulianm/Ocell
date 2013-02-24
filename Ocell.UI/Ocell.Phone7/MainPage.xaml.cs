@@ -294,7 +294,7 @@ namespace Ocell
             HideResumePositionPrompt();
 
             if (currentShowingList != null)
-                currentShowingList.ResumePosition();
+                currentShowingList.ResumeReading();
         }
 
         bool recoverDialogShown = false;

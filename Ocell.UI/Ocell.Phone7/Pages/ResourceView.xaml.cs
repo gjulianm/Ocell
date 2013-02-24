@@ -23,7 +23,7 @@ namespace Ocell.Pages.Search
 
         private void TweetList_Loaded(object sender, RoutedEventArgs e)
         {
-            viewModel.Loader = TweetList.Loader;
+            viewModel.Listbox = TweetList;
 
             TweetList.AutoManageNavigation = true;
             TweetList.ActivatePullToRefresh = true;

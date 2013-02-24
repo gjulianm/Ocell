@@ -132,12 +132,14 @@ namespace Ocell.Controls
         #region Tweetloader communication
         public void Load()
         {
-            TODO
+            scrollController.LoadCalled(-1);
+            Loader.Load();
         }
 
         public void LoadOld()
         {
-            TODO
+            scrollController.LoadCalled(-2);
+            Loader.Load(true);
         }
 
 
@@ -168,13 +170,18 @@ namespace Ocell.Controls
 
         }
 
-        void TryTriggerResumeReading()
+        public void TryTriggerResumeReading()
         {
             if (readingPosManager.CanRecoverPosition())
             {
                 if (ReadyToResumePosition != null)
                     ReadyToResumePosition(this, new EventArgs());
             }
+        }
+
+        public void ResumeReading()
+        {
+            readingPosManager.RecoverPosition();
         }
 
         void Loader_LoadFinished(object sender, EventArgs e)
@@ -395,11 +402,10 @@ namespace Ocell.Controls
 
             bool old = (e.Type == Controls.CompressionType.Bottom);
 
-            if (!old)
-                scrollController.LoadCalled();
+            if (old)
+                LoadOld();
             else
-                scrollController.LoadCalled(-2);
-            Loader.Load(old);
+                Load();
         }
 
         void ManageNavigation(object sender, SelectionChangedEventArgs e)
@@ -440,9 +446,8 @@ namespace Ocell.Controls
         {
             if (DateTime.Now > (lastAutoReload + autoReloadInterval))
             {
-                Loader.Load();
+                Load();
                 lastAutoReload = DateTime.Now; 
-                scrollController.LoadCalled(0);
             }
         }
         #endregion

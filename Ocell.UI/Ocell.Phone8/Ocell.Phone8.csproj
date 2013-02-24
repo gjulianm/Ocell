@@ -216,21 +216,12 @@
     <Compile Include="..\Ocell.Phone7\Helpers\ValueConverters\TweetTextConverter.cs">
       <Link>Helpers\ValueConverters\TweetTextConverter.cs</Link>
     </Compile>
-    <Compile Include="..\Ocell.Phone7\LinqToVisualTree.cs">
-      <Link>LinqToVisualTree.cs</Link>
-    </Compile>
-    <Compile Include="..\Ocell.Phone7\LittleWatson.cs">
-      <Link>LittleWatson.cs</Link>
-    </Compile>
     <Compile Include="..\Ocell.Phone7\MainPage.xaml.cs">
       <Link>MainPage.xaml.cs</Link>
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="..\Ocell.Phone7\MainPageModel.cs">
       <Link>MainPageModel.cs</Link>
-    </Compile>
-    <Compile Include="..\Ocell.Phone7\MessageServiceExtension.cs">
-      <Link>MessageServiceExtension.cs</Link>
     </Compile>
     <Compile Include="..\Ocell.Phone7\MetroInMotion.cs">
       <Link>MetroInMotion.cs</Link>
@@ -391,9 +382,6 @@
     <Compile Include="..\Ocell.Phone7\Pages\TopicsModel.cs">
       <Link>Pages\TopicsModel.cs</Link>
     </Compile>
-    <Compile Include="..\Ocell.Phone7\PushNotifications.cs">
-      <Link>PushNotifications.cs</Link>
-    </Compile>
     <Compile Include="..\Ocell.Phone7\SampleCollections.cs">
       <Link>SampleCollections.cs</Link>
     </Compile>
@@ -411,12 +399,6 @@
     </Compile>
     <Compile Include="..\Ocell.Phone7\Transitions\OpacityTransition.cs">
       <Link>Transitions\OpacityTransition.cs</Link>
-    </Compile>
-    <Compile Include="..\Ocell.Phone7\TrialInformation.cs">
-      <Link>TrialInformation.cs</Link>
-    </Compile>
-    <Compile Include="..\Ocell.Phone7\ViewModelBaseExtensions.cs">
-      <Link>ViewModelBaseExtensions.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

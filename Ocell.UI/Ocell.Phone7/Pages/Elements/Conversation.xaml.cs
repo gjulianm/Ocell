@@ -54,7 +54,7 @@ namespace Ocell.Pages.Elements
             DataContext = CList.Loader;
 
             CList.Loader.Cached = false;
-            CList.Loader.Load();            
+            CList.Load();            
         }
     }
 }

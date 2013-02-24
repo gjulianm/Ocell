@@ -100,7 +100,7 @@
     </Compile>
     <Compile Include="DateSync.cs">
     </Compile>
-    <Compile Include="DebugWriter.cs">
+    <Compile Include="Diagnostics\DebugWriter.cs">
     </Compile>
     <Compile Include="DecisionMaker.cs">
     </Compile>
@@ -112,14 +112,14 @@
     </Compile>
     <Compile Include="GlobalEvents.cs">
     </Compile>
-    <Compile Include="IEnumerableExtension.cs">
+    <Compile Include="Extension\IEnumerableExtension.cs">
     </Compile>
-    <Compile Include="LinqToVisualTree.cs" />
-    <Compile Include="LittleWatson.cs" />
-    <Compile Include="MessageServiceExtension.cs" />
+    <Compile Include="UI\LinqToVisualTree.cs" />
+    <Compile Include="Diagnostics\LittleWatson.cs" />
+    <Compile Include="Extension\MessageServiceExtension.cs" />
     <Compile Include="Notifications\TileManager.cs">
     </Compile>
-    <Compile Include="OcellTheme.cs">
+    <Compile Include="UI\OcellTheme.cs">
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PushNotifications.cs" />
@@ -128,7 +128,7 @@
     <Compile Include="Tasks\TaskExecutor.cs">
     </Compile>
     <Compile Include="TrialInformation.cs" />
-    <Compile Include="TweetFilter.cs">
+    <Compile Include="Filtering\TweetFilter.cs">
     </Compile>
     <Compile Include="Twitter\Cacher.cs">
     </Compile>
@@ -156,8 +156,8 @@
     </Compile>
     <Compile Include="Twitter\UserTokenFiller.cs">
     </Compile>
-    <Compile Include="ViewModelBaseExtensions.cs" />
-    <Compile Include="Watch.cs">
+    <Compile Include="Extension\ViewModelBaseExtensions.cs" />
+    <Compile Include="Diagnostics\Watch.cs">
     </Compile>
     <Compile Include="Tasks\Scheduler.cs" />
   </ItemGroup>

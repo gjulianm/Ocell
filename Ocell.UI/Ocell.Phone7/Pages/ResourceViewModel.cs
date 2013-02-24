@@ -14,6 +14,7 @@ using DanielVaughan.Windows;
 using Ocell.Library.Twitter;
 using Ocell.Library;
 using System.Linq;
+using Ocell.Controls;
 
 namespace Ocell.Pages.Search
 {
@@ -35,6 +36,13 @@ namespace Ocell.Pages.Search
             set { Assign("Loader", ref loader, value); }
         }
 
+        ExtendedListBox listbox;
+        public ExtendedListBox Listbox
+        {
+            get { return listbox; }
+            set { Assign("Listbox", ref listbox, value); }
+        }
+
         DelegateCommand addCommand;
         public ICommand AddCommand
         {
@@ -48,7 +56,7 @@ namespace Ocell.Pages.Search
 
             this.PropertyChanged += (sender, property) =>
                 {
-                    if (property.PropertyName == "Loader")
+                    if (property.PropertyName == "Listbox")
                         UpdateTweetLoader();
                 };
 
@@ -66,8 +74,9 @@ namespace Ocell.Pages.Search
 
         public void UpdateTweetLoader()
         {
-            Loader.Resource = Resource;
-            Loader.Load();
+            Loader = Listbox.Loader;
+            Listbox.Loader.Resource = Resource;
+            Listbox.Load();
         }
     }
 }

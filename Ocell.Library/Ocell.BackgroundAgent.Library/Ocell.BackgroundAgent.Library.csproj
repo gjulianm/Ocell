@@ -83,7 +83,7 @@
     <Compile Include="..\Ocell.Library\DateSync.cs">
       <Link>DateSync.cs</Link>
     </Compile>
-    <Compile Include="..\Ocell.Library\DebugWriter.cs">
+    <Compile Include="..\Ocell.Library\Diagnostics\DebugWriter.cs">
       <Link>DebugWriter.cs</Link>
     </Compile>
     <Compile Include="..\Ocell.Library\FileAbstractor.cs">
