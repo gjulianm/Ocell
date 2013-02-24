@@ -125,10 +125,7 @@
     <Compile Include="Helpers\ValueConverters\ResourceTypeConverter.cs" />
     <Compile Include="Helpers\ValueConverters\ToColumn.cs" />
     <Compile Include="Helpers\ValueConverters\TweetTextConverter.cs" />
-    <Compile Include="LinqToVisualTree.cs" />
-    <Compile Include="LittleWatson.cs" />
     <Compile Include="MainPageModel.cs" />
-    <Compile Include="MessageServiceExtension.cs" />
     <Compile Include="MetroInMotion.cs" />
     <Compile Include="Pages\Columns\AddColumnModel.cs" />
     <Compile Include="Pages\Columns\ColumnViewModel.cs" />
@@ -192,7 +189,6 @@
     <Compile Include="Pages\Topics.xaml.cs">
       <DependentUpon>Topics.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PushNotifications.cs" />
     <Compile Include="SampleCollections.cs" />
     <Compile Include="SchedulerSync.cs" />
     <Compile Include="ThemeFunctions.cs" />
@@ -237,8 +233,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\ValueConverters\RemoveHTML.cs" />
-    <Compile Include="TrialInformation.cs" />
-    <Compile Include="ViewModelBaseExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
