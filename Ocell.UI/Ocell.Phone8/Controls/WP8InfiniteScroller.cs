@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TweetSharp;
 
 namespace Ocell.Controls
 {
@@ -19,10 +20,12 @@ namespace Ocell.Controls
 
         void lb_ItemRealized(object sender, Microsoft.Phone.Controls.ItemRealizationEventArgs e)
         {
-            if (e.ItemKind == Microsoft.Phone.Controls.LongListSelectorItemKind.ListFooter)
+            var tweet = e.Container.DataContext as ITweetable;
+
+            if (tweet != null && lb.Loader.Source.LastOrDefault() == tweet)
             {
-                lb.Loader.Load(true);
-                lb.Loader.IsLoading = false;
+                lb.LoadOld();
+                lb.Loader.IsLoading = false; // Supress loading bar.
             }
         }
     }

@@ -68,9 +68,10 @@ namespace Ocell
                 return;
             
             viewModel.RaiseLoggedInChange();
+            viewModel.OnLoad();
 
             GeolocationPrompt();
-
+            
             CreateStoryboards();
 
             ThreadPool.QueueUserWorkItem((threadContext) =>
@@ -221,7 +222,7 @@ namespace Ocell
                         {
                             long id;
                             if (Config.ReadPositions.TryGetValue(selectedPivot.String, out id)
-                                && !list.GetVisibleItems().Any(x => x.Id == id))
+                                && !list.VisibleItems.Any(x => x.Id == id))
                             {
                                 ShowResumePositionPrompt(list);
                             }

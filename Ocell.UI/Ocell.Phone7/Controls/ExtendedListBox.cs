@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using LinqToVisualTree;
 using Ocell.Controls;
 using Microsoft.Phone.Controls;
+using System.Diagnostics;
 
 namespace Ocell.Controls
 {
@@ -44,6 +45,8 @@ namespace Ocell.Controls
         protected IReadingPositionManager readingPosManager;
         protected IInfiniteScroller infiniteScroller;
         private bool goTopOnNextLoad = false;
+        private Dictionary<ITweetable, ContentPresenter> viewportItems;
+        private object viewportItemsLock = new object();
 
         ScrollViewer sv;
         private ScrollViewer scrollViewer
@@ -76,11 +79,30 @@ namespace Ocell.Controls
             }
         }
 
+        public IDictionary<ITweetable, ContentPresenter> ViewportItems
+        {
+            get
+            {
+                lock (viewportItemsLock)
+                    return new Dictionary<ITweetable, ContentPresenter>(viewportItems); /* Copy to avoid cross-thread access */
+            }
+        }
+
+        public IList<ITweetable> VisibleItems
+        {
+            get
+            {
+                lock(viewportItemsLock)
+                    return viewportItems.Keys.ToList();
+            }
+        }
+
         #region Setup
         public ExtendedListBox()
         {
             Loader = new TweetLoader();
             viewSource = new CollectionViewSource();
+            viewportItems = new Dictionary<ITweetable, ContentPresenter>();
 
             ActivatePullToRefresh = true;
             AutoManageNavigation = true;
@@ -91,9 +113,12 @@ namespace Ocell.Controls
             if (lastErrorFired == null)
                 lastErrorFired = DateTime.MinValue;
 
-            this.Loaded += new RoutedEventHandler(ListBox_Loaded);
-            this.Compression += new OnCompression(RefreshOnPull);
-            this.SelectionChanged += new SelectionChangedEventHandler(ManageNavigation);
+            this.Loaded += OnLoad;
+            this.Compression += RefreshOnPull;
+            this.SelectionChanged += ManageNavigation;
+
+            this.ItemRealized += OnItemRealized;
+            this.ItemUnrealized += OnItemUnrealized;
 
             ExtendedListBox.SaveViewports += this.SaveInstanceViewport;
 
@@ -109,7 +134,34 @@ namespace Ocell.Controls
             infiniteScroller = Dependency.Resolve<IInfiniteScroller>();
         }
 
+        private void OnItemRealized(object sender, ItemRealizationEventArgs e)
+        {
+            if (e.ItemKind == LongListSelectorItemKind.Item)
+            {
+                ITweetable o = e.Container.DataContext as ITweetable;
+                if (o != null)
+                {
+                    lock (viewportItemsLock)
+                        viewportItems[o] = e.Container;
+                }
+            }
+        }
 
+        private void OnItemUnrealized(object sender, ItemRealizationEventArgs e)
+        {
+            if (e.ItemKind == LongListSelectorItemKind.Item)
+            {
+                ITweetable o = e.Container.DataContext as ITweetable;
+                if (o != null)
+                {
+                    lock (viewportItemsLock)
+                        viewportItems.Remove(o);
+                }
+            }
+        }
+
+        
+        
         private void SetupCollectionViewSource()
         {
             ItemsSource = Loader.Source;
@@ -163,7 +215,7 @@ namespace Ocell.Controls
         {
             if (Config.ReloadOptions == ColumnReloadOptions.AskPosition)
                 TryTriggerResumeReading();
-            else if (Config.ReloadOptions == ColumnReloadOptions.KeepPosition)
+            else if (Config.ReloadOptions == ColumnReloadOptions.KeepPosition && readingPosManager.CanRecoverPosition())
                 readingPosManager.RecoverPosition();
             else
                 goTopOnNextLoad = true;
@@ -181,7 +233,8 @@ namespace Ocell.Controls
 
         public void ResumeReading()
         {
-            readingPosManager.RecoverPosition();
+            if (readingPosManager.CanRecoverPosition())
+                readingPosManager.RecoverPosition();
         }
 
         void Loader_LoadFinished(object sender, EventArgs e)
@@ -197,8 +250,10 @@ namespace Ocell.Controls
         #endregion
 
         #region Listbox Events
-        void ListBox_Loaded(object sender, RoutedEventArgs e)
+        void OnLoad(object sender, RoutedEventArgs e)
         {
+            SetTag();
+
             if (!scrollController.Bound)
                 scrollController.Bind(this);
 
@@ -209,10 +264,9 @@ namespace Ocell.Controls
                 infiniteScroller.Bind(this);
 
             if (!alreadyHookedScrollEvents)
-                HookScrollEvent();
-
-            SetTag();
+                HookScrollEvent();            
         }
+
         #endregion
 
         #region Scroll to top
@@ -229,7 +283,10 @@ namespace Ocell.Controls
 
         private void DoScrollToTop()
         {
-            scrollViewer.ScrollToVerticalOffset(0);
+            var first = Loader.Source.FirstOrDefault();
+
+            if (first != null)
+                ScrollTo(first);
         }
         #endregion
 
@@ -258,32 +315,14 @@ namespace Ocell.Controls
 
         protected void SaveInstanceViewport(object sender, EventArgs e)
         {
-            Loader.SaveToCache(GetVisibleItems());
+            var viewport = VisibleItems.ToList();
+            var vpMaxId = viewport.Max(x => x.Id);
+            var vpMinId = viewport.Min(x => x.Id);
+            var upperAmpliation = Loader.Source.Where(x => x.Id > vpMaxId).OrderBy(x => x.Id).Take(10);
+            var lowerAmpliation = Loader.Source.Where(x => x.Id < vpMinId).OrderByDescending(x => x.Id).Take(10);
+            Loader.SaveToCache(viewport.Concat(upperAmpliation).Concat(lowerAmpliation).ToList());
         }
 
-        public IList<ITweetable> GetVisibleItems()
-        {
-            var elementOffset = (int)scrollViewer.VerticalOffset;
-
-            if (elementOffset < Loader.Source.Count)
-            {
-                var lowerBound = elementOffset - 15;
-                var upperBound = elementOffset + 15;
-
-                if (lowerBound < 0)
-                    lowerBound = 0;
-
-                if (upperBound >= Loader.Source.Count)
-                    upperBound = Loader.Source.Count - 1;
-
-                return Loader.Source.OrderByDescending(x => x.Id).Range(lowerBound, upperBound).ToList();
-            }
-            else
-            {
-                return Loader.Source.Take(30).ToList();
-            }
-
-        }        
         #endregion
 
         #region Scroll Events
@@ -447,7 +486,7 @@ namespace Ocell.Controls
             if (DateTime.Now > (lastAutoReload + autoReloadInterval))
             {
                 Load();
-                lastAutoReload = DateTime.Now; 
+                lastAutoReload = DateTime.Now;
             }
         }
         #endregion

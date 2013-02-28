@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Ocell.Library.Twitter
 {
     [DebuggerDisplay("{String}")]
-    public struct TwitterResource
+    public class TwitterResource
     {
         public ResourceType Type { get; set; }
         public UserToken User { get; set; }
@@ -179,11 +179,22 @@ namespace Ocell.Library.Twitter
 
         public static bool operator ==(TwitterResource r1, TwitterResource r2)
         {
+            if (System.Object.ReferenceEquals(r1, r2))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)r2 == null) || ((object)r1 == null))
+            {
+                return false;
+            }
+
             return (r1.Data == r2.Data && r1.Type == r2.Type && r1.User == r2.User);
         }
         public static bool operator !=(TwitterResource r1, TwitterResource r2)
         {
-            return (r1.Data != r2.Data || r1.Type != r2.Type || r1.User != r2.User);
+            return !(r1 == r2);
         }
 
         public override bool Equals(Object obj)

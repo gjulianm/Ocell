@@ -67,6 +67,7 @@ namespace Ocell
             Dependency.Register<IUserProvider, UserProvider>();
             Dependency.Register<IScrollController, DummyScrollController>();
             Dependency.Register<IReadingPositionManager, WP8ReadingPositionManager>();
+            Dependency.Register<IInfiniteScroller, WP8InfiniteScroller>();
 
 
             bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);

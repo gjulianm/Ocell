@@ -9,8 +9,8 @@ namespace Ocell.Controls
     {
         bool Bound { get; }
         void Bind(ExtendedListBox listbox);
-        void SavePosition();
         bool CanRecoverPosition();
+        void SavePosition();
         void RecoverPosition();
     }
 }

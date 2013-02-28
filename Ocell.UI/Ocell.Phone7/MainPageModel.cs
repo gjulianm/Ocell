@@ -202,12 +202,17 @@ namespace Ocell
             feedback = new DelegateCommand((obj) =>
                 {
                     var task = new EmailComposeTask();
-                    task.Subject = "Ocell - Beta feedback";
+                    task.Subject = "Ocell - Feedback";
                     task.To = "gjulian93@gmail.com";
 
                     Deployment.Current.Dispatcher.InvokeIfRequired(task.Show);
                 });
 
+        }
+
+        public void OnLoad()
+        {
+            OnPropertyChanged("Pivots");
         }
 
         public MainPageModel()
