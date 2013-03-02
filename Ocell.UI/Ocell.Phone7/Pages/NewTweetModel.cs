@@ -191,6 +191,8 @@ namespace Ocell.Pages
                 (Config.TweetGeotagging == true || Config.TweetGeotagging == null);
             GeotagEnabled = Config.EnabledGeolocation == true;
 
+            SetupCommands();
+
             this.PropertyChanged += (sender, e) =>
             {
                 switch (e.PropertyName)
@@ -226,9 +228,7 @@ namespace Ocell.Pages
             TryLoadDraft();
 
             if (Config.EnabledGeolocation == true)
-                geoWatcher.Start();
-
-            SetupCommands();
+                geoWatcher.Start();            
         }
 
 
