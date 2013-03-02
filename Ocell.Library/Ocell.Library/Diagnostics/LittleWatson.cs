@@ -44,6 +44,7 @@ namespace Ocell.Library
                         output.WriteLine("Language: {0}", Thread.CurrentThread.CurrentCulture.Name);
                         output.WriteLine("State: {0}", TrialInformation.State);
                         output.WriteLine(extra);
+                        output.WriteLine(ex.GetType().FullName);
                         output.WriteLine(ex.Message);
                         output.WriteLine(ex.StackTrace);                        
                     }
