@@ -316,6 +316,11 @@ namespace Ocell.Controls
         protected void SaveInstanceViewport(object sender, EventArgs e)
         {
             var viewport = VisibleItems.ToList();
+
+            if (viewport.Count == 0)
+                return;
+
+
             var vpMaxId = viewport.Max(x => x.Id);
             var vpMinId = viewport.Min(x => x.Id);
             var upperAmpliation = Loader.Source.Where(x => x.Id > vpMaxId).OrderBy(x => x.Id).Take(10);
