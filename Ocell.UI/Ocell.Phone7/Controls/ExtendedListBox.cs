@@ -92,7 +92,7 @@ namespace Ocell.Controls
         {
             get
             {
-                lock(viewportItemsLock)
+                lock (viewportItemsLock)
                     return viewportItems.Keys.ToList();
             }
         }
@@ -136,8 +136,13 @@ namespace Ocell.Controls
             this.Compression += RefreshOnPull;
             this.SelectionChanged += ManageNavigation;
 
+#if WP7
+            this.Link += ExtendedListBox_Link;
+            this.Unlink += ExtendedListBox_Unlink;
+#elif WP8
             this.ItemRealized += OnItemRealized;
             this.ItemUnrealized += OnItemUnrealized;
+#endif
 
             ExtendedListBox.SaveViewports += this.SaveInstanceViewport;
 
@@ -153,17 +158,36 @@ namespace Ocell.Controls
             infiniteScroller = Dependency.Resolve<IInfiniteScroller>();
         }
 
+#if WP7
+        void ExtendedListBox_Unlink(object sender, LinkUnlinkEventArgs e)
+        {
+            ITweetable o = e.ContentPresenter.DataContext as ITweetable;
+            if (o != null)
+            {
+                lock (viewportItemsLock)
+                    viewportItems.Remove(o);
+            }
+        }
+
+        void ExtendedListBox_Link(object sender, LinkUnlinkEventArgs e)
+        {
+            ITweetable o = e.ContentPresenter.DataContext as ITweetable;
+            if (o != null)
+            {
+                lock (viewportItemsLock)
+                    viewportItems[o] = e.ContentPresenter;
+            }
+        }
+
+#elif WP8
         private void OnItemRealized(object sender, ItemRealizationEventArgs e)
         {
-            if (e.ItemKind == LongListSelectorItemKind.Item)
-            {
                 ITweetable o = e.Container.DataContext as ITweetable;
                 if (o != null)
                 {
                     lock (viewportItemsLock)
                         viewportItems[o] = e.Container;
                 }
-            }
         }
 
         private void OnItemUnrealized(object sender, ItemRealizationEventArgs e)
@@ -178,9 +202,9 @@ namespace Ocell.Controls
                 }
             }
         }
+#endif
 
-        
-        
+
         private void SetupCollectionViewSource()
         {
             ItemsSource = Loader.Source;
@@ -279,7 +303,7 @@ namespace Ocell.Controls
                 infiniteScroller.Bind(this);
 
             if (!alreadyHookedScrollEvents)
-                HookScrollEvent();            
+                HookScrollEvent();
         }
 
         #endregion

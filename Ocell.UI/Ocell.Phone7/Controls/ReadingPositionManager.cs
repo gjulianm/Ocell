@@ -31,6 +31,14 @@ namespace Ocell.Controls
             Bound = true;
         }
 
+        public void Unbind()
+        {
+            scrollViewer = null;
+            lb.ManipulationCompleted -= lb_ManipulationCompleted;
+            lb = null;
+            Bound = false;
+        }
+
         void lb_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
         {
             SavePosition();

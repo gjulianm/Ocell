@@ -48,7 +48,7 @@ namespace Ocell.Pages.Elements
             if (CList.Loader.Resource != resource)
             {
                 CList.Loader.Source.Clear();
-                CList.Loader.Resource = resource;
+                CList.Resource = resource;
             }
 
             DataContext = CList.Loader;

@@ -72,7 +72,7 @@ namespace Ocell.Controls
 
             var first = GetFirstVisibleItem();
 
-            if (first != null)
+            if (first != null && resource != null)
             {
                 Config.ReadPositions[resource.String] = first.Id;
                 Debug.WriteLine("Saved tweet from {0}", first.AuthorName);
