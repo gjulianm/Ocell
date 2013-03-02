@@ -67,26 +67,25 @@ namespace Ocell.Library.Twitter
         {
             string fileName = GetCacheName(resource);
             var serializer = new SharpSerializer(SerializerSettings);
-            Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName);
+           
             IEnumerable<TwitterStatus> statuses = null;
 
-            if (mutex.WaitOne(1000))
+            using (var mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName))
             {
-                try
+                if (mutex.WaitOne(200))
                 {
-                    using (var stream = FileAbstractor.GetFileStream(fileName))
+                    try
                     {
-                        if(stream.Length != 0)
-                            statuses = serializer.Deserialize(stream) as IEnumerable<TwitterStatus>;
+                        using (var stream = FileAbstractor.GetFileStream(fileName))
+                        {
+                            if (stream.Length != 0)
+                                statuses = serializer.Deserialize(stream) as IEnumerable<TwitterStatus>;
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                }
-                finally
-                {
-                    mutex.ReleaseMutex();
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
                 }
             }
 
