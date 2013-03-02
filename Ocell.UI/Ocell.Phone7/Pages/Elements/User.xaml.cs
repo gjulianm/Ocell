@@ -44,9 +44,9 @@ namespace Ocell.Pages.Elements
             {
                 if (e.PropertyName == "ScreenName")
                 {
-                    TweetList.Bind(new TwitterResource { String = "Tweets:" + viewModel.ScreenName, User = DataTransfer.CurrentAccount});
+                    TweetList.Resource = new TwitterResource { String = "Tweets:" + viewModel.ScreenName, User = DataTransfer.CurrentAccount};
                     TweetList.Load();
-                    MentionsList.Bind(new TwitterResource { Data = "@" + viewModel.ScreenName, Type = ResourceType.Search, User = DataTransfer.CurrentAccount });
+                    MentionsList.Resource = new TwitterResource { Data = "@" + viewModel.ScreenName, Type = ResourceType.Search, User = DataTransfer.CurrentAccount };
                     MentionsList.Load();
                 }
             };

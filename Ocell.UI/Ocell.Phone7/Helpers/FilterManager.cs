@@ -13,7 +13,7 @@ namespace Ocell
             if (listbox == null || listbox.Loader == null)
                 return;
 
-            TwitterResource resource = listbox.Loader.Resource;
+            TwitterResource resource = listbox.Resource;
 
             ColumnFilter filter = Config.Filters.FirstOrDefault(item => item.Resource == resource);
 

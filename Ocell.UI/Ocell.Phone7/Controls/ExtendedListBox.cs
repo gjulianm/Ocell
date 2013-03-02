@@ -97,6 +97,25 @@ namespace Ocell.Controls
             }
         }
 
+
+        public TwitterResource Resource
+        {
+            get
+            {
+                return Loader.Resource;
+            }
+            set
+            {
+                if (readingPosManager != null && readingPosManager.Bound)
+                {
+                    readingPosManager.Unbind();
+                    readingPosManager.Bind(this);
+                }
+
+                Loader.Resource = value;
+            }
+        }
+
         #region Setup
         public ExtendedListBox()
         {
@@ -170,15 +189,11 @@ namespace Ocell.Controls
         private void SetTag()
         {
             if (this.Tag != null && this.Tag is string)
-                Loader.Resource = new TwitterResource() { String = this.Tag as string };
+                Resource = new TwitterResource() { String = this.Tag as string };
             else if (this.Tag is TwitterResource)
-                Loader.Resource = (TwitterResource)this.Tag;
+                Resource = (TwitterResource)this.Tag;
         }
 
-        public void Bind(TwitterResource Resource)
-        {
-            Loader.Resource = Resource;
-        }
         #endregion
 
         #region Tweetloader communication
@@ -498,6 +513,7 @@ namespace Ocell.Controls
 
         public delegate void OnCompression(object sender, CompressionEventArgs e);
         public event OnCompression Compression;
+
     }
 
     public class CompressionEventArgs : EventArgs

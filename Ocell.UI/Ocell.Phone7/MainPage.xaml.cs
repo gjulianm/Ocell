@@ -175,7 +175,7 @@ namespace Ocell
                 if (tag is TwitterResource)
                 {
                     Resource = (TwitterResource)tag;
-                    list.Bind(Resource);
+                    list.Resource = Resource;
                 }
 
                 Dispatcher.BeginInvoke(() => FilterManager.SetupFilter(list));

@@ -39,7 +39,7 @@ namespace Ocell.Library.Twitter
 
                 _resource = value;
                 service = ServiceDispatcher.GetService(_resource.User);
-
+                
                 if (conversationService != null)
                     conversationService.Finished -= ConversationFinished;
 

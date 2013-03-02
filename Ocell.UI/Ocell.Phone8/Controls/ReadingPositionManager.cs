@@ -26,12 +26,26 @@ namespace Ocell.Controls
         {
             lb = listbox;
             resource = listbox.Loader.Resource;
-            lb.ManipulationStateChanged += (s, e) => SavePosition();
+            lb.ManipulationStateChanged += lb_ManipulationStateChanged;
+            Bound = true;
+        }
+
+        void lb_ManipulationStateChanged(object sender, EventArgs e)
+        {
+            SavePosition();
+        }
+
+        public void Unbind()
+        {
+            Bound = false;
+            lb.ManipulationStateChanged -= lb_ManipulationStateChanged;
+            lb = null;
+            resource = null;            
         }
 
         public bool CanRecoverPosition()
         {
-            return lb != null && Config.ReadPositions.ContainsKey(resource.String);
+            return Bound && lb != null && Config.ReadPositions.ContainsKey(resource.String);
         }
 
         private ITweetable GetFirstVisibleItem()
@@ -53,6 +67,9 @@ namespace Ocell.Controls
 
         public void SavePosition()
         {
+            if (!Bound)
+                return;
+
             var first = GetFirstVisibleItem();
 
             if (first != null)
