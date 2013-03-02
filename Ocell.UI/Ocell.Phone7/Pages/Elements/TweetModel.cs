@@ -198,6 +198,7 @@ namespace Ocell.Pages.Elements
             deleteTweet = new DelegateCommand((obj) =>
             {
                 var user = Config.Accounts.FirstOrDefault(item => item != null && item.ScreenName == Tweet.Author.ScreenName);
+
                 ServiceDispatcher.GetService(user).DeleteTweet(new DeleteTweetOptions { Id = Tweet.Id }, (s, response) =>
                 {
                     if (response.StatusCode == HttpStatusCode.OK)
@@ -205,8 +206,7 @@ namespace Ocell.Pages.Elements
                     else
                         MessageService.ShowError(Localization.Resources.ErrorDeletingTweet);
                 });
-            }, (obj) =>
-                Config.Accounts.Any(item => item != null && item.ScreenName == Tweet.Author.ScreenName));
+            }, (obj) => Tweet != null && Tweet.Author != null && Config.Accounts.Any(item => item != null && item.ScreenName == Tweet.Author.ScreenName));
 
 
             share = new DelegateCommand((obj) => Deployment.Current.Dispatcher.BeginInvoke(() =>

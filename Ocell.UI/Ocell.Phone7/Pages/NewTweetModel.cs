@@ -368,23 +368,8 @@ namespace Ocell.Pages
             }
             else
             {
-                if (IsGeotagged)
-                {
-                    var location = geoWatcher.Position.Location;
-
-                    foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
-                    {
-                        ServiceDispatcher.GetService(account).SendTweet(new SendTweetOptions
-                        {
-                            Status = TweetText,
-                            InReplyToStatusId = DataTransfer.ReplyId,
-                            Lat = location.Latitude,
-                            Long = location.Longitude
-                        }, ReceiveResponse);
-                        requestsLeft++;
-                    }
-                }
-                else if (UsesTwitlonger)
+               
+                if (UsesTwitlonger)
                 {
                     if (!EnsureTwitlonger())
                     {
@@ -401,10 +386,29 @@ namespace Ocell.Pages
                 }
                 else
                 {
-                    foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
+                    if (IsGeotagged)
                     {
-                        ServiceDispatcher.GetService(account).SendTweet(new SendTweetOptions { Status = TweetText, InReplyToStatusId = DataTransfer.ReplyId }, ReceiveResponse);
-                        requestsLeft++;
+                        var location = geoWatcher.Position.Location;
+
+                        foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
+                        {
+                            ServiceDispatcher.GetService(account).SendTweet(new SendTweetOptions
+                            {
+                                Status = TweetText,
+                                InReplyToStatusId = DataTransfer.ReplyId,
+                                Lat = location.Latitude,
+                                Long = location.Longitude
+                            }, ReceiveResponse);
+                            requestsLeft++;
+                        }
+                    }
+                    else
+                    {
+                        foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
+                        {
+                            ServiceDispatcher.GetService(account).SendTweet(new SendTweetOptions { Status = TweetText, InReplyToStatusId = DataTransfer.ReplyId }, ReceiveResponse);
+                            requestsLeft++;
+                        }
                     }
                 }
             }

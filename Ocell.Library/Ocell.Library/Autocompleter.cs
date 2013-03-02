@@ -99,7 +99,8 @@ namespace Ocell.Library
             if (_textbox.SelectionStart <= _text.Length && _textbox.SelectionStart > 0 && _text[_textbox.SelectionStart - 1] == ' ')
                 return true;
 
-            int spaceIndex = _text.IndexOf(' ', _triggerPosition);
+
+            int spaceIndex = _triggerPosition < _text.Length ? _text.IndexOf(' ', _triggerPosition) : -1;
             if (_textbox.SelectionStart <= _triggerPosition || (spaceIndex != -1 && _textbox.SelectionStart > spaceIndex))
                 return true;
 
