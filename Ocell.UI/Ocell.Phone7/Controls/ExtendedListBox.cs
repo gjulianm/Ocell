@@ -320,11 +320,11 @@ namespace Ocell.Controls
             if (viewport.Count == 0)
                 return;
 
-
             var vpMaxId = viewport.Max(x => x.Id);
             var vpMinId = viewport.Min(x => x.Id);
             var upperAmpliation = Loader.Source.Where(x => x.Id > vpMaxId).OrderBy(x => x.Id).Take(10);
             var lowerAmpliation = Loader.Source.Where(x => x.Id < vpMinId).OrderByDescending(x => x.Id).Take(10);
+
             Loader.SaveToCache(viewport.Concat(upperAmpliation).Concat(lowerAmpliation).ToList());
         }
 

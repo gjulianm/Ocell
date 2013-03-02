@@ -46,6 +46,8 @@
         	<local:AvatarConverter x:Key="AvatarConverter"/>
         	<local:ScreenNameConverter x:Key="ScreenNameConverter"/>
         	<local:MarginConverter x:Key="MarginConverter"/>
+            <local:FirstToUpper x:Key="FirstToUpperConverter"/>
+            <local:FirstToLower x:Key="FirstToLowerConverter"/>
         	<commands:DeleteCommand x:Key="DeleteCommand" />
         	<commands:ProtectCommand x:Key="ProtectCommand" />
         	<local:ProtectedConverter x:Key="ProtectedConverter"/>
