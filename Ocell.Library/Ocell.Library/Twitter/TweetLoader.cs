@@ -214,7 +214,7 @@ namespace Ocell.Library.Twitter
                 service = ServiceDispatcher.GetDefaultService();
 
             if (Resource == null || service == null ||
-                requestsInProgress >= 2 ||
+                requestsInProgress >= 1 ||
                 _rateResetTime > DateTime.Now)
             {
                 if (LoadFinished != null)
