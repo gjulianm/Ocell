@@ -165,6 +165,9 @@
     <Compile Include="..\Ocell.Phone7\Controls\Interfaces\IInfiniteScroller.cs">
       <Link>Controls\Interfaces\IInfiniteScroller.cs</Link>
     </Compile>
+    <Compile Include="..\Ocell.Phone7\Controls\Interfaces\IPullDetector.cs">
+      <Link>Controls\Interfaces\IPullDetector.cs</Link>
+    </Compile>
     <Compile Include="..\Ocell.Phone7\Controls\Interfaces\IReadingPositionManager.cs">
       <Link>Controls\Interfaces\IReadingPositionManager.cs</Link>
     </Compile>
@@ -406,6 +409,7 @@
     <Compile Include="Controls\ReadingPositionManager.cs" />
     <Compile Include="Controls\ScrollController.cs" />
     <Compile Include="Controls\WP8InfiniteScroller.cs" />
+    <Compile Include="Controls\WP8PullDetector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -20,22 +20,24 @@ namespace Ocell.Controls
 
         public void Bind(ExtendedListBox listbox)
         {
-            scrollViewer = listbox.Descendants().OfType<ScrollViewer>().FirstOrDefault();
             lb = listbox;
 
-            if (scrollViewer == null)
-                throw new NotSupportedException("ExtendedListbox must have an underlying ScrollViewer");
+            Deployment.Current.Dispatcher.InvokeIfRequired(() => { 
+                scrollViewer = listbox.Descendants().OfType<ScrollViewer>().FirstOrDefault();
+                lb.ManipulationCompleted += lb_ManipulationCompleted;
+            });
 
-            lb.ManipulationCompleted += lb_ManipulationCompleted;
-
+                     
             Bound = true;
         }
 
         public void Unbind()
         {
+            var tmpLb = lb;
             scrollViewer = null;
-            lb.ManipulationCompleted -= lb_ManipulationCompleted;
             lb = null;
+            Deployment.Current.Dispatcher.InvokeIfRequired(() => tmpLb.ManipulationCompleted -= lb_ManipulationCompleted);
+            
             Bound = false;
         }
 
@@ -46,6 +48,9 @@ namespace Ocell.Controls
 
         public void SavePosition()
         {
+            if (scrollViewer == null)
+                return;
+
             var elementOffset = (int)scrollViewer.VerticalOffset;
 
             if (elementOffset < lb.Loader.Source.Count)
@@ -78,7 +83,7 @@ namespace Ocell.Controls
 
             var item = lb.Loader.Source.FirstOrDefault(x => x.Id == id);
 
-            if (item != null)
+            if (item != null && false)
                 Deployment.Current.Dispatcher.InvokeIfRequired(() => lb.ScrollTo(item));
         }
     }

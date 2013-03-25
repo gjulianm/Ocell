@@ -108,6 +108,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Interfaces\IInfiniteScroller.cs" />
+    <Compile Include="Controls\Interfaces\IPullDetector.cs" />
     <Compile Include="Controls\Interfaces\IReadingPositionManager.cs" />
     <Compile Include="Controls\Interfaces\IScrollController.cs" />
     <Compile Include="Controls\ReadingPositionManager.cs" />

@@ -34,7 +34,6 @@ namespace Ocell.Controls
         private bool isBouncy = false;
         private bool alreadyHookedScrollEvents = false;
         public TweetLoader Loader;
-        protected CollectionViewSource viewSource;
         private ColumnFilter filter;
         protected bool isLoading;
         protected bool selectionChangeFired;
@@ -44,6 +43,7 @@ namespace Ocell.Controls
         protected IScrollController scrollController;
         protected IReadingPositionManager readingPosManager;
         protected IInfiniteScroller infiniteScroller;
+        protected IListboxCompressionDetector pullDetector;
         private bool goTopOnNextLoad = false;
         private Dictionary<ITweetable, ContentPresenter> viewportItems;
         private object viewportItemsLock = new object();
@@ -120,7 +120,6 @@ namespace Ocell.Controls
         public ExtendedListBox()
         {
             Loader = new TweetLoader();
-            viewSource = new CollectionViewSource();
             viewportItems = new Dictionary<ITweetable, ContentPresenter>();
 
             ActivatePullToRefresh = true;
@@ -133,9 +132,7 @@ namespace Ocell.Controls
                 lastErrorFired = DateTime.MinValue;
 
             this.Loaded += OnLoad;
-            this.Compression += RefreshOnPull;
             this.SelectionChanged += ManageNavigation;
-
 #if WP7
             this.Link += ExtendedListBox_Link;
             this.Unlink += ExtendedListBox_Unlink;
@@ -156,6 +153,7 @@ namespace Ocell.Controls
             scrollController = Dependency.Resolve<IScrollController>();
             readingPosManager = Dependency.Resolve<IReadingPositionManager>();
             infiniteScroller = Dependency.Resolve<IInfiniteScroller>();
+            pullDetector = Dependency.Resolve<IListboxCompressionDetector>();
         }
 
 #if WP7
@@ -180,18 +178,22 @@ namespace Ocell.Controls
         }
 
 #elif WP8
+        bool viewportChanged = false;
+
         private void OnItemRealized(object sender, ItemRealizationEventArgs e)
         {
-                ITweetable o = e.Container.DataContext as ITweetable;
-                if (o != null)
-                {
-                    lock (viewportItemsLock)
-                        viewportItems[o] = e.Container;
-                }
+            viewportChanged = true;
+            ITweetable o = e.Container.DataContext as ITweetable;
+            if (o != null)
+            {
+                lock (viewportItemsLock)
+                    viewportItems[o] = e.Container;
+            }
         }
 
         private void OnItemUnrealized(object sender, ItemRealizationEventArgs e)
         {
+            viewportChanged = true;
             if (e.ItemKind == LongListSelectorItemKind.Item)
             {
                 ITweetable o = e.Container.DataContext as ITweetable;
@@ -302,8 +304,11 @@ namespace Ocell.Controls
             if (!infiniteScroller.Bound)
                 infiniteScroller.Bind(this);
 
-            if (!alreadyHookedScrollEvents)
-                HookScrollEvent();
+            if (!pullDetector.Bound)
+            {
+                pullDetector.Bind(this);
+                pullDetector.Compression += RefreshOnPull;
+            }
         }
 
         #endregion
@@ -322,10 +327,17 @@ namespace Ocell.Controls
 
         private void DoScrollToTop()
         {
+#if WP8
             var first = Loader.Source.FirstOrDefault();
 
             if (first != null)
                 ScrollTo(first);
+#elif WP7
+            if(scrollViewer != null)
+            {
+                scrollViewer.ScrollToVerticalOffset(0);
+            }
+#endif
         }
         #endregion
 
@@ -367,114 +379,6 @@ namespace Ocell.Controls
             Loader.SaveToCache(viewport.Concat(upperAmpliation).Concat(lowerAmpliation).ToList());
         }
 
-        #endregion
-
-        #region Scroll Events
-        private void HookScrollEvent()
-        {
-            ScrollBar sb = null;
-            ScrollViewer sv = null;
-
-            alreadyHookedScrollEvents = true;
-            this.AddHandler(ExtendedListBox.ManipulationCompletedEvent, (EventHandler<ManipulationCompletedEventArgs>)LB_ManipulationCompleted, true);
-            sb = (ScrollBar)FindElementRecursive(this, typeof(ScrollBar));
-            sv = (ScrollViewer)FindElementRecursive(this, typeof(ScrollViewer));
-
-            if (sv != null)
-            {
-                // Visual States are always on the first child of the control template 
-                FrameworkElement element = VisualTreeHelper.GetChild(sv, 0) as FrameworkElement;
-                if (element != null)
-                {
-                    VisualStateGroup vgroup = FindVisualState(element, "VerticalCompression");
-                    VisualStateGroup hgroup = FindVisualState(element, "HorizontalCompression");
-                    if (vgroup != null)
-                        vgroup.CurrentStateChanging += new EventHandler<VisualStateChangedEventArgs>(vgroup_CurrentStateChanging);
-                    if (hgroup != null)
-                        hgroup.CurrentStateChanging += new EventHandler<VisualStateChangedEventArgs>(hgroup_CurrentStateChanging);
-                }
-            }
-        }
-
-        private void hgroup_CurrentStateChanging(object sender, VisualStateChangedEventArgs e)
-        {
-            if (e.NewState.Name == "CompressionLeft")
-            {
-                isBouncy = true;
-                if (Compression != null)
-                    Compression(this, new CompressionEventArgs(CompressionType.Left));
-            }
-
-            if (e.NewState.Name == "CompressionRight")
-            {
-                isBouncy = true;
-                if (Compression != null)
-                    Compression(this, new CompressionEventArgs(CompressionType.Right));
-            }
-            if (e.NewState.Name == "NoHorizontalCompression")
-            {
-                isBouncy = false;
-            }
-        }
-
-        private void vgroup_CurrentStateChanging(object sender, VisualStateChangedEventArgs e)
-        {
-            if (e.NewState.Name == "CompressionTop")
-            {
-                isBouncy = true;
-                if (Compression != null)
-                    Compression(this, new CompressionEventArgs(CompressionType.Top));
-            }
-            else if (e.NewState.Name == "CompressionBottom")
-            {
-                isBouncy = true;
-                if (Compression != null)
-                    Compression(this, new CompressionEventArgs(CompressionType.Bottom));
-            }
-            else if (e.NewState.Name == "NoVerticalCompression")
-                isBouncy = false;
-        }
-
-        private void LB_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
-        {
-            if (isBouncy)
-                isBouncy = false;
-        }
-
-        private UIElement FindElementRecursive(FrameworkElement parent, Type targetType)
-        {
-            int childCount = VisualTreeHelper.GetChildrenCount(parent);
-            UIElement returnElement = null;
-            if (childCount > 0)
-            {
-                for (int i = 0; i < childCount; i++)
-                {
-                    Object element = VisualTreeHelper.GetChild(parent, i);
-                    if (element.GetType() == targetType)
-                    {
-                        return element as UIElement;
-                    }
-                    else
-                    {
-                        returnElement = FindElementRecursive(VisualTreeHelper.GetChild(parent, i) as FrameworkElement, targetType);
-                    }
-                }
-            }
-            return returnElement;
-        }
-
-        private VisualStateGroup FindVisualState(FrameworkElement element, string name)
-        {
-            if (element == null)
-                return null;
-
-            IList groups = VisualStateManager.GetVisualStateGroups(element);
-            foreach (VisualStateGroup group in groups)
-                if (group.Name == name)
-                    return group;
-
-            return null;
-        }
         #endregion
 
         #region Auto managers
@@ -535,20 +439,5 @@ namespace Ocell.Controls
         }
         #endregion
 
-        public delegate void OnCompression(object sender, CompressionEventArgs e);
-        public event OnCompression Compression;
-
     }
-
-    public class CompressionEventArgs : EventArgs
-    {
-        public CompressionType Type { get; protected set; }
-
-        public CompressionEventArgs(CompressionType type)
-        {
-            Type = type;
-        }
-    }
-
-    public enum CompressionType { Top, Bottom, Left, Right };
 }
