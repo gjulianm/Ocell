@@ -5,48 +5,17 @@ using System.Linq;
 using System.IO.IsolatedStorage;
 using System.IO;
 
-#if METRO
-using Windows.Storage;
-using System.Threading.Tasks;
-#else
-#endif
-
-
 namespace Ocell.Library
 {
     public static class FileAbstractor
     {
         public static void WriteContentsToFile(string contents, string fileName)
         {
-            Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName);
-#if METRO
-            var storage = ApplicationData.Current.LocalFolder;
-            if (mutex.WaitOne(1000))
-            {
-                try
-                {
-                    var fileTask = storage.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting).AsTask();
-                    fileTask.Wait();
-                    var file = fileTask.Result;
-                    FileIO.WriteTextAsync(file, contents).AsTask().RunSynchronously();
-                }
-                catch (Exception)
-                {
-                    DebugWriter.Log("Exception writing to file " + fileName, LogType.Warning);
-                    throw;
-                }
-                finally
-                {
-                    mutex.ReleaseMutex();
-                }
-            }
-#else
             IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
             IsolatedStorageFileStream file;
-
-            if (mutex.WaitOne(1000))
+            using (Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName))
             {
-                try
+                if (mutex.WaitOne(1000))
                 {
                     using (file = storage.OpenFile(fileName, System.IO.FileMode.Create))
                     {
@@ -58,32 +27,17 @@ namespace Ocell.Library
                         file.Close();
                     }
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
-                finally
-                {
-                    mutex.ReleaseMutex();
-                }
             }
-#endif
         }
-
 
         public static string ReadContentsOfFile(string fileName)
         {
-#if METRO
-            var lines = ReadLinesOfFile(fileName);
-            return lines.Aggregate("", (accumulate, x) => accumulate + x + '\n');
-#else
-            Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName);
             var storage = IsolatedStorageFile.GetUserStoreForApplication();
             string contents = "";
 
-            if (mutex.WaitOne(1000))
+            using (Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName))
             {
-                try
+                if (mutex.WaitOne(1000))
                 {
                     using (var file = storage.OpenFile(fileName, System.IO.FileMode.OpenOrCreate))
                     {
@@ -95,53 +49,19 @@ namespace Ocell.Library
                         file.Close();
                     }
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
-                finally
-                {
-                    mutex.ReleaseMutex();
-                }
-            } 
-
-            mutex.Dispose();
+            }
             return contents;
-#endif
         }
 
 
         public static void WriteLinesToFile(IEnumerable<string> lines, string fileName)
         {
-            Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName);
-#if METRO
-            var storage = ApplicationData.Current.LocalFolder;
-            if (mutex.WaitOne(1000))
-            {
-                try
-                {
-                    var fileTask = storage.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting).AsTask();
-                    fileTask.Wait();
-                    var file = fileTask.Result;
-                    FileIO.WriteLinesAsync(file, contents).AsTask().RunSynchronously();
-                }
-                catch (Exception)
-                {
-                    DebugWriter.Log("Exception writing to file " + fileName, LogType.Warning);
-                    throw;
-                }
-                finally
-                {
-                    mutex.ReleaseMutex();
-                }
-            }
-#else
             IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
             IsolatedStorageFileStream file;
 
-            if (mutex.WaitOne(1000))
+            using (Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName))
             {
-                try
+                if (mutex.WaitOne(1000))
                 {
                     using (file = storage.OpenFile(fileName, System.IO.FileMode.Create))
                     {
@@ -154,54 +74,20 @@ namespace Ocell.Library
                         file.Close();
                     }
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
-                finally
-                {
-                    mutex.ReleaseMutex();
-                }
             }
-#endif
-
         }
 
 
         public static IEnumerable<string> ReadLinesOfFile(string fileName)
         {
-            Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName);
+
             List<string> lines = new List<string>();
-#if METRO
-            var storage = ApplicationData.Current.LocalFolder;
 
-
-            if (mutex.WaitOne(1000))
-            {
-                try
-                {
-                    var fileTask = storage.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists).AsTask();
-                    fileTask.Wait();
-                    var file = fileTask.Result;
-                    var readTask = FileIO.ReadLinesAsync(file).AsTask();
-                    readTask.Wait();
-                    lines = readTask.Result;
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-                finally
-                {
-                    mutex.ReleaseMutex();
-                }
-            }
-#else
             var storage = IsolatedStorageFile.GetUserStoreForApplication();
-            
-            if (mutex.WaitOne(1000))
+
+            using (Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName))
             {
-                try
+                if (mutex.WaitOne(1000))
                 {
                     using (var file = storage.OpenFile(fileName, System.IO.FileMode.OpenOrCreate))
                     {
@@ -213,18 +99,10 @@ namespace Ocell.Library
                         }
                         file.Close();
                     }
+
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
-                finally
-                {
-                    mutex.ReleaseMutex();
-                }
-            } 
-#endif
-            mutex.Dispose();
+            }
+
             return lines;
         }
 
