@@ -26,19 +26,19 @@ namespace Ocell
 
         public static void AutoRegisterForNotifications()
         {
-            if(Config.PushEnabled != true || !TrialInformation.IsFullFeatured)
+            if (Config.PushEnabled != true || !TrialInformation.IsFullFeatured)
                 return;
-         
+
             HttpNotificationChannel channel;
             string channelName = "OcellPushChannel";
-            channel = HttpNotificationChannel.Find(channelName);
 
-            if (channel == null)
+            try
             {
-                channel = new HttpNotificationChannel(channelName);
-                channel.Open();
-                channel.BindToShellTile();
-                channel.BindToShellToast();
+                channel = OpenOrCreateChannel(channelName);
+            }
+            catch (Exception)
+            {
+                return; // Don't report to user.
             }
 
             if (channel.ChannelUri == null)
@@ -54,9 +54,9 @@ namespace Ocell
                 {
                     regs.Add(new RegistrationInfo
                     {
-                         ChannelUri = channelUri,
-                         Type = "mm",
-                         User = user
+                        ChannelUri = channelUri,
+                        Type = "mm",
+                        User = user
                     });
                 }
                 else if (user.Preferences.MessagesPreferences != NotificationType.None)
@@ -72,15 +72,30 @@ namespace Ocell
                 {
                     regs.Add(new RegistrationInfo
                     {
-                         ChannelUri = channelUri,
-                         Type = "mentions",
-                         User = user
+                        ChannelUri = channelUri,
+                        Type = "mentions",
+                        User = user
                     });
                 }
             }
 
             if (regs.Count > 0)
                 SendRegistrationToServer(regs);
+        }
+
+        private static HttpNotificationChannel OpenOrCreateChannel(string channelName)
+        {
+            HttpNotificationChannel channel;
+            channel = HttpNotificationChannel.Find(channelName);
+
+            if (channel == null)
+            {
+                channel = new HttpNotificationChannel(channelName);
+                channel.Open();
+                channel.BindToShellTile();
+                channel.BindToShellToast();
+            }
+            return channel;
         }
 
         public static void UnregisterAll()
@@ -134,7 +149,7 @@ namespace Ocell
         {
             // I'm just so sorry about all this crap.
             string separator = "¬";
-            string urls = "", tokens = "", names = "", types = "" ;
+            string urls = "", tokens = "", names = "", types = "";
 
             foreach (var reg in regs)
             {
@@ -150,7 +165,7 @@ namespace Ocell
             names.Substring(0, names.Length - 1);
             types.Substring(0, types.Length - 1);
 
-            string postContents = "{\"AccessTokens\" : \"" + tokens +"\",\"PushUris\" : \"" + urls +"\",\"Usernames\" : \"" + names +"\",\"Types\" : \"" + types +"\"}";
+            string postContents = "{\"AccessTokens\" : \"" + tokens + "\",\"PushUris\" : \"" + urls + "\",\"Usernames\" : \"" + names + "\",\"Types\" : \"" + types + "\"}";
 
             var request = new RestRequest();
             request.Path = Library.SensitiveData.PushRegisterPostUriFormat;
@@ -160,7 +175,7 @@ namespace Ocell
 
             try
             {
-                new RestClient().BeginRequest(request, (req, resp, s) => 
+                new RestClient().BeginRequest(request, (req, resp, s) =>
                 {
                     ReportRegisterToUser(resp);
                 });
