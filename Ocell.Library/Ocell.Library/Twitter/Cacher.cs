@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.IO;
 using Polenter.Serialization;
 using System.Text;
+using Ocell.Library.Security;
 
 namespace Ocell.Library.Twitter
 {
@@ -37,13 +38,11 @@ namespace Ocell.Library.Twitter
         }
 
         public static void SaveToCache(TwitterResource resource, IEnumerable<TwitterStatus> list)
-        { 
+        {
             string fileName = GetCacheName(resource);
 
             var serializer = new SharpSerializer(SerializerSettings);
-            Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName);
-
-            if (mutex.WaitOne(1000))
+            MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
             {
                 try
                 {
@@ -56,38 +55,31 @@ namespace Ocell.Library.Twitter
                 {
                     Debug.WriteLine(ex);
                 }
-                finally
-                {
-                    mutex.ReleaseMutex();
-                }
-            }
+            });
         }
 
         public static IEnumerable<TwitterStatus> GetFromCache(TwitterResource resource)
         {
             string fileName = GetCacheName(resource);
             var serializer = new SharpSerializer(SerializerSettings);
-           
+
             IEnumerable<TwitterStatus> statuses = null;
 
-            using (var mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName))
+            MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
             {
-                if (mutex.WaitOne(200))
+                try
                 {
-                    try
+                    using (var stream = FileAbstractor.GetFileStream(fileName))
                     {
-                        using (var stream = FileAbstractor.GetFileStream(fileName))
-                        {
-                            if (stream.Length != 0)
-                                statuses = serializer.Deserialize(stream) as IEnumerable<TwitterStatus>;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex);
+                        if (stream.Length != 0)
+                            statuses = serializer.Deserialize(stream) as IEnumerable<TwitterStatus>;
                     }
                 }
-            }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+            });
 
             return statuses ?? new List<TwitterStatus>();
         }

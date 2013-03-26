@@ -4,6 +4,7 @@ using System.Threading;
 using System.Linq;
 using System.IO.IsolatedStorage;
 using System.IO;
+using Ocell.Library.Security;
 
 namespace Ocell.Library
 {
@@ -13,21 +14,19 @@ namespace Ocell.Library
         {
             IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
             IsolatedStorageFileStream file;
-            using (Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName))
+
+            MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
             {
-                if (mutex.WaitOne(1000))
+                using (file = storage.OpenFile(fileName, System.IO.FileMode.Create))
                 {
-                    using (file = storage.OpenFile(fileName, System.IO.FileMode.Create))
+                    using (var writer = new StreamWriter(file))
                     {
-                        using (var writer = new StreamWriter(file))
-                        {
-                            writer.Write(contents);
-                            writer.Close();
-                        }
-                        file.Close();
+                        writer.Write(contents);
+                        writer.Close();
                     }
+                    file.Close();
                 }
-            }
+            });
         }
 
         public static string ReadContentsOfFile(string fileName)
@@ -35,21 +34,19 @@ namespace Ocell.Library
             var storage = IsolatedStorageFile.GetUserStoreForApplication();
             string contents = "";
 
-            using (Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName))
+            MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
             {
-                if (mutex.WaitOne(1000))
+                using (var file = storage.OpenFile(fileName, System.IO.FileMode.OpenOrCreate))
                 {
-                    using (var file = storage.OpenFile(fileName, System.IO.FileMode.OpenOrCreate))
+                    using (var reader = new StreamReader(file))
                     {
-                        using (var reader = new StreamReader(file))
-                        {
-                            contents = reader.ReadToEnd();
-                            reader.Close();
-                        }
-                        file.Close();
+                        contents = reader.ReadToEnd();
+                        reader.Close();
                     }
+                    file.Close();
                 }
-            }
+            });
+
             return contents;
         }
 
@@ -59,22 +56,19 @@ namespace Ocell.Library
             IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
             IsolatedStorageFileStream file;
 
-            using (Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName))
+            MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
             {
-                if (mutex.WaitOne(1000))
+                using (file = storage.OpenFile(fileName, System.IO.FileMode.Create))
                 {
-                    using (file = storage.OpenFile(fileName, System.IO.FileMode.Create))
+                    using (var writer = new StreamWriter(file))
                     {
-                        using (var writer = new StreamWriter(file))
-                        {
-                            foreach (var line in lines)
-                                writer.WriteLine(line);
-                            writer.Close();
-                        }
-                        file.Close();
+                        foreach (var line in lines)
+                            writer.WriteLine(line);
+                        writer.Close();
                     }
+                    file.Close();
                 }
-            }
+            });
         }
 
 
@@ -85,23 +79,19 @@ namespace Ocell.Library
 
             var storage = IsolatedStorageFile.GetUserStoreForApplication();
 
-            using (Mutex mutex = new Mutex(false, "OCELL_FILE_MUTEX" + fileName))
+            MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
             {
-                if (mutex.WaitOne(1000))
+                using (var file = storage.OpenFile(fileName, System.IO.FileMode.OpenOrCreate))
                 {
-                    using (var file = storage.OpenFile(fileName, System.IO.FileMode.OpenOrCreate))
+                    using (var reader = new StreamReader(file))
                     {
-                        using (var reader = new StreamReader(file))
-                        {
-                            while (!reader.EndOfStream)
-                                lines.Add(reader.ReadLine());
-                            reader.Close();
-                        }
-                        file.Close();
+                        while (!reader.EndOfStream)
+                            lines.Add(reader.ReadLine());
+                        reader.Close();
                     }
-
+                    file.Close();
                 }
-            }
+            });
 
             return lines;
         }

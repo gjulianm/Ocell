@@ -13,7 +13,6 @@ namespace Ocell.Library
     public static class DateSync
     {
         private const string FileName = "DateFile";
-        private static Mutex _mutex = new Mutex(false, "OcellDateSync");
 
         private static void WriteDate(DateTime date, string file)
         {

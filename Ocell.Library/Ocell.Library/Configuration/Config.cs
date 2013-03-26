@@ -7,6 +7,7 @@ using Ocell.Library.Tasks;
 using Ocell.Library.Twitter;
 #if !BACKGROUND_AGENT
 using Ocell.Library.Filtering;
+using Ocell.Library.Security;
 #endif
 
 
@@ -22,7 +23,7 @@ namespace Ocell.Library
 
     public static partial class Config
     {
-        private static Mutex _mutex = new Mutex(false, "Ocell.IsolatedStorageSettings_MUTEX");
+        private static string mutexName = "IsolatedStorageSettings";
         private const int MutexTimeout = 1000;
 
         private static T CreateDefault<T>()
@@ -40,37 +41,34 @@ namespace Ocell.Library
             if (element != null)
                 return element;
 
-            if (_mutex.WaitOne(MutexTimeout))
+            T copy = default(T);
+
+            MutexUtil.DoWork(mutexName, () =>
             {
                 IsolatedStorageSettings config = IsolatedStorageSettings.ApplicationSettings;
 
                 try
                 {
-                    if (!config.TryGetValue<T>(key, out element))
+                    if (!config.TryGetValue<T>(key, out copy))
                     {
                         if (DefaultValues.ContainsKey(key))
-                            element = (T)DefaultValues[key];
+                            copy = (T)DefaultValues[key];
                         else
-                            element = CreateDefault<T>();
+                            copy = CreateDefault<T>();
 
-                        config.Add(key, element);
+                        config.Add(key, copy);
                         config.Save();
                     }
                 }
                 catch (InvalidCastException)
                 {
-                    element = CreateDefault<T>();
+                    copy = CreateDefault<T>();
                     config.Remove(key);
                     config.Save();
                 }
-                catch (Exception)
-                {
-                }
-                finally
-                {
-                    _mutex.ReleaseMutex();
-                }
-            }
+            });
+
+            element = copy;
 
             if (element == null)
                 element = CreateDefault<T>();
@@ -83,43 +81,26 @@ namespace Ocell.Library
             if (value == null)
                 return;
 
-            if (_mutex.WaitOne(MutexTimeout))
+            element = value;
+
+            MutexUtil.DoWork(mutexName, () =>
             {
                 IsolatedStorageSettings conf = IsolatedStorageSettings.ApplicationSettings;
 
-                try
-                {
-                    element = value;
-                    if (conf.Contains(Key))
-                        conf[Key] = value;
-                    else
-                        conf.Add(Key, value);
-                    conf.Save();
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-                finally
-                {
-                    _mutex.ReleaseMutex();
-                }
-            }
+                if (conf.Contains(Key))
+                    conf[Key] = value;
+                else
+                    conf.Add(Key, value);
+                conf.Save();
+            });
         }
 
         public static void ClearAll()
         {
-            if (_mutex.WaitOne(MutexTimeout))
+            MutexUtil.DoWork(mutexName, () =>
             {
-                try
-                {
-                    IsolatedStorageSettings.ApplicationSettings.Clear();
-                }
-                finally
-                {
-                    _mutex.ReleaseMutex();
-                }
-            }
+                IsolatedStorageSettings.ApplicationSettings.Clear();
+            });
         }
 
         static Dictionary<string, object> defaultValues;
