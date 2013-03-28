@@ -20,7 +20,7 @@ namespace Ocell.Library.Security
             string appGuid = ((GuidAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), false).GetValue(0)).Value.ToString();
 
             // unique id for global mutex - Global prefix means it is global to the machine
-            string mutexId = string.Format("{1} Global\\{{{0}}}", appGuid, name);
+            string mutexId = string.Format("{1} {{{0}}}", appGuid, name);
 
             using (var mutex = new Mutex(false, mutexId))
             {
