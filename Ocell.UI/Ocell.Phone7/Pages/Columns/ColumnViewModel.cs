@@ -266,7 +266,7 @@ namespace Ocell.Pages.Columns
                 var service = ServiceDispatcher.GetService(user);
 
                 loading++;
-                service.ListSavedSearches(new ListSavedSearchesOptions(), ReceiveSearches);
+                service.ListSavedSearches(ReceiveSearches);
             }
         }
 

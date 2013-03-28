@@ -105,7 +105,7 @@ namespace Ocell.Pages
             showGlobal = new DelegateCommand((obj) => { currentLocation = 1; PlaceName = Localization.Resources.Global; GetTopics(); });
             showLocations = new DelegateCommand((obj) => RaiseShowLocations(), (obj) => Locations.Any());
             
-            ServiceDispatcher.GetCurrentService().ListAvailableTrendsLocations(new ListAvailableTrendsLocationsOptions { }, ReceiveLocations);
+            ServiceDispatcher.GetCurrentService().ListAvailableTrendsLocations(ReceiveLocations);
 
             IsLoading = true;
             if (Config.EnabledGeolocation == true && (Config.TopicPlaceId == -1 || Config.TopicPlaceId == null))
