@@ -58,7 +58,7 @@
 
 		<!--ContentPanel: coloque aquÃ­ el contenido adicional-->
 			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
-				<ListBox x:Name="TList" Margin="28,8,8,8" SelectedItem="{Binding ListSelection, Mode=TwoWay}" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}" SelectionChanged="TList_SelectionChanged"/>
+				<ListBox x:Name="TList" Margin="28,8,8,8" SelectedItem="{Binding ListSelection, Mode=TwoWay}" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}" />
 			</Grid>
             
             <controls:AppBar d:IsHidden="True">
