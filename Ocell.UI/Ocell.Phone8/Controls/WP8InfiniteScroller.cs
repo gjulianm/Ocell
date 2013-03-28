@@ -18,6 +18,14 @@ namespace Ocell.Controls
             lb.ItemRealized += lb_ItemRealized;
         }
 
+        public void Unbind()
+        {
+            if (lb != null)
+                lb.ItemRealized -= lb_ItemRealized;
+
+            lb = null;
+        }
+
         void lb_ItemRealized(object sender, Microsoft.Phone.Controls.ItemRealizationEventArgs e)
         {
             var tweet = e.Container.DataContext as ITweetable;

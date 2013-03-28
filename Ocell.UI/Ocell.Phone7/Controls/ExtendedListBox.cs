@@ -30,9 +30,6 @@ namespace Ocell.Controls
     public class ExtendedListBox : LongListSelector
     {
         // Compression states: Thanks to http://blogs.msdn.com/b/slmperf/archive/2011/06/30/windows-phone-mango-change-listbox-how-to-detect-compression-end-of-scroll-states.aspx
-
-        private bool isBouncy = false;
-        private bool alreadyHookedScrollEvents = false;
         public TweetLoader Loader;
         private ColumnFilter filter;
         protected bool isLoading;
@@ -42,7 +39,6 @@ namespace Ocell.Controls
         protected static DateTime lastErrorFired;
         protected IScrollController scrollController;
         protected IReadingPositionManager readingPosManager;
-        protected IInfiniteScroller infiniteScroller;
         protected IListboxCompressionDetector pullDetector;
         private bool goTopOnNextLoad = false;
         private Dictionary<ITweetable, ContentPresenter> viewportItems;
@@ -152,7 +148,6 @@ namespace Ocell.Controls
 
             scrollController = Dependency.Resolve<IScrollController>();
             readingPosManager = Dependency.Resolve<IReadingPositionManager>();
-            infiniteScroller = Dependency.Resolve<IInfiniteScroller>();
             pullDetector = Dependency.Resolve<IListboxCompressionDetector>();
         }
 
@@ -300,9 +295,6 @@ namespace Ocell.Controls
 
             if (!readingPosManager.Bound)
                 readingPosManager.Bind(this);
-
-            if (!infiniteScroller.Bound)
-                infiniteScroller.Bind(this);
 
             if (!pullDetector.Bound)
             {
