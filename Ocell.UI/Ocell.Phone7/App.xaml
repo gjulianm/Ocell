@@ -18,15 +18,6 @@
     mc:Ignorable="d"
     >
 
-    <!--<Application.RootVisual>
-        <phone:PhoneApplicationFrame x:Name="RootFrame">
-            <phone:PhoneApplicationFrame.UriMapper>
-                <navigation:UriMapper>
-                    <navigation:UriMapping Uri="/Search/{query}" MappedUri="/Pages/Search/Search.xaml?q={query}" />
-                </navigation:UriMapper>
-            </phone:PhoneApplicationFrame.UriMapper>
-        </phone:PhoneApplicationFrame>
-    </Application.RootVisual>--><!--Recursos de la aplicaciÃ³n-->
     <Application.Resources>
         <ResourceDictionary>
         	<global:LocalizedResources x:Key="LocalizedResources"/>
