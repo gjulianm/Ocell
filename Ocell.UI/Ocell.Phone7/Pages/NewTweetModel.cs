@@ -249,6 +249,7 @@ namespace Ocell.Pages
             {
                 RemainingCharsStr = RemainingChars.ToString();
                 RemainingCharsColor = App.Current.Resources["PhoneSubtleBrush"] as Brush;
+                UsesTwitlonger = false;
             }
             else if (RemainingChars >= -10)
             {
@@ -284,6 +285,8 @@ namespace Ocell.Pages
             }
         }
 
+
+        bool commandsSet = false;
         void SetupCommands()
         {
             sendTweet = new DelegateCommand(Send, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !IsLoading);
@@ -291,10 +294,15 @@ namespace Ocell.Pages
             selectImage = new DelegateCommand(StartImageChooser, (param) => SelectedAccounts.Count > 0 && !IsLoading);
             saveDraft = new DelegateCommand(SaveAsDraft, (param) => !IsLoading);
             sendWithBuffer = new DelegateCommand(SendBufferUpdate, (param) => !IsLoading && SelectedAccounts.Count > 0);
+
+            commandsSet = true;
         }
 
         void RaiseExecuteChanged()
         {
+            if (!commandsSet)
+                return;
+
             sendTweet.RaiseCanExecuteChanged();
             scheduleTweet.RaiseCanExecuteChanged();
             selectImage.RaiseCanExecuteChanged();
