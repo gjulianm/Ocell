@@ -151,6 +151,7 @@ namespace Ocell.Pages.Elements
             HasReplies = (Tweet.InReplyToStatusId != null);
             HasImage = (Tweet.Entities != null && Tweet.Entities.Media.Any());
             IsFavorited = Tweet.IsFavorited;
+            RetweetCount = Tweet.RetweetCount;
 
             var service = new ConversationService(DataTransfer.CurrentAccount);
             service.CheckIfReplied(Tweet, (replied) =>
