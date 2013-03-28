@@ -210,5 +210,5 @@ namespace Ocell.Library.Twitter
         }
     };
 
-    public enum ResourceType { Home, Mentions, Messages, List, Search, Favorites, Tweets, Conversation };
+    public enum ResourceType { Home, Mentions, Messages, List, Search, Favorites, Tweets, Conversation, MessageConversation };
 }

@@ -39,7 +39,7 @@ namespace Ocell.Library.Twitter
 
                 _resource = value;
                 service = ServiceDispatcher.GetService(_resource.User);
-                
+
                 if (conversationService != null)
                     conversationService.Finished -= ConversationFinished;
 
@@ -306,6 +306,7 @@ namespace Ocell.Library.Twitter
                     }
                     break;
                 case ResourceType.Messages:
+                case ResourceType.MessageConversation:
                     requestsInProgress++;
                     service.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions { Count = TweetsToLoadPerRequest, MaxId = last }, ReceiveMessages);
                     service.ListDirectMessagesSent(new ListDirectMessagesSentOptions { Count = TweetsToLoadPerRequest, MaxId = last }, ReceiveMessages);
@@ -440,7 +441,8 @@ namespace Ocell.Library.Twitter
 
         private void LoadTweetables(IEnumerable<ITweetable> list)
         {
-            TryAddLoadMoreButton(list);
+            if (Resource.Type != ResourceType.MessageConversation)
+                TryAddLoadMoreButton(list);
 
             list = list.Except(Source);
 
@@ -467,7 +469,7 @@ namespace Ocell.Library.Twitter
                 }
             }
 
-            
+
         }
         #endregion
 

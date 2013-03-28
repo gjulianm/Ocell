@@ -52,7 +52,7 @@ namespace Ocell
 
             TwitterResource resource = new TwitterResource
             {
-                Type = ResourceType.Messages,
+                Type = ResourceType.MessageConversation,
                 User = DataTransfer.CurrentAccount,
                 Data = pairName
             };
