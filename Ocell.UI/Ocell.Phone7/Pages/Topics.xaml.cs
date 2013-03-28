@@ -21,15 +21,5 @@ namespace Ocell.Pages
         {
             LocPicker.Open();
         }
-
-        private void TList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            TweetSharp.TwitterTrend Trend = null;
-            if (e.AddedItems != null && e.AddedItems.Count > 0 && (Trend = e.AddedItems[0] as TweetSharp.TwitterTrend) != null)
-            {
-                string EscapedQuery = Uri.EscapeDataString(Trend.Name);
-                NavigationService.Navigate(new Uri("/Pages/Search/Search.xaml?q=" + EscapedQuery, UriKind.Relative));
-            }
-        }
     }
 }
