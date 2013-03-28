@@ -89,6 +89,9 @@
     <Compile Include="..\Ocell.Library\FileAbstractor.cs">
       <Link>FileAbstractor.cs</Link>
     </Compile>
+    <Compile Include="..\Ocell.Library\Security\MutexExtensions.cs">
+      <Link>MutexExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Ocell.Library\Tasks\TaskExecutor.cs">
       <Link>TaskExecutor.cs</Link>
     </Compile>
