@@ -27,7 +27,10 @@ namespace Ocell.Commands
 
         public void Execute(object parameter)
         {
-            ITweetable tweet = (ITweetable)parameter;
+            if (parameter == null)
+                return;
+
+            ITweetable tweet = (ITweetable) parameter;
             DataTransfer.Text = "@" + tweet.Author.ScreenName + " ";
             if (parameter is TwitterStatus)
             {
