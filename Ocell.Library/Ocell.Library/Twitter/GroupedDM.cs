@@ -44,6 +44,7 @@ namespace Ocell.Library.Twitter
 
                 dispatcher.InvokeIfRequired(() =>
                     {
+                        OnPropertyChanged("Id");
                         OnPropertyChanged("Text");
                         OnPropertyChanged("TextAsHtml");
                         OnPropertyChanged("CreatedDate");

@@ -48,7 +48,7 @@ namespace Ocell
 
             List.Loader.Source.BulkAdd(DataTransfer.DMGroup.Messages.Cast<ITweetable>());
             
-            string pairName =DataTransfer.DMGroup.Messages.First().GetPairName(DataTransfer.CurrentAccount);
+            string pairName = DataTransfer.DMGroup.Messages.First().GetPairName(DataTransfer.CurrentAccount);
 
             TwitterResource resource = new TwitterResource
             {

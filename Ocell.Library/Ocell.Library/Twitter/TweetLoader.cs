@@ -459,8 +459,15 @@ namespace Ocell.Library.Twitter
                 if (group == null)
                     Source.Add(new GroupedDM(msg, Resource.User));
                 else if (!group.Messages.Contains(msg))
+                {
+                    // Force reordering.
+                    Source.Remove(group);
                     group.Messages.Add(msg);
+                    Source.Add(group);
+                }
             }
+
+            
         }
         #endregion
 
