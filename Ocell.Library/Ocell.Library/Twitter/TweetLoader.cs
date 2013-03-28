@@ -443,6 +443,8 @@ namespace Ocell.Library.Twitter
         {
             if (Resource.Type != ResourceType.MessageConversation)
                 TryAddLoadMoreButton(list);
+            else
+                list = list.Cast<TwitterDirectMessage>().Where(x => x.SenderScreenName == Resource.Data || x.RecipientScreenName == Resource.Data).Cast<ITweetable>();
 
             list = list.Except(Source);
 
