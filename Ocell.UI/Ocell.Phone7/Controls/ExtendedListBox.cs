@@ -132,6 +132,8 @@ namespace Ocell.Controls
 #if WP7
             this.Link += ExtendedListBox_Link;
             this.Unlink += ExtendedListBox_Unlink;
+
+            this.IsFlatList = true;
 #elif WP8
             this.ItemRealized += OnItemRealized;
             this.ItemUnrealized += OnItemUnrealized;

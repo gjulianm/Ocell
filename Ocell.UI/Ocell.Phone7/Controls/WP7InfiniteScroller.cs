@@ -28,6 +28,12 @@ namespace Ocell.Controls
             Bound = true;
         }
 
+        public void Unbind()
+        {
+            if (lb != null && scrollViewer != null)
+                lb.ManipulationCompleted -= lb_ManipulationCompleted;
+        }
+
         void lb_ManipulationCompleted(object sender, System.Windows.Input.ManipulationCompletedEventArgs e)
         {
             CheckInfiniteScroll();
