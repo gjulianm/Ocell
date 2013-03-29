@@ -406,6 +406,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Compatibility\WP8TileManager.cs" />
     <Compile Include="Controls\ReadingPositionManager.cs" />
     <Compile Include="Controls\ScrollController.cs" />
     <Compile Include="Controls\WP8InfiniteScroller.cs" />
@@ -498,6 +499,12 @@
     </Content>
     <Content Include="Images\Icons_White\appbar.sendmail.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MediumTileIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\SmallTileIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="Images\RtBtn.png" />
     <Resource Include="Images\ReplyBtn.png" />

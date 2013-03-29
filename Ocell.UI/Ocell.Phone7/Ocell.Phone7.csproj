@@ -107,6 +107,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Compatibility\WP7TileManager.cs" />
     <Compile Include="Controls\Interfaces\IInfiniteScroller.cs" />
     <Compile Include="Controls\Interfaces\IPullDetector.cs" />
     <Compile Include="Controls\Interfaces\IReadingPositionManager.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Controls\ReadingPositionManager.cs" />
     <Compile Include="Controls\ScrollController.cs" />
     <Compile Include="Controls\WP7InfiniteScroller.cs" />
+    <Compile Include="Controls\WP7ListboxCompressionDetector.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Helpers\FilterManager.cs" />
     <Compile Include="Helpers\TemplateSelector.cs" />

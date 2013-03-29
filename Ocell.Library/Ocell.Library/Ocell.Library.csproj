@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="ColumnReloadOptions.cs">
     </Compile>
+    <Compile Include="Compatibility\ITileManager.cs" />
     <Compile Include="Configuration\Config.cs">
     </Compile>
     <Compile Include="Configuration\Config.generated.cs">
@@ -118,8 +119,6 @@
     <Compile Include="UI\LinqToVisualTree.cs" />
     <Compile Include="Diagnostics\LittleWatson.cs" />
     <Compile Include="Extension\MessageServiceExtension.cs" />
-    <Compile Include="Notifications\TileManager.cs">
-    </Compile>
     <Compile Include="UI\OcellTheme.cs">
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

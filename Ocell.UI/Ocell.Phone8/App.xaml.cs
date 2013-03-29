@@ -14,6 +14,7 @@ using DanielVaughan;
 using Ocell.Library.Twitter;
 using DanielVaughan.InversionOfControl.Containers.SimpleContainer;
 using Ocell.Controls;
+using Ocell.Compatibility;
 
 namespace Ocell
 {
@@ -69,6 +70,7 @@ namespace Ocell
             Dependency.Register<IReadingPositionManager, WP8ReadingPositionManager>();
             Dependency.Register<IInfiniteScroller, WP8InfiniteScroller>();
             Dependency.Register<IListboxCompressionDetector, WP8PullDetector>();
+            Dependency.Register<ITileManager, WP8TileManager>();
 
 
             bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);

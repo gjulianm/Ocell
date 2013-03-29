@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Microsoft.Phone.Shell;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using TweetSharp;
-using Microsoft.Phone.Shell;
+using System.Text;
 
-namespace Ocell.Library.Notifications
+namespace Ocell.Compatibility
 {
-    public static class TileManager
+    public class WP7TileManager :ITileManager
     {
-        public static void ClearTile()
+        public void ClearMainTileCount()
         {
             StandardTileData tileData = new StandardTileData
             {

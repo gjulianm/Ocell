@@ -16,6 +16,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media;
 using Ocell.Settings;
 using TweetSharp;
+using Ocell.Compatibility;
 
 namespace Ocell
 {
@@ -384,7 +385,7 @@ namespace Ocell
         {
             SchedulerSync.WriteLastCheckDate(DateTime.Now.ToUniversalTime());
             SchedulerSync.StartPeriodicAgent();
-            TileManager.ClearTile();
+            Dependency.Resolve<ITileManager>().ClearMainTileCount();
         }
 
         private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
