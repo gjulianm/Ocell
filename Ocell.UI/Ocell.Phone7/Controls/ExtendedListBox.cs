@@ -251,6 +251,9 @@ namespace Ocell.Controls
 
         void Loader_CacheLoad(object sender, EventArgs e)
         {
+            if (!scrollController.Bound)
+                Dispatcher.InvokeIfRequired(() => scrollController.Bind(this));
+
             if (Config.ReloadOptions == ColumnReloadOptions.AskPosition)
                 TryTriggerResumeReading();
             else if (Config.ReloadOptions == ColumnReloadOptions.KeepPosition && readingPosManager.CanRecoverPosition())
@@ -291,9 +294,6 @@ namespace Ocell.Controls
         void OnLoad(object sender, RoutedEventArgs e)
         {
             SetTag();
-
-            if (!scrollController.Bound)
-                scrollController.Bind(this);
 
             if (!readingPosManager.Bound)
                 readingPosManager.Bind(this);

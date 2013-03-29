@@ -9,6 +9,7 @@ using Ocell.Library;
 using Ocell.Library.Twitter;
 using System.Windows;
 using DanielVaughan;
+using System.Diagnostics;
 namespace Ocell.Controls
 {
     public class WP7ReadingPositionManager : IReadingPositionManager
@@ -56,6 +57,8 @@ namespace Ocell.Controls
             if (elementOffset < lb.Loader.Source.Count)
             {
                 var element = lb.Loader.Source.OrderByDescending(x => x.Id).ElementAt(elementOffset);
+                Debug.WriteLine("Saved tweet from {0}", element.AuthorName);
+        
                 Config.ReadPositions[lb.Loader.Resource.String] = element.Id;
                 Config.SaveReadPositions();
             }
@@ -83,7 +86,7 @@ namespace Ocell.Controls
 
             var item = lb.Loader.Source.FirstOrDefault(x => x.Id == id);
 
-            if (item != null && false)
+            if (item != null)
                 Deployment.Current.Dispatcher.InvokeIfRequired(() => lb.ScrollTo(item));
         }
     }

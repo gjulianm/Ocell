@@ -9,6 +9,7 @@ namespace Ocell.Controls
     {
         void Bind(ExtendedListBox list);
         void LoadCalled(int position = -1);
+        void Unbind();
         bool Bound { get; set; }
     }
 

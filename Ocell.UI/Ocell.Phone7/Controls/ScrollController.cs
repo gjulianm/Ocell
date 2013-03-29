@@ -19,15 +19,20 @@ namespace Ocell.Controls
 
         public void Bind(ExtendedListBox list)
         {
-            if (listbox != null)
-                listbox.LayoutUpdated -= OnLayoutUpdate;
-
             listbox = list;
             listbox.LayoutUpdated += OnLayoutUpdate;
             scrollViewer = listbox.Descendants().OfType<ScrollViewer>().FirstOrDefault();
             scrollOffsetMargin = 0.5 * scrollViewer.ViewportHeight;
 
             Bound = true;
+        }
+
+        public void Unbind()
+        {
+            if (listbox != null)
+                listbox.LayoutUpdated -= OnLayoutUpdate;
+
+            Bound = false;
         }
 
         public void LoadCalled(int position = -1)
@@ -48,7 +53,7 @@ namespace Ocell.Controls
 
             var scrollPos = scrollViewer.VerticalOffset;
 
-            if ((scrollPos + scrollOffsetMargin > loadCallScrollPosition && loadCallScrollPosition != -2) || loadCallScrollPosition == 0)
+            if ((scrollPos + scrollOffsetMargin >= loadCallScrollPosition && loadCallScrollPosition != -2) || loadCallScrollPosition == 0)
                 MaintainViewport();
 
             lastExtentHeight = scrollViewer.ExtentHeight;
@@ -66,7 +71,7 @@ namespace Ocell.Controls
                 if (oldLastExtentHeight > lastExtentHeight)
                     return; // Items removed, don't do anything.
 
-                double toScroll = scrollViewer.VerticalOffset + (scrollViewer.ExtentHeight - oldLastExtentHeight) - 1;
+                double toScroll = scrollViewer.VerticalOffset + (scrollViewer.ExtentHeight - oldLastExtentHeight);
                 scrollViewer.ScrollToVerticalOffset(toScroll);
             }
         }
