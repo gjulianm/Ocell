@@ -26,8 +26,8 @@ namespace Ocell.Pages.Elements
 
         public Tweet()
         {
-            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };  
-            
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
+
             ThemeFunctions.SetBackground(LayoutRoot);
 
             viewModel = new TweetModel();
@@ -50,7 +50,7 @@ namespace Ocell.Pages.Elements
         {
             CreateText(viewModel.Tweet);
             viewModel.Completed = true;
-            ContentPanel.UpdateLayout();           
+            ContentPanel.UpdateLayout();
         }
 
         private void CreateText(ITweetable Status)
@@ -174,7 +174,7 @@ namespace Ocell.Pages.Elements
             item.Click += (sender, e) =>
             {
                 var filter = FilterManager.SetupMute(FilterType.User, Mention.ScreenName);
-                    Dependency.Resolve<IMessageService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
+                Dependency.Resolve<IMessageService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
             };
             return CreateBaseLink("@" + Mention.ScreenName, Localization.Resources.CopyUsername, "@" + Mention.ScreenName, item);
         }
@@ -266,15 +266,16 @@ namespace Ocell.Pages.Elements
 
         private void Grid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + viewModel.Tweet.Author.ScreenName, UriKind.Relative));
+            if (viewModel != null && viewModel.Tweet != null)
+                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + viewModel.Tweet.AuthorName, UriKind.Relative));
         }
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             var image = sender as Image;
-            if(image != null & image.Tag is ITweeter)
+            if (image != null & image.Tag is ITweeter)
             {
-            NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + (image.Tag as ITweeter).ScreenName, UriKind.Relative));
+                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + (image.Tag as ITweeter).ScreenName, UriKind.Relative));
             }
         }
 
@@ -330,7 +331,7 @@ namespace Ocell.Pages.Elements
                 Dependency.Resolve<IMessageService>().ShowMessage(Localization.Resources.NoHashtagsToMute);
             else
                 Dependency.Resolve<IMessageService>().
-                ShowMessage(String.Format(Localization.Resources.HashtagsMutedUntil, message.Substring(0, message.Length - 2), filter.IsValidUntil.ToString("f") ), "");
+                ShowMessage(String.Format(Localization.Resources.HashtagsMutedUntil, message.Substring(0, message.Length - 2), filter.IsValidUntil.ToString("f")), "");
             viewModel.IsMuting = false;
         }
 
