@@ -510,10 +510,15 @@ namespace Ocell.Pages
             if (requestsLeft <= 0)
                 IsLoading = false;
 
+           
+
             if (response.StatusCode == HttpStatusCode.Forbidden)
                 MessageService.ShowError(Resources.ErrorDuplicateTweet);
             else if (response.StatusCode != HttpStatusCode.OK)
-                MessageService.ShowError(Resources.ErrorMessage);
+            {
+                var errorMsg = response.Error != null ? response.Error.Message : "";
+                MessageService.ShowError(String.Format("{0}: {1} ({2})", Resources.ErrorMessage, errorMsg, response.StatusCode));
+            }
             else
             {
                 TryAssociateWithTLId(status.Author.ScreenName, status.Id);
