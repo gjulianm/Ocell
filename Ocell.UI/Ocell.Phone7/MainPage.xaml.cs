@@ -161,7 +161,6 @@ namespace Ocell
         #endregion
 
         #region List management
-        int loadedLists = 0;
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
             ExtendedListBox list = sender as ExtendedListBox;
