@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System.Threading;
 
 namespace Ocell.Library.Twitter
 {
@@ -25,71 +26,89 @@ namespace Ocell.Library.Twitter
     // Not guaranteed to get results, but will not cause any exceptions to the outside because of serialization.
     public class ConversationService
     {
-        protected UserToken _account;
-        protected Action<IEnumerable<TwitterStatus>, TwitterResponse> _action;
-        protected int _pendingCalls;
-        protected List<string> _processedStatus;
-        protected Action<bool> _checkAction;
-        protected bool _onlyFirstCheck;
+        protected UserToken account;
+        protected Action<IEnumerable<TwitterStatus>, TwitterResponse> callback;
+        protected int pendingCalls;
+        protected SafeObservable<string> processedForReplies;
+        protected SafeObservable<string> processedForReplied;
+        protected Action<bool> checkFirstReplyCallback;
+        protected bool checkOnlyFirstReply;
 
-        public ConversationService(UserToken account)
+        public ConversationService(UserToken token)
         {
-            _account = account;
-            _pendingCalls = 0;
-            _processedStatus = new List<string>();
-            _onlyFirstCheck = false;
+            account = token;
+            pendingCalls = 0;
+            processedForReplies = new SafeObservable<string>();
+            processedForReplied = new SafeObservable<string>();
+            checkOnlyFirstReply = false;
         }
 
+        /// <summary>
+        /// Queries the Twitter API to check if a tweet has replies.
+        /// </summary>
+        /// <param name="status">Status</param>
+        /// <param name="action">Callback. The bool argument indicates if there are replies</param>
         public void CheckIfReplied(TwitterStatus status, Action<bool> action)
         {
-            _action = CheckIfRepliedCallback;
-            _checkAction = action;
-            _onlyFirstCheck = true;
+            callback = CheckIfRepliedCallback;
+            checkFirstReplyCallback = action;
+            checkOnlyFirstReply = true;
             GetReplies(status.Id.ToString());
         }
 
         protected void CheckIfRepliedCallback(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
         {
-            if (_checkAction != null)
-                _checkAction.Invoke(statuses.Any());
+            if (checkFirstReplyCallback != null)
+                checkFirstReplyCallback.Invoke(statuses.Any());
         }
 
-        public void GetConversationForStatus(string Id, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
+        /// <summary>
+        /// Return the conversation for a given status. 
+        /// </summary>
+        /// <param name="id">Tweet ID</param>
+        /// <param name="action">Callback. This will be called various times, one for each Twitter response.</param>
+        public void GetConversationForStatus(string id, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
         {
-            _action = action;
-            _onlyFirstCheck = false;
-            GetReplies(Id);
-            GetReplied(long.Parse(Id));
+            callback = action;
+            checkOnlyFirstReply = false;
+            GetReplies(id);
+            GetReplied(long.Parse(id));
         }
+
+        /// <summary>
+        /// Return the conversation for a given status. 
+        /// </summary>
+        /// <param name="status">Tweet.</param>
+        /// <param name="action">Callback. This will be called various times, one for each Twitter response.</param>
         public void GetConversationForStatus(TwitterStatus status, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
         {
             GetConversationForStatus(status.Id.ToString(), action);
         }
 
-        protected void GetReplies(string Id)
+        protected void GetReplies(string id)
         {
-            if (_processedStatus.Contains("a" + Id))
+            if (processedForReplies.Contains(id))
                 return;
 
-            _processedStatus.Add("a" + Id);
+            processedForReplies.Add(id);
 
-            RestRequest req = PrepareRestRequest(Id);
+            RestRequest req = PrepareRestRequest(id);
             RestClient client = GetRestClient();
 
-            _pendingCalls++;
+            Interlocked.Increment(ref pendingCalls);
             client.BeginRequest(req, Callback, null);
         }
 
-        protected void GetReplied(long Id)
+        protected void GetReplied(long id)
         {
-            if (_processedStatus.Contains("b" + Id.ToString()))
+            if (processedForReplied.Contains(id.ToString()))
                 return;
 
-            _processedStatus.Add("b" + Id.ToString());
+            processedForReplies.Add(id.ToString());
 
-            ITwitterService srv = ServiceDispatcher.GetService(_account);
-            _pendingCalls++;
-            srv.GetTweet(new GetTweetOptions { Id = Id }, ReceiveSingleTweet);
+            ITwitterService srv = ServiceDispatcher.GetService(account);
+            pendingCalls++;
+            srv.GetTweet(new GetTweetOptions { Id = id }, ReceiveSingleTweet);
         }
 
         protected RestRequest PrepareRestRequest(string id)
@@ -103,10 +122,10 @@ namespace Ocell.Library.Twitter
                 ConsumerSecret = SensitiveData.ConsumerSecret,
             };
 
-            if (_account != null)
+            if (account != null)
             {
-                credentials.Token = _account.Key;
-                credentials.TokenSecret = _account.Secret;
+                credentials.Token = account.Key;
+                credentials.TokenSecret = account.Secret;
             }
 
             RestRequest req = new RestRequest
@@ -128,20 +147,18 @@ namespace Ocell.Library.Twitter
 
         protected void Callback(RestRequest request, RestResponse response, object userState)
         {
-            Action<IEnumerable<TwitterStatus>, TwitterResponse> action = _action;
-
             if (response.StatusCode != HttpStatusCode.OK || response.ContentLength == 0)
             {
-                if (action != null)
-                    action.Invoke(new List<TwitterStatus>(), new TwitterResponse(response, null));
+                if (callback != null)
+                    callback.Invoke(new List<TwitterStatus>(), new TwitterResponse(response, null));
                 TryFinish();
                 return;
             }
 
-            if (_onlyFirstCheck)
+            if (checkOnlyFirstReply)
             {
-                if (_checkAction != null)
-                    _checkAction.Invoke(response.ContentLength > 2);
+                if (checkFirstReplyCallback != null)
+                    checkFirstReplyCallback.Invoke(response.ContentLength > 2);
                 return;
             }
 
@@ -157,20 +174,21 @@ namespace Ocell.Library.Twitter
             }
 
             foreach (var status in statuses)
-                GetConversationForStatus(status, _action);
+                GetConversationForStatus(status, callback);
 
-            if (action != null)
-                action.Invoke(statuses, new TwitterResponse(response));
+            if (callback != null)
+                callback.Invoke(statuses, new TwitterResponse(response));
 
             TryFinish();
         }
+
         protected void ReceiveSingleTweet(TwitterStatus status, TwitterResponse response)
         {
             List<TwitterStatus> list = new List<TwitterStatus>();
             if (status == null || response.StatusCode != HttpStatusCode.OK)
             {
-                if (_action != null)
-                    _action.Invoke(list, response);
+                if (callback != null)
+                    callback.Invoke(list, response);
                 return;
             }
 
@@ -180,8 +198,8 @@ namespace Ocell.Library.Twitter
 
             GetReplies(status.Id.ToString());
 
-            if (_action != null)
-                _action.Invoke(list, response);
+            if (callback != null)
+                callback.Invoke(list, response);
             TryFinish();
         }
 
@@ -222,8 +240,7 @@ namespace Ocell.Library.Twitter
 
         private void TryFinish()
         {
-            _pendingCalls--;
-            if (_pendingCalls <= 0)
+            if (Interlocked.Decrement(ref pendingCalls) <= 0)
             {
                 if (Finished != null)
                     Finished(this, new EventArgs());
@@ -231,6 +248,5 @@ namespace Ocell.Library.Twitter
         }
 
         public event EventHandler Finished;
-
     }
 }
