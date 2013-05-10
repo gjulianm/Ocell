@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.LightTwitterService",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.BackgroundAgent.Library", "Ocell.Library\Ocell.BackgroundAgent.Library\Ocell.BackgroundAgent.Library.csproj", "{742DB613-45BB-4F8F-A73F-B559901F6548}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.BackgroundAgent", "Ocell.UI\Ocell.BackgroundAgent\Ocell.BackgroundAgent.csproj", "{38C14A5B-4940-4567-BA45-81FD8E5784DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.BackgroundAgent.Phone7", "Ocell.UI\Ocell.BackgroundAgent\Ocell.BackgroundAgent.Phone7.csproj", "{38C14A5B-4940-4567-BA45-81FD8E5784DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.Library", "Ocell.Library\Ocell.Library\Ocell.Library.csproj", "{1FF8200D-1E01-4ABA-A876-C313E286E1FC}"
 EndProject

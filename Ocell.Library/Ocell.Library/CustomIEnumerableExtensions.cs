@@ -60,5 +60,11 @@ namespace Ocell.Library
             return returned;
         }
 
+        public static IEnumerable<TDest> Select<T, TDest>(this IEnumerable<T> list, Func<T, TDest> transform)
+        {
+            foreach (var item in list)
+                yield return transform(item);
+        }
+
     }
 }

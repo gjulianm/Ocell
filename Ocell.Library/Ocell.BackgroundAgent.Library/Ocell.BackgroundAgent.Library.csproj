@@ -57,6 +57,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Phone" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -68,6 +69,9 @@
     <Compile Include="..\..\SensitiveData.cs">
       <Link>SensitiveData.cs</Link>
     </Compile>
+    <Compile Include="..\Ocell.Library\Compatibility\ITileManager.cs">
+      <Link>ITileManager.cs</Link>
+    </Compile>
     <Compile Include="..\Ocell.Library\Configuration\Config.cs">
       <Link>Configuration\Config.cs</Link>
     </Compile>
@@ -76,9 +80,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Config.tt</DependentUpon>
-    </Compile>
-    <Compile Include="..\Ocell.Library\CustomIEnumerableExtensions.cs">
-      <Link>CustomIEnumerableExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Ocell.Library\DateSync.cs">
       <Link>DateSync.cs</Link>
@@ -95,6 +96,7 @@
     <Compile Include="..\Ocell.Library\Tasks\TaskExecutor.cs">
       <Link>TaskExecutor.cs</Link>
     </Compile>
+    <Compile Include="BaseScheduledAgent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +111,14 @@
     <ProjectReference Include="..\Ocell.Library.CoreTypes\Ocell.Library.CoreTypes.csproj">
       <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
       <Name>Ocell.Library.CoreTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ocell.LightTwitterService\Ocell.LightTwitterService.csproj">
+      <Project>{6D32BDDD-7445-4619-9474-149715C8D42E}</Project>
+      <Name>Ocell.LightTwitterService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ocell.Localization\Ocell.Localization.csproj">
+      <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
+      <Name>Ocell.Localization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

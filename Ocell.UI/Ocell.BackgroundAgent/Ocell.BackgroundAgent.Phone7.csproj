@@ -66,6 +66,9 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Ocell.Phone7\Compatibility\WP7TileManager.cs">
+      <Link>WP7TileManager.cs</Link>
+    </Compile>
     <Compile Include="ScheduledAgent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

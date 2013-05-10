@@ -1206,4 +1206,7 @@
   <data name="WhenAppStart" xml:space="preserve">
     <value>When the app starts...</value>
   </data>
+  <data name="NewXMentionsMessages" xml:space="preserve">
+    <value>{0} new mentions and messages</value>
+  </data>
 </root>

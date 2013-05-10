@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ocell.Compatibility
 {
-    public class WP8TileManager : ITileManager
+    public class WP8TileManager : TileManager
     {
         public void ClearMainTileCount()
         {

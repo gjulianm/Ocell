@@ -549,9 +549,9 @@
       <Project>{35BC2453-9CAD-4508-9C8C-BF06A9223761}</Project>
       <Name>TweetSharp.WindowsPhone.Mango</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ocell.BackgroundAgent\Ocell.BackgroundAgent.csproj">
+    <ProjectReference Include="..\Ocell.BackgroundAgent\Ocell.BackgroundAgent.Phone7.csproj">
       <Project>{38C14A5B-4940-4567-BA45-81FD8E5784DE}</Project>
-      <Name>Ocell.BackgroundAgent</Name>
+      <Name>Ocell.BackgroundAgent.Phone7</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />

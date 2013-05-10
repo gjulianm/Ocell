@@ -1206,4 +1206,8 @@
   <data name="WhenAppStart" xml:space="preserve">
     <value>Cuando la aplicación se abra...</value>
   </data>
+  <data name="NewXMentionsMessages" xml:space="preserve">
+    <value>{0} nuevas menciones y mensajes</value>
+    <comment>ScheduledAgent.</comment>
+  </data>
 </root>

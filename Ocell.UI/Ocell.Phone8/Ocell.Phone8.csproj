@@ -420,12 +420,6 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Ocell.Phone7\Ocell_2012_03_18_19_41_51.sap">
-      <Link>Ocell_2012_03_18_19_41_51.sap</Link>
-    </None>
-    <None Include="..\Ocell.Phone7\Ocell_2012_04_11_23_33_33.sap">
-      <Link>Ocell_2012_04_11_23_33_33.sap</Link>
-    </None>
     <None Include="..\Ocell.Phone7\packages.config">
       <Link>packages.config</Link>
     </None>
@@ -801,9 +795,9 @@
       <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
       <Name>Ocell.Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ocell.BackgroundAgent\Ocell.BackgroundAgent.csproj">
+    <ProjectReference Include="..\Ocell.BackgroundAgent\Ocell.BackgroundAgent.Phone7.csproj">
       <Project>{38C14A5B-4940-4567-BA45-81FD8E5784DE}</Project>
-      <Name>Ocell.BackgroundAgent</Name>
+      <Name>Ocell.BackgroundAgent.Phone7</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />

@@ -384,7 +384,7 @@ namespace Ocell
         {
             SchedulerSync.WriteLastCheckDate(DateTime.Now.ToUniversalTime());
             SchedulerSync.StartPeriodicAgent();
-            Dependency.Resolve<ITileManager>().ClearMainTileCount();
+            Dependency.Resolve<TileManager>().ClearMainTileCount();
         }
 
         private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)

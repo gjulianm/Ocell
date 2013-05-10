@@ -1188,4 +1188,7 @@
   <data name="WhenAppStart" xml:space="preserve">
     <value>Quando Ocell si avvia ...</value>
   </data>
+  <data name="NewXMentionsMessages" xml:space="preserve">
+    <value>{0} nuove menzioni e messaggi</value>
+  </data>
 </root>

@@ -69,7 +69,7 @@ namespace Ocell
             Dependency.Register<IScrollController, WP7ScrollController>();
             Dependency.Register<IReadingPositionManager, WP7ReadingPositionManager>();
             Dependency.Register<IInfiniteScroller, WP7InfiniteScroller>();
-            Dependency.Register<ITileManager, WP7TileManager>();
+            Dependency.Register<TileManager, WP7TileManager>();
             Dependency.Register<IListboxCompressionDetector, WP7ListboxCompressionDetector>();
 
             bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);

@@ -116,3 +116,4 @@ SensitiveData.cs
 
 # ZIP Backups. 
 _backups/
+*.sublime-*
