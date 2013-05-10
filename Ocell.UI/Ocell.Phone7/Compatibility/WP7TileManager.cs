@@ -1,4 +1,5 @@
 ﻿using Microsoft.Phone.Shell;
+using Ocell.Library.Twitter;
 using Ocell.Localization;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Ocell.Compatibility
 {
     public class WP7TileManager : TileManager
     {
-        public void ClearMainTileCount()
+        public override void ClearMainTileCount()
         {
             StandardTileData tileData = new StandardTileData
             {
@@ -23,7 +24,7 @@ namespace Ocell.Compatibility
 
 
 
-        public void SetNotifications(IEnumerable<TileNotification> notifications)
+        public override void SetNotifications(IEnumerable<TileNotification> notifications)
         {
             if (!notifications.Any())
                 return;
@@ -56,7 +57,7 @@ namespace Ocell.Compatibility
             ShellTile.ActiveTiles.FirstOrDefault().Update(mainTile);
         }
 
-        public void SetColumnTweet(string tileString, string content, string author)
+        public override void SetColumnTweet(string tileString, string content, string author)
         {
             ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault(item => item.NavigationUri.ToString().Contains(tileString));
 
@@ -69,6 +70,22 @@ namespace Ocell.Compatibility
                 };
                 Tile.Update(TileData);
             }
+        }
+
+        public override void CreateColumnTile(TwitterResource Resource)
+        {
+            if (Resource == null || ColumnTileIsCreated(Resource))
+                return;
+
+            StandardTileData ColumnTile = new StandardTileData
+            {
+                Title = GetTitle(Resource),
+                BackgroundImage = new Uri("/Images/ColumnTile.png", UriKind.Relative)
+            };
+
+            Uri ColumnUri = new Uri("/MainPage.xaml?column=" + Uri.EscapeDataString(Resource.String), UriKind.Relative);
+
+            ShellTile.Create(ColumnUri, ColumnTile);
         }
     }
 }

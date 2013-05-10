@@ -1,4 +1,6 @@
 ﻿using Microsoft.Phone.Shell;
+using Ocell.Library.Twitter;
+using Ocell.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ namespace Ocell.Compatibility
 {
     public class WP8TileManager : TileManager
     {
-        public void ClearMainTileCount()
+        public override void ClearMainTileCount()
         {
             IconicTileData data = new IconicTileData()
             {
@@ -21,5 +23,81 @@ namespace Ocell.Compatibility
 
             ShellTile.ActiveTiles.First().Update(data);
         }
+
+        public override void SetNotifications(IEnumerable<TileNotification> notifications)
+        {
+            if (!notifications.Any())
+                return;
+
+            IconicTileData mainTile = new IconicTileData();
+            string content = "";
+
+            if (notifications.Count() == 1)
+            {
+                var not = notifications.First();
+                if (not.Type == TweetType.Mention)
+                    content = String.Format(Resources.NewMention, not.From);
+                else
+                    content = String.Format(Resources.NewMessage, not.From);
+            }
+            else
+            {
+                if (notifications.Any(x => x.Type == TweetType.Mention) && notifications.Any(x => x.Type == TweetType.Message))
+                    content = Resources.NewMentionsMessages;
+                else if (notifications.Any(x => x.Type == TweetType.Mention))
+                    content = Resources.NewMentions;
+                else if (notifications.Any(x => x.Type == TweetType.Message))
+                    content = Resources.NewMessages;
+            }
+
+            mainTile.WideContent1 = content;
+            mainTile.WideContent2 = String.Format(Resources.ForX, GetChainOfNames(notifications.Select(x => x.To).Distinct().ToList()));
+            mainTile.WideContent3 = notifications.First().Message;
+
+            mainTile.Count = notifications.Count();
+            ShellTile.ActiveTiles.FirstOrDefault().Update(mainTile);
+        }
+
+        public override void SetColumnTweet(string tileString, string content, string author)
+        {
+            ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault(item => item.NavigationUri.ToString().Contains(tileString));
+
+            if (Tile != null)
+            {
+                string line1 = RemoveMention(content), line2 ="";
+
+                if(line1.Length > 33)
+                {
+                    line2 = line1.Substring(33);
+                    line1 = line1.Substring(0, 33);
+                }
+
+                IconicTileData TileData = new IconicTileData
+                {
+                    WideContent1 = author,
+                    WideContent2 = line1,
+                    WideContent3 = line2
+                };
+
+                Tile.Update(TileData);
+            }
+        }
+
+        public override void CreateColumnTile(TwitterResource Resource)
+        {
+            if (Resource == null || ColumnTileIsCreated(Resource))
+                return;
+
+            IconicTileData ColumnTile = new IconicTileData
+            {
+                Title = GetTitle(Resource),
+                IconImage = new Uri("/Images/ColumnTile.png", UriKind.Relative)
+            };
+
+            Uri ColumnUri = new Uri("/MainPage.xaml?column=" + Uri.EscapeDataString(Resource.String), UriKind.Relative);
+
+            ShellTile.Create(ColumnUri, ColumnTile);
+        }
+
     }
 }

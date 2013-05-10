@@ -93,7 +93,7 @@ namespace Ocell
                     foreach (var line in list)
                         contents += line + Environment.NewLine;
                     email.Body = contents;
-                    //Dispatcher.BeginInvoke(() => email.Show());
+                    Dispatcher.BeginInvoke(() => email.Show());
                     Logger.Clear();
                     Logger.Save();
                 }

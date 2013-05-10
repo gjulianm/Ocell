@@ -1,4 +1,5 @@
-﻿using Ocell.Library.Notifications;
+﻿using Microsoft.Phone.Shell;
+using Ocell.Library.Notifications;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
 using System;
@@ -23,6 +24,7 @@ namespace Ocell.Compatibility
         public abstract void ClearMainTileCount();
         public abstract void SetNotifications(IEnumerable<TileNotification> notifications);
         public abstract void SetColumnTweet(string tileString, string content, string author);
+        public abstract void CreateColumnTile(TwitterResource Resource);
 
         protected string GetChainOfNames(List<string> names)
         {
@@ -49,5 +51,49 @@ namespace Ocell.Compatibility
                 Tweet = (char)8203 + Tweet;
             return Tweet;
         }
+
+        public bool ComposeTileIsCreated()
+        {
+            if (ShellTile.ActiveTiles.Count() == 0)
+                return false;
+            ShellTile ComposeTile = ShellTile.ActiveTiles.FirstOrDefault(item => item != null
+                && !string.IsNullOrWhiteSpace(item.NavigationUri.ToString()) &&
+                item.NavigationUri.ToString().Contains("NewTweet.xaml"));
+            return ComposeTile != null;
+        }
+
+        public bool ColumnTileIsCreated(TwitterResource Resource)
+        {
+            ShellTile ColumnTile = ShellTile.ActiveTiles.FirstOrDefault(item => item != null
+                && !string.IsNullOrWhiteSpace(item.NavigationUri.ToString()) &&
+                item.NavigationUri.ToString().Contains(Uri.EscapeDataString(Resource.String)));
+            return ColumnTile != null;
+        }
+
+        public void CreateComposeTile()
+        {
+            if (ComposeTileIsCreated())
+                return;
+
+            StandardTileData ComposeTile = new StandardTileData
+            {
+                Title = Localization.Resources.NewTweet,
+                BackgroundImage = new Uri("/Images/ComposeTile.png", UriKind.Relative)
+            };
+
+            Uri ComposeUri = new Uri("/Pages/NewTweet.xaml");
+
+            ShellTile.Create(ComposeUri, ComposeTile);
+        }
+
+        protected string GetTitle(TwitterResource Resource)
+        {
+            string title = Resource.Title.ToLowerInvariant();
+
+            title = char.ToUpper(title[0]) + title.Substring(1);
+
+            return title;
+        }
+
     }
 }

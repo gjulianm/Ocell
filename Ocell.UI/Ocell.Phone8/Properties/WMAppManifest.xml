@@ -19,6 +19,9 @@
     </Capabilities>
     <Tasks>
       <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
+    <ExtendedTask Name="BackgroundTask">
+        <BackgroundServiceAgent Specifier="ScheduledTaskAgent" Name="Ocell.BackgroundAgent.Phone8" Source="Ocell.BackgroundAgent.Phone8" Type="Ocell.BackgroundAgent.Phone8.ScheduledAgent" />
+      </ExtendedTask>
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="TestAppToken" TaskName="_default">

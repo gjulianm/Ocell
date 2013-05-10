@@ -69,9 +69,6 @@
     <Compile Include="..\..\SensitiveData.cs">
       <Link>SensitiveData.cs</Link>
     </Compile>
-    <Compile Include="..\Ocell.Library\Compatibility\ITileManager.cs">
-      <Link>ITileManager.cs</Link>
-    </Compile>
     <Compile Include="..\Ocell.Library\Configuration\Config.cs">
       <Link>Configuration\Config.cs</Link>
     </Compile>

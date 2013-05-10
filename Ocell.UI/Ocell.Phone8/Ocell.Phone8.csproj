@@ -763,6 +763,10 @@
       <Project>{4186D1D2-C419-4DA2-A1D8-5F56E5AAA30D}</Project>
       <Name>Ocell.Buffer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.BackgroundAgent.Phone8\Ocell.BackgroundAgent.Phone8.csproj">
+      <Project>{1D77B761-F1A7-43B5-914E-16AC51218972}</Project>
+      <Name>Ocell.BackgroundAgent.Phone8</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj">
       <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>
       <Name>Hammock.WindowsPhone.Mango</Name>
@@ -794,10 +798,6 @@
     <ProjectReference Include="..\..\Ocell.Library\Ocell.Localization\Ocell.Localization.csproj">
       <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
       <Name>Ocell.Localization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ocell.BackgroundAgent\Ocell.BackgroundAgent.Phone7.csproj">
-      <Project>{38C14A5B-4940-4567-BA45-81FD8E5784DE}</Project>
-      <Name>Ocell.BackgroundAgent.Phone7</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />

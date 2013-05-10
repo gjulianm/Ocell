@@ -89,7 +89,6 @@
     </Compile>
     <Compile Include="ColumnReloadOptions.cs">
     </Compile>
-    <Compile Include="Compatibility\ITileManager.cs" />
     <Compile Include="Configuration\Config.cs">
     </Compile>
     <Compile Include="Configuration\Config.generated.cs">
@@ -205,7 +204,9 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Compatibility\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions />

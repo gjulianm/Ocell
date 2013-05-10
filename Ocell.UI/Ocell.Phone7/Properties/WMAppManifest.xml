@@ -15,7 +15,7 @@
     <Tasks>
       <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
       <ExtendedTask Name="BackgroundTask">
-        <BackgroundServiceAgent Specifier="ScheduledTaskAgent" Name="Ocell.BackgroundAgent" Source="Ocell.BackgroundAgent" Type="Ocell.BackgroundAgent.ScheduledAgent" />
+        <BackgroundServiceAgent Specifier="ScheduledTaskAgent" Name="Ocell.BackgroundAgent.Phone7" Source="Ocell.BackgroundAgent.Phone7" Type="Ocell.BackgroundAgent.Phone7.ScheduledAgent" />
       </ExtendedTask>
     </Tasks>
     <Tokens>

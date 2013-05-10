@@ -19,6 +19,7 @@ using Ocell.Library.Filtering;
 using System.Collections.Specialized;
 using System.Windows;
 using Microsoft.Phone.Tasks;
+using Ocell.Compatibility;
 
 namespace Ocell
 {
@@ -169,10 +170,10 @@ namespace Ocell
             pinToStart = new DelegateCommand((obj) =>
                 {
                     var column = (TwitterResource)SelectedPivot;
-                    if (SecondaryTiles.ColumnTileIsCreated(column))
+                    if (Dependency.Resolve<TileManager>().ColumnTileIsCreated(column))
                         MessageService.ShowError("This column is already pinned.");
                     else
-                        SecondaryTiles.CreateColumnTile(column);                    
+                        SecondaryTiles.CreateColumnTile(column);
                 }, (obj) => SelectedPivot != null);
 
             filterColumn = new DelegateCommand((obj) =>
@@ -262,7 +263,7 @@ namespace Ocell
                         UpdatePivot();
                 };
 
-            
+
 
             SetUpCommands();
         }
@@ -285,7 +286,7 @@ namespace Ocell
 
         bool firstNavigation = true;
         public void RaiseNavigatedTo(object sender, System.Windows.Navigation.NavigationEventArgs e, string column)
-        {            
+        {
             ThreadPool.QueueUserWorkItem((context) => RaiseReloadAll());
 
             if (firstNavigation)
@@ -299,7 +300,7 @@ namespace Ocell
                 }
                 else
                 {
-                    if(Config.Columns.Any())
+                    if (Config.Columns.Any())
                         SelectedPivot = Config.Columns.First();
                 }
                 firstNavigation = false;
