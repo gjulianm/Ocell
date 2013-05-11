@@ -75,7 +75,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Calcium.Phone">
-      <HintPath>..\..\Ocell.Common\lib_dll\Calcium.Phone.dll</HintPath>
+      <HintPath>..\..\Ocell.ThirdParty\lib_dll\Calcium.Phone.dll</HintPath>
     </Reference>
     <Reference Include="JeffWilcox.PhoneThemeManager">
       <HintPath>..\packages\PhoneThemeManager.1.3.2\lib\sl4-windowsphone71\JeffWilcox.PhoneThemeManager.dll</HintPath>
@@ -88,10 +88,10 @@
     </Reference>
     <Reference Include="Microsoft.Phone.Interop" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Calcium SDK\Windows Phone\1.0\Libraries\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <HintPath>..\..\Ocell.ThirdParty\lib_dll\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json.WindowsPhone">
-      <HintPath>..\..\Ocell.Common\lib_dll\Newtonsoft.Json.WindowsPhone.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.5\lib\portable-net40+sl4+wp7+win8\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Device" />
     <Reference Include="System.Windows" />

@@ -72,6 +72,8 @@ namespace Ocell
             Dependency.Register<TileManager, WP7TileManager>();
             Dependency.Register<IListboxCompressionDetector, WP7ListboxCompressionDetector>();
 
+            PushNotifications.WPVersion = OSVersion.WP7;
+
             bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
             ThemeFunctions.BackgroundBrush = Config.Background.GetBrush();
             if (Config.Background.Type == LightOrDark.Light)

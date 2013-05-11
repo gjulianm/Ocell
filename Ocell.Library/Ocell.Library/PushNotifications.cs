@@ -15,8 +15,12 @@ using DanielVaughan;
 
 namespace Ocell
 {
+    public enum OSVersion { WP7, WP8 }
+
     public static class PushNotifications
     {
+        public static OSVersion WPVersion { get; set; }
+
         struct RegistrationInfo
         {
             public string ChannelUri;
@@ -104,52 +108,14 @@ namespace Ocell
                 UnregisterPushChannel(user, "mm");
         }
 
-        public static void RegisterPushChannel(UserToken user, string type)
-        {
-            HttpNotificationChannel channel;
-            string channelName = "OcellPushChannel";
-            channel = HttpNotificationChannel.Find(channelName);
-
-            if (channel == null)
-            {
-                channel = new HttpNotificationChannel(channelName);
-                channel.Open();
-                channel.BindToShellTile();
-                channel.BindToShellToast();
-            }
-
-            if (channel.ChannelUri == null)
-                return;
-
-            SendRegistrationToServer(user, channel.ChannelUri.ToString(), type);
-        }
-
-        [Conditional("OCELL_FULL")]
-        static void SendRegistrationToServer(UserToken user, string channelUri, string type)
-        {
-            string encoded = Uri.EscapeDataString(Library.Encrypting.EncodeTokens(user.Key, user.Secret));
-            string url = string.Format(Library.SensitiveData.PushRegisterUriFormat,
-                Uri.EscapeDataString(channelUri), encoded, user.ScreenName, type);
-
-            var request = (HttpWebRequest)WebRequest.Create(url);
-
-            try
-            {
-                var response = request.BeginGetResponse((result) =>
-                {
-                }, request);
-            }
-            catch (Exception)
-            {
-            }
-        }
-
+       
         [Conditional("OCELL_FULL")]
         static void SendRegistrationToServer(IEnumerable<RegistrationInfo> regs)
         {
             // I'm just so sorry about all this crap.
             string separator = "¬";
             string urls = "", tokens = "", names = "", types = "";
+            string version = WPVersion == OSVersion.WP8 ? "8" : "7";
 
             foreach (var reg in regs)
             {
@@ -165,7 +131,7 @@ namespace Ocell
             names.Substring(0, names.Length - 1);
             types.Substring(0, types.Length - 1);
 
-            string postContents = "{\"AccessTokens\" : \"" + tokens + "\",\"PushUris\" : \"" + urls + "\",\"Usernames\" : \"" + names + "\",\"Types\" : \"" + types + "\"}";
+            string postContents = "{\"AccessTokens\" : \"" + tokens + "\",\"PushUris\" : \"" + urls + "\",\"Usernames\" : \"" + names + "\",\"Types\" : \"" + types + "\",\"OSVersion\" : \"" + version + "\"}";
 
             var request = new RestRequest();
             request.Path = Library.SensitiveData.PushRegisterPostUriFormat;

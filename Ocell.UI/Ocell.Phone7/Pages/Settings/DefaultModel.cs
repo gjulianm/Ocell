@@ -430,7 +430,7 @@ namespace Ocell.Settings
             if (type == NotificationType.None)
                 PushNotifications.UnregisterPushChannel(Config.Accounts[account], "mentions");
             else
-                PushNotifications.RegisterPushChannel(Config.Accounts[account], "mentions");
+                PushNotifications.AutoRegisterForNotifications();
         }
 
         bool messageFirstChange = true;
@@ -447,7 +447,7 @@ namespace Ocell.Settings
             if (type == NotificationType.None)
                 PushNotifications.UnregisterPushChannel(Config.Accounts[account], "messages");
             else
-                PushNotifications.RegisterPushChannel(Config.Accounts[account], "messages");
+                PushNotifications.AutoRegisterForNotifications();
         }
 
         TimeSpan SelectedFilterToTimeSpan(int index)

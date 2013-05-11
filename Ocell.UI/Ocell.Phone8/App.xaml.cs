@@ -72,6 +72,8 @@ namespace Ocell
             Dependency.Register<IListboxCompressionDetector, WP8PullDetector>();
             Dependency.Register<TileManager, WP8TileManager>();
 
+            PushNotifications.WPVersion = OSVersion.WP8;
+
 
             bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
             ThemeFunctions.BackgroundBrush = Config.Background.GetBrush();
