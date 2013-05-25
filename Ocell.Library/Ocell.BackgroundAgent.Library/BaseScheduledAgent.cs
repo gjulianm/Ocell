@@ -148,6 +148,7 @@ namespace Ocell.BackgroundAgent.Library
             not.From = from;
             not.Type = type;
             not.To = name;
+            not.Message = item.GetProperty("text");
 
             return not;
         }
