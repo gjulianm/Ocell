@@ -10,6 +10,10 @@ using Microsoft.Phone.Tasks;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using TweetSharp;
+using System.Collections.Generic;
+using System.Windows.Controls;
+using Ocell.Commands;
+using Ocell.Localization;
 
 namespace Ocell.Pages.Elements
 {
@@ -85,11 +89,18 @@ namespace Ocell.Pages.Elements
             set { Assign("WhoRetweeted", ref whoRetweeted, value); }
         }
 
-        string hdAvatar;
-        public string HdAvatar
+        string avatar;
+        public string Avatar
         {
-            get { return hdAvatar; }
-            set { Assign("HdAvatar", ref hdAvatar, value); }
+            get { return avatar; }
+            set { Assign("Avatar", ref avatar, value); }
+        }
+
+        string replyText;
+        public string ReplyText
+        {
+            get { return replyText; }
+            set { Assign("ReplyText", ref replyText, value); }
         }
 
         DelegateCommand deleteTweet;
@@ -116,12 +127,34 @@ namespace Ocell.Pages.Elements
             get { return favorite; }
         }
 
+        DelegateCommand sendTweet;
+        public ICommand SendTweet
+        {
+            get { return sendTweet; }
+        }
+
         string imageSource;
         public string ImageSource
         {
             get { return imageSource; }
             set { Assign("ImageSource", ref imageSource, value); }
         }
+
+        SafeObservable<ITweetable> replies;
+        public SafeObservable<ITweetable> Replies
+        {
+            get { return replies; }
+            protected set { Assign("Replies", ref replies, value); }
+        }
+
+        SafeObservable<string> images;
+        public SafeObservable<string> Images
+        {
+            get { return images; }
+            protected set { Assign("Images", ref images, value); }
+        }
+
+        public event EventHandler TweetSent;
 
         Uri ImageNavigationUri;
 
@@ -146,30 +179,52 @@ namespace Ocell.Pages.Elements
                 WhoRetweeted = "";
             }
 
-            HdAvatar = String.Format("https://api.twitter.com/1/users/profile_image?screen_name={0}&size=bigger", Tweet.Author.ScreenName);
+            Avatar = String.Format("https://api.twitter.com/1/users/profile_image?screen_name={0}&size=original", Tweet.Author.ScreenName);
 
             HasReplies = (Tweet.InReplyToStatusId != null);
             HasImage = (Tweet.Entities != null && Tweet.Entities.Media.Any());
             IsFavorited = Tweet.IsFavorited;
             RetweetCount = Tweet.RetweetCount;
 
-            var service = new ConversationService(DataTransfer.CurrentAccount);
-            service.CheckIfReplied(Tweet, (replied) =>
-                {
-                    if (replied)
-                        HasReplies = true;
-                });
-
             if (Tweet.User == null || Tweet.User.Name == null)
                 FillUser();
 
             UsersWhoRetweeted = new ObservableCollection<ITweeter>();
+            Replies = new SafeObservable<ITweetable>();
+            Images = new SafeObservable<string>();
 
             UsersWhoRetweeted.CollectionChanged += (s, e) =>
             {
                 RetweetCount = UsersWhoRetweeted.Count;
             };
 
+            GetRetweets();
+
+            GetReplies();
+
+            CreateCommands();
+
+            SetImage();
+        }
+
+        private void GetReplies()
+        {
+            var convService = new ConversationService(DataTransfer.CurrentAccount);
+            convService.Finished += (sender, e) => IsLoading = false;
+            convService.GetConversationForStatus(Tweet, (statuses, response) =>
+            {
+                if (statuses != null)
+                {
+                    var statuses_noRepeat = statuses.Cast<ITweetable>().Except(Replies).ToList();
+                    foreach (var status in statuses_noRepeat)
+                        Replies.Add(status);
+                }                        
+            });
+
+        }
+
+        private void GetRetweets()
+        {
             ServiceDispatcher.GetDefaultService().Retweets(new RetweetsOptions { Id = Tweet.Id }, (statuses, response) =>
             {
                 if (statuses != null && statuses.Any())
@@ -182,10 +237,6 @@ namespace Ocell.Pages.Elements
                     });
                 }
             });
-
-            CreateCommands();
-
-            SetImage();
         }
 
         public TweetModel()
@@ -243,6 +294,25 @@ namespace Ocell.Pages.Elements
                         IsFavorited = true;
                     });
             }, parameter => (parameter is TwitterStatus) && Config.Accounts.Count > 0 && DataTransfer.CurrentAccount != null);
+
+            sendTweet = new DelegateCommand((parameter) =>
+            {
+                IsLoading = true;
+                BarText = Resources.SendingTweet;
+                ServiceDispatcher.GetCurrentService().SendTweet(new SendTweetOptions
+                {
+                    InReplyToStatusId = Tweet.Id,
+                    Status = ReplyText
+                }, (status, response) =>
+                {
+                    IsLoading = false;
+                    BarText = "";
+                    if (response.StatusCode != HttpStatusCode.OK)
+                        MessageService.ShowError(response.Error != null ? response.Error.Message : Resources.UnknownValue);
+                    else if (TweetSent != null)
+                        TweetSent(this, new EventArgs());
+                });
+            });
         }
 
         void FillUser()
@@ -269,12 +339,20 @@ namespace Ocell.Pages.Elements
 
         public void ImageTapped(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (ImageNavigationUri != null)
-                Deployment.Current.Dispatcher.BeginInvoke(() =>
+            Image img = sender as Image;
+
+            if (img != null)
+            {
+                var url = img.Tag as string;
+                if (url != null && Uri.IsWellFormedUriString(url, UriKind.Absolute))
                 {
-                    var task = new Microsoft.Phone.Tasks.WebBrowserTask { Uri = ImageNavigationUri };
-                    task.Show();
-                });
+                    Deployment.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        var task = new Microsoft.Phone.Tasks.WebBrowserTask { Uri = new Uri(url, UriKind.Absolute) };
+                        task.Show();
+                    });
+                }
+            }
         }
 
         void SetImage()
@@ -285,12 +363,14 @@ namespace Ocell.Pages.Elements
             if (Tweet.Entities.Media != null && Tweet.Entities.Media.Any())
             {
                 var photo = Tweet.Entities.Media.First();
-                ImageNavigationUri = new Uri(photo.ExpandedUrl, UriKind.Absolute);
-                ImageSource = photo.MediaUrl;
+                Images.Add(photo.MediaUrl);
 
             }
-            else if (Tweet.Entities.Urls != null && Tweet.Entities.Urls.Any())
+            
+            
+            if (Tweet.Entities.Urls != null && Tweet.Entities.Urls.Any())
             {
+                var parser = new MediaLinkParser();
                 foreach (var i in Tweet.Entities.Urls)
                 {
                     if (i.EntityType == TwitterEntityType.Url)
@@ -298,40 +378,30 @@ namespace Ocell.Pages.Elements
                         var url = i as TwitterUrl;
                         if (url != null && !string.IsNullOrWhiteSpace(url.ExpandedValue))
                         {
-                            if (url.ExpandedValue.Contains("http://yfrog.com/"))
-                            {
-                                ImageNavigationUri = new Uri(url.ExpandedValue, UriKind.Absolute);
-                                ImageSource = url.ExpandedValue + ":iphone";
-                            }
-                            else if (url.ExpandedValue.Contains("http://twitpic.com/"))
-                            {
-                                ImageNavigationUri = new Uri(url.ExpandedValue, UriKind.Absolute);
-                                ImageSource = "http://twitpic.com/show/thumb" + url.ExpandedValue.Substring(url.ExpandedValue.LastIndexOf('/'));
-                            }
-                            else if (url.ExpandedValue.Contains("http://instagr.am/"))
-                            {
-                                ImageNavigationUri = new Uri(url.ExpandedValue, UriKind.Absolute);
-                                string idcode;
-
-                                if (url.ExpandedValue.Last() == '/')
-                                    idcode = url.ExpandedValue.Substring(0, url.ExpandedValue.Length - 1);
-                                else
-                                    idcode = url.ExpandedValue;
-
-                                idcode = idcode.Substring(idcode.LastIndexOf('/') + 1);
-                                ImageSource = "http://instagr.am/p/" + idcode + "/media/?size=m";
-                            }
+                            string photoUrl;
+                            if (parser.TryGetMediaUrl(url.ExpandedValue, out photoUrl))
+                                Images.Add(photoUrl);
                         }
                     }
                 }
             }
 
-            if (ImageNavigationUri != null)
+            if (Images.Count > 0)
             {
                 HasImage = true;
                 IsLoading = true;
                 BarText = Localization.Resources.DownloadingImage;
             }
+        }
+
+        public void ReplyBoxGotFocus()
+        {
+            ReplyText = ReplyAllCommand.GetReplied(Tweet);
+        }
+
+        public void ReplyBoxLostFocus()
+        {
+            ReplyText = String.Format("{0}...", Resources.Reply);
         }
     }
 }

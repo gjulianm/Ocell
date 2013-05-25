@@ -17,13 +17,16 @@ using DanielVaughan;
 using DanielVaughan.Services;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Threading;
 
 namespace Ocell.Pages.Elements
 {
     public partial class Tweet : PhoneApplicationPage
     {
         TweetModel viewModel;
-
+        Storyboard sbShow;
+        Storyboard sbHide;
         public Tweet()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
@@ -34,13 +37,15 @@ namespace Ocell.Pages.Elements
             DataContext = viewModel;
 
             this.Loaded += new RoutedEventHandler(Tweet_Loaded);
-            img.ImageFailed += viewModel.ImageFailed;
-            img.ImageOpened += viewModel.ImageOpened;
-            img.Tap += viewModel.ImageTapped;
+
+            viewModel.TweetSent += (s, e) => TBNoFocus();
         }
 
         void Tweet_Loaded(object sender, RoutedEventArgs e)
         {
+            sbShow = this.Resources["sbShow"] as Storyboard;
+            sbHide = this.Resources["sbHide"] as Storyboard;
+
             Initialize();
             if (ApplicationBar != null)
                 ApplicationBar.MatchOverriddenTheme();
@@ -50,7 +55,33 @@ namespace Ocell.Pages.Elements
         {
             CreateText(viewModel.Tweet);
             viewModel.Completed = true;
-            ContentPanel.UpdateLayout();
+
+            if (DataTransfer.Status == null)
+            {
+                NavigationService.GoBack();
+                return;
+            }
+
+            TwitterResource resource = new TwitterResource
+            {
+                Data = DataTransfer.Status.Id.ToString(),
+                Type = ResourceType.Conversation,
+                User = DataTransfer.CurrentAccount
+            };
+
+            if (conversation.Loader == null)
+            {
+                conversation.Loader = new TweetLoader(resource);
+            }
+
+            if (conversation.Loader.Resource != resource)
+            {
+                conversation.Loader.Source.Clear();
+                conversation.Resource = resource;
+            }
+
+            conversation.Loader.Cached = false;
+            conversation.Load();        
         }
 
         private void CreateText(ITweetable Status)
@@ -357,7 +388,61 @@ namespace Ocell.Pages.Elements
             viewModel.IsMuting = true;
         }
 
+        private void ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            viewModel.ImageFailed(sender, e);
+        }
 
+        private void ImageOpened(object sender, RoutedEventArgs e)
+        {
+            viewModel.ImageOpened(sender, e);
+        }
 
+        private void ImageTap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            viewModel.ImageTapped(sender, e);
+        }
+
+        private void textBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TBFocus();
+        }
+
+        public void TBFocus()
+        {
+            sbShow.Begin();
+            viewModel.ReplyBoxGotFocus();
+            textBox.SelectionStart = textBox.Text.Length;
+        }
+
+        public void TBNoFocus()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                sbHide.Begin();
+                viewModel.ReplyBoxLostFocus();
+            });
+        }
+        bool suppressTBFocusLost = false;
+        private void textBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ThreadPool.QueueUserWorkItem((c) =>
+            {
+                // LostFocus gets triggered before the button click, so wait a little bit and let it be triggered.
+                Thread.Sleep(100);
+                Dispatcher.BeginInvoke(() =>
+                {
+                    if (!suppressTBFocusLost)
+                        TBNoFocus();
+                    else
+                        suppressTBFocusLost = false;
+                });
+            });
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            suppressTBFocusLost = true;
+        }
     }
 }

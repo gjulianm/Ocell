@@ -51,6 +51,17 @@ namespace Ocell.Commands
 
     public class ReplyAllCommand : ICommand
     {
+        public static string GetReplied(ITweetable tweet)
+        {
+            string textReplied = "";
+            textReplied = "@" + tweet.Author.ScreenName + " ";
+            foreach (string user in StringManipulator.GetUserNames(tweet.Text))
+                if (DataTransfer.CurrentAccount != null && user != "@" + DataTransfer.CurrentAccount.ScreenName)
+                    textReplied += user + " ";
+
+            return textReplied;
+        }
+
         public bool CanExecute(object parameter)
         {
             return parameter is ITweetable && Config.Accounts.Any() && DataTransfer.CurrentAccount != null;
@@ -60,10 +71,7 @@ namespace Ocell.Commands
         {
             ITweetable tweet = (ITweetable)parameter;
             DataTransfer.ReplyId = tweet.Id;
-            DataTransfer.Text = "@" + tweet.Author.ScreenName + " ";
-            foreach (string user in StringManipulator.GetUserNames(tweet.Text))
-                if(DataTransfer.CurrentAccount != null && user != "@" + DataTransfer.CurrentAccount.ScreenName)
-                    DataTransfer.Text += user + " ";
+            DataTransfer.Text = GetReplied(tweet);
 
             Dependency.Resolve<INavigationService>().Navigate(Uris.WriteTweet);
         }

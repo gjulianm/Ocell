@@ -25,7 +25,7 @@
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <Utf8Output>true</Utf8Output>
-    <ExpressionBlendVersion>5.0.30924.0</ExpressionBlendVersion>
+    <ExpressionBlendVersion>5.0.40218.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -193,6 +193,9 @@
       <DependentUpon>Topics.xaml</DependentUpon>
     </Compile>
     <Compile Include="SampleCollections.cs" />
+    <Compile Include="SampleData\TweetSampleData\TweetSampleData.xaml.cs">
+      <DependentUpon>TweetSampleData.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SchedulerSync.cs" />
     <Compile Include="ThemeFunctions.cs" />
     <Compile Include="Tiles\SecondaryTiles.cs" />
@@ -342,6 +345,10 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <DesignTimeOnly Include="SampleData\TweetSampleData\TweetSampleData.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </DesignTimeOnly>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -512,6 +519,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SplashScreenImage.jpg" />
+    <DesignTimeOnly Include="SampleData\TweetSampleData\TweetSampleData.xsd" />
+    <DesignTimeOnly Include="SampleData\TweetSampleData\TweetSampleData_Files\image01.png" />
+    <DesignTimeOnly Include="SampleData\TweetSampleData\TweetSampleData_Files\image02.png" />
+    <DesignTimeOnly Include="SampleData\TweetSampleData\TweetSampleData_Files\image03.png" />
+    <DesignTimeOnly Include="SampleData\TweetSampleData\TweetSampleData_Files\image04.png" />
+    <DesignTimeOnly Include="SampleData\TweetSampleData\TweetSampleData_Files\image05.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\Icons_Black\" />
