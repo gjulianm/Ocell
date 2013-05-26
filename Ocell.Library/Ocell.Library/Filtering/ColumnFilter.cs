@@ -45,7 +45,12 @@ namespace Ocell.Library.Filtering
 
         public void CleanOldFilters()
         {
+            List<ITweetableFilter> toRemove = new List<ITweetableFilter>();
+
             foreach(var item in _predicates.Where(item=> item.IsValidUntil < DateTime.Now))
+                toRemove.Add(item);
+
+            foreach (var item in toRemove)
                 _predicates.Remove(item);
         }
 
