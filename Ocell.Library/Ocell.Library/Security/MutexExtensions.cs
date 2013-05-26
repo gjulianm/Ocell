@@ -16,11 +16,7 @@ namespace Ocell.Library.Security
         {
             bool workDone = false;
 
-            // get application GUID as defined in AssemblyInfo.cs
-            string appGuid = ((GuidAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), false).GetValue(0)).Value.ToString();
-
-            // unique id for global mutex - Global prefix means it is global to the machine
-            string mutexId = string.Format("{1} {{{0}}}", appGuid, name);
+            string mutexId = name;
 
             using (var mutex = new Mutex(false, mutexId))
             {
@@ -44,7 +40,16 @@ namespace Ocell.Library.Security
                 finally
                 {
                     if (hasHandle)
-                        mutex.ReleaseMutex();
+                    {
+                        try
+                        {
+                            mutex.ReleaseMutex();
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine("Couldn't release Mutex: {0}", e);
+                        }
+                    }
                 }
             }
 
