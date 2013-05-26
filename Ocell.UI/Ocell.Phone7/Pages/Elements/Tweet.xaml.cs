@@ -324,10 +324,9 @@ namespace Ocell.Pages.Elements
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            var image = sender as Image;
-            if (image != null & image.Tag is ITweeter)
+            if (viewModel.Tweet != null && viewModel.Tweet.Author != null)
             {
-                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + (image.Tag as ITweeter).ScreenName, UriKind.Relative));
+                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + viewModel.Tweet.Author.ScreenName, UriKind.Relative));
             }
         }
 

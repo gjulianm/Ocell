@@ -116,7 +116,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Grid Margin="8,0,0,0" Visibility="{Binding Completed, Converter={StaticResource BooleanToVisibilityConverter}}" Height="170">
+                    <Grid Margin="8,0,0,0" Visibility="{Binding Completed, Converter={StaticResource BooleanToVisibilityConverter}}" Height="170" local:MetroInMotion.Tilt="3" Tap="Image_Tap">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="45*" />
                             <ColumnDefinition Width="55*"/>
