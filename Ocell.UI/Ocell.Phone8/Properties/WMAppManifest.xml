@@ -5,6 +5,8 @@
     <Language code="es" />
     <Language code="en" />
     <Language code="it" />
+    <Language code="de" />
+    <Language code="eu" />
   </Languages>
   <App xmlns="" ProductID="{d75e6881-edc9-4b71-8141-75e27d42f7a3}" Title="Ocell" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="TestApp author" Description="Sample description" Publisher="TestApp" PublisherID="{097c45ee-4a8e-4103-9543-672cf90d9e11}">
     <IconPath IsRelative="true" IsResource="false">Images\AppIcon99.png</IconPath>
@@ -19,7 +21,7 @@
     </Capabilities>
     <Tasks>
       <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
-    <ExtendedTask Name="BackgroundTask">
+      <ExtendedTask Name="BackgroundTask">
         <BackgroundServiceAgent Specifier="ScheduledTaskAgent" Name="Ocell.BackgroundAgent.Phone8" Source="Ocell.BackgroundAgent.Phone8" Type="Ocell.BackgroundAgent.Phone8.ScheduledAgent" />
       </ExtendedTask>
     </Tasks>
@@ -30,19 +32,13 @@
           <Count>0</Count>
           <IconImageURI IsRelative="true" IsResource="false">Images\MediumTileIcon.png</IconImageURI>
           <Title>Ocell</Title>
-          <Message>
-          </Message>
-          <BackgroundColor>
-          </BackgroundColor>
+          <Message></Message>
+          <BackgroundColor></BackgroundColor>
           <HasLarge>True</HasLarge>
-          <LargeContent1>
-          </LargeContent1>
-          <LargeContent2>
-          </LargeContent2>
-          <LargeContent3>
-          </LargeContent3>
-          <DeviceLockImageURI IsRelative="true" IsResource="false">
-          </DeviceLockImageURI>
+          <LargeContent1></LargeContent1>
+          <LargeContent2></LargeContent2>
+          <LargeContent3></LargeContent3>
+          <DeviceLockImageURI IsRelative="true" IsResource="false"></DeviceLockImageURI>
         </TemplateIconic>
       </PrimaryToken>
     </Tokens>

@@ -34,4 +34,4 @@ using System.Resources;
 // mediante el carácter '*', como se muestra a continuación:
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: NeutralResourcesLanguageAttribute("es-ES")]
+[assembly: NeutralResourcesLanguageAttribute("en")]
