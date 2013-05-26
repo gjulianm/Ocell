@@ -106,6 +106,7 @@
     </Compile>
     <Compile Include="Encrypting.cs">
     </Compile>
+    <Compile Include="EventArgs.cs" />
     <Compile Include="FileAbstractor.cs">
     </Compile>
     <Compile Include="Filtering\ColumnFilter.cs">

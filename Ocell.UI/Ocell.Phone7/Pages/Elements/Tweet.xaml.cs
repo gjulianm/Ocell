@@ -27,6 +27,8 @@ namespace Ocell.Pages.Elements
         TweetModel viewModel;
         Storyboard sbShow;
         Storyboard sbHide;
+        bool conversationLoaded = false;
+
         public Tweet()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
@@ -38,7 +40,26 @@ namespace Ocell.Pages.Elements
 
             this.Loaded += new RoutedEventHandler(Tweet_Loaded);
 
-            viewModel.TweetSent += (s, e) => TBNoFocus();
+            viewModel.TweetSent += (s, e) =>
+            {
+                conversation.Loader.Source.Insert(0, e.Payload);
+                TBNoFocus();
+            };
+
+            panorama.SelectionChanged += (sender, e) =>
+            {
+                if (e.AddedItems.Count > 0)
+                {
+                    PanoramaItem added = e.AddedItems[0] as PanoramaItem;
+
+                    if(added == null)
+                        return;
+
+                    string tag = added.Tag as string;
+                    if (tag == "conversation")
+                        conversation.Load();
+                }
+            };
         }
 
         void Tweet_Loaded(object sender, RoutedEventArgs e)
@@ -81,7 +102,7 @@ namespace Ocell.Pages.Elements
             }
 
             conversation.Loader.Cached = false;
-            conversation.Load();        
+            conversation.AutoManageNavigation = true;
         }
 
         private void CreateText(ITweetable Status)

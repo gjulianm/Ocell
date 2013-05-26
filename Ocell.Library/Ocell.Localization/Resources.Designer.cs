@@ -1762,6 +1762,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to pictures.
+        /// </summary>
+        public static string Pictures {
+            get {
+                return ResourceManager.GetString("Pictures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to pin this column to start.
         /// </summary>
         public static string PinColumnStart {

@@ -1210,4 +1210,7 @@
     <value>{0} nuevas menciones y mensajes</value>
     <comment>ScheduledAgent.</comment>
   </data>
+  <data name="Pictures" xml:space="preserve">
+    <value>imágenes</value>
+  </data>
 </root>

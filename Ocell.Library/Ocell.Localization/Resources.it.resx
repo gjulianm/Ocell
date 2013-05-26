@@ -1191,4 +1191,7 @@
   <data name="NewXMentionsMessages" xml:space="preserve">
     <value>{0} nuove menzioni e messaggi</value>
   </data>
+  <data name="Pictures" xml:space="preserve">
+    <value>immagini</value>
+  </data>
 </root>

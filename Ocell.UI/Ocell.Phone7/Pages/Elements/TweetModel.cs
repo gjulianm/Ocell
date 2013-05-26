@@ -14,11 +14,19 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using Ocell.Commands;
 using Ocell.Localization;
+using Microsoft.Phone.Shell;
 
 namespace Ocell.Pages.Elements
 {
     public class TweetModel : ExtendedViewModelBase
     {
+        ApplicationBarMode appBarMode;
+        public ApplicationBarMode AppBarMode
+        {
+            get { return appBarMode; }
+            set { Assign("AppBarMode", ref appBarMode, value); }
+        }
+
         bool completed;
         public bool Completed
         {
@@ -154,12 +162,14 @@ namespace Ocell.Pages.Elements
             protected set { Assign("Images", ref images, value); }
         }
 
-        public event EventHandler TweetSent;
+        public event EventHandler<EventArgs<ITweetable>> TweetSent;
 
         Uri ImageNavigationUri;
 
         public void Initialize()
         {
+            AppBarMode = ApplicationBarMode.Default;
+
             if (DataTransfer.Status == null)
             {
                 MessageService.ShowError(Localization.Resources.ErrorLoadingTweet);
@@ -310,7 +320,7 @@ namespace Ocell.Pages.Elements
                     if (response.StatusCode != HttpStatusCode.OK)
                         MessageService.ShowError(response.Error != null ? response.Error.Message : Resources.UnknownValue);
                     else if (TweetSent != null)
-                        TweetSent(this, new EventArgs());
+                        TweetSent(this, new EventArgs<ITweetable>(status));
                 });
             });
         }

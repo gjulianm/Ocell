@@ -1209,4 +1209,7 @@
   <data name="NewXMentionsMessages" xml:space="preserve">
     <value>{0} new mentions and messages</value>
   </data>
+  <data name="Pictures" xml:space="preserve">
+    <value>pictures</value>
+  </data>
 </root>
