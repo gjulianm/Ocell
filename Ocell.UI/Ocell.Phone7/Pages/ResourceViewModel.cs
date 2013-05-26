@@ -52,7 +52,7 @@ namespace Ocell.Pages.Search
         public ResourceViewModel()
             : base("Search")
         {
-            PageTitle = Resource.Title;
+            PageTitle = Resource != null ? Resource.Title :  "";
 
             this.PropertyChanged += (sender, property) =>
                 {
