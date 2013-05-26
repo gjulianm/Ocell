@@ -1042,8 +1042,8 @@ Global
 		{1D77B761-F1A7-43B5-914E-16AC51218972}.Release_Lite|Any CPU.Build.0 = Release|Any CPU
 		{1D77B761-F1A7-43B5-914E-16AC51218972}.Release_Lite|ARM.ActiveCfg = Release|ARM
 		{1D77B761-F1A7-43B5-914E-16AC51218972}.Release_Lite|ARM.Build.0 = Release|ARM
-		{1D77B761-F1A7-43B5-914E-16AC51218972}.Release_Lite|Mixed Platforms.ActiveCfg = Release|x86
-		{1D77B761-F1A7-43B5-914E-16AC51218972}.Release_Lite|Mixed Platforms.Build.0 = Release|x86
+		{1D77B761-F1A7-43B5-914E-16AC51218972}.Release_Lite|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1D77B761-F1A7-43B5-914E-16AC51218972}.Release_Lite|Mixed Platforms.Build.0 = Release|Any CPU
 		{1D77B761-F1A7-43B5-914E-16AC51218972}.Release_Lite|PHP 5.3.ActiveCfg = Release|Any CPU
 		{1D77B761-F1A7-43B5-914E-16AC51218972}.Release_Lite|x86.ActiveCfg = Release|x86
 		{1D77B761-F1A7-43B5-914E-16AC51218972}.Release_Lite|x86.Build.0 = Release|x86

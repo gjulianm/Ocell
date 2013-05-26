@@ -12,7 +12,7 @@ namespace Ocell.Controls
 
         public bool Bound { get; private set; }
 
-        public void Bind(Microsoft.Phone.Controls.LongListSelector listbox)
+        public void Bind(ExtendedListBox listbox)
         {
             list = listbox;
             list.StretchingBottom += list_StretchingBottom;
