@@ -102,7 +102,7 @@
             <controls:Panorama.TitleTemplate>
                 <DataTemplate>
                     <Grid>
-                        <TextBlock Text="{Binding}" FontSize="40" Margin="0,125,0,0" />
+                        <TextBlock Text="{Binding}" FontSize="40" Margin="0,100,0,0"/>
                     </Grid>
                 </DataTemplate>
             </controls:Panorama.TitleTemplate>

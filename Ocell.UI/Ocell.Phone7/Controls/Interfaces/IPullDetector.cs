@@ -23,7 +23,7 @@ namespace Ocell.Controls
     public interface IListboxCompressionDetector
     {
         bool Bound { get; }
-        void Bind(LongListSelector listbox);
+        void Bind(ExtendedListBox listbox);
         void Unbind();
         event OnCompression Compression;
     }

@@ -376,10 +376,13 @@ namespace Ocell.Controls
         #endregion
 
         #region Auto managers
+        DateTime lastPullRefresh = DateTime.MinValue;
         void RefreshOnPull(object sender, CompressionEventArgs e)
         {
-            if (!ActivatePullToRefresh)
+            if (!ActivatePullToRefresh || DateTime.Now - lastPullRefresh < TimeSpan.FromSeconds(10))
                 return;
+
+            lastPullRefresh = DateTime.Now;
 
             bool old = (e.Type == Controls.CompressionType.Bottom);
 

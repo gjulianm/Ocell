@@ -1,6 +1,13 @@
 ﻿using Microsoft.Phone.Controls;
 using System;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using DanielVaughan;
+using System.Diagnostics;
+using System.Collections.Generic;
+using TweetSharp;
+using System.Linq;
 
 namespace Ocell.Controls
 {
@@ -21,23 +28,23 @@ namespace Ocell.Controls
     /// </summary>
     public class WP8PullDetector : IListboxCompressionDetector
     {
-        LongListSelector listbox;
+        ExtendedListBox listbox;
 
         bool viewportChanged = false;
         bool isMoving = false;
         double manipulationStart = 0;
         double manipulationEnd = 0;
+        Grid topGrid = new Grid();
+        Grid bottomGrid = new Grid();
 
         public bool Bound { get; private set; }
 
-        public void Bind(LongListSelector listbox)
+        public void Bind(ExtendedListBox listbox)
         {
             Bound = true;
             this.listbox = listbox;
             listbox.ManipulationStateChanged += listbox_ManipulationStateChanged;
             listbox.MouseMove += listbox_MouseMove;
-            listbox.ItemRealized += OnViewportChanged;
-            listbox.ItemUnrealized += OnViewportChanged;
         }
 
         public void Unbind()
@@ -48,14 +55,7 @@ namespace Ocell.Controls
             {
                 listbox.ManipulationStateChanged -= listbox_ManipulationStateChanged;
                 listbox.MouseMove -= listbox_MouseMove;
-                listbox.ItemRealized -= OnViewportChanged;
-                listbox.ItemUnrealized -= OnViewportChanged;
             }
-        }
-
-        void OnViewportChanged(object sender, Microsoft.Phone.Controls.ItemRealizationEventArgs e)
-        {
-            viewportChanged = true;
         }
 
         void listbox_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -87,12 +87,42 @@ namespace Ocell.Controls
 
                 if (!viewportChanged && Compression != null)
                 {
-                    if (total < 0)
+                    if (IsAtTop())
                         Compression(this, new CompressionEventArgs(CompressionType.Top));
-                    else if(total > 0) // Explicitly exclude total == 0 case
+                    else if (IsAtBottom())
                         Compression(this, new CompressionEventArgs(CompressionType.Bottom));
                 }
             }
+        }
+
+        private bool IsAtTop()
+        {
+            ContentPresenter firstContainer;
+            ITweetable firstItem = listbox.ItemsSource[0] as ITweetable;
+
+            if (listbox.ViewportItems.TryGetValue(firstItem, out firstContainer))
+            {
+                var diff = listbox.GetRelativePosition(firstContainer);
+                if (diff.Y <2 )
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool IsAtBottom()
+        {
+            ContentPresenter lastContainer;
+            ITweetable lastItem = listbox.ItemsSource[listbox.ItemsSource.Count - 1] as ITweetable;
+
+            if (listbox.ViewportItems.TryGetValue(lastItem, out lastContainer))
+            {
+                var diff = lastContainer.GetRelativePosition(listbox);
+                if (diff.Y <= listbox.ActualHeight - lastContainer.ActualHeight + 2)
+                    return true;
+            }
+
+            return false;
         }
 
        
