@@ -54,7 +54,7 @@ namespace Ocell.Pages.Settings
 
             if (response["access_token"] != null)
             {
-                string accessToken = response["access_token"].ToString();
+                string accessToken = response["access_token"].ToString().Replace("\"", "");
 
                 Config.BufferAccessToken = accessToken;
 
