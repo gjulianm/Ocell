@@ -77,7 +77,7 @@
         <controls:Pivot Title="{Binding CurrentAccountName, StringFormat='OCELL - {0}'}" x:Name="MainPivot" Background="{x:Null}" ItemsSource="{Binding Pivots}" SelectedItem="{Binding SelectedPivot, Mode=TwoWay}" Margin="0,50,0,0">
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Title, Converter={StaticResource ListConverter}, FallbackValue=error}" Tag="{Binding}" Tap="TextBlock_Tap" />
+                    <TextBlock Text="{Binding Title, Converter={StaticResource ListConverter}, FallbackValue=error}" Tag="{Binding}" Tap="TextBlock_Tap" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
                 </DataTemplate>
             </controls:Pivot.HeaderTemplate>
             <controls:Pivot.ItemTemplate>

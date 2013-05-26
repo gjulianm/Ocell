@@ -74,9 +74,9 @@ namespace Ocell
 
             PushNotifications.WPVersion = OSVersion.WP8;
 
-
             bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
             ThemeFunctions.BackgroundBrush = Config.Background.GetBrush();
+
             if (Config.Background.Type == LightOrDark.Light)
                 ThemeManager.ToLightTheme();
             else if (Config.Background.Type == LightOrDark.Dark)
@@ -152,7 +152,7 @@ namespace Ocell
 
             // Crear el marco pero no establecerlo como RootVisual todavía; esto permite que
             // la pantalla de presentación permanezca activa hasta que la aplicación esté lista para la presentación.
-            RootFrame = new PhoneApplicationFrame();
+            RootFrame = new TransitionFrame();
             RootFrame.Navigated += CompleteInitializePhoneApplication;
 
             // Controlar errores de navegación

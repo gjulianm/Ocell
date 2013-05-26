@@ -169,7 +169,7 @@
 
                     </TextBox>
                     <Button x:Name="button" Click="button_Click" Content="{Binding Strings.Send, Source={StaticResource LocalizedResources}}" Command="{Binding SendTweet}" Grid.Row="1" Width="150" HorizontalAlignment="Right" Height="0"/>
-                    <lc:ExtendedListBox x:Name="conversation" ItemTemplate="{StaticResource TweetTemplate}" Grid.Row="2" />
+                    <lc:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True"  x:Name="conversation" ItemTemplate="{StaticResource TweetTemplate}" Grid.Row="2" />
 
                     <TextBlock Visibility="{Binding HasRetweets, Converter={StaticResource BooleanToVisibilityConverter}}"  Foreground="{StaticResource PhoneSubtleBrush}" Height="27" Grid.Row="3">
             <Run Text="{Binding Strings.UsersWhoRetweeted, Source={StaticResource LocalizedResources}}"/>

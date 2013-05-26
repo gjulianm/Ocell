@@ -52,7 +52,8 @@
     		<DoubleAnimation Storyboard.TargetName="GeolocImg" Storyboard.TargetProperty="Opacity"
     			To="0.5" Duration="0:0:0.5" />
     	</Storyboard>
-    	<DataTemplate x:Key="SuggestionTemplate">
+
+        <DataTemplate x:Key="SuggestionTemplate">
     		<Grid/>
     	</DataTemplate>
     	<DataTemplate x:Key="ItemTemplate">
@@ -80,20 +81,20 @@
     <toolkit:TransitionService.NavigationInTransition>
         <toolkit:NavigationInTransition>
             <toolkit:NavigationInTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardIn"/>
+                <toolkit:SlideTransition Mode="SlideDownFadeIn"/>
             </toolkit:NavigationInTransition.Backward>
             <toolkit:NavigationInTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardIn"/>
+                <toolkit:SlideTransition Mode="SlideUpFadeIn"/>
             </toolkit:NavigationInTransition.Forward>
         </toolkit:NavigationInTransition>
     </toolkit:TransitionService.NavigationInTransition>
     <toolkit:TransitionService.NavigationOutTransition>
         <toolkit:NavigationOutTransition>
             <toolkit:NavigationOutTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardOut"/>
+                <toolkit:SlideTransition Mode="SlideDownFadeOut"/>
             </toolkit:NavigationOutTransition.Backward>
             <toolkit:NavigationOutTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardOut"/>
+                <toolkit:SlideTransition Mode="SlideUpFadeOut"/>
             </toolkit:NavigationOutTransition.Forward>
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
@@ -129,7 +130,8 @@
                     <ListBox x:Name="ListAccounts" ItemsSource="{Binding AccountList}" SelectionMode="Multiple" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="12,272,12,252" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}" SelectionChanged="ListBox_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
                     <TextBlock Text="{Binding Strings.Accounts, Source={StaticResource LocalizedResources}, StringFormat=\{0\}:}" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Left" Margin="12,236,0,0" TextWrapping="Wrap"  Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top"/>
                     <CheckBox IsChecked="{Binding IsScheduled, Mode=TwoWay}" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" Content="{Binding Strings.ScheduledQuestion, Source={StaticResource LocalizedResources}}" Margin="8,357,216,0" VerticalAlignment="Top" />
-                    <Grid Margin="8,433,20,0" Height="131" VerticalAlignment="Top" Visibility="{Binding IsScheduled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid Margin="8,433,20,0" x:Name="schedGrid" Height="131" VerticalAlignment="Top" Visibility="{Binding IsScheduled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                      
                         <toolkit:DatePicker Value="{Binding ScheduledDate, Mode=TwoWay}" Margin="0,27,0,31" HorizontalAlignment="Left" Width="208" d:LayoutOverrides="Height"/>
                         <toolkit:TimePicker Value="{Binding ScheduledTime, Mode=TwoWay}" HorizontalAlignment="Right" Margin="0,27,0,31" Width="208" d:LayoutOverrides="Height"/>
                         <TextBlock Text="{Binding Strings.Date, Source={StaticResource LocalizedResources}, StringFormat=\{0\}:}" HorizontalAlignment="Left" Margin="14,0,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>

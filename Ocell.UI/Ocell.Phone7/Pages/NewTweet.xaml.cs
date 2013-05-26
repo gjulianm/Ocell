@@ -173,7 +173,7 @@ namespace Ocell.Pages
         private void UserSuggestions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selected = UserSuggestions.SelectedItem as string;
-
+            
             if (string.IsNullOrWhiteSpace(selected))
                 return;
 

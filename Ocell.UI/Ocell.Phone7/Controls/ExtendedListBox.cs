@@ -139,6 +139,7 @@ namespace Ocell.Controls
             this.ItemUnrealized += OnItemUnrealized;
 #endif
 
+
             ExtendedListBox.SaveViewports += this.SaveInstanceViewport;
 
             Loader.Error += new TweetLoader.OnError(Loader_Error);
@@ -191,6 +192,7 @@ namespace Ocell.Controls
         private void OnItemUnrealized(object sender, ItemRealizationEventArgs e)
         {
             viewportChanged = true;
+
             if (e.ItemKind == LongListSelectorItemKind.Item)
             {
                 ITweetable o = e.Container.DataContext as ITweetable;
@@ -293,6 +295,8 @@ namespace Ocell.Controls
         #region Listbox Events
         void OnLoad(object sender, RoutedEventArgs e)
         {
+            TiltEffect.SetIsTiltEnabled(this, true);
+
             SetTag();
 
             if (!readingPosManager.Bound)
