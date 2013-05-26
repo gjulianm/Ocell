@@ -510,9 +510,9 @@ namespace Ocell.Pages
             if (requestsLeft <= 0)
                 IsLoading = false;
 
-           
-
-            if (response.StatusCode == HttpStatusCode.Forbidden)
+            if (response == null)
+                MessageService.ShowError(Resources.Error);
+            else if (response.StatusCode == HttpStatusCode.Forbidden)
                 MessageService.ShowError(Resources.ErrorDuplicateTweet);
             else if (response.StatusCode != HttpStatusCode.OK)
             {
