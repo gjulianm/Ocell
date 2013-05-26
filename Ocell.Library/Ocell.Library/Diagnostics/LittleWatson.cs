@@ -33,20 +33,20 @@ namespace Ocell.Library
                 using (var store = IsolatedStorageFile.GetUserStoreForApplication())
                 {
                     SafeDeleteFile(store);
-                    
+
                     using (TextWriter output = new StreamWriter(store.CreateFile(filename)))
                     {
                         output.WriteLine("Phone: {0} by {1}", DeviceStatus.DeviceName, DeviceStatus.DeviceManufacturer);
-                        output.WriteLine("Memory usage: {0} KB",(DeviceStatus.ApplicationCurrentMemoryUsage / (1024)).ToString());
+                        output.WriteLine("Memory usage: {0} KB", (DeviceStatus.ApplicationCurrentMemoryUsage / (1024)).ToString());
                         output.WriteLine("Memory peak: {0} KB", (DeviceStatus.ApplicationPeakMemoryUsage / (1024)).ToString());
                         output.WriteLine("Firmware version: {0}", DeviceStatus.DeviceFirmwareVersion);
-                        output.WriteLine("Assembly name: {0}", System.Reflection.Assembly.GetExecutingAssembly().FullName);
+                        output.WriteLine("Assembly name: {0}", System.Reflection.Assembly.GetCallingAssembly().FullName);
                         output.WriteLine("Language: {0}", Thread.CurrentThread.CurrentCulture.Name);
                         output.WriteLine("State: {0}", TrialInformation.State);
                         output.WriteLine(extra);
                         output.WriteLine(ex.GetType().FullName);
                         output.WriteLine(ex.Message);
-                        output.WriteLine(ex.StackTrace);                        
+                        output.WriteLine(ex.StackTrace);
                     }
                 }
             }
@@ -73,6 +73,9 @@ namespace Ocell.Library
                 }
                 if (contents != null)
                 {
+                    if (contents.Length >= 64000)
+                        contents = contents.Substring(0, 63999); // just in case.
+
                     Deployment.Current.Dispatcher.BeginInvoke(() =>
                     {
                         if (MessageBox.Show(Resources.ErrorReportMessage, Resources.ErrorReport, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
