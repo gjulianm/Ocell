@@ -134,7 +134,7 @@ namespace Ocell.Pages.Lists
                 if (list != null)
                 {
                     Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-                    _srv.AddListMember(new AddListMemberOptions { ScreenName = list.User.ScreenName, Slug = list.Slug, OwnerScreenName = _userName }, (user, response) =>
+                    _srv.AddListMember(new AddListMemberOptions { ScreenName = _userName, Slug = list.Slug, OwnerScreenName = list.User.ScreenName }, (user, response) =>
                     {
                         LoadListsIn();
                         if (response.StatusCode == HttpStatusCode.OK)
