@@ -1203,4 +1203,10 @@
   <data name="Yes" xml:space="preserve">
     <value>Sì</value>
   </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>notifiche</value>
+  </data>
+  <data name="NoNewNotifications" xml:space="preserve">
+    <value>Non ci sono notifiche.</value>
+  </data>
 </root>

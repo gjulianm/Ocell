@@ -1221,4 +1221,10 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>notifications</value>
+  </data>
+  <data name="NoNewNotifications" xml:space="preserve">
+    <value>No new notifications.</value>
+  </data>
 </root>

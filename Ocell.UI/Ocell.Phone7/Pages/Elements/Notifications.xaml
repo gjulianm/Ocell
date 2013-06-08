@@ -7,7 +7,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:controls="clr-namespace:Ocell.Controls"
 	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
-	x:Class="Ocell.Pages.Elements.Conversation"
+	x:Class="Ocell.Pages.Elements.Notifications"
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
@@ -31,12 +31,12 @@
 		<!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
 		<StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,64,0,28">
 			<TextBlock x:Name="ApplicationTitle" Text="OCELL" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="{Binding Strings.Conversation, Source={StaticResource LocalizedResources}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="PageTitle" Text="{Binding Strings.Notifications, Source={StaticResource LocalizedResources}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
 		</StackPanel>
 
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 		<Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-			<controls:ExtendedListBox x:Name="CList" ItemTemplate="{StaticResource TweetTemplate}" />
+			<ListBox ItemTemplate="{StaticResource TweetTemplate}" ItemsSource="{Binding Tweets}" />
 		</Grid>
 	</Grid>
 </phone:PhoneApplicationPage>

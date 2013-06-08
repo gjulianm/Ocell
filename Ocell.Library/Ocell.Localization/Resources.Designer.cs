@@ -1663,6 +1663,24 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No new notifications..
+        /// </summary>
+        public static string NoNewNotifications {
+            get {
+                return ResourceManager.GetString("NoNewNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to notifications.
+        /// </summary>
+        public static string Notifications {
+            get {
+                return ResourceManager.GetString("Notifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notify mentions:.
         /// </summary>
         public static string NotifyMentions {

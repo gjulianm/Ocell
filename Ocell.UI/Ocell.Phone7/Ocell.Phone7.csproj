@@ -139,6 +139,7 @@
     <Compile Include="Pages\Elements\DMConversation.xaml.cs">
       <DependentUpon>DMConversation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Elements\NotificationsModel.cs" />
     <Compile Include="Pages\Elements\UserListModel.cs" />
     <Compile Include="Pages\Elements\TweetModel.cs" />
     <Compile Include="Pages\Elements\UserList.xaml.cs">
@@ -210,8 +211,8 @@
     <Compile Include="Pages\Columns\ManageColumns.xaml.cs">
       <DependentUpon>ManageColumns.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Elements\Conversation.xaml.cs">
-      <DependentUpon>Conversation.xaml</DependentUpon>
+    <Compile Include="Pages\Elements\Notifications.xaml.cs">
+      <DependentUpon>Notifications.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Elements\DMView.xaml.cs">
       <DependentUpon>DMView.xaml</DependentUpon>
@@ -265,7 +266,7 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Elements\Conversation.xaml">
+    <Page Include="Pages\Elements\Notifications.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>

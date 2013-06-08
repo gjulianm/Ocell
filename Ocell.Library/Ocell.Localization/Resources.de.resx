@@ -1213,4 +1213,10 @@
     <value>wiederholen</value>
     <comment>wiederholen</comment>
   </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>meldungen</value>
+  </data>
+  <data name="NoNewNotifications" xml:space="preserve">
+    <value>Sie haben keine Meldungen.</value>
+  </data>
 </root>

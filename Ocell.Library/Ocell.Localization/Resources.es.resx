@@ -1219,4 +1219,10 @@
   <data name="Repeat" xml:space="preserve">
     <value>Repetir</value>
   </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>notificaciones</value>
+  </data>
+  <data name="NoNewNotifications" xml:space="preserve">
+    <value>No tienes notificaciones.</value>
+  </data>
 </root>

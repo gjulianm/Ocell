@@ -12,6 +12,16 @@
       <Feedback> Abriendo... </Feedback>
       <Navigate Target="Pages/NewTweet.xaml" />
     </Command>
+
+    <Command Name="notify">
+      <Example> notificaciones </Example>
+      <ListenFor> notificaciones</ListenFor>
+      <ListenFor> muestra notificaciones</ListenFor>
+      <ListenFor> ver notificaciones</ListenFor>
+      <ListenFor> ¿qué notificaciones tengo?</ListenFor>
+      <Feedback>Buscando...</Feedback>
+      <Navigate Target="Pages/Elements/Notifications.xaml" />
+    </Command>
   </CommandSet>
 
   <CommandSet xml:lang="en">
@@ -24,6 +34,15 @@
       <ListenFor> [and] send a tweet </ListenFor>
       <Feedback> Opening... </Feedback>
       <Navigate Target="Pages/NewTweet.xaml" />
+    </Command>
+
+    <Command Name="notify">
+      <Example> notifications </Example>
+      <ListenFor> notifications</ListenFor>
+      <ListenFor> show notifications</ListenFor>
+      <ListenFor> see notifications</ListenFor>
+      <Feedback>Searching...</Feedback>
+      <Navigate Target="Pages/Elements/Notifications.xaml" />
     </Command>
   </CommandSet>
 
@@ -38,6 +57,13 @@
       <Feedback> apertura... </Feedback>
       <Navigate Target="Pages/NewTweet.xaml" />
     </Command>
+
+    <Command Name="notify">
+      <Example> notifiche </Example>
+      <ListenFor> notifiche</ListenFor>
+      <Feedback>Ricerca...</Feedback>
+      <Navigate Target="Pages/Elements/Notifications.xaml" />
+    </Command>
   </CommandSet>
 
   <CommandSet xml:lang="de">
@@ -50,6 +76,13 @@
       <ListenFor> [und] senden tweet </ListenFor>
       <Feedback> Öffnen... </Feedback>
       <Navigate Target="Pages/NewTweet.xaml" />
+    </Command>
+
+    <Command Name="notify">
+      <Example> Meldungen </Example>
+      <ListenFor> Meldungen</ListenFor>
+      <Feedback>Suchen...</Feedback>
+      <Navigate Target="Pages/Elements/Notifications.xaml" />
     </Command>
   </CommandSet>
 </VoiceCommands>
