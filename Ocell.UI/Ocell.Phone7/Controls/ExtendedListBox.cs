@@ -412,7 +412,7 @@ namespace Ocell.Controls
                 SelectedItem = null;
 
                 if (e.AddedItems[0] is TwitterStatus)
-                    NavigationService.Navigate(Uris.ViewTweet);
+                    NavigationService.Navigate(new Uri("/Pages/Elements/Tweet.xaml?id=" + DataTransfer.Status.Id.ToString(), UriKind.Relative));
                 else if (e.AddedItems[0] is TwitterDirectMessage)
                     NavigationService.Navigate(Uris.ViewDM);
                 else if (e.AddedItems[0] is GroupedDM)
