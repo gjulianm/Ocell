@@ -6,11 +6,11 @@ using System.Resources;
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie los valores de estos atributos para modificar la información
 // asociada a un ensamblado.
-[assembly: AssemblyTitle("Ocell.BackgroundAgent")]
+[assembly: AssemblyTitle("Ocell.BackgroundAgent.Phone7")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Ocell.BackgroundAgent")]
+[assembly: AssemblyProduct("Ocell.BackgroundAgent.Phone7")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

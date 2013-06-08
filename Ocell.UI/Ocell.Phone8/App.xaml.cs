@@ -15,6 +15,7 @@ using Ocell.Library.Twitter;
 using DanielVaughan.InversionOfControl.Containers.SimpleContainer;
 using Ocell.Controls;
 using Ocell.Compatibility;
+using Windows.Phone.Speech.VoiceCommands;
 
 namespace Ocell
 {
@@ -81,12 +82,14 @@ namespace Ocell
                 ThemeManager.ToLightTheme();
             else if (Config.Background.Type == LightOrDark.Dark)
                 ThemeManager.ToDarkTheme();
+
         }
 
         // Código para ejecutar cuando la aplicación se inicia (p.ej. a partir de Inicio)
         // Este código no se ejecutará cuando la aplicación se reactive
-        private void Application_Launching(object sender, LaunchingEventArgs e)
+        private async void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            await VoiceCommandService.InstallCommandSetsFromFileAsync(new Uri("ms-appx:///VoiceReco/VoiceCommandDefinition.xml"));
             TrialInformation.ReloadTrialInfo();
         }
 

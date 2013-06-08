@@ -1,11 +1,20 @@
 ﻿using System.Windows;
 using DanielVaughan.ComponentModel;
 using System;
+using Microsoft.Phone.Controls;
 
 namespace Ocell
 {
     public class ExtendedViewModelBase : ViewModelBase
     {
+        protected bool CanGoBack
+        {
+            get
+            {
+                return ((PhoneApplicationFrame)Application.Current.RootVisual).CanGoBack;
+            }
+        }
+
         bool isLoading;
         public bool IsLoading
         {
@@ -89,6 +98,9 @@ namespace Ocell
         {
             try
             {
+                if (!CanGoBack)
+                    return;
+
                 var dispatcher = Deployment.Current.Dispatcher;
                 if (dispatcher.CheckAccess())
                     base.GoBack();

@@ -1213,4 +1213,10 @@
   <data name="Pictures" xml:space="preserve">
     <value>imágenes</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Repeat" xml:space="preserve">
+    <value>Repetir</value>
+  </data>
 </root>

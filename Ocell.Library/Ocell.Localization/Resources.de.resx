@@ -1206,4 +1206,11 @@
   <data name="WhenAppStart" xml:space="preserve">
     <value>Wenn die App startet...</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>stornieren</value>
+  </data>
+  <data name="Repeat" xml:space="preserve">
+    <value>wiederholen</value>
+    <comment>wiederholen</comment>
+  </data>
 </root>

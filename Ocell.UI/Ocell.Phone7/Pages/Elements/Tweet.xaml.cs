@@ -31,7 +31,8 @@ namespace Ocell.Pages.Elements
 
         public Tweet()
         {
-            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
+            InitializeComponent(); 
+            Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
 
             ThemeFunctions.SetBackground(LayoutRoot);
 
@@ -68,6 +69,7 @@ namespace Ocell.Pages.Elements
             sbHide = this.Resources["sbHide"] as Storyboard;
 
             Initialize();
+            viewModel.OnLoad();
             if (ApplicationBar != null)
                 ApplicationBar.MatchOverriddenTheme();
         }

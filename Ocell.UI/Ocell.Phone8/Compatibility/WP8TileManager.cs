@@ -85,6 +85,7 @@ namespace Ocell.Compatibility
 
         public override void CreateColumnTile(TwitterResource Resource)
         {
+#if !BACKGROUND_AGENT
             if (Resource == null || ColumnTileIsCreated(Resource))
                 return;
 
@@ -97,7 +98,26 @@ namespace Ocell.Compatibility
             Uri ColumnUri = new Uri("/MainPage.xaml?column=" + Uri.EscapeDataString(Resource.String), UriKind.Relative);
 
             ShellTile.Create(ColumnUri, ColumnTile);
+#endif
         }
 
+
+        public override void CreateComposeTile()
+        {
+#if !BACKGROUND_AGENT
+            if (ComposeTileIsCreated())
+                return;
+
+            StandardTileData ComposeTile = new StandardTileData
+            {
+                Title = Localization.Resources.NewTweet,
+                BackgroundImage = new Uri("/Images/ComposeTile.png", UriKind.Relative)
+            };
+
+            Uri ComposeUri = new Uri("/Pages/NewTweet.xaml");
+
+            ShellTile.Create(ComposeUri, ComposeTile);
+#endif
+        }
     }
 }

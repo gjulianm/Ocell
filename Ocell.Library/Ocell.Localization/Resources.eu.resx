@@ -1170,4 +1170,13 @@
   <data name="SendWithBuffer" xml:space="preserve">
     <value>Buffer-era bidali</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>bertan behera</value>
+  </data>
+  <data name="Repeat" xml:space="preserve">
+    <value>errepikatu</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
 </root>

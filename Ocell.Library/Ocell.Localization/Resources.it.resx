@@ -1194,4 +1194,13 @@
   <data name="Pictures" xml:space="preserve">
     <value>immagini</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annullare</value>
+  </data>
+  <data name="Repeat" xml:space="preserve">
+    <value>Ripetere</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sì</value>
+  </data>
 </root>

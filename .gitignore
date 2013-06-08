@@ -116,4 +116,10 @@ SensitiveData.cs
 
 # ZIP Backups. 
 _backups/
+
+# Performance Logs
+PerfLogs
+*.sap
+*.*.sap
+
 *.sublime-*

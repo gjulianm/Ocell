@@ -97,6 +97,9 @@ namespace Ocell.Controls
 
         private bool IsAtTop()
         {
+            if (listbox.ItemsSource.Count == 0)
+                return true;
+
             ContentPresenter firstContainer;
             ITweetable firstItem = listbox.ItemsSource[0] as ITweetable;
 
@@ -112,6 +115,9 @@ namespace Ocell.Controls
 
         private bool IsAtBottom()
         {
+            if (listbox.ItemsSource.Count == 0)
+                return true;
+
             ContentPresenter lastContainer;
             ITweetable lastItem = listbox.ItemsSource[listbox.ItemsSource.Count - 1] as ITweetable;
 

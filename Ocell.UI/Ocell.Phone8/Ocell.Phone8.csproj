@@ -412,6 +412,7 @@
     <Compile Include="Controls\WP8InfiniteScroller.cs" />
     <Compile Include="Controls\WP8PullDetector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VoiceReco\VoiceRecognizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -426,6 +427,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Ocell.Phone8-Exec-Start.sap" />
+    <None Include="Ocell.Phone8_2013_06_06_15_11_55.sap" />
+    <None Include="Ocell.Phone8_2013_06_06_15_34_19.sap" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
@@ -499,6 +503,9 @@
     </Content>
     <Content Include="Images\SmallTileIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="VoiceReco\VoiceCommandDefinition.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="Images\RtBtn.png" />
     <Resource Include="Images\ReplyBtn.png" />

@@ -15,6 +15,7 @@ using System.Windows.Controls;
 using Ocell.Commands;
 using Ocell.Localization;
 using Microsoft.Phone.Shell;
+using System.Threading;
 
 namespace Ocell.Pages.Elements
 {
@@ -206,15 +207,7 @@ namespace Ocell.Pages.Elements
             UsersWhoRetweeted.CollectionChanged += (s, e) =>
             {
                 RetweetCount = UsersWhoRetweeted.Count;
-            };
-
-            GetRetweets();
-
-            GetReplies();
-
-            CreateCommands();
-
-            SetImage();
+            };           
         }
 
         private void GetReplies()
@@ -253,6 +246,17 @@ namespace Ocell.Pages.Elements
             : base("Tweet")
         {
             Initialize();
+        }
+
+        public void OnLoad()
+        {
+            ThreadPool.QueueUserWorkItem((c) =>
+            {
+                GetRetweets();
+                GetReplies();
+                CreateCommands();
+                SetImage();
+            });
         }
 
         private void CreateCommands()

@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<VoiceCommands xmlns="http://schemas.microsoft.com/voicecommands/1.0">
+  <CommandSet xml:lang="es">
+    <CommandPrefix>Ocell</CommandPrefix>
+    <Example> tuitea </Example>
+
+    <Command Name="tweet">
+      <Example> tuitea </Example>
+      <ListenFor> [y] tuitea</ListenFor>
+      <ListenFor> [y] envía un tuit </ListenFor>
+      <Feedback> Abriendo... </Feedback>
+      <Navigate Target="Pages/NewTweet.xaml" />
+    </Command>
+  </CommandSet>
+
+  <CommandSet xml:lang="en">
+    <CommandPrefix>Ocell</CommandPrefix>
+    <Example> tuitea </Example>
+
+    <Command Name="tweet">
+      <Example> tweet </Example>
+      <ListenFor> [and] tweet</ListenFor>
+      <ListenFor> [and] send a tweet </ListenFor>
+      <Feedback> Opening... </Feedback>
+      <Navigate Target="Pages/NewTweet.xaml" />
+    </Command>
+  </CommandSet>
+
+  <CommandSet xml:lang="it">
+    <CommandPrefix>Ocell</CommandPrefix>
+    <Example> tweet </Example>
+
+    <Command Name="tweet">
+      <Example> tweet </Example>
+      <ListenFor> [e] tweet</ListenFor>
+      <ListenFor> [e] dare un tweet </ListenFor>
+      <Feedback> apertura... </Feedback>
+      <Navigate Target="Pages/NewTweet.xaml" />
+    </Command>
+  </CommandSet>
+
+  <CommandSet xml:lang="de">
+    <CommandPrefix>Ocell</CommandPrefix>
+    <Example> tweet </Example>
+
+    <Command Name="tweet">
+      <Example> tweet </Example>
+      <ListenFor> [und] tweet</ListenFor>
+      <ListenFor> [und] senden tweet </ListenFor>
+      <Feedback> Öffnen... </Feedback>
+      <Navigate Target="Pages/NewTweet.xaml" />
+    </Command>
+  </CommandSet>
+</VoiceCommands>

@@ -430,6 +430,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to change avatar.
         /// </summary>
         public static string ChangeAvatar {
@@ -1942,6 +1951,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Repeat.
+        /// </summary>
+        public static string Repeat {
+            get {
+                return ResourceManager.GetString("Repeat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to reply.
         /// </summary>
         public static string Reply {
@@ -2721,6 +2739,15 @@ namespace Ocell.Localization {
         public static string XYearsAgo {
             get {
                 return ResourceManager.GetString("XYearsAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
         

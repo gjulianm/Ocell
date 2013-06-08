@@ -82,11 +82,10 @@ namespace Ocell.Controls
         public void RecoverPosition()
         {
             long tweetId = Config.ReadPositions[resource.String];
+            var tweet = lb.Loader.Source.FirstOrDefault(x => x.Id == tweetId);
 
             Deployment.Current.Dispatcher.InvokeIfRequired(() =>
             {
-                var tweet = lb.Loader.Source.FirstOrDefault(x => x.Id == tweetId);
-
                 if (tweet != null)
                     lb.ScrollTo(tweet);
             });

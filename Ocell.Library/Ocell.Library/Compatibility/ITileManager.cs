@@ -70,21 +70,7 @@ namespace Ocell.Compatibility
             return ColumnTile != null;
         }
 
-        public void CreateComposeTile()
-        {
-            if (ComposeTileIsCreated())
-                return;
-
-            StandardTileData ComposeTile = new StandardTileData
-            {
-                Title = Localization.Resources.NewTweet,
-                BackgroundImage = new Uri("/Images/ComposeTile.png", UriKind.Relative)
-            };
-
-            Uri ComposeUri = new Uri("/Pages/NewTweet.xaml");
-
-            ShellTile.Create(ComposeUri, ComposeTile);
-        }
+        public abstract void CreateComposeTile(); // Avoid Store complaints about "mehhh can't use ShellTile.Create in backgroundAgent"
 
         protected string GetTitle(TwitterResource Resource)
         {
