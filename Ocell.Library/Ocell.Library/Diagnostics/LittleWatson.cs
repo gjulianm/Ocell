@@ -73,8 +73,8 @@ namespace Ocell.Library
                 }
                 if (contents != null)
                 {
-                    if (contents.Length >= 64000)
-                        contents = contents.Substring(0, 63999); // just in case.
+                    if (contents.Length >= 50000)
+                        contents = contents.Substring(0, 50000); // just in case.
 
                     Deployment.Current.Dispatcher.BeginInvoke(() =>
                     {
