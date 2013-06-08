@@ -32,8 +32,7 @@ namespace Ocell.Pages.Elements
 
         public void OnLoad()
         {
-            // lastCheckTime = DateSync.GetLastCheckDate();
-            lastCheckTime = DateTime.MinValue;
+            lastCheckTime = DateSync.GetLastCheckDate();
 
             var mentionOptions = new ListTweetsMentioningMeOptions
             {
