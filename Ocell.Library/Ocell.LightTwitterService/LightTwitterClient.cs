@@ -15,7 +15,7 @@ namespace Ocell.LightTwitterService
 
         public LightTwitterClient(string consumerToken, string consumerSecret, string userToken, string userSecret)
         {
-            _client = new RestClient { Authority = "http://api.twitter.com/", VersionPath = "1" };
+            _client = new RestClient { Authority = "http://api.twitter.com/", VersionPath = "1.1" };
             _userToken = userToken;
             _userSecret = userSecret;
             _consumerToken = consumerToken;
