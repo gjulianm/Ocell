@@ -15,6 +15,7 @@ using Hammock.Authentication.OAuth;
 using Ocell.Library;
 using Hammock;
 using Hammock.Authentication;
+using System.Diagnostics;
 
 namespace Ocell.Pages.Settings
 {
@@ -36,6 +37,13 @@ namespace Ocell.Pages.Settings
             set { Assign("BrowserVisible", ref browserVisible, value); }
         }
 
+        bool isLoading;
+        public bool IsLoading
+        {
+            get { return isLoading; }
+            set { Assign("IsLoading", ref isLoading, value); }
+        }
+
         public event Navigator BrowserNavigate;
         public void RaiseNavigate(Uri uri)
         {
@@ -50,6 +58,7 @@ namespace Ocell.Pages.Settings
             {
                 e.Cancel = true;
                 BrowserVisible = false;
+                IsLoading = true;
                 ReturnedToCallback(e.Uri);
             }
         }
@@ -58,10 +67,14 @@ namespace Ocell.Pages.Settings
         {
             if (e.Uri.AbsoluteUri.StartsWith(AuthAutority))
                 BrowserVisible = true;
+
+            IsLoading = !BrowserVisible;
         }
 
         public virtual void PageLoaded()
         {
+            IsLoading = true;
+
             if (Version == OAuthVersion.OAuthV1)
                 GetAuthorizationTokens();
             else
@@ -174,8 +187,9 @@ namespace Ocell.Pages.Settings
                 var collection = System.Web.HttpUtility.ParseQueryString(response.Content);
                 PreProcessTokenResponse(collection);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                DebugError("Error building the auth URL: {0}", e);
                 MessageService.ShowError(Localization.Resources.ErrorAuthURL);
                 GoBack();
                 return;
@@ -193,8 +207,9 @@ namespace Ocell.Pages.Settings
             {
                 authUrl = GetAuthorizationUrl();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                DebugError("Error getting auth URL: {0}", e);
                 MessageService.ShowError(Localization.Resources.ErrorAuthURL);
                 return;
             }
@@ -213,6 +228,7 @@ namespace Ocell.Pages.Settings
 
             if (!VerifyCallbackParams(paramCollection))
             {
+                DebugError("Callback parameters are not correct. Returned to {0}", uri);
                 MessageService.ShowError(Localization.Resources.ErrorClientTokens);
                 GoBack();
                 return;
@@ -247,13 +263,21 @@ namespace Ocell.Pages.Settings
             {
                 PostProcess(response.Content);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                DebugError("Error post-processing the token response: {0}", e);
                 MessageService.ShowError(Localization.Resources.ErrorClientTokens);
                 GoBack();
             }
         }
         #endregion
+
+        [Conditional("DEBUG")]
+        private void DebugError(string message, params object[] args)
+        {
+            string msg = String.Format(message, args);
+            MessageService.ShowError(msg);
+        }
     }
 
     public delegate void Navigator(object sender, Uri toNavigate);

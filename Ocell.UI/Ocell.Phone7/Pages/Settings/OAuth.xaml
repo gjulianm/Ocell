@@ -15,6 +15,10 @@
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     >
 
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}"  />
+    </shell:SystemTray.ProgressIndicator>
+
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
@@ -28,7 +32,7 @@
         <!--ContentPanel. Colocar aquí el contenido adicional-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <toolkit:PerformanceProgressBar HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                            Width="344" Height="20" Margin="58,343,54,360" 
+                                            Width="344" Height="30" Margin="58,343,54,360" 
                                             IsIndeterminate="True"  
                                             Visibility="{Binding BrowserVisible, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Collapsed}" />
             <phone:WebBrowser x:Name="wb" 
