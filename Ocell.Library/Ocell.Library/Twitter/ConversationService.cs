@@ -21,45 +21,19 @@ using System.Threading;
 
 namespace Ocell.Library.Twitter
 {
-    // ATTENTION: This is an EXPERIMENTAL class, because it's using an experimental Twitter API path.
-    // Because of this, it's standalone in another class and does not use TweetSharp, just for authentication.
-    // Not guaranteed to get results, but will not cause any exceptions to the outside because of serialization.
     public class ConversationService
     {
-        protected UserToken account;
-        protected Action<IEnumerable<TwitterStatus>, TwitterResponse> callback;
-        protected int pendingCalls;
-        protected SafeObservable<string> processedForReplies;
-        protected SafeObservable<string> processedForReplied;
-        protected Action<bool> checkFirstReplyCallback;
-        protected bool checkOnlyFirstReply;
+        ITwitterService service;
+        SafeObservable<TwitterStatus> searchCache = new SafeObservable<TwitterStatus>();
+        SafeObservable<TwitterStatus> processedStatuses = new SafeObservable<TwitterStatus>();
+        int pendingCalls = 0;
+        Action<IEnumerable<TwitterStatus>, TwitterResponse> callback;
+        TwitterResponse okResponse;
+        SafeObservable<SearchRequest> searchesPerformed = new SafeObservable<SearchRequest>();
 
         public ConversationService(UserToken token)
         {
-            account = token;
-            pendingCalls = 0;
-            processedForReplies = new SafeObservable<string>();
-            processedForReplied = new SafeObservable<string>();
-            checkOnlyFirstReply = false;
-        }
-
-        /// <summary>
-        /// Queries the Twitter API to check if a tweet has replies.
-        /// </summary>
-        /// <param name="status">Status</param>
-        /// <param name="action">Callback. The bool argument indicates if there are replies</param>
-        public void CheckIfReplied(TwitterStatus status, Action<bool> action)
-        {
-            callback = CheckIfRepliedCallback;
-            checkFirstReplyCallback = action;
-            checkOnlyFirstReply = true;
-            GetReplies(status.Id.ToString());
-        }
-
-        protected void CheckIfRepliedCallback(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
-        {
-            if (checkFirstReplyCallback != null)
-                checkFirstReplyCallback.Invoke(statuses.Any());
+            service = ServiceDispatcher.GetService(token);
         }
 
         /// <summary>
@@ -67,175 +41,130 @@ namespace Ocell.Library.Twitter
         /// </summary>
         /// <param name="id">Tweet ID</param>
         /// <param name="action">Callback. This will be called various times, one for each Twitter response.</param>
-        public void GetConversationForStatus(string id, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
-        {
-            callback = action;
-            checkOnlyFirstReply = false;
-            GetReplies(id);
-            GetReplied(long.Parse(id));
-        }
-
-        /// <summary>
-        /// Return the conversation for a given status. 
-        /// </summary>
-        /// <param name="status">Tweet.</param>
-        /// <param name="action">Callback. This will be called various times, one for each Twitter response.</param>
         public void GetConversationForStatus(TwitterStatus status, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
         {
-            GetConversationForStatus(status.Id.ToString(), action);
+            callback = action;
+            GetConversationForStatus(status);
         }
 
-        protected void GetReplies(string id)
+        private void GetConversationForStatus(TwitterStatus status)
         {
-            if (processedForReplies.Contains(id))
-                return;
-
-            processedForReplies.Add(id);
-
-            RestRequest req = PrepareRestRequest(id);
-            RestClient client = GetRestClient();
-
-            Interlocked.Increment(ref pendingCalls);
-            client.BeginRequest(req, Callback, null);
+            GetRepliesFor(status);
+            GetStatusReplied(status);
         }
 
-        protected void GetReplied(long id)
+        private void GetStatusReplied(TwitterStatus status)
         {
-            if (processedForReplied.Contains(id.ToString()))
-                return;
-
-            processedForReplies.Add(id.ToString());
-
-            ITwitterService srv = ServiceDispatcher.GetService(account);
-            pendingCalls++;
-            srv.GetTweet(new GetTweetOptions { Id = id }, ReceiveSingleTweet);
-        }
-
-        protected RestRequest PrepareRestRequest(string id)
-        {
-            var credentials = new OAuthCredentials
+            if (status.InReplyToStatusId != null)
             {
-                Type = OAuthType.ProtectedResource,
-                SignatureMethod = OAuthSignatureMethod.HmacSha1,
-                ParameterHandling = OAuthParameterHandling.HttpAuthorizationHeader,
-                ConsumerKey = SensitiveData.ConsumerToken,
-                ConsumerSecret = SensitiveData.ConsumerSecret,
-            };
+                Interlocked.Increment(ref pendingCalls);
+                service.GetTweet(new GetTweetOptions { Id = (long)status.InReplyToStatusId }, (result, response) =>
+                {
+                    if (result == null || response.StatusCode != HttpStatusCode.OK)
+                    {
+                        RaiseCallback(new List<TwitterStatus>(), response); // report the error
+                        TryFinish();
+                        return;
+                    }
 
-            if (account != null)
-            {
-                credentials.Token = account.Key;
-                credentials.TokenSecret = account.Secret;
+                    okResponse = response;
+                    if (!searchCache.Contains(result))
+                        searchCache.Add(result);
+
+                    RaiseCallback(new List<TwitterStatus> { status, result }, response);
+
+                    GetConversationForStatus(result);
+
+                    TryFinish();
+                });
             }
-
-            RestRequest req = new RestRequest
-            {
-                Credentials = credentials,
-                Path = "/related_results/show/" + id + ".json?include_entities=true"
-            };
-
-            return req;
-        }
-        protected RestClient GetRestClient()
-        {
-            RestClient client = new RestClient();
-            client.Authority = Globals.Authority;
-            client.VersionPath = "1";
-
-            return client;
         }
 
-        protected void Callback(RestRequest request, RestResponse response, object userState)
+        private struct SearchRequest
         {
-            if (response.StatusCode != HttpStatusCode.OK || response.ContentLength == 0)
+            public string user;
+            public long from;
+        }
+
+        private bool AreResultsCached(string user, long from)
+        {
+            return searchesPerformed.Any(x => x.user == user && x.from <= from);
+        }
+
+        private void AddCachedResult(string user, long from)
+        {
+            searchesPerformed.Add(new SearchRequest
             {
-                if (callback != null)
-                    callback.Invoke(new List<TwitterStatus>(), new TwitterResponse(response, null));
+                user = user,
+                from = from
+            });
+        }
+
+        private void GetRepliesFor(TwitterStatus status)
+        {
+            if (processedStatuses.Contains(status))
+                return;
+
+            processedStatuses.Add(status); // There's a possibility that a status can be processed two times... but it's not significant nor a real problem.
+
+            if (AreResultsCached(status.AuthorName, status.Id))
+            {
+                RetrieveRepliesFromCache(status);
+                TryFinish();
+            }
+            else
+            {
+                Interlocked.Increment(ref pendingCalls);
+                service.Search(new SearchOptions { Q = "to:" + status.AuthorName, SinceId = status.Id, Count = 100 },
+                    (result, response) => SearchCallback(result, response, status));
+            }
+        }
+
+        private void SearchCallback(TwitterSearchResult result, TwitterResponse response, TwitterStatus status)
+        {
+            if (result == null || response.StatusCode != HttpStatusCode.OK || result.Statuses == null)
+            {
+                RaiseCallback(new List<TwitterStatus>(), response); // report the error
                 TryFinish();
                 return;
             }
 
-            if (checkOnlyFirstReply)
+            okResponse = response;
+            searchCache.BulkAdd(result.Statuses.Except(searchCache));
+
+            if (result.Statuses.Count() >= 90)
             {
-                if (checkFirstReplyCallback != null)
-                    checkFirstReplyCallback.Invoke(response.ContentLength > 2);
-                return;
+                // There are still more statuses to retrieve
+                Interlocked.Increment(ref pendingCalls);
+                service.Search(new SearchOptions { Q = "to:" + status.AuthorName, SinceId = status.Id, MaxId = result.Statuses.Min(x => x.Id), Count = 100 },
+                    (rs, rp) => SearchCallback(rs, rp, status));
+            }
+            else
+            {
+                // Finished!
+                AddCachedResult(status.AuthorName, status.Id);
             }
 
-            IEnumerable<TwitterStatus> statuses;
-            try
-            {
-                IEnumerable<string> statusStrings = GetStatusesFromResult(response.Content);
-                statuses = new List<TwitterStatus>(DeserializeTweets(statusStrings));
-            }
-            catch (Exception)
-            {
-                statuses = new List<TwitterStatus>();
-            }
-
-            foreach (var status in statuses)
-                GetConversationForStatus(status, callback);
-
-            if (callback != null)
-                callback.Invoke(statuses, new TwitterResponse(response));
+            RetrieveRepliesFromCache(status);
 
             TryFinish();
         }
 
-        protected void ReceiveSingleTweet(TwitterStatus status, TwitterResponse response)
+        private void RetrieveRepliesFromCache(TwitterStatus status)
         {
-            List<TwitterStatus> list = new List<TwitterStatus>();
-            if (status == null || response.StatusCode != HttpStatusCode.OK)
-            {
-                if (callback != null)
-                    callback.Invoke(list, response);
-                return;
-            }
+            var replies = searchCache.Where(x => x.InReplyToStatusId == status.Id);
 
-            list.Add(status);
-            if (status.InReplyToStatusId != null)
-                GetReplied((long)status.InReplyToStatusId);
+            foreach (var reply in replies)
+                GetRepliesFor(reply);
 
-            GetReplies(status.Id.ToString());
+            if (replies.Any())
+                RaiseCallback(replies, okResponse);
+        }
 
+        private void RaiseCallback(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
+        {
             if (callback != null)
-                callback.Invoke(list, response);
-            TryFinish();
-        }
-
-        protected IEnumerable<TwitterStatus> DeserializeTweets(IEnumerable<string> strings)
-        {
-            TwitterService srv = new TwitterService();
-
-            // Little side note: I LOVE yield return.
-            foreach (string status in strings)
-                yield return srv.Deserialize<TwitterStatus>(status);
-        }
-        protected IEnumerable<string> GetStatusesFromResult(string result)
-        {
-            int valueStart;
-            string value;
-            int pos;
-            int pendingBrackets;
-
-            valueStart = result.IndexOf("value\":");
-            while (valueStart != -1)
-            {
-                pos = result.IndexOf('{', valueStart) + 1;
-                pendingBrackets = 1;
-                value = "{";
-                while (pendingBrackets > 0)
-                {
-                    value += result[pos];
-                    if (result[pos] == '{')
-                        pendingBrackets++;
-                    if (result[pos] == '}')
-                        pendingBrackets--;
-                    pos++;
-                }
-                yield return value;
-                valueStart = result.IndexOf("value\":", pos);
-            }
+                callback.Invoke(statuses, response);
         }
 
         private void TryFinish()
@@ -247,7 +176,28 @@ namespace Ocell.Library.Twitter
             }
         }
 
+
         public event EventHandler Finished;
 
+        public void GetConversationForStatus(string status, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
+        {
+            long id;
+            if (long.TryParse(status, out id))
+            {
+                Interlocked.Increment(ref pendingCalls);
+                service.GetTweet(new GetTweetOptions { Id = id }, (s, response) =>
+                {
+                    if (s == null || response.StatusCode != HttpStatusCode.OK)
+                    {
+                        RaiseCallback(new List<TwitterStatus>(), response);
+                        TryFinish();
+                        return;
+                    }
+
+                    GetConversationForStatus(s, action);
+                    TryFinish();
+                });
+            }
+        }
     }
 }
