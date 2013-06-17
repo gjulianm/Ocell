@@ -31,7 +31,7 @@ namespace Ocell.Pages.Elements
 
         public Tweet()
         {
-            InitializeComponent(); 
+            InitializeComponent();
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
 
             ThemeFunctions.SetBackground(LayoutRoot);
@@ -47,20 +47,24 @@ namespace Ocell.Pages.Elements
                 TBNoFocus();
             };
 
+           
+
             panorama.SelectionChanged += (sender, e) =>
             {
-                if (e.AddedItems.Count > 0)
+                var pano = panorama.SelectedItem as PanoramaItem;
+
+                if (pano == null)
+                    return;
+
+                string tag = pano.Tag as string;
+                if (tag == "conversation" && !conversationLoaded)
                 {
-                    PanoramaItem added = e.AddedItems[0] as PanoramaItem;
-
-                    if(added == null)
-                        return;
-
-                    string tag = added.Tag as string;
-                    if (tag == "conversation")
-                        conversation.Load();
+                    conversation.Load();
+                    conversationLoaded = true;
                 }
             };
+
+           
         }
 
         void Tweet_Loaded(object sender, RoutedEventArgs e)
@@ -72,6 +76,12 @@ namespace Ocell.Pages.Elements
             viewModel.OnLoad();
             if (ApplicationBar != null)
                 ApplicationBar.MatchOverriddenTheme();
+
+            conversation.Loader.PropertyChanged += (s, ea) =>
+            {
+                if (ea.PropertyName == "IsLoading")
+                    viewModel.IsLoading = conversation.Loader.IsLoading;
+            };
         }
 
         void Initialize()
