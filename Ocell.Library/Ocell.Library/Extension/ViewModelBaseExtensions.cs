@@ -98,14 +98,19 @@ namespace Ocell
         {
             try
             {
-                if (!CanGoBack)
-                    return;
-
                 var dispatcher = Deployment.Current.Dispatcher;
                 if (dispatcher.CheckAccess())
-                    base.GoBack();
+                {
+                    if (CanGoBack)
+                        base.GoBack();
+                }
                 else
-                    dispatcher.BeginInvoke(GoBack);
+                {
+                    dispatcher.BeginInvoke(() => {
+                        if (CanGoBack)
+                            base.GoBack();
+                    });
+                }
             }
             catch (Exception)
             {
