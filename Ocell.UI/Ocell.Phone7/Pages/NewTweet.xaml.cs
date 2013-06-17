@@ -7,7 +7,10 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Ocell.Library;
 using Ocell.Library.Twitter;
+
+#if WP8
 using Windows.Phone.Speech.Recognition;
+#endif
 using System.Diagnostics;
 using System;
 
@@ -166,17 +169,20 @@ namespace Ocell.Pages
         {
             viewModel.SelectedAccounts = (sender as ListBox).SelectedItems;
         }
-
+#if WP8
         protected override async void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+#elif WP7
+protected override  void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+#endif
         {
             TweetBox.Focus();
             base.OnNavigatedTo(e);
-
+#if WP8
             if (e.NavigationMode == System.Windows.Navigation.NavigationMode.New && NavigationContext.QueryString.ContainsKey("voiceCommandName"))
                 StartSpeechToText();
+#endif
         }
-
-        [Conditional("WP8")]
+#if WP8
         private async void StartSpeechToText()
         {
             var recognizer = new VoiceReco.VoiceRecognizer();
@@ -191,7 +197,7 @@ namespace Ocell.Pages
                     viewModel.SendTweet.Execute(null);
             }
         }
-
+#endif
         private void UserSuggestions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selected = UserSuggestions.SelectedItem as string;

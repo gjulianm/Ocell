@@ -10,7 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using TweetSharp;
+#if WP8
 using Windows.Phone.Speech.Synthesis;
+#endif
 
 namespace Ocell.Pages.Elements
 {
@@ -59,10 +61,11 @@ namespace Ocell.Pages.Elements
                     ServiceDispatcher.GetService(account).ListDirectMessagesReceived(dmOption, (t, r) => FilterAndAddStatuses(t.Cast<ITweetable>(), r));
                 }
             }
-
+#if WP8
             this.LoadFinished += (s, e) => SpeakNotifications();
+#endif
         }
-
+#if WP8
         [Conditional("WP8")]
         private async void SpeakNotifications()
         {
@@ -80,7 +83,7 @@ namespace Ocell.Pages.Elements
 
             await synth.SpeakTextAsync(sb.ToString());
         }
-
+#endif
         private string TweetToText(ITweetable tweet)
         {
             string who, when, text;
