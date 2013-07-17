@@ -229,18 +229,21 @@ namespace Ocell.Pages.Elements
 
         private void GetRetweets()
         {
-            ServiceDispatcher.GetDefaultService().Retweets(new RetweetsOptions { Id = Tweet.Id }, (statuses, response) =>
-            {
-                if (statuses != null && statuses.Any())
-                {
-                    HasRetweets = true;
-                    Deployment.Current.Dispatcher.BeginInvoke(() =>
-                    {
-                        foreach (var rt in statuses)
-                            UsersWhoRetweeted.Add(rt.Author);
-                    });
-                }
-            });
+            var service = ServiceDispatcher.GetCurrentService();
+
+            if (service != null)
+                service.Retweets(new RetweetsOptions { Id = Tweet.Id }, (statuses, response) =>
+             {
+                 if (statuses != null && statuses.Any())
+                 {
+                     HasRetweets = true;
+                     Deployment.Current.Dispatcher.BeginInvoke(() =>
+                     {
+                         foreach (var rt in statuses)
+                             UsersWhoRetweeted.Add(rt.Author);
+                     });
+                 }
+             });
         }
 
         public TweetModel()
