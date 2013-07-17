@@ -24,7 +24,7 @@ namespace Ocell
             viewModel = new UserListModel();
             DataContext = viewModel;
 
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
             this.Loaded += (sender, e) =>
             {
                 string resource, user;

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Phone.Controls;
+using Ocell.Library;
+using Ocell.Library.Filtering;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Phone.Controls;
-using Ocell.Library;
-using Ocell.Library.Filtering;
 
 namespace Ocell.Pages.Filtering
 {
@@ -12,8 +12,7 @@ namespace Ocell.Pages.Filtering
     {
         public Filters()
         {
-            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
-			ThemeFunctions.SetBackground(LayoutRoot);
+            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
 
             this.Loaded += new RoutedEventHandler(Filters_Loaded);
         }
@@ -39,7 +38,7 @@ namespace Ocell.Pages.Filtering
                 DataTransfer.Filter.IsValidUntil = DateTime.Now.AddYears(1);
             else
                 DataTransfer.Filter.IsValidUntil = DateTime.Now + (TimeSpan)Config.DefaultMuteTime;
-            
+
             NavigationService.Navigate(Uris.SingleFilter);
         }
 

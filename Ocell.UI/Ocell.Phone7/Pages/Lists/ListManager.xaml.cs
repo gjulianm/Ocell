@@ -26,7 +26,7 @@ namespace Ocell.Pages.Lists
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
 
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
 
             _selectionChangeFired = false;
             NewList.Click += new RoutedEventHandler(NewList_Click);

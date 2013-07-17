@@ -34,7 +34,7 @@ namespace Ocell.Pages
                 viewModel.TryLoadDraft();
             };
 
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
             DataContext = viewModel;
 
             Loaded += NewTweet_Loaded;

@@ -18,7 +18,7 @@ namespace Ocell.Pages.Search
             viewModel = new ResourceViewModel();
             DataContext = viewModel;
 
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
         }
 
         private void TweetList_Loaded(object sender, RoutedEventArgs e)

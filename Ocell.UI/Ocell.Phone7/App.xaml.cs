@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO.IsolatedStorage;
-using System.Windows;
-using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using Ocell.Library;
+﻿using DanielVaughan;
 using DanielVaughan.InversionOfControl;
+using DanielVaughan.InversionOfControl.Containers.SimpleContainer;
 using DanielVaughan.Services;
 using DanielVaughan.Services.Implementation;
-using DanielVaughan;
-using Ocell.Library.Twitter;
-using DanielVaughan.InversionOfControl.Containers.SimpleContainer;
-using Ocell.Controls;
+using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
 using Ocell.Compatibility;
+using Ocell.Controls;
+using Ocell.Library;
+using Ocell.Library.Twitter;
+using System.Windows;
+using System.Windows.Navigation;
 
 namespace Ocell
 {
@@ -75,7 +71,6 @@ namespace Ocell
             PushNotifications.WPVersion = OSVersion.WP7;
 
             bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
-            ThemeFunctions.BackgroundBrush = Config.Background.GetBrush();
 
             if (Config.Background.Type == LightOrDark.Light)
                 ThemeManager.ToLightTheme();

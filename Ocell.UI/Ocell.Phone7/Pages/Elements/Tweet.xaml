@@ -98,7 +98,7 @@
 
     <!--LayoutRoot es la cuadrÃ­cula raÃ­z donde se coloca todo el contenido de la pÃ¡gina-->
     <Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
-        <controls:Panorama x:Name="panorama"  Title="{Binding Tweet.AuthorName, StringFormat='@{0} tweet:'}" Background="{Binding BackgroundBrush}" DefaultItem="1">
+        <controls:Panorama x:Name="panorama"  Title="{Binding Tweet.AuthorName, StringFormat='@{0} tweet:'}"  DefaultItem="1">
             <controls:Panorama.TitleTemplate>
                 <DataTemplate>
                     <Grid>

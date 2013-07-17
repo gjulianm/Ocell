@@ -15,7 +15,7 @@ namespace Ocell.Pages.Filtering
         {
             _initialized = false;
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
             this.Loaded +=new RoutedEventHandler(ManageFilter_Loaded);
         }
 

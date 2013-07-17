@@ -21,7 +21,7 @@ namespace Ocell.Settings
             InitializeComponent(); 
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
             
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
             DataContext = new DefaultModel();
         }
         

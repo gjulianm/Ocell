@@ -1,22 +1,19 @@
-﻿using System;
+﻿using DanielVaughan;
+using DanielVaughan.Services;
+using Microsoft.Phone.Controls;
+using Ocell.Compatibility;
+using Ocell.Controls;
+using Ocell.Library;
+using Ocell.Library.Twitter;
+using Ocell.Settings;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using DanielVaughan;
-using DanielVaughan.Services;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Tasks;
-using Ocell.Controls;
-using Ocell.Library;
-using Ocell.Library.Notifications;
-using Ocell.Library.Twitter;
-using Ocell.Localization;
-using System.Windows.Media.Animation;
 using System.Windows.Media;
-using Ocell.Settings;
+using System.Windows.Media.Animation;
 using TweetSharp;
-using Ocell.Compatibility;
 
 namespace Ocell
 {
@@ -34,9 +31,6 @@ namespace Ocell
 
             viewModel = new MainPageModel();
             DataContext = viewModel;
-
-            ThemeFunctions.SetBackground(LayoutRoot);
-
             this.Loaded += new RoutedEventHandler(CallLoadFunctions);
 
             LastErrorTime = DateTime.MinValue;
@@ -67,12 +61,16 @@ namespace Ocell
 
             if (!CheckForLogin())
                 return;
-            
+
+
+            var frame = Application.Current.RootVisual as PhoneApplicationFrame;
+            frame.Background = Config.Background.GetBrush();
+
             viewModel.RaiseLoggedInChange();
             viewModel.OnLoad();
 
             GeolocationPrompt();
-            
+
             CreateStoryboards();
 
             ThreadPool.QueueUserWorkItem((threadContext) =>
@@ -102,7 +100,7 @@ namespace Ocell
             });
 
             _initialised = true;
-        } 
+        }
         #endregion
 
         #region Prompts
@@ -154,7 +152,7 @@ namespace Ocell
                 var service = Dependency.Resolve<IMessageService>();
                 bool result = service.AskYesNoQuestion(Localization.Resources.FollowOcellAppMessage, "");
                 if (result)
-                    ServiceDispatcher.GetDefaultService().FollowUser(new FollowUserOptions{ ScreenName = "OcellApp" }, (a, b) => { });
+                    ServiceDispatcher.GetDefaultService().FollowUser(new FollowUserOptions { ScreenName = "OcellApp" }, (a, b) => { });
                 Config.FollowMessageShown = true;
             }
         }
@@ -253,7 +251,7 @@ namespace Ocell
                 DataTransfer.ShouldReloadFilters = false;
             }
         }
-#endregion
+        #endregion
 
         #region RecoverDialog
         Storyboard SbShowDialog;

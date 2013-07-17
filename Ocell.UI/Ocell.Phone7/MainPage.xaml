@@ -1,118 +1,115 @@
 ﻿<phone:PhoneApplicationPage
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
-    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:local="clr-namespace:Ocell" 
-    xmlns:custom="clr-namespace:Ocell.Controls"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+	xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+	xmlns:local="clr-namespace:Ocell" 
+	xmlns:custom="clr-namespace:Ocell.Controls"
 	x:Class="Ocell.MainPage" 
-    xmlns:u="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
-    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
-    SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
+	xmlns:u="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
+	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+	SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
+	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    >
+	>
 
-    <toolkit:TransitionService.NavigationInTransition>
-        <toolkit:NavigationInTransition>
-            <toolkit:NavigationInTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardIn"/>
-            </toolkit:NavigationInTransition.Backward>
-            <toolkit:NavigationInTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardIn" />
-            </toolkit:NavigationInTransition.Forward>
-        </toolkit:NavigationInTransition>
-    </toolkit:TransitionService.NavigationInTransition>
-    <toolkit:TransitionService.NavigationOutTransition>
-        <toolkit:NavigationOutTransition>
-            <toolkit:NavigationOutTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardOut"/>
-            </toolkit:NavigationOutTransition.Backward>
-            <toolkit:NavigationOutTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardOut"/>
-            </toolkit:NavigationOutTransition.Forward>
-        </toolkit:NavigationOutTransition>
-    </toolkit:TransitionService.NavigationOutTransition>
+	<toolkit:TransitionService.NavigationInTransition>
+		<toolkit:NavigationInTransition>
+			<toolkit:NavigationInTransition.Backward>
+				<toolkit:TurnstileTransition Mode="BackwardIn"/>
+			</toolkit:NavigationInTransition.Backward>
+			<toolkit:NavigationInTransition.Forward>
+				<toolkit:TurnstileTransition Mode="ForwardIn" />
+			</toolkit:NavigationInTransition.Forward>
+		</toolkit:NavigationInTransition>
+	</toolkit:TransitionService.NavigationInTransition>
+	<toolkit:TransitionService.NavigationOutTransition>
+		<toolkit:NavigationOutTransition>
+			<toolkit:NavigationOutTransition.Backward>
+				<toolkit:TurnstileTransition Mode="BackwardOut"/>
+			</toolkit:NavigationOutTransition.Backward>
+			<toolkit:NavigationOutTransition.Forward>
+				<toolkit:TurnstileTransition Mode="ForwardOut"/>
+			</toolkit:NavigationOutTransition.Forward>
+		</toolkit:NavigationOutTransition>
+	</toolkit:TransitionService.NavigationOutTransition>
 
-    <phone:PhoneApplicationPage.Resources>
-        <Storyboard x:Name="ShowLeft">
-            <DoubleAnimation
-        Storyboard.TargetProperty="(Grid.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="RecoverDialog"
-        Duration="0:0:0.8" To="0" />
-        </Storyboard>
+	<phone:PhoneApplicationPage.Resources>
+		<Storyboard x:Name="ShowLeft">
+			<DoubleAnimation
+		Storyboard.TargetProperty="(Grid.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="RecoverDialog"
+		Duration="0:0:0.8" To="0" />
+		</Storyboard>
 
-        <Storyboard x:Name="HideLeft">
-            <DoubleAnimation 
-                Storyboard.TargetProperty="(Grid.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="RecoverDialog"
-                Duration="0:0:0.8" To="800" />
-        </Storyboard>
-    </phone:PhoneApplicationPage.Resources>
+		<Storyboard x:Name="HideLeft">
+			<DoubleAnimation 
+				Storyboard.TargetProperty="(Grid.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="RecoverDialog"
+				Duration="0:0:0.8" To="800" />
+		</Storyboard>
+	</phone:PhoneApplicationPage.Resources>
 
-    <phone:PhoneApplicationPage.FontFamily>
-        <StaticResource ResourceKey="PhoneFontFamilyNormal"/>
-    </phone:PhoneApplicationPage.FontFamily>
-    <phone:PhoneApplicationPage.FontSize>
-        <StaticResource ResourceKey="PhoneFontSizeNormal"/>
-    </phone:PhoneApplicationPage.FontSize>
-    <phone:PhoneApplicationPage.Foreground>
-        <StaticResource ResourceKey="PhoneForegroundBrush"/>
-    </phone:PhoneApplicationPage.Foreground>
-
-
-
-    <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" x:Name="pBar" />
-    </shell:SystemTray.ProgressIndicator>
+	<phone:PhoneApplicationPage.FontFamily>
+		<StaticResource ResourceKey="PhoneFontFamilyNormal"/>
+	</phone:PhoneApplicationPage.FontFamily>
+	<phone:PhoneApplicationPage.FontSize>
+		<StaticResource ResourceKey="PhoneFontSizeNormal"/>
+	</phone:PhoneApplicationPage.FontSize>
+	<phone:PhoneApplicationPage.Foreground>
+		<StaticResource ResourceKey="PhoneForegroundBrush"/>
+	</phone:PhoneApplicationPage.Foreground>
 
 
-    <!--LayoutRoot es la cuadrÃ­cula raÃ­z donde se coloca todo el contenido de la pÃ¡gina-->
-    <Grid x:Name="LayoutRoot" CacheMode="BitmapCache" Margin="0,-32,0,0">
-        <Grid.Background>
-            <ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
-        </Grid.Background>
-        <!--Control Pivot-->
-        <controls:Pivot Title="{Binding CurrentAccountName, StringFormat='OCELL - {0}'}" x:Name="MainPivot" Background="{x:Null}" ItemsSource="{Binding Pivots}" SelectedItem="{Binding SelectedPivot, Mode=TwoWay}" Margin="0,50,0,0">
-            <controls:Pivot.HeaderTemplate>
-                <DataTemplate>
-                    <TextBlock FontFamily="Segoe WP SemiLight" FontSize="60" Margin="0,0,0,0" Text="{Binding Title, Converter={StaticResource ListConverter}, FallbackValue=error}" Tag="{Binding}" Tap="TextBlock_Tap" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
-                </DataTemplate>
-            </controls:Pivot.HeaderTemplate>
-            <controls:Pivot.ItemTemplate>
-                <DataTemplate>
-                    <custom:ExtendedListBox HorizontalContentAlignment="Stretch" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" Tag="{Binding}" Loaded="ListBox_Loaded"/>
-                </DataTemplate>
-            </controls:Pivot.ItemTemplate>
-        </controls:Pivot>
-        <Grid x:Name="GoToUserGrid" Height="104" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <TextBlock TextWrapping="Wrap" Text="{Binding Strings.Username, Source={StaticResource LocalizedResources}, StringFormat='{}{0}:'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="13,8,0,0"/>
-            <TextBox x:Name="UserNameBox" TextWrapping="Wrap" d:LayoutOverrides="Height" Margin="0,32,168,0" Text="{Binding UserSearch, Mode=TwoWay}"/>
-            <Button x:Name="GoUser" Content="{Binding Strings.ButtonGo, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Right" Margin="0,0,8,0" VerticalAlignment="Bottom" Width="156" Command="{Binding GoToUser}"/>
-        </Grid>
 
-        <u:AppBar>
+	<shell:SystemTray.ProgressIndicator>
+		<shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" x:Name="pBar" />
+	</shell:SystemTray.ProgressIndicator>
 
-            <u:AppBar.MenuItems>
-                <u:AppBarMenuItem Text="{Binding Strings.PinColumnStart, Source={StaticResource LocalizedResources}}" Command="{Binding PinToStart}"/>
-                <u:AppBarMenuItem Text="{Binding Strings.FilterColumn, Source={StaticResource LocalizedResources}}" Command="{Binding FilterColumn}"/>
-                <u:AppBarHyperlinkMenuItem x:Name="Trending" IsEnabled="{Binding HasLoggedIn}" Text="{Binding Strings.TrendingTopics, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Topics.xaml"/>
-                <u:AppBarMenuItem Text="{Binding Strings.MyProfile, Source={StaticResource LocalizedResources}}" Command="{Binding ToMyProfile}"/>
-                <u:AppBarMenuItem Text="{Binding Strings.GoToUser, Source={StaticResource LocalizedResources}}" Click="AppBarMenuItem_Click"/>
-                <u:AppBarHyperlinkMenuItem Text="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" NavigateUri="/Pages/Settings/Default.xaml"/>
-                <u:AppBarHyperlinkMenuItem Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" NavigateUri="/Pages/Columns/ManageColumns.xaml" />
-                <u:AppBarMenuItem Text="feedback" Command="{Binding Feedback}" />
-            </u:AppBar.MenuItems>
-            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="{Binding Strings.Compose, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/NewTweet.xaml" />
-            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.camera.flash.png" Text="{Binding Strings.QuickView, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Columns/ColumnView.xaml" />
-            <u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="{Binding Strings.SendDM, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/SelectUser.xaml"/>
-            <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="{Binding Strings.Search, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Search/EnterSearch.xaml" />
-        </u:AppBar>
 
-        <Grid x:Name="RecoverDialog" Tap="RecoverDialog_Tap" Height="65" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,-484,0" local:MetroInMotion.Tilt="2" Width="480" HorizontalAlignment="Right">
-            <TextBlock Margin="8" Text="{Binding Strings.RecoverReadPosition, Source={StaticResource LocalizedResources}}"  VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe WP Light" FontSize="26.667" />
-        </Grid>
-    </Grid>
+	<!--LayoutRoot es la cuadrÃ­cula raÃ­z donde se coloca todo el contenido de la pÃ¡gina-->
+	<Grid x:Name="LayoutRoot" CacheMode="BitmapCache" Margin="0,-32,0,0">
+		<!--Control Pivot-->
+		<controls:Pivot Title="{Binding CurrentAccountName, StringFormat='OCELL - {0}'}" x:Name="MainPivot" ItemsSource="{Binding Pivots}" SelectedItem="{Binding SelectedPivot, Mode=TwoWay}" Margin="0,50,0,0">
+			<controls:Pivot.HeaderTemplate>
+				<DataTemplate>
+					<TextBlock FontFamily="Segoe WP SemiLight" FontSize="60" Margin="0,0,0,0" Text="{Binding Title, Converter={StaticResource ListConverter}, FallbackValue=error}" Tag="{Binding}" Tap="TextBlock_Tap" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
+				</DataTemplate>
+			</controls:Pivot.HeaderTemplate>
+			<controls:Pivot.ItemTemplate>
+				<DataTemplate>
+					<custom:ExtendedListBox HorizontalContentAlignment="Stretch" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" Tag="{Binding}" Loaded="ListBox_Loaded"/>
+				</DataTemplate>
+			</controls:Pivot.ItemTemplate>
+		</controls:Pivot>
+		<Grid x:Name="GoToUserGrid" Height="104" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<TextBlock TextWrapping="Wrap" Text="{Binding Strings.Username, Source={StaticResource LocalizedResources}, StringFormat='{}{0}:'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="13,8,0,0"/>
+			<TextBox x:Name="UserNameBox" TextWrapping="Wrap" d:LayoutOverrides="Height" Margin="0,32,168,0" Text="{Binding UserSearch, Mode=TwoWay}"/>
+			<Button x:Name="GoUser" Content="{Binding Strings.ButtonGo, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Right" Margin="0,0,8,0" VerticalAlignment="Bottom" Width="156" Command="{Binding GoToUser}"/>
+		</Grid>
+
+		<u:AppBar>
+
+			<u:AppBar.MenuItems>
+				<u:AppBarMenuItem Text="{Binding Strings.PinColumnStart, Source={StaticResource LocalizedResources}}" Command="{Binding PinToStart}"/>
+				<u:AppBarMenuItem Text="{Binding Strings.FilterColumn, Source={StaticResource LocalizedResources}}" Command="{Binding FilterColumn}"/>
+				<u:AppBarHyperlinkMenuItem x:Name="Trending" IsEnabled="{Binding HasLoggedIn}" Text="{Binding Strings.TrendingTopics, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Topics.xaml"/>
+				<u:AppBarMenuItem Text="{Binding Strings.MyProfile, Source={StaticResource LocalizedResources}}" Command="{Binding ToMyProfile}"/>
+				<u:AppBarMenuItem Text="{Binding Strings.GoToUser, Source={StaticResource LocalizedResources}}" Click="AppBarMenuItem_Click"/>
+				<u:AppBarHyperlinkMenuItem Text="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" NavigateUri="/Pages/Settings/Default.xaml"/>
+				<u:AppBarHyperlinkMenuItem Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" NavigateUri="/Pages/Columns/ManageColumns.xaml" />
+				<u:AppBarMenuItem Text="feedback" Command="{Binding Feedback}" />
+			</u:AppBar.MenuItems>
+			<u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="{Binding Strings.Compose, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/NewTweet.xaml" />
+			<u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.camera.flash.png" Text="{Binding Strings.QuickView, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Columns/ColumnView.xaml" />
+			<u:AppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="{Binding Strings.SendDM, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/SelectUser.xaml"/>
+			<u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="{Binding Strings.Search, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Search/EnterSearch.xaml" />
+		</u:AppBar>
+
+		<Grid x:Name="RecoverDialog" Tap="RecoverDialog_Tap" Height="65" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,-484,0" local:MetroInMotion.Tilt="2" Width="480" HorizontalAlignment="Right">
+			<TextBlock Margin="8" Text="{Binding Strings.RecoverReadPosition, Source={StaticResource LocalizedResources}}"  VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe WP Light" FontSize="26.667" />
+		</Grid>
+	</Grid>
 
 </phone:PhoneApplicationPage>

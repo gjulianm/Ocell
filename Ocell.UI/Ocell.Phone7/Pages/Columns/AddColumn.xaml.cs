@@ -23,7 +23,7 @@ namespace Ocell.Pages.Columns
             
             if(ApplicationBar != null) 
                 ApplicationBar.MatchOverriddenTheme(); 
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
 
             viewModel = new AddColumnModel();
             DataContext = viewModel;

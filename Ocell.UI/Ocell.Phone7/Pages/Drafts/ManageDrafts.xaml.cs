@@ -24,7 +24,7 @@ namespace Ocell
         public ManageDrafts()
         {
             InitializeComponent();
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
              
             viewModel = new ManageDraftsModel();

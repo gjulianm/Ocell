@@ -26,7 +26,7 @@ namespace Ocell
 
             InitializeComponent(); 
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
 
             Loaded += new RoutedEventHandler(DMConversation_Loaded);
             List.Loader.PropertyChanged += (sender, e) =>

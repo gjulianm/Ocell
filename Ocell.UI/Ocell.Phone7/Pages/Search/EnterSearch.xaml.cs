@@ -23,7 +23,7 @@ namespace Ocell.Pages.Search
                         
             DataContext = new EnterSearchModel();
             SearchQuery.TextChanged += OnTextBoxTextChanged;
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
         }
 
         private void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)

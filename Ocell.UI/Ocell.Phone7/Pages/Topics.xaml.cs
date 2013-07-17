@@ -14,7 +14,7 @@ namespace Ocell.Pages
             var viewModel = new TopicsModel();
             DataContext = viewModel;
             viewModel.ShowLocationsPicker += viewModel_ShowLocationsPicker;
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
         }
 
         void viewModel_ShowLocationsPicker(object sender, EventArgs e)

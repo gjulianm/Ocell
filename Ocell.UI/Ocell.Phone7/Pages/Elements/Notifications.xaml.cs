@@ -19,7 +19,7 @@ namespace Ocell.Pages.Elements
         public Notifications()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };  
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
 
             viewModel  = new NotificationsModel();
             this.DataContext = viewModel;

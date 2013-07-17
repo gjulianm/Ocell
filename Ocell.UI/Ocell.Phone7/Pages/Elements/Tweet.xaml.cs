@@ -1,24 +1,22 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Documents;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Tasks;
-using Microsoft.Phone.Shell;
-using Ocell.Library;
-using Ocell.Library.Twitter;
-using TweetSharp;
-using Ocell.Library.Filtering;
-using System.Windows.Controls;
 using DanielVaughan;
 using DanielVaughan.Services;
-using System.Windows.Media.Imaging;
+using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
+using Microsoft.Phone.Tasks;
+using Ocell.Library;
+using Ocell.Library.Filtering;
+using Ocell.Library.Twitter;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Threading;
+using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
@@ -34,8 +32,6 @@ namespace Ocell.Pages.Elements
             InitializeComponent();
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
 
-            ThemeFunctions.SetBackground(LayoutRoot);
-
             viewModel = new TweetModel();
             DataContext = viewModel;
 
@@ -47,7 +43,7 @@ namespace Ocell.Pages.Elements
                 TBNoFocus();
             };
 
-           
+
 
             panorama.SelectionChanged += (sender, e) =>
             {
@@ -64,7 +60,7 @@ namespace Ocell.Pages.Elements
                 }
             };
 
-           
+
         }
 
         void Tweet_Loaded(object sender, RoutedEventArgs e)

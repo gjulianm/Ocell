@@ -18,7 +18,7 @@ namespace Ocell.Pages
         public SelectUser()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };  
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
             viewModel = new SelectUserModel();
             DataContext = viewModel;
             UserFilter.TextChanged += new TextChangedEventHandler(OnTextBoxTextChanged);

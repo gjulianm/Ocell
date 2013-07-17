@@ -13,7 +13,7 @@ namespace Ocell
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
              
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
 
             this.Loaded += new RoutedEventHandler(SelectAccount_Loaded);
         }

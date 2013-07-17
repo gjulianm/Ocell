@@ -394,8 +394,8 @@
     <Compile Include="..\Ocell.Phone7\SchedulerSync.cs">
       <Link>SchedulerSync.cs</Link>
     </Compile>
-    <Compile Include="..\Ocell.Phone7\ThemeFunctions.cs">
-      <Link>ThemeFunctions.cs</Link>
+    <Compile Include="..\Ocell.Phone7\ThemeManager.cs">
+      <Link>ThemeManager.cs</Link>
     </Compile>
     <Compile Include="..\Ocell.Phone7\Tiles\SecondaryTiles.cs">
       <Link>Tiles\SecondaryTiles.cs</Link>
@@ -617,10 +617,6 @@
     <Reference Include="Calcium.Phone, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Ocell.ThirdParty\Calcium.Phone.dll</HintPath>
-    </Reference>
-    <Reference Include="JeffWilcox.PhoneThemeManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\PhoneThemeManager.1.3.2\lib\sl4-windowsphone71\JeffWilcox.PhoneThemeManager.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Phone.Controls, Version=8.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL">

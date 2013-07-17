@@ -15,7 +15,7 @@ namespace Ocell.Pages.Settings
         public CouponCodes()
         {
             InitializeComponent();
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
             DataContext = new CouponCodesModel();
         }
     }

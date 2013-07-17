@@ -1,21 +1,19 @@
-﻿using System;
+﻿using DanielVaughan.Windows;
+using Microsoft.Phone.Shell;
+using Microsoft.Phone.Tasks;
+using Ocell.Commands;
+using Ocell.Library;
+using Ocell.Library.Twitter;
+using Ocell.Localization;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
-using System.Windows;
-using System.Windows.Input;
-using DanielVaughan.ComponentModel;
-using DanielVaughan.Windows;
-using Microsoft.Phone.Tasks;
-using Ocell.Library;
-using Ocell.Library.Twitter;
-using TweetSharp;
-using System.Collections.Generic;
-using System.Windows.Controls;
-using Ocell.Commands;
-using Ocell.Localization;
-using Microsoft.Phone.Shell;
 using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
@@ -81,7 +79,8 @@ namespace Ocell.Pages.Elements
         public int RetweetCount
         {
             get { return retweetCount; }
-            set { Assign("RetweetCount", ref retweetCount, value); }        }
+            set { Assign("RetweetCount", ref retweetCount, value); }
+        }
 
 
         bool hasRetweets;
@@ -207,7 +206,9 @@ namespace Ocell.Pages.Elements
             UsersWhoRetweeted.CollectionChanged += (s, e) =>
             {
                 RetweetCount = UsersWhoRetweeted.Count;
-            };           
+            };
+
+            CreateCommands();
         }
 
         private void GetReplies()
@@ -221,7 +222,7 @@ namespace Ocell.Pages.Elements
                     var statuses_noRepeat = statuses.Cast<ITweetable>().Except(Replies).ToList();
                     foreach (var status in statuses_noRepeat)
                         Replies.Add(status);
-                }                        
+                }
             });
 
         }
@@ -380,8 +381,8 @@ namespace Ocell.Pages.Elements
                 Images.Add(photo.MediaUrl);
 
             }
-            
-            
+
+
             if (Tweet.Entities.Urls != null && Tweet.Entities.Urls.Any())
             {
                 var parser = new MediaLinkParser();

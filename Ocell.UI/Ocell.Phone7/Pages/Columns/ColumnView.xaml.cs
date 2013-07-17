@@ -19,7 +19,7 @@ namespace Ocell.Pages.Columns
         {
             InitializeComponent(); 
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
 
             DataContext = new ColumnViewModel();
         }

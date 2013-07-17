@@ -24,7 +24,7 @@ namespace Ocell.Pages.Elements
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
             
-            ThemeFunctions.SetBackground(LayoutRoot);
+            
 
             viewModel = new UserModel();
             DataContext = viewModel;
