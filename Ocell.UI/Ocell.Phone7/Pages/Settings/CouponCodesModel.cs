@@ -39,7 +39,7 @@ namespace Ocell.Pages.Settings
             Code = "";
         }
 
-        void ValidateCode(object param)
+        async void ValidateCode(object param)
         {
             if (String.IsNullOrWhiteSpace(Code))
             {
@@ -53,32 +53,30 @@ namespace Ocell.Pages.Settings
 
             IsLoading = true;
             validate.RaiseCanExecuteChanged();
-            request.BeginGetResponse((result) =>
-            {
-                bool failed = false; // Easy, no need to complicate here
-                HttpWebResponse response = null;
-                try
-                {
-                    response = (HttpWebResponse)request.EndGetResponse(result);
-                }
-                catch (Exception)
-                {
-                    failed = true;
-                }
 
-                IsLoading = false;
-                validate.RaiseCanExecuteChanged();
-                if (failed || response.StatusCode != HttpStatusCode.OK)
-                {
-                    MessageService.ShowError(Resources.CodeInvalid);
-                }
-                else
-                {
-                    Config.CouponCodeValidated = true;
-                    MessageService.ShowMessage(Resources.CodeValid);
-                    GoBack();
-                }
-            }, null);
+            HttpWebResponse response;
+            bool failed=false;
+            try
+            {
+                response= (HttpWebResponse) await request.GetResponseAsync();
+            }
+            catch (Exception)
+            {
+                failed = true;
+            }
+
+            IsLoading = false;
+            validate.RaiseCanExecuteChanged();
+            if (failed || response.StatusCode != HttpStatusCode.OK)
+            {
+                MessageService.ShowError(Resources.CodeInvalid);
+            }
+            else
+            {
+                Config.CouponCodeValidated = true;
+                MessageService.ShowMessage(Resources.CodeValid);
+                GoBack();
+            }
         }
     }
 }

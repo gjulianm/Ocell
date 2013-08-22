@@ -22,7 +22,7 @@ namespace Ocell.Library.Tasks
         }
 
         [Conditional("OCELL_FULL")]
-        public void ScheduleTweet(string text, DateTime dueTime, RequestCallback callback)
+        public async void ScheduleTweet(string text, DateTime dueTime, RequestCallback callback)
         {
             TimeSpan diff = dueTime - DateTime.Now;
             long delay = (long)diff.TotalMilliseconds;
@@ -30,23 +30,19 @@ namespace Ocell.Library.Tasks
             string url = String.Format(SensitiveData.ScheduleUriformat, Uri.EscapeDataString(accessToken), Uri.EscapeDataString(text), delay);
 
             var request = (HttpWebRequest)WebRequest.Create(url);
-
-            request.BeginGetResponse((result) =>
+            
+            HttpWebResponse response;
+            try
             {
-                HttpWebResponse response;
-
-                try
-                {
-                    response = (HttpWebResponse)request.EndGetResponse(result);
-                }
-                catch (WebException e)
-                {
-                    response = (HttpWebResponse)e.Response;
-                }
-
-                if (callback != null)
+                response = (HttpWebResponse)await request.GetResponseAsync();
+            }
+            catch (WebException e)
+            {
+                response = (HttpWebResponse)e.Response;
+            }
+            
+            if (callback != null)
                     callback(this, response);
-            }, callback);
         }
     }
 
