@@ -171,7 +171,7 @@ namespace Ocell
         }
 
         [Conditional("OCELL_FULL")]
-        static void SendRemoveRequestToServer(UserToken token, string type)
+        static async void SendRemoveRequestToServer(UserToken token, string type)
         {
             string encoded = Library.Encrypting.EncodeTokens(token.Key, token.Secret);
             string url = string.Format(Library.SensitiveData.PushUnregisterUriFormat, Uri.EscapeDataString(encoded), type);
@@ -180,9 +180,7 @@ namespace Ocell
 
             try
             {
-                var response = request.BeginGetResponse((result) =>
-                {
-                }, request);
+                var response = await request.GetResponseAsync();
             }
             catch (Exception)
             {
