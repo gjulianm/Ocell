@@ -189,7 +189,7 @@ namespace Ocell.Pages.Elements
                 WhoRetweeted = "";
             }
 
-            Avatar = String.Format("https://api.twitter.com/1/users/profile_image?screen_name={0}&size=original", Tweet.Author.ScreenName);
+            Avatar = String.Format("https://api.twitter.com/1.1/users/profile_image?screen_name={0}&size=original", Tweet.Author.ScreenName);
 
             HasReplies = (Tweet.InReplyToStatusId != null);
             HasImage = (Tweet.Entities != null && Tweet.Entities.Media.Any());
