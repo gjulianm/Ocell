@@ -1,6 +1,6 @@
 ## What is Ocell?
 
-Ocell is a Twitter client for Windows Phone 7 and Windows 8. Supports multiple accounts, custom columns, and a whole lot of features more.
+Ocell is a Twitter client for Windows Phone 7 and (in the future) Windows 8. Supports multiple accounts, custom columns, and a whole lot of features more.
 
 ## How to compile
 
