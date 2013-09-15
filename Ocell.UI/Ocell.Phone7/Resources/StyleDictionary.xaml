@@ -12,6 +12,6 @@
     </Style>
     
     <Style x:Key="AppBarStyle" TargetType="u:AppBar">
-        <Setter Property="Opacity" Value="0.5" />        
+        <Setter Property="BarOpacity" Value="0.8" />        
     </Style>
 </ResourceDictionary>
