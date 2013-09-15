@@ -1,19 +1,9 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using DanielVaughan.ComponentModel;
-using DanielVaughan;
-using DanielVaughan.Windows;
+﻿using DanielVaughan.Windows;
 using Ocell.Library;
-using System.Collections.Generic;
 using Ocell.Localization;
+using System;
+using System.Net;
+using System.Windows.Input;
 
 namespace Ocell.Pages.Settings
 {
@@ -54,11 +44,11 @@ namespace Ocell.Pages.Settings
             IsLoading = true;
             validate.RaiseCanExecuteChanged();
 
-            HttpWebResponse response;
-            bool failed=false;
+            HttpWebResponse response = null;
+            bool failed = false;
             try
             {
-                response= (HttpWebResponse) await request.GetResponseAsync();
+                response = (HttpWebResponse)await request.GetResponseAsync();
             }
             catch (Exception)
             {
