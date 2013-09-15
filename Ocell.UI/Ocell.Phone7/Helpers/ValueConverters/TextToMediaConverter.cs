@@ -20,7 +20,7 @@ namespace Ocell
             {
                 if (status.Entities.Media.Any())
                 {
-                    imageLink = status.Entities.Media.First().ExpandedUrl;
+                    imageLink = status.Entities.Media.First().MediaUrl;
                 }
                 else
                 {
