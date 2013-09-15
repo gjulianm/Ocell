@@ -231,7 +231,8 @@ namespace Ocell.Pages.Elements
         {
             var service = ServiceDispatcher.GetCurrentService();
 
-            if (service != null)
+            if (service != null && Tweet != null)
+            {
                 service.Retweets(new RetweetsOptions { Id = Tweet.Id }, (statuses, response) =>
              {
                  if (statuses != null && statuses.Any())
@@ -244,6 +245,7 @@ namespace Ocell.Pages.Elements
                      });
                  }
              });
+            }
         }
 
         public TweetModel()
