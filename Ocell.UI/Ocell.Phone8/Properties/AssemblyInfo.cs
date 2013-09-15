@@ -11,7 +11,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Ocell")]
-[assembly: AssemblyCopyright("ASL 2012")]
+[assembly: AssemblyCopyright("MPL 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,6 +32,6 @@ using System.Resources;
 //
 // Puede especificar todos los valores o usar los valores predeterminados de número de compilación y revisión 
 // mediante el carácter '*', como se muestra a continuación:
-[assembly: AssemblyVersion("4.4.2")]
-[assembly: AssemblyFileVersion("4.4.2")]
+[assembly: AssemblyVersion("4.4.3")]
+[assembly: AssemblyFileVersion("4.4.3")]
 [assembly: NeutralResourcesLanguageAttribute("en")]

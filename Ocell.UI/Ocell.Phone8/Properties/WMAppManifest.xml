@@ -8,7 +8,7 @@
     <Language code="de" />
     <Language code="eu" />
   </Languages>
-  <App xmlns="" ProductID="{d75e6881-edc9-4b71-8141-75e27d42f7a3}" Title="Ocell" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="TestApp author" Description="Sample description" Publisher="TestApp" PublisherID="{097c45ee-4a8e-4103-9543-672cf90d9e11}">
+  <App xmlns="" ProductID="{d75e6881-edc9-4b71-8141-75e27d42f7a3}" Title="Ocell" RuntimeType="Silverlight" Version="4.4.3" Genre="apps.normal" Author="Guillermo Julián" Description="Sample description" Publisher="Guillermo Julián" PublisherID="{097c45ee-4a8e-4103-9543-672cf90d9e11}">
     <IconPath IsRelative="true" IsResource="false">Images\AppIcon99.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
