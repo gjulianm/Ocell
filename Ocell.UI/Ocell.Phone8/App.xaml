@@ -21,6 +21,10 @@
 
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/StyleDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
             <global:LocalizedResources x:Key="LocalizedResources"/>
             <local:ListConverter x:Key="ListConverter"/>
             <local:RelativeDateTimeConverter x:Key="RelativeDateTimeConverter"/>
@@ -103,7 +107,7 @@
                                     </Image>
                                     <Image  Source="{Binding ConverterParameter=true, Converter={StaticResource AvatarConverter}}" HorizontalAlignment="Left" Width="30" Margin="8,54,0,0" d:LayoutOverrides="HorizontalAlignment, Height" Height="30" UseLayoutRounding="False" VerticalAlignment="Top"/>
                                     <TextBlock Grid.Row="0" Text="{Binding CleanText}" Margin="86,32.356,8,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Grid.ColumnSpan="2" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="{Binding TweetFontSize, Source={StaticResource GlobalSettings}}"/>
-                                    <TextBlock Grid.Row="0" Margin="86,0,0,0" TextWrapping="Wrap" Text="{Binding AuthorName}" VerticalAlignment="Top" FontSize="24" UseLayoutRounding="False" HorizontalAlignment="Left" Width="258"/>
+                                    <TextBlock Grid.Row="0" Margin="86,0,0,0" TextWrapping="Wrap" Text="{Binding AuthorName}" Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top" FontSize="24" UseLayoutRounding="False" HorizontalAlignment="Left" Width="258"/>
                                     <TextBlock Grid.Row="1" Margin="86,5,0,0" Foreground="#FF707070" Visibility="{Binding IsRetweeted, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Segoe WP SemiLight"><Run Text="{Binding Strings.RTBy, Source={StaticResource LocalizedResources}}" /><Run Text="{Binding Author.ScreenName}" /></TextBlock>
                                 </Grid>
                             </Grid>

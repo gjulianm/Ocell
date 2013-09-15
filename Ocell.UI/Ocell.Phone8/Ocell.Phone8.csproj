@@ -769,6 +769,11 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="..\Ocell.Phone7\Resources\StyleDictionary.xaml">
+      <Link>Resources\StyleDictionary.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\Icons_Black\" />
