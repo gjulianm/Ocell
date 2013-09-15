@@ -141,7 +141,7 @@
                 </Grid>
             </ScrollViewer>
 
-            <u:AppBar d:IsHidden="True">
+            <u:AppBar d:IsHidden="True" Style="{StaticResource AppBarStyle}">
                 <u:AppBar.MenuItems>
                 	<u:AppBarHyperlinkMenuItem Text="{Binding Strings.Drafts, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Drafts/ManageDrafts.xaml" />
                 </u:AppBar.MenuItems>
