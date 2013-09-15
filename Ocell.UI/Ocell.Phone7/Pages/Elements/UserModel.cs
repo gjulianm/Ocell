@@ -1,16 +1,15 @@
-﻿using System;
+﻿using DanielVaughan.Windows;
+using Microsoft.Phone.Tasks;
+using Ocell.Library;
+using Ocell.Library.Twitter;
+using Ocell.Localization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
-using DanielVaughan.ComponentModel;
-using DanielVaughan.Windows;
-using Microsoft.Phone.Tasks;
-using Ocell.Library;
-using Ocell.Library.Twitter;
 using TweetSharp;
-using Ocell.Localization;
 
 namespace Ocell.Pages.Elements
 {
@@ -389,7 +388,9 @@ namespace Ocell.Pages.Elements
 
             User = users.First();
 
-            Avatar = String.Format("https://api.twitter.com/1/users/profile_image?screen_name={0}&size=original", User.ScreenName); ;
+            if (User.ProfileImageUrl != null)
+                Avatar = User.ProfileImageUrl.Replace("_normal", "");
+
             Name = User.Name;
             ScreenName = User.ScreenName;
             Website = User.Url;
