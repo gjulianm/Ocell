@@ -53,7 +53,7 @@
 <!--TitlePanel contiene el nombre de la aplicaciÃ³n y el tÃ­tulo de la pÃ¡gina-->
 			<StackPanel x:Name="TitlePanel" Grid.Row="0" Height="116" VerticalAlignment="Top">
 				<TextBlock x:Name="ApplicationTitle" Style="{StaticResource PhoneTextNormalStyle}"><Run Text="OCELL"/><Run Text=" - TRENDING TOPICS"/></TextBlock>
-				<TextBlock x:Name="PageTitle" Margin="9,-7,0,0" Text="{Binding PlaceName}" Style="{StaticResource PhoneTextTitle1Style}"/>
+				<TextBlock x:Name="PageTitle" Margin="9,-7,0,0" Text="{Binding PlaceName}" Style="{StaticResource PageHeaderStyle}" />
 			</StackPanel>
 
 		<!--ContentPanel: coloque aquÃ­ el contenido adicional-->
@@ -61,7 +61,7 @@
 				<ListBox x:Name="TList" Margin="28,8,8,8" SelectedItem="{Binding ListSelection, Mode=TwoWay}" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}" />
 			</Grid>
             
-            <controls:AppBar d:IsHidden="True">
+            <controls:AppBar d:IsHidden="True" Opacity="0.5">
                 <controls:AppBar.MenuItems>
                     <controls:AppBarMenuItem Command="{Binding ShowGlobal}" Text="{Binding Strings.ShowGlobalTopics, Source={StaticResource LocalizedResources}}" />
 					<controls:AppBarMenuItem Command="{Binding ShowLocations}" Text="{Binding Strings.AvailableLocations, Source={StaticResource LocalizedResources}}" />

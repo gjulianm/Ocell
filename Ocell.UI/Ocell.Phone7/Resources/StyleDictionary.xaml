@@ -1,0 +1,17 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+	xmlns:u="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
+    >  
+    
+    <Style x:Key="PageHeaderStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe WP Light" />
+        <Setter Property="FontSize" Value="60" />
+    </Style>
+    
+    <Style x:Key="AppBarStyle" TargetType="u:AppBar">
+        <Setter Property="Opacity" Value="0.5" />        
+    </Style>
+</ResourceDictionary>

@@ -68,7 +68,7 @@
             <RichTextBox x:Name="Text" TextWrapping="Wrap" HorizontalAlignment="Left" Width="440" FontSize="29.333" VerticalAlignment="Top" Margin="1,110,0,0" IsReadOnly="True" FontFamily="Segoe WP SemiLight" />
             </Grid>
 
-        <u:AppBar>
+        <u:AppBar Style="{StaticResource AppBarStyle}">
             <u:AppBarIconButton IconUri="/Images/Icons_White/appbar.reply.rest.png" Text="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" x:Name="replyButton" Click="replyButton_Click"  />
 
 

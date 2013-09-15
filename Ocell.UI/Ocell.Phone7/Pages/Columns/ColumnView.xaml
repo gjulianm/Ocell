@@ -55,7 +55,7 @@
         <controls:Pivot Title="OCELL" Background="{x:Null}" ItemsSource="{Binding Pivots}" Margin="0,50,0,0">
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Username}"/>
+                    <TextBlock Text="{Binding Username}" Style="{StaticResource PageHeaderStyle}" />
                 </DataTemplate>
             </controls:Pivot.HeaderTemplate>
             <controls:Pivot.ItemTemplate>

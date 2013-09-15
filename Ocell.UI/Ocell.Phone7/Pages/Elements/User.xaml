@@ -72,7 +72,7 @@
             </controls:PivotItem>
         </controls:Pivot>
 
-        <u:AppBar>
+        <u:AppBar Style="{StaticResource AppBarStyle}">
             <u:AppBarToggleButton 
                 Command1="{Binding FollowUser}" IconUri1="/Images/Icons_White/appbar.add.rest.png" Text1="{Binding Strings.Follow, Source={StaticResource LocalizedResources}}"
                 Command2="{Binding UnfollowUser}" IconUri2="/Images/Icons_White/appbar.minus.rest.png" Text2="{Binding Strings.Unfollow, Source={StaticResource LocalizedResources}}"

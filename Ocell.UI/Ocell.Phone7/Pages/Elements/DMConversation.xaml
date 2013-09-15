@@ -29,7 +29,7 @@
 		<!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
 		<StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
 			<TextBlock x:Name="ApplicationTitle" Text="OCELL - DM" Style="{StaticResource PhoneTextNormalStyle}"/>
-			<TextBlock x:Name="PageTitle" Text="{Binding PairName}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="PageTitle" Text="{Binding PairName}" Margin="9,-7,0,0" Style="{StaticResource PageHeaderStyle}" />
 		</StackPanel>
 
 		<!--ContentPanel: coloque aquí el contenido adicional-->

@@ -20,7 +20,11 @@
 
     <Application.Resources>
         <ResourceDictionary>
-        	<global:LocalizedResources x:Key="LocalizedResources"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/StyleDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <global:LocalizedResources x:Key="LocalizedResources"/>
         	<local:ListConverter x:Key="ListConverter"/>
         	<local:RelativeDateTimeConverter x:Key="RelativeDateTimeConverter"/>
         	<local:RemoveHTML x:Key="RemoveHTMLConverter" />
