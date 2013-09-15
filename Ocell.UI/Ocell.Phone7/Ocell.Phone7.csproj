@@ -135,6 +135,7 @@
     <Compile Include="Helpers\TemplateSelector.cs" />
     <Compile Include="Helpers\ValueConverters\AvatarImageManager.cs" />
     <Compile Include="Helpers\ValueConverters\FirstToUpper.cs" />
+    <Compile Include="Helpers\ValueConverters\HasMediaToBackgroundConverter.cs" />
     <Compile Include="Helpers\ValueConverters\ITweetableFilterConverter.cs" />
     <Compile Include="Helpers\ValueConverters\ListConverter.cs" />
     <Compile Include="Helpers\ValueConverters\ProtectedConverter.cs" />

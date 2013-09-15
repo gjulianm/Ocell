@@ -195,6 +195,9 @@
     <Compile Include="..\Ocell.Phone7\Helpers\ValueConverters\FirstToUpper.cs">
       <Link>Helpers\ValueConverters\FirstToUpper.cs</Link>
     </Compile>
+    <Compile Include="..\Ocell.Phone7\Helpers\ValueConverters\HasMediaToBackgroundConverter.cs">
+      <Link>Helpers\ValueConverters\HasMediaToBackgroundConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Ocell.Phone7\Helpers\ValueConverters\ITweetableFilterConverter.cs">
       <Link>Helpers\ValueConverters\ITweetableFilterConverter.cs</Link>
     </Compile>
