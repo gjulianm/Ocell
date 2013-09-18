@@ -501,6 +501,9 @@
     <Content Include="Images\Icons_White\appbar.sendmail.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\LockImage.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\MediumTileIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
