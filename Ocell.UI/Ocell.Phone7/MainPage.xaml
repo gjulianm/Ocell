@@ -74,7 +74,7 @@
 		<controls:Pivot Title="{Binding CurrentAccountName, StringFormat='OCELL - {0}'}" x:Name="MainPivot" ItemsSource="{Binding Pivots}" SelectedItem="{Binding SelectedPivot, Mode=TwoWay}" Margin="0,50,0,0">
 			<controls:Pivot.HeaderTemplate>
 				<DataTemplate>
-					<TextBlock FontFamily="Segoe WP SemiLight" FontSize="60" Margin="0,0,0,0" Text="{Binding Title, Converter={StaticResource ListConverter}, FallbackValue=error}" Tag="{Binding}" Tap="TextBlock_Tap" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
+					<TextBlock Style="{StaticResource PageHeaderStyle}"  Margin="0,0,0,0" Text="{Binding Title, Converter={StaticResource ListConverter}, FallbackValue=error}" Tag="{Binding}" Tap="TextBlock_Tap" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
 				</DataTemplate>
 			</controls:Pivot.HeaderTemplate>
 			<controls:Pivot.ItemTemplate>
@@ -89,7 +89,7 @@
 			<Button x:Name="GoUser" Content="{Binding Strings.ButtonGo, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Right" Margin="0,0,8,0" VerticalAlignment="Bottom" Width="156" Command="{Binding GoToUser}"/>
 		</Grid>
 
-		<u:AppBar>
+		<u:AppBar Style="{StaticResource AppBarStyle}">
 
 			<u:AppBar.MenuItems>
 				<u:AppBarMenuItem Text="{Binding Strings.PinColumnStart, Source={StaticResource LocalizedResources}}" Command="{Binding PinToStart}"/>

@@ -188,8 +188,7 @@ namespace Ocell.Pages.Elements
                 Tweet = DataTransfer.Status;
                 WhoRetweeted = "";
             }
-
-            Avatar = String.Format("https://api.twitter.com/1.1/users/profile_image?screen_name={0}&size=original", Tweet.Author.ScreenName);
+            SetAvatar();
 
             HasReplies = (Tweet.InReplyToStatusId != null);
             HasImage = (Tweet.Entities != null && Tweet.Entities.Media.Any());
@@ -198,6 +197,7 @@ namespace Ocell.Pages.Elements
 
             if (Tweet.User == null || Tweet.User.Name == null)
                 FillUser();
+
 
             UsersWhoRetweeted = new ObservableCollection<ITweeter>();
             Replies = new SafeObservable<ITweetable>();
@@ -209,6 +209,13 @@ namespace Ocell.Pages.Elements
             };
 
             CreateCommands();
+        }
+
+        private void SetAvatar()
+        {
+
+            if (Tweet.User != null && Tweet.User.ProfileImageUrl != null)
+                Avatar = Tweet.User.ProfileImageUrl.Replace("_normal", "");
         }
 
         private void GetReplies()
@@ -231,7 +238,8 @@ namespace Ocell.Pages.Elements
         {
             var service = ServiceDispatcher.GetCurrentService();
 
-            if (service != null)
+            if (service != null && Tweet != null)
+            {
                 service.Retweets(new RetweetsOptions { Id = Tweet.Id }, (statuses, response) =>
              {
                  if (statuses != null && statuses.Any())
@@ -244,6 +252,7 @@ namespace Ocell.Pages.Elements
                      });
                  }
              });
+            }
         }
 
         public TweetModel()
@@ -340,6 +349,7 @@ namespace Ocell.Pages.Elements
                     if (response.StatusCode != HttpStatusCode.OK)
                         MessageService.ShowError(Localization.Resources.ErrorGettingProfile);
                     Tweet.User = user;
+                    SetAvatar();
                 });
         }
 

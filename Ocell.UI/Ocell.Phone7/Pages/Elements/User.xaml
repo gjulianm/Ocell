@@ -26,12 +26,17 @@
         <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
 
-    <Grid x:Name="LayoutRoot" Margin="0,-32,0,0" >
+    <Grid x:Name="LayoutRoot" Margin="0,-32,0,72" >
         <Grid.Background>
             <ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
         </Grid.Background>
         <!--Control Pivot-->
         <controls:Pivot x:Name="pivots" Title="OCELL" Margin="0,64,0,0">
+            <controls:Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Style="{StaticResource PageHeaderStyle}" />
+                </DataTemplate>
+            </controls:Pivot.HeaderTemplate>
             <!--Elemento uno de Pivot-->
             <controls:PivotItem x:Name="pvProfile" Header="{Binding Strings.Profile, Source={StaticResource LocalizedResources}}">
                 <Grid Margin="0,-14,0,0">
@@ -72,7 +77,7 @@
             </controls:PivotItem>
         </controls:Pivot>
 
-        <u:AppBar>
+        <u:AppBar Style="{StaticResource AppBarStyle}">
             <u:AppBarToggleButton 
                 Command1="{Binding FollowUser}" IconUri1="/Images/Icons_White/appbar.add.rest.png" Text1="{Binding Strings.Follow, Source={StaticResource LocalizedResources}}"
                 Command2="{Binding UnfollowUser}" IconUri2="/Images/Icons_White/appbar.minus.rest.png" Text2="{Binding Strings.Unfollow, Source={StaticResource LocalizedResources}}"

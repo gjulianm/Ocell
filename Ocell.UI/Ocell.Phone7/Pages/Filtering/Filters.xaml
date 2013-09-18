@@ -49,7 +49,7 @@
             <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
             <StackPanel x:Name="TitlePanel" Grid.Row="0" Height="116" VerticalAlignment="Top">
                 <TextBlock x:Name="ApplicationTitle" Text="OCELL" Style="{StaticResource PhoneTextNormalStyle}"/>
-                <TextBlock x:Name="PageTitle" Text="{Binding Strings.Filters, Source={StaticResource LocalizedResources}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+                <TextBlock x:Name="PageTitle" Text="{Binding Strings.Filters, Source={StaticResource LocalizedResources}}" Margin="9,-7,0,0" Style="{StaticResource PageHeaderStyle}" />
             </StackPanel>
 
             <!--ContentPanel: coloque aquí el contenido adicional-->
@@ -63,7 +63,7 @@
 
         <!--ContentPanel: coloque aquí el contenido adicional-->
 
-        <u:AppBar>
+        <u:AppBar Style="{StaticResource AppBarStyle}">
             <u:AppBarIconButton x:Name="add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="{Binding Strings.AddNew, Source={StaticResource LocalizedResources}}" Click="add_Click"/>
             <u:AppBarIconButton IconUri="/Images/Icons_White/appbar.save.rest.png" Text="{Binding Strings.Save, Source={StaticResource LocalizedResources}}" Click="ApplicationBarIconButton_Click"/>
         </u:AppBar>
