@@ -123,3 +123,4 @@ PerfLogs
 *.*.sap
 
 *.sublime-*
+analytics.xml
