@@ -448,7 +448,6 @@ namespace Ocell.Pages.Elements
             Dispatcher.BeginInvoke(() =>
             {
                 sbHide.Begin();
-                viewModel.ReplyBoxLostFocus();
             });
         }
         bool suppressTBFocusLost = false;

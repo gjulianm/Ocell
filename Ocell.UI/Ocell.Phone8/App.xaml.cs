@@ -10,6 +10,7 @@ using Ocell.Controls;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Navigation;
 using Windows.Phone.Speech.VoiceCommands;
@@ -74,10 +75,10 @@ namespace Ocell
 
             bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
 
-            //if (Config.Background.Type == LightOrDark.Light)
-            //    ThemeManager.ToLightTheme();
-            //else if (Config.Background.Type == LightOrDark.Dark)
-            //    ThemeManager.ToDarkTheme();
+            if (Config.Background.Type == LightOrDark.Light)
+                ThemeManager.ToLightTheme();
+            else if (Config.Background.Type == LightOrDark.Dark)
+                ThemeManager.ToDarkTheme();
 
             RootFrame.Background = Config.Background.GetBrush();
         }
@@ -86,35 +87,63 @@ namespace Ocell
         // Este código no se ejecutará cuando la aplicación se reactive
         private async void Application_Launching(object sender, LaunchingEventArgs e)
         {
-            await VoiceCommandService.InstallCommandSetsFromFileAsync(new Uri("ms-appx:///VoiceReco/VoiceCommandDefinition.xml"));
-            TrialInformation.ReloadTrialInfo();
+            try
+            {
+                await VoiceCommandService.InstallCommandSetsFromFileAsync(new Uri("ms-appx:///VoiceReco/VoiceCommandDefinition.xml"));
+                TrialInformation.ReloadTrialInfo();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error launching: {0}", ex);
+            }
         }
 
         // Código para ejecutar cuando la aplicación se activa (se trae a primer plano)
         // Este código no se ejecutará cuando la aplicación se inicie por primera vez
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
-            TrialInformation.ReloadTrialInfo();
+            try
+            {
+                TrialInformation.ReloadTrialInfo();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error activating: {0}", ex);
+            }
         }
 
         // Código para ejecutar cuando la aplicación se desactiva (se envía a segundo plano)
         // Este código no se ejecutará cuando la aplicación se cierre
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
-            Controls.ExtendedListBox.RaiseSaveViewports();
-            Config.SaveReadPositions();
-            Config.SaveAccounts();
-            Config.SaveColumns();
+            try
+            {
+                Controls.ExtendedListBox.RaiseSaveViewports();
+                Config.SaveReadPositions();
+                Config.SaveAccounts();
+                Config.SaveColumns();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error deactivating: {0}", ex);
+            }
         }
 
         // Código para ejecutar cuando la aplicación se cierra (p.ej., al hacer clic en Atrás)
         // Este código no se ejecutará cuando la aplicación se desactive
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
-            Controls.ExtendedListBox.RaiseSaveViewports();
-            Config.SaveReadPositions();
-            Config.SaveAccounts();
-            Config.SaveColumns();
+            try
+            {
+                Controls.ExtendedListBox.RaiseSaveViewports();
+                Config.SaveReadPositions();
+                Config.SaveAccounts();
+                Config.SaveColumns();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error closing: {0}", ex);
+            }
         }
 
         // Código para ejecutar si hay un error de navegación
