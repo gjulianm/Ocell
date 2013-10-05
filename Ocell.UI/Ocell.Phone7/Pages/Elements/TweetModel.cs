@@ -426,10 +426,5 @@ namespace Ocell.Pages.Elements
         {
             ReplyText = ReplyAllCommand.GetReplied(Tweet);
         }
-
-        public void ReplyBoxLostFocus()
-        {
-            ReplyText = String.Format("{0}...", Resources.Reply);
-        }
     }
 }

@@ -83,8 +83,12 @@
 				</DataTemplate>
 			</controls:Pivot.ItemTemplate>
 		</controls:Pivot>
-		<Grid x:Name="GoToUserGrid" Height="104" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}">
-			<TextBlock TextWrapping="Wrap" Text="{Binding Strings.Username, Source={StaticResource LocalizedResources}, StringFormat='{}{0}:'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="13,8,0,0"/>
+		<Grid x:Name="GoToUserGrid" Height="176" Margin="0,0,0,0" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+                <TextBlock TextWrapping="Wrap" Text="{Binding Strings.Username, Source={StaticResource LocalizedResources}, StringFormat='{}{0}:'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="13,8,0,0"/>
 			<TextBox x:Name="UserNameBox" TextWrapping="Wrap" d:LayoutOverrides="Height" Margin="0,32,168,0" Text="{Binding UserSearch, Mode=TwoWay}"/>
 			<Button x:Name="GoUser" Content="{Binding Strings.ButtonGo, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Right" Margin="0,0,8,0" VerticalAlignment="Bottom" Width="156" Command="{Binding GoToUser}"/>
 		</Grid>
@@ -107,7 +111,7 @@
 			<u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="{Binding Strings.Search, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Search/EnterSearch.xaml" />
 		</u:AppBar>
 
-		<Grid x:Name="RecoverDialog" Tap="RecoverDialog_Tap" Height="65" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,-484,0" local:MetroInMotion.Tilt="2" Width="480" HorizontalAlignment="Right">
+		<Grid x:Name="RecoverDialog" Tap="RecoverDialog_Tap" Height="65" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,-484,72" local:MetroInMotion.Tilt="2" Width="480" HorizontalAlignment="Right">
 			<TextBlock Margin="8" Text="{Binding Strings.RecoverReadPosition, Source={StaticResource LocalizedResources}}"  VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe WP Light" FontSize="26.667" />
 		</Grid>
 	</Grid>
