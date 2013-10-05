@@ -163,11 +163,11 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <TextBox x:Name="textBox" Grid.Row="0" Text="{Binding ReplyText, Mode=TwoWay}" Height="75" GotFocus="textBox_GotFocus" LostFocus="textBox_LostFocus">
+                    <toolkit:PhoneTextBox x:Name="textBox" Grid.Row="0" Text="{Binding ReplyText, Mode=TwoWay}" Height="75" GotFocus="textBox_GotFocus" Hint="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" TextWrapping="Wrap"  InputScope="Chat">
 
 
 
-                    </TextBox>
+                    </toolkit:PhoneTextBox>
                     <Button x:Name="button" Click="button_Click" Content="{Binding Strings.Send, Source={StaticResource LocalizedResources}}" Command="{Binding SendTweet}" Grid.Row="1" Width="150" HorizontalAlignment="Right" Height="0"/>
                     <lc:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True"  x:Name="conversation" ItemTemplate="{StaticResource TweetTemplate}" Grid.Row="2" />
 
