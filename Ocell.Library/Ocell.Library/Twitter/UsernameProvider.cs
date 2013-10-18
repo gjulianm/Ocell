@@ -7,6 +7,7 @@ using System.Linq;
 using System.IO;
 using Ocell.Library;
 using System.IO.IsolatedStorage;
+using System.Threading.Tasks;
 
 namespace Ocell.Library.Twitter
 {
@@ -16,7 +17,7 @@ namespace Ocell.Library.Twitter
         public UserToken User { get; set; }
         public bool GetFollowers { get; set; }
         public bool GetFollowing { get; set; }
-        private ITwitterService _service;
+        private ITwitterService service;
 
         public UserProvider()
         {
@@ -28,42 +29,47 @@ namespace Ocell.Library.Twitter
         private void GetService()
         {
             if (User == null)
-                _service = ServiceDispatcher.GetDefaultService();
+                service = ServiceDispatcher.GetDefaultService();
             else
-                _service = ServiceDispatcher.GetService(User);
+                service = ServiceDispatcher.GetService(User);
         }
 
         public void Start()
         {
-            if (_service == null)
+            if (service == null)
                 GetService();
 
-            if(GetFollowing)
-                _service.ListFriends(new ListFriendsOptions { ScreenName = User.ScreenName, Cursor = -1 }, ReceiveList);
-            if (GetFollowers)
-                _service.ListFollowers(new ListFollowersOptions { ScreenName = User.ScreenName, Cursor = -1 }, ReceiveList);
+            GetUsers(-1);
         }
 
-        private void ReceiveList(TwitterCursorList<TwitterUser> users, TwitterResponse response)
+        private void GetUsers(long cursor)
         {
-            bool finish = false;
-            if (users == null || response.StatusCode != HttpStatusCode.OK)
+            if (GetFollowing)
+                service.ListFriendsAsync(new ListFriendsOptions { ScreenName = User.ScreenName, Cursor = cursor }).ContinueWith(ReceiveList);
+            if (GetFollowers)
+                service.ListFollowersAsync(new ListFollowersOptions { ScreenName = User.ScreenName, Cursor = cursor }).ContinueWith(ReceiveList);
+        }
+
+        private void ReceiveList(Task<TwitterResponse<TwitterCursorList<TwitterUser>>> task)
+        {
+            var response = task.Result;
+
+            bool finished = false;
+
+            if (!response.RequestSucceeded)
             {
                 if (Error != null)
                     Error(this, response);
-                finish = true;
+
                 return;
             }
 
-            if (users.NextCursor != null && users.NextCursor != 0 && _service != null)
-            {
-                if (GetFollowing)
-                    _service.ListFriends(new ListFriendsOptions { ScreenName = User.ScreenName, Cursor = (long)users.NextCursor }, ReceiveList);
-                if (GetFollowers)
-                    _service.ListFollowers(new ListFollowersOptions { ScreenName = User.ScreenName, Cursor = (long)users.NextCursor }, ReceiveList);
-            }
+            var users = response.Content;
+
+            if (users.NextCursor != null && users.NextCursor != 0 && service != null)
+                GetUsers((long)users.NextCursor); // TODO: This is not efficient if we are searching for both following and followers.
             else
-                finish = true;
+                finished = true;
 
             if (Users == null)
                 Users = new SafeObservable<TwitterUser>();
@@ -72,7 +78,7 @@ namespace Ocell.Library.Twitter
                 if(!Users.Contains(user))
                     Users.Add(user);
 
-            if (finish && Finished != null)
+            if (finished && Finished != null)
                 Finished(this, new EventArgs());
         }
 
@@ -107,7 +113,32 @@ namespace Ocell.Library.Twitter
                 var temp = user;
                 finishedUsers[temp] = false;
                 dicUsers[temp] = GetUserCache(temp).ToList();
-                ServiceDispatcher.GetService(temp).ListFriends(new ListFriendsOptions { ScreenName = temp.ScreenName, Cursor = -1 }, (list, response) => ReceiveFriends(list, response, temp));
+                FillUserNamesFor(temp, -1);
+            }
+        }
+
+        protected static async void FillUserNamesFor(UserToken user, long cursor)
+        {
+            var response = await ServiceDispatcher.GetService(user).ListFriendsAsync(new ListFriendsOptions { ScreenName = user.ScreenName, Cursor = cursor });
+            
+            if (!response.RequestSucceeded)
+                return;
+
+            var friends = response.Content;
+
+            if (dicUsers.ContainsKey(user))
+                dicUsers[user] = dicUsers[user].Union(friends.Select(x => x.ScreenName)).ToList();
+            else
+                dicUsers[user] = friends.Select(x => x.ScreenName).ToList();
+
+            if (friends.NextCursor != null && friends.NextCursor != 0)
+            {
+                FillUserNamesFor(user, (long)friends.NextCursor);
+            }
+            else
+            {
+                finishedUsers[user] = true;
+                SaveUserCache(user, dicUsers[user]);
             }
         }
 
@@ -120,27 +151,6 @@ namespace Ocell.Library.Twitter
             bool userFinished;
             if (!finishedUsers.TryGetValue(User, out userFinished) || !userFinished)
                 UsernameProvider.FillUserNames(new List<UserToken> { User });
-        }
-
-        private static void ReceiveFriends(TwitterCursorList<TwitterUser> friends, TwitterResponse response, UserToken user)
-        {
-            if (friends == null || response.StatusCode != HttpStatusCode.OK)     
-                return;
-
-            if (dicUsers.ContainsKey(user))
-                dicUsers[user] = dicUsers[user].Union(friends.Select(x => x.ScreenName)).ToList();
-            else
-                dicUsers[user] = friends.Select(x => x.ScreenName).ToList();
-
-            if (friends.NextCursor != null && friends.NextCursor != 0)
-                ServiceDispatcher.GetService(user).ListFriends(new ListFriendsOptions { ScreenName = user.ScreenName, Cursor = (long)friends.NextCursor }, (l, r) => ReceiveFriends(l, r, user));
-            else
-            {
-                finishedUsers[user] = true;
-                SaveUserCache(user, dicUsers[user]);
-            }
-
-            
         }
 
         private static IEnumerable<string> GetUserCache(UserToken user)
