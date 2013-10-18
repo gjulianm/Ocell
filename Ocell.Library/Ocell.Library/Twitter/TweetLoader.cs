@@ -31,7 +31,7 @@ namespace Ocell.Library.Twitter
 
                 requestsInProgress = value;
 
-                if(propertyChanges)
+                if (propertyChanges)
                 {
                     OnPropertyChanged("IsLoading");
                 }
@@ -66,7 +66,7 @@ namespace Ocell.Library.Twitter
         public int CacheSize { get; set; }
         public bool LoadRTsOnLists { get; set; }
         #endregion
-        
+
         #region Constructors
         public TweetLoader(TwitterResource resource, bool cached)
             : this()
@@ -213,9 +213,9 @@ namespace Ocell.Library.Twitter
         {
             long? lastId = null;
 
-            if(getOld)
+            if (getOld)
             {
-                if(!Source.Any())
+                if (!Source.Any())
                     return;
                 else
                     lastId = Source.Min(item => item.Id);
@@ -242,7 +242,8 @@ namespace Ocell.Library.Twitter
             SetTaskReceivers(GetSearchTasks(Resource.Type, lastId), SearchToITweetable);
             SetTaskReceivers(GetDirectMessageTasks(Resource.Type, lastId), DMsToITweetable);
 
-            // TODO: Receive conversations.
+            if (Resource.Type == ResourceType.Conversation)
+                conversationService.GetConversationForStatus(Resource.Data, ReceiveConversation);
         }
 
         protected IEnumerable<ITweetable> TweetsToITweetable(IEnumerable<TwitterStatus> statuses)
@@ -253,7 +254,7 @@ namespace Ocell.Library.Twitter
         protected IEnumerable<ITweetable> DMsToITweetable(IEnumerable<TwitterDirectMessage> dms)
         {
             if (Resource.Type == ResourceType.Messages && !string.IsNullOrWhiteSpace(Resource.Data))
-                return dms.Where(x => x.SenderScreenName == Resource.Data || x.RecipientScreenName == Resource.Data)                    .Cast<ITweetable>();
+                return dms.Where(x => x.SenderScreenName == Resource.Data || x.RecipientScreenName == Resource.Data).Cast<ITweetable>();
             else
                 return dms.Cast<ITweetable>();
         }
@@ -265,7 +266,7 @@ namespace Ocell.Library.Twitter
 
         protected void SetTaskReceivers<T>(IEnumerable<Task<TwitterResponse<T>>> tasks, Func<T, IEnumerable<ITweetable>> toITweetableFunc)
         {
-            foreach(var task in tasks)
+            foreach (var task in tasks)
             {
                 RequestsInProgress++;
                 task.ContinueWith((t) => ReceiveResponse(task, toITweetableFunc));
@@ -342,7 +343,7 @@ namespace Ocell.Library.Twitter
 
         protected IEnumerable<Task<TwitterResponse<TwitterSearchResult>>> GetSearchTasks(ResourceType type, long? last)
         {
-            if(type == ResourceType.Search)
+            if (type == ResourceType.Search)
             {
                 yield return service.SearchAsync(new SearchOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true, Q = Resource.Data, MaxId = last });
             }
@@ -369,9 +370,14 @@ namespace Ocell.Library.Twitter
                 return;
             }
 
+            GenericReceive(toITweetable(response.Content));
+        }
+
+        private void GenericReceive(IEnumerable<ITweetable> list)
+        {
             try
             {
-                GenericReceive(toITweetable(response.Content));
+                UnsafeGenericReceive(list);
             }
             catch (Exception ex)
             {
@@ -379,10 +385,10 @@ namespace Ocell.Library.Twitter
             }
         }
 
-        private void GenericReceive(IEnumerable<ITweetable> list)
+        private void UnsafeGenericReceive(IEnumerable<ITweetable> list)
         {
             TweetEqualityComparer comparer = new TweetEqualityComparer();
-            
+
             if (SourceChanging != null)
                 SourceChanging(this, new EventArgs());
 
@@ -434,6 +440,19 @@ namespace Ocell.Library.Twitter
                     Source.Add(group);
                 }
             }
+        }
+
+        private void ReceiveConversation(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
+        {
+            if (!response.RequestSucceeded || statuses == null)
+            {
+                if (Error != null)
+                    Error(response);
+                return;
+            }
+
+            if (statuses.Any())
+                GenericReceive(statuses);
         }
         #endregion
 
