@@ -660,10 +660,6 @@
       <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>
       <Name>Ocell.Sharplonger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
-      <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
-      <Name>TweetSharp.WindowsPhone.Mango</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Ocell.APIs\Ocell.ReadLater\Ocell.ReadLater.csproj">
       <Project>{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}</Project>
       <Name>Ocell.ReadLater</Name>
