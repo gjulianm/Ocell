@@ -106,7 +106,7 @@ namespace Ocell.Pages.Settings
             return request;
         }
 
-        protected override async Task PostProcess(string contents)
+        protected override async void PostProcess(string contents)
         {
             var parameters = System.Web.HttpUtility.ParseQueryString(contents);
 
