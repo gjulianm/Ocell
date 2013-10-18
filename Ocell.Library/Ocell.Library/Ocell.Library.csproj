@@ -133,6 +133,9 @@
     <Reference Include="Newtonsoft.Json.WindowsPhone">
       <HintPath>..\..\Ocell.ThirdParty\lib_dll\Newtonsoft.Json.WindowsPhone.dll</HintPath>
     </Reference>
+    <Reference Include="Polenter.SharpSerializer.PCL">
+      <HintPath>..\..\packages\SharpSerializer.PCL.2.18\lib\portable-net4+sl4+wp71+win8\Polenter.SharpSerializer.PCL.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SensitiveData.cs">
@@ -231,10 +234,6 @@
     <ProjectReference Include="..\..\Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj">
       <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>
       <Name>Hammock.WindowsPhone.Mango</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\SharpSerializer\SharpSerializer.Library.Silverlight\SharpSerializer.Library.Silverlight.csproj">
-      <Project>{3008493B-1E7B-445A-9C3B-144B75E362DB}</Project>
-      <Name>SharpSerializer.Library.Silverlight</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
       <Project>{35BC2453-9CAD-4508-9C8C-BF06A9223761}</Project>
