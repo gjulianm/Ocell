@@ -12,6 +12,7 @@ using Ocell.Library.Twitter;
 using TweetSharp;
 using System.Windows.Data;
 using Ocell.Localization;
+using System.Threading.Tasks;
 
 namespace Ocell.Pages.Elements
 {
@@ -80,13 +81,13 @@ namespace Ocell.Pages.Elements
 
             if (whatUserList == "followers")
             {
-                ServiceDispatcher.GetCurrentService().ListFollowers(new ListFollowersOptions { ScreenName = user, IncludeUserEntities = true }, ReceiveUsers);
+                ServiceDispatcher.GetCurrentService().ListFollowersAsync(new ListFollowersOptions { ScreenName = user, IncludeUserEntities = true }).ContinueWith(ReceiveUsers);
                 BarText = Resources.DownloadingFollowers;
                 PageTitle = Resources.Followers;
             }
             else if (whatUserList == "following")
             {
-                ServiceDispatcher.GetCurrentService().ListFriends(new ListFriendsOptions { ScreenName = user, IncludeUserEntities = true }, ReceiveUsers);
+                ServiceDispatcher.GetCurrentService().ListFriendsAsync(new ListFriendsOptions { ScreenName = user, IncludeUserEntities = true }).ContinueWith(ReceiveUsers);
                 BarText = Resources.DownloadingFollowing;
                 PageTitle = Resources.Following;
             }
@@ -101,20 +102,24 @@ namespace Ocell.Pages.Elements
         }
 
 
-        private void ReceiveUsers(TwitterCursorList<TwitterUser> users, TwitterResponse response)
+        private void ReceiveUsers(Task<TwitterResponse<TwitterCursorList<TwitterUser>>> task)
         {
+            var response = task.Result;
+
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
                 MessageService.ShowError(Resources.CouldntFindUser);
                 GoBack();
                 return;
             }
-            else if (response.StatusCode != HttpStatusCode.OK || users == null)
+            else if (!response.RequestSucceeded)
             {
                 MessageService.ShowError(Resources.ErrorMessage);
                 GoBack();
                 return;
             }
+
+            var users = response.Content;
 
             foreach (var usr in users)
                 if (!list.Contains(usr))
@@ -123,9 +128,9 @@ namespace Ocell.Pages.Elements
             if (users.NextCursor != null && users.NextCursor != 0)
             {
                 if (whatUserList == "followers")
-                    ServiceDispatcher.GetCurrentService().ListFollowers(new ListFollowersOptions { ScreenName = user }, ReceiveUsers);
+                    ServiceDispatcher.GetCurrentService().ListFollowersAsync(new ListFollowersOptions { ScreenName = user, Cursor = users.NextCursor }).ContinueWith(ReceiveUsers);
                 else if (whatUserList == "following")
-                    ServiceDispatcher.GetCurrentService().ListFriends(new ListFriendsOptions { ScreenName = user }, ReceiveUsers);
+                    ServiceDispatcher.GetCurrentService().ListFriendsAsync(new ListFriendsOptions { ScreenName = user, Cursor = users.NextCursor }).ContinueWith(ReceiveUsers);
             }
             else
             {

@@ -20,6 +20,7 @@ using System.Device.Location;
 using System.Linq;
 using Ocell.Pages.Search;
 
+
 namespace Ocell.Pages
 {
     public class TopicsModel : ExtendedViewModelBase
@@ -104,16 +105,39 @@ namespace Ocell.Pages
             refresh = new DelegateCommand((obj) => GetTopics());
             showGlobal = new DelegateCommand((obj) => { currentLocation = 1; PlaceName = Localization.Resources.Global; GetTopics(); });
             showLocations = new DelegateCommand((obj) => RaiseShowLocations(), (obj) => Locations.Any());
-            
-            ServiceDispatcher.GetCurrentService().ListAvailableTrendsLocations(ReceiveLocations);
+
+            GetLocations();
 
             IsLoading = true;
             if (Config.EnabledGeolocation == true && (Config.TopicPlaceId == -1 || Config.TopicPlaceId == null))
-                ServiceDispatcher.GetCurrentService().ListClosestTrendsLocations(new ListClosestTrendsLocationsOptions{ Lat = geoWatcher.Position.Location.Latitude, Long = geoWatcher.Position.Location.Longitude }, ReceiveMyLocation);
+                GetMyLocation();
             else
             {
                 currentLocation = Config.TopicPlaceId.HasValue ? (long)Config.TopicPlaceId : 1;
                 PlaceName = Config.TopicPlace;
+                GetTopics();
+            }
+        }
+
+        // TODO: Check API return values, for what?
+
+        private async void GetMyLocation()
+        {
+            var response = await ServiceDispatcher.GetCurrentService().ListClosestTrendsLocationsAsync(new ListClosestTrendsLocationsOptions
+            {
+                Lat = geoWatcher.Position.Location.Latitude,
+                Long = geoWatcher.Position.Location.Longitude
+            });
+
+            var locs = response.Content;
+
+            if (response.RequestSucceeded && locs.Any())
+            {
+                var loc = locs.First();
+                PlaceName = loc.Name;
+                currentLocation = loc.WoeId;
+                Config.TopicPlace = PlaceName;
+                Config.TopicPlaceId = currentLocation;
                 GetTopics();
             }
         }
@@ -126,28 +150,30 @@ namespace Ocell.Pages
                 ShowLocationsPicker(this, new EventArgs());
         }
 
-        private void ReceiveMyLocation(IEnumerable<WhereOnEarthLocation> locs, TwitterResponse resp)
-        {
-            if (resp.StatusCode == HttpStatusCode.OK && locs != null && locs.Any())
-            {
-                var loc = locs.First();
-                PlaceName = loc.Name;
-                currentLocation = loc.WoeId;
-                Config.TopicPlace = PlaceName;
-                Config.TopicPlaceId = currentLocation;
-                GetTopics();
-            }
-        }
-
-        private void GetTopics()
+        private async void GetTopics()
         {
             IsLoading = true;
-            ServiceDispatcher.GetCurrentService().ListLocalTrendsFor(new ListLocalTrendsForOptions { Id = (int)currentLocation }, ReceiveTrends);
+            
+            var response = await ServiceDispatcher.GetCurrentService().ListLocalTrendsForAsync(new ListLocalTrendsForOptions { Id = (int)currentLocation });
+
+            IsLoading = false;
+            if (!response.RequestSucceeded)
+            {
+                MessageService.ShowError(Localization.Resources.ErrorLoadingTT);
+                GoBack();
+                return;
+            }
+
+            Collection = response.Content;
         }
 
-        private void ReceiveLocations(IEnumerable<WhereOnEarthLocation> locs, TwitterResponse resp)
+        private async void GetLocations()
         {
-            if (resp.StatusCode == HttpStatusCode.OK && locs != null && locs.Any())
+            var response = await ServiceDispatcher.GetCurrentService().ListAvailableTrendsLocationsAsync();
+
+            var locs = response.Content;
+
+            if (response.RequestSucceeded && locs.Any())
             {
                 Deployment.Current.Dispatcher.InvokeIfRequired(() =>
                 {
@@ -171,18 +197,6 @@ namespace Ocell.Pages
             Config.TopicPlace = PlaceName;
             Config.TopicPlaceId = currentLocation;
             GetTopics();
-        }
-
-        private void ReceiveTrends(TweetSharp.TwitterTrends Trends, TweetSharp.TwitterResponse Response)
-        {
-            IsLoading = false;
-            if (Response.StatusCode != HttpStatusCode.OK)
-            {
-                MessageService.ShowError(Localization.Resources.ErrorLoadingTT);
-                GoBack();
-            }
-
-            Collection = Trends;
         }
 
         private void OnSelectionChanged()

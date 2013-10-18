@@ -12,6 +12,7 @@ using System.Threading;
 using TweetSharp;
 #if WP8
 using Windows.Phone.Speech.Synthesis;
+using System.Threading.Tasks;
 #endif
 
 namespace Ocell.Pages.Elements
@@ -32,7 +33,7 @@ namespace Ocell.Pages.Elements
             Tweets = new SortedFilteredObservable<ITweetable>(new TweetComparer());
         }
 
-        public void OnLoad()
+        public async void OnLoad()
         {
             lastCheckTime = DateSync.GetLastCheckDate();
 
@@ -45,28 +46,37 @@ namespace Ocell.Pages.Elements
             {
                 Count = 20,
             };
-            
+
+            IEnumerable<ITweetable> statuses = null;
+
             foreach (var account in Config.Accounts)
             {
                 if (account.Preferences.MentionsPreferences != Library.Notifications.NotificationType.None)
                 {
                     IsLoading = true;
                     Interlocked.Increment(ref requestsPending);
-                    ServiceDispatcher.GetService(account).ListTweetsMentioningMe(mentionOptions, (t, r) => FilterAndAddStatuses(t.Cast<ITweetable>(), r)); // Ugh.
+                    var result = await ServiceDispatcher.GetService(account).ListTweetsMentioningMeAsync(mentionOptions);
+
+                    if (result.RequestSucceeded)
+                        statuses = result.Content.Cast<ITweetable>();
                 }
                 if (account.Preferences.MessagesPreferences != Library.Notifications.NotificationType.None)
                 {
                     IsLoading = true;
                     Interlocked.Increment(ref requestsPending);
-                    ServiceDispatcher.GetService(account).ListDirectMessagesReceived(dmOption, (t, r) => FilterAndAddStatuses(t.Cast<ITweetable>(), r));
+                    var result = await ServiceDispatcher.GetService(account).ListDirectMessagesReceivedAsync(dmOption);
+
+                    if (result.RequestSucceeded)
+                        statuses = result.Content.Cast<ITweetable>();
                 }
             }
-#if WP8
+
+            if (statuses != null)
+                FilterAndAddStatuses(statuses);
+
             this.LoadFinished += (s, e) => SpeakNotifications();
-#endif
         }
-#if WP8
-        [Conditional("WP8")]
+
         private async void SpeakNotifications()
         {
             SpeechSynthesizer synth = new SpeechSynthesizer();
@@ -83,7 +93,7 @@ namespace Ocell.Pages.Elements
 
             await synth.SpeakTextAsync(sb.ToString());
         }
-#endif
+
         private string TweetToText(ITweetable tweet)
         {
             string who, when, text;
@@ -102,10 +112,9 @@ namespace Ocell.Pages.Elements
 
         public event EventHandler LoadFinished;
 
-        private void FilterAndAddStatuses(IEnumerable<ITweetable> tweets, TwitterResponse status)
+        private void FilterAndAddStatuses(IEnumerable<ITweetable> tweets)
         {
-            if (status.StatusCode == System.Net.HttpStatusCode.OK && tweets != null)
-                Tweets.BulkAdd(tweets.Where(x => x.CreatedDate > lastCheckTime));
+            Tweets.BulkAdd(tweets.Where(x => x.CreatedDate > lastCheckTime));
 
             if (Interlocked.Decrement(ref requestsPending) <= 0)
             {

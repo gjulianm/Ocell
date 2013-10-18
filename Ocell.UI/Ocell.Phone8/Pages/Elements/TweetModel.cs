@@ -234,24 +234,26 @@ namespace Ocell.Pages.Elements
 
         }
 
-        private void GetRetweets()
+        private async void GetRetweets()
         {
             var service = ServiceDispatcher.GetCurrentService();
 
             if (service != null && Tweet != null)
             {
-                service.Retweets(new RetweetsOptions { Id = Tweet.Id }, (statuses, response) =>
-             {
-                 if (statuses != null && statuses.Any())
-                 {
-                     HasRetweets = true;
-                     Deployment.Current.Dispatcher.BeginInvoke(() =>
-                     {
-                         foreach (var rt in statuses)
-                             UsersWhoRetweeted.Add(rt.Author);
-                     });
-                 }
-             });
+                var response = await service.RetweetsAsync(new RetweetsOptions { Id = Tweet.Id });
+
+                var statuses = response.Content;
+
+                if (response.RequestSucceeded && statuses.Any())
+                {
+                    HasRetweets = true;
+                    Deployment.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        foreach (var rt in statuses)
+                            UsersWhoRetweeted.Add(rt.Author);
+                    });
+                }
+
             }
         }
 
@@ -274,17 +276,15 @@ namespace Ocell.Pages.Elements
 
         private void CreateCommands()
         {
-            deleteTweet = new DelegateCommand((obj) =>
+            deleteTweet = new DelegateCommand(async (obj) =>
             {
                 var user = Config.Accounts.FirstOrDefault(item => item != null && item.ScreenName == Tweet.Author.ScreenName);
 
-                ServiceDispatcher.GetService(user).DeleteTweet(new DeleteTweetOptions { Id = Tweet.Id }, (s, response) =>
-                {
-                    if (response.StatusCode == HttpStatusCode.OK)
-                        MessageService.ShowMessage(Localization.Resources.TweetDeleted, "");
-                    else
-                        MessageService.ShowError(Localization.Resources.ErrorDeletingTweet);
-                });
+                var response = await ServiceDispatcher.GetService(user).DeleteTweetAsync(new DeleteTweetOptions { Id = Tweet.Id });
+                if (response.RequestSucceeded)
+                    MessageService.ShowMessage(Localization.Resources.TweetDeleted, "");
+                else
+                    MessageService.ShowError(Localization.Resources.ErrorDeletingTweet);
             }, (obj) => Tweet != null && Tweet.Author != null && Config.Accounts.Any(item => item != null && item.ScreenName == Tweet.Author.ScreenName));
 
 
@@ -305,52 +305,52 @@ namespace Ocell.Pages.Elements
                 Navigate(Uris.WriteTweet);
             }, obj => Config.Accounts.Any() && Tweet != null);
 
-            favorite = new DelegateCommand((parameter) =>
+            // TODO: These are the same commands that are used globally. WTF.
+            // TODO: And responses aren't checked again. Holy shit.
+            favorite = new DelegateCommand(async (parameter) =>
             {
                 TwitterStatus param = (TwitterStatus)parameter;
                 if (IsFavorited)
-                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweet(new UnfavoriteTweetOptions { Id = param.Id }, (sts, resp) =>
-                    {
-                        MessageService.ShowLightNotification(Localization.Resources.Unfavorited);
-                        IsFavorited = false;
-                    });
+                {
+                    await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
+                    MessageService.ShowLightNotification(Localization.Resources.Unfavorited);
+                    IsFavorited = false;
+                }
                 else
-                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(new FavoriteTweetOptions { Id = param.Id }, (sts, resp) =>
-                    {
-                        MessageService.ShowLightNotification(Localization.Resources.Favorited);
-                        IsFavorited = true;
-                    });
+                {
+                    await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
+                    MessageService.ShowLightNotification(Localization.Resources.Favorited);
+                    IsFavorited = true;
+                }
             }, parameter => (parameter is TwitterStatus) && Config.Accounts.Count > 0 && DataTransfer.CurrentAccount != null);
 
-            sendTweet = new DelegateCommand((parameter) =>
+            sendTweet = new DelegateCommand(async (parameter) =>
             {
                 IsLoading = true;
                 BarText = Resources.SendingTweet;
-                ServiceDispatcher.GetCurrentService().SendTweet(new SendTweetOptions
-                {
-                    InReplyToStatusId = Tweet.Id,
-                    Status = ReplyText
-                }, (status, response) =>
-                {
-                    IsLoading = false;
-                    BarText = "";
-                    if (response.StatusCode != HttpStatusCode.OK)
-                        MessageService.ShowError(response.Error != null ? response.Error.Message : Resources.UnknownValue);
-                    else if (TweetSent != null)
-                        TweetSent(this, new EventArgs<ITweetable>(status));
-                });
+                var response = await ServiceDispatcher.GetCurrentService().SendTweetAsync(new SendTweetOptions { InReplyToStatusId = Tweet.Id, Status = ReplyText });
+
+                IsLoading = false;
+                BarText = "";
+                if (!response.RequestSucceeded)
+                    MessageService.ShowError(response.Error != null ? response.Error.Message : Resources.UnknownValue);
+                else if (TweetSent != null)
+                    TweetSent(this, new EventArgs<ITweetable>(response.Content));
+
             });
         }
 
-        void FillUser()
+        async void FillUser()
         {
-            ServiceDispatcher.GetDefaultService().GetUserProfileFor(new GetUserProfileForOptions { ScreenName = Tweet.Author.ScreenName }, (user, response) =>
-                {
-                    if (response.StatusCode != HttpStatusCode.OK)
-                        MessageService.ShowError(Localization.Resources.ErrorGettingProfile);
-                    Tweet.User = user;
-                    SetAvatar();
-                });
+            var response = await ServiceDispatcher.GetDefaultService().GetUserProfileForAsync(new GetUserProfileForOptions { ScreenName = Tweet.Author.ScreenName });
+
+            var user = response.Content;
+
+            if (!response.RequestSucceeded)
+                MessageService.ShowError(Localization.Resources.ErrorGettingProfile);
+
+            Tweet.User = user;
+            SetAvatar();
         }
 
         public void ImageFailed(object sender, ExceptionRoutedEventArgs e)

@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using TweetSharp;
 
@@ -207,27 +208,46 @@ namespace Ocell.Pages.Columns
                 var service = ServiceDispatcher.GetService(user);
 
                 loading += 2;
-                service.ListListsFor(new ListListsForOptions { ScreenName = user.ScreenName }, ReceiveLists);
-                service.ListSubscriptions(new ListSubscriptionsOptions { ScreenName = user.ScreenName }, ReceiveLists);
+                service.ListListsForAsync(new ListListsForOptions { ScreenName = user.ScreenName }).ContinueWith(ReceiveLists);
+                service.ListSubscriptionsAsync(new ListSubscriptionsOptions { ScreenName = user.ScreenName }).ContinueWith(ReceiveSubscriptions);
             }
         }
 
-        void ReceiveLists(IEnumerable<TwitterList> list, TwitterResponse response)
+        private void ReceiveSubscriptions(Task<TwitterResponse<TwitterCursorList<TwitterList>>> task)
         {
+            var response = task.Result;
+
             loading--;
 
             if (loading <= 0)
                 IsLoading = false;
 
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
-            {
+            if (!response.RequestSucceeded)
                 MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
-                return;
-            }
+            else
+                AddLists(response.Content);
+        }
 
+        private void ReceiveLists(Task<TwitterResponse<IEnumerable<TwitterList>>> task)
+        {
+            var response = task.Result;
+
+            loading--;
+
+            if (loading <= 0)
+                IsLoading = false;
+
+            if (!response.RequestSucceeded)
+                MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
+            else
+                AddLists(response.Content);
+        }
+
+        void AddLists(IEnumerable<TwitterList> lists)
+        {
             lock (resourcesSync)
             {
-                foreach (var item in list)
+                foreach (var item in lists)
                 {
                     if (!Resources.Any(x => x.Data == item.FullName && x.Type == ResourceType.List))
                         Resources.Add(new TwitterResource
@@ -263,25 +283,30 @@ namespace Ocell.Pages.Columns
             }
             else
             {
-                var service = ServiceDispatcher.GetService(user);
-
-                loading++;
-                service.ListSavedSearches(ReceiveSearches);
+                GetSavedSearches();
             }
         }
 
-        void ReceiveSearches(IEnumerable<TwitterSavedSearch> searches, TwitterResponse response)
+        async void GetSavedSearches()
         {
+            var service = ServiceDispatcher.GetService(user);
+
+            loading++;
+
+            var response = await service.ListSavedSearchesAsync();
+
             loading--;
 
             if (loading <= 0)
-                IsLoading = false;
+                IsLoading = false; // TODO: Refactor this.
 
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            if (!response.RequestSucceeded)
             {
                 MessageService.ShowError(Localization.Resources.ErrorDownloadingSearches);
                 return;
             }
+
+            var searches = response.Content;
 
             lock (resourcesSync)
             {

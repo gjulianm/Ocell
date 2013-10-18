@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Threading;
 using DanielVaughan.Windows;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Ocell.Pages.Columns
 {
@@ -97,9 +98,11 @@ namespace Ocell.Pages.Columns
             BarText = Localization.Resources.LoadingLists;
 
             loading = 2;
-            service.ListListsFor(new ListListsForOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }, ReceiveLists);
-            service.ListSubscriptions(new ListSubscriptionsOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }, ReceiveLists);
+            service.ListListsForAsync(new ListListsForOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }).ContinueWith(ReceiveLists);
+            service.ListSubscriptionsAsync(new ListSubscriptionsOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }).ContinueWith(ReceiveSubscriptions);
         }
+
+       
 
         private void CreateCoreList()
         {
@@ -128,7 +131,25 @@ namespace Ocell.Pages.Columns
             });
         }
 
-        private void ReceiveLists(IEnumerable<TwitterList> result, TwitterResponse response)
+        private void ReceiveSubscriptions(Task<TwitterResponse<TwitterCursorList<TwitterList>>> task)
+        {
+            var response = task.Result;
+            if (!response.RequestSucceeded)
+                MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
+
+            AddLists(response.Content);
+        }
+
+        private void ReceiveLists(Task<TwitterResponse<IEnumerable<TwitterList>>> task)
+        {
+            var response = task.Result;
+            if (!response.RequestSucceeded)
+                MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
+
+            AddLists(response.Content);
+        }
+
+        private void AddLists(IEnumerable<TwitterList> lists)
         {
             lock (sync)
             {
@@ -142,10 +163,7 @@ namespace Ocell.Pages.Columns
                 }
             }
 
-            if (response.StatusCode != HttpStatusCode.OK)
-                MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
-
-            foreach (var list in result)
+            foreach (var list in lists)
                 if (!Lists.Any(x => x.FullName == list.FullName))
                     Lists.Add(list);
         }

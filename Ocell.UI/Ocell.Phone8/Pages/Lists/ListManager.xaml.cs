@@ -26,7 +26,7 @@ namespace Ocell.Pages.Lists
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
 
-            
+
 
             _selectionChangeFired = false;
             NewList.Click += new RoutedEventHandler(NewList_Click);
@@ -53,45 +53,48 @@ namespace Ocell.Pages.Lists
             LoadUserLists();
         }
 
-        private void LoadUserLists()
+        private async void LoadUserLists()
         {
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
             _pendingCalls++;
-            _srv.ListListsFor(new ListListsForOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }, (lists, response) =>
-            {
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorLoadingLists));
-                    return;
-                }
+            var response = await _srv.ListListsForAsync(new ListListsForOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName });
 
-                Dispatcher.BeginInvoke(() => ListsUser.ItemsSource = lists);
-                _pendingCalls--;
-                if (_pendingCalls <= 0)
-                    Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
-            });
+            if (!response.RequestSucceeded)
+            {
+                MessageBox.Show(Localization.Resources.ErrorLoadingLists);
+                return;
+            }
+
+            var lists = response.Content;
+
+            ListsUser.ItemsSource = lists;
+            _pendingCalls--;
+            if (_pendingCalls <= 0)
+                pBar.IsVisible = false;
+
         }
 
-        private void LoadListsIn()
+        private async void LoadListsIn()
         {
             Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
             _pendingCalls++;
-            _srv.ListListMembershipsFor(new ListListMembershipsForOptions { ScreenName = _userName, FilterToOwnedLists = true, Cursor = -1 }, (lists, response) =>
-            {
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorLoadingLists));
-                    return;
-                }
+            var response = await _srv.ListListMembershipsForAsync(new ListListMembershipsForOptions { ScreenName = _userName, FilterToOwnedLists = true, Cursor = -1 });
 
-                Dispatcher.BeginInvoke(() => ListsIn.ItemsSource = lists);
-                _pendingCalls--;
-                if (_pendingCalls <= 0)
-                    Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
-            });
+            var lists = response.Content;
+            if (!response.RequestSucceeded)
+            {
+                Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorLoadingLists));
+                return;
+            }
+
+            Dispatcher.BeginInvoke(() => ListsIn.ItemsSource = lists);
+            _pendingCalls--;
+            if (_pendingCalls <= 0)
+                Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
+
         }
 
-        private void ListsIn_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private async void ListsIn_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (!_selectionChangeFired)
             {
@@ -101,19 +104,19 @@ namespace Ocell.Pages.Lists
                 if (list != null)
                 {
                     Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-                    _srv.RemoveListMember(new RemoveListMemberOptions { OwnerScreenName = list.User.ScreenName, Slug = list.Slug, ScreenName = _userName }, (user, response) =>
+                    var response = await _srv.RemoveListMemberAsync(new RemoveListMemberOptions { OwnerScreenName = list.User.ScreenName, Slug = list.Slug, ScreenName = _userName });
+
+                    LoadListsIn();
+                    if (response.RequestSucceeded)
                     {
-                        LoadListsIn();
-                        if (response.StatusCode == HttpStatusCode.OK)
-                        {
-                            Dispatcher.BeginInvoke(() => MessageBox.Show(String.Format(Localization.Resources.RemovedFromList, _userName, list.FullName)));
-                        }
-                        else
-                        {
-                            Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorMessage));
-                        }
-                        Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
-                    });
+                        Dispatcher.BeginInvoke(() => MessageBox.Show(String.Format(Localization.Resources.RemovedFromList, _userName, list.FullName)));
+                    }
+                    else
+                    {
+                        Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorMessage));
+                    }
+                    Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
+
                 }
                 _selectionChangeFired = true;
                 Dispatcher.BeginInvoke(() => ListsIn.SelectedIndex = -1);
@@ -124,7 +127,7 @@ namespace Ocell.Pages.Lists
             }
         }
 
-        private void ListsUser_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private async void ListsUser_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (!_selectionChangeFired)
             {
@@ -134,19 +137,18 @@ namespace Ocell.Pages.Lists
                 if (list != null)
                 {
                     Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-                    _srv.AddListMember(new AddListMemberOptions { ScreenName = _userName, Slug = list.Slug, OwnerScreenName = list.User.ScreenName }, (user, response) =>
+                    var response = await _srv.AddListMemberAsync(new AddListMemberOptions { ScreenName = _userName, Slug = list.Slug, OwnerScreenName = list.User.ScreenName });
+
+                    LoadListsIn();
+                    if (response.RequestSucceeded)
                     {
-                        LoadListsIn();
-                        if (response.StatusCode == HttpStatusCode.OK)
-                        {
-                            Dispatcher.BeginInvoke(() => MessageBox.Show(String.Format(Localization.Resources.AddedToList, _userName, list.FullName)));
-                        }
-                        else
-                        {
-                            Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorMessage));
-                        }
-                        Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
-                    });
+                        Dispatcher.BeginInvoke(() => MessageBox.Show(String.Format(Localization.Resources.AddedToList, _userName, list.FullName)));
+                    }
+                    else
+                    {
+                        Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorMessage));
+                    }
+                    Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
                 }
                 _selectionChangeFired = true;
                 Dispatcher.BeginInvoke(() => ListsUser.SelectedIndex = -1);
