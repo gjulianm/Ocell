@@ -2,6 +2,8 @@
 using System.Net;
 using TweetSharp;
 using Ocell.Library.Twitter;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Ocell.Library.Tasks
 {
@@ -10,55 +12,43 @@ namespace Ocell.Library.Tasks
     public class TaskExecutor
     {
         public TwitterStatusTask Task { get; set; }
-        int PendingCalls;
 
         public TaskExecutor(TwitterStatusTask task)
         {
             Task = task;
         }
 
-        public void Execute()
+        public async Task Execute()
         {
             try
             {
-                UnsafeExecute();
+                await UnsafeExecute();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if (Error != null)
                     Error(this, null);
+
+                Debug.WriteLine("Error executing task: {0}", ex);
             }
         }
 
-        private void ReceiveResponse(TwitterStatus status, TwitterResponse response)
+        private async Task UnsafeExecute()
         {
-            if (status != null && response.StatusCode == HttpStatusCode.OK)
-            {
-                if (Completed != null)
-                    Completed(this, new EventArgs());
-            }
-            else
-            {
-                if (Error != null)
-                    Error(this, response);
-            }
-        }
-
-        private void UnsafeExecute()
-        {
-            PendingCalls = 0;
             foreach (var user in Task.Accounts)
             {
-#if BACKGROUND_AGENT
                 ITwitterService service = new TwitterService(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret,
                     user.Key, user.Secret);
-#else
-                ITwitterService service = ServiceDispatcher.GetService(user);
-#endif
-                service.SendTweet(new SendTweetOptions { Status = Task.Text, InReplyToStatusId = Task.InReplyTo }, ReceiveResponse);
-                PendingCalls++;
+
+                var result = await service.SendTweetAsync(new SendTweetOptions { Status = Task.Text, InReplyToStatusId = Task.InReplyTo });
+
+                if(!result.RequestSucceeded)
+                {
+                    if (Error != null)
+                        Error(this, result);
+                }
             }
-            if (PendingCalls == 0 && Completed != null)
+            if (Completed != null)
                 Completed(this, new EventArgs());
         }
 

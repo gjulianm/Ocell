@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading;
 using Microsoft.Phone.Shell;
 using TweetSharp;
+using System.Threading.Tasks;
 
 namespace Ocell.BackgroundAgent.Library
 {
@@ -22,10 +23,10 @@ namespace Ocell.BackgroundAgent.Library
         public Func<long> ApplicationMemoryUsage { get; set; }
         public TileManager TileManager { get; set; }
 
-        public void Start()
+        public async void Start()
         {
-            CompleteAction(SendScheduledTweets);
-            CompleteAction(NotifyMentionsAndMessages);
+            await CompleteAction(SendScheduledTweets);
+            await CompleteAction(NotifyMentionsAndMessages);
         }
 
         bool IsMemoryUsageHigh()
@@ -50,10 +51,10 @@ namespace Ocell.BackgroundAgent.Library
             Logger.Add(toWrite);
         }
 
-        private void CompleteAction(Action action)
+        private async Task CompleteAction(Func<Task> action)
         {
             WriteMemUsage("Start " + action.Method.Name);
-            action.Invoke();
+            await action.Invoke();
             WriteMemUsage("End " + action.Method.Name);
 
             if (IsMemoryUsageHigh() && !System.Diagnostics.Debugger.IsAttached)
@@ -74,7 +75,7 @@ namespace Ocell.BackgroundAgent.Library
             }
         }
 
-        private void SendScheduledTweets()
+        private async Task SendScheduledTweets()
         {
             var copyList = new List<TwitterStatusTask>(Config.TweetTasks);
             AutoResetEvent waitHandle = new AutoResetEvent(false);
@@ -83,16 +84,13 @@ namespace Ocell.BackgroundAgent.Library
             {
                 Config.TweetTasks.Remove(task);
                 var executor = new TaskExecutor(task);
-                executor.Completed += (sender, e) => waitHandle.Set();
                 executor.Error += (sender, e) =>
                 {
                     Config.TweetTasks.Add(task);
                     Config.SaveTweetTasks();
-                    waitHandle.Set();
                 };
-                executor.Execute();
 
-                waitHandle.WaitOne(TimeSpan.FromSeconds(1)); // Do work sequentially
+                await executor.Execute();
             }
             Config.SaveTweetTasks();
         }
@@ -104,7 +102,7 @@ namespace Ocell.BackgroundAgent.Library
         private List<TileNotification> toastNotifications = new List<TileNotification>();
         private object notsSync = new object();
 
-        private void NotifyMentionsAndMessages()
+        private async Task NotifyMentionsAndMessages()
         {
             foreach (var user in Config.Accounts)
                 CheckNotificationsForUser(user);
@@ -197,8 +195,10 @@ namespace Ocell.BackgroundAgent.Library
 
         }
 
-        private void CheckNotificationsForUser(UserToken user)
+        private async Task CheckNotificationsForUser(UserToken user)
         {
+            // TODO: Check if we can reuse Tweetsharp here again. 
+
             var service = new LightTwitterClient(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, user.Key, user.Secret);
 
             if (user.Preferences.MentionsPreferences != NotificationType.None)
@@ -307,57 +307,11 @@ namespace Ocell.BackgroundAgent.Library
             }
         }
 
-       
+
 
         protected void Load(TwitterResource resource)
         {
-            var service = new TwitterService(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, resource.User.Key, resource.User.Secret);
-
-            switch (resource.Type)
-            {
-                case ResourceType.Home:
-                    service.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions { Count = 1, IncludeEntities = true }, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
-                    break;
-                case ResourceType.Mentions:
-                    service.ListTweetsMentioningMe(new ListTweetsMentioningMeOptions { Count = 1, IncludeEntities = true }, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
-                    break;
-                case ResourceType.Messages:
-                    service.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions { Count = 1 }, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
-                    break;
-                case ResourceType.Favorites:
-                    service.ListFavoriteTweets(new ListFavoriteTweetsOptions { Count = 1 }, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
-                    break;
-                case ResourceType.List:
-                    service.ListTweetsOnList(new ListTweetsOnListOptions
-                    {
-                        IncludeRts = false,
-                        Count = 1,
-                        OwnerScreenName = resource.Data.Substring(1, resource.Data.IndexOf('/') - 1),
-                        Slug = resource.Data.Substring(resource.Data.IndexOf('/') + 1)
-                    }, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
-                    break;
-                case ResourceType.Search:
-                    service.Search(new SearchOptions { Count = 1, IncludeEntities = true, Q = resource.Data }, (status, response) => ReceiveTweetable(status.Statuses.Cast<ITweetable>(), response, resource));
-                    break;
-                case ResourceType.Tweets:
-                    service.ListTweetsOnUserTimeline(new ListTweetsOnUserTimelineOptions { Count = 1, ScreenName = resource.Data, IncludeRts = true }, (status, response) => ReceiveTweetable(status.Cast<ITweetable>(), response, resource));
-                    break;
-            }
-        }
-
-        protected void ReceiveTweetable(IEnumerable<ITweetable> statuses, TwitterResponse response, TwitterResource Resource)
-        {
-            WriteMemUsage("Received tweet for column.");
-            if (statuses == null || !statuses.Any() || response.StatusCode != System.Net.HttpStatusCode.OK)
-            {
-                WriteMemUsage("Exit with error");
-                return;
-            }
-
-            string tileString = Uri.EscapeDataString(Resource.String);
-            ITweetable tweet = statuses.FirstOrDefault();
-
-            TileManager.SetColumnTweet(tileString, tweet.CleanText, tweet.AuthorName);            
+            // TODO: Receive data for columns. Use TweetLoader? Refactor to reuse the functions?
         }
         #endregion
     }
