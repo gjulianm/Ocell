@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API Libraries", "API Libraries", "{6AD81ED6-3EBA-4ABD-AC73-08FB0CBFA29B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{AE47EC9D-1750-4329-B929-11CEA7DBB69F}"
@@ -10,6 +12,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows Phone 8", "Windows Phone 8", "{29334B7B-5C43-4C89-B4D8-DDFB94666CDC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Third Party", "Third Party", "{251BFB7A-4180-46DF-ADA3-2FF57B1FA108}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Background Agent", "Background Agent", "{7F901A34-ABEA-4AED-B9EB-523C9C1BBD8B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hammock.WindowsPhone.Mango", "Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj", "{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}"
 EndProject
@@ -38,8 +42,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.Phone7", "Ocell.UI\Ocell.Phone7\Ocell.Phone7.csproj", "{F3B6A65D-237D-4E5E-B4A9-F9E098730119}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.Phone8", "Ocell.UI\Ocell.Phone8\Ocell.Phone8.csproj", "{D23E7947-6771-402D-A3D9-384CF40A8824}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Background Agent", "Background Agent", "{7F901A34-ABEA-4AED-B9EB-523C9C1BBD8B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.Pictures", "Ocell.APIs\Ocell.Pictures\Ocell.Pictures.csproj", "{A0F91E66-0795-4592-A0D2-2FAAFC839557}"
 EndProject

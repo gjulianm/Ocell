@@ -129,16 +129,9 @@ namespace Ocell.Controls
 
             this.Loaded += OnLoad;
             this.SelectionChanged += ManageNavigation;
-#if WP7
-            this.Link += ExtendedListBox_Link;
-            this.Unlink += ExtendedListBox_Unlink;
 
-            this.IsFlatList = true;
-#elif WP8
             this.ItemRealized += OnItemRealized;
             this.ItemUnrealized += OnItemUnrealized;
-#endif
-
 
             ExtendedListBox.SaveViewports += this.SaveInstanceViewport;
 
@@ -154,28 +147,6 @@ namespace Ocell.Controls
             pullDetector = Dependency.Resolve<IListboxCompressionDetector>();
         }
 
-#if WP7
-        void ExtendedListBox_Unlink(object sender, LinkUnlinkEventArgs e)
-        {
-            ITweetable o = e.ContentPresenter.DataContext as ITweetable;
-            if (o != null)
-            {
-                lock (viewportItemsLock)
-                    viewportItems.Remove(o);
-            }
-        }
-
-        void ExtendedListBox_Link(object sender, LinkUnlinkEventArgs e)
-        {
-            ITweetable o = e.ContentPresenter.DataContext as ITweetable;
-            if (o != null)
-            {
-                lock (viewportItemsLock)
-                    viewportItems[o] = e.ContentPresenter;
-            }
-        }
-
-#elif WP8
         bool viewportChanged = false;
 
         private void OnItemRealized(object sender, ItemRealizationEventArgs e)
@@ -203,8 +174,6 @@ namespace Ocell.Controls
                 }
             }
         }
-#endif
-
 
         private void SetupCollectionViewSource()
         {

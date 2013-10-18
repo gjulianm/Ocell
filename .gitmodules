@@ -1,5 +1,5 @@
-[submodule "Ocell.ThirdParty/Sharplonger"]
-	path = Ocell.ThirdParty/Sharplonger
+[submodule "Ocell.APIs/Ocell.Sharplonger"]
+	path = Ocell.APIs/Ocell.Sharplonger
 	url = git@github.com:gjulianm/Sharplonger.git
 [submodule "Ocell.ThirdParty/hammock"]
 	path = Ocell.ThirdParty/hammock
@@ -8,8 +8,8 @@
 	path = Ocell.ThirdParty/tweetsharp
 	url = git@github.com:gjulianm/tweetsharp.git
 [submodule "Ocell.APIs/SharpSerializer"]
-	path = Ocell.APIs/SharpSerializer
+	path = Ocell.ThirdParty/SharpSerializer
 	url = git@github.com:gjulianm/SharpSerializer.git
-[submodule "Ocell.APIs/BufferAPI"]
-	path = Ocell.APIs/BufferAPI
+[submodule "Ocell.APIs/Buffer"]
+	path = Ocell.APIs/Ocell.Buffer
 	url = git@github.com:gjulianm/BufferAPI.git
