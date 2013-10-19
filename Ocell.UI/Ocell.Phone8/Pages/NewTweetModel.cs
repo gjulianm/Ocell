@@ -511,7 +511,7 @@ namespace Ocell.Pages
 
             requestsLeft++;
 
-            var response = await ServiceDispatcher.GetService(account).SendTweetAsync(new SendTweetOptions { Status = post, InReplyToStatusId = DataTransfer.ReplyId });
+            var response = await ServiceDispatcher.GetService(account).SendTweetAsync(sendOptions);
             var status = response.Content;
 
             requestsLeft--;
