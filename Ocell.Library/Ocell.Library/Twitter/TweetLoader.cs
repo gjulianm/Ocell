@@ -50,7 +50,7 @@ namespace Ocell.Library.Twitter
                 if (value == resource)
                     return;
 
-                Resource = value;
+                resource = value;
                 RefreshServices();
             }
         }
