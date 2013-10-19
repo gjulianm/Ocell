@@ -1,4 +1,5 @@
-﻿using DanielVaughan;
+﻿using AsyncOAuth;
+using DanielVaughan;
 using DanielVaughan.InversionOfControl;
 using DanielVaughan.InversionOfControl.Containers.SimpleContainer;
 using DanielVaughan.Services;
@@ -11,6 +12,7 @@ using Ocell.Library;
 using Ocell.Library.Twitter;
 using System;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Navigation;
 using Windows.Phone.Speech.VoiceCommands;
@@ -61,6 +63,9 @@ namespace Ocell
 
             SimpleContainer container = new SimpleContainer();
             container.InitializeServiceLocator();
+
+            OAuthUtility.ComputeHash = (key, buffer) => { using (var hmac = new HMACSHA1(key)) { return hmac.ComputeHash(buffer); } };
+
 
             Dependency.Register<INavigationService, FrameNavigationService>(true);
             Dependency.Register<IMessageService, MessageService>(true);
