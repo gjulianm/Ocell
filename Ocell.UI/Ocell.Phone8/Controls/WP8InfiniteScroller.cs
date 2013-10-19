@@ -31,10 +31,7 @@ namespace Ocell.Controls
             var tweet = e.Container.DataContext as ITweetable;
 
             if (tweet != null && lb.Loader.Source.LastOrDefault() == tweet)
-            {
                 lb.LoadOld();
-                lb.Loader.IsLoading = false; // Supress loading bar.
-            }
         }
     }
 }

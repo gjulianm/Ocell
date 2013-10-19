@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -14,37 +15,23 @@ namespace Ocell.Library.Twitter
 {
     public class UserTokenFiller
     {
-        public UserToken Token { get; set; }
-
-        public UserTokenFiller(UserToken token)
+        public async Task FillUserData(UserToken token)
         {
-            Token = token;
-        }
-
-        public void FillUserData()
-        {
-            if (!(string.IsNullOrWhiteSpace(Token.ScreenName) || string.IsNullOrWhiteSpace(Token.AvatarUrl) || Token.Id == null))
+            if (!(string.IsNullOrWhiteSpace(token.ScreenName) || string.IsNullOrWhiteSpace(token.AvatarUrl) || token.Id == null))
                 return;
 
-            ITwitterService srv = ServiceDispatcher.GetService(Token);
+            ITwitterService service = ServiceDispatcher.GetService(token);
 
-            srv.GetUserProfile(new GetUserProfileOptions { IncludeEntities = true }, ReceiveUserProfile);
-        }
+            var response = await service.GetUserProfileAsync(new GetUserProfileOptions { IncludeEntities = true });
 
-        protected void ReceiveUserProfile(TwitterUser user, TwitterResponse response)
-        {
-            if (response.StatusCode != HttpStatusCode.OK)
+            if (!response.RequestSucceeded)
                 return;
 
-            Token.ScreenName = user.ScreenName;
-            Token.Id = user.Id;
-            Token.AvatarUrl = user.ProfileImageUrl;
+            var user = response.Content;
 
-            if (UserDataFilled != null)
-                UserDataFilled(Token);
+            token.ScreenName = user.ScreenName;
+            token.Id = user.Id;
+            token.AvatarUrl = user.ProfileImageUrl;
         }
-
-        public delegate void OnUserDataFilled(UserToken Token);
-        public event OnUserDataFilled UserDataFilled;
     }
 }

@@ -30,7 +30,7 @@ namespace Ocell.Commands
             if (parameter == null)
                 return;
 
-            ITweetable tweet = (ITweetable) parameter;
+            ITweetable tweet = (ITweetable)parameter;
             DataTransfer.Text = "@" + tweet.Author.ScreenName + " ";
             if (parameter is TwitterStatus)
             {
@@ -79,6 +79,8 @@ namespace Ocell.Commands
         public event EventHandler CanExecuteChanged;
     }
 
+    // TODO: Man, check the responses. That was lazy.
+
     public class RetweetCommand : ICommand
     {
         public bool CanExecute(object parameter)
@@ -88,13 +90,11 @@ namespace Ocell.Commands
                 DataTransfer.CurrentAccount != null;
         }
 
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
             Dependency.Resolve<IMessageService>().SetLoadingBar(true);
-            ServiceDispatcher.GetService(DataTransfer.CurrentAccount).Retweet(new RetweetOptions { Id = ((ITweetable)parameter).Id }, (sts, resp) =>
-            {
-                Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Retweeted);
-            });
+            await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).RetweetAsync(new RetweetOptions { Id = ((ITweetable)parameter).Id });
+            Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Retweeted);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -109,19 +109,19 @@ namespace Ocell.Commands
                 DataTransfer.CurrentAccount != null;
         }
 
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
             TwitterStatus param = (TwitterStatus)parameter;
             if (param.IsFavorited)
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweet(new UnfavoriteTweetOptions { Id = param.Id }, (sts, resp) =>
-                {
-                    Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Unfavorited);
-                });
+            {
+                await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
+                Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Unfavorited);
+            }
             else
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweet(new FavoriteTweetOptions { Id = param.Id }, (sts, resp) =>
-                {
-                    Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Favorited);
-                });
+            {
+                await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
+                Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Favorited);
+            }
         }
 
         public event EventHandler CanExecuteChanged;

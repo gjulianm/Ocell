@@ -228,7 +228,7 @@ namespace Ocell.Pages
             TryLoadDraft();
 
             if (Config.EnabledGeolocation == true)
-                geoWatcher.Start();            
+                geoWatcher.Start();
         }
 
 
@@ -372,11 +372,11 @@ namespace Ocell.Pages
 
             if (IsDM)
             {
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).SendDirectMessage(new SendDirectMessageOptions { UserId = (int)DataTransfer.DMDestinationId, Text = TweetText }, ReceiveDM);
+                SendDirectMessage();
             }
             else
             {
-               
+
                 if (UsesTwitlonger)
                 {
                     if (!EnsureTwitlonger())
@@ -394,30 +394,8 @@ namespace Ocell.Pages
                 }
                 else
                 {
-                    if (IsGeotagged)
-                    {
-                        var location = geoWatcher.Position.Location;
-
-                        foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
-                        {
-                            ServiceDispatcher.GetService(account).SendTweet(new SendTweetOptions
-                            {
-                                Status = TweetText,
-                                InReplyToStatusId = DataTransfer.ReplyId,
-                                Lat = location.Latitude,
-                                Long = location.Longitude
-                            }, ReceiveResponse);
-                            requestsLeft++;
-                        }
-                    }
-                    else
-                    {
-                        foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
-                        {
-                            ServiceDispatcher.GetService(account).SendTweet(new SendTweetOptions { Status = TweetText, InReplyToStatusId = DataTransfer.ReplyId }, ReceiveResponse);
-                            requestsLeft++;
-                        }
-                    }
+                    foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
+                        SendTweetToTwitter(TweetText, account);
                 }
             }
 
@@ -428,6 +406,27 @@ namespace Ocell.Pages
 
                 DataTransfer.Draft = null;
                 Config.SaveDrafts();
+            }
+        }
+
+        private async void SendDirectMessage()
+        {
+            var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+            var response = await service.SendDirectMessageAsync(new SendDirectMessageOptions { UserId = (int)DataTransfer.DMDestinationId, Text = TweetText });
+
+            IsLoading = false;
+            BarText = "";
+
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+                MessageService.ShowError(Resources.ErrorDuplicateTweet);
+            else if (response.StatusCode != HttpStatusCode.OK)
+                MessageService.ShowError(Resources.ErrorMessage);
+            else
+            {
+                TweetText = "";
+                DataTransfer.Text = "";
+                GoBack();
+                DataTransfer.ReplyingDM = false;
             }
         }
 
@@ -456,6 +455,8 @@ namespace Ocell.Pages
 
         void ReceiveTLResponse(TwitlongerPost post, TwitlongerResponse response)
         {
+            requestsLeft--;
+
             if (response.StatusCode != HttpStatusCode.OK || post == null || post.Post == null || string.IsNullOrEmpty(post.Post.Content) || response.Sender == null)
             {
                 IsLoading = false;
@@ -486,25 +487,33 @@ namespace Ocell.Pages
                 // TODO: Sometimes, this gives a weird OutOfRange exception. Don't know why, investigate it.
             }
 
-            if (IsGeotagged)
-            {
-                var location = geoWatcher.Position.Location;
-                ServiceDispatcher.GetService(account).SendTweet(new SendTweetOptions
-                {
-                    Status = post.Post.Content,
-                    InReplyToStatusId = DataTransfer.ReplyId,
-                    Lat = location.Latitude,
-                    Long = location.Longitude
-                }, ReceiveResponse);
-            }
-            else
-            {
-                ServiceDispatcher.GetService(account).SendTweet(new SendTweetOptions { Status = post.Post.Content, InReplyToStatusId = DataTransfer.ReplyId }, ReceiveResponse);
-            }
+            SendTweetToTwitter(post.Post.Content, account);
         }
 
-        void ReceiveResponse(TwitterStatus status, TwitterResponse response)
+        private async void SendTweetToTwitter(string post, UserToken account)
         {
+            double? latitude = null, longitude = null;
+
+            if (IsGeotagged)
+            {
+                GeoCoordinate location = IsGeotagged ? geoWatcher.Position.Location : null;
+                latitude = location.Latitude;
+                longitude = location.Longitude;
+            }
+
+            var sendOptions = new SendTweetOptions
+            {
+                Status = post,
+                InReplyToStatusId = DataTransfer.ReplyId,
+                Lat = latitude,
+                Long = longitude
+            };
+
+            requestsLeft++;
+
+            var response = await ServiceDispatcher.GetService(account).SendTweetAsync(sendOptions);
+            var status = response.Content;
+
             requestsLeft--;
 
             if (requestsLeft <= 0)
@@ -514,7 +523,7 @@ namespace Ocell.Pages
                 MessageService.ShowError(Resources.Error);
             else if (response.StatusCode == HttpStatusCode.Forbidden)
                 MessageService.ShowError(Resources.ErrorDuplicateTweet);
-            else if (response.StatusCode != HttpStatusCode.OK)
+            else if (!response.RequestSucceeded)
             {
                 var errorMsg = response.Error != null ? response.Error.Message : "";
                 MessageService.ShowError(String.Format("{0}: {1} ({2})", Resources.ErrorMessage, errorMsg, response.StatusCode));
@@ -542,24 +551,6 @@ namespace Ocell.Pages
 
             if (id != null)
                 ServiceDispatcher.GetTwitlongerService(name).SetId(id, tweetId, null);
-        }
-
-        void ReceiveDM(TwitterDirectMessage DM, TwitterResponse response)
-        {
-            IsLoading = false;
-            BarText = "";
-
-            if (response.StatusCode == HttpStatusCode.Forbidden)
-                MessageService.ShowError(Resources.ErrorDuplicateTweet);
-            else if (response.StatusCode != HttpStatusCode.OK)
-                MessageService.ShowError(Resources.ErrorMessage);
-            else
-            {
-                TweetText = "";
-                DataTransfer.Text = "";
-                GoBack();
-                DataTransfer.ReplyingDM = false;
-            }
         }
 
         void Schedule(object param)
@@ -654,31 +645,9 @@ namespace Ocell.Pages
 
         void ChooserCompleted(object sender, PhotoResult e)
         {
-            if (e.TaskResult != TaskResult.OK)
-                return;
+            // TODO: Complete.
 
-            IsLoading = true;
-            BarText = Resources.UploadingPicture;
-
-            TwitterService srv = ServiceDispatcher.GetService(DataTransfer.CurrentAccount) as TwitterService;
-
-            if (srv == null)
-                return; // Dirty trick: it will never be null if we're not testing.
-
-            RestRequest req = srv.PrepareEchoRequest();
-            RestClient client = new RestClient { Authority = "http://api.twitpic.com/", VersionPath = "1" };
-
-            req.AddFile("media", e.OriginalFileName, e.ChosenPhoto);
-            req.AddField("key", "1abb1622666934158f4c2047f0822d0a");
-            req.AddField("message", TweetText);
-            req.AddField("consumer_token", Ocell.Library.SensitiveData.ConsumerToken);
-            req.AddField("consumer_secret", SensitiveData.ConsumerSecret);
-            req.AddField("oauth_token", DataTransfer.CurrentAccount.Key);
-            req.AddField("oauth_secret", DataTransfer.CurrentAccount.Secret);
-            req.Path = "upload.xml";
-            //req.Method = Hammock.Web.WebMethod.Post;
-
-            client.BeginRequest(req, (RestCallback)uploadCompleted);
+            MessageService.ShowError("Woops, not supported.");
         }
 
         void uploadCompleted(RestRequest request, RestResponse response, object userstate)

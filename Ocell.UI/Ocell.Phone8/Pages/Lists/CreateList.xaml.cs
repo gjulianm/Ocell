@@ -21,10 +21,10 @@ namespace Ocell.Pages.Lists
         public CreateList()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            
+
         }
 
-        private void CreateButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void CreateButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             ITwitterService srv = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
             TwitterListMode mode;
@@ -32,24 +32,21 @@ namespace Ocell.Pages.Lists
                 mode = TwitterListMode.Public;
             else
                 mode = TwitterListMode.Private;
-            Dispatcher.BeginInvoke(() => pBar.IsVisible = true);
-            srv.CreateList(new CreateListOptions { ListOwner = DataTransfer.CurrentAccount.ScreenName, Name = ListName.Text, Description = ListDescp.Text, Mode = mode }, (list, response) =>
-            {
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    Dispatcher.BeginInvoke(() =>
-                    {
-                        MessageBox.Show(Localization.Resources.ListCreated);
-                        NavigationService.GoBack();
-                    });
-                }
-                else
-                {
-                    Dispatcher.BeginInvoke(() => MessageBox.Show(Localization.Resources.ErrorCreatingList));
-                }
+            pBar.IsVisible = true;
 
-                Dispatcher.BeginInvoke(() => pBar.IsVisible = false);
-            });
+            var response = await srv.CreateListAsync(new CreateListOptions { ListOwner = DataTransfer.CurrentAccount.ScreenName, Name = ListName.Text, Description = ListDescp.Text, Mode = mode });
+
+            if (response.RequestSucceeded)
+            {
+                MessageBox.Show(Localization.Resources.ListCreated);
+                NavigationService.GoBack();
+            }
+            else
+            {
+                MessageBox.Show(Localization.Resources.ErrorCreatingList);
+            }
+
+            pBar.IsVisible = false;
         }
     }
 }

@@ -53,30 +53,31 @@ namespace Ocell.Library.Twitter
             GetStatusReplied(status);
         }
 
-        private void GetStatusReplied(TwitterStatus status)
+        private async void GetStatusReplied(TwitterStatus status)
         {
             if (status.InReplyToStatusId != null)
             {
                 Interlocked.Increment(ref pendingCalls);
-                service.GetTweet(new GetTweetOptions { Id = (long)status.InReplyToStatusId }, (result, response) =>
+                var response = await service.GetTweetAsync(new GetTweetOptions { Id = (long)status.InReplyToStatusId });
+
+                if (!response.RequestSucceeded)
                 {
-                    if (result == null || response.StatusCode != HttpStatusCode.OK)
-                    {
-                        RaiseCallback(new List<TwitterStatus>(), response); // report the error
-                        TryFinish();
-                        return;
-                    }
-
-                    okResponse = response;
-                    if (!searchCache.Contains(result))
-                        searchCache.Add(result);
-
-                    RaiseCallback(new List<TwitterStatus> { status, result }, response);
-
-                    GetConversationForStatus(result);
-
+                    RaiseCallback(new List<TwitterStatus>(), response); // report the error
                     TryFinish();
-                });
+                    return;
+                }
+
+                var result = response.Content;
+
+                okResponse = response;
+                if (!searchCache.Contains(result))
+                    searchCache.Add(result);
+
+                RaiseCallback(new List<TwitterStatus> { status, result }, response);
+
+                GetConversationForStatus(result);
+
+                TryFinish();
             }
         }
 
@@ -114,20 +115,24 @@ namespace Ocell.Library.Twitter
             }
             else
             {
-                Interlocked.Increment(ref pendingCalls);
-                service.Search(new SearchOptions { Q = "to:" + status.AuthorName, SinceId = status.Id, Count = 100 },
-                    (result, response) => SearchCallback(result, response, status));
+                SearchReplies(status);
             }
         }
 
-        private void SearchCallback(TwitterSearchResult result, TwitterResponse response, TwitterStatus status)
+        private async void SearchReplies(TwitterStatus status, long? maxId = null)
         {
-            if (result == null || response.StatusCode != HttpStatusCode.OK || result.Statuses == null)
+            Interlocked.Increment(ref pendingCalls);
+
+            var response = await service.SearchAsync(new SearchOptions { Q = "to:" + status.AuthorName, SinceId = status.Id, Count = 100, MaxId = maxId });
+
+            if (!response.RequestSucceeded)
             {
                 RaiseCallback(new List<TwitterStatus>(), response); // report the error
                 TryFinish();
                 return;
             }
+
+            var result = response.Content;
 
             okResponse = response;
             searchCache.BulkAdd(result.Statuses.Except(searchCache));
@@ -135,9 +140,7 @@ namespace Ocell.Library.Twitter
             if (result.Statuses.Count() >= 90)
             {
                 // There are still more statuses to retrieve
-                Interlocked.Increment(ref pendingCalls);
-                service.Search(new SearchOptions { Q = "to:" + status.AuthorName, SinceId = status.Id, MaxId = result.Statuses.Min(x => x.Id), Count = 100 },
-                    (rs, rp) => SearchCallback(rs, rp, status));
+                SearchReplies(status, result.Statuses.Min(x => x.Id));
             }
             else
             {
@@ -179,24 +182,23 @@ namespace Ocell.Library.Twitter
 
         public event EventHandler Finished;
 
-        public void GetConversationForStatus(string status, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
+        public async void GetConversationForStatus(string statusId, Action<IEnumerable<TwitterStatus>, TwitterResponse> action)
         {
             long id;
-            if (long.TryParse(status, out id))
+            if (long.TryParse(statusId, out id))
             {
                 Interlocked.Increment(ref pendingCalls);
-                service.GetTweet(new GetTweetOptions { Id = id }, (s, response) =>
-                {
-                    if (s == null || response.StatusCode != HttpStatusCode.OK)
-                    {
-                        RaiseCallback(new List<TwitterStatus>(), response);
-                        TryFinish();
-                        return;
-                    }
+                var response = await service.GetTweetAsync(new GetTweetOptions { Id = id });
 
-                    GetConversationForStatus(s, action);
+                if (!response.RequestSucceeded)
+                {
+                    RaiseCallback(new List<TwitterStatus>(), response);
                     TryFinish();
-                });
+                    return;
+                }
+
+                GetConversationForStatus(response.Content, action);
+                TryFinish();
             }
         }
     }

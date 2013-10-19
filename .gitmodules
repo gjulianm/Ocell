@@ -6,7 +6,7 @@
 	url = git@github.com:gjulianm/hammock.git
 [submodule "Ocell.ThirdParty/tweetsharp"]
 	path = Ocell.ThirdParty/tweetsharp
-	url = git@github.com:gjulianm/tweetsharp.git
+	url = git@github.com:gjulianm/tweetsharp-pcl.git
 [submodule "Ocell.APIs/SharpSerializer"]
 	path = Ocell.ThirdParty/SharpSerializer
 	url = git@github.com:gjulianm/SharpSerializer.git

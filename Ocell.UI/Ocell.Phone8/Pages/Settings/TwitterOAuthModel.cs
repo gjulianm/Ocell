@@ -17,6 +17,7 @@ using System.Linq;
 using Ocell.Library.Twitter;
 using Ocell.Library.Notifications;
 using DanielVaughan;
+using System.Threading.Tasks;
 
 namespace Ocell.Pages.Settings
 {
@@ -105,7 +106,7 @@ namespace Ocell.Pages.Settings
             return request;
         }
 
-        protected override void PostProcess(string contents)
+        protected override async void PostProcess(string contents)
         {
             var parameters = System.Web.HttpUtility.ParseQueryString(contents);
 
@@ -116,7 +117,7 @@ namespace Ocell.Pages.Settings
                 return;
             }
 
-            UserToken Token = new UserToken
+            UserToken token = new UserToken
             {
                 Key = parameters["oauth_token"],
                 Secret = parameters["oauth_token_secret"],
@@ -127,18 +128,14 @@ namespace Ocell.Pages.Settings
                 }
             };
 
-            var filler = new UserTokenFiller(Token);
-            filler.UserDataFilled += new UserTokenFiller.OnUserDataFilled(InsertTokenIntoAccounts);
-            filler.FillUserData();
+            var filler = new UserTokenFiller();
+            await filler.FillUserData(token);
+
+            CheckIfExistsAndInsert(token);
+            CreateColumns(token);
+            GoBack();
         }
 
-        private void InsertTokenIntoAccounts(UserToken Token)
-        {
-            CheckIfExistsAndInsert(Token);
-            CreateColumns(Token);
-            GoBack();
-            return;
-        }
 
         private void CreateColumns(UserToken user)
         {

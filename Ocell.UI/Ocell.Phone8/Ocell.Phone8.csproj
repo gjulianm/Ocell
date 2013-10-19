@@ -496,6 +496,10 @@
     <Resource Include="Images\BirdGray.png" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AsyncOAuth, Version=0.8.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\AsyncOAuth.0.8.3\lib\AsyncOAuth.dll</HintPath>
+    </Reference>
     <Reference Include="Calcium.Phone, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Ocell.ThirdParty\Calcium.Phone.dll</HintPath>
@@ -524,7 +528,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\portable-net45+wp80+win8\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="System.Windows.Interactivity, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Net.Http, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.15\lib\sl4-windowsphone71\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.15\lib\sl4-windowsphone71\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.15\lib\sl4-windowsphone71\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=3.7.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Ocell.ThirdParty\lib_dll\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainPage.xaml">
@@ -660,10 +679,6 @@
       <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>
       <Name>Ocell.Sharplonger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
-      <Project>{51554319-87B7-4D38-9DDA-8F771FDA70FD}</Project>
-      <Name>TweetSharp.WindowsPhone.Mango</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Ocell.APIs\Ocell.ReadLater\Ocell.ReadLater.csproj">
       <Project>{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}</Project>
       <Name>Ocell.ReadLater</Name>
@@ -680,6 +695,10 @@
       <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
       <Name>Ocell.Localization</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\Tweetsharp.PCL\Tweetsharp.PCL.csproj">
+      <Project>{9869CC4F-7410-474D-8434-FF3FDF68D08B}</Project>
+      <Name>Tweetsharp.PCL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
@@ -691,4 +710,9 @@
   </Target>
   -->
   <ProjectExtensions />
+  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
 </Project>

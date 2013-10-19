@@ -1,72 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
-using TweetSharp;
-using Ocell.Library;
-using System.Threading;
-using Ocell.Library.Twitter;
+﻿using Ocell.Library.Collections;
 using Ocell.Library.Twitter.Comparers;
-using System.Windows.Controls;
-using System.Windows;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using Ocell.Library.Collections;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using TweetSharp;
 
 namespace Ocell.Library.Twitter
 {
     public class TweetLoader : INotifyPropertyChanged
     {
-        int loaded;
-        const int TO_LOAD = 1;
-        int requestsInProgress;
-        long lastId = 0;
-
+        #region Properties
         public SortedFilteredObservable<ITweetable> Source { get; protected set; }
 
-        TwitterResource _resource;
+        private int requestsInProgress;
+        public int RequestsInProgress
+        {
+            get
+            {
+                return requestsInProgress;
+            }
+
+            set
+            {
+                bool propertyChanges = value > 0 == IsLoading;
+
+                requestsInProgress = value;
+
+                if (propertyChanges)
+                {
+                    OnPropertyChanged("IsLoading");
+                }
+            }
+        }
+
+        TwitterResource resource;
         public TwitterResource Resource
         {
             get
             {
-                return _resource;
+                return resource;
             }
             set
             {
-                if (value == _resource)
+                if (value == resource)
                     return;
 
-                _resource = value;
-                service = ServiceDispatcher.GetService(_resource.User);
-
-                if (conversationService != null)
-                    conversationService.Finished -= ConversationFinished;
-
-                conversationService = new ConversationService(_resource.User);
-                conversationService.Finished += ConversationFinished;
+                resource = value;
+                RefreshServices();
             }
         }
 
-        bool _isLoading;
-        public bool IsLoading
-        {
-            get { return _isLoading; }
-            set
-            {
-                if (value == _isLoading)
-                    return;
-                _isLoading = value;
-                var dispatcher = Deployment.Current.Dispatcher;
-                if (dispatcher.CheckAccess())
-                    OnPropertyChanged("IsLoading");
-                else
-                    dispatcher.BeginInvoke(() => OnPropertyChanged("IsLoading"));
-            }
-        }
-
-        protected ITwitterService service;
-        protected ConversationService conversationService;
+        public bool IsLoading { get { return RequestsInProgress > 0; } }
+        #endregion
 
         #region Settings
         public int TweetsToLoadPerRequest { get; set; }
@@ -75,16 +65,6 @@ namespace Ocell.Library.Twitter
         public bool LoadRetweetsAsMentions { get; set; }
         public int CacheSize { get; set; }
         public bool LoadRTsOnLists { get; set; }
-        #endregion
-
-        #region INotifyPropertyChanged methods
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged(string propName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propName));
-        }
         #endregion
 
         #region Constructors
@@ -105,12 +85,11 @@ namespace Ocell.Library.Twitter
 
         public TweetLoader()
         {
-            loaded = 0;
             Source = new SortedFilteredObservable<ITweetable>(new TweetComparer());
-            requestsInProgress = 0;
+            RequestsInProgress = 0;
 
-            if (_rateResetTime == null)
-                _rateResetTime = DateTime.MinValue;
+            if (rateResetTime == null)
+                rateResetTime = DateTime.MinValue;
 
             Error += new OnError(CheckForRateLimit);
 
@@ -128,10 +107,32 @@ namespace Ocell.Library.Twitter
 
         #endregion
 
+        private void ConversationFinished(object sender, EventArgs e)
+        {
+            if (LoadFinished != null)
+                LoadFinished(this, e);
+        }
+
         public void Dispose()
         {
             Source.Clear();
         }
+
+        #region Services
+        protected ITwitterService service;
+        protected ConversationService conversationService;
+
+        private void RefreshServices()
+        {
+            service = ServiceDispatcher.GetService(Resource.User);
+
+            if (conversationService != null)
+                conversationService.Finished -= ConversationFinished;
+
+            conversationService = new ConversationService(Resource.User);
+            conversationService.Finished += ConversationFinished;
+        }
+        #endregion
 
         #region Cache
         public void SaveToCacheAsync()
@@ -208,215 +209,185 @@ namespace Ocell.Library.Twitter
         #endregion
 
         #region Loaders
-        public void Load(bool Old = false)
+        public void Load(bool getOld = false)
+        {
+            long? lastId = null;
+
+            if (getOld)
+            {
+                if (!Source.Any())
+                    return;
+                else
+                    lastId = Source.Min(item => item.Id);
+            }
+
+            LoadFrom(lastId);
+        }
+
+        public void LoadFrom(long? lastId)
         {
             if (service == null)
                 service = ServiceDispatcher.GetDefaultService();
 
             if (Resource == null || service == null ||
-                requestsInProgress >= 1 ||
-                _rateResetTime > DateTime.Now)
+                IsLoading ||
+                rateResetTime > DateTime.Now)
             {
                 if (LoadFinished != null)
                     LoadFinished(this, new EventArgs());
                 return;
             }
 
-            requestsInProgress++;
+            SetTaskReceivers(GetTweetTasks(Resource.Type, lastId), TweetsToITweetable);
+            SetTaskReceivers(GetSearchTasks(Resource.Type, lastId), SearchToITweetable);
+            SetTaskReceivers(GetDirectMessageTasks(Resource.Type, lastId), DMsToITweetable);
 
-            if (Old)
-                LoadOld(lastId);
+            if (Resource.Type == ResourceType.Conversation)
+                conversationService.GetConversationForStatus(Resource.Data, ReceiveConversation);
+        }
+
+        protected IEnumerable<ITweetable> TweetsToITweetable(IEnumerable<TwitterStatus> statuses)
+        {
+            return statuses.Cast<ITweetable>();
+        }
+
+        protected IEnumerable<ITweetable> DMsToITweetable(IEnumerable<TwitterDirectMessage> dms)
+        {
+            if (Resource.Type == ResourceType.Messages && !string.IsNullOrWhiteSpace(Resource.Data))
+                return dms.Where(x => x.SenderScreenName == Resource.Data || x.RecipientScreenName == Resource.Data).Cast<ITweetable>();
             else
-                LoadNew();
+                return dms.Cast<ITweetable>();
         }
 
-        public void LoadFrom(long Id)
+        protected IEnumerable<ITweetable> SearchToITweetable(TwitterSearchResult search)
         {
-            LoadOld(Id);
+            return search.Statuses.Cast<ITweetable>();
         }
 
-        protected void LoadNew()
+        protected void SetTaskReceivers<T>(IEnumerable<Task<TwitterResponse<T>>> tasks, Func<T, IEnumerable<ITweetable>> toITweetableFunc)
         {
-            loaded++;
-            IsLoading = true;
-
-            switch (Resource.Type)
+            foreach (var task in tasks)
             {
-                case ResourceType.Home:
-                    service.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true }, ReceiveTweets);
-                    break;
-                case ResourceType.Mentions:
-                    service.ListTweetsMentioningMe(new ListTweetsMentioningMeOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true }, ReceiveTweets);
-                    if (LoadRetweetsAsMentions)
-                    {
-                        requestsInProgress++;
-                        service.ListRetweetsOfMyTweets(new ListRetweetsOfMyTweetsOptions { IncludeUserEntities = true, Count = TweetsToLoadPerRequest }, ReceiveTweets);
-                    }
-                    break;
-                case ResourceType.Messages:
-                    requestsInProgress++;
-                    service.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions { Count = TweetsToLoadPerRequest }, ReceiveMessages);
-                    service.ListDirectMessagesSent(new ListDirectMessagesSentOptions { Count = TweetsToLoadPerRequest }, ReceiveMessages);
-                    break;
-                case ResourceType.Favorites:
-                    service.ListFavoriteTweets(new ListFavoriteTweetsOptions { Count = TweetsToLoadPerRequest }, ReceiveTweets);
-                    break;
-                case ResourceType.List:
-                    service.ListTweetsOnList(new ListTweetsOnListOptions
-                    {
-                        IncludeRts = LoadRTsOnLists,
-                        Count = TweetsToLoadPerRequest,
-                        OwnerScreenName = Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
-                        Slug = Resource.Data.Substring(Resource.Data.IndexOf('/') + 1)
-                    }, ReceiveTweets);
-                    break;
-                case ResourceType.Search:
-                    service.Search(new SearchOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true, Q = Resource.Data }, ReceiveSearch);
-                    break;
-                case ResourceType.Tweets:
-                    service.ListTweetsOnUserTimeline(new ListTweetsOnUserTimelineOptions { Count = TweetsToLoadPerRequest, ScreenName = Resource.Data, IncludeRts = true }, ReceiveTweets);
-                    break;
-                case ResourceType.Conversation:
-                    conversationService.GetConversationForStatus(Resource.Data, ReceiveTweets);
-                    break;
+                RequestsInProgress++;
+                task.ContinueWith((t) => ReceiveResponse(task, toITweetableFunc));
             }
         }
 
-        protected void LoadOld(long last = 0)
+        protected IEnumerable<Task<TwitterResponse<IEnumerable<TwitterStatus>>>> GetTweetTasks(ResourceType type, long? last)
         {
-            loaded++;
-
-            if (!Source.Any())
-                return;
-            IsLoading = true;
-            if (last == 0)
-                last = Source.Min(item => item.Id);
-
             switch (Resource.Type)
             {
                 case ResourceType.Home:
-                    service.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true, MaxId = last }, ReceiveTweets);
+                    yield return service.ListTweetsOnHomeTimelineAsync(new ListTweetsOnHomeTimelineOptions
+                    {
+                        Count = TweetsToLoadPerRequest,
+                        IncludeEntities = true,
+                        MaxId = last
+                    });
                     break;
                 case ResourceType.Mentions:
-                    service.ListTweetsMentioningMe(new ListTweetsMentioningMeOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true, MaxId = last }, ReceiveTweets);
+                    yield return service.ListTweetsMentioningMeAsync(new ListTweetsMentioningMeOptions
+                    {
+                        Count = TweetsToLoadPerRequest,
+                        IncludeEntities = true,
+                        MaxId = last
+                    });
+
                     if (LoadRetweetsAsMentions)
                     {
-                        requestsInProgress++;
-                        service.ListRetweetsOfMyTweets(new ListRetweetsOfMyTweetsOptions { IncludeUserEntities = true, Count = TweetsToLoadPerRequest, MaxId = last }, ReceiveTweets);
+                        yield return service.ListRetweetsOfMyTweetsAsync(new ListRetweetsOfMyTweetsOptions
+                        {
+                            IncludeUserEntities = true,
+                            Count = TweetsToLoadPerRequest,
+                            MaxId = last
+                        });
                     }
                     break;
-                case ResourceType.Messages:
-                case ResourceType.MessageConversation:
-                    requestsInProgress++;
-                    service.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions { Count = TweetsToLoadPerRequest, MaxId = last }, ReceiveMessages);
-                    service.ListDirectMessagesSent(new ListDirectMessagesSentOptions { Count = TweetsToLoadPerRequest, MaxId = last }, ReceiveMessages);
-                    break;
                 case ResourceType.Favorites:
-                    service.ListFavoriteTweets(new ListFavoriteTweetsOptions { Count = TweetsToLoadPerRequest, MaxId = last }, ReceiveTweets);
+                    yield return service.ListFavoriteTweetsAsync(new ListFavoriteTweetsOptions
+                    {
+                        Count = TweetsToLoadPerRequest,
+                        MaxId = last
+                    });
                     break;
                 case ResourceType.List:
-                    service.ListTweetsOnList(new ListTweetsOnListOptions
+                    yield return service.ListTweetsOnListAsync(new ListTweetsOnListOptions
                     {
                         IncludeRts = LoadRTsOnLists,
                         Count = TweetsToLoadPerRequest,
                         OwnerScreenName = Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
                         Slug = Resource.Data.Substring(Resource.Data.IndexOf('/') + 1),
                         MaxId = last
-                    }, ReceiveTweets);
-                    break;
-                case ResourceType.Search:
-                    service.Search(new SearchOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true, Q = Resource.Data, MaxId = last }, ReceiveSearch);
+                    });
                     break;
                 case ResourceType.Tweets:
-                    service.ListTweetsOnUserTimeline(new ListTweetsOnUserTimelineOptions { Count = TweetsToLoadPerRequest, ScreenName = Resource.Data, IncludeRts = true, MaxId = last }, ReceiveTweets);
+                    yield return service.ListTweetsOnUserTimelineAsync(new ListTweetsOnUserTimelineOptions
+                    {
+                        Count = TweetsToLoadPerRequest,
+                        ScreenName = Resource.Data,
+                        IncludeRts = true,
+                        MaxId = last
+                    });
                     break;
-                case ResourceType.Conversation:
-                    conversationService.GetConversationForStatus(Resource.Data, ReceiveTweets);
-                    break;
+            }
+        }
+
+        protected IEnumerable<Task<TwitterResponse<IEnumerable<TwitterDirectMessage>>>> GetDirectMessageTasks(ResourceType type, long? last)
+        {
+            if (type == ResourceType.Messages || type == ResourceType.MessageConversation)
+            {
+                yield return service.ListDirectMessagesReceivedAsync(new ListDirectMessagesReceivedOptions { Count = TweetsToLoadPerRequest, MaxId = last });
+                yield return service.ListDirectMessagesSentAsync(new ListDirectMessagesSentOptions { Count = TweetsToLoadPerRequest, MaxId = last });
+            }
+        }
+
+        protected IEnumerable<Task<TwitterResponse<TwitterSearchResult>>> GetSearchTasks(ResourceType type, long? last)
+        {
+            if (type == ResourceType.Search)
+            {
+                yield return service.SearchAsync(new SearchOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true, Q = Resource.Data, MaxId = last });
             }
         }
         #endregion
 
-        #region Specific Receivers
-        protected void ReceiveTweets(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
+        #region Receivers
+        protected void ReceiveResponse<T>(Task<TwitterResponse<T>> task, Func<T, IEnumerable<ITweetable>> toITweetable)
         {
-            requestsInProgress--;
-            IsLoading = false;
-            if (statuses == null)
+            RequestsInProgress--;
+
+            if (task.IsFaulted)
+            {
+                Debug.WriteLine("Task faulted: {0}", task.Exception);
+                return;
+            }
+
+            var response = task.Result;
+
+            if (!response.RequestSucceeded)
             {
                 if (Error != null)
                     Error(response);
                 return;
             }
 
-            GenericReceive(statuses.Cast<ITweetable>(), response);
+            GenericReceive(toITweetable(response.Content));
         }
 
-        protected void ReceiveMessages(IEnumerable<TwitterDirectMessage> statuses, TwitterResponse response)
-        {
-            requestsInProgress--;
-            IsLoading = false;
-            if (statuses == null)
-            {
-                if (Error != null)
-                    Error(response);
-                return;
-            }
-
-            if (statuses.Any())
-                lastId = statuses.Min(x => x.Id);
-
-            if (Resource.Type == ResourceType.Messages && !string.IsNullOrWhiteSpace(Resource.Data))
-                GenericReceive(statuses.Where(x => x.SenderScreenName == Resource.Data || x.RecipientScreenName == Resource.Data)
-                    .Cast<ITweetable>(),
-                    response);
-            else
-                GenericReceive(statuses.Cast<ITweetable>(), response);
-        }
-
-        protected void ReceiveSearch(TwitterSearchResult result, TwitterResponse response)
-        {
-            requestsInProgress--;
-            IsLoading = false;
-            if (result == null || result.Statuses == null)
-            {
-                if (Error != null)
-                    Error(response);
-                return;
-            }
-
-            GenericReceive(result.Statuses.Cast<ITweetable>(), response);
-        }
-
-        private void ConversationFinished(object sender, EventArgs e)
-        {
-            if (LoadFinished != null)
-                LoadFinished(this, e);
-        }
-        #endregion
-
-        #region Generic Receivers
-        protected void GenericReceive(IEnumerable<ITweetable> list, TwitterResponse response)
+        private void GenericReceive(IEnumerable<ITweetable> list)
         {
             try
             {
-                UnsafeGenericReceive(list, response);
+                UnsafeGenericReceive(list);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine("Error receiving object: {0}", ex);
             }
         }
-        private void UnsafeGenericReceive(IEnumerable<ITweetable> list, TwitterResponse response)
+
+        private void UnsafeGenericReceive(IEnumerable<ITweetable> list)
         {
             TweetEqualityComparer comparer = new TweetEqualityComparer();
-
-            IsLoading = false;
-            if (list == null || response.StatusCode != HttpStatusCode.OK)
-            {
-                if (Error != null)
-                    Error(response);
-                return;
-            }
 
             if (SourceChanging != null)
                 SourceChanging(this, new EventArgs());
@@ -430,11 +401,10 @@ namespace Ocell.Library.Twitter
                     LoadTweetables(list);
             }
 
-            if (LoadFinished != null && _resource.Type != ResourceType.Conversation)
+            if (LoadFinished != null && Resource.Type != ResourceType.Conversation)
                 LoadFinished(this, new EventArgs());
-            else if (PartialLoad != null && _resource.Type == ResourceType.Conversation)
+            else if (PartialLoad != null && Resource.Type == ResourceType.Conversation)
                 PartialLoad(this, new EventArgs()); // When loading conversations, calls to this function will be partial.
-
 
             SaveToCacheAsync();
         }
@@ -470,8 +440,19 @@ namespace Ocell.Library.Twitter
                     Source.Add(group);
                 }
             }
+        }
 
+        private void ReceiveConversation(IEnumerable<TwitterStatus> statuses, TwitterResponse response)
+        {
+            if (!response.RequestSucceeded || statuses == null)
+            {
+                if (Error != null)
+                    Error(response);
+                return;
+            }
 
+            if (statuses.Any())
+                GenericReceive(statuses);
         }
         #endregion
 
@@ -534,31 +515,31 @@ namespace Ocell.Library.Twitter
         #endregion
 
         #region Rate limit checks
-        static DateTime _rateResetTime;
+        static DateTime rateResetTime;
         void CheckForRateLimit(TwitterResponse response)
         {
             if (response.RateLimitStatus.RemainingHits <= 0)
-                _rateResetTime = response.RateLimitStatus.ResetTime;
+                rateResetTime = response.RateLimitStatus.ResetTime;
         }
         #endregion
 
         #region Refresh handlers
         Queue<ITweetable> _deferredItems = new Queue<ITweetable>();
-        bool _allowOneRefresh = false;
-        object _deferSync = new object();
-        bool _deferringRefresh = false;
+        bool allowOneRefresh = false;
+        object deferSync = new object();
+        bool deferringRefresh = false;
 
         public void StopSourceRefresh()
         {
-            lock (_deferSync)
-                _deferringRefresh = true;
+            lock (deferSync)
+                deferringRefresh = true;
         }
 
         public void ResumeSourceRefresh()
         {
-            lock (_deferSync)
+            lock (deferSync)
             {
-                _deferringRefresh = false;
+                deferringRefresh = false;
 
                 var list = _deferredItems.AsEnumerable().Except(Source);
                 TryAddLoadMoreButton(list);
@@ -570,8 +551,8 @@ namespace Ocell.Library.Twitter
 
         public void AllowNextRefresh()
         {
-            lock (_deferSync)
-                _allowOneRefresh = true;
+            lock (deferSync)
+                allowOneRefresh = true;
         }
         #endregion
 
@@ -586,6 +567,21 @@ namespace Ocell.Library.Twitter
         public event EventHandler CacheLoad;
 
         public event EventHandler SourceChanging;
+        #endregion
+
+        #region INotifyPropertyChanged methods
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propName)
+        {
+            var dispatcher = Deployment.Current.Dispatcher;
+
+            if (!dispatcher.CheckAccess())
+                dispatcher.BeginInvoke(() => OnPropertyChanged(propName));
+
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propName));
+        }
         #endregion
     }
 

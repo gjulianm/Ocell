@@ -152,7 +152,7 @@ namespace Ocell
                 var service = Dependency.Resolve<IMessageService>();
                 bool result = service.AskYesNoQuestion(Localization.Resources.FollowOcellAppMessage, "");
                 if (result)
-                    ServiceDispatcher.GetDefaultService().FollowUser(new FollowUserOptions { ScreenName = "OcellApp" }, (a, b) => { });
+                    ServiceDispatcher.GetDefaultService().FollowUserAsync(new FollowUserOptions { ScreenName = "OcellApp" });
                 Config.FollowMessageShown = true;
             }
         }

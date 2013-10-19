@@ -136,6 +136,17 @@
     <Reference Include="Polenter.SharpSerializer.PCL">
       <HintPath>..\..\packages\SharpSerializer.PCL.2.18\lib\portable-net4+sl4+wp71+win8\Polenter.SharpSerializer.PCL.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.15\lib\sl4-windowsphone71\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.15\lib\sl4-windowsphone71\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.15\lib\sl4-windowsphone71\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SensitiveData.cs">
@@ -235,9 +246,9 @@
       <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>
       <Name>Hammock.WindowsPhone.Mango</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\TweetSharp.WindowsPhone.Mango\TweetSharp.WindowsPhone.Mango.csproj">
-      <Project>{35BC2453-9CAD-4508-9C8C-BF06A9223761}</Project>
-      <Name>TweetSharp.WindowsPhone.Mango</Name>
+    <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\Tweetsharp.PCL\Tweetsharp.PCL.csproj">
+      <Project>{9869CC4F-7410-474D-8434-FF3FDF68D08B}</Project>
+      <Name>Tweetsharp.PCL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ocell.Library.CoreTypes\Ocell.Library.CoreTypes.csproj">
       <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
