@@ -39,7 +39,7 @@ namespace Ocell.Library.ReadLater.Instapaper
         /// <param name="url">URL to add.</param>
         public async Task<HttpResponse> AddUrl(string url)
         {
-            return await CreateAndExecute("url", HttpMethod.Post, "url", url);
+            return await CreateAndExecute("add", HttpMethod.Post, "url", url);
         }
 
         /// <summary>
