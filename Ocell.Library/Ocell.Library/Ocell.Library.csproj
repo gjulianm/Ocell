@@ -241,14 +241,6 @@
     <Compile Include="Tasks\Scheduler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Ocell.APIs\Ocell.Sharplonger\Ocell.Sharplonger.csproj">
-      <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>
-      <Name>Ocell.Sharplonger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\Tweetsharp.PCL\Tweetsharp.PCL.csproj">
-      <Project>{9869CC4F-7410-474D-8434-FF3FDF68D08B}</Project>
-      <Name>Tweetsharp.PCL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ocell.Library.CoreTypes\Ocell.Library.CoreTypes.csproj">
       <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
       <Name>Ocell.Library.CoreTypes</Name>

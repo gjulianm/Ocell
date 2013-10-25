@@ -127,10 +127,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\Tweetsharp.PCL\Tweetsharp.PCL.csproj">
-      <Project>{9869CC4F-7410-474D-8434-FF3FDF68D08B}</Project>
-      <Name>Tweetsharp.PCL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ocell.Localization\Ocell.Localization.csproj">
       <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
       <Name>Ocell.Localization</Name>

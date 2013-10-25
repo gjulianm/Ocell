@@ -269,7 +269,7 @@ namespace Ocell.Commands
             if (credentials.Pocket != null)
             {
                 var service = new PocketService();
-                service.UserName = credentials.Pocket.User;
+                service.Username = credentials.Pocket.User;
                 service.Password = credentials.Pocket.Password;
 
                 TwitterUrl link = tweet.Entities.FirstOrDefault(item => item != null && item.EntityType == TwitterEntityType.Url) as TwitterUrl;

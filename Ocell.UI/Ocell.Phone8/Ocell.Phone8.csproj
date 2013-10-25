@@ -673,10 +673,6 @@
       <Project>{1D77B761-F1A7-43B5-914E-16AC51218972}</Project>
       <Name>Ocell.BackgroundAgent.Phone8</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.APIs\Ocell.Sharplonger\Ocell.Sharplonger.csproj">
-      <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>
-      <Name>Ocell.Sharplonger</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Ocell.APIs\Ocell.ReadLater\Ocell.ReadLater.csproj">
       <Project>{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}</Project>
       <Name>Ocell.ReadLater</Name>
@@ -692,10 +688,6 @@
     <ProjectReference Include="..\..\Ocell.Library\Ocell.Localization\Ocell.Localization.csproj">
       <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
       <Name>Ocell.Localization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\Tweetsharp.PCL\Tweetsharp.PCL.csproj">
-      <Project>{9869CC4F-7410-474D-8434-FF3FDF68D08B}</Project>
-      <Name>Tweetsharp.PCL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />

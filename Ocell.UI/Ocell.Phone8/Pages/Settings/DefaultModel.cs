@@ -225,7 +225,7 @@ namespace Ocell.Settings
                         BarText = Resources.VerifyingCredentials;
                         IsLoading = true;
                         PocketPair = new AuthPair { User = PocketUser, Password = PocketPassword };
-                        var service = new PocketService { UserName = PocketPair.User, Password = PocketPair.Password };
+                        var service = new PocketService { Username = PocketPair.User, Password = PocketPair.Password };
                         service.CheckCredentials((valid, response) =>
                         {
                             if (valid)
