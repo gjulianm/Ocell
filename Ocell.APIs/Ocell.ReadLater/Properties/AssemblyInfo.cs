@@ -15,14 +15,6 @@ using System.Resources;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Si ComVisible se establece en False, los componentes COM no verán los 
-// tipos de este ensamblado. Si necesita obtener acceso a un tipo de este ensamblado desde 
-// COM, establezca el atributo ComVisible en True en este tipo.
-[assembly: ComVisible(false)]
-
-// El siguiente GUID sirve como identificador de typelib si este proyecto se expone a COM
-[assembly: Guid("0662c571-c3e5-4e79-bbac-03696aec4adc")]
-
 // La información de versión de un ensamblado consta de los cuatro valores siguientes:
 //
 //      Versión principal
