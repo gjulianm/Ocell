@@ -95,12 +95,6 @@
     <Compile Include="TwitpicPictureService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj">
-      <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>
-      <Name>Hammock.WindowsPhone.Mango</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>

@@ -496,9 +496,15 @@
     <Resource Include="Images\BirdGray.png" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AncoraMVVM.Rest">
+      <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.0-alpha\lib\portable-net45+sl50+wp80+win\AncoraMVVM.Rest.dll</HintPath>
+    </Reference>
     <Reference Include="AsyncOAuth, Version=0.8.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AsyncOAuth.0.8.3\lib\AsyncOAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="BufferAPI">
+      <HintPath>..\..\packages\BufferAPI.0.1.0-alpha\lib\portable-net45+sl50+wp80+win\BufferAPI.dll</HintPath>
     </Reference>
     <Reference Include="Calcium.Phone, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -663,17 +669,9 @@
     <Folder Include="Images\Icons_Black\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Ocell.APIs\Ocell.Buffer\Ocell.Buffer.csproj">
-      <Project>{4186D1D2-C419-4DA2-A1D8-5F56E5AAA30D}</Project>
-      <Name>Ocell.Buffer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Ocell.BackgroundAgent.Phone8\Ocell.BackgroundAgent.Phone8.csproj">
       <Project>{1D77B761-F1A7-43B5-914E-16AC51218972}</Project>
       <Name>Ocell.BackgroundAgent.Phone8</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj">
-      <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>
-      <Name>Hammock.WindowsPhone.Mango</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.APIs\Ocell.Sharplonger\Ocell.Sharplonger.csproj">
       <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>

@@ -112,10 +112,6 @@
     <Compile Include="TwitterObjectCollection.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj">
-      <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>
-      <Name>Hammock.WindowsPhone.Mango</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ocell.Library.CoreTypes\Ocell.Library.CoreTypes.csproj">
       <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
       <Name>Ocell.Library.CoreTypes</Name>

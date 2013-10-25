@@ -127,10 +127,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj">
-      <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>
-      <Name>Hammock.WindowsPhone.Mango</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\Tweetsharp.PCL\Tweetsharp.PCL.csproj">
       <Project>{9869CC4F-7410-474D-8434-FF3FDF68D08B}</Project>
       <Name>Tweetsharp.PCL</Name>

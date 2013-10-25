@@ -112,6 +112,12 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AncoraMVVM.Rest">
+      <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.0-alpha\lib\portable-net45+sl50+wp80+win\AncoraMVVM.Rest.dll</HintPath>
+    </Reference>
+    <Reference Include="BufferAPI">
+      <HintPath>..\..\packages\BufferAPI.0.1.0-alpha\lib\portable-net45+sl50+wp80+win\BufferAPI.dll</HintPath>
+    </Reference>
     <Reference Include="Calcium.Phone">
       <HintPath>..\..\Ocell.ThirdParty\lib_dll\Calcium.Phone.dll</HintPath>
     </Reference>
@@ -130,8 +136,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.16\lib\wp8\Microsoft.Threading.Tasks.Extensions.Phone.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json.WindowsPhone">
-      <HintPath>..\..\Ocell.ThirdParty\lib_dll\Newtonsoft.Json.WindowsPhone.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\portable-net45+wp80+win8\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Polenter.SharpSerializer.PCL">
       <HintPath>..\..\packages\SharpSerializer.PCL.2.18\lib\portable-net4+sl4+wp71+win8\Polenter.SharpSerializer.PCL.dll</HintPath>
@@ -234,17 +241,9 @@
     <Compile Include="Tasks\Scheduler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Ocell.APIs\Ocell.Buffer\Ocell.Buffer.csproj">
-      <Project>{4186D1D2-C419-4DA2-A1D8-5F56E5AAA30D}</Project>
-      <Name>Ocell.Buffer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Ocell.APIs\Ocell.Sharplonger\Ocell.Sharplonger.csproj">
       <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>
       <Name>Ocell.Sharplonger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj">
-      <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>
-      <Name>Hammock.WindowsPhone.Mango</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\Tweetsharp.PCL\Tweetsharp.PCL.csproj">
       <Project>{9869CC4F-7410-474D-8434-FF3FDF68D08B}</Project>
