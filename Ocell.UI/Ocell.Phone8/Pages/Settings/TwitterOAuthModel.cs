@@ -1,30 +1,19 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Hammock.Authentication.OAuth;
-using Hammock;
-using Ocell.Library;
-using Hammock.Authentication;
-using Hammock.Silverlight.Compat;
-using System.Linq;
-using Ocell.Library.Twitter;
-using Ocell.Library.Notifications;
+﻿using AncoraMVVM.Rest;
+using AsyncOAuth;
 using DanielVaughan;
-using System.Threading.Tasks;
+using Ocell.Library;
+using Ocell.Library.Notifications;
+using Ocell.Library.Twitter;
+using System;
+using System.Net.Http;
+using System.Windows;
 
 namespace Ocell.Pages.Settings
 {
     public class TwitterOAuthModel : OAuthModel
     {
-        string request_token = "";
-        string request_token_secret = "";
+        private string request_token = "";
+        private string request_token_secret = "";
 
         public TwitterOAuthModel()
         {
@@ -34,36 +23,20 @@ namespace Ocell.Pages.Settings
             Version = OAuthVersion.OAuthV1;
         }
 
-        protected override IWebCredentials  GetAuthorizationTokenCredentials()
+        protected override OAuthAuthorizer GetOAuthorizer()
         {
-            OAuthCredentials credentials = new OAuthCredentials()
-            {
-                Type = OAuthType.RequestToken,
-                SignatureMethod = OAuthSignatureMethod.HmacSha1,
-                ParameterHandling = OAuthParameterHandling.HttpAuthorizationHeader,
-                ConsumerKey = SensitiveData.ConsumerToken,
-                ConsumerSecret = SensitiveData.ConsumerSecret,
-                CallbackUrl = callbackUrl,
-                Version = "1.0a"
-            };
-
-            return credentials;
-        }
-        
-        protected override RestRequest CreateAuthTokensRequest()
-        {
-            var request = new RestRequest
-            {
-                Path = "/oauth/request_token/"
-            };
-
-            return request;
+            return new OAuthAuthorizer(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret);
         }
 
-        protected override void PreProcessTokenResponse(NameValueCollection collection)
+        protected override string GetTokenRequestPath()
         {
-            request_token = collection["oauth_token"];
-            request_token_secret = collection["oauth_token_secret"];
+            return "/oauth/request_token/";
+        }
+
+        protected override void PreProcessTokenResponse(TokenResponse<RequestToken> response)
+        {
+            request_token = response.Token.Key;
+            request_token_secret = response.Token.Secret;
         }
 
         protected override string GetAuthorizationUrl()
@@ -71,46 +44,21 @@ namespace Ocell.Pages.Settings
             return string.Format("https://api.twitter.com/oauth/authorize?oauth_token={0}", request_token);
         }
 
-        protected override bool VerifyCallbackParams(NameValueCollection parameters)
+        protected override bool VerifyCallbackParams(ParameterCollection parameters)
         {
-            return parameters.AllKeys.Contains("oauth_token") && parameters.AllKeys.Contains("oauth_verifier");
+            return parameters.ContainsKey("oauth_token") && parameters.ContainsKey("oauth_verifier");
         }
 
-        protected override IWebCredentials GetCredentials(NameValueCollection parameters)
+        protected override HttpRequestMessage CreateTokensRequest(ParameterCollection parameters)
         {
-            OAuthCredentials credentials = new OAuthCredentials()
-            {
-                Type = OAuthType.RequestToken,
-                SignatureMethod = OAuthSignatureMethod.HmacSha1,
-                ParameterHandling = OAuthParameterHandling.HttpAuthorizationHeader,
-                ConsumerKey = SensitiveData.ConsumerToken,
-                ConsumerSecret = SensitiveData.ConsumerSecret,
-                Token = parameters["oauth_token"],
-                TokenSecret = request_token_secret,
-                Verifier = parameters["oauth_verifier"],
-                CallbackUrl = callbackUrl,
-                Version = "1.0a"
-            };
-
-            return credentials;
-        }
-
-        protected override RestRequest CreateTokensRequest(NameValueCollection parameters)
-        {
-            var request = new RestRequest
-            {
-                Path = "/oauth/access_token/",
-                DecompressionMethods = Hammock.Silverlight.Compat.DecompressionMethods.None
-            };
+            var request = new HttpRequestMessage(HttpMethod.Get, "/oauth/access_token/");
 
             return request;
         }
 
-        protected override async void PostProcess(string contents)
+        protected override async void PostProcess(ParameterCollection parameters)
         {
-            var parameters = System.Web.HttpUtility.ParseQueryString(contents);
-
-            if (!parameters.AllKeys.Contains("oauth_token") || !parameters.AllKeys.Contains("oauth_token_secret"))
+            if (!parameters.ContainsKey("oauth_token") || !parameters.ContainsKey("oauth_token_secret"))
             {
                 MessageService.ShowError(Localization.Resources.ErrorClientTokens);
                 GoBack();
@@ -119,8 +67,8 @@ namespace Ocell.Pages.Settings
 
             UserToken token = new UserToken
             {
-                Key = parameters["oauth_token"],
-                Secret = parameters["oauth_token_secret"],
+                Key = parameters["oauth_token"].ToString(),
+                Secret = parameters["oauth_token_secret"].ToString(),
                 Preferences = new NotificationPreferences
                 {
                     MentionsPreferences = NotificationType.TileAndToast,
@@ -135,7 +83,6 @@ namespace Ocell.Pages.Settings
             CreateColumns(token);
             GoBack();
         }
-
 
         private void CreateColumns(UserToken user)
         {
@@ -154,8 +101,6 @@ namespace Ocell.Pages.Settings
             });
         }
 
-        
-
         private static void CheckIfExistsAndInsert(UserToken Token)
         {
             foreach (var item in Config.Accounts)
@@ -171,7 +116,7 @@ namespace Ocell.Pages.Settings
                     return;
                 }
             }
-            
+
             Config.Accounts.Add(Token);
             Config.SaveAccounts();
         }

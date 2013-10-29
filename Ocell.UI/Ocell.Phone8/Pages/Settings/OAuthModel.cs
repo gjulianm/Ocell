@@ -1,21 +1,13 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Windows.Navigation;
+﻿using AncoraMVVM.Rest;
+using AsyncOAuth;
 using Microsoft.Phone.Controls;
-using Hammock.Silverlight.Compat;
-using Hammock.Authentication.OAuth;
-using Ocell.Library;
-using Hammock;
-using Hammock.Authentication;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Windows.Navigation;
 
 namespace Ocell.Pages.Settings
 {
@@ -30,14 +22,14 @@ namespace Ocell.Pages.Settings
         protected OAuthVersion Version = OAuthVersion.OAuthV1;
 
         #region UI Communication
-        bool browserVisible;
+        private bool browserVisible;
         public bool BrowserVisible
         {
             get { return browserVisible; }
             set { Assign("BrowserVisible", ref browserVisible, value); }
         }
 
-        bool isLoading;
+        private bool isLoading;
         public bool IsLoading
         {
             get { return isLoading; }
@@ -45,6 +37,7 @@ namespace Ocell.Pages.Settings
         }
 
         public event Navigator BrowserNavigate;
+        private TokenResponse<RequestToken> tokenResponse;
         public void RaiseNavigate(Uri uri)
         {
             if (BrowserNavigate != null)
@@ -80,7 +73,8 @@ namespace Ocell.Pages.Settings
             else
                 GetAuthorizationFromUser();
         }
-        #endregion
+
+        #endregion UI Communication
 
         #region Url getters & verifiers
         /// <summary>
@@ -94,60 +88,52 @@ namespace Ocell.Pages.Settings
         /// </summary>
         /// <param name="parameters">Parameters.</param>
         /// <returns>True if correct, false if not.</returns>
-        protected abstract bool VerifyCallbackParams(NameValueCollection parameters);
-
-        /// <summary>
-        /// Builds the credentials for getting the full tokens.
-        /// </summary>
-        /// <param name="parameters">Parameters from the authorization reponse.</param>
-        /// <returns>Credentials. By default, it returns null.</returns>
-        protected virtual IWebCredentials GetCredentials(NameValueCollection parameters)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Builds the credentials for getting the auth tokens. Should only be used on OAuth 1.
-        /// </summary>
-        /// <returns>Credentials. By default, it returns null</returns>
-        protected virtual IWebCredentials GetAuthorizationTokenCredentials()
-        {
-            return null;
-        }
+        protected abstract bool VerifyCallbackParams(ParameterCollection parameters);
 
         /// <summary>
         /// Creates the request for getting the full tokens.
         /// </summary>
         /// <param name="parameters">Parameters from the authorization response.</param>
         /// <returns>RestRequest</returns>
-        protected abstract RestRequest CreateTokensRequest(NameValueCollection parameters);
+        protected abstract HttpRequestMessage CreateTokensRequest(ParameterCollection parameters);
 
         /// <summary>
-        /// Creates the request for getting the auth tokens. Should only be used on OAuth 1.
+        /// Returns the path for getting the auth tokens. Should only be used on OAuth 1.
         /// As this function won't be used much, it's implemented with return null to avoid
         /// having a bunch of useless functions implemented on OAuth 2 models.
         /// </summary>
-        /// <returns>RestRequest</returns>
-        protected virtual RestRequest CreateAuthTokensRequest()
+        /// <returns>string</returns>
+        protected virtual string GetTokenRequestPath()
         {
-            return null;
+            throw new NotImplementedException();
+        }
+
+        protected virtual string GetAccessTokenPath()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
         /// This function is called when the used is authenticated and the OAuth flow is over.
         /// </summary>
         /// <param name="parameters">Collection of parameters from the tokens callback.</param>
-        protected abstract void PostProcess(string contents);
-        
+        protected abstract void PostProcess(ParameterCollection parameters);
+
         /// <summary>
         /// Pre process the auth tokens parameters. Should only be used on OAuth 1.
         /// Implemented as an empty method to avoid cluttering on OAuth 2 models.
         /// </summary>
         /// <param name="collection">Collection of parameters.</param>
-        protected virtual void PreProcessTokenResponse(NameValueCollection collection)
+        protected virtual void PreProcessTokenResponse(TokenResponse<RequestToken> response)
         {
         }
-        #endregion
+
+        protected virtual OAuthAuthorizer GetOAuthorizer()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion Url getters & verifiers
 
         #region Tools
         private string GetQueryString(string Query)
@@ -158,38 +144,52 @@ namespace Ocell.Pages.Settings
 
             return Query;
         }
-        #endregion
 
-        #region OAuth flow
-        public virtual void GetAuthorizationTokens()
+        private ParameterCollection GetQueryParameters(string query)
         {
-            var client = new RestClient
-            {
-                Authority = APIAuthority,
-                Credentials = GetAuthorizationTokenCredentials()
-            };
+            ParameterCollection collection = new ParameterCollection();
 
-            // Get the response from the request
-            client.BeginRequest(CreateAuthTokensRequest(), new RestCallback(GetRequestTokenResponse));
+            query = query.TrimStart('?');
+
+            var pars = query.Split('&').Select(x => x.Split('=')).Select(x => Tuple.Create(x[0], Uri.UnescapeDataString(x[1])));
+
+            foreach (var pair in pars)
+                collection.Add(pair.Item1, pair.Item2);
+
+            return collection;
         }
 
-        private void GetRequestTokenResponse(RestRequest request, RestResponse response, object userstate)
+        #endregion Tools
+
+        #region OAuth flow
+        public virtual async void GetAuthorizationTokens()
         {
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            var authorizer = GetOAuthorizer();
+
+            // Get the response from the request
+            try
             {
+                tokenResponse = await authorizer.GetRequestToken(APIAuthority + GetTokenRequestPath());
+            }
+            catch (HttpRequestException ex)
+            {
+                DebugError("Error getting request token: {0}", ex);
                 MessageService.ShowError(Localization.Resources.ErrorAuthURL);
                 GoBack();
                 return;
             }
+            GetRequestTokenResponse(tokenResponse);
+        }
 
+        private void GetRequestTokenResponse(TokenResponse<RequestToken> response)
+        {
             try
             {
-                var collection = System.Web.HttpUtility.ParseQueryString(response.Content);
-                PreProcessTokenResponse(collection);
+                PreProcessTokenResponse(response);
             }
             catch (Exception e)
             {
-                DebugError("Error building the auth URL: {0}", e);
+                DebugError("Error processing token response: {0}", e);
                 MessageService.ShowError(Localization.Resources.ErrorAuthURL);
                 GoBack();
                 return;
@@ -220,11 +220,11 @@ namespace Ocell.Pages.Settings
             RaiseNavigate(authUri);
         }
 
-        public virtual void ReturnedToCallback(Uri uri)
+        public virtual async void ReturnedToCallback(Uri uri)
         {
             string url = GetQueryString(uri.Query);
 
-            var paramCollection = System.Web.HttpUtility.ParseQueryString(url);
+            var paramCollection = GetQueryParameters(url);
 
             if (!VerifyCallbackParams(paramCollection))
             {
@@ -234,26 +234,34 @@ namespace Ocell.Pages.Settings
                 return;
             }
 
-            GetFullTokens(paramCollection);
+            await GetFullTokens(paramCollection);
         }
 
-        public virtual void GetFullTokens(NameValueCollection parameters)
+        public virtual async Task GetFullTokens(ParameterCollection parameters)
         {
             // Use Hammock to create a rest client
-            var client = new RestClient
-            {
-                Authority = APIAuthority,
-                Credentials = GetCredentials(parameters)
-            };
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(APIAuthority);
+            var returnedParameters = new ParameterCollection();
 
-            // Get the response from the request
-            client.BeginRequest(CreateTokensRequest(parameters), new RestCallback(TokensRequestCompleted));
+            if (Version == OAuthVersion.OAuthV1)
+                await GetOAuth1AccessTokenParameters(parameters, returnedParameters);
+            else
+                await GetOAuth2AccessTokenParameters(parameters, returnedParameters);
+
+            PostProcess(returnedParameters);
         }
 
-        public void TokensRequestCompleted(RestRequest req, RestResponse response, object userstate)
+        private async Task GetOAuth2AccessTokenParameters(ParameterCollection parameters, ParameterCollection returnedParameters)
         {
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(APIAuthority, UriKind.Absolute);
+
+            var response = await client.SendAsync(CreateTokensRequest(parameters));
+
+            if (!response.IsSuccessStatusCode)
             {
+                DebugError("Error in the token request. Response code {0}, content {1}.", response.StatusCode, await response.Content.ReadAsStringAsync());
                 MessageService.ShowError(Localization.Resources.ErrorClientTokens);
                 GoBack();
                 return;
@@ -261,7 +269,11 @@ namespace Ocell.Pages.Settings
 
             try
             {
-                PostProcess(response.Content);
+                string contents = await response.Content.ReadAsStringAsync();
+                var json = JObject.Parse(contents);
+
+                foreach (var key in json)
+                    returnedParameters.Add(key.Key, key.Value);
             }
             catch (Exception e)
             {
@@ -270,12 +282,31 @@ namespace Ocell.Pages.Settings
                 GoBack();
             }
         }
-        #endregion
+
+        private async Task GetOAuth1AccessTokenParameters(ParameterCollection parameters, ParameterCollection returnedParameters)
+        {
+            try
+            {
+                var response = await GetOAuthorizer().GetAccessToken(APIAuthority + GetAccessTokenPath(), tokenResponse.Token, parameters.First(x => x.Key == "oauth_verifier").Value.ToString());
+
+                returnedParameters.Add("oauth_token", response.Token.Key);
+                returnedParameters.Add("oauth_token_secret", response.Token.Secret);
+            }
+            catch (Exception e)
+            {
+                DebugError("Error requesting access token parameters (OAuth 1): {0}", e);
+                MessageService.ShowError(Localization.Resources.ErrorClientTokens);
+                GoBack();
+            }
+        }
+
+        #endregion OAuth flow
 
         [Conditional("DEBUG")]
         private void DebugError(string message, params object[] args)
         {
             string msg = String.Format(message, args);
+            Debug.WriteLine(msg);
             MessageService.ShowError(msg);
         }
     }
