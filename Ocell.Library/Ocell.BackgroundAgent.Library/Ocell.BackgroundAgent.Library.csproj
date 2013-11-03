@@ -121,8 +121,8 @@
     <Compile Include="..\Ocell.Library\DateSync.cs">
       <Link>DateSync.cs</Link>
     </Compile>
-    <Compile Include="..\Ocell.Library\Diagnostics\DebugWriter.cs">
-      <Link>DebugWriter.cs</Link>
+    <Compile Include="..\Ocell.Library\Diagnostics\Logger.cs">
+      <Link>Logger.cs</Link>
     </Compile>
     <Compile Include="..\Ocell.Library\FileAbstractor.cs">
       <Link>FileAbstractor.cs</Link>

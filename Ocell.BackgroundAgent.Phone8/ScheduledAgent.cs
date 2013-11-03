@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using Microsoft.Phone.Info;
 using Microsoft.Phone.Scheduler;
 using Ocell.BackgroundAgent.Library;
-using Microsoft.Phone.Info;
+using Ocell.Compatibility;
 using Ocell.Library;
 using System;
-using Ocell.Compatibility;
+using System.Diagnostics;
+using System.Windows;
 
 namespace Ocell.BackgroundAgent.Phone8
 {
@@ -55,10 +55,8 @@ namespace Ocell.BackgroundAgent.Phone8
             }
             catch (Exception e)
             {
-                Logger.Log("Exception " + e.GetType().Name + ": " + e.Message);
+                Logger.Trace("Exception " + e.GetType().Name + ": " + e.Message);
             }
-
-            Logger.Save();
 
             NotifyComplete();
         }

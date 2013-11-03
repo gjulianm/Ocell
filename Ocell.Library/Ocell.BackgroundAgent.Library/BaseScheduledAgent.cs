@@ -45,8 +45,8 @@ namespace Ocell.BackgroundAgent.Library
                 percentage = 0;
             string toWrite = string.Format("{3}: {0} - {1} KB ({2}% of available memory)",
                 message, used, percentage, DateTime.Now.ToString("HH:mm:ss.ff"));
-            Debug.WriteLine(toWrite);
-            Logger.Add(toWrite);
+
+            Logger.Trace(toWrite);
         }
 
         private async Task CompleteAction(Func<Task> action)

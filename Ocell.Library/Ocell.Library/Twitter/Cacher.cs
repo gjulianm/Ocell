@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.IsolatedStorage;
-using TweetSharp;
-using System.Linq;
-using Ocell.Library.Twitter.Comparers;
-using System.Threading;
-using System.Diagnostics;
-using Newtonsoft.Json;
-using System.IO;
+﻿using Ocell.Library.Security;
 using Polenter.Serialization;
-using System.Text;
-using Ocell.Library.Security;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using TweetSharp;
 
 namespace Ocell.Library.Twitter
 {
     public static class Cacher
     {
-        static SharpSerializerBinarySettings SerializerSettings = new SharpSerializerBinarySettings
+        private static SharpSerializerBinarySettings SerializerSettings = new SharpSerializerBinarySettings
         {
             Mode = BinarySerializationMode.SizeOptimized
         };
@@ -53,7 +47,7 @@ namespace Ocell.Library.Twitter
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
+                    Logger.Trace(ex.ToString());
                 }
             });
         }

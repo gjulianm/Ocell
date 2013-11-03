@@ -194,7 +194,7 @@
     </Compile>
     <Compile Include="DateSync.cs">
     </Compile>
-    <Compile Include="Diagnostics\DebugWriter.cs">
+    <Compile Include="Diagnostics\Logger.cs">
     </Compile>
     <Compile Include="DecisionMaker.cs">
     </Compile>
