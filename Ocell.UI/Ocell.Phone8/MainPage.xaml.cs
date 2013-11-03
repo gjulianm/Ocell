@@ -81,14 +81,14 @@ namespace Ocell
                     PushNotifications.AutoRegisterForNotifications();
                 UsernameProvider.FillUserNames(Config.Accounts);
 #if DEBUG
-                var contents = Logger.LogAsString;
+                var contents = FileAbstractor.ReadContentsOfFile("BA_DEBUG");
                 if (!string.IsNullOrEmpty(contents))
                 {
                     EmailComposeTask email = new EmailComposeTask();
                     email.To = "gjulian93@gmail.com";
-                    email.Subject = "Ocell Error Report";
+                    email.Subject = "Ocell Background Agent Report";
                     email.Body = contents;
-                    //Dispatcher.BeginInvoke(() => email.Show());
+                    Dispatcher.BeginInvoke(() => email.Show());
                 }
 #endif
                 LittleWatson.CheckForPreviousException();

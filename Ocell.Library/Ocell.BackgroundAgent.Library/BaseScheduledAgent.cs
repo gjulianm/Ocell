@@ -25,6 +25,7 @@ namespace Ocell.BackgroundAgent.Library
         {
             await CompleteAction(SendScheduledTweets);
             await CompleteAction(NotifyMentionsAndMessages);
+            FileAbstractor.WriteLinesToFile(Logger.LogHistory, "BA_DEBUG");
         }
 
         private bool IsMemoryUsageHigh()
