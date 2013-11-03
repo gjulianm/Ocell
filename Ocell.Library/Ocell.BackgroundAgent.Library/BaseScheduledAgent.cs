@@ -1,4 +1,4 @@
-﻿using Hammock;
+﻿using Microsoft.Phone.Shell;
 using Ocell.Compatibility;
 using Ocell.Library;
 using Ocell.Library.Notifications;
@@ -11,8 +11,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Microsoft.Phone.Shell;
-using TweetSharp;
 using System.Threading.Tasks;
 
 namespace Ocell.BackgroundAgent.Library
@@ -29,7 +27,7 @@ namespace Ocell.BackgroundAgent.Library
             await CompleteAction(NotifyMentionsAndMessages);
         }
 
-        bool IsMemoryUsageHigh()
+        private bool IsMemoryUsageHigh()
         {
             double highPercentage = 0.97;
             double highMemory = ApplicationMemoryLimit() * highPercentage;
@@ -37,7 +35,7 @@ namespace Ocell.BackgroundAgent.Library
         }
 
         [Conditional("DEBUG")]
-        void WriteMemUsage(string message)
+        private void WriteMemUsage(string message)
         {
             long percentage;
             long used = ApplicationMemoryUsage() / 1024;
@@ -159,9 +157,11 @@ namespace Ocell.BackgroundAgent.Library
                 return user.Preferences.MessagesPreferences;
         }
 
-        private void ReceiveTweetObjects(TweetType type, UserToken user, TwitterObjectCollection statuses, RestResponse response)
+        private void ReceiveTweetObjects(TweetType type, UserToken user, TwitterObjectCollection statuses)
         {
-            GC.Collect();
+            // TODO: Adapt this.
+
+            /*GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
             WriteMemUsage("Received " + type.ToString());
@@ -191,15 +191,15 @@ namespace Ocell.BackgroundAgent.Library
 
             if (notPrefs == NotificationType.Toast || notPrefs == NotificationType.TileAndToast)
                 lock (notsSync)
-                    toastNotifications.AddRange(toastStatuses);
+                    toastNotifications.AddRange(toastStatuses);*/
 
         }
 
         private async Task CheckNotificationsForUser(UserToken user)
         {
-            // TODO: Check if we can reuse Tweetsharp here again. 
+            // TODO: Check if we can reuse Tweetsharp here again.
 
-            var service = new LightTwitterClient(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, user.Key, user.Secret);
+            /*var service = new LightTwitterClient(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, user.Key, user.Secret);
 
             if (user.Preferences.MentionsPreferences != NotificationType.None)
             {
@@ -221,12 +221,12 @@ namespace Ocell.BackgroundAgent.Library
                     if (Interlocked.Decrement(ref requestsPending) == 0)
                         notificationsWaitHandle.Set();
                 });
-            }
+            }*/
         }
 
         private void NotifyToast()
         {
-            if(Config.PushEnabled == true || !toastNotifications.Any())
+            if (Config.PushEnabled == true || !toastNotifications.Any())
                 return;
 
             string toastContent = "";
@@ -257,7 +257,7 @@ namespace Ocell.BackgroundAgent.Library
             toast.Show();
         }
 
-        string GetChainOfNames(List<string> names)
+        private string GetChainOfNames(List<string> names)
         {
             string content = "";
             if (names == null || !names.Any())
@@ -275,10 +275,12 @@ namespace Ocell.BackgroundAgent.Library
 
             return content;
         }
-        #endregion
+
+        #endregion Notifications
 
         #region Tile updating
-        void UpdateTiles()
+
+        private void UpdateTiles()
         {
             if (Config.BackgroundLoadColumns == true)
             {
@@ -307,12 +309,11 @@ namespace Ocell.BackgroundAgent.Library
             }
         }
 
-
-
         protected void Load(TwitterResource resource)
         {
             // TODO: Receive data for columns. Use TweetLoader? Refactor to reuse the functions?
         }
-        #endregion
+
+        #endregion Tile updating
     }
 }

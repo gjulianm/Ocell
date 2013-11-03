@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Net;
-using TweetSharp;
-using Ocell.Library.Twitter;
-using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using TweetSharp;
 
 namespace Ocell.Library.Tasks
 {
@@ -42,7 +40,7 @@ namespace Ocell.Library.Tasks
 
                 var result = await service.SendTweetAsync(new SendTweetOptions { Status = Task.Text, InReplyToStatusId = Task.InReplyTo });
 
-                if(!result.RequestSucceeded)
+                if (!result.RequestSucceeded)
                 {
                     if (Error != null)
                         Error(this, result);

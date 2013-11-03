@@ -113,7 +113,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AncoraMVVM.Rest">
-      <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.0-alpha\lib\portable-net45+sl50+wp80+win\AncoraMVVM.Rest.dll</HintPath>
+      <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.1-alpha\lib\portable-net45+sl50+wp80+win\AncoraMVVM.Rest.dll</HintPath>
     </Reference>
     <Reference Include="AsyncOAuth, Version=0.8.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

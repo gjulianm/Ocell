@@ -1,42 +1,31 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO.IsolatedStorage;
-using System.Web;
-using System.Windows;
-using Hammock;
-using Hammock.Authentication.OAuth;
+﻿using DanielVaughan;
 using Microsoft.Phone.Controls;
-using System.Linq;
-using Ocell.Library;
-using Ocell.Library.Twitter;
-using Ocell.Library.Notifications;
-using System.Text;
-using Ocell.Localization;
 using Ocell.Pages.Settings;
-using DanielVaughan;
+using System;
 
 namespace Ocell.Settings
 {
-    public enum AuthType { Twitter, Buffer}
-
+    public enum AuthType { Twitter, Buffer }
 
     public partial class OAuth : PhoneApplicationPage
     {
-        OAuthModel viewModel;
-        public static AuthType Type { get; set;}
+        private OAuthModel viewModel;
+        public static AuthType Type { get; set; }
 
         public OAuth()
         {
-            InitializeComponent(); 
+            InitializeComponent();
 
             switch (Type)
             {
                 case AuthType.Twitter:
                     viewModel = new TwitterOAuthModel();
                     break;
+
                 case AuthType.Buffer:
                     viewModel = new BufferOAuthModel();
                     break;
+
                 default:
                     throw new NotImplementedException(string.Format("Type {0} unknown", Type));
             }
@@ -47,6 +36,6 @@ namespace Ocell.Settings
             viewModel.BrowserNavigate += (sender, e) => Dispatcher.InvokeIfRequired(() => wb.Navigate(e));
 
             DataContext = viewModel;
-        }               
+        }
     }
 }

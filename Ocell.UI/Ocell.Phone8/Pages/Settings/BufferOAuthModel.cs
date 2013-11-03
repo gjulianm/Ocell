@@ -1,6 +1,5 @@
 ﻿using AncoraMVVM.Rest;
 using BufferAPI;
-using Newtonsoft.Json.Linq;
 using Ocell.Library;
 using System;
 using System.Linq;
@@ -44,13 +43,11 @@ namespace Ocell.Pages.Settings
             return request;
         }
 
-        protected override void PostProcess(string contents)
+        protected override void PostProcess(ParameterCollection parameters)
         {
-            var response = JObject.Parse(contents);
-
-            if (response["access_token"] != null)
+            if (parameters["access_token"] != null)
             {
-                Config.BufferAccessToken = response["access_token"].ToString().Replace("\"", "");
+                Config.BufferAccessToken = parameters["access_token"].ToString().Replace("\"", "");
                 GetBufferProfiles();
             }
             else
