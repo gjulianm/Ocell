@@ -112,8 +112,9 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AncoraMVVM.Rest">
-      <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.1-alpha\lib\portable-net45+sl50+wp80+win\AncoraMVVM.Rest.dll</HintPath>
+    <Reference Include="AncoraMVVM.Rest, Version=0.1.6.31017, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.6-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Rest.dll</HintPath>
     </Reference>
     <Reference Include="AsyncOAuth, Version=0.8.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
