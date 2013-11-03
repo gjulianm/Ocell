@@ -1,0 +1,1 @@
+<Playlist Version="1.0"><Add Test="Ocell.Tests.SerializationTests.Serialization" /><Add Test="Ocell.Tests.SerializationTests.Deserialization" /></Playlist>

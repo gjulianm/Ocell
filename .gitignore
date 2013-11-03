@@ -124,3 +124,6 @@ PerfLogs
 
 *.sublime-*
 analytics.xml
+Endpoints/*.json
+Ocell.UI/Ocell.Phone8/Endpoints/
+Endpoints/

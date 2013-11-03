@@ -165,6 +165,19 @@
     <None Include="..\Ocell.Library\Configuration\NotBackgroundAgent.json">
       <Link>Configuration\NotBackgroundAgent.json</Link>
     </None>
+    <None Include="Endpoints\_TwitterService.1.Timelines.json" />
+    <None Include="Endpoints\_TwitterService.10.Lists.json" />
+    <None Include="Endpoints\_TwitterService.11.SavedSearches.json" />
+    <None Include="Endpoints\_TwitterService.12.Places.json" />
+    <None Include="Endpoints\_TwitterService.13.Trends.json" />
+    <None Include="Endpoints\_TwitterService.14.Help.json" />
+    <None Include="Endpoints\_TwitterService.2.Tweets.json" />
+    <None Include="Endpoints\_TwitterService.3.Search.json" />
+    <None Include="Endpoints\_TwitterService.5.DirectMessages.json" />
+    <None Include="Endpoints\_TwitterService.6.FriendsFollowers.json" />
+    <None Include="Endpoints\_TwitterService.7.Users.json" />
+    <None Include="Endpoints\_TwitterService.8.SuggestedUsers.json" />
+    <None Include="Endpoints\_TwitterService.9.Favorites.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -213,10 +226,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.Net.Http.2.2.15\lib\sl4-windowsphone71\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="Tweetsharp.PCL, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Tweetsharp.PCL, Version=3.0.4.39021, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Tweetsharp.PCL.3.0.0-alpha\lib\portable-net45+sl50+wp80+win\Tweetsharp.PCL.dll</HintPath>
+      <HintPath>..\..\packages\Tweetsharp.PCL.3.0.4-alpha\lib\portable-net45+sl50+wp80+win\Tweetsharp.PCL.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assembly.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

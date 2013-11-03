@@ -19,6 +19,8 @@ namespace Ocell.Library
                                [CallerFilePath] string sourceFilePath = "",
                                [CallerLineNumber] int sourceLineNumber = 0)
         {
+            var lastSlash = sourceFilePath.LastIndexOf("\\") + 1;
+            sourceFilePath = sourceFilePath.Substring(lastSlash, sourceFilePath.Length - lastSlash);
             message = String.Format("{0} [{1}]: {2}" + Environment.NewLine + "\t==WHERE== {3} at {4}:{5}", DateTime.Now, level, message, memberName, sourceFilePath, sourceLineNumber);
             Lines.Add(message);
             Debug.WriteLine(message);
