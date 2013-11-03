@@ -1,6 +1,7 @@
 ﻿using DanielVaughan;
 using DanielVaughan.Services;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Tasks;
 using Ocell.Compatibility;
 using Ocell.Controls;
 using Ocell.Library;
@@ -54,14 +55,13 @@ namespace Ocell
             base.OnNavigatedTo(e);
         }
 
-        void CallLoadFunctions(object sender, RoutedEventArgs e)
+        private void CallLoadFunctions(object sender, RoutedEventArgs e)
         {
             if (_initialised)
                 return;
 
             if (!CheckForLogin())
                 return;
-
 
             var frame = Application.Current.RootVisual as PhoneApplicationFrame;
             frame.Background = Config.Background.GetBrush();
@@ -101,10 +101,11 @@ namespace Ocell
 
             _initialised = true;
         }
-        #endregion
+
+        #endregion Page events
 
         #region Prompts
-        bool AskForPushPermission()
+        private bool AskForPushPermission()
         {
             if (!TrialInformation.IsFullFeatured)
                 return false;
@@ -114,7 +115,7 @@ namespace Ocell
             return result;
         }
 
-        void GeolocationPrompt()
+        private void GeolocationPrompt()
         {
             if (Config.EnabledGeolocation != null)
                 return;
@@ -128,7 +129,7 @@ namespace Ocell
             Config.EnabledGeolocation = result == MessageBoxResult.OK;
         }
 
-        bool CheckForLogin()
+        private bool CheckForLogin()
         {
             if (!Config.Accounts.Any())
             {
@@ -145,7 +146,7 @@ namespace Ocell
                 return true;
         }
 
-        void ShowFollowMessage()
+        private void ShowFollowMessage()
         {
             if ((Config.FollowMessageShown == false || Config.FollowMessageShown == null) && ServiceDispatcher.CanGetServices)
             {
@@ -156,7 +157,8 @@ namespace Ocell
                 Config.FollowMessageShown = true;
             }
         }
-        #endregion
+
+        #endregion Prompts
 
         #region List management
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
@@ -242,7 +244,7 @@ namespace Ocell
             });
         }
 
-        void CheckForFilterUpdate(object sender, RoutedEventArgs e)
+        private void CheckForFilterUpdate(object sender, RoutedEventArgs e)
         {
             ExtendedListBox list = sender as ExtendedListBox;
             if (list != null && ((DataTransfer.ShouldReloadFilters && DataTransfer.cFilter.Resource == list.Loader.Resource) || DataTransfer.IsGlobalFilter))
@@ -251,14 +253,15 @@ namespace Ocell
                 DataTransfer.ShouldReloadFilters = false;
             }
         }
-        #endregion
+
+        #endregion List management
 
         #region RecoverDialog
-        Storyboard SbShowDialog;
-        Storyboard SbHideDialog;
+        private Storyboard SbShowDialog;
+        private Storyboard SbHideDialog;
 
-        TranslateTransform trans;
-        void CreateStoryboards()
+        private TranslateTransform trans;
+        private void CreateStoryboards()
         {
             trans = new TranslateTransform() { X = 0, Y = 0 };
             RecoverDialog.RenderTransformOrigin = new Point(0, 0);
@@ -287,7 +290,7 @@ namespace Ocell
             SbHideDialog.Children.Add(hideAnim);
         }
 
-        ExtendedListBox currentShowingList;
+        private ExtendedListBox currentShowingList;
         private void RecoverDialog_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             HideResumePositionPrompt();
@@ -296,8 +299,8 @@ namespace Ocell
                 currentShowingList.ResumeReading();
         }
 
-        bool recoverDialogShown = false;
-        void ShowResumePositionPrompt(ExtendedListBox list)
+        private bool recoverDialogShown = false;
+        private void ShowResumePositionPrompt(ExtendedListBox list)
         {
             currentShowingList = list;
 
@@ -310,12 +313,12 @@ namespace Ocell
             recoverDialogShown = true;
         }
 
-        void SbShowDialog_Completed(object sender, EventArgs e)
+        private void SbShowDialog_Completed(object sender, EventArgs e)
         {
             HideResumePositionPrompt(true);
         }
 
-        void HideResumePositionPrompt(bool delay = false)
+        private void HideResumePositionPrompt(bool delay = false)
         {
             if (!recoverDialogShown)
                 return;
@@ -328,26 +331,25 @@ namespace Ocell
             SbHideDialog.Begin();
         }
 
-        void SetupRecoverDialogGestures()
+        private void SetupRecoverDialogGestures()
         {
             var gestureListener = GestureService.GetGestureListener(RecoverDialog);
             gestureListener.DragDelta += RecoverDiag_DragDelta;
             gestureListener.DragCompleted += RecoverDiag_DragEnd;
         }
 
-        void RecoverDiag_DragDelta(object sender, DragDeltaGestureEventArgs e)
+        private void RecoverDiag_DragDelta(object sender, DragDeltaGestureEventArgs e)
         {
             ((TranslateTransform)RecoverDialog.RenderTransform).X += e.HorizontalChange;
         }
 
-        void RecoverDiag_DragEnd(object sender, DragCompletedGestureEventArgs e)
+        private void RecoverDiag_DragEnd(object sender, DragCompletedGestureEventArgs e)
         {
             if (e.Direction == System.Windows.Controls.Orientation.Horizontal && e.HorizontalChange > 0)
             {
                 // Nice, it was a flick which moved the dialog to the right. Now, let's see if the user moved it enough to hide it.
                 var moveNeeded = 0.40; // 40% of the dialog must have been moved to the right.
                 var actualMove = e.HorizontalChange / RecoverDialog.Width;
-
 
                 if (actualMove >= moveNeeded)
                     HideResumePositionPrompt(false);
@@ -360,7 +362,8 @@ namespace Ocell
                 e.Handled = true;
             }
         }
-        #endregion
+
+        #endregion RecoverDialog
 
         #region UserGrid
         private void HideUserGrid(object sender, System.ComponentModel.CancelEventArgs e)
@@ -370,15 +373,15 @@ namespace Ocell
             this.BackKeyPress -= HideUserGrid;
         }
 
-
         private void AppBarMenuItem_Click(object sender, EventArgs e)
         {
             viewModel.IsSearching = true;
             this.BackKeyPress += HideUserGrid;
         }
-        #endregion
 
-        void CreateTile()
+        #endregion UserGrid
+
+        private void CreateTile()
         {
             SchedulerSync.WriteLastCheckDate(DateTime.Now.ToUniversalTime());
             SchedulerSync.StartPeriodicAgent();

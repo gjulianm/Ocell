@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 
 namespace Ocell
 {
@@ -130,8 +131,8 @@ namespace Ocell
             string postContents = "{\"AccessTokens\" : \"" + tokens + "\",\"PushUris\" : \"" + urls + "\",\"Usernames\" : \"" + names + "\",\"Types\" : \"" + types + "\",\"OSVersion\" : \"" + version + "\"}";
 
             var request = new HttpRequestMessage(HttpMethod.Post, SensitiveData.PushRegisterPostUriFormat);
-            request.Headers.Add("Content-Type", "application/json");
-            request.Content = new StringContent(postContents);
+
+            request.Content = new StringContent(postContents, UTF8Encoding.UTF8, "application/json");
 
             try
             {
