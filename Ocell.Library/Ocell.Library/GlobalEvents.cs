@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Threading;
-
+using System.Threading.Tasks;
 namespace Ocell.Library
 {
     public static class GlobalEvents
@@ -18,7 +18,7 @@ namespace Ocell.Library
 
         public static void FireFiltersChanged(object sender, EventArgs e)
         {
-            ThreadPool.QueueUserWorkItem((threadcontext) => {
+            Task.Run(() => {
                 if (FiltersChanged != null)
                     FiltersChanged(sender, e);
             });

@@ -6,6 +6,7 @@ using System.Net;
 using TweetSharp;
 using Ocell.Library;
 using System.Threading;
+using System.Threading.Tasks;
 using Ocell.Library.Twitter;
 using Ocell.Library.Twitter.Comparers;
 using System.Windows.Controls;
@@ -136,12 +137,12 @@ namespace Ocell.Library.Twitter
         #region Cache
         public void SaveToCacheAsync()
         {
-            ThreadPool.QueueUserWorkItem((threadContext) => SaveToCache());
+            Task.Run(() => SaveToCache());
         }
 
         public void LoadCacheAsync()
         {
-            ThreadPool.QueueUserWorkItem((threadContext) => LoadCache());
+            Task.Run(() => LoadCache());
         }
 
         public void DeferredCacheLoad()
@@ -151,7 +152,7 @@ namespace Ocell.Library.Twitter
 
         public void SaveToCacheAsync(IList<ITweetable> viewport)
         {
-            ThreadPool.QueueUserWorkItem((context) => SaveToCache(viewport));
+            Task.Run(() => SaveToCache(viewport));
         }
 
         public void SaveToCache(IList<ITweetable> viewport)
