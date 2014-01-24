@@ -192,6 +192,7 @@
     <Compile Include="Helpers\ValueConverters\TextToMediaConverter.cs" />
     <Compile Include="Helpers\ValueConverters\ToColumn.cs" />
     <Compile Include="Helpers\ValueConverters\TweetTextConverter.cs" />
+    <Compile Include="LinqToVisualTree.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

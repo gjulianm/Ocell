@@ -120,9 +120,9 @@
     <Compile Include="Extension\IEnumerableExtension.cs">
     </Compile>
     <Compile Include="MediaLinkParser.cs" />
+    <Compile Include="Notifications\NotificationPreferences.cs" />
     <Compile Include="Security\MutexExtensions.cs" />
     <Compile Include="Twitter\UserToken.cs" />
-    <Compile Include="UI\LinqToVisualTree.cs" />
     <Compile Include="Extension\MessageServiceExtension.cs" />
     <Compile Include="UI\OcellTheme.cs">
     </Compile>
@@ -178,19 +178,6 @@
     </None>
     <None Include="Configuration\NotBackgroundAgent.json">
     </None>
-    <None Include="Endpoints\_TwitterService.1.Timelines.json" />
-    <None Include="Endpoints\_TwitterService.10.Lists.json" />
-    <None Include="Endpoints\_TwitterService.11.SavedSearches.json" />
-    <None Include="Endpoints\_TwitterService.12.Places.json" />
-    <None Include="Endpoints\_TwitterService.13.Trends.json" />
-    <None Include="Endpoints\_TwitterService.14.Help.json" />
-    <None Include="Endpoints\_TwitterService.2.Tweets.json" />
-    <None Include="Endpoints\_TwitterService.3.Search.json" />
-    <None Include="Endpoints\_TwitterService.5.DirectMessages.json" />
-    <None Include="Endpoints\_TwitterService.6.FriendsFollowers.json" />
-    <None Include="Endpoints\_TwitterService.7.Users.json" />
-    <None Include="Endpoints\_TwitterService.8.SuggestedUsers.json" />
-    <None Include="Endpoints\_TwitterService.9.Favorites.json" />
     <None Include="Fody.targets" />
     <None Include="packages.config" />
   </ItemGroup>
