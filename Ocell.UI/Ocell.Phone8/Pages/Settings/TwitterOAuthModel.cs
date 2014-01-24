@@ -4,7 +4,6 @@ using DanielVaughan;
 using Ocell.Library;
 using Ocell.Library.Notifications;
 using Ocell.Library.Twitter;
-using System;
 using System.Net.Http;
 using System.Windows;
 
@@ -42,6 +41,11 @@ namespace Ocell.Pages.Settings
         protected override string GetAuthorizationUrl()
         {
             return string.Format("https://api.twitter.com/oauth/authorize?oauth_token={0}", request_token);
+        }
+
+        protected override string GetAccessTokenPath()
+        {
+            return "/oauth/access_token";
         }
 
         protected override bool VerifyCallbackParams(ParameterCollection parameters)

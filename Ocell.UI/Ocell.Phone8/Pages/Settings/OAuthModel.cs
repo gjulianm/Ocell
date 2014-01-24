@@ -297,6 +297,7 @@ namespace Ocell.Pages.Settings
                 DebugError("Error requesting access token parameters (OAuth 1): {0}", e);
                 MessageService.ShowError(Localization.Resources.ErrorClientTokens);
                 GoBack();
+                return;
             }
         }
 
