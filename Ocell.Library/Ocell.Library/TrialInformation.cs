@@ -1,4 +1,5 @@
-﻿using Microsoft.Phone.Tasks;
+﻿using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
 using Ocell.Library;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace Ocell
     public static class TrialInformation
     {
         const int TrialDays = 7;
+
+        public static Func<bool> RequestTrialInfo { get; set; }
 
         public static bool IsFull
         {
@@ -37,8 +40,7 @@ namespace Ocell
                 if (Config.TrialStart == DateTime.MaxValue)
                     Config.TrialStart = DateTime.Now;
 
-                var license = new Microsoft.Phone.Marketplace.LicenseInformation();
-                IsTrial = license.IsTrial();
+                IsTrial = RequestTrialInfo();
             }
             else
             {
@@ -67,17 +69,13 @@ namespace Ocell
 
         public static void ShowBuyDialog()
         {
-            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            var notificator = Dependency.Resolve<INotificationService>();
+            var accepts = notificator.Prompt(Localization.Resources.AskBuyFullVersion);
+            if (accepts)
             {
-                var result = MessageBox.Show(Localization.Resources.AskBuyFullVersion, "", MessageBoxButton.OKCancel);
-                if (result == MessageBoxResult.OK)
-                {
-                    var task = new MarketplaceDetailTask();
-                    task.ContentType = MarketplaceContentType.Applications;
-                    task.ContentIdentifier = "8644cfe4-1629-43f0-8869-4d6684a7cfcb";
-                    task.Show();
-                }
-            });
+                Dependency.Resolve<ITaskFactory>().CreateAppStoreTask(AppStoreContentType.Application, "8644cfe4-1629-43f0-8869-4d6684a7cfcb");
+            }
+
         }
 
         public static string State
