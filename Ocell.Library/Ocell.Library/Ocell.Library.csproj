@@ -104,7 +104,6 @@
     </Compile>
     <Compile Include="DateSync.cs">
     </Compile>
-    <Compile Include="Dependency.cs" />
     <Compile Include="Diagnostics\Logger.cs">
     </Compile>
     <Compile Include="DecisionMaker.cs">
@@ -122,6 +121,7 @@
     </Compile>
     <Compile Include="MediaLinkParser.cs" />
     <Compile Include="Security\MutexExtensions.cs" />
+    <Compile Include="Twitter\UserToken.cs" />
     <Compile Include="UI\LinqToVisualTree.cs" />
     <Compile Include="Extension\MessageServiceExtension.cs" />
     <Compile Include="UI\OcellTheme.cs">
@@ -164,7 +164,6 @@
     <Compile Include="Diagnostics\Watch.cs">
     </Compile>
     <Compile Include="Tasks\Scheduler.cs" />
-    <Compile Include="UserToken.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

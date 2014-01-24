@@ -137,6 +137,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Ocell.Library\Ocell.Library.csproj">
+      <Project>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</Project>
+      <Name>Ocell.Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ocell.Localization\Ocell.Localization.csproj">
       <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
       <Name>Ocell.Localization</Name>
