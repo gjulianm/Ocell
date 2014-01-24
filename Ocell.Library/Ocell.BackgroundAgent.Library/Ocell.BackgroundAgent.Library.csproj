@@ -141,10 +141,6 @@
       <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
       <Name>Ocell.Library.CoreTypes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ocell.LightTwitterService\Ocell.LightTwitterService.csproj">
-      <Project>{6D32BDDD-7445-4619-9474-149715C8D42E}</Project>
-      <Name>Ocell.LightTwitterService</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ocell.Localization\Ocell.Localization.csproj">
       <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
       <Name>Ocell.Localization</Name>

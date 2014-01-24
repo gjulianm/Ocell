@@ -4,7 +4,6 @@ using Ocell.Library;
 using Ocell.Library.Notifications;
 using Ocell.Library.Tasks;
 using Ocell.Library.Twitter;
-using Ocell.LightTwitterService;
 using Ocell.Localization;
 using System;
 using System.Collections.Generic;
@@ -113,9 +112,9 @@ namespace Ocell.BackgroundAgent.Library
             TileManager.SetNotifications(tileNotifications);
         }
 
-        private bool TwitterObjectIsOlderThan(TwitterObject item, DateTime date)
+        private bool TwitterObjectIsOlderThan(/*TwitterObject item, */DateTime date)
         {
-            string content;
+            /*string content;
             if (!item.TryGetProperty("created_at", out content))
                 return false;
 
@@ -127,11 +126,15 @@ namespace Ocell.BackgroundAgent.Library
 
             var d = objDate.ToUniversalTime();
 
-            return date < d;
+            return date < d;*/
+
+            return true;
         }
 
-        private TileNotification TwitterObjectToNotification(TweetType type, string name, TwitterObject item)
+        private TileNotification TwitterObjectToNotification(TweetType type, string name)
         {
+            // TODO: Solve this
+            /*
             var not = new TileNotification();
 
             string userstring = "";
@@ -147,7 +150,9 @@ namespace Ocell.BackgroundAgent.Library
             not.To = name;
             not.Message = item.GetProperty("text");
 
-            return not;
+            return not;*/
+
+            throw new NotImplementedException();
         }
 
         private NotificationType PreferencesForType(TweetType type, UserToken user)
@@ -158,7 +163,7 @@ namespace Ocell.BackgroundAgent.Library
                 return user.Preferences.MessagesPreferences;
         }
 
-        private void ReceiveTweetObjects(TweetType type, UserToken user, TwitterObjectCollection statuses)
+        private void ReceiveTweetObjects(TweetType type, UserToken user /*, TwitterObjectCollection statuses*/)
         {
             // TODO: Adapt this.
 
