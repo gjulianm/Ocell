@@ -95,10 +95,6 @@
       <Project>{742DB613-45BB-4F8F-A73F-B559901F6548}</Project>
       <Name>Ocell.BackgroundAgent.Library</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ocell.Library\Ocell.Library.CoreTypes\Ocell.Library.CoreTypes.csproj">
-      <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
-      <Name>Ocell.Library.CoreTypes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ocell.Library\Ocell.Localization\Ocell.Localization.csproj">
       <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
       <Name>Ocell.Localization</Name>
