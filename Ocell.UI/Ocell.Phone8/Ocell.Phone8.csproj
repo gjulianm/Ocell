@@ -159,6 +159,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\SensitiveData.cs">
+      <Link>SensitiveData.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -306,6 +309,19 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Endpoints\_TwitterService.1.Timelines.json" />
+    <None Include="Endpoints\_TwitterService.10.Lists.json" />
+    <None Include="Endpoints\_TwitterService.11.SavedSearches.json" />
+    <None Include="Endpoints\_TwitterService.12.Places.json" />
+    <None Include="Endpoints\_TwitterService.13.Trends.json" />
+    <None Include="Endpoints\_TwitterService.14.Help.json" />
+    <None Include="Endpoints\_TwitterService.2.Tweets.json" />
+    <None Include="Endpoints\_TwitterService.3.Search.json" />
+    <None Include="Endpoints\_TwitterService.5.DirectMessages.json" />
+    <None Include="Endpoints\_TwitterService.6.FriendsFollowers.json" />
+    <None Include="Endpoints\_TwitterService.7.Users.json" />
+    <None Include="Endpoints\_TwitterService.8.SuggestedUsers.json" />
+    <None Include="Endpoints\_TwitterService.9.Favorites.json" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">
@@ -313,6 +329,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assembly.ico" />
     <Content Include="Images\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -496,9 +513,16 @@
     <Resource Include="Images\BirdGray.png" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AncoraMVVM.Rest, Version=0.1.6.31017, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.6-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Rest.dll</HintPath>
+    </Reference>
     <Reference Include="AsyncOAuth, Version=0.8.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AsyncOAuth.0.8.3\lib\AsyncOAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="BufferAPI">
+      <HintPath>..\..\packages\BufferAPI.0.1.0-alpha\lib\portable-net45+sl50+wp80+win\BufferAPI.dll</HintPath>
     </Reference>
     <Reference Include="Calcium.Phone, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -528,6 +552,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\portable-net45+wp80+win8\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PCLWebUtility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\PCLWebUtility.1.0.2\Lib\portable-net4+sl4+wp7+win8\PCLWebUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Sharplonger">
+      <HintPath>..\..\packages\Sharplonger.0.1.0-alpha\lib\portable-net45+sl50+wp80+win\Sharplonger.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.Net.Http.2.2.15\lib\sl4-windowsphone71\System.Net.Http.dll</HintPath>
@@ -543,6 +574,10 @@
     <Reference Include="System.Windows.Interactivity, Version=3.7.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Ocell.ThirdParty\lib_dll\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Tweetsharp.PCL, Version=3.0.4.39021, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Tweetsharp.PCL.3.0.4-alpha\lib\portable-net45+sl50+wp80+win\Tweetsharp.PCL.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -663,21 +698,9 @@
     <Folder Include="Images\Icons_Black\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Ocell.APIs\Ocell.Buffer\Ocell.Buffer.csproj">
-      <Project>{4186D1D2-C419-4DA2-A1D8-5F56E5AAA30D}</Project>
-      <Name>Ocell.Buffer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Ocell.BackgroundAgent.Phone8\Ocell.BackgroundAgent.Phone8.csproj">
       <Project>{1D77B761-F1A7-43B5-914E-16AC51218972}</Project>
       <Name>Ocell.BackgroundAgent.Phone8</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\hammock\src\net40\Hammock.WindowsPhone.Mango\Hammock.WindowsPhone.Mango.csproj">
-      <Project>{CD029D13-5037-43A6-8CD9-5F12B00A7DE0}</Project>
-      <Name>Hammock.WindowsPhone.Mango</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.APIs\Ocell.Sharplonger\Ocell.Sharplonger.csproj">
-      <Project>{E74C3890-7501-44D4-82DA-403AE92F718A}</Project>
-      <Name>Ocell.Sharplonger</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.APIs\Ocell.ReadLater\Ocell.ReadLater.csproj">
       <Project>{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}</Project>
@@ -694,10 +717,6 @@
     <ProjectReference Include="..\..\Ocell.Library\Ocell.Localization\Ocell.Localization.csproj">
       <Project>{FAC86E98-A611-4800-B374-83E915925F6D}</Project>
       <Name>Ocell.Localization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.ThirdParty\tweetsharp\src\Tweetsharp.PCL\Tweetsharp.PCL.csproj">
-      <Project>{9869CC4F-7410-474D-8434-FF3FDF68D08B}</Project>
-      <Name>Tweetsharp.PCL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />

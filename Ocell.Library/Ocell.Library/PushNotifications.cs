@@ -1,17 +1,15 @@
-﻿using System;
-using System.Net;
+﻿using DanielVaughan;
+using DanielVaughan.Services;
 using Microsoft.Phone.Notification;
 using Ocell.Library;
-using Ocell.Library.Twitter;
-using System.Diagnostics;
-using System.IO;
-using System.Collections.Generic;
-using System.Text;
-using Hammock;
-using Hammock.Web;
 using Ocell.Library.Notifications;
-using DanielVaughan.Services;
-using DanielVaughan;
+using Ocell.Library.Twitter;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 
 namespace Ocell
 {
@@ -21,7 +19,7 @@ namespace Ocell
     {
         public static OSVersion WPVersion { get; set; }
 
-        struct RegistrationInfo
+        private struct RegistrationInfo
         {
             public string ChannelUri;
             public string Type;
@@ -108,9 +106,8 @@ namespace Ocell
                 UnregisterPushChannel(user, "mm");
         }
 
-       
         [Conditional("OCELL_FULL")]
-        static void SendRegistrationToServer(IEnumerable<RegistrationInfo> regs)
+        private static async void SendRegistrationToServer(IEnumerable<RegistrationInfo> regs)
         {
             // I'm just so sorry about all this crap.
             string separator = "¬";
@@ -133,26 +130,23 @@ namespace Ocell
 
             string postContents = "{\"AccessTokens\" : \"" + tokens + "\",\"PushUris\" : \"" + urls + "\",\"Usernames\" : \"" + names + "\",\"Types\" : \"" + types + "\",\"OSVersion\" : \"" + version + "\"}";
 
-            var request = new RestRequest();
-            request.Path = Library.SensitiveData.PushRegisterPostUriFormat;
-            request.Method = WebMethod.Post;
-            request.AddHeader("Content-Type", "application/json");
-            request.AddPostContent(Encoding.UTF8.GetBytes(postContents));
+            var request = new HttpRequestMessage(HttpMethod.Post, SensitiveData.PushRegisterPostUriFormat);
+
+            request.Content = new StringContent(postContents, UTF8Encoding.UTF8, "application/json");
 
             try
             {
-                new RestClient().BeginRequest(request, (req, resp, s) =>
-                {
-                    ReportRegisterToUser(resp);
-                });
+                var response = await new HttpClient().SendAsync(request);
+                ReportRegisterToUser(response);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine("Error sending push registration: {0}", ex);
             }
         }
 
         [Conditional("DEBUG")]
-        private static void ReportRegisterToUser(RestResponse resp)
+        private static void ReportRegisterToUser(HttpResponseMessage resp)
         {
             string msg = string.Format("Response from push server: {0}", resp.StatusCode);
             Dependency.Resolve<IMessageService>().ShowMessage(msg);
@@ -171,7 +165,7 @@ namespace Ocell
         }
 
         [Conditional("OCELL_FULL")]
-        static async void SendRemoveRequestToServer(UserToken token, string type)
+        private static async void SendRemoveRequestToServer(UserToken token, string type)
         {
             string encoded = Library.Encrypting.EncodeTokens(token.Key, token.Secret);
             string url = string.Format(Library.SensitiveData.PushUnregisterUriFormat, Uri.EscapeDataString(encoded), type);

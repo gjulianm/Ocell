@@ -1,18 +1,15 @@
-﻿using Hammock;
+﻿using Microsoft.Phone.Shell;
 using Ocell.Compatibility;
 using Ocell.Library;
 using Ocell.Library.Notifications;
 using Ocell.Library.Tasks;
 using Ocell.Library.Twitter;
-using Ocell.LightTwitterService;
 using Ocell.Localization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Microsoft.Phone.Shell;
-using TweetSharp;
 using System.Threading.Tasks;
 
 namespace Ocell.BackgroundAgent.Library
@@ -27,9 +24,10 @@ namespace Ocell.BackgroundAgent.Library
         {
             await CompleteAction(SendScheduledTweets);
             await CompleteAction(NotifyMentionsAndMessages);
+            FileAbstractor.WriteLinesToFile(Logger.LogHistory, "BA_DEBUG");
         }
 
-        bool IsMemoryUsageHigh()
+        private bool IsMemoryUsageHigh()
         {
             double highPercentage = 0.97;
             double highMemory = ApplicationMemoryLimit() * highPercentage;
@@ -37,7 +35,7 @@ namespace Ocell.BackgroundAgent.Library
         }
 
         [Conditional("DEBUG")]
-        void WriteMemUsage(string message)
+        private void WriteMemUsage(string message)
         {
             long percentage;
             long used = ApplicationMemoryUsage() / 1024;
@@ -47,8 +45,8 @@ namespace Ocell.BackgroundAgent.Library
                 percentage = 0;
             string toWrite = string.Format("{3}: {0} - {1} KB ({2}% of available memory)",
                 message, used, percentage, DateTime.Now.ToString("HH:mm:ss.ff"));
-            Debug.WriteLine(toWrite);
-            Logger.Add(toWrite);
+
+            Logger.Trace(toWrite);
         }
 
         private async Task CompleteAction(Func<Task> action)
@@ -114,9 +112,9 @@ namespace Ocell.BackgroundAgent.Library
             TileManager.SetNotifications(tileNotifications);
         }
 
-        private bool TwitterObjectIsOlderThan(TwitterObject item, DateTime date)
+        private bool TwitterObjectIsOlderThan(/*TwitterObject item, */DateTime date)
         {
-            string content;
+            /*string content;
             if (!item.TryGetProperty("created_at", out content))
                 return false;
 
@@ -128,11 +126,15 @@ namespace Ocell.BackgroundAgent.Library
 
             var d = objDate.ToUniversalTime();
 
-            return date < d;
+            return date < d;*/
+
+            return true;
         }
 
-        private TileNotification TwitterObjectToNotification(TweetType type, string name, TwitterObject item)
+        private TileNotification TwitterObjectToNotification(TweetType type, string name)
         {
+            // TODO: Solve this
+            /*
             var not = new TileNotification();
 
             string userstring = "";
@@ -148,7 +150,9 @@ namespace Ocell.BackgroundAgent.Library
             not.To = name;
             not.Message = item.GetProperty("text");
 
-            return not;
+            return not;*/
+
+            throw new NotImplementedException();
         }
 
         private NotificationType PreferencesForType(TweetType type, UserToken user)
@@ -159,9 +163,11 @@ namespace Ocell.BackgroundAgent.Library
                 return user.Preferences.MessagesPreferences;
         }
 
-        private void ReceiveTweetObjects(TweetType type, UserToken user, TwitterObjectCollection statuses, RestResponse response)
+        private void ReceiveTweetObjects(TweetType type, UserToken user /*, TwitterObjectCollection statuses*/)
         {
-            GC.Collect();
+            // TODO: Adapt this.
+
+            /*GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
             WriteMemUsage("Received " + type.ToString());
@@ -191,15 +197,15 @@ namespace Ocell.BackgroundAgent.Library
 
             if (notPrefs == NotificationType.Toast || notPrefs == NotificationType.TileAndToast)
                 lock (notsSync)
-                    toastNotifications.AddRange(toastStatuses);
+                    toastNotifications.AddRange(toastStatuses);*/
 
         }
 
         private async Task CheckNotificationsForUser(UserToken user)
         {
-            // TODO: Check if we can reuse Tweetsharp here again. 
+            // TODO: Check if we can reuse Tweetsharp here again.
 
-            var service = new LightTwitterClient(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, user.Key, user.Secret);
+            /*var service = new LightTwitterClient(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, user.Key, user.Secret);
 
             if (user.Preferences.MentionsPreferences != NotificationType.None)
             {
@@ -221,12 +227,12 @@ namespace Ocell.BackgroundAgent.Library
                     if (Interlocked.Decrement(ref requestsPending) == 0)
                         notificationsWaitHandle.Set();
                 });
-            }
+            }*/
         }
 
         private void NotifyToast()
         {
-            if(Config.PushEnabled == true || !toastNotifications.Any())
+            if (Config.PushEnabled == true || !toastNotifications.Any())
                 return;
 
             string toastContent = "";
@@ -257,7 +263,7 @@ namespace Ocell.BackgroundAgent.Library
             toast.Show();
         }
 
-        string GetChainOfNames(List<string> names)
+        private string GetChainOfNames(List<string> names)
         {
             string content = "";
             if (names == null || !names.Any())
@@ -275,10 +281,12 @@ namespace Ocell.BackgroundAgent.Library
 
             return content;
         }
-        #endregion
+
+        #endregion Notifications
 
         #region Tile updating
-        void UpdateTiles()
+
+        private void UpdateTiles()
         {
             if (Config.BackgroundLoadColumns == true)
             {
@@ -307,12 +315,11 @@ namespace Ocell.BackgroundAgent.Library
             }
         }
 
-
-
         protected void Load(TwitterResource resource)
         {
             // TODO: Receive data for columns. Use TweetLoader? Refactor to reuse the functions?
         }
-        #endregion
+
+        #endregion Tile updating
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TweetSharp;
 using BufferAPI;
+using Sharplonger;
 
 
 namespace Ocell.Library.Twitter
@@ -67,14 +68,14 @@ namespace Ocell.Library.Twitter
             return GetService(DataTransfer.CurrentAccount);
         }
 
-        public static Sharplonger.TwitlongerService GetTwitlongerService(UserToken user)
+        public static TwitlongerService GetTwitlongerService(UserToken user)
         {
             return GetTwitlongerService(user.ScreenName);
         }
 
-        public static Sharplonger.TwitlongerService GetTwitlongerService(string user)
+        public static TwitlongerService GetTwitlongerService(string user)
         {
-            return new Sharplonger.TwitlongerService(SensitiveData.TwitlongerAppName, SensitiveData.TwitlongerApiKey, user);
+            return new TwitlongerService(SensitiveData.TwitlongerAppName, SensitiveData.TwitlongerApiKey, user);
         }
 
         public static BufferService GetBufferService()

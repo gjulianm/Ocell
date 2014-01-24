@@ -1,12 +1,9 @@
-﻿using System.Linq;
-using Hammock.Silverlight.Compat;
-using Ocell.Library;
-using Hammock;
-using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using AncoraMVVM.Rest;
 using BufferAPI;
-using System.Collections.Generic;
+using Ocell.Library;
+using System;
+using System.Linq;
+using System.Net.Http;
 
 namespace Ocell.Pages.Settings
 {
@@ -25,41 +22,33 @@ namespace Ocell.Pages.Settings
             return string.Format("https://bufferapp.com/oauth2/authorize?client_id={0}&redirect_uri={1}&response_type=code", SensitiveData.BufferClientId, callbackUrl);
         }
 
-        protected override bool VerifyCallbackParams(NameValueCollection parameters)
+        protected override bool VerifyCallbackParams(ParameterCollection parameters)
         {
-            return parameters.AllKeys.Contains("code");
+            return parameters.ContainsKey("code");
         }
 
-        protected override RestRequest CreateTokensRequest(NameValueCollection parameters)
+        protected override HttpRequestMessage CreateTokensRequest(ParameterCollection parameters)
         {
-            var request = new RestRequest
-            {
-                Path = "/1/oauth2/token.json",
-                Method = Hammock.Web.WebMethod.Post,
-                 
-            };
+            var request = new HttpRequestMessage(HttpMethod.Post, "/1/oauth2/token.json");
 
-            request.AddParameter("client_id", SensitiveData.BufferClientId);
-            request.AddParameter("client_secret", SensitiveData.BufferClientSecret);
-            request.AddParameter("redirect_uri", callbackUrl);
-            request.AddParameter("code", parameters["code"]);
-            request.AddParameter("grant_type", "authorization_code");
+            var pars = new ParameterCollection(new object[] {
+                "client_id", SensitiveData.BufferClientId,
+                "client_secret", SensitiveData.BufferClientSecret,
+                "redirect_uri", callbackUrl,
+                "code", parameters["code"],
+                "grant_type", "authorization_code"});
+
+            request.Content = new StringContent(pars.BuildPostContent());
 
             return request;
         }
 
-        protected override void PostProcess(string contents)
+        protected override void PostProcess(ParameterCollection parameters)
         {
-            var response = JObject.Parse(contents);
-
-            if (response["access_token"] != null)
+            if (parameters["access_token"] != null)
             {
-                string accessToken = response["access_token"].ToString().Replace("\"", "");
-
-                Config.BufferAccessToken = accessToken;
-
-                var service = new BufferService(accessToken);
-                service.GetProfiles(ReceiveProfiles);
+                Config.BufferAccessToken = parameters["access_token"].ToString().Replace("\"", "");
+                GetBufferProfiles();
             }
             else
             {
@@ -67,14 +56,19 @@ namespace Ocell.Pages.Settings
             }
         }
 
-        void ReceiveProfiles(IEnumerable<BufferProfile> profiles, BufferResponse response)
+        private async void GetBufferProfiles()
         {
-            if (response.StatusCode != System.Net.HttpStatusCode.OK || profiles == null)
+            var service = new BufferService(Config.BufferAccessToken);
+            var response = await service.GetProfiles();
+
+            if (!response.Succeeded)
             {
                 MessageService.ShowError(Localization.Resources.ErrorBufferProfiles);
                 GoBack();
                 return;
             }
+
+            var profiles = response.Content;
 
             bool added = false;
 

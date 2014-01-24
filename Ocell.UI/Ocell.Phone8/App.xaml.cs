@@ -32,7 +32,7 @@ namespace Ocell
         /// </summary>
         public App()
         {
-            // Controlador global para excepciones no detectadas. 
+            // Controlador global para excepciones no detectadas.
             UnhandledException += Application_UnhandledException;
 
             // Inicialización de Silverlight estándar
@@ -50,7 +50,7 @@ namespace Ocell
                 // Mostrar las áreas de la aplicación que se están volviendo a dibujar en cada marco.
                 //Application.Current.Host.Settings.EnableRedrawRegions = true;
 
-                // Habilitar el modo de visualización de análisis de no producción, 
+                // Habilitar el modo de visualización de análisis de no producción,
                 // que muestra áreas de una página que se entregan a la GPU con una superposición coloreada.
                 //Application.Current.Host.Settings.EnableCacheVisualization = true;
 
@@ -65,7 +65,6 @@ namespace Ocell
             container.InitializeServiceLocator();
 
             OAuthUtility.ComputeHash = (key, buffer) => { using (var hmac = new HMACSHA1(key)) { return hmac.ComputeHash(buffer); } };
-
 
             Dependency.Register<INavigationService, FrameNavigationService>(true);
             Dependency.Register<IMessageService, MessageService>(true);
@@ -159,6 +158,8 @@ namespace Ocell
                 // Ha habido un error de navegación; interrumpir el depurador
                 System.Diagnostics.Debugger.Break();
             }
+
+            LittleWatson.ReportException(e.Exception, "Ocell App Error");
         }
 
         // Código para ejecutar en excepciones no controladas
@@ -207,7 +208,7 @@ namespace Ocell
             RootFrame.Navigated -= CompleteInitializePhoneApplication;
         }
 
-        #endregion
+        #endregion Inicialización de la aplicación telefónica
 
     }
 }

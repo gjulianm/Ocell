@@ -1,11 +1,12 @@
-﻿using System;
-using Hammock;
+﻿using AncoraMVVM.Rest;
+using System;
+using System.Threading.Tasks;
 
 namespace Ocell.Library.ReadLater
 {
     public interface IReadLaterService
     {
-        void CheckCredentials(Action<bool, ReadLaterResponse> action);
-        void AddUrl(string url, Action<ReadLaterResponse> action);
+        Task<HttpResponse> CheckCredentials();
+        Task<HttpResponse> AddUrl(string url);
     }
 }

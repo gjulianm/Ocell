@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Hammock;
-using Hammock.Web;
 using Ocell.Library.Twitter;
 using Ocell.Library.Tasks;
 

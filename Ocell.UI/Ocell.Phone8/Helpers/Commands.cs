@@ -1,20 +1,19 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Input;
+﻿using AncoraMVVM.Rest;
+using DanielVaughan;
+using DanielVaughan.Services;
 using Microsoft.Phone.Controls;
 using Ocell.Library;
 using Ocell.Library.Filtering;
-using Ocell.Library.Twitter;
-using TweetSharp;
-using System.Threading;
 using Ocell.Library.ReadLater.Instapaper;
 using Ocell.Library.ReadLater.Pocket;
-using Ocell.Library.ReadLater;
-using System.Linq;
-using DanielVaughan;
-using DanielVaughan.Services;
-using System.Collections.Generic;
+using Ocell.Library.Twitter;
 using Ocell.Localization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
+using TweetSharp;
 
 namespace Ocell.Commands
 {
@@ -257,7 +256,7 @@ namespace Ocell.Commands
             return parameter is TwitterStatus && (creds.Instapaper != null || creds.Pocket != null);
         }
 
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
             TwitterStatus tweet = parameter as TwitterStatus;
             _pendingCalls = 0;
@@ -266,54 +265,45 @@ namespace Ocell.Commands
             if (tweet == null)
                 return;
 
+            TwitterUrl link = tweet.Entities.FirstOrDefault(item => item != null && item.EntityType == TwitterEntityType.Url) as TwitterUrl;
+            HttpResponse response = null;
+            string tweetUrl = "http://twitter.com/" + tweet.Author.ScreenName + "/statuses/" + tweet.Id.ToString();
+
             if (credentials.Pocket != null)
             {
-                var service = new PocketService();
-                service.UserName = credentials.Pocket.User;
-                service.Password = credentials.Pocket.Password;
+                var service = new PocketService(credentials.Pocket.User, credentials.Pocket.Password);
 
-                TwitterUrl link = tweet.Entities.FirstOrDefault(item => item != null && item.EntityType == TwitterEntityType.Url) as TwitterUrl;
                 Dependency.Resolve<IMessageService>().SetLoadingBar(true, Resources.SavingForLater);
-                _pendingCalls++;
                 if (link != null)
-                    service.AddUrl(link.ExpandedValue, tweet.Id, Callback);
+                    response = await service.AddUrl(link.ExpandedValue, tweet.Id);
                 else
-                {
-                    string url = "http://twitter.com/" + tweet.Author.ScreenName + "/statuses/" + tweet.Id.ToString();
-                    service.AddUrl(url, Callback);
-                }
+                    response = await service.AddUrl(tweetUrl);
+
+                CheckResponse(response);
             }
+
             if (credentials.Instapaper != null)
             {
-                var service = new InstapaperService();
-                service.UserName = credentials.Instapaper.User;
-                service.Password = credentials.Instapaper.Password;
+                var service = new InstapaperService(credentials.Instapaper.User, credentials.Instapaper.Password);
 
-                TwitterUrl link = tweet.Entities.FirstOrDefault(item => item != null && item.EntityType == TwitterEntityType.Url) as TwitterUrl;
                 Dependency.Resolve<IMessageService>().SetLoadingBar(true, Resources.SavingForLater);
-                _pendingCalls++;
                 if (link != null)
-                    service.AddUrl(link.ExpandedValue, tweet.Text, Callback);
+                    response = await service.AddUrl(link.ExpandedValue, tweet.Text);
                 else
-                {
-                    string url = "http://twitter.com/" + tweet.Author.ScreenName + "/statuses/" + tweet.Id.ToString();
-                    service.AddUrl(url, Callback);
-                }
+                    response = await service.AddUrl(tweetUrl);
+
+                CheckResponse(response);
             }
         }
 
-        private void Callback(ReadLaterResponse response)
+        private void CheckResponse(HttpResponse response)
         {
             Dependency.Resolve<IMessageService>().SetLoadingBar(false);
-            _pendingCalls--;
-            if (response.Result != ReadLaterResult.Accepted)
-            {
+
+            if (!response.Succeeded)
                 Dependency.Resolve<IMessageService>().ShowError(Resources.ErrorSavingLater);
-            }
-            else if (_pendingCalls <= 0)
-            {
+            else
                 Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.SavedForLater);
-            }
         }
 
         public event EventHandler CanExecuteChanged;

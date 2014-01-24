@@ -15,7 +15,7 @@ namespace Ocell.Library
 
     public class LittleWatson
     {
-        const string filename = "LittleWatson.txt";
+        private const string filename = "LittleWatson.txt";
 
         public static void ReportException(Exception ex, string extra)
         {
@@ -38,6 +38,8 @@ namespace Ocell.Library
                         output.WriteLine(ex.GetType().FullName);
                         output.WriteLine(ex.Message);
                         output.WriteLine(ex.StackTrace);
+                        output.WriteLine();
+                        output.WriteLine(Logger.LogWithoutMessages);
                     }
                 }
             }

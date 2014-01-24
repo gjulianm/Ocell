@@ -1,40 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Input;
-using DanielVaughan.Windows;
+﻿using DanielVaughan.Windows;
 using Ocell.Library;
 using Ocell.Library.Notifications;
 using Ocell.Library.ReadLater.Instapaper;
 using Ocell.Library.ReadLater.Pocket;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using System;
+using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace Ocell.Settings
 {
     public class DefaultModel : ExtendedViewModelBase
-    {     
-        string instapaperUser;
+    {
+        private string instapaperUser;
         public string InstapaperUser
         {
             get { return instapaperUser; }
             set { Assign("InstapaperUser", ref instapaperUser, value); }
         }
 
-        string instapaperPassword;
+        private string instapaperPassword;
         public string InstapaperPassword
         {
             get { return instapaperPassword; }
             set { Assign("InstapaperPassword", ref instapaperPassword, value); }
         }
 
-        string pocketUser;
+        private string pocketUser;
         public string PocketUser
         {
             get { return pocketUser; }
             set { Assign("PocketUser", ref pocketUser, value); }
         }
 
-        string pocketPassword;
+        private string pocketPassword;
         public string PocketPassword
         {
             get { return pocketPassword; }
@@ -42,150 +42,151 @@ namespace Ocell.Settings
         }
 
         #region Fields
-        int selectedFontSize;
+        private int selectedFontSize;
         public int SelectedFontSize
         {
             get { return selectedFontSize; }
             set { Assign("SelectedFontSize", ref selectedFontSize, value); }
         }
 
-        bool retweetsAsMentions;
+        private bool retweetsAsMentions;
         public bool RetweetsAsMentions
         {
             get { return retweetsAsMentions; }
             set { Assign("RetweetsAsMentions", ref retweetsAsMentions, value); }
         }
 
-        bool pushAvailable;
+        private bool pushAvailable;
         public bool PushAvailable
         {
             get { return pushAvailable; }
             set { Assign("PushAvailable", ref pushAvailable, value); }
         }
 
-        bool pushEnabled;
+        private bool pushEnabled;
         public bool PushEnabled
         {
             get { return pushEnabled; }
             set { Assign("PushEnabled", ref pushEnabled, value); }
         }
 
-        bool backgroundUpdateTiles;
+        private bool backgroundUpdateTiles;
         public bool BackgroundUpdateTiles
         {
             get { return backgroundUpdateTiles; }
             set { Assign("BackgroundUpdateTiles", ref backgroundUpdateTiles, value); }
         }
 
-        string tweetsPerRequest;
+        private string tweetsPerRequest;
         public string TweetsPerRequest
         {
             get { return tweetsPerRequest; }
             set { Assign("TweetsPerRequest", ref tweetsPerRequest, value); }
         }
 
-        List<string> notifyOptions;
+        private List<string> notifyOptions;
         public List<string> NotifyOptions
         {
             get { return notifyOptions; }
             set { Assign("NotifyOptions", ref notifyOptions, value); }
         }
 
-        int mentionNotifyOption;
+        private int mentionNotifyOption;
         public int MentionNotifyOption
         {
             get { return mentionNotifyOption; }
             set { Assign("MentionNotifyOption", ref mentionNotifyOption, value); }
         }
 
-        int messageNotifyOption;
+        private int messageNotifyOption;
         public int MessageNotifyOption
         {
             get { return messageNotifyOption; }
             set { Assign("MessageNotifyOption", ref messageNotifyOption, value); }
         }
 
-        int selectedAccount;
+        private int selectedAccount;
         public int SelectedAccount
         {
             get { return selectedAccount; }
             set { Assign("SelectedAccount", ref selectedAccount, value); }
         }
 
-        int selectedMuteTime;
+        private int selectedMuteTime;
         public int SelectedMuteTime
         {
             get { return selectedMuteTime; }
             set { Assign("SelectedMuteTime", ref selectedMuteTime, value); }
         }
 
-        SafeObservable<UserToken> accounts;
+        private SafeObservable<UserToken> accounts;
         public SafeObservable<UserToken> Accounts
         {
             get { return accounts; }
             set { Assign("Accounts", ref accounts, value); }
         }
 
-        bool showResumePositionButton;
+        private bool showResumePositionButton;
         public bool ShowResumePositionButton
         {
             get { return showResumePositionButton; }
             set { Assign("ShowResumePositionButton", ref showResumePositionButton, value); }
         }
 
-        bool geoTaggingEnabled;
+        private bool geoTaggingEnabled;
         public bool GeoTaggingEnabled
         {
             get { return geoTaggingEnabled; }
             set { Assign("GeoTaggingEnabled", ref geoTaggingEnabled, value); }
         }
 
-        int selectedReloadOption;
+        private int selectedReloadOption;
         public int SelectedReloadOption
         {
             get { return selectedReloadOption; }
             set { Assign("SelectedReloadOption", ref selectedReloadOption, value); }
         }
-        #endregion
+
+        #endregion Fields
 
         #region Commands
-        DelegateCommand setCustomBackground;
+        private DelegateCommand setCustomBackground;
         public ICommand SetCustomBackground
         {
             get { return setCustomBackground; }
         }
 
-        DelegateCommand pinComposeToStart;
+        private DelegateCommand pinComposeToStart;
         public ICommand PinComposeToStart
         {
             get { return pinComposeToStart; }
         }
 
-        DelegateCommand addAccount;
+        private DelegateCommand addAccount;
         public ICommand AddAccount
         {
             get { return addAccount; }
         }
 
-        DelegateCommand editFilters;
+        private DelegateCommand editFilters;
         public ICommand EditFilters
         {
             get { return editFilters; }
         }
 
-        DelegateCommand saveCredentials;
+        private DelegateCommand saveCredentials;
         public ICommand SaveCredentials
         {
             get { return saveCredentials; }
         }
 
-        DelegateCommand showPrivacyPolicy;
+        private DelegateCommand showPrivacyPolicy;
         public ICommand ShowPrivacyPolicy
         {
             get { return showPrivacyPolicy; }
         }
 
-        void SetCommands()
+        private void SetCommands()
         {
             setCustomBackground = new DelegateCommand((obj) =>
             {
@@ -203,7 +204,8 @@ namespace Ocell.Settings
                     pinComposeToStart.RaiseCanExecuteChanged();
                 }, (obj) => !SecondaryTiles.ComposeTileIsCreated());
 
-            addAccount = new DelegateCommand((obj) => {
+            addAccount = new DelegateCommand((obj) =>
+            {
                 OAuth.Type = AuthType.Twitter;
                 Navigate(Uris.LoginPage);
             });
@@ -215,7 +217,7 @@ namespace Ocell.Settings
                     Navigate(Uris.Filters);
                 });
 
-            saveCredentials = new DelegateCommand((obj) =>
+            saveCredentials = new DelegateCommand(async (obj) =>
                 {
                     AuthPair PocketPair = null;
                     AuthPair InstapaperPair = null;
@@ -225,21 +227,20 @@ namespace Ocell.Settings
                         BarText = Resources.VerifyingCredentials;
                         IsLoading = true;
                         PocketPair = new AuthPair { User = PocketUser, Password = PocketPassword };
-                        var service = new PocketService { UserName = PocketPair.User, Password = PocketPair.Password };
-                        service.CheckCredentials((valid, response) =>
+                        var service = new PocketService(PocketPair.User, PocketPair.Password);
+                        var response = await service.CheckCredentials();
+
+                        if (response.Succeeded)
                         {
-                            if (valid)
-                            {
-                                MessageService.ShowLightNotification(String.Format(Resources.CredentialsSaved, "Pocket"));
-                                Config.ReadLaterCredentials.Pocket = PocketPair;
-                                Config.ReadLaterCredentials = Config.ReadLaterCredentials;
-                            }
-                            else
-                            {
-                                IsLoading = false;
-                                MessageService.ShowError(String.Format(Resources.InvalidCredentials, "Pocket"));
-                            }
-                        });
+                            MessageService.ShowLightNotification(String.Format(Resources.CredentialsSaved, "Pocket"));
+                            Config.ReadLaterCredentials.Pocket = PocketPair;
+                            Config.ReadLaterCredentials = Config.ReadLaterCredentials;
+                        }
+                        else
+                        {
+                            IsLoading = false;
+                            MessageService.ShowError(String.Format(Resources.InvalidCredentials, "Pocket"));
+                        }
                     }
                     else
                     {
@@ -252,21 +253,20 @@ namespace Ocell.Settings
                         BarText = Resources.VerifyingCredentials;
                         IsLoading = true;
                         InstapaperPair = new AuthPair { User = InstapaperUser, Password = InstapaperPassword };
-                        var service = new InstapaperService { UserName = InstapaperPair.User, Password = InstapaperPair.Password };
-                        service.CheckCredentials((valid, response) =>
+                        var service = new InstapaperService(InstapaperPair.User, InstapaperPair.Password);
+                        var response = await service.CheckCredentials();
+
+                        if (response.Succeeded)
                         {
-                            if (valid)
-                            {
-                                MessageService.ShowLightNotification(String.Format(Resources.CredentialsSaved, "Instapaper"));
-                                Config.ReadLaterCredentials.Instapaper = InstapaperPair;
-                                Config.ReadLaterCredentials = Config.ReadLaterCredentials;
-                            }
-                            else
-                            {
-                                IsLoading = false;
-                                MessageService.ShowError(String.Format(Resources.InvalidCredentials, "Instapaper"));
-                            }
-                        });
+                            MessageService.ShowLightNotification(String.Format(Resources.CredentialsSaved, "Instapaper"));
+                            Config.ReadLaterCredentials.Instapaper = InstapaperPair;
+                            Config.ReadLaterCredentials = Config.ReadLaterCredentials;
+                        }
+                        else
+                        {
+                            IsLoading = false;
+                            MessageService.ShowError(String.Format(Resources.InvalidCredentials, "Instapaper"));
+                        }
                     }
                     else
                     {
@@ -275,9 +275,10 @@ namespace Ocell.Settings
                     }
                 });
         }
-        #endregion
 
-        int FontSizeToIndex(int size)
+        #endregion Commands
+
+        private int FontSizeToIndex(int size)
         {
             if (size == 18)
                 return 0;
@@ -287,7 +288,7 @@ namespace Ocell.Settings
                 return 1;
         }
 
-        int IndexToFontSize(int index)
+        private int IndexToFontSize(int index)
         {
             if (index == 0)
                 return 18;
@@ -337,14 +338,17 @@ namespace Ocell.Settings
                     case "RetweetsAsMentions":
                         Config.RetweetAsMentions = RetweetsAsMentions;
                         break;
+
                     case "BackgroundUpdateTiles":
                         Config.BackgroundLoadColumns = BackgroundUpdateTiles;
                         break;
+
                     case "TweetsPerRequest":
                         int number;
                         if (int.TryParse(TweetsPerRequest, out number))
                             Config.TweetsPerRequest = number;
                         break;
+
                     case "SelectedAccount":
                         if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Count)
                         {
@@ -365,28 +369,35 @@ namespace Ocell.Settings
                             }
                         }
                         break;
+
                     case "MentionNotifyOption":
                         if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Count)
                             SetMentionNotifyPref((NotificationType)MentionNotifyOption, SelectedAccount);
                         break;
+
                     case "MessageNotifyOption":
                         if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Count)
                             SetMessageNotifyPref((NotificationType)MessageNotifyOption, SelectedAccount);
                         Config.SaveAccounts();
                         break;
+
                     case "SelectedMuteTime":
                         Config.DefaultMuteTime = SelectedFilterToTimeSpan(SelectedMuteTime);
                         break;
+
                     case "SelectedFontSize":
                         ((GlobalSettings)App.Current.Resources["GlobalSettings"]).
                             TweetFontSize = IndexToFontSize(SelectedFontSize);
                         break;
+
                     case "ShowResumePositionButton":
                         Config.RecoverReadPositions = ShowResumePositionButton;
                         break;
+
                     case "GeoTaggingEnabled":
                         Config.EnabledGeolocation = GeoTaggingEnabled;
                         break;
+
                     case "PushEnabled":
                         if (!TrialInformation.IsFullFeatured)
                         {
@@ -404,20 +415,21 @@ namespace Ocell.Settings
                         else
                             PushNotifications.AutoRegisterForNotifications();
                         break;
+
                     case "SelectedReloadOption":
                         Config.ReloadOptions = (ColumnReloadOptions)SelectedReloadOption;
                         break;
                 }
             };
-            
+
             SelectedAccount = -1;
-            if(Config.Accounts.Count > 0)
+            if (Config.Accounts.Count > 0)
                 SelectedAccount = 0;
             SetCommands();
         }
 
-        bool mentionFirstChange = true;
-        void SetMentionNotifyPref(NotificationType type, int account)
+        private bool mentionFirstChange = true;
+        private void SetMentionNotifyPref(NotificationType type, int account)
         {
             if (mentionFirstChange)
             {
@@ -433,8 +445,8 @@ namespace Ocell.Settings
                 PushNotifications.AutoRegisterForNotifications();
         }
 
-        bool messageFirstChange = true;
-        void SetMessageNotifyPref(NotificationType type, int account)
+        private bool messageFirstChange = true;
+        private void SetMessageNotifyPref(NotificationType type, int account)
         {
             if (messageFirstChange)
             {
@@ -450,26 +462,31 @@ namespace Ocell.Settings
                 PushNotifications.AutoRegisterForNotifications();
         }
 
-        TimeSpan SelectedFilterToTimeSpan(int index)
+        private TimeSpan SelectedFilterToTimeSpan(int index)
         {
             switch (index)
             {
                 case 0:
                     return TimeSpan.FromHours(1);
+
                 case 1:
                     return TimeSpan.FromHours(8);
+
                 case 2:
                     return TimeSpan.FromDays(1);
+
                 case 3:
                     return TimeSpan.FromDays(7);
+
                 case 4:
                     return TimeSpan.MaxValue;
+
                 default:
                     return TimeSpan.FromHours(8);
             }
         }
 
-        int TimeSpanToSelectedFilter(TimeSpan span)
+        private int TimeSpanToSelectedFilter(TimeSpan span)
         {
             if (Config.DefaultMuteTime == TimeSpan.FromHours(1))
                 return 0;
