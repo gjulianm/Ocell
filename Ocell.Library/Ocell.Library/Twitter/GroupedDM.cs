@@ -1,22 +1,13 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using TweetSharp;
+﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using DanielVaughan;
-using DanielVaughan.ComponentModel;
-using DanielVaughan.Linq;
+using TweetSharp;
 
 namespace Ocell.Library.Twitter
-{   
+{
     public class GroupedDM : ObservableObject, ITweetable
     {
         long lastId;
@@ -40,20 +31,20 @@ namespace Ocell.Library.Twitter
                 text = TrimLength(LastMessage.Text);
                 cleantext = TrimLength(LastMessage.CleanText);
 
-                var dispatcher = Deployment.Current.Dispatcher;
+                var dispatcher = Dependency.Resolve<IDispatcher>();
 
                 dispatcher.InvokeIfRequired(() =>
                     {
-                        OnPropertyChanged("Id");
-                        OnPropertyChanged("Text");
-                        OnPropertyChanged("TextAsHtml");
-                        OnPropertyChanged("CreatedDate");
-                        OnPropertyChanged("Entities");
-                        OnPropertyChanged("RawSource");
-                        OnPropertyChanged("AuthorName");
-                        OnPropertyChanged("CleanText");
-                        OnPropertyChanged("Author");
-                        OnPropertyChanged("Author.ProfileImageUrl");
+                        RaisePropertyChanged("Id");
+                        RaisePropertyChanged("Text");
+                        RaisePropertyChanged("TextAsHtml");
+                        RaisePropertyChanged("CreatedDate");
+                        RaisePropertyChanged("Entities");
+                        RaisePropertyChanged("RawSource");
+                        RaisePropertyChanged("AuthorName");
+                        RaisePropertyChanged("CleanText");
+                        RaisePropertyChanged("Author");
+                        RaisePropertyChanged("Author.ProfileImageUrl");
                     });
             }
         }
@@ -242,7 +233,7 @@ namespace Ocell.Library.Twitter
 
                 converserNames = new Pair<string, string>(first.SenderScreenName, first.RecipientScreenName);
 
-                return converserNames;                
+                return converserNames;
             }
         }
     }

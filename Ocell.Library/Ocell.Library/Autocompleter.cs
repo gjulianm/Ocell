@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Ocell.Library.Twitter;
+using System;
 using System.Linq;
-using System.Windows.Controls;
-using Ocell.Library;
-using Ocell.Library.Twitter;
-using DanielVaughan.ComponentModel;
-using System.Windows;
-using DanielVaughan;
 
 namespace Ocell.Library
 {
@@ -36,7 +30,7 @@ namespace Ocell.Library
         private UsernameProvider _provider = new UsernameProvider();
         private TextBox _textbox;
         private string _text;
-        
+
         bool isAutocompleting;
         public bool IsAutocompleting
         {
@@ -78,10 +72,10 @@ namespace Ocell.Library
                 _triggerPosition = _textbox.SelectionStart - 1;
             }
 
-            if (_textbox.SelectionStart > 0 && 
+            if (_textbox.SelectionStart > 0 &&
                 _textbox.SelectionStart < _textbox.Text.Length &&
-                _textbox.Text[_textbox.SelectionStart - 1] == ' ' && _text != null && 
-                _textbox.SelectionStart < _text.Length && _text[_textbox.SelectionStart] != '@' )
+                _textbox.Text[_textbox.SelectionStart - 1] == ' ' && _text != null &&
+                _textbox.SelectionStart < _text.Length && _text[_textbox.SelectionStart] != '@')
                 IsAutocompleting = false;
 
             if (IsAutocompleting)
@@ -151,7 +145,7 @@ namespace Ocell.Library
         private string GetTextWrittenByUser()
         {
             if (_textbox.SelectionStart < _text.Length)
-                return _text.Substring(_triggerPosition + 1, _textbox.SelectionStart - _triggerPosition -1);
+                return _text.Substring(_triggerPosition + 1, _textbox.SelectionStart - _triggerPosition - 1);
             else if (_triggerPosition + 1 < _text.Length)
                 return _text.Substring(_triggerPosition + 1);
             else
@@ -160,7 +154,7 @@ namespace Ocell.Library
 
         private string GetFirstUserCoincidentWith(string chunk)
         {
-            return _provider.Usernames.FirstOrDefault(item => 
+            return _provider.Usernames.FirstOrDefault(item =>
                 item.IndexOf(chunk, StringComparison.InvariantCultureIgnoreCase) == 0);
         }
 
@@ -192,8 +186,8 @@ namespace Ocell.Library
 
 
             var newText = _text.Substring(0, _triggerPosition + 1) + name;
-            
-            if(nextSpace != -1)
+
+            if (nextSpace != -1)
                 newText += _text.Substring(nextSpace);
 
             _text = newText;

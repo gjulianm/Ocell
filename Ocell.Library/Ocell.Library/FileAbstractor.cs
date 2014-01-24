@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Linq;
-using System.IO.IsolatedStorage;
-using System.IO;
 using Ocell.Library.Security;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Ocell.Library
 {

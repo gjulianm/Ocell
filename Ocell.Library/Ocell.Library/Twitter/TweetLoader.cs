@@ -7,10 +7,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ocell.Library.Twitter;
-using Ocell.Library.Twitter.Comparers;
-using System.Windows.Controls;
-using System.Windows;
 using TweetSharp;
 
 namespace Ocell.Library.Twitter

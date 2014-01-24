@@ -1,14 +1,6 @@
-﻿using System;
+﻿using Ocell.Library.Security;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO.IsolatedStorage;
-using System.Threading;
-using Ocell.Library.Tasks;
-using Ocell.Library.Twitter;
-using Ocell.Library.Security;
-#if !BACKGROUND_AGENT
-using Ocell.Library.Filtering;
-#endif
 
 
 namespace Ocell.Library
@@ -97,9 +89,9 @@ namespace Ocell.Library
 
         public static void ClearAll()
         {
-            MutexUtil.DoWork(mutexName, () => 
+            MutexUtil.DoWork(mutexName, () =>
             {
-                    IsolatedStorageSettings.ApplicationSettings.Clear();
+                IsolatedStorageSettings.ApplicationSettings.Clear();
             });
         }
 

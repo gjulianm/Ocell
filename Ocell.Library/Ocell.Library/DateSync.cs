@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Threading;
 
-#if METRO
-using Windows.Storage;
-using System.Threading.Tasks;
-#else
-using System.IO.IsolatedStorage;
-#endif
+
 
 namespace Ocell.Library
 {

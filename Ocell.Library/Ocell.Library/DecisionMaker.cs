@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.Collections.Generic;
-using TweetSharp;
 using System.Linq;
+using TweetSharp;
 
 namespace Ocell.Library
 {
@@ -26,7 +17,7 @@ namespace Ocell.Library
 
             for (i = 0; i < upperLimit; i++)
             {
-                Difference = tweets.ElementAt(i).CreatedDate - tweets.ElementAt(i+1).CreatedDate;
+                Difference = tweets.ElementAt(i).CreatedDate - tweets.ElementAt(i + 1).CreatedDate;
                 sum += Difference.TotalSeconds;
             }
 
