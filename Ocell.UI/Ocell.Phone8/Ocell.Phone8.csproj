@@ -291,6 +291,7 @@
     </Compile>
     <Compile Include="Pages\TopicsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PushNotifications.cs" />
     <Compile Include="SampleCollections.cs" />
     <Compile Include="SchedulerSync.cs" />
     <Compile Include="ThemeManager.cs" />
@@ -399,6 +400,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Pages\Settings\OcellIcon200.png" />
+    <Content Include="Readme.txt" />
     <Content Include="README_FIRST.txt" />
     <Content Include="SplashScreenImage.jpg" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
@@ -513,6 +515,12 @@
     <Resource Include="Images\BirdGray.png" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AncoraMVVM.Base">
+      <HintPath>..\..\packages\AncoraMVVM.Base.0.1.11-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="AncoraMVVM.Phone7">
+      <HintPath>..\..\packages\AncoraMVVM.Phone7.0.1.13-alpha\lib\wp71\AncoraMVVM.Phone7.dll</HintPath>
+    </Reference>
     <Reference Include="AncoraMVVM.Rest, Version=0.1.6.31017, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.6-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Rest.dll</HintPath>
@@ -524,12 +532,8 @@
     <Reference Include="BufferAPI">
       <HintPath>..\..\packages\BufferAPI.0.1.0-alpha\lib\portable-net45+sl50+wp80+win\BufferAPI.dll</HintPath>
     </Reference>
-    <Reference Include="Calcium.Phone, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ocell.ThirdParty\Calcium.Phone.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Phone.Controls, Version=8.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=8.0.1.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\WPtoolkit.4.2013.08.16\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
     </Reference>
@@ -705,10 +709,6 @@
     <ProjectReference Include="..\..\Ocell.APIs\Ocell.ReadLater\Ocell.ReadLater.csproj">
       <Project>{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}</Project>
       <Name>Ocell.ReadLater</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Ocell.Library\Ocell.Library.CoreTypes\Ocell.Library.CoreTypes.csproj">
-      <Project>{B4CA0BB9-C805-4FC2-BDF4-9F729A661EB0}</Project>
-      <Name>Ocell.Library.CoreTypes</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.Library\Ocell.Library\Ocell.Library.csproj">
       <Project>{1FF8200D-1E01-4ABA-A876-C313E286E1FC}</Project>
