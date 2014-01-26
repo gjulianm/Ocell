@@ -1,4 +1,5 @@
 ﻿
+using AncoraMVVM.Base.IoC;
 namespace Ocell.Library
 {
     public class AuthPair
@@ -13,7 +14,7 @@ namespace Ocell.Library
                     return null;
                 else
                 {
-                    byte[] unencryptedBytes = ProtectedData.Unprotect(_encryptedPass, null);
+                    byte[] unencryptedBytes = Dependency.Resolve<ICryptoManager>().UnprotectData(_encryptedPass);
                     return System.Text.Encoding.UTF8.GetString(unencryptedBytes, 0, unencryptedBytes.Length);
                 }
             }
@@ -24,7 +25,7 @@ namespace Ocell.Library
                 else
                 {
                     byte[] unencryptedBytes = System.Text.Encoding.UTF8.GetBytes(value);
-                    _encryptedPass = ProtectedData.Protect(unencryptedBytes, null);
+                    _encryptedPass = Dependency.Resolve<ICryptoManager>().ProtectData(unencryptedBytes);
                 }
             }
         }

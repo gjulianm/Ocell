@@ -96,6 +96,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Config.tt</DependentUpon>
     </Compile>
+    <Compile Include="Crypto\TokenCombinator.cs" />
     <Compile Include="DataTransfer.cs">
     </Compile>
     <Compile Include="DateSync.cs">
@@ -104,11 +105,9 @@
     </Compile>
     <Compile Include="DecisionMaker.cs">
     </Compile>
-    <Compile Include="Encrypting.cs">
+    <Compile Include="Crypto\ICryptoManager.cs">
     </Compile>
     <Compile Include="EventArgs.cs" />
-    <Compile Include="FileAbstractor.cs">
-    </Compile>
     <Compile Include="Filtering\ColumnFilter.cs">
     </Compile>
     <Compile Include="GlobalEvents.cs">
@@ -195,6 +194,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AncoraMVVM.Base">
+      <HintPath>..\..\packages\AncoraMVVM.Base.0.1.14-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
+    </Reference>
     <Reference Include="AncoraMVVM.Rest">
       <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.13-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Rest.dll</HintPath>
     </Reference>
@@ -251,6 +253,7 @@
   <ItemGroup>
     <Content Include="assembly.ico" />
     <Content Include="FodyWeavers.xml" />
+    <Content Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ocell.Localization\Ocell.Localization.csproj">

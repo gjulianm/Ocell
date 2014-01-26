@@ -1,4 +1,5 @@
-﻿using AsyncOAuth;
+﻿using AncoraMVVM.Base.IoC;
+using AsyncOAuth;
 using DanielVaughan;
 using DanielVaughan.InversionOfControl;
 using DanielVaughan.InversionOfControl.Containers.SimpleContainer;
@@ -66,6 +67,7 @@ namespace Ocell
 
             OAuthUtility.ComputeHash = (key, buffer) => { using (var hmac = new HMACSHA1(key)) { return hmac.ComputeHash(buffer); } };
 
+            // TODO: solve this.
             Dependency.Register<INavigationService, FrameNavigationService>(true);
             Dependency.Register<IMessageService, MessageService>(true);
             Dependency.Register<IUserProvider, UserProvider>();
@@ -74,6 +76,8 @@ namespace Ocell
             Dependency.Register<IInfiniteScroller, WP8InfiniteScroller>();
             Dependency.Register<IListboxCompressionDetector, WP8PullDetector>();
             Dependency.Register<TileManager, WP8TileManager>();
+
+            Dependency.Register<ICryptoManager, CryptoManager>();
 
             PushNotifications.WPVersion = OSVersion.WP8;
 

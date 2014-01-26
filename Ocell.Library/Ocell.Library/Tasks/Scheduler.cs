@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ocell.Library.Crypto;
+using System;
 using System.Diagnostics;
 using System.Net;
 
@@ -10,7 +11,7 @@ namespace Ocell.Library.Tasks
 
         public Scheduler(string token, string secret)
         {
-            accessToken = Encrypting.EncodeTokens(token, secret);
+            accessToken = TokenCombinator.EncodeTokens(token, secret);
         }
 
         [Conditional("OCELL_FULL")]
