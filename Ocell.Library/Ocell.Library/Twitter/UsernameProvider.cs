@@ -1,4 +1,6 @@
 ﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Files;
+using AncoraMVVM.Base.IoC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -102,13 +104,13 @@ namespace Ocell.Library.Twitter
 
         public UserToken User { get; set; }
 
-        public static void FillUserNames(IEnumerable<UserToken> users)
+        public static async void FillUserNames(IEnumerable<UserToken> users)
         {
             foreach (var user in users)
             {
                 var temp = user;
                 finishedUsers[temp] = false;
-                dicUsers[temp] = GetUserCache(temp).ToList();
+                dicUsers[temp] = (await GetUserCache(temp)).ToList();
                 FillUserNamesFor(temp, -1);
             }
         }
@@ -149,16 +151,18 @@ namespace Ocell.Library.Twitter
                 UsernameProvider.FillUserNames(new List<UserToken> { User });
         }
 
-        private static IEnumerable<string> GetUserCache(UserToken user)
+
+
+        private async static Task<IEnumerable<string>> GetUserCache(UserToken user)
         {
             string filename = "AUTOCOMPLETECACHE" + user.ScreenName;
-            return FileAbstractor.ReadLinesOfFile(filename);
+            return await Dependency.Resolve<IFileManager>().ReadLines(filename);
         }
 
-        private static void SaveUserCache(UserToken user, IEnumerable<string> names)
+        private async static Task SaveUserCache(UserToken user, IEnumerable<string> names)
         {
             string filename = "AUTOCOMPLETECACHE" + user.ScreenName;
-            FileAbstractor.WriteLinesToFile(names, filename);
+            await Dependency.Resolve<IFileManager>().WriteLines(filename, names);
         }
 
         public event OnError Error;
