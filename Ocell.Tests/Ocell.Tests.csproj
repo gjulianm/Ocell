@@ -93,6 +93,7 @@
     <Compile Include="AutocompleterTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Endpoints\_TwitterService.1.Timelines.json" />
     <None Include="Endpoints\_TwitterService.10.Lists.json" />
     <None Include="Endpoints\_TwitterService.11.SavedSearches.json" />

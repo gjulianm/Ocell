@@ -161,6 +161,7 @@
     <None Include="..\Ocell.Library\Configuration\NotBackgroundAgent.json">
       <Link>Configuration\NotBackgroundAgent.json</Link>
     </None>
+    <None Include="app.config" />
     <None Include="Endpoints\_TwitterService.1.Timelines.json" />
     <None Include="Endpoints\_TwitterService.10.Lists.json" />
     <None Include="Endpoints\_TwitterService.11.SavedSearches.json" />

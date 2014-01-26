@@ -33,7 +33,7 @@ namespace Ocell.Library
 	#region Properties for Background Agent and main app
 <# foreach(ConfigProperty prop in BAProps) { #>
 
-		private static ConfigItem<<#= prop.Type #>> <#= prop.Name #>configItem = new ConfigItem<<#= prop.Type#>> {
+		private static ConfigItem<<#= prop.Type #>> <#= prop.Name #>ConfigItem = new ConfigItem<<#= prop.Type#>> {
 			Key = "<#= prop.Key #>",
 			<# if (prop.Default != "") { #> DefaultValue = <#= prop.Default #> <# } #>
 		};
@@ -42,18 +42,18 @@ namespace Ocell.Library
 		{
 			get 
 			{
-				return <#= prop.Name #>configItem.Get();
+				return <#= prop.Name #>ConfigItem.Value;
 			}
 			set
 			{
-				<#= prop.Name #>configItem.Set(value);
+				<#= prop.Name #>ConfigItem.Value = value;
 			}
 		}
 <# if(prop.Type.Contains("List<") || prop.Type.Contains("Collection<") || prop.Type.Contains("Dictionary<")) { #>
 
 		public static void Save<#= prop.Name #>()
 		{
-			<#= prop.Name #>configItem.Set(<#= prop.Name #>configItem.Get());
+			<#= prop.Name #>ConfigItem.Value = <#= prop.Name #>ConfigItem.Value;
 		}
 <# } #>
 <# } #>
@@ -63,7 +63,7 @@ namespace Ocell.Library
 	#if !BACKGROUND_AGENT
 <# foreach(ConfigProperty prop in NotBAProps) { #>
 
-		private static ConfigItem<<#= prop.Type #>> <#= prop.Name #>configItem = new ConfigItem<<#= prop.Type#>> {
+		private static ConfigItem<<#= prop.Type #>> <#= prop.Name #>ConfigItem = new ConfigItem<<#= prop.Type#>> {
 			Key = "<#= prop.Key #>",
 			<# if (prop.Default != "") { #> DefaultValue = <#= prop.Default #> <# } #>
 		};
@@ -72,18 +72,18 @@ namespace Ocell.Library
 		{
 			get 
 			{
-				return <#= prop.Name #>configItem.Get();
+				return <#= prop.Name #>ConfigItem.Value;
 			}
 			set
 			{
-				<#= prop.Name #>configItem.Set(value);
+				<#= prop.Name #>ConfigItem.Value = value;
 			}
 		}
 <# if(prop.Type.Contains("List<") || prop.Type.Contains("Collection<") || prop.Type.Contains("Dictionary<")) { #>
 
 		public static void Save<#= prop.Name #>()
 		{
-			<#= prop.Name #>configItem.Set(<#= prop.Name #>configItem.Get());
+			<#= prop.Name #>ConfigItem.Value = <#= prop.Name #>ConfigItem.Value;
 		}
 <# } #>
 <# } #>
