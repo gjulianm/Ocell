@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Ocell.Library.Twitter;
 using Ocell.Library.Tasks;
-
+using BufferAPI;
+using AncoraMVVM.Base.Interfaces;
 #if !BACKGROUND_AGENT
 using Ocell.Library.Filtering;
 using BufferAPI;
@@ -16,70 +17,82 @@ namespace Ocell.Library
 	{	
 	#region Properties for Background Agent and main app
 
-		private static List<UserToken> _Accounts;
+		private static ConfigItem<List<UserToken>> AccountsconfigItem = new ConfigItem<List<UserToken>> {
+			Key = "ACCOUNTS",
+					};
+
 		public static List<UserToken> Accounts
 		{
 			get 
 			{
-				return GenericGetFromConfig<List<UserToken>>("ACCOUNTS", ref _Accounts);
+				return AccountsconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<List<UserToken>>("ACCOUNTS", ref _Accounts, value);
+				AccountsconfigItem.Set(value);
 			}
 		}
 
 		public static void SaveAccounts()
 		{
-			Accounts = _Accounts;
+			AccountsconfigItem.Set(AccountsconfigItem.Get());
 		}
 
-		private static ObservableCollection<TwitterResource> _Columns;
+		private static ConfigItem<ObservableCollection<TwitterResource>> ColumnsconfigItem = new ConfigItem<ObservableCollection<TwitterResource>> {
+			Key = "COLUMNS",
+					};
+
 		public static ObservableCollection<TwitterResource> Columns
 		{
 			get 
 			{
-				return GenericGetFromConfig<ObservableCollection<TwitterResource>>("COLUMNS", ref _Columns);
+				return ColumnsconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<ObservableCollection<TwitterResource>>("COLUMNS", ref _Columns, value);
+				ColumnsconfigItem.Set(value);
 			}
 		}
 
 		public static void SaveColumns()
 		{
-			Columns = _Columns;
+			ColumnsconfigItem.Set(ColumnsconfigItem.Get());
 		}
 
-		private static List<TwitterStatusTask> _TweetTasks;
+		private static ConfigItem<List<TwitterStatusTask>> TweetTasksconfigItem = new ConfigItem<List<TwitterStatusTask>> {
+			Key = "TWEETTASKS",
+					};
+
 		public static List<TwitterStatusTask> TweetTasks
 		{
 			get 
 			{
-				return GenericGetFromConfig<List<TwitterStatusTask>>("TWEETTASKS", ref _TweetTasks);
+				return TweetTasksconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<List<TwitterStatusTask>>("TWEETTASKS", ref _TweetTasks, value);
+				TweetTasksconfigItem.Set(value);
 			}
 		}
 
 		public static void SaveTweetTasks()
 		{
-			TweetTasks = _TweetTasks;
+			TweetTasksconfigItem.Set(TweetTasksconfigItem.Get());
 		}
 
-		private static bool? _BackgroundLoadColumns;
+		private static ConfigItem<bool?> BackgroundLoadColumnsconfigItem = new ConfigItem<bool?> {
+			Key = "BGLOADCOLUMNS",
+			 DefaultValue = true 		};
+
 		public static bool? BackgroundLoadColumns
 		{
 			get 
 			{
-				return GenericGetFromConfig<bool?>("BGLOADCOLUMNS", ref _BackgroundLoadColumns);
+				return BackgroundLoadColumnsconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<bool?>("BGLOADCOLUMNS", ref _BackgroundLoadColumns, value);
+				BackgroundLoadColumnsconfigItem.Set(value);
 			}
 		}
 	#endregion
@@ -87,384 +100,401 @@ namespace Ocell.Library
 	#region Properties only for main app
 	#if !BACKGROUND_AGENT
 
-		private static bool? _FollowMessageShown;
+		private static ConfigItem<bool?> FollowMessageShownconfigItem = new ConfigItem<bool?> {
+			Key = "FOLLOWMSG",
+			 DefaultValue = false 		};
+
 		public static bool? FollowMessageShown
 		{
 			get 
 			{
-				return GenericGetFromConfig<bool?>("FOLLOWMSG", ref _FollowMessageShown);
+				return FollowMessageShownconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<bool?>("FOLLOWMSG", ref _FollowMessageShown, value);
+				FollowMessageShownconfigItem.Set(value);
 			}
 		}
 
-		private static List<UserToken> _ProtectedAccounts;
+		private static ConfigItem<List<UserToken>> ProtectedAccountsconfigItem = new ConfigItem<List<UserToken>> {
+			Key = "PROTECTEDACC",
+					};
+
 		public static List<UserToken> ProtectedAccounts
 		{
 			get 
 			{
-				return GenericGetFromConfig<List<UserToken>>("PROTECTEDACC", ref _ProtectedAccounts);
+				return ProtectedAccountsconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<List<UserToken>>("PROTECTEDACC", ref _ProtectedAccounts, value);
+				ProtectedAccountsconfigItem.Set(value);
 			}
 		}
 
 		public static void SaveProtectedAccounts()
 		{
-			ProtectedAccounts = _ProtectedAccounts;
+			ProtectedAccountsconfigItem.Set(ProtectedAccountsconfigItem.Get());
 		}
 
-		private static List<ColumnFilter> _Filters;
+		private static ConfigItem<List<ColumnFilter>> FiltersconfigItem = new ConfigItem<List<ColumnFilter>> {
+			Key = "FILTERS",
+					};
+
 		public static List<ColumnFilter> Filters
 		{
 			get 
 			{
-				return GenericGetFromConfig<List<ColumnFilter>>("FILTERS", ref _Filters);
+				return FiltersconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<List<ColumnFilter>>("FILTERS", ref _Filters, value);
+				FiltersconfigItem.Set(value);
 			}
 		}
 
 		public static void SaveFilters()
 		{
-			Filters = _Filters;
+			FiltersconfigItem.Set(FiltersconfigItem.Get());
 		}
 
-		private static ColumnFilter _GlobalFilter;
+		private static ConfigItem<ColumnFilter> GlobalFilterconfigItem = new ConfigItem<ColumnFilter> {
+			Key = "GLOBALFILTER",
+					};
+
 		public static ColumnFilter GlobalFilter
 		{
 			get 
 			{
-				return GenericGetFromConfig<ColumnFilter>("GLOBALFILTER", ref _GlobalFilter);
+				return GlobalFilterconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<ColumnFilter>("GLOBALFILTER", ref _GlobalFilter, value);
+				GlobalFilterconfigItem.Set(value);
 			}
 		}
 
-		private static bool? _RetweetAsMentions;
+		private static ConfigItem<bool?> RetweetAsMentionsconfigItem = new ConfigItem<bool?> {
+			Key = "RTASMENTIONS",
+			 DefaultValue = true 		};
+
 		public static bool? RetweetAsMentions
 		{
 			get 
 			{
-				return GenericGetFromConfig<bool?>("RTASMENTIONS", ref _RetweetAsMentions);
+				return RetweetAsMentionsconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<bool?>("RTASMENTIONS", ref _RetweetAsMentions, value);
+				RetweetAsMentionsconfigItem.Set(value);
 			}
 		}
 
-		private static int? _TweetsPerRequest;
+		private static ConfigItem<int?> TweetsPerRequestconfigItem = new ConfigItem<int?> {
+			Key = "TWEETSXREQ",
+			 DefaultValue = 40 		};
+
 		public static int? TweetsPerRequest
 		{
 			get 
 			{
-				return GenericGetFromConfig<int?>("TWEETSXREQ", ref _TweetsPerRequest);
+				return TweetsPerRequestconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<int?>("TWEETSXREQ", ref _TweetsPerRequest, value);
+				TweetsPerRequestconfigItem.Set(value);
 			}
 		}
 
-		private static TimeSpan? _DefaultMuteTime;
+		private static ConfigItem<TimeSpan?> DefaultMuteTimeconfigItem = new ConfigItem<TimeSpan?> {
+			Key = "DEFAULTMUTETIME",
+					};
+
 		public static TimeSpan? DefaultMuteTime
 		{
 			get 
 			{
-				return GenericGetFromConfig<TimeSpan?>("DEFAULTMUTETIME", ref _DefaultMuteTime);
+				return DefaultMuteTimeconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<TimeSpan?>("DEFAULTMUTETIME", ref _DefaultMuteTime, value);
+				DefaultMuteTimeconfigItem.Set(value);
 			}
 		}
 
-		private static List<TwitterDraft> _Drafts;
+		private static ConfigItem<List<TwitterDraft>> DraftsconfigItem = new ConfigItem<List<TwitterDraft>> {
+			Key = "DRAFTS",
+					};
+
 		public static List<TwitterDraft> Drafts
 		{
 			get 
 			{
-				return GenericGetFromConfig<List<TwitterDraft>>("DRAFTS", ref _Drafts);
+				return DraftsconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<List<TwitterDraft>>("DRAFTS", ref _Drafts, value);
+				DraftsconfigItem.Set(value);
 			}
 		}
 
 		public static void SaveDrafts()
 		{
-			Drafts = _Drafts;
+			DraftsconfigItem.Set(DraftsconfigItem.Get());
 		}
 
-		private static ReadLaterCredentials _ReadLaterCredentials;
+		private static ConfigItem<ReadLaterCredentials> ReadLaterCredentialsconfigItem = new ConfigItem<ReadLaterCredentials> {
+			Key = "READLATERCREDS",
+					};
+
 		public static ReadLaterCredentials ReadLaterCredentials
 		{
 			get 
 			{
-				return GenericGetFromConfig<ReadLaterCredentials>("READLATERCREDS", ref _ReadLaterCredentials);
+				return ReadLaterCredentialsconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<ReadLaterCredentials>("READLATERCREDS", ref _ReadLaterCredentials, value);
+				ReadLaterCredentialsconfigItem.Set(value);
 			}
 		}
 
-		private static OcellTheme _Background;
+		private static ConfigItem<OcellTheme> BackgroundconfigItem = new ConfigItem<OcellTheme> {
+			Key = "BACKGROUNDSKEY",
+					};
+
 		public static OcellTheme Background
 		{
 			get 
 			{
-				return GenericGetFromConfig<OcellTheme>("BACKGROUNDSKEY", ref _Background);
+				return BackgroundconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<OcellTheme>("BACKGROUNDSKEY", ref _Background, value);
+				BackgroundconfigItem.Set(value);
 			}
 		}
 
-		private static bool? _FirstInit;
+		private static ConfigItem<bool?> FirstInitconfigItem = new ConfigItem<bool?> {
+			Key = "ISFIRSTINIT",
+					};
+
 		public static bool? FirstInit
 		{
 			get 
 			{
-				return GenericGetFromConfig<bool?>("ISFIRSTINIT", ref _FirstInit);
+				return FirstInitconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<bool?>("ISFIRSTINIT", ref _FirstInit, value);
+				FirstInitconfigItem.Set(value);
 			}
 		}
 
-		private static int? _FontSize;
+		private static ConfigItem<int?> FontSizeconfigItem = new ConfigItem<int?> {
+			Key = "FONTSIZE",
+			 DefaultValue = 20 		};
+
 		public static int? FontSize
 		{
 			get 
 			{
-				return GenericGetFromConfig<int?>("FONTSIZE", ref _FontSize);
+				return FontSizeconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<int?>("FONTSIZE", ref _FontSize, value);
+				FontSizeconfigItem.Set(value);
 			}
 		}
 
-		private static Dictionary<string, long> _ReadPositions;
+		private static ConfigItem<Dictionary<string, long>> ReadPositionsconfigItem = new ConfigItem<Dictionary<string, long>> {
+			Key = "READPOSITIONS",
+					};
+
 		public static Dictionary<string, long> ReadPositions
 		{
 			get 
 			{
-				return GenericGetFromConfig<Dictionary<string, long>>("READPOSITIONS", ref _ReadPositions);
+				return ReadPositionsconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<Dictionary<string, long>>("READPOSITIONS", ref _ReadPositions, value);
+				ReadPositionsconfigItem.Set(value);
 			}
 		}
 
 		public static void SaveReadPositions()
 		{
-			ReadPositions = _ReadPositions;
+			ReadPositionsconfigItem.Set(ReadPositionsconfigItem.Get());
 		}
 
-		private static bool? _RecoverReadPositions;
+		private static ConfigItem<bool?> RecoverReadPositionsconfigItem = new ConfigItem<bool?> {
+			Key = "RECOVERREAD",
+			 DefaultValue = true 		};
+
 		public static bool? RecoverReadPositions
 		{
 			get 
 			{
-				return GenericGetFromConfig<bool?>("RECOVERREAD", ref _RecoverReadPositions);
+				return RecoverReadPositionsconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<bool?>("RECOVERREAD", ref _RecoverReadPositions, value);
+				RecoverReadPositionsconfigItem.Set(value);
 			}
 		}
 
-		private static bool? _EnabledGeolocation;
+		private static ConfigItem<bool?> EnabledGeolocationconfigItem = new ConfigItem<bool?> {
+			Key = "GEOLOC_ENABLED",
+					};
+
 		public static bool? EnabledGeolocation
 		{
 			get 
 			{
-				return GenericGetFromConfig<bool?>("GEOLOC_ENABLED", ref _EnabledGeolocation);
+				return EnabledGeolocationconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<bool?>("GEOLOC_ENABLED", ref _EnabledGeolocation, value);
+				EnabledGeolocationconfigItem.Set(value);
 			}
 		}
 
-		private static bool? _TweetGeotagging;
+		private static ConfigItem<bool?> TweetGeotaggingconfigItem = new ConfigItem<bool?> {
+			Key = "GEOTAG_TWEETS",
+			 DefaultValue = true 		};
+
 		public static bool? TweetGeotagging
 		{
 			get 
 			{
-				return GenericGetFromConfig<bool?>("GEOTAG_TWEETS", ref _TweetGeotagging);
+				return TweetGeotaggingconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<bool?>("GEOTAG_TWEETS", ref _TweetGeotagging, value);
+				TweetGeotaggingconfigItem.Set(value);
 			}
 		}
 
-		private static List<BufferProfile> _BufferProfiles;
+		private static ConfigItem<List<BufferProfile>> BufferProfilesconfigItem = new ConfigItem<List<BufferProfile>> {
+			Key = "BUFFER_PROFILES",
+					};
+
 		public static List<BufferProfile> BufferProfiles
 		{
 			get 
 			{
-				return GenericGetFromConfig<List<BufferProfile>>("BUFFER_PROFILES", ref _BufferProfiles);
+				return BufferProfilesconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<List<BufferProfile>>("BUFFER_PROFILES", ref _BufferProfiles, value);
+				BufferProfilesconfigItem.Set(value);
 			}
 		}
 
 		public static void SaveBufferProfiles()
 		{
-			BufferProfiles = _BufferProfiles;
+			BufferProfilesconfigItem.Set(BufferProfilesconfigItem.Get());
 		}
 
-		private static string _BufferAccessToken;
+		private static ConfigItem<string> BufferAccessTokenconfigItem = new ConfigItem<string> {
+			Key = "BUFFER_ACCESS_TOKEN",
+					};
+
 		public static string BufferAccessToken
 		{
 			get 
 			{
-				return GenericGetFromConfig<string>("BUFFER_ACCESS_TOKEN", ref _BufferAccessToken);
+				return BufferAccessTokenconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<string>("BUFFER_ACCESS_TOKEN", ref _BufferAccessToken, value);
+				BufferAccessTokenconfigItem.Set(value);
 			}
 		}
 
-		private static DateTime? _TrialStart;
+		private static ConfigItem<DateTime?> TrialStartconfigItem = new ConfigItem<DateTime?> {
+			Key = "TRIAL_INSTALLED_TIME",
+			 DefaultValue = DateTime.MaxValue 		};
+
 		public static DateTime? TrialStart
 		{
 			get 
 			{
-				return GenericGetFromConfig<DateTime?>("TRIAL_INSTALLED_TIME", ref _TrialStart);
+				return TrialStartconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<DateTime?>("TRIAL_INSTALLED_TIME", ref _TrialStart, value);
+				TrialStartconfigItem.Set(value);
 			}
 		}
 
-		private static bool? _CouponCodeValidated;
+		private static ConfigItem<bool?> CouponCodeValidatedconfigItem = new ConfigItem<bool?> {
+			Key = "COUPON_CODE",
+			 DefaultValue = false 		};
+
 		public static bool? CouponCodeValidated
 		{
 			get 
 			{
-				return GenericGetFromConfig<bool?>("COUPON_CODE", ref _CouponCodeValidated);
+				return CouponCodeValidatedconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<bool?>("COUPON_CODE", ref _CouponCodeValidated, value);
+				CouponCodeValidatedconfigItem.Set(value);
 			}
 		}
 
-		private static ColumnReloadOptions? _ReloadOptions;
+		private static ConfigItem<ColumnReloadOptions?> ReloadOptionsconfigItem = new ConfigItem<ColumnReloadOptions?> {
+			Key = "RELOAD_OPS",
+			 DefaultValue = ColumnReloadOptions.KeepPosition 		};
+
 		public static ColumnReloadOptions? ReloadOptions
 		{
 			get 
 			{
-				return GenericGetFromConfig<ColumnReloadOptions?>("RELOAD_OPS", ref _ReloadOptions);
+				return ReloadOptionsconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<ColumnReloadOptions?>("RELOAD_OPS", ref _ReloadOptions, value);
+				ReloadOptionsconfigItem.Set(value);
 			}
 		}
 
-		private static string _TopicPlace;
+		private static ConfigItem<string> TopicPlaceconfigItem = new ConfigItem<string> {
+			Key = "TOPICS_NAME",
+					};
+
 		public static string TopicPlace
 		{
 			get 
 			{
-				return GenericGetFromConfig<string>("TOPICS_NAME", ref _TopicPlace);
+				return TopicPlaceconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<string>("TOPICS_NAME", ref _TopicPlace, value);
+				TopicPlaceconfigItem.Set(value);
 			}
 		}
 
-		private static long? _TopicPlaceId;
+		private static ConfigItem<long?> TopicPlaceIdconfigItem = new ConfigItem<long?> {
+			Key = "TOPICS_ID",
+			 DefaultValue = -1 		};
+
 		public static long? TopicPlaceId
 		{
 			get 
 			{
-				return GenericGetFromConfig<long?>("TOPICS_ID", ref _TopicPlaceId);
+				return TopicPlaceIdconfigItem.Get();
 			}
 			set
 			{
-				GenericSaveToConfig<long?>("TOPICS_ID", ref _TopicPlaceId, value);
+				TopicPlaceIdconfigItem.Set(value);
 			}
 		}
 	#endif
 	#endregion
 
-		public static void ClearStaticValues()
-		{
-			_Accounts = null;
-			_Columns = null;
-			_TweetTasks = null;
-			_BackgroundLoadColumns = null;
 
-#if !BACKGROUND_AGENT
-			_FollowMessageShown = null;
-			_ProtectedAccounts = null;
-			_Filters = null;
-			_GlobalFilter = null;
-			_RetweetAsMentions = null;
-			_TweetsPerRequest = null;
-			_DefaultMuteTime = null;
-			_Drafts = null;
-			_ReadLaterCredentials = null;
-			_Background = null;
-			_FirstInit = null;
-			_FontSize = null;
-			_ReadPositions = null;
-			_RecoverReadPositions = null;
-			_EnabledGeolocation = null;
-			_TweetGeotagging = null;
-			_BufferProfiles = null;
-			_BufferAccessToken = null;
-			_TrialStart = null;
-			_CouponCodeValidated = null;
-			_ReloadOptions = null;
-			_TopicPlace = null;
-			_TopicPlaceId = null;
-#endif
-		}
-
-		static void GenerateDefaultDictionary()
-		{
-			defaultValues = new Dictionary<string, object>();
-
-			defaultValues.Add("BGLOADCOLUMNS", true);
-
-#if !BACKGROUND_AGENT
-			defaultValues.Add("FOLLOWMSG", false);
-			defaultValues.Add("RTASMENTIONS", true);
-			defaultValues.Add("TWEETSXREQ", 40);
-			defaultValues.Add("FONTSIZE", 20);
-			defaultValues.Add("RECOVERREAD", true);
-			defaultValues.Add("GEOTAG_TWEETS", true);
-			defaultValues.Add("TRIAL_INSTALLED_TIME", DateTime.MaxValue);
-			defaultValues.Add("COUPON_CODE", false);
-			defaultValues.Add("RELOAD_OPS", ColumnReloadOptions.KeepPosition);
-			defaultValues.Add("TOPICS_ID", -1);
-#endif
-		}
 	}
 }
