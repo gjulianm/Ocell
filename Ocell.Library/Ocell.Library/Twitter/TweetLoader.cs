@@ -1,4 +1,4 @@
-﻿using Ocell.Library.Collections;
+﻿using AncoraMVVM.Base.Collections;
 using Ocell.Library.Twitter.Comparers;
 using System;
 using System.Collections.Generic;
@@ -136,12 +136,12 @@ namespace Ocell.Library.Twitter
         #region Cache
         public void SaveToCacheAsync()
         {
-            Task.Run(() => SaveToCache());
+            Task.Factory.StartNew(SaveToCache);
         }
 
         public void LoadCacheAsync()
         {
-            Task.Run(() => LoadCache());
+            Task.Factory.StartNew(LoadCache);
         }
 
         public void DeferredCacheLoad()
@@ -151,7 +151,7 @@ namespace Ocell.Library.Twitter
 
         public void SaveToCacheAsync(IList<ITweetable> viewport)
         {
-            Task.Run(() => SaveToCache(viewport));
+            Task.Factory.StartNew(() => SaveToCache(viewport));
         }
 
         public void SaveToCache(IList<ITweetable> viewport)
