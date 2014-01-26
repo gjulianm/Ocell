@@ -115,6 +115,7 @@
     </Compile>
     <Compile Include="Extension\IEnumerableExtension.cs">
     </Compile>
+    <Compile Include="IDataProvider.cs" />
     <Compile Include="MediaLinkParser.cs" />
     <Compile Include="Notifications\NotificationPreferences.cs" />
     <Compile Include="Security\MutexExtensions.cs" />

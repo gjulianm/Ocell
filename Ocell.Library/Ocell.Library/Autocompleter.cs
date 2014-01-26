@@ -1,4 +1,5 @@
-﻿using Ocell.Library.Twitter;
+﻿using AncoraMVVM.Base;
+using PropertyChanged;
 using System;
 using System.Linq;
 
@@ -23,105 +24,103 @@ namespace Ocell.Library
             else
                 return endIndex - startIndex - 1;
         }
+
+        public static bool Contains(this string str, char c)
+        {
+            foreach (var ch in str)
+                if (c == ch)
+                    return true;
+
+            return false;
+        }
     }
 
+    [ImplementPropertyChanged]
     public class Autocompleter : ObservableObject
     {
-        private UsernameProvider _provider = new UsernameProvider();
-        private TextBox _textbox;
-        private string _text;
+        private IDataProvider<string> provider;
+        private string previousText;
+        private string written;
+        int triggerPosition;
 
-        bool isAutocompleting;
-        public bool IsAutocompleting
-        {
-            get { return isAutocompleting; }
-            set { Assign("IsAutocompleting", ref isAutocompleting, value); }
-        }
-        private int _triggerPosition;
-        public UserToken User { get { return _provider.User; } set { _provider.User = value; } }
+        public int SelectionStart { get; set; }
+        public string InputText { get; set; }
         public char Trigger { get; set; }
+        public bool IsAutocompleting { get; set; }
         public SafeObservable<string> Suggestions { get; protected set; }
-        string written;
-        public TextBox Textbox
-        {
-            get
-            {
-                return _textbox;
-            }
-            set
-            {
-                _textbox = value;
-                _textbox.TextChanged += new TextChangedEventHandler(OnTextChanged);
-            }
-        }
 
-        public Autocompleter()
+        public Autocompleter(IDataProvider<string> provider)
         {
+            this.provider = provider;
+
+            if (provider != null)
+                provider.StartRetrieval();
+
             Suggestions = new SafeObservable<string>();
             IsAutocompleting = false;
         }
 
-        private void OnTextChanged(object sender, TextChangedEventArgs e)
+        public void TextChanged(string text, int selectionStart)
         {
-            if (_textbox == null)
+            InputText = text;
+            this.SelectionStart = selectionStart;
+
+            OnTextChanged();
+        }
+
+        private void OnTextChanged()
+        {
+            if (InputText == null)
                 return;
 
-            if (_textbox.Text.Length > 0 && _textbox.SelectionStart > 0 && _textbox.SelectionStart <= _textbox.Text.Length && (Trigger != '\0' && _textbox.Text[_textbox.SelectionStart - 1] == Trigger))
-            {
-                IsAutocompleting = true;
-                _triggerPosition = _textbox.SelectionStart - 1;
-            }
-
-            if (_textbox.SelectionStart > 0 &&
-                _textbox.SelectionStart < _textbox.Text.Length &&
-                _textbox.Text[_textbox.SelectionStart - 1] == ' ' && _text != null &&
-                _textbox.SelectionStart < _text.Length && _text[_textbox.SelectionStart] != '@')
-                IsAutocompleting = false;
+            IsAutocompleting = GetAutocompletingState(InputText, previousText, SelectionStart);
 
             if (IsAutocompleting)
                 UpdateAutocomplete();
         }
 
-        private bool ShouldStopAutocompleting()
+        internal bool GetAutocompletingState(string inputText, string previousText, int selectionStart)
         {
-            if (string.IsNullOrWhiteSpace(_text))
+            if (inputText.Length > 0 && selectionStart > 0 && selectionStart <= inputText.Length && (Trigger != '\0' && inputText[selectionStart - 1] == Trigger))
                 return true;
 
-            if (!_text.Contains(Trigger) && Trigger != '\0')
-                return true;
+            if (selectionStart > 0 &&
+                selectionStart < inputText.Length &&
+                inputText[selectionStart - 1] == ' ' && previousText != null &&
+                selectionStart < previousText.Length && previousText[selectionStart] != '@')
+                return false;
 
-            if (_textbox.SelectionStart <= _text.Length && _textbox.SelectionStart > 0 && _text[_textbox.SelectionStart - 1] == ' ')
-                return true;
+            if (string.IsNullOrWhiteSpace(previousText))
+                return false;
 
+            if (!previousText.Contains(Trigger) && Trigger != '\0')
+                return false;
 
-            int spaceIndex = _triggerPosition < _text.Length ? _text.IndexOf(' ', _triggerPosition) : -1;
-            if (_textbox.SelectionStart <= _triggerPosition || (spaceIndex != -1 && _textbox.SelectionStart > spaceIndex))
-                return true;
+            if (selectionStart <= previousText.Length && selectionStart > 0 && previousText[selectionStart - 1] == ' ')
+                return false;
 
-            return false;
+            int spaceIndex = triggerPosition < previousText.Length ? previousText.IndexOf(' ', triggerPosition) : -1;
+            if (selectionStart <= triggerPosition || (spaceIndex != -1 && selectionStart > spaceIndex))
+                return false;
+
+            return false; // Return what?
         }
 
         private void UpdateAutocomplete()
         {
             // There's an strange reason which causes TextChanged to fire indefinitely, although the text has not changed really.
             // To avoid this, if the text we stored is the same, just return.
-            if (_text == _textbox.Text)
+            if (previousText == InputText)
                 return;
 
-            _text = _textbox.Text;
+            previousText = InputText;
 
-            if (ShouldStopAutocompleting())
-            {
-                IsAutocompleting = false;
-                return;
-            }
-
-            written = GetTextWrittenByUser();
+            written = GetTextWrittenByUser(InputText, previousText, SelectionStart, triggerPosition);
 
             Suggestions.Clear();
 
-            foreach (var user in _provider.Usernames
-                .Where(x => x.IndexOf(written, StringComparison.InvariantCultureIgnoreCase) != -1)
+            foreach (var user in provider.DataList
+                .Where(x => x.IndexOf(written, StringComparison.OrdinalIgnoreCase) != -1)
                 .Take(20)
                 .OrderBy(x => x))
             {
@@ -131,49 +130,62 @@ namespace Ocell.Library
 
         private void RemovePreviousAutocompleted()
         {
-            if (string.IsNullOrWhiteSpace(_text))
+            if (string.IsNullOrWhiteSpace(previousText))
                 return;
 
-            int firstSpaceAfterSelStart = _text.Substring(_textbox.SelectionStart).IndexOf(' ');
-            if (firstSpaceAfterSelStart == -1 && _textbox.SelectionStart < _text.Length)
-                _text = _text.Remove(_textbox.SelectionStart);
-            else if (firstSpaceAfterSelStart != -1 && firstSpaceAfterSelStart + _textbox.SelectionStart < _text.Length &&
+            int firstSpaceAfterSelStart = previousText.Substring(SelectionStart).IndexOf(' ');
+            if (firstSpaceAfterSelStart == -1 && SelectionStart < previousText.Length)
+                previousText = previousText.Remove(SelectionStart);
+            else if (firstSpaceAfterSelStart != -1 && firstSpaceAfterSelStart + SelectionStart < previousText.Length &&
                 firstSpaceAfterSelStart != 1)
-                _text = _text.Remove(_textbox.SelectionStart, firstSpaceAfterSelStart);
+                previousText = previousText.Remove(SelectionStart, firstSpaceAfterSelStart);
         }
 
-        private string GetTextWrittenByUser()
+        internal string GetTextWrittenByUser(string inputText, string previousText, int selectionStart, int triggerPosition)
         {
-            if (_textbox.SelectionStart < _text.Length)
-                return _text.Substring(_triggerPosition + 1, _textbox.SelectionStart - _triggerPosition - 1);
-            else if (_triggerPosition + 1 < _text.Length)
-                return _text.Substring(_triggerPosition + 1);
+            if (selectionStart < previousText.Length)
+                return previousText.Substring(triggerPosition + 1, selectionStart - triggerPosition - 1);
+            else if (triggerPosition + 1 < previousText.Length)
+                return previousText.Substring(triggerPosition + 1);
             else
                 return "";
         }
 
         private string GetFirstUserCoincidentWith(string chunk)
         {
-            return _provider.Usernames.FirstOrDefault(item =>
-                item.IndexOf(chunk, StringComparison.InvariantCultureIgnoreCase) == 0);
+            return provider.DataList.FirstOrDefault(item =>
+                item.IndexOf(chunk, StringComparison.OrdinalIgnoreCase) == 0);
         }
 
         private void AutocompleteText(string text)
         {
             int insertPosition;
-            if (_textbox.SelectionStart > _text.Length)
-                insertPosition = _text.Length;
+            if (SelectionStart > text.Length)
+                insertPosition = text.Length;
             else
-                insertPosition = _textbox.SelectionStart;
+                insertPosition = SelectionStart;
 
-            _text = _text.Insert(insertPosition, text);
+            text = text.Insert(insertPosition, text);
         }
 
         private void UpdateTextbox()
         {
-            int oldSelStart = _textbox.SelectionStart;
-            _textbox.Text = _text;
-            _textbox.SelectionStart = oldSelStart;
+            int oldSelStart = SelectionStart;
+            InputText = previousText;
+            SelectionStart = oldSelStart;
+        }
+
+        internal string InsertSuggestionInText(string text, int triggerPosition, string toInsert)
+        {
+            // Remove the user text written until now.
+            var nextSpace = text.IndexOf(' ', triggerPosition);
+
+            var newText = text.Substring(0, triggerPosition + 1) + toInsert;
+
+            if (nextSpace != -1)
+                newText += text.Substring(nextSpace);
+
+            return newText;
         }
 
         public void UserChoseElement(string name)
@@ -181,18 +193,10 @@ namespace Ocell.Library
             IsAutocompleting = false;
             written = "";
 
-            // Remove the user text written until now.
-            var nextSpace = _text.IndexOf(' ', _triggerPosition);
+            var newText = InsertSuggestionInText(previousText, triggerPosition, name);
 
-
-            var newText = _text.Substring(0, _triggerPosition + 1) + name;
-
-            if (nextSpace != -1)
-                newText += _text.Substring(nextSpace);
-
-            _text = newText;
-
-            Deployment.Current.Dispatcher.InvokeIfRequired(() => _textbox.Text = _text);
+            previousText = newText;
+            InputText = previousText;
         }
     }
 }

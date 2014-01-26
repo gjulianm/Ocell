@@ -90,6 +90,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationTests.cs" />
+    <Compile Include="AutocompleterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Endpoints\_TwitterService.1.Timelines.json" />
@@ -109,6 +110,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assembly.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ocell.Library\Ocell.Library\Ocell.Library.csproj">
+      <Project>{1ff8200d-1e01-4aba-a876-c313e286e1fc}</Project>
+      <Name>Ocell.Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
