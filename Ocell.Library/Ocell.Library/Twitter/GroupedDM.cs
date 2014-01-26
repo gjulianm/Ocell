@@ -218,8 +218,8 @@ namespace Ocell.Library.Twitter
             }
         }
 
-        Pair<string, string> converserNames;
-        public Pair<string, string> ConverserNames
+        Tuple<string, string> converserNames;
+        public Tuple<string, string> ConverserNames
         {
             get
             {
@@ -229,9 +229,9 @@ namespace Ocell.Library.Twitter
                 var first = Messages.FirstOrDefault();
 
                 if (first == null)
-                    return new Pair<string, string>("", "");
+                    return new Tuple<string, string>("", "");
 
-                converserNames = new Pair<string, string>(first.SenderScreenName, first.RecipientScreenName);
+                converserNames = new Tuple<string, string>(first.SenderScreenName, first.RecipientScreenName);
 
                 return converserNames;
             }

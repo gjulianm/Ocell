@@ -84,7 +84,7 @@ namespace Ocell.Library
             return builder.ToString();
         }
 
-        public static Pair<string, string> Decombine(string str)
+        public static Tuple<string, string> Decombine(string str)
         {
             string a = "", b = "";
             string aStrLen = "", bStrLen = "";
@@ -136,10 +136,10 @@ namespace Ocell.Library
                     break;
             }
 
-            return new Pair<string, string>(a, b);
+            return new Tuple<string, string>(a, b);
         }
 
-        public static Pair<string, string> DecodeTokens(string received)
+        public static Tuple<string, string> DecodeTokens(string received)
         {
             return Decombine(DecryptString(received, SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret));
         }

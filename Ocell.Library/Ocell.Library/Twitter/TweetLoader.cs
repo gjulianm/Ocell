@@ -427,7 +427,7 @@ namespace Ocell.Library.Twitter
             foreach (var msg in messages)
             {
                 var pairId = msg.GetPairName(Resource.User);
-                var group = groups.FirstOrDefault(x => x.ConverserNames.First == pairId || x.ConverserNames.Second == pairId);
+                var group = groups.FirstOrDefault(x => x.ConverserNames.Item1 == pairId || x.ConverserNames.Item2 == pairId);
 
                 if (group == null)
                     Source.Add(new GroupedDM(msg, Resource.User));
