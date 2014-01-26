@@ -8,7 +8,7 @@ namespace Ocell.Library
 
         public static void FireFiltersChanged(object sender, EventArgs e)
         {
-            Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
                 if (FiltersChanged != null)
                     FiltersChanged(sender, e);

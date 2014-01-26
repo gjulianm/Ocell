@@ -1,4 +1,6 @@
 ﻿using AncoraMVVM.Base.Collections;
+using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
 using Ocell.Library.Twitter.Comparers;
 using System;
 using System.Collections.Generic;
@@ -573,9 +575,9 @@ namespace Ocell.Library.Twitter
 
         protected void OnPropertyChanged(string propName)
         {
-            var dispatcher = Deployment.Current.Dispatcher;
+            var dispatcher = Dependency.Resolve<IDispatcher>();
 
-            if (!dispatcher.CheckAccess())
+            if (!dispatcher.IsUIThread)
                 dispatcher.BeginInvoke(() => OnPropertyChanged(propName));
 
             if (PropertyChanged != null)

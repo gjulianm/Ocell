@@ -1,8 +1,10 @@
-﻿using Ocell.Library.Security;
+﻿using AncoraMVVM.Base.Diagnostics;
+using AncoraMVVM.Base.Files;
+using AncoraMVVM.Base.IoC;
+using Ocell.Library.Security;
 using Polenter.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using TweetSharp;
 
@@ -35,6 +37,8 @@ namespace Ocell.Library.Twitter
         {
             string fileName = GetCacheName(resource);
 
+            var fileManager = Dependency.Resolve<IFileManager>();
+
             foreach (var tweet in list)
                 tweet.CreatedDate = new DateTime(tweet.CreatedDate.Ticks, DateTimeKind.Local);
 
@@ -43,52 +47,40 @@ namespace Ocell.Library.Twitter
             {
                 try
                 {
-                    using (var stream = FileAbstractor.GetFileStream(fileName))
+                    using (var file = fileManager.OpenFile(fileName, FilePermissions.Write, FileOpenMode.Create))
                     {
-                        serializer.Serialize(list.Distinct().OfType<TwitterStatus>().ToList(), stream);
+                        serializer.Serialize(list.Distinct().OfType<TwitterStatus>().ToList(), file.FileStream);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.Trace(ex.ToString());
+                    AncoraLogger.Instance.LogException("Error getting cache to " + resource.ToString(), ex);
                 }
             });
         }
 
         public static IEnumerable<TwitterStatus> GetFromCache(TwitterResource resource)
         {
-            var stopwatch = new Stopwatch();
-            long partial0 = -1, partial2 = -1, partial3 = -1;
-            stopwatch.Start();
-            partial0 = stopwatch.ElapsedMilliseconds;
             string fileName = GetCacheName(resource);
             var serializer = new SharpSerializer(SerializerSettings);
-
+            var fileManager = Dependency.Resolve<IFileManager>();
             IEnumerable<TwitterStatus> statuses = null;
-
-            var partial1 = stopwatch.ElapsedMilliseconds;
 
             MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
             {
-                partial2 = stopwatch.ElapsedMilliseconds;
                 try
                 {
-                    using (var stream = FileAbstractor.GetFileStream(fileName))
+                    using (var file = fileManager.OpenFile(fileName, FilePermissions.Read, FileOpenMode.OpenOrCreate))
                     {
-                        partial3 = stopwatch.ElapsedMilliseconds;
-                        if (stream.Length != 0)
-                            statuses = serializer.Deserialize(stream) as IEnumerable<TwitterStatus>;
+                        if (file.FileStream.Length != 0)
+                            statuses = serializer.Deserialize(file.FileStream) as IEnumerable<TwitterStatus>;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.Trace(ex.ToString());
+                    AncoraLogger.Instance.LogException("Error getting cache from " + resource.ToString(), ex);
                 }
             });
-            stopwatch.Stop();
-
-            Logger.Trace(String.Format("GetFromCache: Partial0 {0}ms, Partial1 {2}ms, Partial2 {2}ms, Partial3 {3}ms, Final {4}ms.",
-                partial0, partial1, partial2, partial3, stopwatch.ElapsedMilliseconds));
 
             return statuses ?? new List<TwitterStatus>();
         }

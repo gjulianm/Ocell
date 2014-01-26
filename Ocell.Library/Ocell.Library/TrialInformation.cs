@@ -1,11 +1,8 @@
 ﻿using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
+using AncoraMVVM.Base.Tasks;
 using Ocell.Library;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
 
 namespace Ocell
 {
@@ -73,7 +70,7 @@ namespace Ocell
             var accepts = notificator.Prompt(Localization.Resources.AskBuyFullVersion);
             if (accepts)
             {
-                Dependency.Resolve<ITaskFactory>().CreateAppStoreTask(AppStoreContentType.Application, "8644cfe4-1629-43f0-8869-4d6684a7cfcb");
+                Dependency.Resolve<ITaskFactory>().CreateAppStoreTask(AppStoreContentType.Applications, "8644cfe4-1629-43f0-8869-4d6684a7cfcb");
             }
 
         }
