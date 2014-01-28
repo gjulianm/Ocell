@@ -15,25 +15,14 @@ using Ocell.Library.Twitter;
 using Ocell.Library;
 using System.Linq;
 using PropertyChanged;
+using AncoraMVVM.Base;
 
 namespace Ocell.Pages.Search
 {
     [ImplementPropertyChanged]
     public class EnterSearchModel : ExtendedViewModelBase
     {
-        string query;
-
-        public string Query
-        {
-            get
-            {
-                return query;
-            }
-            set
-            {
-                Assign("Query", ref query, value);
-            }
-        }
+        public string Query { get; set; }
 
         readonly DelegateCommand buttonClick;
 

@@ -1,23 +1,13 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Collections.ObjectModel;
-using TweetSharp;
-using Ocell.Library.Twitter;
+﻿using AncoraMVVM.Base;
 using Ocell.Library;
+using Ocell.Library.Twitter;
+using PropertyChanged;
 using System.Collections.Generic;
-using System.Threading;
-using DanielVaughan.Windows;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using PropertyChanged;
+using System.Windows.Input;
+using TweetSharp;
 
 namespace Ocell.Pages.Columns
 {

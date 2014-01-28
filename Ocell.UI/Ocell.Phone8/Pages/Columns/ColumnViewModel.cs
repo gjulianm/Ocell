@@ -1,14 +1,11 @@
-﻿using DanielVaughan.Windows;
+﻿using AncoraMVVM.Base;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Pages.Search;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TweetSharp;

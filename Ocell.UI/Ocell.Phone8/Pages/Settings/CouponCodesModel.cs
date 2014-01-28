@@ -1,4 +1,5 @@
-﻿using Ocell.Library;
+﻿using AncoraMVVM.Base;
+using Ocell.Library;
 using Ocell.Localization;
 using PropertyChanged;
 using System;

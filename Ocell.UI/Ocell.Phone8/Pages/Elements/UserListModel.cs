@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Windows.Input;
-using DanielVaughan.ComponentModel;
-using DanielVaughan.Windows;
-using Microsoft.Phone.Tasks;
-using Ocell.Library;
+﻿using AncoraMVVM.Base;
 using Ocell.Library.Twitter;
-using TweetSharp;
-using System.Windows.Data;
 using Ocell.Localization;
-using System.Threading.Tasks;
 using PropertyChanged;
+using System.Net;
+using System.Threading.Tasks;
+using System.Windows.Data;
+using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {

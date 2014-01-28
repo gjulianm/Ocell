@@ -20,6 +20,7 @@ using System.Device.Location;
 using System.Linq;
 using Ocell.Pages.Search;
 using PropertyChanged;
+using AncoraMVVM.Base;
 
 
 namespace Ocell.Pages
