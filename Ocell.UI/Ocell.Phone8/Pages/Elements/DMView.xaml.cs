@@ -1,18 +1,16 @@
-﻿using System;
+﻿using Microsoft.Phone.Controls;
+using Microsoft.Phone.Tasks;
+using Ocell.Library;
+using Ocell.Library.Filtering;
+using Ocell.Library.Twitter;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Windows;
-using System.Windows.Documents;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Tasks;
-using TweetSharp;
-using Ocell.Library;
-using System.Windows.Media;
 using System.Windows.Controls;
-using DanielVaughan.Services;
-using Ocell.Library.Filtering;
-using DanielVaughan;
-using Ocell.Library.Twitter;
+using System.Windows.Documents;
+using System.Windows.Media;
+using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
@@ -23,9 +21,9 @@ namespace Ocell.Pages.Elements
         public DMView()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            
 
-            this.Loaded += new RoutedEventHandler(Tweet_Loaded); 
+
+            this.Loaded += new RoutedEventHandler(Tweet_Loaded);
         }
 
         void Tweet_Loaded(object sender, RoutedEventArgs e)
@@ -52,7 +50,7 @@ namespace Ocell.Pages.Elements
 
             ViaDate.Margin = new Thickness(ViaDate.Margin.Left, Text.ActualHeight + Text.Margin.Top + 10,
                 ViaDate.Margin.Right, ViaDate.Margin.Bottom);
-            ViaDate.Text = (string)dc.Convert(status.CreatedDate, null, null, null) ;
+            ViaDate.Text = (string)dc.Convert(status.CreatedDate, null, null, null);
 
             SName.Text = "@" + status.Author.ScreenName;
             ContentPanel.UpdateLayout();
@@ -278,8 +276,8 @@ namespace Ocell.Pages.Elements
             NavigationService.Navigate(Uris.WriteTweet);
         }
 
-      
-       
+
+
 
         private void receive(TwitterStatus status, TwitterResponse resp)
         {
@@ -304,7 +302,7 @@ namespace Ocell.Pages.Elements
         {
             NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + status.Author.ScreenName, UriKind.Relative));
         }
-    
+
     }
-    
+
 }

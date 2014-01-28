@@ -1,10 +1,10 @@
 ﻿using AncoraMVVM.Base.IoC;
 using AsyncOAuth;
-using DanielVaughan;
-using DanielVaughan.InversionOfControl;
-using DanielVaughan.InversionOfControl.Containers.SimpleContainer;
-using DanielVaughan.Services;
-using DanielVaughan.Services.Implementation;
+
+
+
+
+
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Ocell.Compatibility;

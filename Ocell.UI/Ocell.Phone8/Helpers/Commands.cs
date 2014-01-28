@@ -1,6 +1,6 @@
 ﻿using AncoraMVVM.Rest;
-using DanielVaughan;
-using DanielVaughan.Services;
+
+
 using Microsoft.Phone.Controls;
 using Ocell.Library;
 using Ocell.Library.Filtering;

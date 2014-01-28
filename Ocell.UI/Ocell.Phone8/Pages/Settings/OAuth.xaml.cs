@@ -1,4 +1,4 @@
-﻿using DanielVaughan;
+﻿
 using Microsoft.Phone.Controls;
 using Ocell.Pages.Settings;
 using System;

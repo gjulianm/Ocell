@@ -1,21 +1,9 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using DanielVaughan.ComponentModel;
-using DanielVaughan;
-using DanielVaughan.Windows;
-using Ocell.Library.Twitter;
-using Ocell.Library;
-using System.Linq;
+﻿using AncoraMVVM.Base;
 using Ocell.Controls;
+using Ocell.Library;
+using Ocell.Library.Twitter;
 using PropertyChanged;
+using System.Windows.Input;
 
 namespace Ocell.Pages.Search
 {

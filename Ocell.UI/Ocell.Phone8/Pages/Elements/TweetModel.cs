@@ -1,4 +1,4 @@
-﻿using DanielVaughan.Windows;
+﻿using AncoraMVVM.Base;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using Ocell.Commands;
@@ -9,7 +9,6 @@ using PropertyChanged;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;

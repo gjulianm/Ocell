@@ -1,8 +1,8 @@
 ﻿
 using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
-using DanielVaughan;
-using DanielVaughan.Services;
+
+
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;

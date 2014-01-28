@@ -1,25 +1,15 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Data;
-using System.Windows.Input;
-using DanielVaughan.ComponentModel;
-using DanielVaughan.Windows;
-using TweetSharp;
+﻿using Microsoft.Phone.Tasks;
 using Ocell.Library;
-using Ocell.Library.Twitter;
-using System.Collections.Generic;
-using System;
-using System.ComponentModel;
-using System.Threading;
-using DanielVaughan;
-using DanielVaughan.InversionOfControl;
-using DanielVaughan.Net;
-using DanielVaughan.Services;
-using System.Linq;
 using Ocell.Library.Filtering;
+using Ocell.Library.Twitter;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
+using System.Threading;
 using System.Windows;
-using Microsoft.Phone.Tasks;
-using Ocell.Compatibility;
+using System.Windows.Input;
 
 namespace Ocell
 {

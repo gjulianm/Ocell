@@ -1,8 +1,6 @@
-﻿using DanielVaughan;
-using DanielVaughan.Services;
+﻿
+
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Tasks;
-using Ocell.Compatibility;
 using Ocell.Controls;
 using Ocell.Library;
 using Ocell.Library.Twitter;

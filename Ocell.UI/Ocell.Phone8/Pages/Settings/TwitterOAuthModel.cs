@@ -1,6 +1,6 @@
 ﻿using AncoraMVVM.Rest;
 using AsyncOAuth;
-using DanielVaughan;
+
 using Ocell.Library;
 using Ocell.Library.Notifications;
 using Ocell.Library.Twitter;

@@ -1,18 +1,13 @@
-﻿using Ocell.Library;
+﻿using LinqToVisualTree;
+using Ocell.Library;
 using Ocell.Library.Twitter;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using TweetSharp;
-using DanielVaughan;
-using LinqToVisualTree;
-using System.Windows.Controls.Primitives;
 using System.Diagnostics;
-using Microsoft.Phone.Controls;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using TweetSharp;
 
 namespace Ocell.Controls
 {
@@ -40,7 +35,7 @@ namespace Ocell.Controls
             Bound = false;
             lb.ManipulationStateChanged -= lb_ManipulationStateChanged;
             lb = null;
-            resource = null;            
+            resource = null;
         }
 
         public bool CanRecoverPosition()

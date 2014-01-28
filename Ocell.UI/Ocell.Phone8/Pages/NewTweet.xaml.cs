@@ -1,18 +1,15 @@
-﻿using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using DanielVaughan;
-using Microsoft.Phone.Controls;
+﻿using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Ocell.Library;
 using Ocell.Library.Twitter;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 #if WP8
-using Windows.Phone.Speech.Recognition;
+
 #endif
-using System.Diagnostics;
-using System;
 
 namespace Ocell.Pages
 {
@@ -34,7 +31,7 @@ namespace Ocell.Pages
                 viewModel.TryLoadDraft();
             };
 
-            
+
             DataContext = viewModel;
 
             Loaded += NewTweet_Loaded;
@@ -61,10 +58,10 @@ namespace Ocell.Pages
         private void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            
+
             // Update the binding source
             BindingExpression bindingExpr = textBox.GetBindingExpression(TextBox.TextProperty);
-            bindingExpr.UpdateSource();            
+            bindingExpr.UpdateSource();
         }
 
         void NewTweet_Unloaded(object sender, RoutedEventArgs e)
@@ -95,7 +92,7 @@ namespace Ocell.Pages
                 }
                 else
                 {
-                    if(!ListAccounts.SelectedItems.Contains(DataTransfer.CurrentAccount))
+                    if (!ListAccounts.SelectedItems.Contains(DataTransfer.CurrentAccount))
                         ListAccounts.SelectedItems.Add(DataTransfer.CurrentAccount);
                 }
             }
@@ -117,7 +114,7 @@ namespace Ocell.Pages
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             Image img = sender as Image;
-            
+
             if (img == null)
                 return;
 
@@ -155,7 +152,7 @@ namespace Ocell.Pages
                 return;
 
             UserToken usr = img.Tag as UserToken;
-            if (usr == DataTransfer.CurrentAccount 
+            if (usr == DataTransfer.CurrentAccount
                 || (DataTransfer.Draft != null && DataTransfer.Draft.Accounts.Contains(usr)))
                 UpdateOpacity(img);
         }
@@ -201,7 +198,7 @@ protected override  void OnNavigatedTo(System.Windows.Navigation.NavigationEvent
         private void UserSuggestions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selected = UserSuggestions.SelectedItem as string;
-            
+
             if (string.IsNullOrWhiteSpace(selected))
                 return;
 

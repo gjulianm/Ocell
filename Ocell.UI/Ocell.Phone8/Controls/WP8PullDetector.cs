@@ -1,13 +1,8 @@
-﻿using Microsoft.Phone.Controls;
-using System;
-using System.Windows;
+﻿using System;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using DanielVaughan;
-using System.Diagnostics;
-using System.Collections.Generic;
+
 using TweetSharp;
-using System.Linq;
 
 namespace Ocell.Controls
 {
@@ -106,7 +101,7 @@ namespace Ocell.Controls
             if (listbox.ViewportItems.TryGetValue(firstItem, out firstContainer))
             {
                 var diff = listbox.GetRelativePosition(firstContainer);
-                if (diff.Y <2 )
+                if (diff.Y < 2)
                     return true;
             }
 
@@ -131,7 +126,7 @@ namespace Ocell.Controls
             return false;
         }
 
-       
+
         public event OnCompression Compression;
     }
 }

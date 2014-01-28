@@ -1,26 +1,16 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using DanielVaughan.ComponentModel;
-using DanielVaughan;
-using DanielVaughan.Windows;
+﻿using AncoraMVVM.Base;
 using Ocell.Library;
-using System.Collections.Generic;
 using Ocell.Library.Twitter;
-using System.Collections.ObjectModel;
-using TweetSharp;
-using System.Device.Location;
-using System.Linq;
 using Ocell.Pages.Search;
 using PropertyChanged;
-using AncoraMVVM.Base;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Device.Location;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
+using TweetSharp;
 
 
 namespace Ocell.Pages

@@ -1,19 +1,9 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
+﻿using AncoraMVVM.Base;
+using Ocell.Library;
+using PropertyChanged;
+using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using DanielVaughan.ComponentModel;
-using DanielVaughan;
-using DanielVaughan.Windows;
-using Ocell.Library;
-using System.Collections.Generic;
-using PropertyChanged;
 
 namespace Ocell.Pages.Settings
 {
@@ -50,7 +40,7 @@ namespace Ocell.Pages.Settings
             {
                 if (e.PropertyName == "SelectedIndex")
                 {
-                    theme.Background = (BackgroundType)selectedIndex;
+                    theme.Background = (BackgroundType)SelectedIndex;
                     BackgroundBrush = theme.GetBrush();
                 }
             };
