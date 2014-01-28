@@ -482,7 +482,7 @@ namespace Ocell.Pages
                 0);
 
             if (TrialInformation.IsFullFeatured)
-                ScheduleWithServer(scheduledTime);
+                ScheduleWithServer(ScheduledTime);
             else
                 ScheduleWithBackgroundAgent(scheduleTime);
         }
