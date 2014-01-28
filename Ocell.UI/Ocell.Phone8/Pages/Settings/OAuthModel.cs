@@ -164,7 +164,7 @@ namespace Ocell.Pages.Settings
             catch (HttpRequestException ex)
             {
                 DebugError("Error getting request token: {0}", ex);
-                MessageService.ShowError(Localization.Resources.ErrorAuthURL);
+                Notificator.ShowError(Localization.Resources.ErrorAuthURL);
                 GoBack();
                 return;
             }
@@ -180,7 +180,7 @@ namespace Ocell.Pages.Settings
             catch (Exception e)
             {
                 DebugError("Error processing token response: {0}", e);
-                MessageService.ShowError(Localization.Resources.ErrorAuthURL);
+                Notificator.ShowError(Localization.Resources.ErrorAuthURL);
                 GoBack();
                 return;
             }
@@ -200,7 +200,7 @@ namespace Ocell.Pages.Settings
             catch (Exception e)
             {
                 DebugError("Error getting auth URL: {0}", e);
-                MessageService.ShowError(Localization.Resources.ErrorAuthURL);
+                Notificator.ShowError(Localization.Resources.ErrorAuthURL);
                 return;
             }
 
@@ -219,7 +219,7 @@ namespace Ocell.Pages.Settings
             if (!VerifyCallbackParams(paramCollection))
             {
                 DebugError("Callback parameters are not correct. Returned to {0}", uri);
-                MessageService.ShowError(Localization.Resources.ErrorClientTokens);
+                Notificator.ShowError(Localization.Resources.ErrorClientTokens);
                 GoBack();
                 return;
             }
@@ -252,7 +252,7 @@ namespace Ocell.Pages.Settings
             if (!response.IsSuccessStatusCode)
             {
                 DebugError("Error in the token request. Response code {0}, content {1}.", response.StatusCode, await response.Content.ReadAsStringAsync());
-                MessageService.ShowError(Localization.Resources.ErrorClientTokens);
+                Notificator.ShowError(Localization.Resources.ErrorClientTokens);
                 GoBack();
                 return;
             }
@@ -268,7 +268,7 @@ namespace Ocell.Pages.Settings
             catch (Exception e)
             {
                 DebugError("Error post-processing the token response: {0}", e);
-                MessageService.ShowError(Localization.Resources.ErrorClientTokens);
+                Notificator.ShowError(Localization.Resources.ErrorClientTokens);
                 GoBack();
             }
         }
@@ -285,7 +285,7 @@ namespace Ocell.Pages.Settings
             catch (Exception e)
             {
                 DebugError("Error requesting access token parameters (OAuth 1): {0}", e);
-                MessageService.ShowError(Localization.Resources.ErrorClientTokens);
+                Notificator.ShowError(Localization.Resources.ErrorClientTokens);
                 GoBack();
                 return;
             }
@@ -298,7 +298,7 @@ namespace Ocell.Pages.Settings
         {
             string msg = String.Format(message, args);
             Debug.WriteLine(msg);
-            MessageService.ShowError(msg);
+            Notificator.ShowError(msg);
         }
     }
 

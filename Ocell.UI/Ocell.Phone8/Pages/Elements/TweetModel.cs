@@ -93,7 +93,7 @@ namespace Ocell.Pages.Elements
 
             if (DataTransfer.Status == null)
             {
-                MessageService.ShowError(Localization.Resources.ErrorLoadingTweet);
+                Notificator.ShowError(Localization.Resources.ErrorLoadingTweet);
                 GoBack();
                 return;
             }
@@ -179,7 +179,6 @@ namespace Ocell.Pages.Elements
         }
 
         public TweetModel()
-            : base("Tweet")
         {
             Initialize();
         }
@@ -203,9 +202,9 @@ namespace Ocell.Pages.Elements
 
                 var response = await ServiceDispatcher.GetService(user).DeleteTweetAsync(new DeleteTweetOptions { Id = Tweet.Id });
                 if (response.RequestSucceeded)
-                    MessageService.ShowMessage(Localization.Resources.TweetDeleted, "");
+                    Notificator.ShowMessage(Localization.Resources.TweetDeleted);
                 else
-                    MessageService.ShowError(Localization.Resources.ErrorDeletingTweet);
+                    Notificator.ShowError(Localization.Resources.ErrorDeletingTweet);
             }, (obj) => Tweet != null && Tweet.Author != null && Config.Accounts.Any(item => item != null && item.ScreenName == Tweet.Author.ScreenName));
 
 
@@ -234,13 +233,13 @@ namespace Ocell.Pages.Elements
                 if (IsFavorited)
                 {
                     await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
-                    MessageService.ShowLightNotification(Localization.Resources.Unfavorited);
+                    Notificator.ShowProgressIndicatorMessage(Localization.Resources.Unfavorited);
                     IsFavorited = false;
                 }
                 else
                 {
                     await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
-                    MessageService.ShowLightNotification(Localization.Resources.Favorited);
+                    Notificator.ShowProgressIndicatorMessage(Localization.Resources.Favorited);
                     IsFavorited = true;
                 }
             }, parameter => (parameter is TwitterStatus) && Config.Accounts.Count > 0 && DataTransfer.CurrentAccount != null);
@@ -254,7 +253,7 @@ namespace Ocell.Pages.Elements
                 Progress.IsLoading = false;
                 BarText = "";
                 if (!response.RequestSucceeded)
-                    MessageService.ShowError(response.Error != null ? response.Error.Message : Resources.UnknownValue);
+                    Notificator.ShowError(response.Error != null ? response.Error.Message : Resources.UnknownValue);
                 else if (TweetSent != null)
                     TweetSent(this, new EventArgs<ITweetable>(response.Content));
 
@@ -268,7 +267,7 @@ namespace Ocell.Pages.Elements
             var user = response.Content;
 
             if (!response.RequestSucceeded)
-                MessageService.ShowError(Localization.Resources.ErrorGettingProfile);
+                Notificator.ShowError(Localization.Resources.ErrorGettingProfile);
 
             Tweet.User = user;
             SetAvatar();
@@ -277,7 +276,7 @@ namespace Ocell.Pages.Elements
         public void ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
             Progress.IsLoading = false;
-            MessageService.ShowError(Localization.Resources.ErrorDownloadingImage);
+            Notificator.ShowError(Localization.Resources.ErrorDownloadingImage);
         }
 
         public void ImageOpened(object sender, RoutedEventArgs e)

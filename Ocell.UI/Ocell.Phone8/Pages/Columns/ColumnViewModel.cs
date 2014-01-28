@@ -129,8 +129,8 @@ namespace Ocell.Pages.Columns
         void AddResource(TwitterResource resource)
         {
             if (Config.Columns.Contains(resource))
-                MessageService.ShowError(Localization.Resources.ColumnAlreadyPinned);
-            else if (MessageService.AskYesNoQuestion(String.Format(Localization.Resources.AskAddColumn, resource.Title)))
+                Notificator.ShowError(Localization.Resources.ColumnAlreadyPinned);
+            else if (Notificator.Prompt(String.Format(Localization.Resources.AskAddColumn, resource.Title)))
             {
                 Config.Columns.Add(resource);
                 Config.SaveColumns();
@@ -177,7 +177,7 @@ namespace Ocell.Pages.Columns
                 Progress.IsLoading = false;
 
             if (!response.RequestSucceeded)
-                MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
+                Notificator.ShowError(Localization.Resources.ErrorLoadingLists);
             else
                 AddLists(response.Content);
         }
@@ -192,7 +192,7 @@ namespace Ocell.Pages.Columns
                 Progress.IsLoading = false;
 
             if (!response.RequestSucceeded)
-                MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
+                Notificator.ShowError(Localization.Resources.ErrorLoadingLists);
             else
                 AddLists(response.Content);
         }
@@ -256,7 +256,7 @@ namespace Ocell.Pages.Columns
 
             if (!response.RequestSucceeded)
             {
-                MessageService.ShowError(Localization.Resources.ErrorDownloadingSearches);
+                Notificator.ShowError(Localization.Resources.ErrorDownloadingSearches);
                 return;
             }
 

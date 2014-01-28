@@ -139,7 +139,7 @@ namespace Ocell
                 {
                     var column = (TwitterResource)SelectedPivot;
                     if (Dependency.Resolve<TileManager>().ColumnTileIsCreated(column))
-                        MessageService.ShowError("This column is already pinned.");
+                        Notificator.ShowError("This column is already pinned.");
                     else
                         SecondaryTiles.CreateColumnTile(column);
                 }, (obj) => SelectedPivot != null);
@@ -185,7 +185,6 @@ namespace Ocell
         }
 
         public MainPageModel()
-            : base("MainPage")
         {
             if (Config.RetweetAsMentions == null)
                 Config.RetweetAsMentions = true;

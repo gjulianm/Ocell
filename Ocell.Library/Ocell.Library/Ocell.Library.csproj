@@ -248,7 +248,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assembly.ico" />
-    <Content Include="FodyWeavers.xml" />
+    <Content Include="FodyWeavers.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup>

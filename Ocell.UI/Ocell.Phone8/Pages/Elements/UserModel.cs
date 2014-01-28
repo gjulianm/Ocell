@@ -112,7 +112,6 @@ namespace Ocell.Pages.Elements
         #endregion
 
         public UserModel()
-            : base("User")
         {
             User = null;
             GenericCanExecute = (obj) => User != null && DataTransfer.CurrentAccount != null;
@@ -138,7 +137,7 @@ namespace Ocell.Pages.Elements
                         User = DataTransfer.CurrentAccount
                     });
                     Config.SaveColumns();
-                    MessageService.ShowLightNotification(Resources.UserPinned);
+                    Notificator.ShowProgressIndicatorMessage(Resources.UserPinned);
                     pinUser.RaiseCanExecuteChanged();
 
                 }, item => GenericCanExecute.Invoke(null)
@@ -163,9 +162,9 @@ namespace Ocell.Pages.Elements
                 Progress.IsLoading = false;
 
                 if (response.StatusCode == HttpStatusCode.OK)
-                    MessageService.ShowLightNotification(String.Format(Resources.ReportedAndBlocked, User.ScreenName));
+                    Notificator.ShowProgressIndicatorMessage(String.Format(Resources.ReportedAndBlocked, User.ScreenName));
                 else
-                    MessageService.ShowError(String.Format(Resources.CouldntReport, User.ScreenName));
+                    Notificator.ShowError(String.Format(Resources.CouldntReport, User.ScreenName));
 
             }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
@@ -235,9 +234,9 @@ namespace Ocell.Pages.Elements
             BarText = "";
             Progress.IsLoading = false;
             if (response.StatusCode == HttpStatusCode.OK)
-                MessageService.ShowLightNotification(Resources.ProfileImageChanged);
+                Notificator.ShowProgressIndicatorMessage(Resources.ProfileImageChanged);
             else
-                MessageService.ShowError(Resources.ErrorUploadingProfileImage);
+                Notificator.ShowError(Resources.ErrorUploadingProfileImage);
         }
 
         void ReceiveFollow(Task<TwitterResponse<TwitterUser>> task)
@@ -250,7 +249,7 @@ namespace Ocell.Pages.Elements
 
             if (usr == null)
             {
-                MessageService.ShowError(Resources.ErrorMessage);
+                Notificator.ShowError(Resources.ErrorMessage);
                 return;
             }
 
@@ -268,13 +267,13 @@ namespace Ocell.Pages.Elements
             Progress.IsLoading = false;
             if (response.RequestSucceeded)
             {
-                MessageService.ShowLightNotification(successMsg);
+                Notificator.ShowProgressIndicatorMessage(successMsg);
                 Followed = !Followed;
                 followUser.RaiseCanExecuteChanged();
                 unfollowUser.RaiseCanExecuteChanged(); ;
             }
             else
-                MessageService.ShowError(errorMsg);
+                Notificator.ShowError(errorMsg);
         }
 
         void ReceiveBlock(Task<TwitterResponse<TwitterUser>> task)
@@ -298,13 +297,13 @@ namespace Ocell.Pages.Elements
 
             if (response.RequestSucceeded)
             {
-                MessageService.ShowLightNotification(successMsg);
+                Notificator.ShowProgressIndicatorMessage(successMsg);
                 Blocked = !Blocked;
                 block.RaiseCanExecuteChanged();
                 unblock.RaiseCanExecuteChanged(); // TODO: Implement AncoraMVVM here and avoid all those RaiseCanExecuteChanged.
             }
             else
-                MessageService.ShowError(errorMsg);
+                Notificator.ShowError(errorMsg);
         }
 
         async void GetUser(string userName)
@@ -318,7 +317,7 @@ namespace Ocell.Pages.Elements
             Progress.IsLoading = false;
             if (!response.RequestSucceeded || !users.Any())
             {
-                MessageService.ShowError(Resources.CouldntFindUser);
+                Notificator.ShowError(Resources.CouldntFindUser);
                 return;
             }
 
@@ -368,7 +367,7 @@ namespace Ocell.Pages.Elements
             FriendshipRetrieved = true;
             if (!response.RequestSucceeded)
             {
-                MessageService.ShowWarning(Resources.CouldntGetRelationship);
+                Notificator.ShowWarning(Resources.CouldntGetRelationship);
                 return;
             }
 

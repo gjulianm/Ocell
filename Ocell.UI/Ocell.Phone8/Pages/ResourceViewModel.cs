@@ -25,7 +25,6 @@ namespace Ocell.Pages.Search
         }
 
         public ResourceViewModel()
-            : base("Search")
         {
             PageTitle = Resource != null ? Resource.Title : "";
 
@@ -40,7 +39,7 @@ namespace Ocell.Pages.Search
                     if (!Config.Columns.Contains(Resource))
                         Config.Columns.Add(Resource);
                     Config.SaveColumns();
-                    MessageService.ShowMessage(Localization.Resources.ColumnAdded, "");
+                    Notificator.ShowMessage(Localization.Resources.ColumnAdded);
                     DataTransfer.ShouldReloadColumns = true;
                     addCommand.RaiseCanExecuteChanged();
                 },

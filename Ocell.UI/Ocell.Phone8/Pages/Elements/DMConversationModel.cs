@@ -10,7 +10,6 @@ namespace Ocell.Pages.Elements
         public string PairName { get; set; }
 
         public DMConversationModel()
-            : base("DMConversation")
         {
         }
     }

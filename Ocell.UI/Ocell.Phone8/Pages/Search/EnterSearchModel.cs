@@ -23,7 +23,6 @@ namespace Ocell.Pages.Search
         }
 
         public EnterSearchModel()
-            : base("EnterSearch")
         {
             this.PropertyChanged += (sender, e) =>
             {

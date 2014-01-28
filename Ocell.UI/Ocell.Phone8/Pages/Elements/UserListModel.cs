@@ -29,7 +29,6 @@ namespace Ocell.Pages.Elements
         public object SelectedUser { get; set; }
 
         public UserListModel()
-            : base("UserList")
         {
             whatUserList = "";
             user = "";
@@ -77,7 +76,7 @@ namespace Ocell.Pages.Elements
             }
             else
             {
-                MessageService.ShowError(Resources.NotValidResource);
+                Notificator.ShowError(Resources.NotValidResource);
                 GoBack();
                 return;
             }
@@ -92,13 +91,13 @@ namespace Ocell.Pages.Elements
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                MessageService.ShowError(Resources.CouldntFindUser);
+                Notificator.ShowError(Resources.CouldntFindUser);
                 GoBack();
                 return;
             }
             else if (!response.RequestSucceeded)
             {
-                MessageService.ShowError(Resources.ErrorMessage);
+                Notificator.ShowError(Resources.ErrorMessage);
                 GoBack();
                 return;
             }

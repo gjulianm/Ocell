@@ -29,7 +29,6 @@ namespace Ocell.Pages.Columns
         }
 
         public AddColumnModel()
-            : base("AddColumn")
         {
             Core = new ObservableCollection<TwitterResource>();
             Lists = new SafeObservable<TwitterList>();
@@ -52,7 +51,7 @@ namespace Ocell.Pages.Columns
         {
             if (DataTransfer.CurrentAccount == null)
             {
-                MessageService.ShowError(Localization.Resources.ErrorNoAccount);
+                Notificator.ShowError(Localization.Resources.ErrorNoAccount);
                 GoBack();
                 return;
             }
@@ -107,7 +106,7 @@ namespace Ocell.Pages.Columns
         {
             var response = task.Result;
             if (!response.RequestSucceeded)
-                MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
+                Notificator.ShowError(Localization.Resources.ErrorLoadingLists);
 
             AddLists(response.Content);
         }
@@ -116,7 +115,7 @@ namespace Ocell.Pages.Columns
         {
             var response = task.Result;
             if (!response.RequestSucceeded)
-                MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
+                Notificator.ShowError(Localization.Resources.ErrorLoadingLists);
 
             AddLists(response.Content);
         }

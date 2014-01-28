@@ -106,7 +106,7 @@ namespace Ocell
             if (!TrialInformation.IsFullFeatured)
                 return false;
 
-            var result = Dependency.Resolve<INotificationService>().AskYesNoQuestion(Localization.Resources.AskEnablePush);
+            var result = Dependency.Resolve<INotificationService>().Prompt(Localization.Resources.AskEnablePush);
             Config.PushEnabled = result;
             return result;
         }
@@ -130,7 +130,7 @@ namespace Ocell
             if (!Config.Accounts.Any())
             {
                 var service = Dependency.Resolve<INotificationService>();
-                bool result = service.AskYesNoQuestion(Localization.Resources.YouHaveToLogin, "");
+                bool result = service.Prompt(Localization.Resources.YouHaveToLogin);
                 if (result)
                 {
                     OAuth.Type = AuthType.Twitter;
@@ -147,7 +147,7 @@ namespace Ocell
             if ((Config.FollowMessageShown == false || Config.FollowMessageShown == null) && ServiceDispatcher.CanGetServices)
             {
                 var service = Dependency.Resolve<INotificationService>();
-                bool result = service.AskYesNoQuestion(Localization.Resources.FollowOcellAppMessage, "");
+                bool result = service.Prompt(Localization.Resources.FollowOcellAppMessage);
                 if (result)
                     ServiceDispatcher.GetDefaultService().FollowUserAsync(new FollowUserOptions { ScreenName = "OcellApp" });
                 Config.FollowMessageShown = true;
@@ -329,6 +329,7 @@ namespace Ocell
 
         private void SetupRecoverDialogGestures()
         {
+            // TODO: solve deprecation.
             var gestureListener = GestureService.GetGestureListener(RecoverDialog);
             gestureListener.DragDelta += RecoverDiag_DragDelta;
             gestureListener.DragCompleted += RecoverDiag_DragEnd;

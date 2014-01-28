@@ -36,7 +36,6 @@ namespace Ocell.Pages
         }
 
         public SelectUserModel()
-            : base("SelectUserForDM")
         {
             provider = Dependency.Resolve<IUserProvider>();
             provider.GetFollowers = true;
@@ -45,7 +44,7 @@ namespace Ocell.Pages
             provider.Error += (sender, e) =>
             {
                 Progress.IsLoading = false;
-                MessageService.ShowError(Localization.Resources.ErrorDownloadingUsers);
+                Notificator.ShowError(Localization.Resources.ErrorDownloadingUsers);
             };
 
             Collection = new CollectionViewSource();

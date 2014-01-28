@@ -29,7 +29,6 @@ namespace Ocell.Pages.Settings
         }
 
         public BackgroundsModel()
-            : base("Backgrounds")
         {
             theme = new OcellTheme();
             backgroundNames = new List<string> { "Default", "None (transparent)", "Fabric", "Egg", "Tiles", "Tire", "Floral", "Map", "Diamond" };
@@ -48,7 +47,7 @@ namespace Ocell.Pages.Settings
             saveBackground = new DelegateCommand((param) =>
             {
                 Config.Background = theme;
-                MessageService.ShowMessage(Localization.Resources.BackgroundChangeOnRestart);
+                Notificator.ShowMessage(Localization.Resources.BackgroundChangeOnRestart);
                 GoBack();
             });
         }

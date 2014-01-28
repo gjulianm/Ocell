@@ -20,7 +20,6 @@ namespace Ocell.Pages.Settings
         }
 
         public CouponCodesModel()
-            : base("Backgrounds")
         {
             validate = new DelegateCommand(ValidateCode, x => !IsLoading);
             Code = "";
@@ -30,7 +29,7 @@ namespace Ocell.Pages.Settings
         {
             if (String.IsNullOrWhiteSpace(Code))
             {
-                MessageService.ShowError(Resources.CodeInvalid);
+                Notificator.ShowError(Resources.CodeInvalid);
                 return;
             }
 
@@ -56,12 +55,12 @@ namespace Ocell.Pages.Settings
             validate.RaiseCanExecuteChanged();
             if (failed || response.StatusCode != HttpStatusCode.OK)
             {
-                MessageService.ShowError(Resources.CodeInvalid);
+                Notificator.ShowError(Resources.CodeInvalid);
             }
             else
             {
                 Config.CouponCodeValidated = true;
-                MessageService.ShowMessage(Resources.CodeValid);
+                Notificator.ShowMessage(Resources.CodeValid);
                 GoBack();
             }
         }

@@ -54,7 +54,6 @@ namespace Ocell.Pages
         long currentLocation = 1;
 
         public TopicsModel()
-            : base("TrendingTopics")
         {
             this.PropertyChanged += (sender, e) =>
                 {
@@ -127,7 +126,7 @@ namespace Ocell.Pages
             Progress.IsLoading = false;
             if (!response.RequestSucceeded)
             {
-                MessageService.ShowError(Localization.Resources.ErrorLoadingTT);
+                Notificator.ShowError(Localization.Resources.ErrorLoadingTT);
                 GoBack();
                 return;
             }

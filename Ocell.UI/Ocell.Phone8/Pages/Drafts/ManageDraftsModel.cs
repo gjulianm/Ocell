@@ -16,7 +16,6 @@ namespace Ocell
         public object ListSelection { get; set; }
 
         public ManageDraftsModel()
-            : base("ManageDrafts")
         {
             Collection = new ObservableCollection<TwitterDraft>(Config.Drafts);
 
@@ -41,11 +40,11 @@ namespace Ocell
             TwitterDraft draft = grid.Tag as TwitterDraft;
             if (draft != null && Config.Drafts.Contains(draft))
             {
-                var accepts = MessageService.AskYesNoQuestion(Resources.AskDeleteDraft, "");
+                var accepts = Notificator.Prompt(Resources.AskDeleteDraft);
                 if (accepts)
                 {
                     Collection.Remove(draft);
-                    MessageService.ShowMessage(Resources.DraftDeleted, "");
+                    Notificator.ShowMessage(Resources.DraftDeleted);
                 }
             }
         }

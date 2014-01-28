@@ -64,7 +64,7 @@ namespace Ocell.Pages.Settings
         {
             if (!parameters.ContainsKey("oauth_token") || !parameters.ContainsKey("oauth_token_secret"))
             {
-                MessageService.ShowError(Localization.Resources.ErrorClientTokens);
+                Notificator.ShowError(Localization.Resources.ErrorClientTokens);
                 GoBack();
                 return;
             }

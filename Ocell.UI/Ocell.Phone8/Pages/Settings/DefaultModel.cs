@@ -85,7 +85,7 @@ namespace Ocell.Settings
 
             showPrivacyPolicy = new DelegateCommand((obj) =>
             {
-                MessageService.ShowMessage(Resources.PrivacyPolicy);
+                Notificator.ShowMessage(Resources.PrivacyPolicy);
             });
 
             pinComposeToStart = new DelegateCommand((obj) =>
@@ -122,14 +122,14 @@ namespace Ocell.Settings
 
                         if (response.Succeeded)
                         {
-                            MessageService.ShowLightNotification(String.Format(Resources.CredentialsSaved, "Pocket"));
+                            Notificator.ShowProgressIndicatorMessage(String.Format(Resources.CredentialsSaved, "Pocket"));
                             Config.ReadLaterCredentials.Pocket = PocketPair;
                             Config.ReadLaterCredentials = Config.ReadLaterCredentials;
                         }
                         else
                         {
                             Progress.IsLoading = false;
-                            MessageService.ShowError(String.Format(Resources.InvalidCredentials, "Pocket"));
+                            Notificator.ShowError(String.Format(Resources.InvalidCredentials, "Pocket"));
                         }
                     }
                     else
@@ -148,14 +148,14 @@ namespace Ocell.Settings
 
                         if (response.Succeeded)
                         {
-                            MessageService.ShowLightNotification(String.Format(Resources.CredentialsSaved, "Instapaper"));
+                            Notificator.ShowProgressIndicatorMessage(String.Format(Resources.CredentialsSaved, "Instapaper"));
                             Config.ReadLaterCredentials.Instapaper = InstapaperPair;
                             Config.ReadLaterCredentials = Config.ReadLaterCredentials;
                         }
                         else
                         {
                             Progress.IsLoading = false;
-                            MessageService.ShowError(String.Format(Resources.InvalidCredentials, "Instapaper"));
+                            Notificator.ShowError(String.Format(Resources.InvalidCredentials, "Instapaper"));
                         }
                     }
                     else
@@ -189,7 +189,6 @@ namespace Ocell.Settings
         }
 
         public DefaultModel()
-            : base("Default")
         {
             SelectedFontSize = FontSizeToIndex(((GlobalSettings)App.Current.Resources["GlobalSettings"]).
                             TweetFontSize);

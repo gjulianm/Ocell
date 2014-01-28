@@ -91,9 +91,10 @@ namespace Ocell.Commands
 
         public async void Execute(object parameter)
         {
-            Dependency.Resolve<INotificationService>().SetLoadingBar(true);
+            Dependency.Resolve<IProgressIndicator>().IsLoading = true;
+            Dependency.Resolve<IProgressIndicator>().IsLoading = true;
             await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).RetweetAsync(new RetweetOptions { Id = ((ITweetable)parameter).Id });
-            Dependency.Resolve<INotificationService>().ShowLightNotification(Resources.Retweeted);
+            Dependency.Resolve<INotificationService>().ShowProgressIndicatorMessage(Resources.Retweeted);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -114,12 +115,12 @@ namespace Ocell.Commands
             if (param.IsFavorited)
             {
                 await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
-                Dependency.Resolve<INotificationService>().ShowLightNotification(Resources.Unfavorited);
+                Dependency.Resolve<INotificationService>().ShowProgressIndicatorMessage(Resources.Unfavorited);
             }
             else
             {
                 await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
-                Dependency.Resolve<INotificationService>().ShowLightNotification(Resources.Favorited);
+                Dependency.Resolve<INotificationService>().ShowProgressIndicatorMessage(Resources.Favorited);
             }
         }
 
@@ -178,7 +179,7 @@ namespace Ocell.Commands
                     msg = Resources.AccountProtected;
                 else
                     msg = Resources.AccountUnprotected;
-                Dependency.Resolve<INotificationService>().ShowLightNotification(msg);
+                Dependency.Resolve<INotificationService>().ShowProgressIndicatorMessage(msg);
             }
             catch (Exception)
             {
@@ -240,7 +241,7 @@ namespace Ocell.Commands
             ITweeter author = tweet.Author;
 
             FilterManager.SetupMute(FilterType.User, author.ScreenName);
-            Dependency.Resolve<INotificationService>().ShowLightNotification(Resources.Filtered);
+            Dependency.Resolve<INotificationService>().ShowProgressIndicatorMessage(Resources.Filtered);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -273,7 +274,7 @@ namespace Ocell.Commands
             {
                 var service = new PocketService(credentials.Pocket.User, credentials.Pocket.Password);
 
-                Dependency.Resolve<INotificationService>().SetLoadingBar(true, Resources.SavingForLater);
+                Dependency.Resolve<INotificationService>().ShowProgressIndicatorMessage(Resources.SavingForLater);
                 if (link != null)
                     response = await service.AddUrl(link.ExpandedValue, tweet.Id);
                 else
@@ -286,7 +287,7 @@ namespace Ocell.Commands
             {
                 var service = new InstapaperService(credentials.Instapaper.User, credentials.Instapaper.Password);
 
-                Dependency.Resolve<INotificationService>().SetLoadingBar(true, Resources.SavingForLater);
+                Dependency.Resolve<INotificationService>().ShowProgressIndicatorMessage(Resources.SavingForLater);
                 if (link != null)
                     response = await service.AddUrl(link.ExpandedValue, tweet.Text);
                 else
@@ -298,12 +299,12 @@ namespace Ocell.Commands
 
         private void CheckResponse(HttpResponse response)
         {
-            Dependency.Resolve<INotificationService>().SetLoadingBar(false);
+            Dependency.Resolve<IProgressIndicator>().IsLoading = false;
 
             if (!response.Succeeded)
                 Dependency.Resolve<INotificationService>().ShowError(Resources.ErrorSavingLater);
             else
-                Dependency.Resolve<INotificationService>().ShowLightNotification(Resources.SavedForLater);
+                Dependency.Resolve<INotificationService>().ShowProgressIndicatorMessage(Resources.SavedForLater);
         }
 
         public event EventHandler CanExecuteChanged;

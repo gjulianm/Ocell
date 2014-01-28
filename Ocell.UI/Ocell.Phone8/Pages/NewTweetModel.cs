@@ -282,13 +282,13 @@ namespace Ocell.Pages
 
             if (!response.Succeeded)
             {
-                MessageService.ShowError(Resources.ErrorCreatingBuffer);
+                Notificator.ShowError(Resources.ErrorCreatingBuffer);
                 return;
             }
 
             TweetText = "";
             DataTransfer.Text = "";
-            MessageService.ShowMessage(Resources.BufferUpdateSent);
+            Notificator.ShowMessage(Resources.BufferUpdateSent);
             GoBack();
         }
 
@@ -301,7 +301,7 @@ namespace Ocell.Pages
 
             if (SelectedAccounts.Count == 0)
             {
-                MessageService.ShowError(Resources.SelectAccount);
+                Notificator.ShowError(Resources.SelectAccount);
                 return;
             }
 
@@ -355,9 +355,9 @@ namespace Ocell.Pages
             BarText = "";
 
             if (response.StatusCode == HttpStatusCode.Forbidden)
-                MessageService.ShowError(Resources.ErrorDuplicateTweet);
+                Notificator.ShowError(Resources.ErrorDuplicateTweet);
             else if (response.StatusCode != HttpStatusCode.OK)
-                MessageService.ShowError(Resources.ErrorMessage);
+                Notificator.ShowError(Resources.ErrorMessage);
             else
             {
                 TweetText = "";
@@ -369,7 +369,7 @@ namespace Ocell.Pages
 
         private bool EnsureTwitlonger()
         {
-            return MessageService.AskOkCancelQuestion(Resources.AskTwitlonger);
+            return Notificator.Prompt(Resources.AskTwitlonger);
         }
 
         private object dicLock = new object();
@@ -384,7 +384,7 @@ namespace Ocell.Pages
             if (!response.Succeeded)
             {
                 Progress.IsLoading = false;
-                MessageService.ShowError(Resources.ErrorCreatingTwitlonger);
+                Notificator.ShowError(Resources.ErrorCreatingTwitlonger);
                 return;
             }
 
@@ -435,13 +435,13 @@ namespace Ocell.Pages
                 Progress.IsLoading = false;
 
             if (response == null)
-                MessageService.ShowError(Resources.Error);
+                Notificator.ShowError(Resources.Error);
             else if (response.StatusCode == HttpStatusCode.Forbidden)
-                MessageService.ShowError(Resources.ErrorDuplicateTweet);
+                Notificator.ShowError(Resources.ErrorDuplicateTweet);
             else if (!response.RequestSucceeded)
             {
                 var errorMsg = response.Error != null ? response.Error.Message : "";
-                MessageService.ShowError(String.Format("{0}: {1} ({2})", Resources.ErrorMessage, errorMsg, response.StatusCode));
+                Notificator.ShowError(String.Format("{0}: {1} ({2})", Resources.ErrorMessage, errorMsg, response.StatusCode));
             }
             else
             {
@@ -498,7 +498,7 @@ namespace Ocell.Pages
 
             if (ScheduledDate == null || ScheduledTime == null)
             {
-                MessageService.ShowError(Resources.SelectDateTimeToSchedule);
+                Notificator.ShowError(Resources.SelectDateTimeToSchedule);
                 return;
             }
 
@@ -512,7 +512,7 @@ namespace Ocell.Pages
             Config.TweetTasks.Add(task);
             Config.SaveTweetTasks();
 
-            MessageService.ShowMessage(Resources.MessageScheduled, "");
+            Notificator.ShowMessage(Resources.MessageScheduled);
             GoBack();
         }
 
@@ -534,7 +534,7 @@ namespace Ocell.Pages
                     if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.NoContent)
                     {
                         error = true;
-                        MessageService.ShowError(string.Format(Resources.ScheduleError, user.ScreenName));
+                        Notificator.ShowError(string.Format(Resources.ScheduleError, user.ScreenName));
                     }
 
                     if (requestsLeft <= 0)
@@ -542,7 +542,7 @@ namespace Ocell.Pages
                         Progress.IsLoading = false;
                         if (!error)
                         {
-                            MessageService.ShowMessage(Resources.MessageScheduled);
+                            Notificator.ShowMessage(Resources.MessageScheduled);
                             GoBack();
                         }
                     }
@@ -562,7 +562,7 @@ namespace Ocell.Pages
         {
             // TODO: Complete.
 
-            MessageService.ShowError("Woops, not supported.");
+            Notificator.ShowError("Woops, not supported.");
         }
 
         public void SaveAsDraft(object param)
@@ -572,7 +572,7 @@ namespace Ocell.Pages
             Config.Drafts.Add(draft);
             Config.Drafts = Config.Drafts;
 
-            MessageService.ShowMessage(Resources.DraftSaved);
+            Notificator.ShowMessage(Resources.DraftSaved);
         }
 
         public TwitterDraft CreateDraft()
@@ -620,7 +620,7 @@ namespace Ocell.Pages
             {
                 if (user != null && ProtectedAccounts.IsProtected(user))
                 {
-                    var result = MessageService.AskYesNoQuestion(String.Format(Resources.AskTweetProtectedAccount, user.ScreenName), "");
+                    var result = Notificator.Prompt(String.Format(Resources.AskTweetProtectedAccount, user.ScreenName));
                     if (!result)
                         return false;
                 }
@@ -632,7 +632,7 @@ namespace Ocell.Pages
         #region User suggestions
         private void UpdateAutocompleter()
         {
-            OnPropertyChanged("Suggestions");
+            RaisePropertyChanged("Suggestions");
             if (Completer != null)
             {
                 Completer.PropertyChanged += (sender, e) =>
