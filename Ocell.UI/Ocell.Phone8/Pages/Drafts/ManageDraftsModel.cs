@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using Ocell.Library;
+﻿using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
-using Ocell.Pages;
 using PropertyChanged;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 namespace Ocell
 {
@@ -19,11 +18,11 @@ namespace Ocell
         public ManageDraftsModel()
             : base("ManageDrafts")
         {
-            collection = new ObservableCollection<TwitterDraft>(Config.Drafts);
+            Collection = new ObservableCollection<TwitterDraft>(Config.Drafts);
 
             this.NavigatingFrom += (sender, e) =>
             {
-                Config.Drafts = new List<TwitterDraft>(collection);
+                Config.Drafts = new List<TwitterDraft>(Collection);
             };
 
             this.PropertyChanged += (sender, e) =>
@@ -45,7 +44,7 @@ namespace Ocell
                 var accepts = MessageService.AskYesNoQuestion(Resources.AskDeleteDraft, "");
                 if (accepts)
                 {
-                    collection.Remove(draft);
+                    Collection.Remove(draft);
                     MessageService.ShowMessage(Resources.DraftDeleted, "");
                 }
             }

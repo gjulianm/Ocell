@@ -51,24 +51,6 @@ namespace Ocell.Pages.Columns
             {
                 var pivot = new ColumnViewPivotModel(account);
 
-                pivot.PropertyChanged += (sender, e) =>
-                    {
-                        if (e.PropertyName == "IsLoading")
-                        {
-                            var p = sender as ColumnViewPivotModel;
-
-                            if (p == null)
-                                return;
-
-                            if (p.IsLoading)
-                                pivotsLoading++;
-                            else
-                                pivotsLoading--;
-
-                            Progress.IsLoading = pivotsLoading > 0;
-                        }
-                    };
-
                 Pivots.Add(pivot);
             }
         }
@@ -90,9 +72,7 @@ namespace Ocell.Pages.Columns
         object loadingSync = new object();
 
         public string Username { get; set; }
-
         public object SelectedResource { get; set; }
-
         public bool FastAddMode { get; set; }
 
         public ColumnViewPivotModel(UserToken User)
@@ -104,12 +84,12 @@ namespace Ocell.Pages.Columns
 
             this.PropertyChanged += (sender, e) =>
                 {
-                    if (e.PropertyName == "SelectedResource" && selectedResource is TwitterResource)
+                    if (e.PropertyName == "SelectedResource" && SelectedResource is TwitterResource)
                     {
                         if (FastAddMode)
-                            AddResource((TwitterResource)selectedResource);
+                            AddResource((TwitterResource)SelectedResource);
                         else
-                            NavigateToResource((TwitterResource)selectedResource);
+                            NavigateToResource((TwitterResource)SelectedResource);
                     }
                 };
 
