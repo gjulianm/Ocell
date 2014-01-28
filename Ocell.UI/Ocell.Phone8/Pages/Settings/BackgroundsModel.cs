@@ -13,9 +13,11 @@ using DanielVaughan;
 using DanielVaughan.Windows;
 using Ocell.Library;
 using System.Collections.Generic;
+using PropertyChanged;
 
 namespace Ocell.Pages.Settings
 {
+    [ImplementPropertyChanged]
     public class BackgroundsModel : ExtendedViewModelBase
     {
         OcellTheme theme;
@@ -26,19 +28,9 @@ namespace Ocell.Pages.Settings
             get { return backgroundNames; }
         }
 
-        Brush backgroundBrush;
-        public Brush BackgroundBrush
-        {
-            get { return backgroundBrush; }
-            set { Assign("BackgroundBrush", ref backgroundBrush, value); }
-        }
+        public Brush BackgroundBrush { get; set; }
 
-        int selectedIndex;
-        public int SelectedIndex
-        {
-            get { return selectedIndex; }
-            set { Assign("SelectedIndex", ref selectedIndex, value); }
-        }
+        public int SelectedIndex { get; set; }
 
         DelegateCommand saveBackground;
         public ICommand SaveBackground
@@ -52,7 +44,7 @@ namespace Ocell.Pages.Settings
             theme = new OcellTheme();
             backgroundNames = new List<string> { "Default", "None (transparent)", "Fabric", "Egg", "Tiles", "Tire", "Floral", "Map", "Diamond" };
 
-            
+
 
             this.PropertyChanged += (sender, e) =>
             {

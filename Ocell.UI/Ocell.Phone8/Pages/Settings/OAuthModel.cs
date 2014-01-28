@@ -22,19 +22,9 @@ namespace Ocell.Pages.Settings
         protected OAuthVersion Version = OAuthVersion.OAuthV1;
 
         #region UI Communication
-        private bool browserVisible;
-        public bool BrowserVisible
-        {
-            get { return browserVisible; }
-            set { Assign("BrowserVisible", ref browserVisible, value); }
-        }
+        public bool BrowserVisible { get; set; }
 
-        private bool isLoading;
-        public bool IsLoading
-        {
-            get { return isLoading; }
-            set { Assign("IsLoading", ref isLoading, value); }
-        }
+        public bool IsLoading { get; set; }
 
         public event Navigator BrowserNavigate;
         private TokenResponse<RequestToken> tokenResponse;

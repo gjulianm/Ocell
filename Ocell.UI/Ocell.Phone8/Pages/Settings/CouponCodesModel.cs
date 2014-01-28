@@ -1,19 +1,16 @@
 ﻿using Ocell.Library;
 using Ocell.Localization;
+using PropertyChanged;
 using System;
 using System.Net;
 using System.Windows.Input;
 
 namespace Ocell.Pages.Settings
 {
+    [ImplementPropertyChanged]
     public class CouponCodesModel : ExtendedViewModelBase
     {
-        string code;
-        public string Code
-        {
-            get { return code; }
-            set { Assign("Code", ref code, value); }
-        }
+        public string Code { get; set; }
 
         DelegateCommand validate;
         public ICommand Validate

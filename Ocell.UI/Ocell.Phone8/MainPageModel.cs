@@ -99,40 +99,15 @@ namespace Ocell
 
         Queue<NotifyCollectionChangedEventArgs> collectionChangedArgs;
 
-        ObservableCollection<TwitterResource> pivots;
-        public ObservableCollection<TwitterResource> Pivots
-        {
-            get { return pivots; }
-            set { Assign("Pivots", ref pivots, value); }
-        }
+        public ObservableCollection<TwitterResource> Pivots { get; set; }
 
-        object selectedPivot;
-        public object SelectedPivot
-        {
-            get { return selectedPivot; }
-            set { Assign("SelectedPivot", ref selectedPivot, value); }
-        }
+        public object SelectedPivot { get; set; }
 
-        string currentAccountName;
-        public string CurrentAccountName
-        {
-            get { return currentAccountName; }
-            set { Assign("CurrentAccountName", ref currentAccountName, value); }
-        }
+        public string CurrentAccountName { get; set; }
 
-        bool isSearching;
-        public bool IsSearching
-        {
-            get { return isSearching; }
-            set { Assign("IsSearching", ref isSearching, value); }
-        }
+        public bool IsSearching { get; set; }
 
-        string userSearch;
-        public string UserSearch
-        {
-            get { return userSearch; }
-            set { Assign("UserSearch", ref userSearch, value); }
-        }
+        public string UserSearch { get; set; }
         #region Commands
         DelegateCommand pinToStart;
         public ICommand PinToStart

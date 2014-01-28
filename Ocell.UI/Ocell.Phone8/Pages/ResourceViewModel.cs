@@ -15,33 +15,20 @@ using Ocell.Library.Twitter;
 using Ocell.Library;
 using System.Linq;
 using Ocell.Controls;
+using PropertyChanged;
 
 namespace Ocell.Pages.Search
 {
+    [ImplementPropertyChanged]
     public class ResourceViewModel : ExtendedViewModelBase
     {
         public static TwitterResource Resource;
 
-        string pageTitle;
-        public string PageTitle
-        {
-            get { return pageTitle; }
-            set { Assign("PageTitle", ref pageTitle, value); }
-        }
+        public string PageTitle { get; set; }
 
-        TweetLoader loader;
-        public TweetLoader Loader
-        {
-            get { return loader; }
-            set { Assign("Loader", ref loader, value); }
-        }
+        public TweetLoader Loader { get; set; }
 
-        ExtendedListBox listbox;
-        public ExtendedListBox Listbox
-        {
-            get { return listbox; }
-            set { Assign("Listbox", ref listbox, value); }
-        }
+        public ExtendedListBox Listbox { get; set; }
 
         DelegateCommand addCommand;
         public ICommand AddCommand
@@ -52,7 +39,7 @@ namespace Ocell.Pages.Search
         public ResourceViewModel()
             : base("Search")
         {
-            PageTitle = Resource != null ? Resource.Title :  "";
+            PageTitle = Resource != null ? Resource.Title : "";
 
             this.PropertyChanged += (sender, property) =>
                 {

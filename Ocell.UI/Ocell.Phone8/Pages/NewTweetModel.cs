@@ -1,10 +1,10 @@
 ﻿using AncoraMVVM.Base;
-using DanielVaughan.Windows;
 using Microsoft.Phone.Tasks;
 using Ocell.Library;
 using Ocell.Library.Tasks;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using PropertyChanged;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,113 +17,39 @@ using TweetSharp;
 
 namespace Ocell.Pages
 {
+    [ImplementPropertyChanged]
     public class NewTweetModel : ExtendedViewModelBase
     {
         #region Fields
-        private IEnumerable<UserToken> accountList;
-        public IEnumerable<UserToken> AccountList
-        {
-            get { return accountList; }
-            set { Assign("AccountList", ref accountList, value); }
-        }
+        public IEnumerable<UserToken> AccountList { get; set; }
 
-        private bool isDM;
-        public bool IsDM
-        {
-            get { return isDM; }
-            set { Assign("IsDM", ref isDM, value); }
-        }
+        public bool IsDM { get; set; }
 
-        private string tweetText;
-        public string TweetText
-        {
-            get { return tweetText; }
-            set { Assign("TweetText", ref tweetText, value); }
-        }
+        public string TweetText { get; set; }
 
-        private int remainingChars;
-        public int RemainingChars
-        {
-            get { return remainingChars; }
-            set { Assign("RemainingChars", ref remainingChars, value); }
-        }
+        public int RemainingChars { get; set; }
 
-        private string remainingCharsStr;
-        public string RemainingCharsStr
-        {
-            get { return remainingCharsStr; }
-            set { Assign("RemainingCharsStr", ref remainingCharsStr, value); }
-        }
+        public string RemainingCharsStr { get; set; }
 
-        private Brush remainingCharsColor;
-        public Brush RemainingCharsColor
-        {
-            get { return remainingCharsColor; }
-            set { Assign("RemainingCharsColor", ref remainingCharsColor, value); }
-        }
+        public Brush RemainingCharsColor { get; set; }
 
-        private bool usesTwitlonger;
-        public bool UsesTwitlonger
-        {
-            get { return usesTwitlonger; }
-            set { Assign("UsesTwitlonger", ref usesTwitlonger, value); }
-        }
+        public bool UsesTwitlonger { get; set; }
 
-        private bool isScheduled;
-        public bool IsScheduled
-        {
-            get { return isScheduled; }
-            set { Assign("IsScheduled", ref isScheduled, value); }
-        }
+        public bool IsScheduled { get; set; }
 
-        private DateTime scheduledDate;
-        public DateTime ScheduledDate
-        {
-            get { return scheduledDate; }
-            set { Assign("ScheduledDate", ref scheduledDate, value); }
-        }
+        public DateTime ScheduledDate { get; set; }
 
-        private DateTime scheduledTime;
-        public DateTime ScheduledTime
-        {
-            get { return scheduledTime; }
-            set { Assign("ScheduledTime", ref scheduledTime, value); }
-        }
+        public DateTime ScheduledTime { get; set; }
 
-        private bool sendingDM;
-        public bool SendingDM
-        {
-            get { return sendingDM; }
-            set { Assign("SendingDM", ref sendingDM, value); }
-        }
+        public bool SendingDM { get; set; }
 
-        private IList selectedAccounts;
-        public IList SelectedAccounts
-        {
-            get { return selectedAccounts; }
-            set { Assign("SelectedAccounts", ref selectedAccounts, value); }
-        }
+        public IList SelectedAccounts { get; set; }
 
-        private bool isGeotagged;
-        public bool IsGeotagged
-        {
-            get { return isGeotagged; }
-            set { Assign("IsGeotagged", ref isGeotagged, value); }
-        }
+        public bool IsGeotagged { get; set; }
 
-        private bool geotagEnabled;
-        public bool GeotagEnabled
-        {
-            get { return geotagEnabled; }
-            set { Assign("GeotagEnabled", ref geotagEnabled, value); }
-        }
+        public bool GeotagEnabled { get; set; }
 
-        private bool isSuggestingUsers;
-        public bool IsSuggestingUsers
-        {
-            get { return isSuggestingUsers; }
-            set { Assign("IsSuggestingUsers", ref isSuggestingUsers, value); }
-        }
+        public bool IsSuggestingUsers { get; set; }
 
         public SafeObservable<string> Suggestions
         {
@@ -136,12 +62,7 @@ namespace Ocell.Pages
             }
         }
 
-        private Autocompleter completer;
-        public Autocompleter Completer
-        {
-            get { return completer; }
-            set { Assign("Completer", ref completer, value); }
-        }
+        public Autocompleter Completer { get; set; }
 
         #endregion Fields
 

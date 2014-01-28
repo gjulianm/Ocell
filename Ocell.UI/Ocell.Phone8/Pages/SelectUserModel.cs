@@ -1,5 +1,6 @@
 ﻿using Ocell.Library;
 using Ocell.Library.Twitter;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,45 +12,21 @@ using TweetSharp;
 
 namespace Ocell.Pages
 {
+    [ImplementPropertyChanged]
     public class SelectUserModel : ExtendedViewModelBase
     {
         private IUserProvider provider;
 
-        CollectionViewSource collection;
-        public CollectionViewSource Collection
-        {
-            get { return collection; }
-            set { Assign("Collection", ref collection, value); }
-        }
+        public CollectionViewSource Collection { get; set; }
 
-        object sender;
-        public object Sender
-        {
-            get { return sender; }
-            set { Assign("Sender", ref sender, value); }
-        }
+        public object Sender { get; set; }
 
 
-        object destinatary;
-        public object Destinatary
-        {
-            get { return destinatary; }
-            set { Assign("Destinatary", ref destinatary, value); }
-        }
+        public object Destinatary { get; set; }
 
-        string userFilter;
-        public string UserFilter
-        {
-            get { return userFilter; }
-            set { Assign("UserFilter", ref userFilter, value); }
-        }
+        public string UserFilter { get; set; }
 
-        IEnumerable<UserToken> accounts;
-        public IEnumerable<UserToken> Accounts
-        {
-            get { return accounts; }
-            set { Assign("Accounts", ref accounts, value); }
-        }
+        public IEnumerable<UserToken> Accounts { get; set; }
 
         DelegateCommand goNext;
         public ICommand GoNext

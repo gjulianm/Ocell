@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Ocell.Compatibility
 {
-    public class WP8TileManager : TileManager
+    public class WP8TileManager //: TileManager
     {
-        public override void ClearMainTileCount()
+        /*public override void ClearMainTileCount()
         {
             IconicTileData data = new IconicTileData()
             {
@@ -118,6 +118,6 @@ namespace Ocell.Compatibility
 
             ShellTile.Create(ComposeUri, ComposeTile);
 #endif
-        }
+        }*/
     }
 }

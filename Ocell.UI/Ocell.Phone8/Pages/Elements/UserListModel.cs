@@ -13,20 +13,17 @@ using TweetSharp;
 using System.Windows.Data;
 using Ocell.Localization;
 using System.Threading.Tasks;
+using PropertyChanged;
 
 namespace Ocell.Pages.Elements
 {
+    [ImplementPropertyChanged]
     public class UserListModel : ExtendedViewModelBase
     {
         string whatUserList;
         string user;
 
-        string pageTitle;
-        public string PageTitle
-        {
-            get { return pageTitle; }
-            set { Assign("PageTitle", ref pageTitle, value); }
-        }
+        public string PageTitle { get; set; }
 
         SafeObservable<TwitterUser> list;
 
@@ -37,12 +34,7 @@ namespace Ocell.Pages.Elements
             get { return viewSource.View; }
         }
 
-        object selectedUser;
-        public object SelectedUser
-        {
-            get { return selectedUser; }
-            set { Assign("SelectedUser", ref selectedUser, value); }
-        }
+        public object SelectedUser { get; set; }
 
         public UserListModel()
             : base("UserList")

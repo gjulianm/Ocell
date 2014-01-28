@@ -5,6 +5,7 @@ using Ocell.Commands;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using PropertyChanged;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,99 +18,35 @@ using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
+    [ImplementPropertyChanged]
     public class TweetModel : ExtendedViewModelBase
     {
-        ApplicationBarMode appBarMode;
-        public ApplicationBarMode AppBarMode
-        {
-            get { return appBarMode; }
-            set { Assign("AppBarMode", ref appBarMode, value); }
-        }
+        public ApplicationBarMode AppBarMode { get; set; }
 
-        bool completed;
-        public bool Completed
-        {
-            get { return completed; }
-            set { Assign("Completed", ref completed, value); }
-        }
+        public bool Completed { get; set; }
 
-        bool isMuting;
-        public bool IsMuting
-        {
-            get { return isMuting; }
-            set { Assign("IsMuting", ref isMuting, value); }
-        }
+        public bool IsMuting { get; set; }
 
-        TwitterStatus tweet;
-        public TwitterStatus Tweet
-        {
-            get { return tweet; }
-            set { Assign("Tweet", ref tweet, value); }
-        }
+        public TwitterStatus Tweet { get; set; }
 
-        bool hasReplies;
-        public bool HasReplies
-        {
-            get { return hasReplies; }
-            set { Assign("HasReplies", ref hasReplies, value); }
-        }
+        public bool HasReplies { get; set; }
 
-        bool isFavorited;
-        public bool IsFavorited
-        {
-            get { return isFavorited; }
-            set { Assign("IsFavorited", ref isFavorited, value); }
-        }
+        public bool IsFavorited { get; set; }
 
-        bool hasImage;
-        public bool HasImage
-        {
-            get { return hasImage; }
-            set { Assign("HasImage", ref hasImage, value); }
-        }
+        public bool HasImage { get; set; }
 
-        ObservableCollection<ITweeter> usersWhoRetweeted;
-        public ObservableCollection<ITweeter> UsersWhoRetweeted
-        {
-            get { return usersWhoRetweeted; }
-            set { Assign("UsersWhoRetweeted", ref usersWhoRetweeted, value); }
-        }
+        public ObservableCollection<ITweeter> UsersWhoRetweeted { get; set; }
 
-        int retweetCount;
-        public int RetweetCount
-        {
-            get { return retweetCount; }
-            set { Assign("RetweetCount", ref retweetCount, value); }
-        }
+        public int RetweetCount { get; set; }
 
 
-        bool hasRetweets;
-        public bool HasRetweets
-        {
-            get { return hasRetweets; }
-            set { Assign("HasRetweets", ref hasRetweets, value); }
-        }
+        public bool HasRetweets { get; set; }
 
-        string whoRetweeted;
-        public string WhoRetweeted
-        {
-            get { return whoRetweeted; }
-            set { Assign("WhoRetweeted", ref whoRetweeted, value); }
-        }
+        public string WhoRetweeted { get; set; }
 
-        string avatar;
-        public string Avatar
-        {
-            get { return avatar; }
-            set { Assign("Avatar", ref avatar, value); }
-        }
+        public string Avatar { get; set; }
 
-        string replyText;
-        public string ReplyText
-        {
-            get { return replyText; }
-            set { Assign("ReplyText", ref replyText, value); }
-        }
+        public string ReplyText { get; set; }
 
         DelegateCommand deleteTweet;
         public ICommand DeleteTweet
@@ -141,26 +78,11 @@ namespace Ocell.Pages.Elements
             get { return sendTweet; }
         }
 
-        string imageSource;
-        public string ImageSource
-        {
-            get { return imageSource; }
-            set { Assign("ImageSource", ref imageSource, value); }
-        }
+        public string ImageSource { get; set; }
 
-        SafeObservable<ITweetable> replies;
-        public SafeObservable<ITweetable> Replies
-        {
-            get { return replies; }
-            protected set { Assign("Replies", ref replies, value); }
-        }
+        public SafeObservable<ITweetable> Replies { get; set; }
 
-        SafeObservable<string> images;
-        public SafeObservable<string> Images
-        {
-            get { return images; }
-            protected set { Assign("Images", ref images, value); }
-        }
+        public SafeObservable<string> Images { get; set; }
 
         public event EventHandler<EventArgs<ITweetable>> TweetSent;
 

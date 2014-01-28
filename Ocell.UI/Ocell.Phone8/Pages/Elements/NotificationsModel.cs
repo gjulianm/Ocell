@@ -11,10 +11,12 @@ using TweetSharp;
 #if WP8
 using Windows.Phone.Speech.Synthesis;
 using AncoraMVVM.Base.Collections;
+using PropertyChanged;
 #endif
 
 namespace Ocell.Pages.Elements
 {
+    [ImplementPropertyChanged]
     public class NotificationsModel : ExtendedViewModelBase
     {
         private DateTime lastCheckTime;

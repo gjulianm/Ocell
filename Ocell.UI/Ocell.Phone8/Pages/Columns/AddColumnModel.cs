@@ -17,38 +17,20 @@ using System.Threading;
 using DanielVaughan.Windows;
 using System.Linq;
 using System.Threading.Tasks;
+using PropertyChanged;
 
 namespace Ocell.Pages.Columns
 {
+    [ImplementPropertyChanged]
     public class AddColumnModel : ExtendedViewModelBase
     {
-        SafeObservable<TwitterList> lists;
-        public SafeObservable<TwitterList> Lists
-        {
-            get { return lists; }
-            set { Assign("Lists", ref lists, value); }
-        }
+        public SafeObservable<TwitterList> Lists { get; set; }
 
-        ObservableCollection<TwitterResource> core;
-        public ObservableCollection<TwitterResource> Core
-        {
-            get { return core; }
-            set { Assign("Core", ref core, value); }
-        }
+        public ObservableCollection<TwitterResource> Core { get; set; }
 
-        object coreSelection;
-        public object CoreSelection
-        {
-            get { return coreSelection; }
-            set { Assign("CoreSelection", ref coreSelection, value); }
-        }
+        public object CoreSelection { get; set; }
 
-        object listSelection;
-        public object ListSelection
-        {
-            get { return listSelection; }
-            set { Assign("ListSelection", ref listSelection, value); }
-        }
+        public object ListSelection { get; set; }
 
         DelegateCommand reloadLists;
         public ICommand ReloadLists

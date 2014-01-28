@@ -4,24 +4,17 @@ using System.Windows.Controls;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using Ocell.Pages;
+using PropertyChanged;
 
 namespace Ocell
 {
+    [ImplementPropertyChanged]
     public class ManageDraftsModel : ExtendedViewModelBase
     {
-        ObservableCollection<TwitterDraft> collection;
-        public ObservableCollection<TwitterDraft> Collection
-        {
-            get { return collection; }
-            set { Assign("Collection", ref collection, value); }
-        }
+        public ObservableCollection<TwitterDraft> Collection { get; set; }
 
-        object listSelection;
-        public object ListSelection
-        {
-            get { return listSelection; }
-            set { Assign("ListSelection", ref listSelection, value); }
-        }
+        public object ListSelection { get; set; }
 
         public ManageDraftsModel()
             : base("ManageDrafts")

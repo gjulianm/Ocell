@@ -3,6 +3,7 @@ using Microsoft.Phone.Tasks;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,115 +15,41 @@ using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
+    [ImplementPropertyChanged]
     public class UserModel : ExtendedViewModelBase
     {
         public TwitterUser User { get; set; } // Not a property, don't need Assign().
 
-        bool friendshipRetrieved;
-        public bool FriendshipRetrieved
-        {
-            get { return friendshipRetrieved; }
-            set { Assign("FriendshipRetrieved", ref friendshipRetrieved, value); }
-        }
+        public bool FriendshipRetrieved { get; set; }
 
-        bool followed;
-        public bool Followed
-        {
-            get { return followed; }
-            set { Assign("Followed", ref followed, value); }
-        }
+        public bool Followed { get; set; }
 
-        bool followsMe;
-        public bool FollowsMe
-        {
-            get { return followsMe; }
-            set { Assign("FollowsMe", ref followsMe, value); }
-        }
+        public bool FollowsMe { get; set; }
 
-        string relationshipText;
-        public string RelationshipText
-        {
-            get { return relationshipText; }
-            set { Assign("RelationshipText", ref relationshipText, value); }
-        }
+        public string RelationshipText { get; set; }
 
-        bool blocked;
-        public bool Blocked
-        {
-            get { return blocked; }
-            set { Assign("Blocked", ref blocked, value); }
-        }
+        public bool Blocked { get; set; }
 
-        bool isOwner;
-        public bool IsOwner
-        {
-            get { return isOwner; }
-            set { Assign("IsOwner", ref isOwner, value); }
-        }
+        public bool IsOwner { get; set; }
 
         #region Fields.
-        string avatar;
-        public string Avatar
-        {
-            get { return avatar; }
-            set { Assign("Avatar", ref avatar, value); }
-        }
+        public string Avatar { get; set; }
 
-        string name;
-        public string Name
-        {
-            get { return name; }
-            set { Assign("Name", ref name, value); }
-        }
+        public string Name { get; set; }
 
-        string screenName;
-        public string ScreenName
-        {
-            get { return screenName; }
-            set { Assign("ScreenName", ref screenName, value); }
-        }
+        public string ScreenName { get; set; }
 
-        string website;
-        public string Website
-        {
-            get { return website; }
-            set { Assign("Website", ref website, value); }
-        }
+        public string Website { get; set; }
 
-        string biography;
-        public string Biography
-        {
-            get { return biography; }
-            set { Assign("Biography", ref biography, value); }
-        }
+        public string Biography { get; set; }
 
-        string tweets;
-        public string Tweets
-        {
-            get { return tweets; }
-            set { Assign("Tweets", ref tweets, value); }
-        }
+        public string Tweets { get; set; }
 
-        string following;
-        public string Following
-        {
-            get { return following; }
-            set { Assign("Following", ref following, value); }
-        }
+        public string Following { get; set; }
 
-        string followers;
-        public string Followers
-        {
-            get { return followers; }
-            set { Assign("Followers", ref followers, value); }
-        }
+        public string Followers { get; set; }
 
-        bool websiteEnabled;
-        public bool WebsiteEnabled
-        {
-            get { return websiteEnabled; }
-            set { Assign("WebsiteEnabled", ref websiteEnabled, value); }
-        }
+        public bool WebsiteEnabled { get; set; }
         #endregion
 
         #region Commands

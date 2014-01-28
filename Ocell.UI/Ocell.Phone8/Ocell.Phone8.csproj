@@ -29,6 +29,7 @@
     <Utf8Output>true</Utf8Output>
     <ExpressionBlendVersion>5.0.30924.0</ExpressionBlendVersion>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <FodyPath>..\..\packages\Fody.1.20.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -209,6 +210,7 @@
       <DependentUpon>ColumnView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Columns\ColumnViewModel.cs" />
+    <Compile Include="Pages\Columns\ImplementPropertyChanged.cs" />
     <Compile Include="Pages\Columns\ManageColumns.xaml.cs">
       <DependentUpon>ManageColumns.xaml</DependentUpon>
     </Compile>
@@ -326,6 +328,7 @@
     <None Include="Endpoints\_TwitterService.7.Users.json" />
     <None Include="Endpoints\_TwitterService.8.SuggestedUsers.json" />
     <None Include="Endpoints\_TwitterService.9.Favorites.json" />
+    <None Include="Fody.targets" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">
@@ -334,6 +337,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assembly.ico" />
+    <Content Include="FodyWeavers.xml" />
     <Content Include="Images\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -562,6 +566,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\PCLWebUtility.1.0.2\Lib\portable-net4+sl4+wp7+win8\PCLWebUtility.dll</HintPath>
     </Reference>
+    <Reference Include="PropertyChanged">
+      <HintPath>..\..\packages\PropertyChanged.Fody.1.45.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\PropertyChanged.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sharplonger">
       <HintPath>..\..\packages\Sharplonger.0.1.0-alpha\lib\portable-net45+sl50+wp80+win\Sharplonger.dll</HintPath>
     </Reference>
@@ -732,4 +740,5 @@
     <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
     <Error Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
+  <Import Project="Fody.targets" />
 </Project>

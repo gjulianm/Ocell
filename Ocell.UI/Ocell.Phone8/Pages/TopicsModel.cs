@@ -19,48 +19,25 @@ using TweetSharp;
 using System.Device.Location;
 using System.Linq;
 using Ocell.Pages.Search;
+using PropertyChanged;
 
 
 namespace Ocell.Pages
 {
+    [ImplementPropertyChanged]
     public class TopicsModel : ExtendedViewModelBase
     {
         GeoCoordinateWatcher geoWatcher;
 
-        string placeName;
-        public string PlaceName
-        {
-            get { return placeName; }
-            set { Assign("PlaceName", ref placeName, value); }
-        }
+        public string PlaceName { get; set; }
 
-        object listSelection;
-        public object ListSelection
-        {
-            get { return listSelection; }
-            set { Assign("ListSelection", ref listSelection, value); }
-        }
+        public object ListSelection { get; set; }
 
-        IEnumerable<TwitterTrend> collection;
-        public IEnumerable<TwitterTrend> Collection
-        {
-            get { return collection; }
-            set { Assign("Collection", ref collection, value); }
-        }
+        public IEnumerable<TwitterTrend> Collection { get; set; }
 
-        ObservableCollection<string> locations;
-        public ObservableCollection<string> Locations
-        {
-            get { return locations; }
-            set { Assign("Locations", ref locations, value); }
-        }
+        public ObservableCollection<string> Locations { get; set; }
 
-        string selectedLocation;
-        public string SelectedLocation
-        {
-            get { return selectedLocation; }
-            set { Assign("SelectedLocation", ref selectedLocation, value); }
-        }
+        public string SelectedLocation { get; set; }
 
         Dictionary<string, long> LocationMap;
 

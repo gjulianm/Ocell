@@ -2,6 +2,7 @@
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Pages.Search;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,21 +15,12 @@ using TweetSharp;
 
 namespace Ocell.Pages.Columns
 {
+    [ImplementPropertyChanged]
     public class ColumnViewModel : ExtendedViewModelBase
     {
-        SafeObservable<ColumnViewPivotModel> pivots;
-        public SafeObservable<ColumnViewPivotModel> Pivots
-        {
-            get { return pivots; }
-            set { Assign("Pivots", ref pivots, value); }
-        }
+        public SafeObservable<ColumnViewPivotModel> Pivots { get; set; }
 
-        bool fastAddMode;
-        public bool FastAddMode
-        {
-            get { return fastAddMode; }
-            set { Assign("FastAddMode", ref fastAddMode, value); }
-        }
+        public bool FastAddMode { get; set; }
 
         DelegateCommand enableQuickAdd;
         public ICommand EnableQuickAdd
@@ -93,31 +85,16 @@ namespace Ocell.Pages.Columns
         static List<TwitterResource> searchesCache = new List<TwitterResource>();
 
         object resourcesSync = new object();
-        SafeObservable<TwitterResource> resources;
-        public SafeObservable<TwitterResource> Resources
-        {
-            get { return resources; }
-            set { Assign("Resources", ref resources, value); }
-        }
+        public SafeObservable<TwitterResource> Resources { get; set; }
 
 
         UserToken user;
         int loading = 0;
         object loadingSync = new object();
 
-        string username;
-        public string Username
-        {
-            get { return username; }
-            set { Assign("Username", ref username, value); }
-        }
+        public string Username { get; set; }
 
-        object selectedResource;
-        public object SelectedResource
-        {
-            get { return selectedResource; }
-            set { Assign("SelectedResource", ref selectedResource, value); }
-        }
+        public object SelectedResource { get; set; }
 
         public bool FastAddMode { get; set; }
 

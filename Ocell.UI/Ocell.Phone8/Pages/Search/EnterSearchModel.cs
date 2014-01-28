@@ -14,9 +14,11 @@ using DanielVaughan.Windows;
 using Ocell.Library.Twitter;
 using Ocell.Library;
 using System.Linq;
+using PropertyChanged;
 
 namespace Ocell.Pages.Search
 {
+    [ImplementPropertyChanged]
     public class EnterSearchModel : ExtendedViewModelBase
     {
         string query;
