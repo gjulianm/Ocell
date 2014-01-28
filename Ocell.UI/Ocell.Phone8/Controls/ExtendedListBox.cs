@@ -1,4 +1,6 @@
-﻿using LinqToVisualTree;
+﻿using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
+using LinqToVisualTree;
 using Microsoft.Phone.Controls;
 using Ocell.Library;
 using Ocell.Library.Filtering;
@@ -192,7 +194,7 @@ namespace Ocell.Controls
 
         void Loader_Error(TwitterResponse response)
         {
-            var messager = Dependency.Resolve<IMessageService>();
+            var messager = Dependency.Resolve<INotificationService>();
             if (DateTime.Now > lastErrorFired.AddSeconds(10))
             {
                 lastErrorFired = DateTime.Now;

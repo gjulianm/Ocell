@@ -1,6 +1,9 @@
 ﻿
 
+using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
 using Microsoft.Phone.Controls;
+using Ocell.Compatibility;
 using Ocell.Controls;
 using Ocell.Library;
 using Ocell.Library.Twitter;
@@ -103,7 +106,7 @@ namespace Ocell
             if (!TrialInformation.IsFullFeatured)
                 return false;
 
-            var result = Dependency.Resolve<IMessageService>().AskYesNoQuestion(Localization.Resources.AskEnablePush);
+            var result = Dependency.Resolve<INotificationService>().AskYesNoQuestion(Localization.Resources.AskEnablePush);
             Config.PushEnabled = result;
             return result;
         }
@@ -126,7 +129,7 @@ namespace Ocell
         {
             if (!Config.Accounts.Any())
             {
-                var service = Dependency.Resolve<IMessageService>();
+                var service = Dependency.Resolve<INotificationService>();
                 bool result = service.AskYesNoQuestion(Localization.Resources.YouHaveToLogin, "");
                 if (result)
                 {
@@ -143,7 +146,7 @@ namespace Ocell
         {
             if ((Config.FollowMessageShown == false || Config.FollowMessageShown == null) && ServiceDispatcher.CanGetServices)
             {
-                var service = Dependency.Resolve<IMessageService>();
+                var service = Dependency.Resolve<INotificationService>();
                 bool result = service.AskYesNoQuestion(Localization.Resources.FollowOcellAppMessage, "");
                 if (result)
                     ServiceDispatcher.GetDefaultService().FollowUserAsync(new FollowUserOptions { ScreenName = "OcellApp" });

@@ -1,11 +1,7 @@
-﻿using Microsoft.Phone.Shell;
-using Ocell.Library.Notifications;
-using Ocell.Library.Twitter;
+﻿using Ocell.Library.Twitter;
 using Ocell.Localization;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Ocell.Compatibility
 {
@@ -52,7 +48,8 @@ namespace Ocell.Compatibility
             return Tweet;
         }
 
-        public bool ComposeTileIsCreated()
+        // TODO: What about this.
+        /*public bool ComposeTileIsCreated()
         {
             if (ShellTile.ActiveTiles.Count() == 0)
                 return false;
@@ -68,7 +65,7 @@ namespace Ocell.Compatibility
                 && !string.IsNullOrWhiteSpace(item.NavigationUri.ToString()) &&
                 item.NavigationUri.ToString().Contains(Uri.EscapeDataString(Resource.String)));
             return ColumnTile != null;
-        }
+        }*/
 
         public abstract void CreateComposeTile(); // Avoid Store complaints about "mehhh can't use ShellTile.Create in backgroundAgent"
 

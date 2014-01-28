@@ -1,4 +1,7 @@
-﻿using Microsoft.Phone.Tasks;
+﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.IoC;
+using Microsoft.Phone.Tasks;
+using Ocell.Compatibility;
 using Ocell.Library;
 using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;

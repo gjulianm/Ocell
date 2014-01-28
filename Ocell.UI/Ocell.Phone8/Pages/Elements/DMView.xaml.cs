@@ -1,4 +1,6 @@
-﻿using Microsoft.Phone.Controls;
+﻿using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
+using Microsoft.Phone.Controls;
 using Microsoft.Phone.Tasks;
 using Ocell.Library;
 using Ocell.Library.Filtering;
@@ -162,7 +164,7 @@ namespace Ocell.Pages.Elements
             item.Click += (sender, e) =>
             {
                 var filter = FilterManager.SetupMute(FilterType.Text, "#" + Hashtag.Text);
-                Dependency.Resolve<IMessageService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
+                Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
             };
             return CreateBaseLink("#" + Hashtag.Text, Localization.Resources.CopyHashtag, "#" + Hashtag.Text, item);
         }
@@ -177,7 +179,7 @@ namespace Ocell.Pages.Elements
             item.Click += (sender, e) =>
             {
                 var filter = FilterManager.SetupMute(FilterType.User, Mention.ScreenName);
-                Dependency.Resolve<IMessageService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
+                Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
             };
             return CreateBaseLink("@" + Mention.ScreenName, Localization.Resources.CopyUsername, "@" + Mention.ScreenName, item);
         }
@@ -195,10 +197,10 @@ namespace Ocell.Pages.Elements
                 if (Uri.TryCreate(URL.ExpandedValue, UriKind.Absolute, out uri))
                 {
                     var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
-                    Dependency.Resolve<IMessageService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
+                    Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
                 }
                 else
-                    Dependency.Resolve<IMessageService>().ShowError(Localization.Resources.NotValidURL);
+                    Dependency.Resolve<INotificationService>().ShowError(Localization.Resources.NotValidURL);
             };
 
             string value = string.IsNullOrWhiteSpace(URL.ExpandedValue) ? URL.Value : URL.ExpandedValue;
@@ -219,10 +221,10 @@ namespace Ocell.Pages.Elements
                 if (Uri.TryCreate(Media.DisplayUrl, UriKind.Absolute, out uri))
                 {
                     var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
-                    Dependency.Resolve<IMessageService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
+                    Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
                 }
                 else
-                    Dependency.Resolve<IMessageService>().ShowError(Localization.Resources.NotValidURL);
+                    Dependency.Resolve<INotificationService>().ShowError(Localization.Resources.NotValidURL);
             };
 
             return CreateBaseLink(Media.DisplayUrl, Localization.Resources.CopyLink, Media.DisplayUrl, item);

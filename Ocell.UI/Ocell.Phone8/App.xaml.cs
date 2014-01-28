@@ -62,14 +62,9 @@ namespace Ocell
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
 
-            SimpleContainer container = new SimpleContainer();
-            container.InitializeServiceLocator();
-
             OAuthUtility.ComputeHash = (key, buffer) => { using (var hmac = new HMACSHA1(key)) { return hmac.ComputeHash(buffer); } };
 
             // TODO: solve this.
-            Dependency.Register<INavigationService, FrameNavigationService>(true);
-            Dependency.Register<IMessageService, MessageService>(true);
             Dependency.Register<IUserProvider, UserProvider>();
             Dependency.Register<IScrollController, DummyScrollController>();
             Dependency.Register<IReadingPositionManager, WP8ReadingPositionManager>();

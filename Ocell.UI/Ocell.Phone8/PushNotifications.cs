@@ -1,4 +1,6 @@
-﻿using Microsoft.Phone.Notification;
+﻿using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
+using Microsoft.Phone.Notification;
 using Ocell.Library;
 using Ocell.Library.Notifications;
 using Ocell.Library.Twitter;
@@ -147,7 +149,7 @@ namespace Ocell
         private static void ReportRegisterToUser(HttpResponseMessage resp)
         {
             string msg = string.Format("Response from push server: {0}", resp.StatusCode);
-            Dependency.Resolve<IMessageService>().ShowMessage(msg);
+            Dependency.Resolve<INotificationService>().ShowMessage(msg);
         }
 
         public static void UnregisterPushChannel(UserToken user, string type)

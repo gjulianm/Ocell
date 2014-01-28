@@ -1,6 +1,6 @@
-﻿using AncoraMVVM.Rest;
-
-
+﻿using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
+using AncoraMVVM.Rest;
 using Microsoft.Phone.Controls;
 using Ocell.Library;
 using Ocell.Library.Filtering;
@@ -91,9 +91,9 @@ namespace Ocell.Commands
 
         public async void Execute(object parameter)
         {
-            Dependency.Resolve<IMessageService>().SetLoadingBar(true);
+            Dependency.Resolve<INotificationService>().SetLoadingBar(true);
             await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).RetweetAsync(new RetweetOptions { Id = ((ITweetable)parameter).Id });
-            Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Retweeted);
+            Dependency.Resolve<INotificationService>().ShowLightNotification(Resources.Retweeted);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -114,12 +114,12 @@ namespace Ocell.Commands
             if (param.IsFavorited)
             {
                 await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
-                Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Unfavorited);
+                Dependency.Resolve<INotificationService>().ShowLightNotification(Resources.Unfavorited);
             }
             else
             {
                 await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
-                Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Favorited);
+                Dependency.Resolve<INotificationService>().ShowLightNotification(Resources.Favorited);
             }
         }
 
@@ -178,11 +178,11 @@ namespace Ocell.Commands
                     msg = Resources.AccountProtected;
                 else
                     msg = Resources.AccountUnprotected;
-                Dependency.Resolve<IMessageService>().ShowLightNotification(msg);
+                Dependency.Resolve<INotificationService>().ShowLightNotification(msg);
             }
             catch (Exception)
             {
-                Dependency.Resolve<IMessageService>().ShowError(Resources.ErrorMessage);
+                Dependency.Resolve<INotificationService>().ShowError(Resources.ErrorMessage);
             }
         }
 
@@ -240,7 +240,7 @@ namespace Ocell.Commands
             ITweeter author = tweet.Author;
 
             FilterManager.SetupMute(FilterType.User, author.ScreenName);
-            Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.Filtered);
+            Dependency.Resolve<INotificationService>().ShowLightNotification(Resources.Filtered);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -273,7 +273,7 @@ namespace Ocell.Commands
             {
                 var service = new PocketService(credentials.Pocket.User, credentials.Pocket.Password);
 
-                Dependency.Resolve<IMessageService>().SetLoadingBar(true, Resources.SavingForLater);
+                Dependency.Resolve<INotificationService>().SetLoadingBar(true, Resources.SavingForLater);
                 if (link != null)
                     response = await service.AddUrl(link.ExpandedValue, tweet.Id);
                 else
@@ -286,7 +286,7 @@ namespace Ocell.Commands
             {
                 var service = new InstapaperService(credentials.Instapaper.User, credentials.Instapaper.Password);
 
-                Dependency.Resolve<IMessageService>().SetLoadingBar(true, Resources.SavingForLater);
+                Dependency.Resolve<INotificationService>().SetLoadingBar(true, Resources.SavingForLater);
                 if (link != null)
                     response = await service.AddUrl(link.ExpandedValue, tweet.Text);
                 else
@@ -298,12 +298,12 @@ namespace Ocell.Commands
 
         private void CheckResponse(HttpResponse response)
         {
-            Dependency.Resolve<IMessageService>().SetLoadingBar(false);
+            Dependency.Resolve<INotificationService>().SetLoadingBar(false);
 
             if (!response.Succeeded)
-                Dependency.Resolve<IMessageService>().ShowError(Resources.ErrorSavingLater);
+                Dependency.Resolve<INotificationService>().ShowError(Resources.ErrorSavingLater);
             else
-                Dependency.Resolve<IMessageService>().ShowLightNotification(Resources.SavedForLater);
+                Dependency.Resolve<INotificationService>().ShowLightNotification(Resources.SavedForLater);
         }
 
         public event EventHandler CanExecuteChanged;
