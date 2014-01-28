@@ -47,7 +47,7 @@ namespace Ocell.Pages.Elements
         public UserListModel()
             : base("UserList")
         {
-            whatUserList ="";
+            whatUserList = "";
             user = "";
             PageTitle = whatUserList;
             list = new SafeObservable<TwitterUser>();
@@ -56,9 +56,9 @@ namespace Ocell.Pages.Elements
             viewSource.View.SortDescriptions.Add(new System.ComponentModel.SortDescription("ScreenName", System.ComponentModel.ListSortDirection.Ascending));
 
 
-            
 
-            
+
+
 
             this.PropertyChanged += (sender, e) =>
             {
@@ -66,7 +66,7 @@ namespace Ocell.Pages.Elements
                 {
                     TwitterUser selected = SelectedUser as TwitterUser;
                     if (selected != null)
-                    {                        
+                    {
                         Navigate("/Pages/Elements/User.xaml?user=" + selected.ScreenName);
                         SelectedUser = null;
                     }
@@ -98,7 +98,7 @@ namespace Ocell.Pages.Elements
                 return;
             }
 
-            IsLoading = true;
+            Progress.IsLoading = true;
         }
 
 
@@ -134,7 +134,7 @@ namespace Ocell.Pages.Elements
             }
             else
             {
-                IsLoading = false;
+                Progress.IsLoading = false;
             }
         }
     }

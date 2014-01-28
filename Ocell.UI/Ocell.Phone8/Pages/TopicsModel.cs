@@ -108,7 +108,7 @@ namespace Ocell.Pages
 
             GetLocations();
 
-            IsLoading = true;
+            Progress.IsLoading = true;
             if (Config.EnabledGeolocation == true && (Config.TopicPlaceId == -1 || Config.TopicPlaceId == null))
                 GetMyLocation();
             else
@@ -152,11 +152,11 @@ namespace Ocell.Pages
 
         private async void GetTopics()
         {
-            IsLoading = true;
-            
+            Progress.IsLoading = true;
+
             var response = await ServiceDispatcher.GetCurrentService().ListLocalTrendsForAsync(new ListLocalTrendsForOptions { Id = (int)currentLocation });
 
-            IsLoading = false;
+            Progress.IsLoading = false;
             if (!response.RequestSucceeded)
             {
                 MessageService.ShowError(Localization.Resources.ErrorLoadingTT);
@@ -202,7 +202,7 @@ namespace Ocell.Pages
         private void OnSelectionChanged()
         {
             TwitterTrend trend = ListSelection as TwitterTrend;
-            
+
             if (trend == null)
                 return;
 

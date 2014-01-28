@@ -221,7 +221,7 @@ namespace Ocell.Pages.Elements
         private void GetReplies()
         {
             var convService = new ConversationService(DataTransfer.CurrentAccount);
-            convService.Finished += (sender, e) => IsLoading = false;
+            convService.Finished += (sender, e) => Progress.IsLoading = false;
             convService.GetConversationForStatus(Tweet, (statuses, response) =>
             {
                 if (statuses != null)
@@ -326,11 +326,11 @@ namespace Ocell.Pages.Elements
 
             sendTweet = new DelegateCommand(async (parameter) =>
             {
-                IsLoading = true;
+                Progress.IsLoading = true;
                 BarText = Resources.SendingTweet;
                 var response = await ServiceDispatcher.GetCurrentService().SendTweetAsync(new SendTweetOptions { InReplyToStatusId = Tweet.Id, Status = ReplyText });
 
-                IsLoading = false;
+                Progress.IsLoading = false;
                 BarText = "";
                 if (!response.RequestSucceeded)
                     MessageService.ShowError(response.Error != null ? response.Error.Message : Resources.UnknownValue);
@@ -355,13 +355,13 @@ namespace Ocell.Pages.Elements
 
         public void ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            IsLoading = false;
+            Progress.IsLoading = false;
             MessageService.ShowError(Localization.Resources.ErrorDownloadingImage);
         }
 
         public void ImageOpened(object sender, RoutedEventArgs e)
         {
-            IsLoading = false;
+            Progress.IsLoading = false;
             BarText = "";
         }
 
@@ -417,7 +417,7 @@ namespace Ocell.Pages.Elements
             if (Images.Count > 0)
             {
                 HasImage = true;
-                IsLoading = true;
+                Progress.IsLoading = true;
                 BarText = Localization.Resources.DownloadingImage;
             }
         }

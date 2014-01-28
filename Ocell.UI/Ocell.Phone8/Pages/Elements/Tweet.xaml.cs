@@ -1,4 +1,6 @@
 ﻿
+using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
 using DanielVaughan;
 using DanielVaughan.Services;
 using Microsoft.Phone.Controls;
@@ -76,7 +78,7 @@ namespace Ocell.Pages.Elements
             conversation.Loader.PropertyChanged += (s, ea) =>
             {
                 if (ea.PropertyName == "IsLoading")
-                    viewModel.IsLoading = conversation.Loader.IsLoading;
+                    Dependency.Resolve<IProgressIndicator>().IsLoading = conversation.Loader.IsLoading;
             };
         }
 

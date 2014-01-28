@@ -76,7 +76,7 @@ namespace Ocell.Pages.Columns
                             else
                                 pivotsLoading--;
 
-                            IsLoading = pivotsLoading > 0;
+                            Progress.IsLoading = pivotsLoading > 0;
                         }
                     };
 
@@ -220,7 +220,7 @@ namespace Ocell.Pages.Columns
             loading--;
 
             if (loading <= 0)
-                IsLoading = false;
+                Progress.IsLoading = false;
 
             if (!response.RequestSucceeded)
                 MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
@@ -235,7 +235,7 @@ namespace Ocell.Pages.Columns
             loading--;
 
             if (loading <= 0)
-                IsLoading = false;
+                Progress.IsLoading = false;
 
             if (!response.RequestSucceeded)
                 MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
@@ -298,7 +298,7 @@ namespace Ocell.Pages.Columns
             loading--;
 
             if (loading <= 0)
-                IsLoading = false; // TODO: Refactor this.
+                Progress.IsLoading = false; // TODO: Refactor this.
 
             if (!response.RequestSucceeded)
             {

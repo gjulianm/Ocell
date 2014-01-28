@@ -1,20 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using Ocell.Library;
+using Ocell.Library.Twitter;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading;
 using System.Windows.Data;
 using System.Windows.Input;
-using DanielVaughan.ComponentModel;
-using DanielVaughan.Windows;
 using TweetSharp;
-using Ocell.Library;
-using Ocell.Library.Twitter;
-using System.Collections.Generic;
-using System;
-using System.ComponentModel;
-using System.Threading;
-using DanielVaughan;
-using DanielVaughan.InversionOfControl;
-using DanielVaughan.Net;
-using DanielVaughan.Services;
-using System.Linq;
 
 namespace Ocell.Pages
 {
@@ -70,10 +63,10 @@ namespace Ocell.Pages
             provider = Dependency.Resolve<IUserProvider>();
             provider.GetFollowers = true;
             provider.GetFollowing = false;
-            provider.Finished += (sender, e) => IsLoading = false;
+            provider.Finished += (sender, e) => Progress.IsLoading = false;
             provider.Error += (sender, e) =>
             {
-                IsLoading = false;
+                Progress.IsLoading = false;
                 MessageService.ShowError(Localization.Resources.ErrorDownloadingUsers);
             };
 
@@ -124,7 +117,7 @@ namespace Ocell.Pages
             provider.User = Sender as UserToken;
             ThreadPool.QueueUserWorkItem((context) =>
             {
-                IsLoading = true;
+                Progress.IsLoading = true;
                 provider.Start();
             });
             goNext.RaiseCanExecuteChanged();

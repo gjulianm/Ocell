@@ -90,9 +90,9 @@ namespace Ocell
             {
                 loadingCount = value;
                 if (loadingCount <= 0)
-                    IsLoading = false;
+                    Progress.IsLoading = false;
                 else
-                    IsLoading = true;
+                    Progress.IsLoading = true;
             }
 
         }

@@ -1,4 +1,5 @@
-﻿using DanielVaughan.Windows;
+﻿using AncoraMVVM.Base;
+using DanielVaughan.Windows;
 using Microsoft.Phone.Tasks;
 using Ocell.Library;
 using Ocell.Library.Tasks;
@@ -181,7 +182,6 @@ namespace Ocell.Pages
         private int requestsLeft;
 
         public NewTweetModel()
-            : base("NewTweet")
         {
             SelectedAccounts = new List<object>();
             AccountList = Config.Accounts.ToList();
@@ -312,7 +312,7 @@ namespace Ocell.Pages
 
         private void AskBufferLogin()
         {
-            var result = MessageService.AskYesNoQuestion(Resources.NoBufferConfigured);
+            var result = Notificator.Prompt(Resources.NoBufferConfigured);
 
             if (result)
             {
@@ -355,9 +355,9 @@ namespace Ocell.Pages
             if (service == null)
                 return;
 
-            IsLoading = true;
+            Progress.IsLoading = true;
             var response = await service.PostUpdate(TweetText, profiles);
-            IsLoading = false;
+            Progress.IsLoading = false;
 
             if (!response.Succeeded)
             {
@@ -385,7 +385,7 @@ namespace Ocell.Pages
             }
 
             BarText = Resources.SendingTweet;
-            IsLoading = true;
+            Progress.IsLoading = true;
 
             if (IsDM)
             {
@@ -398,7 +398,7 @@ namespace Ocell.Pages
                 {
                     if (!EnsureTwitlonger())
                     {
-                        IsLoading = false;
+                        Progress.IsLoading = false;
                         return;
                     }
 
@@ -430,7 +430,7 @@ namespace Ocell.Pages
             var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
             var response = await service.SendDirectMessageAsync(new SendDirectMessageOptions { UserId = (int)DataTransfer.DMDestinationId, Text = TweetText });
 
-            IsLoading = false;
+            Progress.IsLoading = false;
             BarText = "";
 
             if (response.StatusCode == HttpStatusCode.Forbidden)
@@ -462,7 +462,7 @@ namespace Ocell.Pages
 
             if (!response.Succeeded)
             {
-                IsLoading = false;
+                Progress.IsLoading = false;
                 MessageService.ShowError(Resources.ErrorCreatingTwitlonger);
                 return;
             }
@@ -511,7 +511,7 @@ namespace Ocell.Pages
             requestsLeft--;
 
             if (requestsLeft <= 0)
-                IsLoading = false;
+                Progress.IsLoading = false;
 
             if (response == null)
                 MessageService.ShowError(Resources.Error);
@@ -602,7 +602,7 @@ namespace Ocell.Pages
             error = false;
             foreach (var user in SelectedAccounts.OfType<UserToken>())
             {
-                IsLoading = true;
+                Progress.IsLoading = true;
                 requestsLeft++;
 
                 var scheduler = new Scheduler(user.Key, user.Secret);
@@ -618,7 +618,7 @@ namespace Ocell.Pages
 
                     if (requestsLeft <= 0)
                     {
-                        IsLoading = false;
+                        Progress.IsLoading = false;
                         if (!error)
                         {
                             MessageService.ShowMessage(Resources.MessageScheduled);

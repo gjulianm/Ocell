@@ -1,5 +1,4 @@
-﻿using DanielVaughan.Windows;
-using Ocell.Library;
+﻿using Ocell.Library;
 using Ocell.Library.Notifications;
 using Ocell.Library.ReadLater.Instapaper;
 using Ocell.Library.ReadLater.Pocket;
@@ -225,7 +224,7 @@ namespace Ocell.Settings
                     if (!string.IsNullOrWhiteSpace(PocketUser))
                     {
                         BarText = Resources.VerifyingCredentials;
-                        IsLoading = true;
+                        Progress.IsLoading = true;
                         PocketPair = new AuthPair { User = PocketUser, Password = PocketPassword };
                         var service = new PocketService(PocketPair.User, PocketPair.Password);
                         var response = await service.CheckCredentials();
@@ -238,7 +237,7 @@ namespace Ocell.Settings
                         }
                         else
                         {
-                            IsLoading = false;
+                            Progress.IsLoading = false;
                             MessageService.ShowError(String.Format(Resources.InvalidCredentials, "Pocket"));
                         }
                     }
@@ -251,7 +250,7 @@ namespace Ocell.Settings
                     if (!string.IsNullOrWhiteSpace(InstapaperUser))
                     {
                         BarText = Resources.VerifyingCredentials;
-                        IsLoading = true;
+                        Progress.IsLoading = true;
                         InstapaperPair = new AuthPair { User = InstapaperUser, Password = InstapaperPassword };
                         var service = new InstapaperService(InstapaperPair.User, InstapaperPair.Password);
                         var response = await service.CheckCredentials();
@@ -264,7 +263,7 @@ namespace Ocell.Settings
                         }
                         else
                         {
-                            IsLoading = false;
+                            Progress.IsLoading = false;
                             MessageService.ShowError(String.Format(Resources.InvalidCredentials, "Instapaper"));
                         }
                     }

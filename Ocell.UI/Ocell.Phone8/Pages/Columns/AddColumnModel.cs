@@ -94,7 +94,7 @@ namespace Ocell.Pages.Columns
         {
             var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
 
-            IsLoading = true;
+            Progress.IsLoading = true;
             BarText = Localization.Resources.LoadingLists;
 
             loading = 2;
@@ -102,7 +102,7 @@ namespace Ocell.Pages.Columns
             service.ListSubscriptionsAsync(new ListSubscriptionsOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }).ContinueWith(ReceiveSubscriptions);
         }
 
-       
+
 
         private void CreateCoreList()
         {
@@ -157,7 +157,7 @@ namespace Ocell.Pages.Columns
 
                 if (loading <= 0)
                 {
-                    IsLoading = false;
+                    Progress.IsLoading = false;
                     BarText = "";
                     reloadLists.RaiseCanExecuteChanged();
                 }
@@ -181,9 +181,9 @@ namespace Ocell.Pages.Columns
                 User = DataTransfer.CurrentAccount
             };
 
-            SaveColumn(toAdd);           
+            SaveColumn(toAdd);
             ListSelection = null;
-            GoBack();        
+            GoBack();
         }
 
         void AddSelectedCoreResource()

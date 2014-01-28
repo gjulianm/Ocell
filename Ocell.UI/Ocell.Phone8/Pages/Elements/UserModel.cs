@@ -192,13 +192,13 @@ namespace Ocell.Pages.Elements
 
             followUser = new DelegateCommand((obj) =>
             {
-                IsLoading = true;
+                Progress.IsLoading = true;
                 ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FollowUserAsync(new FollowUserOptions { UserId = User.Id }).ContinueWith(ReceiveFollow);
             }, x => FriendshipRetrieved && GenericCanExecute.Invoke(null));
 
             unfollowUser = new DelegateCommand((obj) =>
             {
-                IsLoading = true;
+                Progress.IsLoading = true;
                 ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfollowUserAsync(new UnfollowUserOptions { UserId = User.Id }).ContinueWith(ReceiveFollow);
             }, x => FriendshipRetrieved && GenericCanExecute.Invoke(null));
 
@@ -219,21 +219,21 @@ namespace Ocell.Pages.Elements
 
             block = new DelegateCommand((obj) =>
                 {
-                    IsLoading = true;
+                    Progress.IsLoading = true;
                     ServiceDispatcher.GetService(DataTransfer.CurrentAccount).BlockUserAsync(new BlockUserOptions { UserId = User.Id }).ContinueWith(ReceiveBlock);
                 }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
             unblock = new DelegateCommand((obj) =>
                 {
-                    IsLoading = true;
+                    Progress.IsLoading = true;
                     ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnblockUserAsync(new UnblockUserOptions { UserId = User.Id }).ContinueWith(ReceiveBlock);
                 }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
             reportSpam = new DelegateCommand(async (obj) =>
             {
-                IsLoading = true;
+                Progress.IsLoading = true;
                 var response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).ReportSpamAsync(new ReportSpamOptions { UserId = User.Id });
-                IsLoading = false;
+                Progress.IsLoading = false;
 
                 if (response.StatusCode == HttpStatusCode.OK)
                     MessageService.ShowLightNotification(String.Format(Resources.ReportedAndBlocked, User.ScreenName));
@@ -286,7 +286,7 @@ namespace Ocell.Pages.Elements
 
             ScreenName = userName;
 
-            GetUser(userName);           
+            GetUser(userName);
         }
 
         void task_Completed(object sender, PhotoResult e)
@@ -296,7 +296,7 @@ namespace Ocell.Pages.Elements
             if (e.TaskResult == TaskResult.OK && User != null)
             {
                 BarText = Resources.UploadingPicture;
-                IsLoading = true;
+                Progress.IsLoading = true;
                 ITwitterService srv = ServiceDispatcher.GetService(usr);
                 // TODO: When image uploads are ready.
                 // srv.UpdateProfileImage(new UpdateProfileImageOptions { ImagePath = e.OriginalFileName }, ReceivePhotoUpload);
@@ -306,7 +306,7 @@ namespace Ocell.Pages.Elements
         private void ReceivePhotoUpload(TwitterUser user, TwitterResponse response)
         {
             BarText = "";
-            IsLoading = false;
+            Progress.IsLoading = false;
             if (response.StatusCode == HttpStatusCode.OK)
                 MessageService.ShowLightNotification(Resources.ProfileImageChanged);
             else
@@ -338,7 +338,7 @@ namespace Ocell.Pages.Elements
                 errorMsg = String.Format(Resources.CouldntUnfollow, usr.ScreenName);
             }
 
-            IsLoading = false;
+            Progress.IsLoading = false;
             if (response.RequestSucceeded)
             {
                 MessageService.ShowLightNotification(successMsg);
@@ -367,7 +367,7 @@ namespace Ocell.Pages.Elements
                 errorMsg = String.Format(Resources.CouldntBlock, User.ScreenName);
             }
 
-            IsLoading = false;
+            Progress.IsLoading = false;
 
             if (response.RequestSucceeded)
             {
@@ -383,13 +383,13 @@ namespace Ocell.Pages.Elements
         async void GetUser(string userName)
         {
             BarText = Resources.RetrievingUser;
-            IsLoading = true;
+            Progress.IsLoading = true;
 
             var response = await ServiceDispatcher.GetDefaultService().ListUserProfilesForAsync(new ListUserProfilesForOptions { ScreenName = new List<string> { userName } });
             var users = response.Content;
             BarText = "";
-            IsLoading = false;
-            if (!response.RequestSucceeded|| !users.Any())
+            Progress.IsLoading = false;
+            if (!response.RequestSucceeded || !users.Any())
             {
                 MessageService.ShowError(Resources.CouldntFindUser);
                 return;

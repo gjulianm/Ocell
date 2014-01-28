@@ -1,5 +1,4 @@
-﻿using DanielVaughan.Windows;
-using Ocell.Library;
+﻿using Ocell.Library;
 using Ocell.Localization;
 using System;
 using System.Net;
@@ -41,7 +40,7 @@ namespace Ocell.Pages.Settings
 
             var request = (HttpWebRequest)WebRequest.Create(query);
 
-            IsLoading = true;
+            Progress.IsLoading = true;
             validate.RaiseCanExecuteChanged();
 
             HttpWebResponse response = null;
@@ -55,7 +54,7 @@ namespace Ocell.Pages.Settings
                 failed = true;
             }
 
-            IsLoading = false;
+            Progress.IsLoading = false;
             validate.RaiseCanExecuteChanged();
             if (failed || response.StatusCode != HttpStatusCode.OK)
             {

@@ -51,7 +51,7 @@ namespace Ocell.Pages.Settings
             {
                 e.Cancel = true;
                 BrowserVisible = false;
-                IsLoading = true;
+                Progress.IsLoading = true;
                 ReturnedToCallback(e.Uri);
             }
         }
@@ -61,12 +61,12 @@ namespace Ocell.Pages.Settings
             if (e.Uri.AbsoluteUri.StartsWith(AuthAutority))
                 BrowserVisible = true;
 
-            IsLoading = !BrowserVisible;
+            Progress.IsLoading = !BrowserVisible;
         }
 
         public virtual void PageLoaded()
         {
-            IsLoading = true;
+            Progress.IsLoading = true;
 
             if (Version == OAuthVersion.OAuthV1)
                 GetAuthorizationTokens();

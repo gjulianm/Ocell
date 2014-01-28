@@ -14,6 +14,8 @@ using Ocell.Library;
 using TweetSharp;
 using Ocell.Library.Twitter;
 using Ocell.Pages.Elements;
+using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
 
 namespace Ocell
 {
@@ -24,15 +26,15 @@ namespace Ocell
         {
             InitializeComponent();
 
-            InitializeComponent(); 
+            InitializeComponent();
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            
+
 
             Loaded += new RoutedEventHandler(DMConversation_Loaded);
             List.Loader.PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == "IsLoading")
-                        viewModel.IsLoading = List.Loader.IsLoading;
+                        Dependency.Resolve<IProgressIndicator>().IsLoading = List.Loader.IsLoading;
                 };
 
             DataContext = viewModel;
@@ -47,7 +49,7 @@ namespace Ocell
             }
 
             List.Loader.Source.BulkAdd(DataTransfer.DMGroup.Messages.Cast<ITweetable>());
-            
+
             string pairName = DataTransfer.DMGroup.Messages.First().GetPairName(DataTransfer.CurrentAccount);
 
             TwitterResource resource = new TwitterResource

@@ -1,18 +1,16 @@
 ﻿using Ocell.Library;
-using Ocell.Library.Collections;
 using Ocell.Library.Twitter;
 using Ocell.Library.Twitter.Comparers;
 using Ocell.Localization;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using TweetSharp;
 #if WP8
 using Windows.Phone.Speech.Synthesis;
-using System.Threading.Tasks;
+using AncoraMVVM.Base.Collections;
 #endif
 
 namespace Ocell.Pages.Elements
@@ -35,7 +33,7 @@ namespace Ocell.Pages.Elements
 
         public async void OnLoad()
         {
-            lastCheckTime = DateSync.GetLastCheckDate();
+            lastCheckTime = await DateSync.GetLastCheckDate();
 
             var mentionOptions = new ListTweetsMentioningMeOptions
             {
@@ -53,7 +51,7 @@ namespace Ocell.Pages.Elements
             {
                 if (account.Preferences.MentionsPreferences != Library.Notifications.NotificationType.None)
                 {
-                    IsLoading = true;
+                    Progress.IsLoading = true;
                     Interlocked.Increment(ref requestsPending);
                     var result = await ServiceDispatcher.GetService(account).ListTweetsMentioningMeAsync(mentionOptions);
 
@@ -62,7 +60,7 @@ namespace Ocell.Pages.Elements
                 }
                 if (account.Preferences.MessagesPreferences != Library.Notifications.NotificationType.None)
                 {
-                    IsLoading = true;
+                    Progress.IsLoading = true;
                     Interlocked.Increment(ref requestsPending);
                     var result = await ServiceDispatcher.GetService(account).ListDirectMessagesReceivedAsync(dmOption);
 
@@ -118,7 +116,7 @@ namespace Ocell.Pages.Elements
 
             if (Interlocked.Decrement(ref requestsPending) <= 0)
             {
-                IsLoading = false;
+                Progress.IsLoading = false;
                 if (LoadFinished != null)
                     LoadFinished(this, new EventArgs());
             }
