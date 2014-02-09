@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using AncoraMVVM.Base.IoC;
+using NUnit.Framework;
 using Ocell.Library;
 using System.Collections.Generic;
 
@@ -10,43 +11,49 @@ namespace Ocell.Tests
         [TestFixtureSetUp]
         public static void Setup()
         {
+            Dependency.Provider = new MockProvider();
+        }
 
+        [TestFixtureTearDown]
+        public static void Teardown()
+        {
+            Dependency.Provider = null;
         }
 
         public IEnumerable<TestCaseData> GetAutocompletingStateTestData
         {
             get
             {
-                yield return new TestCaseData("", "", 0).Returns(false).SetName("GetAutocompletingState_EmptyText_IsFalse");
+                yield return new TestCaseData("", 0).Returns(false).SetName("GetAutocompletingState_EmptyText_IsFalse");
 
-                yield return new TestCaseData("Lorem Ipsum Dolor Sit Amet", "Lorem Ipsum Dolor Sit Ame", -1).Returns(false)
+                yield return new TestCaseData("Lorem Ipsum Dolor Sit Amet", -1).Returns(false)
                     .SetName("GetAutocompletingState_TextWithNoTrigger_IsFalse");
 
-                yield return new TestCaseData("Lorem Ipsum @Dolor Sit Amet", "Lorem Ipsum @Dolor Sit Ame", -1).Returns(false)
+                yield return new TestCaseData("Lorem Ipsum @Dolor Sit Amet", -1).Returns(false)
                     .SetName("GetAutocompletingState_TextWithTriggerOnPreviousPos_IsFalse");
 
-                yield return new TestCaseData("Lorem Ipsum Dolor Sit Ame@", "Lorem Ipsum Dolor Sit Ame", 3).Returns(false)
+                yield return new TestCaseData("Lorem Ipsum Dolor Sit Ame@", 3).Returns(false)
                     .SetName("GetAutocompletingState_TextWithTriggerOnLastPosSelStartNotLast_IsFalse");
 
-                yield return new TestCaseData("Lorem Ipsum Dolor Sit Ame@ ", "Lorem Ipsum Dolor Sit Ame@", -1).Returns(false)
+                yield return new TestCaseData("Lorem Ipsum Dolor Sit Ame@ ", -1).Returns(false)
                     .SetName("GetAutocompletingState_TextWithTriggerBeforeSpace_IsFalse");
 
-                yield return new TestCaseData("Lorem Ipsum Dolor Sit Ame@", "Lorem Ipsum Dolor Sit Ame", -1).Returns(true)
-                    .SetName("GetAutocompletingState_TextWithTriggerLastPos_IsTrue");
+                yield return new TestCaseData("Lorem Ipsum Dolor Sit Ame@", -1).Returns(false)
+                    .SetName("GetAutocompletingState_TextWithTriggerLastPos_IsFalse");
 
-                yield return new TestCaseData("Lorem @ Ipsum Dolor Sit Ame", "Lorem  Ipsum Dolor Sit Ame", 7).Returns(true)
+                yield return new TestCaseData("Lorem @ Ipsum Dolor Sit Ame", 7).Returns(true)
                     .SetName("GetAutocompletingState_TextWithTriggerMiddleText_IsTrue");
 
-                yield return new TestCaseData("Lorem @a Ipsum Dolor Sit Ame", "Lorem a Ipsum Dolor Sit Ame", 7).Returns(false)
+                yield return new TestCaseData("Lorem a@a Ipsum Dolor Sit Ame", 7).Returns(false)
                     .SetName("GetAutocompletingState_TextWithTriggerMiddleWord_IsFalse");
 
-                yield return new TestCaseData("Lorem @a Ipsum Dolor Sit Ame", "Lorem @ Ipsum Dolor Sit Ame", 8).Returns(true)
+                yield return new TestCaseData("Lorem @a Ipsum Dolor Sit Ame", 8).Returns(true)
                     .SetName("GetAutocompletingState_TextWithTriggerAndLettersAfter_IsTrue");
             }
         }
 
         [TestCaseSource("GetAutocompletingStateTestData")]
-        public bool GetAutocompletingStateTest(string text, string previousText, int selectionStart)
+        public bool GetAutocompletingStateTest(string text, int selectionStart)
         {
             var ac = new Autocompleter(null);
             ac.Trigger = '@';
@@ -54,7 +61,7 @@ namespace Ocell.Tests
             if (selectionStart == -1)
                 selectionStart = text.Length;
 
-            var actual = ac.GetAutocompletingState(text, previousText, selectionStart);
+            var actual = ac.GetAutocompletingState(text, selectionStart);
 
             return actual;
         }
@@ -63,16 +70,16 @@ namespace Ocell.Tests
         {
             get
             {
-                yield return new TestCaseData("Lorem @ipsu", "Lorem @ips", -1, 6).Returns("ipsu")
+                yield return new TestCaseData("Lorem @ipsu", -1).Returns("ipsu")
                     .SetName("GetTextWrittenByUser_AtEndOfString_ReturnsTextAfterTrigger");
 
-                yield return new TestCaseData("Lorem @ipsu dolor", "Lorem @ips dolor", 11, 6).Returns("ipsu")
+                yield return new TestCaseData("Lorem @ipsu dolor", 11).Returns("ipsu")
                     .SetName("GetTextWrittenByUser_TextInMiddleOfString_ReturnsUntilSpace");
             }
         }
 
         [TestCaseSource("GetTextWrittenByUserTestData")]
-        public string GetTextWrittenByUserTest(string inputText, string previousText, int selectionStart, int triggerPosition)
+        public string GetTextWrittenByUserTest(string inputText, int selectionStart)
         {
             var ac = new Autocompleter(null);
             ac.Trigger = '@';
@@ -80,7 +87,7 @@ namespace Ocell.Tests
             if (selectionStart == -1)
                 selectionStart = inputText.Length;
 
-            var actual = ac.GetTextWrittenByUser(inputText, previousText, selectionStart, triggerPosition);
+            var actual = ac.GetTextWrittenByUser(inputText, selectionStart);
 
             return actual;
         }
@@ -104,6 +111,38 @@ namespace Ocell.Tests
         public string InsertSuggestionInTextTest(string text, int triggerPosition, string toInsert)
         {
             return new Autocompleter(null).InsertSuggestionInText(text, triggerPosition, toInsert);
+        }
+
+        public IEnumerable<TestCaseData> GetWordBeingWrittenTestData
+        {
+            get
+            {
+                yield return new TestCaseData("Word", 4).Returns("Word")
+                    .SetName("GetWordBeingWritten_OneWordCursorAtEnd_ReturnsWord");
+                yield return new TestCaseData("Word", 2).Returns("Word")
+                    .SetName("GetWordBeingWritten_OneWordCursorAtMiddle_ReturnsWord");
+                yield return new TestCaseData("A Word", 4).Returns("Word")
+                    .SetName("GetWordBeingWritten_TwoWordsCursorAtEnd_ReturnsWord");
+                yield return new TestCaseData("More long Word with things", 10).Returns("Word")
+                    .SetName("GetWordBeingWritten_MultipleWordsCursorAtStart_ReturnsWord");
+                yield return new TestCaseData("Word", 0).Returns("Word")
+                    .SetName("GetWordBeingWritten_OneWordCursorAtStart_ReturnsWord");
+                yield return new TestCaseData("Word two", 4).Returns("Word")
+                    .SetName("GetWordBeingWritten_WordAfterCursorAtEnd_ReturnsWord");
+                yield return new TestCaseData("Tst a two", 3).Returns("Tst")
+                    .SetName("GetWordBeingWritten_CursorBeforeOneLetterWord_ReturnsPreviousWord");
+                yield return new TestCaseData("Tst a two", 4).Returns("a")
+                    .SetName("GetWordBeingWritten_CursorOnOneLetterWord_ReturnsLetter");
+                yield return new TestCaseData("Tst a two", 5).Returns("a")
+                    .SetName("GetWordBeingWritten_CursorAfterOneLetterWord_ReturnsLetter");
+
+            }
+        }
+
+        [TestCaseSource("GetWordBeingWrittenTestData")]
+        public string GetWordBeingWrittenTest(string text, int cursor)
+        {
+            return new Autocompleter(null).GetWordBeingWritten(text, cursor);
         }
     }
 }

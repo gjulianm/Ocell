@@ -1,12 +1,12 @@
 ﻿using AncoraMVVM.Rest;
 using NUnit.Framework;
 using Ocell.Library.ReadLater.Instapaper;
-using Ocell.Library.ReadLater.Pocket;
 using System;
 using System.Threading.Tasks;
 
 namespace Ocell.ReadLater.Tests
 {
+    [Ignore]
     [TestFixture]
     public class InstapaperServiceTests
     {

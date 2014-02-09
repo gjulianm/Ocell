@@ -73,37 +73,32 @@ namespace Ocell.Library
             if (InputText == null)
                 return;
 
-            IsAutocompleting = GetAutocompletingState(InputText, previousText, SelectionStart);
+            IsAutocompleting = GetAutocompletingState(InputText, SelectionStart);
 
             if (IsAutocompleting)
                 UpdateAutocomplete();
         }
 
-        internal bool GetAutocompletingState(string inputText, string previousText, int selectionStart)
+        internal string GetWordBeingWritten(string text, int cursorPosition)
         {
-            if (inputText.Length > 0 && selectionStart > 0 && selectionStart <= inputText.Length && (Trigger != '\0' && inputText[selectionStart - 1] == Trigger))
+            int wordStart, wordEnd;
+
+            for (wordStart = cursorPosition; wordStart >= 0 && (wordStart == cursorPosition || text[wordStart] != ' '); wordStart--) ;
+            for (wordEnd = cursorPosition; wordEnd < text.Length && text[wordEnd] != ' '; wordEnd++) ;
+
+            wordStart++;
+
+            return text.Substring(wordStart, wordEnd - wordStart);
+        }
+
+        internal bool GetAutocompletingState(string inputText, int selectionStart)
+        {
+            string word = GetWordBeingWritten(inputText, selectionStart);
+
+            if (!string.IsNullOrWhiteSpace(word) && word[0] == Trigger)
                 return true;
-
-            if (selectionStart > 0 &&
-                selectionStart < inputText.Length &&
-                inputText[selectionStart - 1] == ' ' && previousText != null &&
-                selectionStart < previousText.Length && previousText[selectionStart] != '@')
+            else
                 return false;
-
-            if (string.IsNullOrWhiteSpace(previousText))
-                return false;
-
-            if (!previousText.Contains(Trigger) && Trigger != '\0')
-                return false;
-
-            if (selectionStart <= previousText.Length && selectionStart > 0 && previousText[selectionStart - 1] == ' ')
-                return false;
-
-            int spaceIndex = triggerPosition < previousText.Length ? previousText.IndexOf(' ', triggerPosition) : -1;
-            if (selectionStart <= triggerPosition || (spaceIndex != -1 && selectionStart > spaceIndex))
-                return false;
-
-            return false; // Return what?
         }
 
         private void UpdateAutocomplete()
@@ -115,7 +110,7 @@ namespace Ocell.Library
 
             previousText = InputText;
 
-            written = GetTextWrittenByUser(InputText, previousText, SelectionStart, triggerPosition);
+            written = GetTextWrittenByUser(InputText, SelectionStart);
 
             Suggestions.Clear();
 
@@ -128,25 +123,12 @@ namespace Ocell.Library
             }
         }
 
-        private void RemovePreviousAutocompleted()
+        internal string GetTextWrittenByUser(string inputText, int selectionStart)
         {
-            if (string.IsNullOrWhiteSpace(previousText))
-                return;
+            string written = GetWordBeingWritten(inputText, selectionStart);
 
-            int firstSpaceAfterSelStart = previousText.Substring(SelectionStart).IndexOf(' ');
-            if (firstSpaceAfterSelStart == -1 && SelectionStart < previousText.Length)
-                previousText = previousText.Remove(SelectionStart);
-            else if (firstSpaceAfterSelStart != -1 && firstSpaceAfterSelStart + SelectionStart < previousText.Length &&
-                firstSpaceAfterSelStart != 1)
-                previousText = previousText.Remove(SelectionStart, firstSpaceAfterSelStart);
-        }
-
-        internal string GetTextWrittenByUser(string inputText, string previousText, int selectionStart, int triggerPosition)
-        {
-            if (selectionStart < previousText.Length)
-                return previousText.Substring(triggerPosition + 1, selectionStart - triggerPosition - 1);
-            else if (triggerPosition + 1 < previousText.Length)
-                return previousText.Substring(triggerPosition + 1);
+            if (!string.IsNullOrWhiteSpace(written))
+                return written.Substring(1);
             else
                 return "";
         }
