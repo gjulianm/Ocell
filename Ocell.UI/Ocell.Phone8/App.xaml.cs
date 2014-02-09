@@ -1,10 +1,6 @@
 ﻿using AncoraMVVM.Base.IoC;
+using AncoraMVVM.Phone;
 using AsyncOAuth;
-
-
-
-
-
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Ocell.Compatibility;
@@ -63,6 +59,8 @@ namespace Ocell
             }
 
             OAuthUtility.ComputeHash = (key, buffer) => { using (var hmac = new HMACSHA1(key)) { return hmac.ComputeHash(buffer); } };
+
+            Dependency.RegisterModule(new PhoneDependencyModule());
 
             // TODO: solve this.
             Dependency.Register<IUserProvider, UserProvider>();
