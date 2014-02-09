@@ -7,6 +7,12 @@ namespace Ocell.Tests
     [TestFixture]
     public class AutocompleterTests
     {
+        [TestFixtureSetUp]
+        public static void Setup()
+        {
+
+        }
+
         public IEnumerable<TestCaseData> GetAutocompletingStateTestData
         {
             get
