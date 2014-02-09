@@ -99,10 +99,6 @@
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
 
-    <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
-    </shell:SystemTray.ProgressIndicator>
-
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
     <Grid x:Name="LayoutRoot" Margin="0,-32,0,0" d:DataContext="{Binding Source={StaticResource SampleNames}}">
         <Grid.RowDefinitions>

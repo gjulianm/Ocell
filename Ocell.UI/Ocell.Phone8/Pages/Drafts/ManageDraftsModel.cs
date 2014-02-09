@@ -19,16 +19,18 @@ namespace Ocell
         {
             Collection = new ObservableCollection<TwitterDraft>(Config.Drafts);
 
-            this.NavigatingFrom += (sender, e) =>
-            {
-                Config.Drafts = new List<TwitterDraft>(Collection);
-            };
-
             this.PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == "ListSelection")
                         OnSelectionChanged();
                 };
+        }
+
+        public override void OnNavigating(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnNavigating(e);
+
+            Config.Drafts = new List<TwitterDraft>(Collection);
         }
 
         public void GridHold(object sender, System.Windows.Input.GestureEventArgs e)
@@ -58,7 +60,7 @@ namespace Ocell
 
             DataTransfer.Draft = draft;
             ListSelection = null;
-            GoBack();
+            Navigator.GoBack();
         }
 
     }

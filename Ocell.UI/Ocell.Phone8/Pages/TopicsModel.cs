@@ -127,7 +127,7 @@ namespace Ocell.Pages
             if (!response.RequestSucceeded)
             {
                 Notificator.ShowError(Localization.Resources.ErrorLoadingTT);
-                GoBack();
+                Navigator.GoBack();
                 return;
             }
 
@@ -142,7 +142,7 @@ namespace Ocell.Pages
 
             if (response.RequestSucceeded && locs.Any())
             {
-                Deployment.Current.Dispatcher.InvokeIfRequired(() =>
+                Dispatcher.InvokeIfRequired(() =>
                 {
                     foreach (var loc in locs.OrderBy(x => x.Name))
                     {
@@ -182,7 +182,7 @@ namespace Ocell.Pages
                    User = DataTransfer.CurrentAccount
                };
             ResourceViewModel.Resource = resource;
-            Navigate(Uris.ResourceView);
+            Navigator.Navigate(Uris.ResourceView);
         }
     }
 }

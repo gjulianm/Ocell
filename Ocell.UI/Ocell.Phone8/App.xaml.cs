@@ -158,7 +158,8 @@ namespace Ocell
                 System.Diagnostics.Debugger.Break();
             }
 
-            LittleWatson.ReportException(e.Exception, "Ocell App Error");
+            // TODO: Exception checking.
+            // LittleWatson.ReportException(e.Exception, "Ocell App Error");
         }
 
         // Código para ejecutar en excepciones no controladas
@@ -170,7 +171,8 @@ namespace Ocell
                 System.Diagnostics.Debugger.Break();
             }
 
-            LittleWatson.ReportException(e.ExceptionObject, "Ocell App Error");
+            // TODO: Exception checking.
+            // LittleWatson.ReportException(e.ExceptionObject, "Ocell App Error");
         }
 
         #region Inicialización de la aplicación telefónica

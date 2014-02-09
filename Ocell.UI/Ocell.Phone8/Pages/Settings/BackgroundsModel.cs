@@ -48,7 +48,7 @@ namespace Ocell.Pages.Settings
             {
                 Config.Background = theme;
                 Notificator.ShowMessage(Localization.Resources.BackgroundChangeOnRestart);
-                GoBack();
+                Navigator.GoBack();
             });
         }
     }

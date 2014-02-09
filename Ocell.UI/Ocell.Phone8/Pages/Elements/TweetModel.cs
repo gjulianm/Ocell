@@ -94,7 +94,7 @@ namespace Ocell.Pages.Elements
             if (DataTransfer.Status == null)
             {
                 Notificator.ShowError(Localization.Resources.ErrorLoadingTweet);
-                GoBack();
+                Navigator.GoBack();
                 return;
             }
 
@@ -183,7 +183,7 @@ namespace Ocell.Pages.Elements
             Initialize();
         }
 
-        public void OnLoad()
+        public override void OnLoad()
         {
             ThreadPool.QueueUserWorkItem((c) =>
             {
@@ -222,7 +222,7 @@ namespace Ocell.Pages.Elements
             quote = new DelegateCommand((obj) =>
             {
                 DataTransfer.Text = "RT @" + Tweet.Author.ScreenName + ": " + Tweet.Text;
-                Navigate(Uris.WriteTweet);
+                Navigator.Navigate(Uris.WriteTweet);
             }, obj => Config.Accounts.Any() && Tweet != null);
 
             // TODO: These are the same commands that are used globally. WTF.
@@ -247,11 +247,11 @@ namespace Ocell.Pages.Elements
             sendTweet = new DelegateCommand(async (parameter) =>
             {
                 Progress.IsLoading = true;
-                BarText = Resources.SendingTweet;
+                Progress.Text = Resources.SendingTweet;
                 var response = await ServiceDispatcher.GetCurrentService().SendTweetAsync(new SendTweetOptions { InReplyToStatusId = Tweet.Id, Status = ReplyText });
 
                 Progress.IsLoading = false;
-                BarText = "";
+                Progress.Text = "";
                 if (!response.RequestSucceeded)
                     Notificator.ShowError(response.Error != null ? response.Error.Message : Resources.UnknownValue);
                 else if (TweetSent != null)
@@ -282,7 +282,7 @@ namespace Ocell.Pages.Elements
         public void ImageOpened(object sender, RoutedEventArgs e)
         {
             Progress.IsLoading = false;
-            BarText = "";
+            Progress.Text = "";
         }
 
         public void ImageTapped(object sender, System.Windows.Input.GestureEventArgs e)
@@ -338,7 +338,7 @@ namespace Ocell.Pages.Elements
             {
                 HasImage = true;
                 Progress.IsLoading = true;
-                BarText = Localization.Resources.DownloadingImage;
+                Progress.Text = Localization.Resources.DownloadingImage;
             }
         }
 

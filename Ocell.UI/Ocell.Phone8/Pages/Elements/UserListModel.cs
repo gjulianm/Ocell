@@ -50,7 +50,7 @@ namespace Ocell.Pages.Elements
                     TwitterUser selected = SelectedUser as TwitterUser;
                     if (selected != null)
                     {
-                        Navigate("/Pages/Elements/User.xaml?user=" + selected.ScreenName);
+                        Navigator.Navigate("/Pages/Elements/User.xaml?user=" + selected.ScreenName);
                         SelectedUser = null;
                     }
                 }
@@ -65,19 +65,19 @@ namespace Ocell.Pages.Elements
             if (whatUserList == "followers")
             {
                 ServiceDispatcher.GetCurrentService().ListFollowersAsync(new ListFollowersOptions { ScreenName = user, IncludeUserEntities = true }).ContinueWith(ReceiveUsers);
-                BarText = Resources.DownloadingFollowers;
+                Progress.Text = Resources.DownloadingFollowers;
                 PageTitle = Resources.Followers;
             }
             else if (whatUserList == "following")
             {
                 ServiceDispatcher.GetCurrentService().ListFriendsAsync(new ListFriendsOptions { ScreenName = user, IncludeUserEntities = true }).ContinueWith(ReceiveUsers);
-                BarText = Resources.DownloadingFollowing;
+                Progress.Text = Resources.DownloadingFollowing;
                 PageTitle = Resources.Following;
             }
             else
             {
                 Notificator.ShowError(Resources.NotValidResource);
-                GoBack();
+                Navigator.GoBack();
                 return;
             }
 
@@ -92,13 +92,13 @@ namespace Ocell.Pages.Elements
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
                 Notificator.ShowError(Resources.CouldntFindUser);
-                GoBack();
+                Navigator.GoBack();
                 return;
             }
             else if (!response.RequestSucceeded)
             {
                 Notificator.ShowError(Resources.ErrorMessage);
-                GoBack();
+                Navigator.GoBack();
                 return;
             }
 

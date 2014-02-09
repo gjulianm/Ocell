@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+﻿using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
 using Microsoft.Phone.Controls;
 using Ocell.Library;
-using TweetSharp;
 using Ocell.Library.Twitter;
 using Ocell.Pages.Elements;
-using AncoraMVVM.Base.Interfaces;
-using AncoraMVVM.Base.IoC;
+using System.Linq;
+using System.Windows;
 
 namespace Ocell
 {
@@ -48,7 +38,8 @@ namespace Ocell
                 return;
             }
 
-            List.Loader.Source.BulkAdd(DataTransfer.DMGroup.Messages.Cast<ITweetable>());
+            // TODO: Add range to DM.
+            // List.Loader.Source.AddRange(DataTransfer.DMGroup.Messages.Cast<ITweetable>());
 
             string pairName = DataTransfer.DMGroup.Messages.First().GetPairName(DataTransfer.CurrentAccount);
 

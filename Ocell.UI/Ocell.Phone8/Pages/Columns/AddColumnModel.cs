@@ -33,7 +33,7 @@ namespace Ocell.Pages.Columns
             Core = new ObservableCollection<TwitterResource>();
             Lists = new SafeObservable<TwitterList>();
 
-            reloadLists = new DelegateCommand((param) => LoadLists(), (param) => !IsLoading);
+            reloadLists = new DelegateCommand(() => LoadLists(), () => !Progress.IsLoading);
 
             this.PropertyChanged += (sender, e) =>
             {
@@ -47,12 +47,12 @@ namespace Ocell.Pages.Columns
         int loading = 0;
         object sync = new object();
 
-        public void OnLoad()
+        public override void OnLoad()
         {
             if (DataTransfer.CurrentAccount == null)
             {
                 Notificator.ShowError(Localization.Resources.ErrorNoAccount);
-                GoBack();
+                Navigator.GoBack();
                 return;
             }
 
@@ -66,7 +66,7 @@ namespace Ocell.Pages.Columns
             var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
 
             Progress.IsLoading = true;
-            BarText = Localization.Resources.LoadingLists;
+            Progress.Text = Localization.Resources.LoadingLists;
 
             loading = 2;
             service.ListListsForAsync(new ListListsForOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }).ContinueWith(ReceiveLists);
@@ -129,7 +129,7 @@ namespace Ocell.Pages.Columns
                 if (loading <= 0)
                 {
                     Progress.IsLoading = false;
-                    BarText = "";
+                    Progress.Text = "";
                     reloadLists.RaiseCanExecuteChanged();
                 }
             }
@@ -154,7 +154,7 @@ namespace Ocell.Pages.Columns
 
             SaveColumn(toAdd);
             ListSelection = null;
-            GoBack();
+            Navigator.GoBack();
         }
 
         void AddSelectedCoreResource()
@@ -164,7 +164,7 @@ namespace Ocell.Pages.Columns
 
             SaveColumn((TwitterResource)CoreSelection);
             CoreSelection = null;
-            GoBack();
+            Navigator.GoBack();
         }
 
         private void SaveColumn(TwitterResource toAdd)

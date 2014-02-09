@@ -211,7 +211,7 @@ namespace Ocell.Controls
         void Loader_CacheLoad(object sender, EventArgs e)
         {
             if (!scrollController.Bound)
-                Dispatcher.InvokeIfRequired(() => scrollController.Bind(this));
+                Dependency.Resolve<IDispatcher>().InvokeIfRequired(() => scrollController.Bind(this));
 
             if (Config.ReloadOptions == ColumnReloadOptions.AskPosition)
                 TryTriggerResumeReading();

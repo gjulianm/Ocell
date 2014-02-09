@@ -165,7 +165,7 @@ namespace Ocell.Pages.Settings
             {
                 DebugError("Error getting request token: {0}", ex);
                 Notificator.ShowError(Localization.Resources.ErrorAuthURL);
-                GoBack();
+                Navigator.GoBack();
                 return;
             }
             GetRequestTokenResponse(tokenResponse);
@@ -181,7 +181,7 @@ namespace Ocell.Pages.Settings
             {
                 DebugError("Error processing token response: {0}", e);
                 Notificator.ShowError(Localization.Resources.ErrorAuthURL);
-                GoBack();
+                Navigator.GoBack();
                 return;
             }
 
@@ -220,7 +220,7 @@ namespace Ocell.Pages.Settings
             {
                 DebugError("Callback parameters are not correct. Returned to {0}", uri);
                 Notificator.ShowError(Localization.Resources.ErrorClientTokens);
-                GoBack();
+                Navigator.GoBack();
                 return;
             }
 
@@ -253,7 +253,7 @@ namespace Ocell.Pages.Settings
             {
                 DebugError("Error in the token request. Response code {0}, content {1}.", response.StatusCode, await response.Content.ReadAsStringAsync());
                 Notificator.ShowError(Localization.Resources.ErrorClientTokens);
-                GoBack();
+                Navigator.GoBack();
                 return;
             }
 
@@ -269,7 +269,7 @@ namespace Ocell.Pages.Settings
             {
                 DebugError("Error post-processing the token response: {0}", e);
                 Notificator.ShowError(Localization.Resources.ErrorClientTokens);
-                GoBack();
+                Navigator.GoBack();
             }
         }
 
@@ -286,7 +286,7 @@ namespace Ocell.Pages.Settings
             {
                 DebugError("Error requesting access token parameters (OAuth 1): {0}", e);
                 Notificator.ShowError(Localization.Resources.ErrorClientTokens);
-                GoBack();
+                Navigator.GoBack();
                 return;
             }
         }

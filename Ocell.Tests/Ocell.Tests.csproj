@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AncoraMVVM.Base">
+      <HintPath>..\packages\AncoraMVVM.Base.0.1.15-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
+    </Reference>
     <Reference Include="AsyncOAuth">
       <HintPath>..\packages\AsyncOAuth.0.8.3\lib\AsyncOAuth.dll</HintPath>
     </Reference>
@@ -111,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assembly.ico" />
+    <Content Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ocell.Library\Ocell.Library\Ocell.Library.csproj">

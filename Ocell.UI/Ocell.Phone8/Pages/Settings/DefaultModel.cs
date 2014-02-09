@@ -80,7 +80,7 @@ namespace Ocell.Settings
         {
             setCustomBackground = new DelegateCommand((obj) =>
             {
-                Navigate("/Pages/Settings/Backgrounds.xaml");
+                Navigator.Navigate("/Pages/Settings/Backgrounds.xaml");
             });
 
             showPrivacyPolicy = new DelegateCommand((obj) =>
@@ -97,14 +97,14 @@ namespace Ocell.Settings
             addAccount = new DelegateCommand((obj) =>
             {
                 OAuth.Type = AuthType.Twitter;
-                Navigate(Uris.LoginPage);
+                Navigator.Navigate(Uris.LoginPage);
             });
 
             editFilters = new DelegateCommand((obj) =>
                 {
                     DataTransfer.cFilter = Config.GlobalFilter;
                     DataTransfer.IsGlobalFilter = true;
-                    Navigate(Uris.Filters);
+                    Navigator.Navigate(Uris.Filters);
                 });
 
             saveCredentials = new DelegateCommand(async (obj) =>
@@ -114,7 +114,7 @@ namespace Ocell.Settings
 
                     if (!string.IsNullOrWhiteSpace(PocketUser))
                     {
-                        BarText = Resources.VerifyingCredentials;
+                        Progress.Text = Resources.VerifyingCredentials;
                         Progress.IsLoading = true;
                         PocketPair = new AuthPair { User = PocketUser, Password = PocketPassword };
                         var service = new PocketService(PocketPair.User, PocketPair.Password);
@@ -140,7 +140,7 @@ namespace Ocell.Settings
 
                     if (!string.IsNullOrWhiteSpace(InstapaperUser))
                     {
-                        BarText = Resources.VerifyingCredentials;
+                        Progress.Text = Resources.VerifyingCredentials;
                         Progress.IsLoading = true;
                         InstapaperPair = new AuthPair { User = InstapaperUser, Password = InstapaperPassword };
                         var service = new InstapaperService(InstapaperPair.User, InstapaperPair.Password);

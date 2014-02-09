@@ -183,7 +183,7 @@ namespace Ocell.Pages.Elements
                     task.Show();
                 }, (url) => url is string && Uri.IsWellFormedUriString(url as string, UriKind.Absolute));
 
-            manageLists = new DelegateCommand((obj) => Navigate("/Pages/Lists/ListManager.xaml?user=" + User.ScreenName),
+            manageLists = new DelegateCommand((obj) => Navigator.Navigate("/Pages/Lists/ListManager.xaml?user=" + User.ScreenName),
                 GenericCanExecute);
 
             this.PropertyChanged += (sender, e) =>
@@ -221,7 +221,7 @@ namespace Ocell.Pages.Elements
             usr = Config.Accounts.FirstOrDefault(item => item != null && item.ScreenName == User.ScreenName);
             if (e.TaskResult == TaskResult.OK && User != null)
             {
-                BarText = Resources.UploadingPicture;
+                Progress.Text = Resources.UploadingPicture;
                 Progress.IsLoading = true;
                 ITwitterService srv = ServiceDispatcher.GetService(usr);
                 // TODO: When image uploads are ready.
@@ -231,7 +231,7 @@ namespace Ocell.Pages.Elements
 
         private void ReceivePhotoUpload(TwitterUser user, TwitterResponse response)
         {
-            BarText = "";
+            Progress.Text = "";
             Progress.IsLoading = false;
             if (response.StatusCode == HttpStatusCode.OK)
                 Notificator.ShowProgressIndicatorMessage(Resources.ProfileImageChanged);
@@ -308,12 +308,12 @@ namespace Ocell.Pages.Elements
 
         async void GetUser(string userName)
         {
-            BarText = Resources.RetrievingUser;
+            Progress.Text = Resources.RetrievingUser;
             Progress.IsLoading = true;
 
             var response = await ServiceDispatcher.GetDefaultService().ListUserProfilesForAsync(new ListUserProfilesForOptions { ScreenName = new List<string> { userName } });
             var users = response.Content;
-            BarText = "";
+            Progress.Text = "";
             Progress.IsLoading = false;
             if (!response.RequestSucceeded || !users.Any())
             {

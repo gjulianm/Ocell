@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    xmlns:controls="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
+    xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
     x:Class="Ocell.Pages.SelectUser"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
@@ -45,11 +45,6 @@
 		<StaticResource ResourceKey="PhoneForegroundBrush"/>
 	</phone:PhoneApplicationPage.Foreground>
 	
-	<shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding Strings.DownloadingUserList, Source={StaticResource LocalizedResources}}" x:Name="pBar" />
-    </shell:SystemTray.ProgressIndicator>
-	
-<!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
     <Grid x:Name="LayoutRoot" Margin="0,-32,0,0" >
     	<Grid.Background>
     		<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
@@ -73,11 +68,13 @@
                 <TextBox x:Name="UserFilter" Margin="0,139,8,0" Text="{Binding UserFilter, Mode=TwoWay, UpdateSourceTrigger=Explicit}" TextWrapping="Wrap" VerticalAlignment="Top"/>
     			<ListBox x:Name="UserList" Margin="12,211,20,8" ItemsSource="{Binding Collection.View}" SelectedItem="{Binding Destinatary, Mode=TwoWay}" ItemTemplate="{StaticResource UserTemplate}" />
     		</Grid>
-            
-            <controls:AppBar Style="{StaticResource AppBarStyle}">
-                <controls:AppBarIconButton Text="{Binding Strings.Next, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.next.rest.png" Command="{Binding GoNext}" />
-            </controls:AppBar>
-    	</Grid>
+
+            <appbar:Bindable.ApplicationBar>
+                <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
+                    <appbar:BindableAppBarButton Text="{Binding Strings.Next, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.next.rest.png" Command="{Binding GoNext}" />
+                </appbar:BindableAppBar>
+            </appbar:Bindable.ApplicationBar>
+        </Grid>
 
 <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
 <!--ContentPanel. Colocar aquí el contenido adicional-->

@@ -13,10 +13,6 @@
 	Foreground="{StaticResource PhoneForegroundBrush}"
 	Orientation="Portrait"
 	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache">
-
-	<shell:SystemTray.ProgressIndicator>
-		<shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" x:Name="pBar" />
-	</shell:SystemTray.ProgressIndicator>	
 	
 	<!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
 	<Grid x:Name="LayoutRoot" Margin="0,-32,0,0">

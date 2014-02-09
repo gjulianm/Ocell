@@ -39,7 +39,7 @@ namespace Ocell.Pages.Search
                     };
 
                     ResourceViewModel.Resource = resource;
-                    Navigate(Uris.ResourceView);
+                    Navigator.Navigate(Uris.ResourceView);
                 }, (obj) => !string.IsNullOrWhiteSpace(Query));
         }
     }

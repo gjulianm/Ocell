@@ -118,7 +118,8 @@ namespace Ocell
             {
                 urls += reg.ChannelUri + separator;
                 names += reg.User.ScreenName + separator;
-                tokens += Library.Encrypting.EncodeTokens(reg.User.Key, reg.User.Secret) + separator;
+                // TODO: Encryption tokens.
+                // tokens += Library.Encrypting.EncodeTokens(reg.User.Key, reg.User.Secret) + separator;
                 types += reg.Type + separator;
             }
 
@@ -167,7 +168,8 @@ namespace Ocell
         [Conditional("OCELL_FULL")]
         private static async void SendRemoveRequestToServer(UserToken token, string type)
         {
-            string encoded = Library.Encrypting.EncodeTokens(token.Key, token.Secret);
+            // TODO: TOkens.
+            string encoded = null; /*Library.Encrypting.EncodeTokens(token.Key, token.Secret); */
             string url = string.Format(Library.SensitiveData.PushUnregisterUriFormat, Uri.EscapeDataString(encoded), type);
 
             var request = (HttpWebRequest)WebRequest.Create(url);

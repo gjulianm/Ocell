@@ -21,10 +21,6 @@
         </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
  
- 	<shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
-    </shell:SystemTray.ProgressIndicator>
-
 	<phone:PhoneApplicationPage.FontFamily>
 		<StaticResource ResourceKey="PhoneFontFamilyNormal"/>
 	</phone:PhoneApplicationPage.FontFamily>

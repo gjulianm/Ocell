@@ -141,7 +141,7 @@ namespace Ocell.Pages.Columns
         void NavigateToResource(TwitterResource resource)
         {
             ResourceViewModel.Resource = resource;
-            Navigate(Uris.ResourceView);
+            Navigator.Navigate<ResourceViewModel>();
         }
 
         void GetLists()

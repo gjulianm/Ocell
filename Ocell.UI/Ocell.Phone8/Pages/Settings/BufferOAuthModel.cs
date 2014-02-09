@@ -63,7 +63,7 @@ namespace Ocell.Pages.Settings
             if (!response.Succeeded)
             {
                 Notificator.ShowError(Localization.Resources.ErrorBufferProfiles);
-                GoBack();
+                Navigator.GoBack();
                 return;
             }
 
@@ -87,7 +87,7 @@ namespace Ocell.Pages.Settings
                 Notificator.ShowWarning(Localization.Resources.NoBufferProfilesAdded);
             }
 
-            GoBack();
+            Navigator.GoBack();
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using AncoraMVVM.Base;
-using AncoraMVVM.Base.IoC;
 using Microsoft.Phone.Tasks;
-using Ocell.Compatibility;
 using Ocell.Library;
 using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
@@ -11,7 +9,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
-using System.Windows;
 using System.Windows.Input;
 
 namespace Ocell
@@ -72,7 +69,7 @@ namespace Ocell
 
         public void RaiseLoggedInChange()
         {
-            OnPropertyChanged("HasLoggedIn");
+            RaisePropertyChanged("HasLoggedIn");
         }
 
         int loadingCount;
@@ -138,10 +135,11 @@ namespace Ocell
             pinToStart = new DelegateCommand((obj) =>
                 {
                     var column = (TwitterResource)SelectedPivot;
-                    if (Dependency.Resolve<TileManager>().ColumnTileIsCreated(column))
+                    /*if (Dependency.Resolve<TileManager>().ColumnTileIsCreated(column))
                         Notificator.ShowError("This column is already pinned.");
                     else
-                        SecondaryTiles.CreateColumnTile(column);
+                        SecondaryTiles.CreateColumnTile(column);*/
+                    // TODO: Column manager.
                 }, (obj) => SelectedPivot != null);
 
             filterColumn = new DelegateCommand((obj) =>
@@ -153,19 +151,19 @@ namespace Ocell
                     DataTransfer.cFilter = new ColumnFilter { Resource = column };
 
                 DataTransfer.IsGlobalFilter = false;
-                Navigate(Uris.Filters);
+                Navigator.Navigate(Uris.Filters);
 
             }, (obj) => SelectedPivot != null);
 
             toMyProfile = new DelegateCommand((obj) =>
                 {
-                    Navigate("/Pages/Elements/User.xaml?user=" + CurrentAccountName);
+                    Navigator.Navigate("/Pages/Elements/User.xaml?user=" + CurrentAccountName);
                 }, (obj) => !string.IsNullOrWhiteSpace(CurrentAccountName));
 
             goToUser = new DelegateCommand((obj) =>
             {
                 IsSearching = false;
-                Navigate("/Pages/Elements/User.xaml?user=" + UserSearch);
+                Navigator.Navigate("/Pages/Elements/User.xaml?user=" + UserSearch);
             }, obj => Config.Accounts.Any());
 
             feedback = new DelegateCommand((obj) =>
@@ -174,14 +172,14 @@ namespace Ocell
                     task.Subject = "Ocell - Feedback";
                     task.To = "gjulian93@gmail.com";
 
-                    Deployment.Current.Dispatcher.InvokeIfRequired(task.Show);
+                    Dispatcher.InvokeIfRequired(task.Show);
                 });
 
         }
 
-        public void OnLoad()
+        public override void OnLoad()
         {
-            OnPropertyChanged("Pivots");
+            RaisePropertyChanged("Pivots");
         }
 
         public MainPageModel()
@@ -202,7 +200,7 @@ namespace Ocell
 
             Config.Columns.CollectionChanged += (sender, e) =>
             {
-                Deployment.Current.Dispatcher.InvokeIfRequired(() =>
+                Dispatcher.InvokeIfRequired(() =>
                     {
                         if (e.NewItems != null)
                         {

@@ -210,11 +210,11 @@ namespace Ocell.Pages
         private bool commandsSet = false;
         private void SetupCommands()
         {
-            sendTweet = new DelegateCommand(Send, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !IsLoading);
-            scheduleTweet = new DelegateCommand(Schedule, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !IsLoading);
-            selectImage = new DelegateCommand(StartImageChooser, (param) => SelectedAccounts.Count > 0 && !IsLoading);
-            saveDraft = new DelegateCommand(SaveAsDraft, (param) => !IsLoading);
-            sendWithBuffer = new DelegateCommand(SendBufferUpdate, (param) => !IsLoading && SelectedAccounts.Count > 0);
+            sendTweet = new DelegateCommand(Send, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !Progress.IsLoading);
+            scheduleTweet = new DelegateCommand(Schedule, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !Progress.IsLoading);
+            selectImage = new DelegateCommand(StartImageChooser, (param) => SelectedAccounts.Count > 0 && !Progress.IsLoading);
+            saveDraft = new DelegateCommand(SaveAsDraft, (param) => !Progress.IsLoading);
+            sendWithBuffer = new DelegateCommand(SendBufferUpdate, (param) => !Progress.IsLoading && SelectedAccounts.Count > 0);
 
             commandsSet = true;
         }
@@ -238,7 +238,7 @@ namespace Ocell.Pages
             if (result)
             {
                 Ocell.Settings.OAuth.Type = Ocell.Settings.AuthType.Buffer;
-                Navigate(Uris.LoginPage);
+                Navigator.Navigate(Uris.LoginPage);
             }
         }
 
@@ -289,7 +289,7 @@ namespace Ocell.Pages
             TweetText = "";
             DataTransfer.Text = "";
             Notificator.ShowMessage(Resources.BufferUpdateSent);
-            GoBack();
+            Navigator.GoBack();
         }
 
         private void Send(object param)
@@ -305,7 +305,7 @@ namespace Ocell.Pages
                 return;
             }
 
-            BarText = Resources.SendingTweet;
+            Progress.Text = Resources.SendingTweet;
             Progress.IsLoading = true;
 
             if (IsDM)
@@ -323,7 +323,7 @@ namespace Ocell.Pages
                         return;
                     }
 
-                    BarText = Resources.UploadingTwitlonger;
+                    Progress.Text = Resources.UploadingTwitlonger;
                     foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
                     {
                         SendTwitlongerPost(account);
@@ -352,7 +352,7 @@ namespace Ocell.Pages
             var response = await service.SendDirectMessageAsync(new SendDirectMessageOptions { UserId = (int)DataTransfer.DMDestinationId, Text = TweetText });
 
             Progress.IsLoading = false;
-            BarText = "";
+            Progress.Text = "";
 
             if (response.StatusCode == HttpStatusCode.Forbidden)
                 Notificator.ShowError(Resources.ErrorDuplicateTweet);
@@ -362,7 +362,7 @@ namespace Ocell.Pages
             {
                 TweetText = "";
                 DataTransfer.Text = "";
-                GoBack();
+                Navigator.GoBack();
                 DataTransfer.ReplyingDM = false;
             }
         }
@@ -390,7 +390,7 @@ namespace Ocell.Pages
 
             var post = response.Content;
 
-            BarText = Resources.SendingTweet;
+            Progress.Text = Resources.SendingTweet;
 
             try
             {
@@ -450,7 +450,7 @@ namespace Ocell.Pages
                 {
                     TweetText = "";
                     DataTransfer.Text = "";
-                    GoBack();
+                    Navigator.GoBack();
                 }
             }
         }
@@ -513,7 +513,7 @@ namespace Ocell.Pages
             Config.SaveTweetTasks();
 
             Notificator.ShowMessage(Resources.MessageScheduled);
-            GoBack();
+            Navigator.GoBack();
         }
 
         private bool error;
@@ -543,7 +543,7 @@ namespace Ocell.Pages
                         if (!error)
                         {
                             Notificator.ShowMessage(Resources.MessageScheduled);
-                            GoBack();
+                            Navigator.GoBack();
                         }
                     }
                 });

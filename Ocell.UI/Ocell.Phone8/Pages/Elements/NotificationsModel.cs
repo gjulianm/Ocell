@@ -33,7 +33,7 @@ namespace Ocell.Pages.Elements
             Tweets = new SortedFilteredObservable<ITweetable>(new TweetComparer());
         }
 
-        public async void OnLoad()
+        public override async void OnLoad()
         {
             lastCheckTime = await DateSync.GetLastCheckDate();
 
@@ -114,7 +114,8 @@ namespace Ocell.Pages.Elements
 
         private void FilterAndAddStatuses(IEnumerable<ITweetable> tweets)
         {
-            Tweets.BulkAdd(tweets.Where(x => x.CreatedDate > lastCheckTime));
+            // TODO: AddRange.
+            //Tweets.BulkAdd(tweets.Where(x => x.CreatedDate > lastCheckTime));
 
             if (Interlocked.Decrement(ref requestsPending) <= 0)
             {

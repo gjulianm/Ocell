@@ -1,4 +1,6 @@
-﻿using Microsoft.Phone.Controls;
+﻿using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
+using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Ocell.Library;
 using Ocell.Library.Twitter;
@@ -48,9 +50,9 @@ namespace Ocell.Pages
                     if (e.PropertyName == "IsGeotagged")
                     {
                         if (viewModel.IsGeotagged)
-                            Dispatcher.InvokeIfRequired(EnableGeoloc.Begin);
+                            Dependency.Resolve<IDispatcher>().InvokeIfRequired(EnableGeoloc.Begin);
                         else
-                            Dispatcher.InvokeIfRequired(DisableGeoloc.Begin);
+                            Dependency.Resolve<IDispatcher>().InvokeIfRequired(DisableGeoloc.Begin);
                     }
                 };
         }
@@ -98,17 +100,18 @@ namespace Ocell.Pages
             }
 
 
-            _completer = new Autocompleter();
-            _completer.User = DataTransfer.CurrentAccount;
-            _completer.Textbox = TweetBox;
+            // TODO: Fix this with autocompleter.
+            //_completer = new Autocompleter();
+            //_completer.User = DataTransfer.CurrentAccount;
+            //_completer.Textbox = TweetBox;
             _completer.Trigger = '@';
             viewModel.Completer = _completer;
 
             // Update the UI.
             if (viewModel.IsGeotagged)
-                Dispatcher.InvokeIfRequired(EnableGeoloc.Begin);
+                Dependency.Resolve<IDispatcher>().InvokeIfRequired(EnableGeoloc.Begin);
             else
-                Dispatcher.InvokeIfRequired(DisableGeoloc.Begin);
+                Dependency.Resolve<IDispatcher>().InvokeIfRequired(DisableGeoloc.Begin);
         }
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -124,7 +127,8 @@ namespace Ocell.Pages
 
             if (img.Opacity == 1)
             {
-                _completer.User = user;
+                // TODO: Fix.
+                //_completer.User = user;
                 if (!viewModel.SelectedAccounts.Contains(user))
                     viewModel.SelectedAccounts.Add(user);
             }
@@ -166,20 +170,15 @@ namespace Ocell.Pages
         {
             viewModel.SelectedAccounts = (sender as ListBox).SelectedItems;
         }
-#if WP8
-        protected override async void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
-#elif WP7
-protected override  void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
-#endif
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             TweetBox.Focus();
             base.OnNavigatedTo(e);
-#if WP8
             if (e.NavigationMode == System.Windows.Navigation.NavigationMode.New && NavigationContext.QueryString.ContainsKey("voiceCommandName"))
                 StartSpeechToText();
-#endif
         }
-#if WP8
+
         private async void StartSpeechToText()
         {
             var recognizer = new VoiceReco.VoiceRecognizer();
@@ -194,7 +193,7 @@ protected override  void OnNavigatedTo(System.Windows.Navigation.NavigationEvent
                     viewModel.SendTweet.Execute(null);
             }
         }
-#endif
+
         private void UserSuggestions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selected = UserSuggestions.SelectedItem as string;

@@ -1,10 +1,11 @@
-﻿using LinqToVisualTree;
+﻿using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
+using LinqToVisualTree;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using TweetSharp;
@@ -79,7 +80,7 @@ namespace Ocell.Controls
             long tweetId = Config.ReadPositions[resource.String];
             var tweet = lb.Loader.Source.FirstOrDefault(x => x.Id == tweetId);
 
-            Deployment.Current.Dispatcher.InvokeIfRequired(() =>
+            Dependency.Resolve<IDispatcher>().InvokeIfRequired(() =>
             {
                 if (tweet != null)
                     lb.ScrollTo(tweet);

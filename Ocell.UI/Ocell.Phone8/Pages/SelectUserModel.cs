@@ -1,4 +1,5 @@
 ﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.IoC;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using PropertyChanged;
@@ -57,7 +58,7 @@ namespace Ocell.Pages
             goNext = new DelegateCommand((obj) =>
             {
                 DataTransfer.ReplyingDM = true;
-                Navigate(new Uri("/Pages/NewTweet.xaml?removeBack=1", UriKind.Relative));
+                Navigator.Navigate(new Uri("/Pages/NewTweet.xaml?removeBack=1", UriKind.Relative));
 
             }, (obj) =>
                 {

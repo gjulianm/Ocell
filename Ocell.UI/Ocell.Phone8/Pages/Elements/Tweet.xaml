@@ -89,14 +89,6 @@
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
 
-    <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
-    </shell:SystemTray.ProgressIndicator>
-
-    <!--CÃ³digo de ejemplo que muestra el uso de ApplicationBar-->
-
-
-    <!--LayoutRoot es la cuadrÃ­cula raÃ­z donde se coloca todo el contenido de la pÃ¡gina-->
     <Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
         <controls:Panorama x:Name="panorama"  Title="{Binding Tweet.AuthorName, StringFormat='@{0} tweet:'}"  DefaultItem="1">
             <controls:Panorama.TitleTemplate>
@@ -194,7 +186,7 @@
                 <appbar:BindableAppBar.MenuItems>
                     <appbar:BindableAppBarMenuItem Text="{Binding Strings.RetweetWithComments, Source={StaticResource LocalizedResources}}" x:Name="quoteButton" Command="{Binding Quote}"/>
                     <appbar:BindableAppBarMenuItem Text="{Binding Strings.Share, Source={StaticResource LocalizedResources}}" x:Name="shareButton" Command="{Binding Share}"/>
-                    <appbar:BindableAppBarMenuItem Text="{Binding Strings.Mute, Source={StaticResource LocalizedResources}}" Click="MuteBtn_Click"/>
+                    <appbar:BindableAppBarMenuItem Text="{Binding Strings.Mute, Source={StaticResource LocalizedResources}}" Tap="MuteBtn_Click"/>
                     <appbar:BindableAppBarMenuItem Text="{Binding Strings.ReadLater, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding Tweet}" />
                     <appbar:BindableAppBarMenuItem Text="{Binding Strings.DeleteTweet, Source={StaticResource LocalizedResources}}" Command="{Binding DeleteTweet}" />
                 </appbar:BindableAppBar.MenuItems>

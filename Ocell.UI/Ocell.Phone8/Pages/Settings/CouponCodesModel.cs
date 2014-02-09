@@ -21,7 +21,7 @@ namespace Ocell.Pages.Settings
 
         public CouponCodesModel()
         {
-            validate = new DelegateCommand(ValidateCode, x => !IsLoading);
+            validate = new DelegateCommand(ValidateCode, x => !Progress.IsLoading);
             Code = "";
         }
 
@@ -61,7 +61,7 @@ namespace Ocell.Pages.Settings
             {
                 Config.CouponCodeValidated = true;
                 Notificator.ShowMessage(Resources.CodeValid);
-                GoBack();
+                Navigator.GoBack();
             }
         }
     }

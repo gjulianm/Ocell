@@ -92,7 +92,8 @@ namespace Ocell
                     Dispatcher.BeginInvoke(() => email.Show());
                 }
 #endif
-                LittleWatson.CheckForPreviousException();
+                // TODO: Exception control.
+                // LittleWatson.CheckForPreviousException();
             });
 
             _initialised = true;
@@ -182,6 +183,7 @@ namespace Ocell
 
                 list.Loader.PropertyChanged += (sender1, e1) =>
                 {
+                    // TODO: Check this.
                     if (e1.PropertyName == "IsLoading")
                     {
                         if (list.Loader.IsLoading)

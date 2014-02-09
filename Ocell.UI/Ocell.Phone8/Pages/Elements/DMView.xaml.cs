@@ -164,11 +164,13 @@ namespace Ocell.Pages.Elements
             item.Click += (sender, e) =>
             {
                 var filter = FilterManager.SetupMute(FilterType.Text, "#" + Hashtag.Text);
-                Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
+                Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")));
             };
             return CreateBaseLink("#" + Hashtag.Text, Localization.Resources.CopyHashtag, "#" + Hashtag.Text, item);
         }
 
+
+        // TODO: Refactor this.
         Inline CreateMentionLink(TwitterMention Mention)
         {
             MenuItem item = new MenuItem
@@ -179,7 +181,7 @@ namespace Ocell.Pages.Elements
             item.Click += (sender, e) =>
             {
                 var filter = FilterManager.SetupMute(FilterType.User, Mention.ScreenName);
-                Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
+                Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")));
             };
             return CreateBaseLink("@" + Mention.ScreenName, Localization.Resources.CopyUsername, "@" + Mention.ScreenName, item);
         }
@@ -197,7 +199,7 @@ namespace Ocell.Pages.Elements
                 if (Uri.TryCreate(URL.ExpandedValue, UriKind.Absolute, out uri))
                 {
                     var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
-                    Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
+                    Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")));
                 }
                 else
                     Dependency.Resolve<INotificationService>().ShowError(Localization.Resources.NotValidURL);
@@ -221,7 +223,7 @@ namespace Ocell.Pages.Elements
                 if (Uri.TryCreate(Media.DisplayUrl, UriKind.Absolute, out uri))
                 {
                     var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
-                    Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")), "");
+                    Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")));
                 }
                 else
                     Dependency.Resolve<INotificationService>().ShowError(Localization.Resources.NotValidURL);
