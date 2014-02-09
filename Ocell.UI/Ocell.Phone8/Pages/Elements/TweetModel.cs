@@ -1,14 +1,14 @@
-﻿using DanielVaughan.Windows;
+﻿using AncoraMVVM.Base;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using Ocell.Commands;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using PropertyChanged;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,99 +17,35 @@ using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
+    [ImplementPropertyChanged]
     public class TweetModel : ExtendedViewModelBase
     {
-        ApplicationBarMode appBarMode;
-        public ApplicationBarMode AppBarMode
-        {
-            get { return appBarMode; }
-            set { Assign("AppBarMode", ref appBarMode, value); }
-        }
+        public ApplicationBarMode AppBarMode { get; set; }
 
-        bool completed;
-        public bool Completed
-        {
-            get { return completed; }
-            set { Assign("Completed", ref completed, value); }
-        }
+        public bool Completed { get; set; }
 
-        bool isMuting;
-        public bool IsMuting
-        {
-            get { return isMuting; }
-            set { Assign("IsMuting", ref isMuting, value); }
-        }
+        public bool IsMuting { get; set; }
 
-        TwitterStatus tweet;
-        public TwitterStatus Tweet
-        {
-            get { return tweet; }
-            set { Assign("Tweet", ref tweet, value); }
-        }
+        public TwitterStatus Tweet { get; set; }
 
-        bool hasReplies;
-        public bool HasReplies
-        {
-            get { return hasReplies; }
-            set { Assign("HasReplies", ref hasReplies, value); }
-        }
+        public bool HasReplies { get; set; }
 
-        bool isFavorited;
-        public bool IsFavorited
-        {
-            get { return isFavorited; }
-            set { Assign("IsFavorited", ref isFavorited, value); }
-        }
+        public bool IsFavorited { get; set; }
 
-        bool hasImage;
-        public bool HasImage
-        {
-            get { return hasImage; }
-            set { Assign("HasImage", ref hasImage, value); }
-        }
+        public bool HasImage { get; set; }
 
-        ObservableCollection<ITweeter> usersWhoRetweeted;
-        public ObservableCollection<ITweeter> UsersWhoRetweeted
-        {
-            get { return usersWhoRetweeted; }
-            set { Assign("UsersWhoRetweeted", ref usersWhoRetweeted, value); }
-        }
+        public ObservableCollection<ITweeter> UsersWhoRetweeted { get; set; }
 
-        int retweetCount;
-        public int RetweetCount
-        {
-            get { return retweetCount; }
-            set { Assign("RetweetCount", ref retweetCount, value); }
-        }
+        public int RetweetCount { get; set; }
 
 
-        bool hasRetweets;
-        public bool HasRetweets
-        {
-            get { return hasRetweets; }
-            set { Assign("HasRetweets", ref hasRetweets, value); }
-        }
+        public bool HasRetweets { get; set; }
 
-        string whoRetweeted;
-        public string WhoRetweeted
-        {
-            get { return whoRetweeted; }
-            set { Assign("WhoRetweeted", ref whoRetweeted, value); }
-        }
+        public string WhoRetweeted { get; set; }
 
-        string avatar;
-        public string Avatar
-        {
-            get { return avatar; }
-            set { Assign("Avatar", ref avatar, value); }
-        }
+        public string Avatar { get; set; }
 
-        string replyText;
-        public string ReplyText
-        {
-            get { return replyText; }
-            set { Assign("ReplyText", ref replyText, value); }
-        }
+        public string ReplyText { get; set; }
 
         DelegateCommand deleteTweet;
         public ICommand DeleteTweet
@@ -141,26 +77,11 @@ namespace Ocell.Pages.Elements
             get { return sendTweet; }
         }
 
-        string imageSource;
-        public string ImageSource
-        {
-            get { return imageSource; }
-            set { Assign("ImageSource", ref imageSource, value); }
-        }
+        public string ImageSource { get; set; }
 
-        SafeObservable<ITweetable> replies;
-        public SafeObservable<ITweetable> Replies
-        {
-            get { return replies; }
-            protected set { Assign("Replies", ref replies, value); }
-        }
+        public SafeObservable<ITweetable> Replies { get; set; }
 
-        SafeObservable<string> images;
-        public SafeObservable<string> Images
-        {
-            get { return images; }
-            protected set { Assign("Images", ref images, value); }
-        }
+        public SafeObservable<string> Images { get; set; }
 
         public event EventHandler<EventArgs<ITweetable>> TweetSent;
 
@@ -172,8 +93,8 @@ namespace Ocell.Pages.Elements
 
             if (DataTransfer.Status == null)
             {
-                MessageService.ShowError(Localization.Resources.ErrorLoadingTweet);
-                GoBack();
+                Notificator.ShowError(Localization.Resources.ErrorLoadingTweet);
+                Navigator.GoBack();
                 return;
             }
 
@@ -221,7 +142,7 @@ namespace Ocell.Pages.Elements
         private void GetReplies()
         {
             var convService = new ConversationService(DataTransfer.CurrentAccount);
-            convService.Finished += (sender, e) => IsLoading = false;
+            convService.Finished += (sender, e) => Progress.IsLoading = false;
             convService.GetConversationForStatus(Tweet, (statuses, response) =>
             {
                 if (statuses != null)
@@ -258,12 +179,11 @@ namespace Ocell.Pages.Elements
         }
 
         public TweetModel()
-            : base("Tweet")
         {
             Initialize();
         }
 
-        public void OnLoad()
+        public override void OnLoad()
         {
             ThreadPool.QueueUserWorkItem((c) =>
             {
@@ -282,9 +202,9 @@ namespace Ocell.Pages.Elements
 
                 var response = await ServiceDispatcher.GetService(user).DeleteTweetAsync(new DeleteTweetOptions { Id = Tweet.Id });
                 if (response.RequestSucceeded)
-                    MessageService.ShowMessage(Localization.Resources.TweetDeleted, "");
+                    Notificator.ShowMessage(Localization.Resources.TweetDeleted);
                 else
-                    MessageService.ShowError(Localization.Resources.ErrorDeletingTweet);
+                    Notificator.ShowError(Localization.Resources.ErrorDeletingTweet);
             }, (obj) => Tweet != null && Tweet.Author != null && Config.Accounts.Any(item => item != null && item.ScreenName == Tweet.Author.ScreenName));
 
 
@@ -302,7 +222,7 @@ namespace Ocell.Pages.Elements
             quote = new DelegateCommand((obj) =>
             {
                 DataTransfer.Text = "RT @" + Tweet.Author.ScreenName + ": " + Tweet.Text;
-                Navigate(Uris.WriteTweet);
+                Navigator.Navigate(Uris.WriteTweet);
             }, obj => Config.Accounts.Any() && Tweet != null);
 
             // TODO: These are the same commands that are used globally. WTF.
@@ -313,27 +233,27 @@ namespace Ocell.Pages.Elements
                 if (IsFavorited)
                 {
                     await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
-                    MessageService.ShowLightNotification(Localization.Resources.Unfavorited);
+                    Notificator.ShowProgressIndicatorMessage(Localization.Resources.Unfavorited);
                     IsFavorited = false;
                 }
                 else
                 {
                     await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
-                    MessageService.ShowLightNotification(Localization.Resources.Favorited);
+                    Notificator.ShowProgressIndicatorMessage(Localization.Resources.Favorited);
                     IsFavorited = true;
                 }
             }, parameter => (parameter is TwitterStatus) && Config.Accounts.Count > 0 && DataTransfer.CurrentAccount != null);
 
             sendTweet = new DelegateCommand(async (parameter) =>
             {
-                IsLoading = true;
-                BarText = Resources.SendingTweet;
+                Progress.IsLoading = true;
+                Progress.Text = Resources.SendingTweet;
                 var response = await ServiceDispatcher.GetCurrentService().SendTweetAsync(new SendTweetOptions { InReplyToStatusId = Tweet.Id, Status = ReplyText });
 
-                IsLoading = false;
-                BarText = "";
+                Progress.IsLoading = false;
+                Progress.Text = "";
                 if (!response.RequestSucceeded)
-                    MessageService.ShowError(response.Error != null ? response.Error.Message : Resources.UnknownValue);
+                    Notificator.ShowError(response.Error != null ? response.Error.Message : Resources.UnknownValue);
                 else if (TweetSent != null)
                     TweetSent(this, new EventArgs<ITweetable>(response.Content));
 
@@ -347,7 +267,7 @@ namespace Ocell.Pages.Elements
             var user = response.Content;
 
             if (!response.RequestSucceeded)
-                MessageService.ShowError(Localization.Resources.ErrorGettingProfile);
+                Notificator.ShowError(Localization.Resources.ErrorGettingProfile);
 
             Tweet.User = user;
             SetAvatar();
@@ -355,14 +275,14 @@ namespace Ocell.Pages.Elements
 
         public void ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            IsLoading = false;
-            MessageService.ShowError(Localization.Resources.ErrorDownloadingImage);
+            Progress.IsLoading = false;
+            Notificator.ShowError(Localization.Resources.ErrorDownloadingImage);
         }
 
         public void ImageOpened(object sender, RoutedEventArgs e)
         {
-            IsLoading = false;
-            BarText = "";
+            Progress.IsLoading = false;
+            Progress.Text = "";
         }
 
         public void ImageTapped(object sender, System.Windows.Input.GestureEventArgs e)
@@ -417,8 +337,8 @@ namespace Ocell.Pages.Elements
             if (Images.Count > 0)
             {
                 HasImage = true;
-                IsLoading = true;
-                BarText = Localization.Resources.DownloadingImage;
+                Progress.IsLoading = true;
+                Progress.Text = Localization.Resources.DownloadingImage;
             }
         }
 

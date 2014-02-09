@@ -1,43 +1,36 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using Ocell.Library;
+﻿using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using PropertyChanged;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 namespace Ocell
 {
+    [ImplementPropertyChanged]
     public class ManageDraftsModel : ExtendedViewModelBase
     {
-        ObservableCollection<TwitterDraft> collection;
-        public ObservableCollection<TwitterDraft> Collection
-        {
-            get { return collection; }
-            set { Assign("Collection", ref collection, value); }
-        }
+        public ObservableCollection<TwitterDraft> Collection { get; set; }
 
-        object listSelection;
-        public object ListSelection
-        {
-            get { return listSelection; }
-            set { Assign("ListSelection", ref listSelection, value); }
-        }
+        public object ListSelection { get; set; }
 
         public ManageDraftsModel()
-            : base("ManageDrafts")
         {
-            collection = new ObservableCollection<TwitterDraft>(Config.Drafts);
-
-            this.NavigatingFrom += (sender, e) =>
-            {
-                Config.Drafts = new List<TwitterDraft>(collection);
-            };
+            Collection = new ObservableCollection<TwitterDraft>(Config.Drafts);
 
             this.PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == "ListSelection")
                         OnSelectionChanged();
                 };
+        }
+
+        public override void OnNavigating(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnNavigating(e);
+
+            Config.Drafts = new List<TwitterDraft>(Collection);
         }
 
         public void GridHold(object sender, System.Windows.Input.GestureEventArgs e)
@@ -49,11 +42,11 @@ namespace Ocell
             TwitterDraft draft = grid.Tag as TwitterDraft;
             if (draft != null && Config.Drafts.Contains(draft))
             {
-                var accepts = MessageService.AskYesNoQuestion(Resources.AskDeleteDraft, "");
+                var accepts = Notificator.Prompt(Resources.AskDeleteDraft);
                 if (accepts)
                 {
-                    collection.Remove(draft);
-                    MessageService.ShowMessage(Resources.DraftDeleted, "");
+                    Collection.Remove(draft);
+                    Notificator.ShowMessage(Resources.DraftDeleted);
                 }
             }
         }
@@ -67,7 +60,7 @@ namespace Ocell
 
             DataTransfer.Draft = draft;
             ListSelection = null;
-            GoBack();
+            Navigator.GoBack();
         }
 
     }

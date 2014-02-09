@@ -1,18 +1,17 @@
-﻿using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using DanielVaughan;
+﻿using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Ocell.Library;
 using Ocell.Library.Twitter;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 #if WP8
-using Windows.Phone.Speech.Recognition;
+
 #endif
-using System.Diagnostics;
-using System;
 
 namespace Ocell.Pages
 {
@@ -34,7 +33,7 @@ namespace Ocell.Pages
                 viewModel.TryLoadDraft();
             };
 
-            
+
             DataContext = viewModel;
 
             Loaded += NewTweet_Loaded;
@@ -51,9 +50,9 @@ namespace Ocell.Pages
                     if (e.PropertyName == "IsGeotagged")
                     {
                         if (viewModel.IsGeotagged)
-                            Dispatcher.InvokeIfRequired(EnableGeoloc.Begin);
+                            Dependency.Resolve<IDispatcher>().InvokeIfRequired(EnableGeoloc.Begin);
                         else
-                            Dispatcher.InvokeIfRequired(DisableGeoloc.Begin);
+                            Dependency.Resolve<IDispatcher>().InvokeIfRequired(DisableGeoloc.Begin);
                     }
                 };
         }
@@ -61,10 +60,10 @@ namespace Ocell.Pages
         private void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            
+
             // Update the binding source
             BindingExpression bindingExpr = textBox.GetBindingExpression(TextBox.TextProperty);
-            bindingExpr.UpdateSource();            
+            bindingExpr.UpdateSource();
         }
 
         void NewTweet_Unloaded(object sender, RoutedEventArgs e)
@@ -95,29 +94,30 @@ namespace Ocell.Pages
                 }
                 else
                 {
-                    if(!ListAccounts.SelectedItems.Contains(DataTransfer.CurrentAccount))
+                    if (!ListAccounts.SelectedItems.Contains(DataTransfer.CurrentAccount))
                         ListAccounts.SelectedItems.Add(DataTransfer.CurrentAccount);
                 }
             }
 
 
-            _completer = new Autocompleter();
-            _completer.User = DataTransfer.CurrentAccount;
-            _completer.Textbox = TweetBox;
+            // TODO: Fix this with autocompleter.
+            //_completer = new Autocompleter();
+            //_completer.User = DataTransfer.CurrentAccount;
+            //_completer.Textbox = TweetBox;
             _completer.Trigger = '@';
             viewModel.Completer = _completer;
 
             // Update the UI.
             if (viewModel.IsGeotagged)
-                Dispatcher.InvokeIfRequired(EnableGeoloc.Begin);
+                Dependency.Resolve<IDispatcher>().InvokeIfRequired(EnableGeoloc.Begin);
             else
-                Dispatcher.InvokeIfRequired(DisableGeoloc.Begin);
+                Dependency.Resolve<IDispatcher>().InvokeIfRequired(DisableGeoloc.Begin);
         }
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             Image img = sender as Image;
-            
+
             if (img == null)
                 return;
 
@@ -127,7 +127,8 @@ namespace Ocell.Pages
 
             if (img.Opacity == 1)
             {
-                _completer.User = user;
+                // TODO: Fix.
+                //_completer.User = user;
                 if (!viewModel.SelectedAccounts.Contains(user))
                     viewModel.SelectedAccounts.Add(user);
             }
@@ -155,7 +156,7 @@ namespace Ocell.Pages
                 return;
 
             UserToken usr = img.Tag as UserToken;
-            if (usr == DataTransfer.CurrentAccount 
+            if (usr == DataTransfer.CurrentAccount
                 || (DataTransfer.Draft != null && DataTransfer.Draft.Accounts.Contains(usr)))
                 UpdateOpacity(img);
         }
@@ -169,20 +170,15 @@ namespace Ocell.Pages
         {
             viewModel.SelectedAccounts = (sender as ListBox).SelectedItems;
         }
-#if WP8
-        protected override async void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
-#elif WP7
-protected override  void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
-#endif
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             TweetBox.Focus();
             base.OnNavigatedTo(e);
-#if WP8
             if (e.NavigationMode == System.Windows.Navigation.NavigationMode.New && NavigationContext.QueryString.ContainsKey("voiceCommandName"))
                 StartSpeechToText();
-#endif
         }
-#if WP8
+
         private async void StartSpeechToText()
         {
             var recognizer = new VoiceReco.VoiceRecognizer();
@@ -197,11 +193,11 @@ protected override  void OnNavigatedTo(System.Windows.Navigation.NavigationEvent
                     viewModel.SendTweet.Execute(null);
             }
         }
-#endif
+
         private void UserSuggestions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selected = UserSuggestions.SelectedItem as string;
-            
+
             if (string.IsNullOrWhiteSpace(selected))
                 return;
 

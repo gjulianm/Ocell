@@ -13,7 +13,7 @@
 	shell:SystemTray.IsVisible="True"
 	shell:SystemTray.Opacity="0"
 	xmlns:commands="clr-namespace:Ocell.Commands"
-    xmlns:u="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone">
+    xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7">
 
     <phone:PhoneApplicationPage.Resources>
         <DataTemplate x:Key="ItemTemplate">
@@ -63,10 +63,12 @@
 
         <!--ContentPanel: coloque aquí el contenido adicional-->
 
-        <u:AppBar Style="{StaticResource AppBarStyle}">
-            <u:AppBarIconButton x:Name="add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="{Binding Strings.AddNew, Source={StaticResource LocalizedResources}}" Click="add_Click"/>
-            <u:AppBarIconButton IconUri="/Images/Icons_White/appbar.save.rest.png" Text="{Binding Strings.Save, Source={StaticResource LocalizedResources}}" Click="ApplicationBarIconButton_Click"/>
-        </u:AppBar>
+        <appbar:Bindable.ApplicationBar>
+            <appbar:BindableAppBar>
+                <appbar:BindableAppBarButton x:Name="add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="{Binding Strings.AddNew, Source={StaticResource LocalizedResources}}" Tap="add_Click"/>
+                <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.save.rest.png" Text="{Binding Strings.Save, Source={StaticResource LocalizedResources}}" Tap="ApplicationBarIconButton_Click"/>
+            </appbar:BindableAppBar>
+        </appbar:Bindable.ApplicationBar>
     </Grid>
 
 

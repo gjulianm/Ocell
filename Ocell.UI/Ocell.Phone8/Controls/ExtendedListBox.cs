@@ -1,29 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Input;
-using System.Windows.Media;
+﻿using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
+using LinqToVisualTree;
+using Microsoft.Phone.Controls;
+using Ocell.Library;
 using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
-using Ocell.Library.Twitter.Comparers;
-using TweetSharp;
-using System.ComponentModel;
-using DanielVaughan.ComponentModel;
-using Ocell.Library;
-using DanielVaughan.Services;
-using DanielVaughan;
-using Ocell.Localization;
+using System;
 using System.Collections.Generic;
-using LinqToVisualTree;
-using Ocell.Controls;
-using Microsoft.Phone.Controls;
-using System.Diagnostics;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using TweetSharp;
 
 namespace Ocell.Controls
 {
@@ -206,7 +194,7 @@ namespace Ocell.Controls
 
         void Loader_Error(TwitterResponse response)
         {
-            var messager = Dependency.Resolve<IMessageService>();
+            var messager = Dependency.Resolve<INotificationService>();
             if (DateTime.Now > lastErrorFired.AddSeconds(10))
             {
                 lastErrorFired = DateTime.Now;
@@ -223,7 +211,7 @@ namespace Ocell.Controls
         void Loader_CacheLoad(object sender, EventArgs e)
         {
             if (!scrollController.Bound)
-                Dispatcher.InvokeIfRequired(() => scrollController.Bind(this));
+                Dependency.Resolve<IDispatcher>().InvokeIfRequired(() => scrollController.Bind(this));
 
             if (Config.ReloadOptions == ColumnReloadOptions.AskPosition)
                 TryTriggerResumeReading();

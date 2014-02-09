@@ -1,14 +1,7 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+﻿using Ocell.Library.Crypto;
+using System;
 using System.Diagnostics;
+using System.Net;
 
 namespace Ocell.Library.Tasks
 {
@@ -18,7 +11,7 @@ namespace Ocell.Library.Tasks
 
         public Scheduler(string token, string secret)
         {
-            accessToken = Encrypting.EncodeTokens(token, secret);
+            accessToken = TokenCombinator.EncodeTokens(token, secret);
         }
 
         [Conditional("OCELL_FULL")]
@@ -30,7 +23,7 @@ namespace Ocell.Library.Tasks
             string url = String.Format(SensitiveData.ScheduleUriformat, Uri.EscapeDataString(accessToken), Uri.EscapeDataString(text), delay);
 
             var request = (HttpWebRequest)WebRequest.Create(url);
-            
+
             HttpWebResponse response;
             try
             {
@@ -40,9 +33,9 @@ namespace Ocell.Library.Tasks
             {
                 response = (HttpWebResponse)e.Response;
             }
-            
+
             if (callback != null)
-                    callback(this, response);
+                callback(this, response);
         }
     }
 

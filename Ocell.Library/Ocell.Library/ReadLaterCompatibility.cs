@@ -1,22 +1,11 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-
+﻿
+using AncoraMVVM.Base.IoC;
 namespace Ocell.Library
 {
     public class AuthPair
     {
         private byte[] _encryptedPass;
-        public string User {get; set;}
+        public string User { get; set; }
         public string Password
         {
             get
@@ -25,7 +14,7 @@ namespace Ocell.Library
                     return null;
                 else
                 {
-                    byte[] unencryptedBytes = ProtectedData.Unprotect(_encryptedPass, null);
+                    byte[] unencryptedBytes = Dependency.Resolve<ICryptoManager>().UnprotectData(_encryptedPass);
                     return System.Text.Encoding.UTF8.GetString(unencryptedBytes, 0, unencryptedBytes.Length);
                 }
             }
@@ -36,7 +25,7 @@ namespace Ocell.Library
                 else
                 {
                     byte[] unencryptedBytes = System.Text.Encoding.UTF8.GetBytes(value);
-                    _encryptedPass = ProtectedData.Protect(unencryptedBytes, null);
+                    _encryptedPass = Dependency.Resolve<ICryptoManager>().ProtectData(unencryptedBytes);
                 }
             }
         }

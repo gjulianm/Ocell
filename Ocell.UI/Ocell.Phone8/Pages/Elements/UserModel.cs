@@ -1,8 +1,9 @@
-﻿using DanielVaughan.Windows;
+﻿using AncoraMVVM.Base;
 using Microsoft.Phone.Tasks;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,115 +15,41 @@ using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
+    [ImplementPropertyChanged]
     public class UserModel : ExtendedViewModelBase
     {
         public TwitterUser User { get; set; } // Not a property, don't need Assign().
 
-        bool friendshipRetrieved;
-        public bool FriendshipRetrieved
-        {
-            get { return friendshipRetrieved; }
-            set { Assign("FriendshipRetrieved", ref friendshipRetrieved, value); }
-        }
+        public bool FriendshipRetrieved { get; set; }
 
-        bool followed;
-        public bool Followed
-        {
-            get { return followed; }
-            set { Assign("Followed", ref followed, value); }
-        }
+        public bool Followed { get; set; }
 
-        bool followsMe;
-        public bool FollowsMe
-        {
-            get { return followsMe; }
-            set { Assign("FollowsMe", ref followsMe, value); }
-        }
+        public bool FollowsMe { get; set; }
 
-        string relationshipText;
-        public string RelationshipText
-        {
-            get { return relationshipText; }
-            set { Assign("RelationshipText", ref relationshipText, value); }
-        }
+        public string RelationshipText { get; set; }
 
-        bool blocked;
-        public bool Blocked
-        {
-            get { return blocked; }
-            set { Assign("Blocked", ref blocked, value); }
-        }
+        public bool Blocked { get; set; }
 
-        bool isOwner;
-        public bool IsOwner
-        {
-            get { return isOwner; }
-            set { Assign("IsOwner", ref isOwner, value); }
-        }
+        public bool IsOwner { get; set; }
 
         #region Fields.
-        string avatar;
-        public string Avatar
-        {
-            get { return avatar; }
-            set { Assign("Avatar", ref avatar, value); }
-        }
+        public string Avatar { get; set; }
 
-        string name;
-        public string Name
-        {
-            get { return name; }
-            set { Assign("Name", ref name, value); }
-        }
+        public string Name { get; set; }
 
-        string screenName;
-        public string ScreenName
-        {
-            get { return screenName; }
-            set { Assign("ScreenName", ref screenName, value); }
-        }
+        public string ScreenName { get; set; }
 
-        string website;
-        public string Website
-        {
-            get { return website; }
-            set { Assign("Website", ref website, value); }
-        }
+        public string Website { get; set; }
 
-        string biography;
-        public string Biography
-        {
-            get { return biography; }
-            set { Assign("Biography", ref biography, value); }
-        }
+        public string Biography { get; set; }
 
-        string tweets;
-        public string Tweets
-        {
-            get { return tweets; }
-            set { Assign("Tweets", ref tweets, value); }
-        }
+        public string Tweets { get; set; }
 
-        string following;
-        public string Following
-        {
-            get { return following; }
-            set { Assign("Following", ref following, value); }
-        }
+        public string Following { get; set; }
 
-        string followers;
-        public string Followers
-        {
-            get { return followers; }
-            set { Assign("Followers", ref followers, value); }
-        }
+        public string Followers { get; set; }
 
-        bool websiteEnabled;
-        public bool WebsiteEnabled
-        {
-            get { return websiteEnabled; }
-            set { Assign("WebsiteEnabled", ref websiteEnabled, value); }
-        }
+        public bool WebsiteEnabled { get; set; }
         #endregion
 
         #region Commands
@@ -185,20 +112,19 @@ namespace Ocell.Pages.Elements
         #endregion
 
         public UserModel()
-            : base("User")
         {
             User = null;
             GenericCanExecute = (obj) => User != null && DataTransfer.CurrentAccount != null;
 
             followUser = new DelegateCommand((obj) =>
             {
-                IsLoading = true;
+                Progress.IsLoading = true;
                 ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FollowUserAsync(new FollowUserOptions { UserId = User.Id }).ContinueWith(ReceiveFollow);
             }, x => FriendshipRetrieved && GenericCanExecute.Invoke(null));
 
             unfollowUser = new DelegateCommand((obj) =>
             {
-                IsLoading = true;
+                Progress.IsLoading = true;
                 ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfollowUserAsync(new UnfollowUserOptions { UserId = User.Id }).ContinueWith(ReceiveFollow);
             }, x => FriendshipRetrieved && GenericCanExecute.Invoke(null));
 
@@ -211,7 +137,7 @@ namespace Ocell.Pages.Elements
                         User = DataTransfer.CurrentAccount
                     });
                     Config.SaveColumns();
-                    MessageService.ShowLightNotification(Resources.UserPinned);
+                    Notificator.ShowProgressIndicatorMessage(Resources.UserPinned);
                     pinUser.RaiseCanExecuteChanged();
 
                 }, item => GenericCanExecute.Invoke(null)
@@ -219,26 +145,26 @@ namespace Ocell.Pages.Elements
 
             block = new DelegateCommand((obj) =>
                 {
-                    IsLoading = true;
+                    Progress.IsLoading = true;
                     ServiceDispatcher.GetService(DataTransfer.CurrentAccount).BlockUserAsync(new BlockUserOptions { UserId = User.Id }).ContinueWith(ReceiveBlock);
                 }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
             unblock = new DelegateCommand((obj) =>
                 {
-                    IsLoading = true;
+                    Progress.IsLoading = true;
                     ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnblockUserAsync(new UnblockUserOptions { UserId = User.Id }).ContinueWith(ReceiveBlock);
                 }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
             reportSpam = new DelegateCommand(async (obj) =>
             {
-                IsLoading = true;
+                Progress.IsLoading = true;
                 var response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).ReportSpamAsync(new ReportSpamOptions { UserId = User.Id });
-                IsLoading = false;
+                Progress.IsLoading = false;
 
                 if (response.StatusCode == HttpStatusCode.OK)
-                    MessageService.ShowLightNotification(String.Format(Resources.ReportedAndBlocked, User.ScreenName));
+                    Notificator.ShowProgressIndicatorMessage(String.Format(Resources.ReportedAndBlocked, User.ScreenName));
                 else
-                    MessageService.ShowError(String.Format(Resources.CouldntReport, User.ScreenName));
+                    Notificator.ShowError(String.Format(Resources.CouldntReport, User.ScreenName));
 
             }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
@@ -257,7 +183,7 @@ namespace Ocell.Pages.Elements
                     task.Show();
                 }, (url) => url is string && Uri.IsWellFormedUriString(url as string, UriKind.Absolute));
 
-            manageLists = new DelegateCommand((obj) => Navigate("/Pages/Lists/ListManager.xaml?user=" + User.ScreenName),
+            manageLists = new DelegateCommand((obj) => Navigator.Navigate("/Pages/Lists/ListManager.xaml?user=" + User.ScreenName),
                 GenericCanExecute);
 
             this.PropertyChanged += (sender, e) =>
@@ -286,7 +212,7 @@ namespace Ocell.Pages.Elements
 
             ScreenName = userName;
 
-            GetUser(userName);           
+            GetUser(userName);
         }
 
         void task_Completed(object sender, PhotoResult e)
@@ -295,8 +221,8 @@ namespace Ocell.Pages.Elements
             usr = Config.Accounts.FirstOrDefault(item => item != null && item.ScreenName == User.ScreenName);
             if (e.TaskResult == TaskResult.OK && User != null)
             {
-                BarText = Resources.UploadingPicture;
-                IsLoading = true;
+                Progress.Text = Resources.UploadingPicture;
+                Progress.IsLoading = true;
                 ITwitterService srv = ServiceDispatcher.GetService(usr);
                 // TODO: When image uploads are ready.
                 // srv.UpdateProfileImage(new UpdateProfileImageOptions { ImagePath = e.OriginalFileName }, ReceivePhotoUpload);
@@ -305,12 +231,12 @@ namespace Ocell.Pages.Elements
 
         private void ReceivePhotoUpload(TwitterUser user, TwitterResponse response)
         {
-            BarText = "";
-            IsLoading = false;
+            Progress.Text = "";
+            Progress.IsLoading = false;
             if (response.StatusCode == HttpStatusCode.OK)
-                MessageService.ShowLightNotification(Resources.ProfileImageChanged);
+                Notificator.ShowProgressIndicatorMessage(Resources.ProfileImageChanged);
             else
-                MessageService.ShowError(Resources.ErrorUploadingProfileImage);
+                Notificator.ShowError(Resources.ErrorUploadingProfileImage);
         }
 
         void ReceiveFollow(Task<TwitterResponse<TwitterUser>> task)
@@ -323,7 +249,7 @@ namespace Ocell.Pages.Elements
 
             if (usr == null)
             {
-                MessageService.ShowError(Resources.ErrorMessage);
+                Notificator.ShowError(Resources.ErrorMessage);
                 return;
             }
 
@@ -338,16 +264,16 @@ namespace Ocell.Pages.Elements
                 errorMsg = String.Format(Resources.CouldntUnfollow, usr.ScreenName);
             }
 
-            IsLoading = false;
+            Progress.IsLoading = false;
             if (response.RequestSucceeded)
             {
-                MessageService.ShowLightNotification(successMsg);
+                Notificator.ShowProgressIndicatorMessage(successMsg);
                 Followed = !Followed;
                 followUser.RaiseCanExecuteChanged();
                 unfollowUser.RaiseCanExecuteChanged(); ;
             }
             else
-                MessageService.ShowError(errorMsg);
+                Notificator.ShowError(errorMsg);
         }
 
         void ReceiveBlock(Task<TwitterResponse<TwitterUser>> task)
@@ -367,31 +293,31 @@ namespace Ocell.Pages.Elements
                 errorMsg = String.Format(Resources.CouldntBlock, User.ScreenName);
             }
 
-            IsLoading = false;
+            Progress.IsLoading = false;
 
             if (response.RequestSucceeded)
             {
-                MessageService.ShowLightNotification(successMsg);
+                Notificator.ShowProgressIndicatorMessage(successMsg);
                 Blocked = !Blocked;
                 block.RaiseCanExecuteChanged();
                 unblock.RaiseCanExecuteChanged(); // TODO: Implement AncoraMVVM here and avoid all those RaiseCanExecuteChanged.
             }
             else
-                MessageService.ShowError(errorMsg);
+                Notificator.ShowError(errorMsg);
         }
 
         async void GetUser(string userName)
         {
-            BarText = Resources.RetrievingUser;
-            IsLoading = true;
+            Progress.Text = Resources.RetrievingUser;
+            Progress.IsLoading = true;
 
             var response = await ServiceDispatcher.GetDefaultService().ListUserProfilesForAsync(new ListUserProfilesForOptions { ScreenName = new List<string> { userName } });
             var users = response.Content;
-            BarText = "";
-            IsLoading = false;
-            if (!response.RequestSucceeded|| !users.Any())
+            Progress.Text = "";
+            Progress.IsLoading = false;
+            if (!response.RequestSucceeded || !users.Any())
             {
-                MessageService.ShowError(Resources.CouldntFindUser);
+                Notificator.ShowError(Resources.CouldntFindUser);
                 return;
             }
 
@@ -441,7 +367,7 @@ namespace Ocell.Pages.Elements
             FriendshipRetrieved = true;
             if (!response.RequestSucceeded)
             {
-                MessageService.ShowWarning(Resources.CouldntGetRelationship);
+                Notificator.ShowWarning(Resources.CouldntGetRelationship);
                 return;
             }
 

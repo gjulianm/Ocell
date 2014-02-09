@@ -1,4 +1,6 @@
-﻿using DanielVaughan;
+﻿
+using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
 using Microsoft.Phone.Controls;
 using Ocell.Pages.Settings;
 using System;
@@ -33,7 +35,7 @@ namespace Ocell.Settings
             wb.Navigated += (sender, e) => viewModel.BrowserNavigated(e);
             wb.Navigating += (sender, e) => viewModel.BrowserNavigating(e);
             this.Loaded += (sender, e) => viewModel.PageLoaded();
-            viewModel.BrowserNavigate += (sender, e) => Dispatcher.InvokeIfRequired(() => wb.Navigate(e));
+            viewModel.BrowserNavigate += (sender, e) => Dependency.Resolve<IDispatcher>().InvokeIfRequired(() => wb.Navigate(e));
 
             DataContext = viewModel;
         }

@@ -1,151 +1,41 @@
-﻿using DanielVaughan.Windows;
+﻿using AncoraMVVM.Base;
 using Ocell.Library;
 using Ocell.Library.Notifications;
 using Ocell.Library.ReadLater.Instapaper;
 using Ocell.Library.ReadLater.Pocket;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
 namespace Ocell.Settings
 {
+    [ImplementPropertyChanged]
     public class DefaultModel : ExtendedViewModelBase
     {
-        private string instapaperUser;
-        public string InstapaperUser
-        {
-            get { return instapaperUser; }
-            set { Assign("InstapaperUser", ref instapaperUser, value); }
-        }
-
-        private string instapaperPassword;
-        public string InstapaperPassword
-        {
-            get { return instapaperPassword; }
-            set { Assign("InstapaperPassword", ref instapaperPassword, value); }
-        }
-
-        private string pocketUser;
-        public string PocketUser
-        {
-            get { return pocketUser; }
-            set { Assign("PocketUser", ref pocketUser, value); }
-        }
-
-        private string pocketPassword;
-        public string PocketPassword
-        {
-            get { return pocketPassword; }
-            set { Assign("PocketPassword", ref pocketPassword, value); }
-        }
+        public string InstapaperUser { get; set; }
+        public string InstapaperPassword { get; set; }
+        public string PocketUser { get; set; }
+        public string PocketPassword { get; set; }
 
         #region Fields
-        private int selectedFontSize;
-        public int SelectedFontSize
-        {
-            get { return selectedFontSize; }
-            set { Assign("SelectedFontSize", ref selectedFontSize, value); }
-        }
-
-        private bool retweetsAsMentions;
-        public bool RetweetsAsMentions
-        {
-            get { return retweetsAsMentions; }
-            set { Assign("RetweetsAsMentions", ref retweetsAsMentions, value); }
-        }
-
-        private bool pushAvailable;
-        public bool PushAvailable
-        {
-            get { return pushAvailable; }
-            set { Assign("PushAvailable", ref pushAvailable, value); }
-        }
-
-        private bool pushEnabled;
-        public bool PushEnabled
-        {
-            get { return pushEnabled; }
-            set { Assign("PushEnabled", ref pushEnabled, value); }
-        }
-
-        private bool backgroundUpdateTiles;
-        public bool BackgroundUpdateTiles
-        {
-            get { return backgroundUpdateTiles; }
-            set { Assign("BackgroundUpdateTiles", ref backgroundUpdateTiles, value); }
-        }
-
-        private string tweetsPerRequest;
-        public string TweetsPerRequest
-        {
-            get { return tweetsPerRequest; }
-            set { Assign("TweetsPerRequest", ref tweetsPerRequest, value); }
-        }
-
-        private List<string> notifyOptions;
-        public List<string> NotifyOptions
-        {
-            get { return notifyOptions; }
-            set { Assign("NotifyOptions", ref notifyOptions, value); }
-        }
-
-        private int mentionNotifyOption;
-        public int MentionNotifyOption
-        {
-            get { return mentionNotifyOption; }
-            set { Assign("MentionNotifyOption", ref mentionNotifyOption, value); }
-        }
-
-        private int messageNotifyOption;
-        public int MessageNotifyOption
-        {
-            get { return messageNotifyOption; }
-            set { Assign("MessageNotifyOption", ref messageNotifyOption, value); }
-        }
-
-        private int selectedAccount;
-        public int SelectedAccount
-        {
-            get { return selectedAccount; }
-            set { Assign("SelectedAccount", ref selectedAccount, value); }
-        }
-
-        private int selectedMuteTime;
-        public int SelectedMuteTime
-        {
-            get { return selectedMuteTime; }
-            set { Assign("SelectedMuteTime", ref selectedMuteTime, value); }
-        }
-
-        private SafeObservable<UserToken> accounts;
-        public SafeObservable<UserToken> Accounts
-        {
-            get { return accounts; }
-            set { Assign("Accounts", ref accounts, value); }
-        }
-
-        private bool showResumePositionButton;
-        public bool ShowResumePositionButton
-        {
-            get { return showResumePositionButton; }
-            set { Assign("ShowResumePositionButton", ref showResumePositionButton, value); }
-        }
-
-        private bool geoTaggingEnabled;
-        public bool GeoTaggingEnabled
-        {
-            get { return geoTaggingEnabled; }
-            set { Assign("GeoTaggingEnabled", ref geoTaggingEnabled, value); }
-        }
-
-        private int selectedReloadOption;
-        public int SelectedReloadOption
-        {
-            get { return selectedReloadOption; }
-            set { Assign("SelectedReloadOption", ref selectedReloadOption, value); }
-        }
+        public int SelectedFontSize { get; set; }
+        public bool RetweetsAsMentions { get; set; }
+        public bool PushAvailable { get; set; }
+        public bool PushEnabled { get; set; }
+        public bool BackgroundUpdateTiles { get; set; }
+        public string TweetsPerRequest { get; set; }
+        public List<string> NotifyOptions { get; set; }
+        public int MentionNotifyOption { get; set; }
+        public int MessageNotifyOption { get; set; }
+        public int SelectedAccount { get; set; }
+        public int SelectedMuteTime { get; set; }
+        public SafeObservable<UserToken> Accounts { get; set; }
+        public bool ShowResumePositionButton { get; set; }
+        public bool GeoTaggingEnabled { get; set; }
+        public int SelectedReloadOption { get; set; }
 
         #endregion Fields
 
@@ -190,12 +80,12 @@ namespace Ocell.Settings
         {
             setCustomBackground = new DelegateCommand((obj) =>
             {
-                Navigate("/Pages/Settings/Backgrounds.xaml");
+                Navigator.Navigate("/Pages/Settings/Backgrounds.xaml");
             });
 
             showPrivacyPolicy = new DelegateCommand((obj) =>
             {
-                MessageService.ShowMessage(Resources.PrivacyPolicy);
+                Notificator.ShowMessage(Resources.PrivacyPolicy);
             });
 
             pinComposeToStart = new DelegateCommand((obj) =>
@@ -207,14 +97,14 @@ namespace Ocell.Settings
             addAccount = new DelegateCommand((obj) =>
             {
                 OAuth.Type = AuthType.Twitter;
-                Navigate(Uris.LoginPage);
+                Navigator.Navigate(Uris.LoginPage);
             });
 
             editFilters = new DelegateCommand((obj) =>
                 {
                     DataTransfer.cFilter = Config.GlobalFilter;
                     DataTransfer.IsGlobalFilter = true;
-                    Navigate(Uris.Filters);
+                    Navigator.Navigate(Uris.Filters);
                 });
 
             saveCredentials = new DelegateCommand(async (obj) =>
@@ -224,22 +114,22 @@ namespace Ocell.Settings
 
                     if (!string.IsNullOrWhiteSpace(PocketUser))
                     {
-                        BarText = Resources.VerifyingCredentials;
-                        IsLoading = true;
+                        Progress.Text = Resources.VerifyingCredentials;
+                        Progress.IsLoading = true;
                         PocketPair = new AuthPair { User = PocketUser, Password = PocketPassword };
                         var service = new PocketService(PocketPair.User, PocketPair.Password);
                         var response = await service.CheckCredentials();
 
                         if (response.Succeeded)
                         {
-                            MessageService.ShowLightNotification(String.Format(Resources.CredentialsSaved, "Pocket"));
+                            Notificator.ShowProgressIndicatorMessage(String.Format(Resources.CredentialsSaved, "Pocket"));
                             Config.ReadLaterCredentials.Pocket = PocketPair;
                             Config.ReadLaterCredentials = Config.ReadLaterCredentials;
                         }
                         else
                         {
-                            IsLoading = false;
-                            MessageService.ShowError(String.Format(Resources.InvalidCredentials, "Pocket"));
+                            Progress.IsLoading = false;
+                            Notificator.ShowError(String.Format(Resources.InvalidCredentials, "Pocket"));
                         }
                     }
                     else
@@ -250,22 +140,22 @@ namespace Ocell.Settings
 
                     if (!string.IsNullOrWhiteSpace(InstapaperUser))
                     {
-                        BarText = Resources.VerifyingCredentials;
-                        IsLoading = true;
+                        Progress.Text = Resources.VerifyingCredentials;
+                        Progress.IsLoading = true;
                         InstapaperPair = new AuthPair { User = InstapaperUser, Password = InstapaperPassword };
                         var service = new InstapaperService(InstapaperPair.User, InstapaperPair.Password);
                         var response = await service.CheckCredentials();
 
                         if (response.Succeeded)
                         {
-                            MessageService.ShowLightNotification(String.Format(Resources.CredentialsSaved, "Instapaper"));
+                            Notificator.ShowProgressIndicatorMessage(String.Format(Resources.CredentialsSaved, "Instapaper"));
                             Config.ReadLaterCredentials.Instapaper = InstapaperPair;
                             Config.ReadLaterCredentials = Config.ReadLaterCredentials;
                         }
                         else
                         {
-                            IsLoading = false;
-                            MessageService.ShowError(String.Format(Resources.InvalidCredentials, "Instapaper"));
+                            Progress.IsLoading = false;
+                            Notificator.ShowError(String.Format(Resources.InvalidCredentials, "Instapaper"));
                         }
                     }
                     else
@@ -299,7 +189,6 @@ namespace Ocell.Settings
         }
 
         public DefaultModel()
-            : base("Default")
         {
             SelectedFontSize = FontSizeToIndex(((GlobalSettings)App.Current.Resources["GlobalSettings"]).
                             TweetFontSize);

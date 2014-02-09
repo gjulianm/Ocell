@@ -11,10 +11,6 @@
 	shell:SystemTray.IsVisible="True"
     shell:SystemTray.Opacity="0.0">
 
-    <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding BarText}" x:Name="pBar" />
-    </shell:SystemTray.ProgressIndicator>
-
     <phone:PhoneApplicationPage.Resources>
 		<DataTemplate x:Key="ItemTemplate1">
 			<Grid Height="75" Width="406">

@@ -1,54 +1,26 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Collections.ObjectModel;
-using TweetSharp;
-using Ocell.Library.Twitter;
+﻿using AncoraMVVM.Base;
 using Ocell.Library;
+using Ocell.Library.Twitter;
+using PropertyChanged;
 using System.Collections.Generic;
-using System.Threading;
-using DanielVaughan.Windows;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using TweetSharp;
 
 namespace Ocell.Pages.Columns
 {
+    [ImplementPropertyChanged]
     public class AddColumnModel : ExtendedViewModelBase
     {
-        SafeObservable<TwitterList> lists;
-        public SafeObservable<TwitterList> Lists
-        {
-            get { return lists; }
-            set { Assign("Lists", ref lists, value); }
-        }
+        public SafeObservable<TwitterList> Lists { get; set; }
 
-        ObservableCollection<TwitterResource> core;
-        public ObservableCollection<TwitterResource> Core
-        {
-            get { return core; }
-            set { Assign("Core", ref core, value); }
-        }
+        public ObservableCollection<TwitterResource> Core { get; set; }
 
-        object coreSelection;
-        public object CoreSelection
-        {
-            get { return coreSelection; }
-            set { Assign("CoreSelection", ref coreSelection, value); }
-        }
+        public object CoreSelection { get; set; }
 
-        object listSelection;
-        public object ListSelection
-        {
-            get { return listSelection; }
-            set { Assign("ListSelection", ref listSelection, value); }
-        }
+        public object ListSelection { get; set; }
 
         DelegateCommand reloadLists;
         public ICommand ReloadLists
@@ -57,12 +29,11 @@ namespace Ocell.Pages.Columns
         }
 
         public AddColumnModel()
-            : base("AddColumn")
         {
             Core = new ObservableCollection<TwitterResource>();
             Lists = new SafeObservable<TwitterList>();
 
-            reloadLists = new DelegateCommand((param) => LoadLists(), (param) => !IsLoading);
+            reloadLists = new DelegateCommand(() => LoadLists(), () => !Progress.IsLoading);
 
             this.PropertyChanged += (sender, e) =>
             {
@@ -76,12 +47,12 @@ namespace Ocell.Pages.Columns
         int loading = 0;
         object sync = new object();
 
-        public void OnLoad()
+        public override void OnLoad()
         {
             if (DataTransfer.CurrentAccount == null)
             {
-                MessageService.ShowError(Localization.Resources.ErrorNoAccount);
-                GoBack();
+                Notificator.ShowError(Localization.Resources.ErrorNoAccount);
+                Navigator.GoBack();
                 return;
             }
 
@@ -94,15 +65,15 @@ namespace Ocell.Pages.Columns
         {
             var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
 
-            IsLoading = true;
-            BarText = Localization.Resources.LoadingLists;
+            Progress.IsLoading = true;
+            Progress.Text = Localization.Resources.LoadingLists;
 
             loading = 2;
             service.ListListsForAsync(new ListListsForOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }).ContinueWith(ReceiveLists);
             service.ListSubscriptionsAsync(new ListSubscriptionsOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }).ContinueWith(ReceiveSubscriptions);
         }
 
-       
+
 
         private void CreateCoreList()
         {
@@ -135,7 +106,7 @@ namespace Ocell.Pages.Columns
         {
             var response = task.Result;
             if (!response.RequestSucceeded)
-                MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
+                Notificator.ShowError(Localization.Resources.ErrorLoadingLists);
 
             AddLists(response.Content);
         }
@@ -144,7 +115,7 @@ namespace Ocell.Pages.Columns
         {
             var response = task.Result;
             if (!response.RequestSucceeded)
-                MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
+                Notificator.ShowError(Localization.Resources.ErrorLoadingLists);
 
             AddLists(response.Content);
         }
@@ -157,8 +128,8 @@ namespace Ocell.Pages.Columns
 
                 if (loading <= 0)
                 {
-                    IsLoading = false;
-                    BarText = "";
+                    Progress.IsLoading = false;
+                    Progress.Text = "";
                     reloadLists.RaiseCanExecuteChanged();
                 }
             }
@@ -181,9 +152,9 @@ namespace Ocell.Pages.Columns
                 User = DataTransfer.CurrentAccount
             };
 
-            SaveColumn(toAdd);           
+            SaveColumn(toAdd);
             ListSelection = null;
-            GoBack();        
+            Navigator.GoBack();
         }
 
         void AddSelectedCoreResource()
@@ -193,7 +164,7 @@ namespace Ocell.Pages.Columns
 
             SaveColumn((TwitterResource)CoreSelection);
             CoreSelection = null;
-            GoBack();
+            Navigator.GoBack();
         }
 
         private void SaveColumn(TwitterResource toAdd)

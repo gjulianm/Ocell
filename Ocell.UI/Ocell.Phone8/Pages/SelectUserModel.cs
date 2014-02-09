@@ -1,62 +1,34 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Data;
-using System.Windows.Input;
-using DanielVaughan.ComponentModel;
-using DanielVaughan.Windows;
-using TweetSharp;
+﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.IoC;
 using Ocell.Library;
 using Ocell.Library.Twitter;
-using System.Collections.Generic;
+using PropertyChanged;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Threading;
-using DanielVaughan;
-using DanielVaughan.InversionOfControl;
-using DanielVaughan.Net;
-using DanielVaughan.Services;
 using System.Linq;
+using System.Threading;
+using System.Windows.Data;
+using System.Windows.Input;
+using TweetSharp;
 
 namespace Ocell.Pages
 {
+    [ImplementPropertyChanged]
     public class SelectUserModel : ExtendedViewModelBase
     {
         private IUserProvider provider;
 
-        CollectionViewSource collection;
-        public CollectionViewSource Collection
-        {
-            get { return collection; }
-            set { Assign("Collection", ref collection, value); }
-        }
+        public CollectionViewSource Collection { get; set; }
 
-        object sender;
-        public object Sender
-        {
-            get { return sender; }
-            set { Assign("Sender", ref sender, value); }
-        }
+        public object Sender { get; set; }
 
 
-        object destinatary;
-        public object Destinatary
-        {
-            get { return destinatary; }
-            set { Assign("Destinatary", ref destinatary, value); }
-        }
+        public object Destinatary { get; set; }
 
-        string userFilter;
-        public string UserFilter
-        {
-            get { return userFilter; }
-            set { Assign("UserFilter", ref userFilter, value); }
-        }
+        public string UserFilter { get; set; }
 
-        IEnumerable<UserToken> accounts;
-        public IEnumerable<UserToken> Accounts
-        {
-            get { return accounts; }
-            set { Assign("Accounts", ref accounts, value); }
-        }
+        public IEnumerable<UserToken> Accounts { get; set; }
 
         DelegateCommand goNext;
         public ICommand GoNext
@@ -65,16 +37,15 @@ namespace Ocell.Pages
         }
 
         public SelectUserModel()
-            : base("SelectUserForDM")
         {
             provider = Dependency.Resolve<IUserProvider>();
             provider.GetFollowers = true;
             provider.GetFollowing = false;
-            provider.Finished += (sender, e) => IsLoading = false;
+            provider.Finished += (sender, e) => Progress.IsLoading = false;
             provider.Error += (sender, e) =>
             {
-                IsLoading = false;
-                MessageService.ShowError(Localization.Resources.ErrorDownloadingUsers);
+                Progress.IsLoading = false;
+                Notificator.ShowError(Localization.Resources.ErrorDownloadingUsers);
             };
 
             Collection = new CollectionViewSource();
@@ -87,7 +58,7 @@ namespace Ocell.Pages
             goNext = new DelegateCommand((obj) =>
             {
                 DataTransfer.ReplyingDM = true;
-                Navigate(new Uri("/Pages/NewTweet.xaml?removeBack=1", UriKind.Relative));
+                Navigator.Navigate(new Uri("/Pages/NewTweet.xaml?removeBack=1", UriKind.Relative));
 
             }, (obj) =>
                 {
@@ -124,7 +95,7 @@ namespace Ocell.Pages
             provider.User = Sender as UserToken;
             ThreadPool.QueueUserWorkItem((context) =>
             {
-                IsLoading = true;
+                Progress.IsLoading = true;
                 provider.Start();
             });
             goNext.RaiseCanExecuteChanged();

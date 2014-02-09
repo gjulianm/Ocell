@@ -1,37 +1,16 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using DanielVaughan.ComponentModel;
-using DanielVaughan;
-using DanielVaughan.Windows;
-using Ocell.Library.Twitter;
+﻿using AncoraMVVM.Base;
 using Ocell.Library;
+using Ocell.Library.Twitter;
+using PropertyChanged;
 using System.Linq;
+using System.Windows.Input;
 
 namespace Ocell.Pages.Search
 {
+    [ImplementPropertyChanged]
     public class EnterSearchModel : ExtendedViewModelBase
     {
-        string query;
-
-        public string Query
-        {
-            get
-            {
-                return query;
-            }
-            set
-            {
-                Assign("Query", ref query, value);
-            }
-        }
+        public string Query { get; set; }
 
         readonly DelegateCommand buttonClick;
 
@@ -44,7 +23,6 @@ namespace Ocell.Pages.Search
         }
 
         public EnterSearchModel()
-            : base("EnterSearch")
         {
             this.PropertyChanged += (sender, e) =>
             {
@@ -61,7 +39,7 @@ namespace Ocell.Pages.Search
                     };
 
                     ResourceViewModel.Resource = resource;
-                    Navigate(Uris.ResourceView);
+                    Navigator.Navigate(Uris.ResourceView);
                 }, (obj) => !string.IsNullOrWhiteSpace(Query));
         }
     }

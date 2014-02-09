@@ -1,32 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Windows.Input;
-using DanielVaughan.ComponentModel;
-using DanielVaughan.Windows;
-using Microsoft.Phone.Tasks;
-using Ocell.Library;
+﻿using AncoraMVVM.Base;
 using Ocell.Library.Twitter;
-using TweetSharp;
-using System.Windows.Data;
 using Ocell.Localization;
+using PropertyChanged;
+using System.Net;
 using System.Threading.Tasks;
+using System.Windows.Data;
+using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
+    [ImplementPropertyChanged]
     public class UserListModel : ExtendedViewModelBase
     {
         string whatUserList;
         string user;
 
-        string pageTitle;
-        public string PageTitle
-        {
-            get { return pageTitle; }
-            set { Assign("PageTitle", ref pageTitle, value); }
-        }
+        public string PageTitle { get; set; }
 
         SafeObservable<TwitterUser> list;
 
@@ -37,17 +26,11 @@ namespace Ocell.Pages.Elements
             get { return viewSource.View; }
         }
 
-        object selectedUser;
-        public object SelectedUser
-        {
-            get { return selectedUser; }
-            set { Assign("SelectedUser", ref selectedUser, value); }
-        }
+        public object SelectedUser { get; set; }
 
         public UserListModel()
-            : base("UserList")
         {
-            whatUserList ="";
+            whatUserList = "";
             user = "";
             PageTitle = whatUserList;
             list = new SafeObservable<TwitterUser>();
@@ -56,9 +39,9 @@ namespace Ocell.Pages.Elements
             viewSource.View.SortDescriptions.Add(new System.ComponentModel.SortDescription("ScreenName", System.ComponentModel.ListSortDirection.Ascending));
 
 
-            
 
-            
+
+
 
             this.PropertyChanged += (sender, e) =>
             {
@@ -66,8 +49,8 @@ namespace Ocell.Pages.Elements
                 {
                     TwitterUser selected = SelectedUser as TwitterUser;
                     if (selected != null)
-                    {                        
-                        Navigate("/Pages/Elements/User.xaml?user=" + selected.ScreenName);
+                    {
+                        Navigator.Navigate("/Pages/Elements/User.xaml?user=" + selected.ScreenName);
                         SelectedUser = null;
                     }
                 }
@@ -82,23 +65,23 @@ namespace Ocell.Pages.Elements
             if (whatUserList == "followers")
             {
                 ServiceDispatcher.GetCurrentService().ListFollowersAsync(new ListFollowersOptions { ScreenName = user, IncludeUserEntities = true }).ContinueWith(ReceiveUsers);
-                BarText = Resources.DownloadingFollowers;
+                Progress.Text = Resources.DownloadingFollowers;
                 PageTitle = Resources.Followers;
             }
             else if (whatUserList == "following")
             {
                 ServiceDispatcher.GetCurrentService().ListFriendsAsync(new ListFriendsOptions { ScreenName = user, IncludeUserEntities = true }).ContinueWith(ReceiveUsers);
-                BarText = Resources.DownloadingFollowing;
+                Progress.Text = Resources.DownloadingFollowing;
                 PageTitle = Resources.Following;
             }
             else
             {
-                MessageService.ShowError(Resources.NotValidResource);
-                GoBack();
+                Notificator.ShowError(Resources.NotValidResource);
+                Navigator.GoBack();
                 return;
             }
 
-            IsLoading = true;
+            Progress.IsLoading = true;
         }
 
 
@@ -108,14 +91,14 @@ namespace Ocell.Pages.Elements
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                MessageService.ShowError(Resources.CouldntFindUser);
-                GoBack();
+                Notificator.ShowError(Resources.CouldntFindUser);
+                Navigator.GoBack();
                 return;
             }
             else if (!response.RequestSucceeded)
             {
-                MessageService.ShowError(Resources.ErrorMessage);
-                GoBack();
+                Notificator.ShowError(Resources.ErrorMessage);
+                Navigator.GoBack();
                 return;
             }
 
@@ -134,7 +117,7 @@ namespace Ocell.Pages.Elements
             }
             else
             {
-                IsLoading = false;
+                Progress.IsLoading = false;
             }
         }
     }

@@ -1,20 +1,17 @@
-﻿using DanielVaughan.Windows;
+﻿using AncoraMVVM.Base;
 using Ocell.Library;
 using Ocell.Localization;
+using PropertyChanged;
 using System;
 using System.Net;
 using System.Windows.Input;
 
 namespace Ocell.Pages.Settings
 {
+    [ImplementPropertyChanged]
     public class CouponCodesModel : ExtendedViewModelBase
     {
-        string code;
-        public string Code
-        {
-            get { return code; }
-            set { Assign("Code", ref code, value); }
-        }
+        public string Code { get; set; }
 
         DelegateCommand validate;
         public ICommand Validate
@@ -23,9 +20,8 @@ namespace Ocell.Pages.Settings
         }
 
         public CouponCodesModel()
-            : base("Backgrounds")
         {
-            validate = new DelegateCommand(ValidateCode, x => !IsLoading);
+            validate = new DelegateCommand(ValidateCode, x => !Progress.IsLoading);
             Code = "";
         }
 
@@ -33,7 +29,7 @@ namespace Ocell.Pages.Settings
         {
             if (String.IsNullOrWhiteSpace(Code))
             {
-                MessageService.ShowError(Resources.CodeInvalid);
+                Notificator.ShowError(Resources.CodeInvalid);
                 return;
             }
 
@@ -41,7 +37,7 @@ namespace Ocell.Pages.Settings
 
             var request = (HttpWebRequest)WebRequest.Create(query);
 
-            IsLoading = true;
+            Progress.IsLoading = true;
             validate.RaiseCanExecuteChanged();
 
             HttpWebResponse response = null;
@@ -55,17 +51,17 @@ namespace Ocell.Pages.Settings
                 failed = true;
             }
 
-            IsLoading = false;
+            Progress.IsLoading = false;
             validate.RaiseCanExecuteChanged();
             if (failed || response.StatusCode != HttpStatusCode.OK)
             {
-                MessageService.ShowError(Resources.CodeInvalid);
+                Notificator.ShowError(Resources.CodeInvalid);
             }
             else
             {
                 Config.CouponCodeValidated = true;
-                MessageService.ShowMessage(Resources.CodeValid);
-                GoBack();
+                Notificator.ShowMessage(Resources.CodeValid);
+                Navigator.GoBack();
             }
         }
     }

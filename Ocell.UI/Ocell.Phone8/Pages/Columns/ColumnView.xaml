@@ -10,7 +10,7 @@
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
     xmlns:custom="clr-namespace:Ocell.Controls"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    xmlns:c="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
+    xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -46,9 +46,6 @@
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
 
-    <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" x:Name="pBar" />
-    </shell:SystemTray.ProgressIndicator>
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
     <Grid x:Name="LayoutRoot" CacheMode="BitmapCache" Margin="0,-32,0,0">
         <!--Control Pivot-->
@@ -64,12 +61,16 @@
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>
-
-        <c:AppBar>
-            <c:AppBarToggleButton   IconUri1="/Images/Icons_White/appbar.add.rest.png" Text1="{Binding Strings.EnableQuickAdd, Source={StaticResource LocalizedResources}}" Command1="{Binding EnableQuickAdd}"
+        
+        <appbar:Bindable.ApplicationBar>
+            <appbar:BindableAppBar>
+                <appbar:BindableAppBar.Buttons>
+                    <appbar:BindableAppBarToggleButton   IconUri1="/Images/Icons_White/appbar.add.rest.png" Text1="{Binding Strings.EnableQuickAdd, Source={StaticResource LocalizedResources}}" Command1="{Binding EnableQuickAdd}"
                                     IconUri2="/Images/Icons_White/appbar.check.rest.png" Text2="{Binding Strings.DisableQuickAdd, Source={StaticResource LocalizedResources}}" Command2="{Binding DisableQuickAdd}"
                                     Toggled="{Binding FastAddMode}" />
-        </c:AppBar>
+                </appbar:BindableAppBar.Buttons>
+            </appbar:BindableAppBar>
+        </appbar:Bindable.ApplicationBar>
     </Grid>
 
 </phone:PhoneApplicationPage>

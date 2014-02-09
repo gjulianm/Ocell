@@ -5,8 +5,8 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:controls="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone" 
-    xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.SampleDataSource" 
+	xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
+     xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.SampleDataSource" 
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     x:Class="Ocell.Pages.Settings.Backgrounds"
     SupportedOrientations="Portrait" Orientation="Portrait"
@@ -14,25 +14,25 @@
     shell:SystemTray.IsVisible="True"
     shell:SystemTray.Opacity="0.0"
     >
-	<phone:PhoneApplicationPage.Resources>
-		<DataTemplate x:Key="ItemTemplate2">
-			<StackPanel>
+    <phone:PhoneApplicationPage.Resources>
+        <DataTemplate x:Key="ItemTemplate2">
+            <StackPanel>
                 <TextBlock  toolkit:TiltEffect.IsTiltEnabled="True" Text="{Binding}" FontFamily="Segoe WP Light" FontSize="26.667" Height="48" VerticalAlignment="Center"/>
-			</StackPanel>
-		</DataTemplate>
-	</phone:PhoneApplicationPage.Resources>
+            </StackPanel>
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
 
-	<phone:PhoneApplicationPage.FontFamily>
-		<StaticResource ResourceKey="PhoneFontFamilyNormal"/>
-	</phone:PhoneApplicationPage.FontFamily>
-	<phone:PhoneApplicationPage.FontSize>
-		<StaticResource ResourceKey="PhoneFontSizeNormal"/>
-	</phone:PhoneApplicationPage.FontSize>
+    <phone:PhoneApplicationPage.FontFamily>
+        <StaticResource ResourceKey="PhoneFontFamilyNormal"/>
+    </phone:PhoneApplicationPage.FontFamily>
+    <phone:PhoneApplicationPage.FontSize>
+        <StaticResource ResourceKey="PhoneFontSizeNormal"/>
+    </phone:PhoneApplicationPage.FontSize>
 
-<Grid x:Name="LayoutRoot" Background="{Binding BackgroundBrush}">
+    <Grid x:Name="LayoutRoot" Background="{Binding BackgroundBrush}">
         <Grid.RowDefinitions>
-        	<RowDefinition Height="Auto"/>
-        	<RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
@@ -43,12 +43,14 @@
 
         <!--ContentPanel. Colocar aquí el contenido adicional-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <ListBox Margin="8,8,8,83" ItemTemplate="{StaticResource ItemTemplate2}" ItemsSource="{Binding BackgroundNames}" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"/></Grid>
-			
-    	<controls:AppBar Style="{StaticResource AppBarStyle}">
+            <ListBox Margin="8,8,8,83" ItemTemplate="{StaticResource ItemTemplate2}" ItemsSource="{Binding BackgroundNames}" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"/>
+        </Grid>
 
-            <controls:AppBarIconButton IconUri="/Images/Icons_White/appbar.save.rest.png" Text="{Binding Strings.Save, Source={StaticResource LocalizedResources}}" Command="{Binding SaveBackground}" />
-    	</controls:AppBar>
+        <appbar:Bindable.ApplicationBar>
+            <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
+                <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.save.rest.png" Text="{Binding Strings.Save, Source={StaticResource LocalizedResources}}" Command="{Binding SaveBackground}" />
+            </appbar:BindableAppBar>
+        </appbar:Bindable.ApplicationBar>
     </Grid>
 
 </phone:PhoneApplicationPage>

@@ -18,7 +18,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Ocell.Library.Twitter;
 using Ocell.Library.Tasks;
-
+using BufferAPI;
+using AncoraMVVM.Base.Interfaces;
 #if !BACKGROUND_AGENT
 using Ocell.Library.Filtering;
 using BufferAPI;
@@ -32,23 +33,27 @@ namespace Ocell.Library
 	#region Properties for Background Agent and main app
 <# foreach(ConfigProperty prop in BAProps) { #>
 
-		private static <#= prop.Type #> _<#= prop.Name #>;
+		private static ConfigItem<<#= prop.Type #>> <#= prop.Name #>ConfigItem = new ConfigItem<<#= prop.Type#>> {
+			Key = "<#= prop.Key #>",
+			<# if (prop.Default != "") { #> DefaultValue = <#= prop.Default #> <# } #>
+		};
+
 		public static <#= prop.Type #> <#= prop.Name #>
 		{
 			get 
 			{
-				return GenericGetFromConfig<<#= prop.Type #>>("<#= prop.Key #>", ref _<#= prop.Name #>);
+				return <#= prop.Name #>ConfigItem.Value;
 			}
 			set
 			{
-				GenericSaveToConfig<<#= prop.Type #>>("<#= prop.Key #>", ref _<#= prop.Name #>, value);
+				<#= prop.Name #>ConfigItem.Value = value;
 			}
 		}
 <# if(prop.Type.Contains("List<") || prop.Type.Contains("Collection<") || prop.Type.Contains("Dictionary<")) { #>
 
 		public static void Save<#= prop.Name #>()
 		{
-			<#= prop.Name #> = _<#= prop.Name #>;
+			<#= prop.Name #>ConfigItem.Value = <#= prop.Name #>ConfigItem.Value;
 		}
 <# } #>
 <# } #>
@@ -58,60 +63,34 @@ namespace Ocell.Library
 	#if !BACKGROUND_AGENT
 <# foreach(ConfigProperty prop in NotBAProps) { #>
 
-		private static <#= prop.Type #> _<#= prop.Name #>;
+		private static ConfigItem<<#= prop.Type #>> <#= prop.Name #>ConfigItem = new ConfigItem<<#= prop.Type#>> {
+			Key = "<#= prop.Key #>",
+			<# if (prop.Default != "") { #> DefaultValue = <#= prop.Default #> <# } #>
+		};
+
 		public static <#= prop.Type #> <#= prop.Name #>
 		{
 			get 
 			{
-				return GenericGetFromConfig<<#= prop.Type #>>("<#= prop.Key #>", ref _<#= prop.Name #>);
+				return <#= prop.Name #>ConfigItem.Value;
 			}
 			set
 			{
-				GenericSaveToConfig<<#= prop.Type #>>("<#= prop.Key #>", ref _<#= prop.Name #>, value);
+				<#= prop.Name #>ConfigItem.Value = value;
 			}
 		}
 <# if(prop.Type.Contains("List<") || prop.Type.Contains("Collection<") || prop.Type.Contains("Dictionary<")) { #>
 
 		public static void Save<#= prop.Name #>()
 		{
-			<#= prop.Name #> = _<#= prop.Name #>;
+			<#= prop.Name #>ConfigItem.Value = <#= prop.Name #>ConfigItem.Value;
 		}
 <# } #>
 <# } #>
 	#endif
 	#endregion
 
-		public static void ClearStaticValues()
-		{
-<# foreach(ConfigProperty prop in BAProps) { #>
-			_<#= prop.Name #> = null;
-<# } #>
 
-#if !BACKGROUND_AGENT
-<# foreach(ConfigProperty prop in NotBAProps) { #>
-			_<#= prop.Name #> = null;
-<# } #>
-#endif
-		}
-
-		static void GenerateDefaultDictionary()
-		{
-			defaultValues = new Dictionary<string, object>();
-
-<# foreach(ConfigProperty prop in BAProps) { #>
-<# if(prop.Default != "") { #>
-			defaultValues.Add("<#= prop.Key #>", <#= prop.Default #>);
-<# } #>
-<# } #>
-
-#if !BACKGROUND_AGENT
-<# foreach(ConfigProperty prop in NotBAProps) { #>
-<# if(prop.Default != "") { #>
-			defaultValues.Add("<#= prop.Key #>", <#= prop.Default #>);
-<# } #>
-<# } #>
-#endif
-		}
 	}
 }
 <#+

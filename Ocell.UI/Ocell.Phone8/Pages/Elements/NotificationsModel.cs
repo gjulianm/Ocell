@@ -1,22 +1,22 @@
 ﻿using Ocell.Library;
-using Ocell.Library.Collections;
 using Ocell.Library.Twitter;
 using Ocell.Library.Twitter.Comparers;
 using Ocell.Localization;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using TweetSharp;
 #if WP8
 using Windows.Phone.Speech.Synthesis;
-using System.Threading.Tasks;
+using AncoraMVVM.Base.Collections;
+using PropertyChanged;
 #endif
 
 namespace Ocell.Pages.Elements
 {
+    [ImplementPropertyChanged]
     public class NotificationsModel : ExtendedViewModelBase
     {
         private DateTime lastCheckTime;
@@ -33,9 +33,9 @@ namespace Ocell.Pages.Elements
             Tweets = new SortedFilteredObservable<ITweetable>(new TweetComparer());
         }
 
-        public async void OnLoad()
+        public override async void OnLoad()
         {
-            lastCheckTime = DateSync.GetLastCheckDate();
+            lastCheckTime = await DateSync.GetLastCheckDate();
 
             var mentionOptions = new ListTweetsMentioningMeOptions
             {
@@ -53,7 +53,7 @@ namespace Ocell.Pages.Elements
             {
                 if (account.Preferences.MentionsPreferences != Library.Notifications.NotificationType.None)
                 {
-                    IsLoading = true;
+                    Progress.IsLoading = true;
                     Interlocked.Increment(ref requestsPending);
                     var result = await ServiceDispatcher.GetService(account).ListTweetsMentioningMeAsync(mentionOptions);
 
@@ -62,7 +62,7 @@ namespace Ocell.Pages.Elements
                 }
                 if (account.Preferences.MessagesPreferences != Library.Notifications.NotificationType.None)
                 {
-                    IsLoading = true;
+                    Progress.IsLoading = true;
                     Interlocked.Increment(ref requestsPending);
                     var result = await ServiceDispatcher.GetService(account).ListDirectMessagesReceivedAsync(dmOption);
 
@@ -114,11 +114,12 @@ namespace Ocell.Pages.Elements
 
         private void FilterAndAddStatuses(IEnumerable<ITweetable> tweets)
         {
-            Tweets.BulkAdd(tweets.Where(x => x.CreatedDate > lastCheckTime));
+            // TODO: AddRange.
+            //Tweets.BulkAdd(tweets.Where(x => x.CreatedDate > lastCheckTime));
 
             if (Interlocked.Decrement(ref requestsPending) <= 0)
             {
-                IsLoading = false;
+                Progress.IsLoading = false;
                 if (LoadFinished != null)
                     LoadFinished(this, new EventArgs());
             }

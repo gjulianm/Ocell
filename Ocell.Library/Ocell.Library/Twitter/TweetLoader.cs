@@ -1,4 +1,6 @@
-﻿using Ocell.Library.Collections;
+﻿using AncoraMVVM.Base.Collections;
+using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Base.IoC;
 using Ocell.Library.Twitter.Comparers;
 using System;
 using System.Collections.Generic;
@@ -7,10 +9,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ocell.Library.Twitter;
-using Ocell.Library.Twitter.Comparers;
-using System.Windows.Controls;
-using System.Windows;
 using TweetSharp;
 
 namespace Ocell.Library.Twitter
@@ -140,12 +138,12 @@ namespace Ocell.Library.Twitter
         #region Cache
         public void SaveToCacheAsync()
         {
-            Task.Run(() => SaveToCache());
+            Task.Factory.StartNew(SaveToCache);
         }
 
         public void LoadCacheAsync()
         {
-            Task.Run(() => LoadCache());
+            Task.Factory.StartNew(LoadCache);
         }
 
         public void DeferredCacheLoad()
@@ -155,7 +153,7 @@ namespace Ocell.Library.Twitter
 
         public void SaveToCacheAsync(IList<ITweetable> viewport)
         {
-            Task.Run(() => SaveToCache(viewport));
+            Task.Factory.StartNew(() => SaveToCache(viewport));
         }
 
         public void SaveToCache(IList<ITweetable> viewport)
@@ -431,7 +429,7 @@ namespace Ocell.Library.Twitter
             foreach (var msg in messages)
             {
                 var pairId = msg.GetPairName(Resource.User);
-                var group = groups.FirstOrDefault(x => x.ConverserNames.First == pairId || x.ConverserNames.Second == pairId);
+                var group = groups.FirstOrDefault(x => x.ConverserNames.Item1 == pairId || x.ConverserNames.Item2 == pairId);
 
                 if (group == null)
                     Source.Add(new GroupedDM(msg, Resource.User));
@@ -577,9 +575,9 @@ namespace Ocell.Library.Twitter
 
         protected void OnPropertyChanged(string propName)
         {
-            var dispatcher = Deployment.Current.Dispatcher;
+            var dispatcher = Dependency.Resolve<IDispatcher>();
 
-            if (!dispatcher.CheckAccess())
+            if (!dispatcher.IsUIThread)
                 dispatcher.BeginInvoke(() => OnPropertyChanged(propName));
 
             if (PropertyChanged != null)

@@ -1,9 +1,10 @@
-﻿using DanielVaughan.Windows;
+﻿using AncoraMVVM.Base;
 using Microsoft.Phone.Tasks;
 using Ocell.Library;
 using Ocell.Library.Tasks;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using PropertyChanged;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,113 +17,39 @@ using TweetSharp;
 
 namespace Ocell.Pages
 {
+    [ImplementPropertyChanged]
     public class NewTweetModel : ExtendedViewModelBase
     {
         #region Fields
-        private IEnumerable<UserToken> accountList;
-        public IEnumerable<UserToken> AccountList
-        {
-            get { return accountList; }
-            set { Assign("AccountList", ref accountList, value); }
-        }
+        public IEnumerable<UserToken> AccountList { get; set; }
 
-        private bool isDM;
-        public bool IsDM
-        {
-            get { return isDM; }
-            set { Assign("IsDM", ref isDM, value); }
-        }
+        public bool IsDM { get; set; }
 
-        private string tweetText;
-        public string TweetText
-        {
-            get { return tweetText; }
-            set { Assign("TweetText", ref tweetText, value); }
-        }
+        public string TweetText { get; set; }
 
-        private int remainingChars;
-        public int RemainingChars
-        {
-            get { return remainingChars; }
-            set { Assign("RemainingChars", ref remainingChars, value); }
-        }
+        public int RemainingChars { get; set; }
 
-        private string remainingCharsStr;
-        public string RemainingCharsStr
-        {
-            get { return remainingCharsStr; }
-            set { Assign("RemainingCharsStr", ref remainingCharsStr, value); }
-        }
+        public string RemainingCharsStr { get; set; }
 
-        private Brush remainingCharsColor;
-        public Brush RemainingCharsColor
-        {
-            get { return remainingCharsColor; }
-            set { Assign("RemainingCharsColor", ref remainingCharsColor, value); }
-        }
+        public Brush RemainingCharsColor { get; set; }
 
-        private bool usesTwitlonger;
-        public bool UsesTwitlonger
-        {
-            get { return usesTwitlonger; }
-            set { Assign("UsesTwitlonger", ref usesTwitlonger, value); }
-        }
+        public bool UsesTwitlonger { get; set; }
 
-        private bool isScheduled;
-        public bool IsScheduled
-        {
-            get { return isScheduled; }
-            set { Assign("IsScheduled", ref isScheduled, value); }
-        }
+        public bool IsScheduled { get; set; }
 
-        private DateTime scheduledDate;
-        public DateTime ScheduledDate
-        {
-            get { return scheduledDate; }
-            set { Assign("ScheduledDate", ref scheduledDate, value); }
-        }
+        public DateTime ScheduledDate { get; set; }
 
-        private DateTime scheduledTime;
-        public DateTime ScheduledTime
-        {
-            get { return scheduledTime; }
-            set { Assign("ScheduledTime", ref scheduledTime, value); }
-        }
+        public DateTime ScheduledTime { get; set; }
 
-        private bool sendingDM;
-        public bool SendingDM
-        {
-            get { return sendingDM; }
-            set { Assign("SendingDM", ref sendingDM, value); }
-        }
+        public bool SendingDM { get; set; }
 
-        private IList selectedAccounts;
-        public IList SelectedAccounts
-        {
-            get { return selectedAccounts; }
-            set { Assign("SelectedAccounts", ref selectedAccounts, value); }
-        }
+        public IList SelectedAccounts { get; set; }
 
-        private bool isGeotagged;
-        public bool IsGeotagged
-        {
-            get { return isGeotagged; }
-            set { Assign("IsGeotagged", ref isGeotagged, value); }
-        }
+        public bool IsGeotagged { get; set; }
 
-        private bool geotagEnabled;
-        public bool GeotagEnabled
-        {
-            get { return geotagEnabled; }
-            set { Assign("GeotagEnabled", ref geotagEnabled, value); }
-        }
+        public bool GeotagEnabled { get; set; }
 
-        private bool isSuggestingUsers;
-        public bool IsSuggestingUsers
-        {
-            get { return isSuggestingUsers; }
-            set { Assign("IsSuggestingUsers", ref isSuggestingUsers, value); }
-        }
+        public bool IsSuggestingUsers { get; set; }
 
         public SafeObservable<string> Suggestions
         {
@@ -135,12 +62,7 @@ namespace Ocell.Pages
             }
         }
 
-        private Autocompleter completer;
-        public Autocompleter Completer
-        {
-            get { return completer; }
-            set { Assign("Completer", ref completer, value); }
-        }
+        public Autocompleter Completer { get; set; }
 
         #endregion Fields
 
@@ -181,7 +103,6 @@ namespace Ocell.Pages
         private int requestsLeft;
 
         public NewTweetModel()
-            : base("NewTweet")
         {
             SelectedAccounts = new List<object>();
             AccountList = Config.Accounts.ToList();
@@ -289,11 +210,11 @@ namespace Ocell.Pages
         private bool commandsSet = false;
         private void SetupCommands()
         {
-            sendTweet = new DelegateCommand(Send, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !IsLoading);
-            scheduleTweet = new DelegateCommand(Schedule, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !IsLoading);
-            selectImage = new DelegateCommand(StartImageChooser, (param) => SelectedAccounts.Count > 0 && !IsLoading);
-            saveDraft = new DelegateCommand(SaveAsDraft, (param) => !IsLoading);
-            sendWithBuffer = new DelegateCommand(SendBufferUpdate, (param) => !IsLoading && SelectedAccounts.Count > 0);
+            sendTweet = new DelegateCommand(Send, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !Progress.IsLoading);
+            scheduleTweet = new DelegateCommand(Schedule, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !Progress.IsLoading);
+            selectImage = new DelegateCommand(StartImageChooser, (param) => SelectedAccounts.Count > 0 && !Progress.IsLoading);
+            saveDraft = new DelegateCommand(SaveAsDraft, (param) => !Progress.IsLoading);
+            sendWithBuffer = new DelegateCommand(SendBufferUpdate, (param) => !Progress.IsLoading && SelectedAccounts.Count > 0);
 
             commandsSet = true;
         }
@@ -312,12 +233,12 @@ namespace Ocell.Pages
 
         private void AskBufferLogin()
         {
-            var result = MessageService.AskYesNoQuestion(Resources.NoBufferConfigured);
+            var result = Notificator.Prompt(Resources.NoBufferConfigured);
 
             if (result)
             {
                 Ocell.Settings.OAuth.Type = Ocell.Settings.AuthType.Buffer;
-                Navigate(Uris.LoginPage);
+                Navigator.Navigate(Uris.LoginPage);
             }
         }
 
@@ -355,20 +276,20 @@ namespace Ocell.Pages
             if (service == null)
                 return;
 
-            IsLoading = true;
+            Progress.IsLoading = true;
             var response = await service.PostUpdate(TweetText, profiles);
-            IsLoading = false;
+            Progress.IsLoading = false;
 
             if (!response.Succeeded)
             {
-                MessageService.ShowError(Resources.ErrorCreatingBuffer);
+                Notificator.ShowError(Resources.ErrorCreatingBuffer);
                 return;
             }
 
             TweetText = "";
             DataTransfer.Text = "";
-            MessageService.ShowMessage(Resources.BufferUpdateSent);
-            GoBack();
+            Notificator.ShowMessage(Resources.BufferUpdateSent);
+            Navigator.GoBack();
         }
 
         private void Send(object param)
@@ -380,12 +301,12 @@ namespace Ocell.Pages
 
             if (SelectedAccounts.Count == 0)
             {
-                MessageService.ShowError(Resources.SelectAccount);
+                Notificator.ShowError(Resources.SelectAccount);
                 return;
             }
 
-            BarText = Resources.SendingTweet;
-            IsLoading = true;
+            Progress.Text = Resources.SendingTweet;
+            Progress.IsLoading = true;
 
             if (IsDM)
             {
@@ -398,11 +319,11 @@ namespace Ocell.Pages
                 {
                     if (!EnsureTwitlonger())
                     {
-                        IsLoading = false;
+                        Progress.IsLoading = false;
                         return;
                     }
 
-                    BarText = Resources.UploadingTwitlonger;
+                    Progress.Text = Resources.UploadingTwitlonger;
                     foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
                     {
                         SendTwitlongerPost(account);
@@ -430,25 +351,25 @@ namespace Ocell.Pages
             var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
             var response = await service.SendDirectMessageAsync(new SendDirectMessageOptions { UserId = (int)DataTransfer.DMDestinationId, Text = TweetText });
 
-            IsLoading = false;
-            BarText = "";
+            Progress.IsLoading = false;
+            Progress.Text = "";
 
             if (response.StatusCode == HttpStatusCode.Forbidden)
-                MessageService.ShowError(Resources.ErrorDuplicateTweet);
+                Notificator.ShowError(Resources.ErrorDuplicateTweet);
             else if (response.StatusCode != HttpStatusCode.OK)
-                MessageService.ShowError(Resources.ErrorMessage);
+                Notificator.ShowError(Resources.ErrorMessage);
             else
             {
                 TweetText = "";
                 DataTransfer.Text = "";
-                GoBack();
+                Navigator.GoBack();
                 DataTransfer.ReplyingDM = false;
             }
         }
 
         private bool EnsureTwitlonger()
         {
-            return MessageService.AskOkCancelQuestion(Resources.AskTwitlonger);
+            return Notificator.Prompt(Resources.AskTwitlonger);
         }
 
         private object dicLock = new object();
@@ -462,14 +383,14 @@ namespace Ocell.Pages
 
             if (!response.Succeeded)
             {
-                IsLoading = false;
-                MessageService.ShowError(Resources.ErrorCreatingTwitlonger);
+                Progress.IsLoading = false;
+                Notificator.ShowError(Resources.ErrorCreatingTwitlonger);
                 return;
             }
 
             var post = response.Content;
 
-            BarText = Resources.SendingTweet;
+            Progress.Text = Resources.SendingTweet;
 
             try
             {
@@ -511,16 +432,16 @@ namespace Ocell.Pages
             requestsLeft--;
 
             if (requestsLeft <= 0)
-                IsLoading = false;
+                Progress.IsLoading = false;
 
             if (response == null)
-                MessageService.ShowError(Resources.Error);
+                Notificator.ShowError(Resources.Error);
             else if (response.StatusCode == HttpStatusCode.Forbidden)
-                MessageService.ShowError(Resources.ErrorDuplicateTweet);
+                Notificator.ShowError(Resources.ErrorDuplicateTweet);
             else if (!response.RequestSucceeded)
             {
                 var errorMsg = response.Error != null ? response.Error.Message : "";
-                MessageService.ShowError(String.Format("{0}: {1} ({2})", Resources.ErrorMessage, errorMsg, response.StatusCode));
+                Notificator.ShowError(String.Format("{0}: {1} ({2})", Resources.ErrorMessage, errorMsg, response.StatusCode));
             }
             else
             {
@@ -529,7 +450,7 @@ namespace Ocell.Pages
                 {
                     TweetText = "";
                     DataTransfer.Text = "";
-                    GoBack();
+                    Navigator.GoBack();
                 }
             }
         }
@@ -561,7 +482,7 @@ namespace Ocell.Pages
                 0);
 
             if (TrialInformation.IsFullFeatured)
-                ScheduleWithServer(scheduledTime);
+                ScheduleWithServer(ScheduledTime);
             else
                 ScheduleWithBackgroundAgent(scheduleTime);
         }
@@ -577,7 +498,7 @@ namespace Ocell.Pages
 
             if (ScheduledDate == null || ScheduledTime == null)
             {
-                MessageService.ShowError(Resources.SelectDateTimeToSchedule);
+                Notificator.ShowError(Resources.SelectDateTimeToSchedule);
                 return;
             }
 
@@ -591,8 +512,8 @@ namespace Ocell.Pages
             Config.TweetTasks.Add(task);
             Config.SaveTweetTasks();
 
-            MessageService.ShowMessage(Resources.MessageScheduled, "");
-            GoBack();
+            Notificator.ShowMessage(Resources.MessageScheduled);
+            Navigator.GoBack();
         }
 
         private bool error;
@@ -602,7 +523,7 @@ namespace Ocell.Pages
             error = false;
             foreach (var user in SelectedAccounts.OfType<UserToken>())
             {
-                IsLoading = true;
+                Progress.IsLoading = true;
                 requestsLeft++;
 
                 var scheduler = new Scheduler(user.Key, user.Secret);
@@ -613,16 +534,16 @@ namespace Ocell.Pages
                     if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.NoContent)
                     {
                         error = true;
-                        MessageService.ShowError(string.Format(Resources.ScheduleError, user.ScreenName));
+                        Notificator.ShowError(string.Format(Resources.ScheduleError, user.ScreenName));
                     }
 
                     if (requestsLeft <= 0)
                     {
-                        IsLoading = false;
+                        Progress.IsLoading = false;
                         if (!error)
                         {
-                            MessageService.ShowMessage(Resources.MessageScheduled);
-                            GoBack();
+                            Notificator.ShowMessage(Resources.MessageScheduled);
+                            Navigator.GoBack();
                         }
                     }
                 });
@@ -641,7 +562,7 @@ namespace Ocell.Pages
         {
             // TODO: Complete.
 
-            MessageService.ShowError("Woops, not supported.");
+            Notificator.ShowError("Woops, not supported.");
         }
 
         public void SaveAsDraft(object param)
@@ -651,7 +572,7 @@ namespace Ocell.Pages
             Config.Drafts.Add(draft);
             Config.Drafts = Config.Drafts;
 
-            MessageService.ShowMessage(Resources.DraftSaved);
+            Notificator.ShowMessage(Resources.DraftSaved);
         }
 
         public TwitterDraft CreateDraft()
@@ -699,7 +620,7 @@ namespace Ocell.Pages
             {
                 if (user != null && ProtectedAccounts.IsProtected(user))
                 {
-                    var result = MessageService.AskYesNoQuestion(String.Format(Resources.AskTweetProtectedAccount, user.ScreenName), "");
+                    var result = Notificator.Prompt(String.Format(Resources.AskTweetProtectedAccount, user.ScreenName));
                     if (!result)
                         return false;
                 }
@@ -711,7 +632,7 @@ namespace Ocell.Pages
         #region User suggestions
         private void UpdateAutocompleter()
         {
-            OnPropertyChanged("Suggestions");
+            RaisePropertyChanged("Suggestions");
             if (Completer != null)
             {
                 Completer.PropertyChanged += (sender, e) =>

@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading;
 using TweetSharp;
 
 namespace Ocell.Tests
@@ -16,6 +17,8 @@ namespace Ocell.Tests
     public class SerializationTests
     {
         public static IEnumerable<TwitterStatus> Statuses { get; set; }
+        private Mutex mutex = new Mutex(false, "__OCELL__SERTESTS__MUTEX");
+        private TimeSpan timeout = TimeSpan.FromSeconds(10);
 
         [TestFixtureSetUp]
         public static void Setup()
@@ -28,13 +31,34 @@ namespace Ocell.Tests
             Debug.WriteLine("Received {0} statuses.", Statuses.Count());
         }
 
+        private void ExclusiveDoAction(Action action)
+        {
+            bool taken = mutex.WaitOne(timeout);
+            try
+            {
+                if (taken)
+                    action();
+                else
+                    Assert.Inconclusive("Mutex not acquired.");
+            }
+            finally
+            {
+                if (taken)
+                    mutex.ReleaseMutex();
+            }
+        }
+
         [Test]
         public void Serialization()
         {
             var serializer = new SharpSerializer(new SharpSerializerBinarySettings { Mode = BinarySerializationMode.Burst });
 
-            using (var file = File.Create("serialization"))
-                serializer.Serialize(Statuses, file);
+
+            ExclusiveDoAction(() =>
+            {
+                using (var file = File.Create("serialization"))
+                    serializer.Serialize(Statuses, file);
+            });
         }
 
         [Test]
@@ -43,12 +67,15 @@ namespace Ocell.Tests
             var serializer = new SharpSerializer(new SharpSerializerBinarySettings { Mode = BinarySerializationMode.Burst });
             IEnumerable<TwitterStatus> deserializedStatuses = null;
 
-            using (var file = File.Create("serialization"))
-            {
-                serializer.Serialize(Statuses.ToList(), file);
-                file.Seek(0, SeekOrigin.Begin);
-                deserializedStatuses = serializer.Deserialize(file) as IEnumerable<TwitterStatus>;
-            }
+            ExclusiveDoAction(() =>
+           {
+               using (var file = File.Create("serialization"))
+               {
+                   serializer.Serialize(Statuses.ToList(), file);
+                   file.Seek(0, SeekOrigin.Begin);
+                   deserializedStatuses = serializer.Deserialize(file) as IEnumerable<TwitterStatus>;
+               }
+           });
 
             Assert.NotNull(deserializedStatuses);
             CollectionAssert.AreEquivalent(Statuses, deserializedStatuses);
@@ -58,28 +85,39 @@ namespace Ocell.Tests
         public void TestSerializationTimes(SharpSerializer serializer)
         {
             var stopwatch = new Stopwatch();
-            using (var file = File.Create("serialization"))
+
+            ExclusiveDoAction(() =>
             {
-                stopwatch.Start();
-                serializer.Serialize(Statuses, file);
-                stopwatch.Stop();
-                Assert.Pass("Time: {0} ms", stopwatch.ElapsedMilliseconds);
-            }
+                using (var file = File.Create("serialization"))
+                {
+                    stopwatch.Start();
+                    serializer.Serialize(Statuses, file);
+                    stopwatch.Stop();
+
+                }
+            });
+
+            Assert.Pass("Time: {0} ms", stopwatch.ElapsedMilliseconds);
         }
 
         [TestCaseSource("Deserializers")]
         public void TestDeserializationTimes(SharpSerializer serializer)
         {
             var stopwatch = new Stopwatch();
-            using (var file = File.Create("serialization"))
+            ExclusiveDoAction(() =>
             {
-                serializer.Serialize(Statuses, file);
-                file.Seek(0, SeekOrigin.Begin);
-                stopwatch.Start();
-                var deserializedStatuses = serializer.Deserialize(file) as IEnumerable<TwitterStatus>;
-                stopwatch.Stop();
-                Assert.Pass("Time: {0} ms", stopwatch.ElapsedMilliseconds);
-            }
+                using (var file = File.Create("serialization"))
+                {
+                    serializer.Serialize(Statuses, file);
+                    file.Seek(0, SeekOrigin.Begin);
+                    stopwatch.Start();
+                    var deserializedStatuses = serializer.Deserialize(file) as IEnumerable<TwitterStatus>;
+                    stopwatch.Stop();
+
+                }
+            });
+
+            Assert.Pass("Time: {0} ms", stopwatch.ElapsedMilliseconds);
         }
 
         public IEnumerable<TestCaseData> Deserializers

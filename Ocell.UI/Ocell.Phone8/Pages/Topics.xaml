@@ -5,72 +5,69 @@
 	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
-	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
 	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
 	x:Class="Ocell.Pages.Topics"
 	Orientation="Portrait"
 	shell:SystemTray.IsVisible="True"
 	shell:SystemTray.Opacity="0.0">
 
-	<phone:PhoneApplicationPage.Resources>
-		<DataTemplate x:Key="ItemTemplate">
-			<StackPanel>
-				<TextBlock Text="{Binding Name}" FontFamily="Segoe WP Semibold" FontSize="29.333" Height="40"/>
-			</StackPanel>
-		</DataTemplate>
-		<DataTemplate x:Key="FullModeTemplate">
-			<StackPanel>
-				<TextBlock Text="{Binding}" FontFamily="Segoe WP Light" FontSize="30" Height="40"/>
-			</StackPanel>
-		</DataTemplate>
-	</phone:PhoneApplicationPage.Resources>
-	<phone:PhoneApplicationPage.FontFamily>
-		<StaticResource ResourceKey="PhoneFontFamilyNormal"/>
-	</phone:PhoneApplicationPage.FontFamily>
-	<phone:PhoneApplicationPage.FontSize>
-		<StaticResource ResourceKey="PhoneFontSizeNormal"/>
-	</phone:PhoneApplicationPage.FontSize>
-	<phone:PhoneApplicationPage.Foreground>
-		<StaticResource ResourceKey="PhoneForegroundBrush"/>
-	</phone:PhoneApplicationPage.Foreground>
+    <phone:PhoneApplicationPage.Resources>
+        <DataTemplate x:Key="ItemTemplate">
+            <StackPanel>
+                <TextBlock Text="{Binding Name}" FontFamily="Segoe WP Semibold" FontSize="29.333" Height="40"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="FullModeTemplate">
+            <StackPanel>
+                <TextBlock Text="{Binding}" FontFamily="Segoe WP Light" FontSize="30" Height="40"/>
+            </StackPanel>
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
+    <phone:PhoneApplicationPage.FontFamily>
+        <StaticResource ResourceKey="PhoneFontFamilyNormal"/>
+    </phone:PhoneApplicationPage.FontFamily>
+    <phone:PhoneApplicationPage.FontSize>
+        <StaticResource ResourceKey="PhoneFontSizeNormal"/>
+    </phone:PhoneApplicationPage.FontSize>
+    <phone:PhoneApplicationPage.Foreground>
+        <StaticResource ResourceKey="PhoneForegroundBrush"/>
+    </phone:PhoneApplicationPage.Foreground>
 
-	<shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading}" Text="{Binding Strings.DownloadingTopics, Source={StaticResource LocalizedResources}}" x:Name="pBar" />
-    </shell:SystemTray.ProgressIndicator> 
+    <!--LayoutRoot es la cuadrÃ­cula raÃ­z donde se coloca todo el contenido de la pÃ¡gina-->
+    <Grid x:Name="LayoutRoot" Margin="0,-24,0,0">
+        <Grid.Background>
+            <ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-	<!--LayoutRoot es la cuadrÃ­cula raÃ­z donde se coloca todo el contenido de la pÃ¡gina-->
-	<Grid x:Name="LayoutRoot" Margin="0,-24,0,0">
-		<Grid.Background>
-			<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
-		</Grid.Background>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
-		
-		<Grid Margin="12,64,0,0" Grid.RowSpan="2">
-<!--TitlePanel contiene el nombre de la aplicaciÃ³n y el tÃ­tulo de la pÃ¡gina-->
-			<StackPanel x:Name="TitlePanel" Grid.Row="0" Height="116" VerticalAlignment="Top">
-				<TextBlock x:Name="ApplicationTitle" Style="{StaticResource PhoneTextNormalStyle}"><Run Text="OCELL"/><Run Text=" - TRENDING TOPICS"/></TextBlock>
-				<TextBlock x:Name="PageTitle" Margin="9,-7,0,0" Text="{Binding PlaceName}" Style="{StaticResource PageHeaderStyle}" />
-			</StackPanel>
+        <Grid Margin="12,64,0,0" Grid.RowSpan="2">
+            <!--TitlePanel contiene el nombre de la aplicaciÃ³n y el tÃ­tulo de la pÃ¡gina-->
+            <StackPanel x:Name="TitlePanel" Grid.Row="0" Height="116" VerticalAlignment="Top">
+                <TextBlock x:Name="ApplicationTitle" Style="{StaticResource PhoneTextNormalStyle}"><Run Text="OCELL"/><Run Text=" - TRENDING TOPICS"/></TextBlock>
+                <TextBlock x:Name="PageTitle" Margin="9,-7,0,0" Text="{Binding PlaceName}" Style="{StaticResource PageHeaderStyle}" />
+            </StackPanel>
 
-		<!--ContentPanel: coloque aquÃ­ el contenido adicional-->
-			<Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
-				<ListBox x:Name="TList" Margin="28,8,8,8" SelectedItem="{Binding ListSelection, Mode=TwoWay}" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}" />
-			</Grid>
-            
-            <controls:AppBar d:IsHidden="True" Opacity="0.5">
-                <controls:AppBar.MenuItems>
-                    <controls:AppBarMenuItem Command="{Binding ShowGlobal}" Text="{Binding Strings.ShowGlobalTopics, Source={StaticResource LocalizedResources}}" />
-					<controls:AppBarMenuItem Command="{Binding ShowLocations}" Text="{Binding Strings.AvailableLocations, Source={StaticResource LocalizedResources}}" />
-				</controls:AppBar.MenuItems>
-                <controls:AppBarIconButton Command="{Binding Refresh}" IconUri="/Images/Icons_White/appbar.refresh.rest.png" Text="{Binding Strings.Refresh, Source={StaticResource LocalizedResources}}" />
-            </controls:AppBar>
-			<toolkit:ListPicker FullModeItemTemplate="{StaticResource FullModeTemplate}" x:Name="LocPicker" ItemsSource="{Binding Locations}" Visibility="Collapsed" SelectedItem="{Binding SelectedLocation, Mode=TwoWay}"/>
-		</Grid>
-		
-		<!--TitlePanel contiene el nombre de la aplicaciÃ³n y el tÃ­tulo de la pÃ¡gina--><!--ContentPanel: coloque aquÃ­ el contenido adicional-->
-	</Grid>
+            <!--ContentPanel: coloque aquÃ­ el contenido adicional-->
+            <Grid x:Name="ContentPanel" Margin="0,144,12,0" d:LayoutOverrides="GridBox">
+                <ListBox x:Name="TList" Margin="28,8,8,8" SelectedItem="{Binding ListSelection, Mode=TwoWay}" ItemTemplate="{StaticResource ItemTemplate}" ItemsSource="{Binding Collection}" />
+            </Grid>
+            <toolkit:ListPicker FullModeItemTemplate="{StaticResource FullModeTemplate}" x:Name="LocPicker" ItemsSource="{Binding Locations}" Visibility="Collapsed" SelectedItem="{Binding SelectedLocation, Mode=TwoWay}"/>
+
+        </Grid>
+    </Grid>
+
+    <appbar:Bindable.ApplicationBar>
+        <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
+            <appbar:BindableAppBar.MenuItems>
+                <appbar:BindableAppBarMenuItem Command="{Binding ShowGlobal}" Text="{Binding Strings.ShowGlobalTopics, Source={StaticResource LocalizedResources}}" />
+                <appbar:BindableAppBarMenuItem Command="{Binding ShowLocations}" Text="{Binding Strings.AvailableLocations, Source={StaticResource LocalizedResources}}" />
+            </appbar:BindableAppBar.MenuItems>
+            <appbar:BindableAppBarButton Command="{Binding Refresh}" IconUri="/Images/Icons_White/appbar.refresh.rest.png" Text="{Binding Strings.Refresh, Source={StaticResource LocalizedResources}}" />
+        </appbar:BindableAppBar>
+    </appbar:Bindable.ApplicationBar>
 </phone:PhoneApplicationPage>

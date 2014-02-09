@@ -1,17 +1,7 @@
-﻿using System;
-using System.Net;
+﻿using Microsoft.Phone.Scheduler;
+using System;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.IO.IsolatedStorage;
-using System.Text;
-using Microsoft.Phone.Scheduler;
-using Microsoft.Phone.Shell;
 
 namespace Ocell
 {
@@ -24,9 +14,9 @@ namespace Ocell
             Library.DateSync.WriteLastCheckDate(Date);
         }
 
-        public static DateTime GetLastCheckDate()
+        public static async Task<DateTime> GetLastCheckDate()
         {
-            return Library.DateSync.GetLastCheckDate();
+            return await Library.DateSync.GetLastCheckDate();
         }
 
         public static void StartPeriodicAgent()
@@ -36,8 +26,8 @@ namespace Ocell
 
             try
             {
-                 periodicTask = ScheduledActionService.Find(periodicTaskName) as PeriodicTask;
-                 
+                periodicTask = ScheduledActionService.Find(periodicTaskName) as PeriodicTask;
+
             }
             catch (Exception)
             {

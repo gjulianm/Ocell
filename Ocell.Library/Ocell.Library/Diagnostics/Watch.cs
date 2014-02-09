@@ -1,9 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-
+﻿
 namespace Ocell.Library
 {
-    public static class TimeTracker
+    /*public static class TimeTracker
     {
         public static void Track(Action function)
         {
@@ -27,5 +25,5 @@ namespace Ocell.Library
             watch.Stop();
             Debug.WriteLine("Time for function {0}: {1} ms", action, watch.ElapsedMilliseconds);
         }
-    }
+    }*/
 }

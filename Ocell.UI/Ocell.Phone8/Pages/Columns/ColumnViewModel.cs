@@ -1,34 +1,23 @@
-﻿using DanielVaughan.Windows;
+﻿using AncoraMVVM.Base;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Pages.Search;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TweetSharp;
 
 namespace Ocell.Pages.Columns
 {
+    [ImplementPropertyChanged]
     public class ColumnViewModel : ExtendedViewModelBase
     {
-        SafeObservable<ColumnViewPivotModel> pivots;
-        public SafeObservable<ColumnViewPivotModel> Pivots
-        {
-            get { return pivots; }
-            set { Assign("Pivots", ref pivots, value); }
-        }
+        public SafeObservable<ColumnViewPivotModel> Pivots { get; set; }
 
-        bool fastAddMode;
-        public bool FastAddMode
-        {
-            get { return fastAddMode; }
-            set { Assign("FastAddMode", ref fastAddMode, value); }
-        }
+        public bool FastAddMode { get; set; }
 
         DelegateCommand enableQuickAdd;
         public ICommand EnableQuickAdd
@@ -62,24 +51,6 @@ namespace Ocell.Pages.Columns
             {
                 var pivot = new ColumnViewPivotModel(account);
 
-                pivot.PropertyChanged += (sender, e) =>
-                    {
-                        if (e.PropertyName == "IsLoading")
-                        {
-                            var p = sender as ColumnViewPivotModel;
-
-                            if (p == null)
-                                return;
-
-                            if (p.IsLoading)
-                                pivotsLoading++;
-                            else
-                                pivotsLoading--;
-
-                            IsLoading = pivotsLoading > 0;
-                        }
-                    };
-
                 Pivots.Add(pivot);
             }
         }
@@ -93,32 +64,15 @@ namespace Ocell.Pages.Columns
         static List<TwitterResource> searchesCache = new List<TwitterResource>();
 
         object resourcesSync = new object();
-        SafeObservable<TwitterResource> resources;
-        public SafeObservable<TwitterResource> Resources
-        {
-            get { return resources; }
-            set { Assign("Resources", ref resources, value); }
-        }
+        public SafeObservable<TwitterResource> Resources { get; set; }
 
 
         UserToken user;
         int loading = 0;
         object loadingSync = new object();
 
-        string username;
-        public string Username
-        {
-            get { return username; }
-            set { Assign("Username", ref username, value); }
-        }
-
-        object selectedResource;
-        public object SelectedResource
-        {
-            get { return selectedResource; }
-            set { Assign("SelectedResource", ref selectedResource, value); }
-        }
-
+        public string Username { get; set; }
+        public object SelectedResource { get; set; }
         public bool FastAddMode { get; set; }
 
         public ColumnViewPivotModel(UserToken User)
@@ -130,12 +84,12 @@ namespace Ocell.Pages.Columns
 
             this.PropertyChanged += (sender, e) =>
                 {
-                    if (e.PropertyName == "SelectedResource" && selectedResource is TwitterResource)
+                    if (e.PropertyName == "SelectedResource" && SelectedResource is TwitterResource)
                     {
                         if (FastAddMode)
-                            AddResource((TwitterResource)selectedResource);
+                            AddResource((TwitterResource)SelectedResource);
                         else
-                            NavigateToResource((TwitterResource)selectedResource);
+                            NavigateToResource((TwitterResource)SelectedResource);
                     }
                 };
 
@@ -175,8 +129,8 @@ namespace Ocell.Pages.Columns
         void AddResource(TwitterResource resource)
         {
             if (Config.Columns.Contains(resource))
-                MessageService.ShowError(Localization.Resources.ColumnAlreadyPinned);
-            else if (MessageService.AskYesNoQuestion(String.Format(Localization.Resources.AskAddColumn, resource.Title)))
+                Notificator.ShowError(Localization.Resources.ColumnAlreadyPinned);
+            else if (Notificator.Prompt(String.Format(Localization.Resources.AskAddColumn, resource.Title)))
             {
                 Config.Columns.Add(resource);
                 Config.SaveColumns();
@@ -187,7 +141,7 @@ namespace Ocell.Pages.Columns
         void NavigateToResource(TwitterResource resource)
         {
             ResourceViewModel.Resource = resource;
-            Navigate(Uris.ResourceView);
+            Navigator.Navigate<ResourceViewModel>();
         }
 
         void GetLists()
@@ -220,10 +174,10 @@ namespace Ocell.Pages.Columns
             loading--;
 
             if (loading <= 0)
-                IsLoading = false;
+                Progress.IsLoading = false;
 
             if (!response.RequestSucceeded)
-                MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
+                Notificator.ShowError(Localization.Resources.ErrorLoadingLists);
             else
                 AddLists(response.Content);
         }
@@ -235,10 +189,10 @@ namespace Ocell.Pages.Columns
             loading--;
 
             if (loading <= 0)
-                IsLoading = false;
+                Progress.IsLoading = false;
 
             if (!response.RequestSucceeded)
-                MessageService.ShowError(Localization.Resources.ErrorLoadingLists);
+                Notificator.ShowError(Localization.Resources.ErrorLoadingLists);
             else
                 AddLists(response.Content);
         }
@@ -298,11 +252,11 @@ namespace Ocell.Pages.Columns
             loading--;
 
             if (loading <= 0)
-                IsLoading = false; // TODO: Refactor this.
+                Progress.IsLoading = false; // TODO: Refactor this.
 
             if (!response.RequestSucceeded)
             {
-                MessageService.ShowError(Localization.Resources.ErrorDownloadingSearches);
+                Notificator.ShowError(Localization.Resources.ErrorDownloadingSearches);
                 return;
             }
 

@@ -1,13 +1,11 @@
-﻿using System;
+﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Files;
+using AncoraMVVM.Base.IoC;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Net;
-using TweetSharp;
 using System.Linq;
-using System.IO;
-using Ocell.Library;
-using System.IO.IsolatedStorage;
 using System.Threading.Tasks;
+using TweetSharp;
 
 namespace Ocell.Library.Twitter
 {
@@ -75,7 +73,7 @@ namespace Ocell.Library.Twitter
                 Users = new SafeObservable<TwitterUser>();
 
             foreach (var user in users)
-                if(!Users.Contains(user))
+                if (!Users.Contains(user))
                     Users.Add(user);
 
             if (finished && Finished != null)
@@ -89,8 +87,8 @@ namespace Ocell.Library.Twitter
 
     public class UsernameProvider
     {
-        private static Dictionary<UserToken, IList<string>> dicUsers = new Dictionary<UserToken,IList<string>>();
-        private static Dictionary<UserToken, bool> finishedUsers = new Dictionary<UserToken,bool>();
+        private static Dictionary<UserToken, IList<string>> dicUsers = new Dictionary<UserToken, IList<string>>();
+        private static Dictionary<UserToken, bool> finishedUsers = new Dictionary<UserToken, bool>();
 
         public IList<string> Usernames
         {
@@ -106,13 +104,13 @@ namespace Ocell.Library.Twitter
 
         public UserToken User { get; set; }
 
-        public static void FillUserNames(IEnumerable<UserToken> users)
+        public static async void FillUserNames(IEnumerable<UserToken> users)
         {
             foreach (var user in users)
             {
                 var temp = user;
                 finishedUsers[temp] = false;
-                dicUsers[temp] = GetUserCache(temp).ToList();
+                dicUsers[temp] = (await GetUserCache(temp)).ToList();
                 FillUserNamesFor(temp, -1);
             }
         }
@@ -120,7 +118,7 @@ namespace Ocell.Library.Twitter
         protected static async void FillUserNamesFor(UserToken user, long cursor)
         {
             var response = await ServiceDispatcher.GetService(user).ListFriendsAsync(new ListFriendsOptions { ScreenName = user.ScreenName, Cursor = cursor });
-            
+
             if (!response.RequestSucceeded)
                 return;
 
@@ -153,16 +151,18 @@ namespace Ocell.Library.Twitter
                 UsernameProvider.FillUserNames(new List<UserToken> { User });
         }
 
-        private static IEnumerable<string> GetUserCache(UserToken user)
+
+
+        private async static Task<IEnumerable<string>> GetUserCache(UserToken user)
         {
             string filename = "AUTOCOMPLETECACHE" + user.ScreenName;
-            return FileAbstractor.ReadLinesOfFile(filename);
+            return await Dependency.Resolve<IFileManager>().ReadLines(filename);
         }
 
-        private static void SaveUserCache(UserToken user, IEnumerable<string> names)
+        private async static Task SaveUserCache(UserToken user, IEnumerable<string> names)
         {
             string filename = "AUTOCOMPLETECACHE" + user.ScreenName;
-            FileAbstractor.WriteLinesToFile(names, filename);
+            await Dependency.Resolve<IFileManager>().WriteLines(filename, names);
         }
 
         public event OnError Error;

@@ -1,6 +1,6 @@
-﻿using AncoraMVVM.Rest;
+﻿using AncoraMVVM.Base.Interfaces;
+using AncoraMVVM.Rest;
 using AsyncOAuth;
-using DanielVaughan;
 using Ocell.Library;
 using Ocell.Library.Notifications;
 using Ocell.Library.Twitter;
@@ -64,8 +64,8 @@ namespace Ocell.Pages.Settings
         {
             if (!parameters.ContainsKey("oauth_token") || !parameters.ContainsKey("oauth_token_secret"))
             {
-                MessageService.ShowError(Localization.Resources.ErrorClientTokens);
-                GoBack();
+                Notificator.ShowError(Localization.Resources.ErrorClientTokens);
+                Navigator.GoBack();
                 return;
             }
 
@@ -85,7 +85,7 @@ namespace Ocell.Pages.Settings
 
             CheckIfExistsAndInsert(token);
             CreateColumns(token);
-            GoBack();
+            Navigator.GoBack();
         }
 
         private void CreateColumns(UserToken user)
@@ -93,7 +93,7 @@ namespace Ocell.Pages.Settings
             TwitterResource Home = new TwitterResource { Type = ResourceType.Home, User = user };
             TwitterResource Mentions = new TwitterResource { Type = ResourceType.Mentions, User = user };
             TwitterResource Messages = new TwitterResource { Type = ResourceType.Messages, User = user };
-            Deployment.Current.Dispatcher.InvokeIfRequired(() =>
+            Dispatcher.InvokeIfRequired(() =>
             {
                 if (!Config.Columns.Contains(Home))
                     Config.Columns.Add(Home);

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-
+﻿
 namespace Ocell.Library
 {
     public enum LightOrDark { SystemDefault, Light, Dark, };
@@ -10,6 +6,8 @@ namespace Ocell.Library
 
     public class OcellTheme
     {
+        public static bool IsDarkThemeSet { get; set; }
+
         public BackgroundType Background { get; set; }
         public LightOrDark Type
         {
@@ -44,8 +42,7 @@ namespace Ocell.Library
                     case BackgroundType.None:
                         return "";
                     case BackgroundType.ThemeDependant:
-                        bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
-                        if (isDarkTheme)
+                        if (IsDarkThemeSet)
                             return "/Images/Backgrounds/Fabric.png";
                         else
                             return "/Images/Backgrounds/Gray.png";
@@ -61,24 +58,6 @@ namespace Ocell.Library
                         return "";
                 }
             }
-        }
-
-        public Brush GetBrush()
-        {
-            if (BackgroundUrl == "")
-                return new SolidColorBrush(Colors.Transparent);
-            else
-            {
-                var bi = new BitmapImage(new Uri(BackgroundUrl, UriKind.Relative));
-                bi.CreateOptions = BitmapCreateOptions.None;
-                var ib = new ImageBrush { ImageSource = bi };
-                return ib;
-            }
-        }
-
-        void z_ImageFailed(object sender, ExceptionRoutedEventArgs e)
-        {
-            e.Equals(1);
         }
     }
 

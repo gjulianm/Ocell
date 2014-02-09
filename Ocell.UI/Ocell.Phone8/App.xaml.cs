@@ -1,9 +1,6 @@
-﻿using AsyncOAuth;
-using DanielVaughan;
-using DanielVaughan.InversionOfControl;
-using DanielVaughan.InversionOfControl.Containers.SimpleContainer;
-using DanielVaughan.Services;
-using DanielVaughan.Services.Implementation;
+﻿using AncoraMVVM.Base.IoC;
+using AncoraMVVM.Phone;
+using AsyncOAuth;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Ocell.Compatibility;
@@ -61,19 +58,19 @@ namespace Ocell
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
 
-            SimpleContainer container = new SimpleContainer();
-            container.InitializeServiceLocator();
-
             OAuthUtility.ComputeHash = (key, buffer) => { using (var hmac = new HMACSHA1(key)) { return hmac.ComputeHash(buffer); } };
 
-            Dependency.Register<INavigationService, FrameNavigationService>(true);
-            Dependency.Register<IMessageService, MessageService>(true);
+            Dependency.RegisterModule(new PhoneDependencyModule());
+
+            // TODO: solve this.
             Dependency.Register<IUserProvider, UserProvider>();
             Dependency.Register<IScrollController, DummyScrollController>();
             Dependency.Register<IReadingPositionManager, WP8ReadingPositionManager>();
             Dependency.Register<IInfiniteScroller, WP8InfiniteScroller>();
             Dependency.Register<IListboxCompressionDetector, WP8PullDetector>();
             Dependency.Register<TileManager, WP8TileManager>();
+
+            Dependency.Register<ICryptoManager, CryptoManager>();
 
             PushNotifications.WPVersion = OSVersion.WP8;
 
@@ -159,7 +156,8 @@ namespace Ocell
                 System.Diagnostics.Debugger.Break();
             }
 
-            LittleWatson.ReportException(e.Exception, "Ocell App Error");
+            // TODO: Exception checking.
+            // LittleWatson.ReportException(e.Exception, "Ocell App Error");
         }
 
         // Código para ejecutar en excepciones no controladas
@@ -171,7 +169,8 @@ namespace Ocell
                 System.Diagnostics.Debugger.Break();
             }
 
-            LittleWatson.ReportException(e.ExceptionObject, "Ocell App Error");
+            // TODO: Exception checking.
+            // LittleWatson.ReportException(e.ExceptionObject, "Ocell App Error");
         }
 
         #region Inicialización de la aplicación telefónica

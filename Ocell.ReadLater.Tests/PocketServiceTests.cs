@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ocell.ReadLater.Tests
 {
+    [Ignore]
     [TestFixture]
     public class PocketServiceTests
     {

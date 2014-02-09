@@ -1,25 +1,15 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Data;
-using System.Windows.Input;
-using DanielVaughan.ComponentModel;
-using DanielVaughan.Windows;
-using TweetSharp;
-using Ocell.Library;
-using Ocell.Library.Twitter;
-using System.Collections.Generic;
-using System;
-using System.ComponentModel;
-using System.Threading;
-using DanielVaughan;
-using DanielVaughan.InversionOfControl;
-using DanielVaughan.Net;
-using DanielVaughan.Services;
-using System.Linq;
-using Ocell.Library.Filtering;
-using System.Collections.Specialized;
-using System.Windows;
+﻿using AncoraMVVM.Base;
 using Microsoft.Phone.Tasks;
-using Ocell.Compatibility;
+using Ocell.Library;
+using Ocell.Library.Filtering;
+using Ocell.Library.Twitter;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Threading;
+using System.Windows.Input;
 
 namespace Ocell
 {
@@ -79,7 +69,7 @@ namespace Ocell
 
         public void RaiseLoggedInChange()
         {
-            OnPropertyChanged("HasLoggedIn");
+            RaisePropertyChanged("HasLoggedIn");
         }
 
         int loadingCount;
@@ -90,49 +80,24 @@ namespace Ocell
             {
                 loadingCount = value;
                 if (loadingCount <= 0)
-                    IsLoading = false;
+                    Progress.IsLoading = false;
                 else
-                    IsLoading = true;
+                    Progress.IsLoading = true;
             }
 
         }
 
         Queue<NotifyCollectionChangedEventArgs> collectionChangedArgs;
 
-        ObservableCollection<TwitterResource> pivots;
-        public ObservableCollection<TwitterResource> Pivots
-        {
-            get { return pivots; }
-            set { Assign("Pivots", ref pivots, value); }
-        }
+        public ObservableCollection<TwitterResource> Pivots { get; set; }
 
-        object selectedPivot;
-        public object SelectedPivot
-        {
-            get { return selectedPivot; }
-            set { Assign("SelectedPivot", ref selectedPivot, value); }
-        }
+        public object SelectedPivot { get; set; }
 
-        string currentAccountName;
-        public string CurrentAccountName
-        {
-            get { return currentAccountName; }
-            set { Assign("CurrentAccountName", ref currentAccountName, value); }
-        }
+        public string CurrentAccountName { get; set; }
 
-        bool isSearching;
-        public bool IsSearching
-        {
-            get { return isSearching; }
-            set { Assign("IsSearching", ref isSearching, value); }
-        }
+        public bool IsSearching { get; set; }
 
-        string userSearch;
-        public string UserSearch
-        {
-            get { return userSearch; }
-            set { Assign("UserSearch", ref userSearch, value); }
-        }
+        public string UserSearch { get; set; }
         #region Commands
         DelegateCommand pinToStart;
         public ICommand PinToStart
@@ -170,10 +135,11 @@ namespace Ocell
             pinToStart = new DelegateCommand((obj) =>
                 {
                     var column = (TwitterResource)SelectedPivot;
-                    if (Dependency.Resolve<TileManager>().ColumnTileIsCreated(column))
-                        MessageService.ShowError("This column is already pinned.");
+                    /*if (Dependency.Resolve<TileManager>().ColumnTileIsCreated(column))
+                        Notificator.ShowError("This column is already pinned.");
                     else
-                        SecondaryTiles.CreateColumnTile(column);
+                        SecondaryTiles.CreateColumnTile(column);*/
+                    // TODO: Column manager.
                 }, (obj) => SelectedPivot != null);
 
             filterColumn = new DelegateCommand((obj) =>
@@ -185,19 +151,19 @@ namespace Ocell
                     DataTransfer.cFilter = new ColumnFilter { Resource = column };
 
                 DataTransfer.IsGlobalFilter = false;
-                Navigate(Uris.Filters);
+                Navigator.Navigate(Uris.Filters);
 
             }, (obj) => SelectedPivot != null);
 
             toMyProfile = new DelegateCommand((obj) =>
                 {
-                    Navigate("/Pages/Elements/User.xaml?user=" + CurrentAccountName);
+                    Navigator.Navigate("/Pages/Elements/User.xaml?user=" + CurrentAccountName);
                 }, (obj) => !string.IsNullOrWhiteSpace(CurrentAccountName));
 
             goToUser = new DelegateCommand((obj) =>
             {
                 IsSearching = false;
-                Navigate("/Pages/Elements/User.xaml?user=" + UserSearch);
+                Navigator.Navigate("/Pages/Elements/User.xaml?user=" + UserSearch);
             }, obj => Config.Accounts.Any());
 
             feedback = new DelegateCommand((obj) =>
@@ -206,18 +172,17 @@ namespace Ocell
                     task.Subject = "Ocell - Feedback";
                     task.To = "gjulian93@gmail.com";
 
-                    Deployment.Current.Dispatcher.InvokeIfRequired(task.Show);
+                    Dispatcher.InvokeIfRequired(task.Show);
                 });
 
         }
 
-        public void OnLoad()
+        public override void OnLoad()
         {
-            OnPropertyChanged("Pivots");
+            RaisePropertyChanged("Pivots");
         }
 
         public MainPageModel()
-            : base("MainPage")
         {
             if (Config.RetweetAsMentions == null)
                 Config.RetweetAsMentions = true;
@@ -235,7 +200,7 @@ namespace Ocell
 
             Config.Columns.CollectionChanged += (sender, e) =>
             {
-                Deployment.Current.Dispatcher.InvokeIfRequired(() =>
+                Dispatcher.InvokeIfRequired(() =>
                     {
                         if (e.NewItems != null)
                         {

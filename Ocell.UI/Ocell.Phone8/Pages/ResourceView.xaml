@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:custom="clr-namespace:Ocell.Controls"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    xmlns:controls="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
+    xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -36,15 +36,15 @@
             </toolkit:NavigationOutTransition.Forward>
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
-    
+
     <shell:SystemTray.ProgressIndicator>
         <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding Loader.IsLoading}" x:Name="pBar" />
     </shell:SystemTray.ProgressIndicator>
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
     <Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
-    	<Grid.Background>
-    		<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
-    	</Grid.Background>
+        <Grid.Background>
+            <ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -61,12 +61,14 @@
             <custom:ExtendedListBox  toolkit:TiltEffect.IsTiltEnabled="True" x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" Loaded="TweetList_Loaded"/>
         </Grid>
 
-        <controls:AppBar Style="{StaticResource AppBarStyle}">
-            <controls:AppBarIconButton x:Name="Add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="{Binding Strings.AddColumn, Source={StaticResource LocalizedResources}}" Command="{Binding AddCommand}" />
-        </controls:AppBar>
+        <appbar:Bindable.ApplicationBar>
+            <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
+                <appbar:BindableAppBarButton x:Name="Add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="{Binding Strings.AddColumn, Source={StaticResource LocalizedResources}}" Command="{Binding AddCommand}" />
+            </appbar:BindableAppBar>
+        </appbar:Bindable.ApplicationBar>
     </Grid>
- 
+
     <!--Código de ejemplo que muestra el uso de ApplicationBar-->
-    
+
 
 </phone:PhoneApplicationPage>

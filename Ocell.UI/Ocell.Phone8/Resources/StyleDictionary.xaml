@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-	xmlns:u="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
+	xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
     >  
     
     <Style x:Key="PageHeaderStyle" TargetType="TextBlock">
@@ -11,7 +11,7 @@
         <Setter Property="FontSize" Value="60" />
     </Style>
     
-    <Style x:Key="AppBarStyle" TargetType="u:AppBar">
-        <Setter Property="BarOpacity" Value="0.8" />        
+    <Style x:Key="AppBarStyle" TargetType="appbar:BindableAppBar">
+        <Setter Property="BindableOpacity" Value="0.8" />        
     </Style>
 </ResourceDictionary>

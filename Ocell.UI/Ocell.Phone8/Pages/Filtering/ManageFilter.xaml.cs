@@ -1,8 +1,8 @@
-﻿using System.Windows;
-using Microsoft.Phone.Controls;
+﻿using Microsoft.Phone.Controls;
 using Ocell.Library;
 using Ocell.Library.Filtering;
 using System;
+using System.Windows;
 
 namespace Ocell.Pages.Filtering
 {
@@ -15,8 +15,8 @@ namespace Ocell.Pages.Filtering
         {
             _initialized = false;
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            
-            this.Loaded +=new RoutedEventHandler(ManageFilter_Loaded);
+
+            this.Loaded += new RoutedEventHandler(ManageFilter_Loaded);
         }
 
         void MessageAndExit(string msg)

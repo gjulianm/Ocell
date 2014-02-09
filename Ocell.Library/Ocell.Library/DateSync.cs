@@ -1,12 +1,9 @@
-﻿using System;
-using System.Threading;
-
-#if METRO
-using Windows.Storage;
+﻿using AncoraMVVM.Base.Files;
+using AncoraMVVM.Base.IoC;
+using System;
 using System.Threading.Tasks;
-#else
-using System.IO.IsolatedStorage;
-#endif
+
+
 
 namespace Ocell.Library
 {
@@ -16,12 +13,12 @@ namespace Ocell.Library
 
         private static void WriteDate(DateTime date, string file)
         {
-            FileAbstractor.WriteContentsToFile(date.ToString("s"), file);
+            Dependency.Resolve<IFileManager>().WriteContents(date.ToString("s"), file);
         }
 
-        private static DateTime GetDate(string file)
+        private async static Task<DateTime> GetDate(string file)
         {
-            string dateStr = FileAbstractor.ReadContentsOfFile(file);
+            string dateStr = await Dependency.Resolve<IFileManager>().ReadContents(file);
 
             DateTime date;
 
@@ -41,14 +38,14 @@ namespace Ocell.Library
             WriteDate(date, "ToastFile");
         }
 
-        public static DateTime GetLastCheckDate()
+        public async static Task<DateTime> GetLastCheckDate()
         {
-            return GetDate("DateFile");
+            return await GetDate("DateFile");
         }
 
-        public static DateTime GetLastToastNotificationDate()
+        public static async Task<DateTime> GetLastToastNotificationDate()
         {
-            return GetDate("ToastFile");
+            return await GetDate("ToastFile");
         }
     }
 }

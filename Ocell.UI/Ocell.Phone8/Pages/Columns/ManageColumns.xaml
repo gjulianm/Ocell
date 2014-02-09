@@ -15,7 +15,7 @@
     mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    xmlns:u="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
+    xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
     >
 	
 	<toolkit:TransitionService.NavigationInTransition>
@@ -80,9 +80,9 @@
     		</Grid>
     	</Grid>
 
-        <u:AppBar Style="{StaticResource AppBarStyle}">
-                <u:AppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.new.rest.png" Text="{Binding Strings.Add, Source={StaticResource LocalizedResources}}" NavigateUri="/Pages/Columns/ColumnView.xaml"/>
-        </u:AppBar>
+       <appbar:Bindable.ApplicationBar><appbar:BindableAppBar>
+                <appbar:BindableAppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.new.rest.png" Text="{Binding Strings.Add, Source={StaticResource LocalizedResources}}" Uri="/Pages/Columns/ColumnView.xaml"/>
+        </appbar:BindableAppBar></appbar:Bindable.ApplicationBar>
     </Grid>
  
     

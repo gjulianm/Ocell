@@ -1,7 +1,6 @@
 ﻿using AncoraMVVM.Rest;
 using BufferAPI;
 using Ocell.Library;
-using System;
 using System.Linq;
 using System.Net.Http;
 
@@ -52,7 +51,7 @@ namespace Ocell.Pages.Settings
             }
             else
             {
-                MessageService.ShowError(Localization.Resources.ErrorBufferProfiles);
+                Notificator.ShowError(Localization.Resources.ErrorBufferProfiles);
             }
         }
 
@@ -63,8 +62,8 @@ namespace Ocell.Pages.Settings
 
             if (!response.Succeeded)
             {
-                MessageService.ShowError(Localization.Resources.ErrorBufferProfiles);
-                GoBack();
+                Notificator.ShowError(Localization.Resources.ErrorBufferProfiles);
+                Navigator.GoBack();
                 return;
             }
 
@@ -85,10 +84,10 @@ namespace Ocell.Pages.Settings
 
             if (!added)
             {
-                MessageService.ShowWarning(Localization.Resources.NoBufferProfilesAdded);
+                Notificator.ShowWarning(Localization.Resources.NoBufferProfilesAdded);
             }
 
-            GoBack();
+            Navigator.GoBack();
         }
     }
 }

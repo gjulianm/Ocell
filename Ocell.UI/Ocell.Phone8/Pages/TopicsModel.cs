@@ -1,66 +1,34 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using DanielVaughan.ComponentModel;
-using DanielVaughan;
-using DanielVaughan.Windows;
+﻿using AncoraMVVM.Base;
 using Ocell.Library;
-using System.Collections.Generic;
 using Ocell.Library.Twitter;
+using Ocell.Pages.Search;
+using PropertyChanged;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using TweetSharp;
 using System.Device.Location;
 using System.Linq;
-using Ocell.Pages.Search;
+using System.Windows;
+using System.Windows.Input;
+using TweetSharp;
 
 
 namespace Ocell.Pages
 {
+    [ImplementPropertyChanged]
     public class TopicsModel : ExtendedViewModelBase
     {
         GeoCoordinateWatcher geoWatcher;
 
-        string placeName;
-        public string PlaceName
-        {
-            get { return placeName; }
-            set { Assign("PlaceName", ref placeName, value); }
-        }
+        public string PlaceName { get; set; }
 
-        object listSelection;
-        public object ListSelection
-        {
-            get { return listSelection; }
-            set { Assign("ListSelection", ref listSelection, value); }
-        }
+        public object ListSelection { get; set; }
 
-        IEnumerable<TwitterTrend> collection;
-        public IEnumerable<TwitterTrend> Collection
-        {
-            get { return collection; }
-            set { Assign("Collection", ref collection, value); }
-        }
+        public IEnumerable<TwitterTrend> Collection { get; set; }
 
-        ObservableCollection<string> locations;
-        public ObservableCollection<string> Locations
-        {
-            get { return locations; }
-            set { Assign("Locations", ref locations, value); }
-        }
+        public ObservableCollection<string> Locations { get; set; }
 
-        string selectedLocation;
-        public string SelectedLocation
-        {
-            get { return selectedLocation; }
-            set { Assign("SelectedLocation", ref selectedLocation, value); }
-        }
+        public string SelectedLocation { get; set; }
 
         Dictionary<string, long> LocationMap;
 
@@ -86,7 +54,6 @@ namespace Ocell.Pages
         long currentLocation = 1;
 
         public TopicsModel()
-            : base("TrendingTopics")
         {
             this.PropertyChanged += (sender, e) =>
                 {
@@ -108,7 +75,7 @@ namespace Ocell.Pages
 
             GetLocations();
 
-            IsLoading = true;
+            Progress.IsLoading = true;
             if (Config.EnabledGeolocation == true && (Config.TopicPlaceId == -1 || Config.TopicPlaceId == null))
                 GetMyLocation();
             else
@@ -152,15 +119,15 @@ namespace Ocell.Pages
 
         private async void GetTopics()
         {
-            IsLoading = true;
-            
+            Progress.IsLoading = true;
+
             var response = await ServiceDispatcher.GetCurrentService().ListLocalTrendsForAsync(new ListLocalTrendsForOptions { Id = (int)currentLocation });
 
-            IsLoading = false;
+            Progress.IsLoading = false;
             if (!response.RequestSucceeded)
             {
-                MessageService.ShowError(Localization.Resources.ErrorLoadingTT);
-                GoBack();
+                Notificator.ShowError(Localization.Resources.ErrorLoadingTT);
+                Navigator.GoBack();
                 return;
             }
 
@@ -175,7 +142,7 @@ namespace Ocell.Pages
 
             if (response.RequestSucceeded && locs.Any())
             {
-                Deployment.Current.Dispatcher.InvokeIfRequired(() =>
+                Dispatcher.InvokeIfRequired(() =>
                 {
                     foreach (var loc in locs.OrderBy(x => x.Name))
                     {
@@ -202,7 +169,7 @@ namespace Ocell.Pages
         private void OnSelectionChanged()
         {
             TwitterTrend trend = ListSelection as TwitterTrend;
-            
+
             if (trend == null)
                 return;
 
@@ -215,7 +182,7 @@ namespace Ocell.Pages
                    User = DataTransfer.CurrentAccount
                };
             ResourceViewModel.Resource = resource;
-            Navigate(Uris.ResourceView);
+            Navigator.Navigate(Uris.ResourceView);
         }
     }
 }
