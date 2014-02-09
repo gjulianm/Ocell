@@ -12,7 +12,7 @@
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
     xmlns:tr="clr-namespace:Ocell.Transitions"
     xmlns:navigation="clr-namespace:System.Windows.Navigation;assembly=Microsoft.Phone"
-    xmlns:ac="clr-namespace:AncoraMVVM.Base.Converters;assembly=AncoraMVVM.Phone7"
+    xmlns:ac="clr-namespace:AncoraMVVM.Phone7.Converters;assembly=AncoraMVVM.Phone7"
     xmlns:global="clr-namespace:Ocell.Localization;assembly=Ocell.Localization"
     x:Class="Ocell.App"
     mc:Ignorable="d"

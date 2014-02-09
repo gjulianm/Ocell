@@ -35,6 +35,7 @@ namespace Ocell
                             encrypt.Write(utfD1, 0, utfD1.Length);
                             encrypt.FlushFinalBlock();
                         }
+
                         return Convert.ToBase64String(encryptionStream.ToArray());
                     }
                 }

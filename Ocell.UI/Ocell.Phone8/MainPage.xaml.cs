@@ -1,8 +1,7 @@
-﻿
-
-using AncoraMVVM.Base.Interfaces;
+﻿using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Tasks;
 using Ocell.Compatibility;
 using Ocell.Controls;
 using Ocell.Library;
@@ -81,8 +80,8 @@ namespace Ocell
                 if (Config.PushEnabled == true || (Config.PushEnabled == null && AskForPushPermission()))
                     PushNotifications.AutoRegisterForNotifications();
                 UsernameProvider.FillUserNames(Config.Accounts);
-#if DEBUG
-                var contents = FileAbstractor.ReadContentsOfFile("BA_DEBUG");
+#if DEBUG && AVARIJUSTINVENTEDTOAVOIDCOMPILINGTHISSHIT
+                //var contents = FileAbstractor.ReadContentsOfFile("BA_DEBUG");
                 if (!string.IsNullOrEmpty(contents))
                 {
                     EmailComposeTask email = new EmailComposeTask();

@@ -336,6 +336,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assembly.ico" />
+    <Content Include="BindableAppBar\README.txt" />
     <Content Include="FodyWeavers.xml" />
     <Content Include="Images\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -521,11 +522,13 @@
     <Resource Include="Images\BirdGray.png" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AncoraMVVM.Base">
-      <HintPath>..\..\packages\AncoraMVVM.Base.0.1.15-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
+    <Reference Include="AncoraMVVM.Base, Version=0.1.19.43182, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\AncoraMVVM.Base.0.1.19-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
     </Reference>
-    <Reference Include="AncoraMVVM.Phone7">
-      <HintPath>..\..\packages\AncoraMVVM.Phone7.0.1.15-alpha\lib\wp71\AncoraMVVM.Phone7.dll</HintPath>
+    <Reference Include="AncoraMVVM.Phone7, Version=0.1.20.43183, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\AncoraMVVM.Phone7.0.1.20-alpha\lib\wp71\AncoraMVVM.Phone7.dll</HintPath>
     </Reference>
     <Reference Include="AncoraMVVM.Rest">
       <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.13-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Rest.dll</HintPath>
@@ -554,8 +557,9 @@
     <Reference Include="Microsoft.Threading.Tasks.Extensions.Phone">
       <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.165\lib\wp8\Microsoft.Threading.Tasks.Extensions.Phone.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.6.0.1-beta1\lib\portable-net45+wp80+win8\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.1\lib\portable-net45+wp80+win8\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PCLWebUtility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
