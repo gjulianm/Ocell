@@ -10,7 +10,7 @@
     xmlns:local="clr-namespace:Ocell" 
 	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
 	x:Class="Ocell.Pages.Elements.User"
-    xmlns:u="clr-namespace:DanielVaughan.Windows.Controls;assembly=Calcium.Phone"
+    xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:converters="clr-namespace:DanielVaughan.Windows.Converters;assembly=Calcium.Phone"
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -77,22 +77,22 @@
             </controls:PivotItem>
         </controls:Pivot>
 
-        <u:AppBar Style="{StaticResource AppBarStyle}">
-            <u:AppBarToggleButton 
+       <appbar:Bindable.ApplicationBar><appbar:BindableAppBar>
+            <appbar:BindableAppBarToggleButton 
                 Command1="{Binding FollowUser}" IconUri1="/Images/Icons_White/appbar.add.rest.png" Text1="{Binding Strings.Follow, Source={StaticResource LocalizedResources}}"
                 Command2="{Binding UnfollowUser}" IconUri2="/Images/Icons_White/appbar.minus.rest.png" Text2="{Binding Strings.Unfollow, Source={StaticResource LocalizedResources}}"
                 Toggled="{Binding Followed}" IsEnabled="{Binding FriendshipRetrieved}"/>
-            <u:AppBarIconButton Command="{Binding PinUser}" Text="{Binding Strings.PinToMainPage, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.pin.rest.png" />
-            <u:AppBar.MenuItems>
-                <u:AppBarToggleMenuItem 
+            <appbar:BindableAppBarButton Command="{Binding PinUser}" Text="{Binding Strings.PinToMainPage, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.pin.rest.png" />
+            <appbar:BindableAppBar.MenuItems>
+                <appbar:BindableAppBarToggleMenuItem 
                     Command1="{Binding Block}" Text1="{Binding Strings.Block, Source={StaticResource LocalizedResources}}"
                     Command2="{Binding Unblock}" Text2="{Binding Strings.Unblock, Source={StaticResource LocalizedResources}}"
                     Toggled="{Binding Blocked}"/>
-                <u:AppBarMenuItem Text="{Binding Strings.BlockAndReport, Source={StaticResource LocalizedResources}}" Command="{Binding ReportSpam}"/>
-                <u:AppBarMenuItem Text="{Binding Strings.ManageListsForUser, Source={StaticResource LocalizedResources}}" Command="{Binding ManageLists}"/>
-                <u:AppBarMenuItem Text="{Binding Strings.ChangeAvatar, Source={StaticResource LocalizedResources}}" Command="{Binding ChangeAvatar}"/>
-            </u:AppBar.MenuItems>
-        </u:AppBar>
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.BlockAndReport, Source={StaticResource LocalizedResources}}" Command="{Binding ReportSpam}"/>
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.ManageListsForUser, Source={StaticResource LocalizedResources}}" Command="{Binding ManageLists}"/>
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.ChangeAvatar, Source={StaticResource LocalizedResources}}" Command="{Binding ChangeAvatar}"/>
+            </appbar:BindableAppBar.MenuItems>
+        </appbar:BindableAppBar></appbar:Bindable.ApplicationBar>
 
     </Grid>
 </phone:PhoneApplicationPage>

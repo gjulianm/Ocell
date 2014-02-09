@@ -124,9 +124,6 @@
     <Compile Include="..\Ocell.Library\Diagnostics\Logger.cs">
       <Link>Logger.cs</Link>
     </Compile>
-    <Compile Include="..\Ocell.Library\FileAbstractor.cs">
-      <Link>FileAbstractor.cs</Link>
-    </Compile>
     <Compile Include="..\Ocell.Library\Security\MutexExtensions.cs">
       <Link>MutexExtensions.cs</Link>
     </Compile>
