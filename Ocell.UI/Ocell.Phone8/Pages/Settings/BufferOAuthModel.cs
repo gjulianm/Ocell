@@ -46,7 +46,7 @@ namespace Ocell.Pages.Settings
         {
             if (parameters["access_token"] != null)
             {
-                Config.BufferAccessToken = parameters["access_token"].ToString().Replace("\"", "");
+                Config.BufferAccessToken.Value = parameters["access_token"].ToString().Replace("\"", "");
                 GetBufferProfiles();
             }
             else
@@ -57,7 +57,7 @@ namespace Ocell.Pages.Settings
 
         private async void GetBufferProfiles()
         {
-            var service = new BufferService(Config.BufferAccessToken);
+            var service = new BufferService(Config.BufferAccessToken.Value);
             var response = await service.GetProfiles();
 
             if (!response.Succeeded)
@@ -73,10 +73,10 @@ namespace Ocell.Pages.Settings
 
             foreach (var profile in profiles.Where(x => x.Service.ToLowerInvariant() == "twitter"))
             {
-                if (Config.Accounts.Any(x => x.ScreenName == profile.ServiceUsername))
+                if (Config.Accounts.Value.Any(x => x.ScreenName == profile.ServiceUsername))
                 {
                     added = true;
-                    Config.BufferProfiles.Add(profile);
+                    Config.BufferProfiles.Value.Add(profile);
                 }
             }
 

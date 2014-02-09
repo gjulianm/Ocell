@@ -20,8 +20,8 @@ namespace Ocell
 
         void SelectAccount_Loaded(object sender, RoutedEventArgs e)
         {
-            AccountsList.DataContext = Config.Accounts;
-            AccountsList.ItemsSource = Config.Accounts;
+            AccountsList.DataContext = Config.Accounts.Value;
+            AccountsList.ItemsSource = Config.Accounts.Value;
 
             AccountsList.SelectionChanged += new SelectionChangedEventHandler(AccountsList_SelectionChanged);
         }
@@ -32,7 +32,7 @@ namespace Ocell
                 return;
             UserToken Account = e.AddedItems[0] as UserToken;
             if (Account == null)
-                Account = Config.Accounts[0];
+                Account = Config.Accounts.Value[0];
             DataTransfer.CurrentAccount = Account;
             Dispatcher.BeginInvoke(() =>
                 NavigationService.Navigate(Uris.AddColumn));

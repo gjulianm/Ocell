@@ -32,13 +32,13 @@ namespace Ocell
         const int DefaultTweetFontSize = 20;
         public int TweetFontSize
         {
-            get { return Config.FontSize ?? DefaultTweetFontSize; }
+            get { return Config.FontSize.Value ?? DefaultTweetFontSize; }
             set
             {
-                if (Config.FontSize == value)
+                if (Config.FontSize.Value == value)
                     return;
 
-                Config.FontSize = value;
+                Config.FontSize.Value = value;
 
                 RaisePropertyChanged("TweetFontSize");
             }

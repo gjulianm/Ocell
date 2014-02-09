@@ -213,9 +213,9 @@ namespace Ocell.Controls
             if (!scrollController.Bound)
                 Dependency.Resolve<IDispatcher>().InvokeIfRequired(() => scrollController.Bind(this));
 
-            if (Config.ReloadOptions == ColumnReloadOptions.AskPosition)
+            if (Config.ReloadOptions.Value == ColumnReloadOptions.AskPosition)
                 TryTriggerResumeReading();
-            else if (Config.ReloadOptions == ColumnReloadOptions.KeepPosition && readingPosManager.CanRecoverPosition())
+            else if (Config.ReloadOptions.Value == ColumnReloadOptions.KeepPosition && readingPosManager.CanRecoverPosition())
                 readingPosManager.RecoverPosition();
             else
                 goTopOnNextLoad = true;

@@ -33,7 +33,7 @@ namespace Ocell.Pages.Search
                 {
                     var resource = new TwitterResource
                     {
-                        User = DataTransfer.CurrentAccount ?? Config.Accounts.FirstOrDefault(),
+                        User = DataTransfer.CurrentAccount ?? Config.Accounts.Value.FirstOrDefault(),
                         Type = ResourceType.Search,
                         Data = Query
                     };

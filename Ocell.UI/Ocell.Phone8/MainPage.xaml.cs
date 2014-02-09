@@ -64,7 +64,7 @@ namespace Ocell
                 return;
 
             var frame = Application.Current.RootVisual as PhoneApplicationFrame;
-            frame.Background = Config.Background.GetBrush();
+            frame.Background = Config.Background.Value.GetBrush();
 
             viewModel.RaiseLoggedInChange();
             viewModel.OnLoad();
@@ -77,9 +77,9 @@ namespace Ocell
             {
                 CreateTile();
                 ShowFollowMessage();
-                if (Config.PushEnabled == true || (Config.PushEnabled == null && AskForPushPermission()))
+                if (Config.PushEnabled.Value == true || (Config.PushEnabled.Value == null && AskForPushPermission()))
                     PushNotifications.AutoRegisterForNotifications();
-                UsernameProvider.FillUserNames(Config.Accounts);
+                UsernameProvider.FillUserNames(Config.Accounts.Value);
 #if DEBUG && AVARIJUSTINVENTEDTOAVOIDCOMPILINGTHISSHIT
                 //var contents = FileAbstractor.ReadContentsOfFile("BA_DEBUG");
                 if (!string.IsNullOrEmpty(contents))
@@ -113,7 +113,7 @@ namespace Ocell
 
         private void GeolocationPrompt()
         {
-            if (Config.EnabledGeolocation != null)
+            if (Config.EnabledGeolocation.Value != null)
                 return;
 
             string boxText = Localization.Resources.AskAccessGrantGeolocation + Environment.NewLine + Environment.NewLine;
@@ -122,12 +122,12 @@ namespace Ocell
 
             var result = MessageBox.Show(boxText, Localization.Resources.Geolocation, MessageBoxButton.OKCancel);
 
-            Config.EnabledGeolocation = result == MessageBoxResult.OK;
+            Config.EnabledGeolocation.Value = result == MessageBoxResult.OK;
         }
 
         private bool CheckForLogin()
         {
-            if (!Config.Accounts.Any())
+            if (!Config.Accounts.Value.Any())
             {
                 var service = Dependency.Resolve<INotificationService>();
                 bool result = service.Prompt(Localization.Resources.YouHaveToLogin);
@@ -144,13 +144,13 @@ namespace Ocell
 
         private void ShowFollowMessage()
         {
-            if ((Config.FollowMessageShown == false || Config.FollowMessageShown == null) && ServiceDispatcher.CanGetServices)
+            if ((Config.FollowMessageShown.Value == false || Config.FollowMessageShown.Value == null) && ServiceDispatcher.CanGetServices)
             {
                 var service = Dependency.Resolve<INotificationService>();
                 bool result = service.Prompt(Localization.Resources.FollowOcellAppMessage);
                 if (result)
                     ServiceDispatcher.GetDefaultService().FollowUserAsync(new FollowUserOptions { ScreenName = "OcellApp" });
-                Config.FollowMessageShown = true;
+                Config.FollowMessageShown.Value = true;
             }
         }
 
@@ -177,8 +177,8 @@ namespace Ocell
                 Dispatcher.BeginInvoke(() => FilterManager.SetupFilter(list));
 
                 list.Loader.ActivateLoadMoreButton = true;
-                list.Loader.TweetsToLoadPerRequest = (int)Config.TweetsPerRequest;
-                list.Loader.LoadRetweetsAsMentions = (bool)Config.RetweetAsMentions;
+                list.Loader.TweetsToLoadPerRequest = (int)Config.TweetsPerRequest.Value;
+                list.Loader.LoadRetweetsAsMentions = (bool)Config.RetweetAsMentions.Value;
 
                 list.Loader.PropertyChanged += (sender1, e1) =>
                 {
@@ -206,7 +206,7 @@ namespace Ocell
 
                 viewModel.CheckIfCanResumePosition += (sender1, e1) =>
                 {
-                    if (e1.Resource == list.Loader.Resource && Config.ReloadOptions == ColumnReloadOptions.AskPosition)
+                    if (e1.Resource == list.Loader.Resource && Config.ReloadOptions.Value == ColumnReloadOptions.AskPosition)
                         list.TryTriggerResumeReading();
                 };
 
@@ -218,7 +218,7 @@ namespace Ocell
                         Dispatcher.BeginInvoke(() =>
                         {
                             long id;
-                            if (Config.ReadPositions.TryGetValue(selectedPivot.String, out id)
+                            if (Config.ReadPositions.Value.TryGetValue(selectedPivot.String, out id)
                                 && !list.VisibleItems.Any(x => x.Id == id))
                             {
                                 ShowResumePositionPrompt(list);

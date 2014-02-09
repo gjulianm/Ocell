@@ -15,7 +15,7 @@ namespace Ocell
 
             TwitterResource resource = listbox.Resource;
 
-            ColumnFilter filter = Config.Filters.FirstOrDefault(item => item.Resource == resource);
+            ColumnFilter filter = Config.Filters.Value.FirstOrDefault(item => item.Resource == resource);
 
             if (filter != null)
             {
@@ -25,26 +25,26 @@ namespace Ocell
             else
                 listbox.Filter = new ColumnFilter();
 
-            listbox.Filter.Global = Config.GlobalFilter;
+            listbox.Filter.Global = Config.GlobalFilter.Value;
             listbox.Filter = listbox.Filter; // Force update of filter.
         }
 
         public static ITweetableFilter SetupMute(FilterType type, string data)
         {
-            if (Config.GlobalFilter == null)
-                Config.GlobalFilter = new ColumnFilter();
+            if (Config.GlobalFilter.Value == null)
+                Config.GlobalFilter.Value = new ColumnFilter();
 
             ITweetableFilter filter = new ITweetableFilter();
             filter.Inclusion = IncludeOrExclude.Exclude;
             filter.Type = type;
             filter.Filter = data;
-            if (Config.DefaultMuteTime == TimeSpan.MaxValue)
+            if (Config.DefaultMuteTime.Value == TimeSpan.MaxValue)
                 filter.IsValidUntil = DateTime.MaxValue;
             else
-                filter.IsValidUntil = DateTime.Now + (TimeSpan)Config.DefaultMuteTime;
+                filter.IsValidUntil = DateTime.Now + (TimeSpan)Config.DefaultMuteTime.Value;
 
-            Config.GlobalFilter.AddFilter(filter);
-            Config.GlobalFilter = Config.GlobalFilter; // Force save.
+            Config.GlobalFilter.Value.AddFilter(filter);
+            Config.GlobalFilter.Value = Config.GlobalFilter.Value; // Force save.
             GlobalEvents.FireFiltersChanged(filter, new EventArgs());
 
             return filter;

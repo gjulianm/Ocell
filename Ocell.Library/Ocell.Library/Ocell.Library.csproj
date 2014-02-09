@@ -91,11 +91,6 @@
     </Compile>
     <Compile Include="Configuration\Config.cs">
     </Compile>
-    <Compile Include="Configuration\Config.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Config.tt</DependentUpon>
-    </Compile>
     <Compile Include="Crypto\TokenCombinator.cs" />
     <Compile Include="DataTransfer.cs">
     </Compile>
@@ -168,14 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Configuration\BackgroundAgent.json">
-    </None>
-    <None Include="Configuration\Config.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Config.generated.cs</LastGenOutput>
-    </None>
-    <None Include="Configuration\NotBackgroundAgent.json">
-    </None>
     <None Include="Fody.targets" />
     <None Include="packages.config" />
   </ItemGroup>

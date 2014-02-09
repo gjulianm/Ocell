@@ -34,10 +34,10 @@ namespace Ocell.Pages.Filtering
             DataTransfer.Filter.Type = FilterType.User;
             DataTransfer.Filter.Filter = "";
             DataTransfer.Filter.Inclusion = IncludeOrExclude.Include;
-            if (Config.DefaultMuteTime == TimeSpan.MaxValue)
+            if (Config.DefaultMuteTime.Value == TimeSpan.MaxValue)
                 DataTransfer.Filter.IsValidUntil = DateTime.Now.AddYears(1);
             else
-                DataTransfer.Filter.IsValidUntil = DateTime.Now + (TimeSpan)Config.DefaultMuteTime;
+                DataTransfer.Filter.IsValidUntil = DateTime.Now + (TimeSpan)Config.DefaultMuteTime.Value;
 
             NavigationService.Navigate(Uris.SingleFilter);
         }
@@ -47,17 +47,17 @@ namespace Ocell.Pages.Filtering
             // Save.
             if (!DataTransfer.IsGlobalFilter)
             {
-                ColumnFilter ToRemove = Config.Filters.FirstOrDefault(item => item.Resource == DataTransfer.cFilter.Resource);
+                ColumnFilter ToRemove = Config.Filters.Value.FirstOrDefault(item => item.Resource == DataTransfer.cFilter.Resource);
                 if (ToRemove != null)
-                    Config.Filters.Remove(ToRemove);
+                    Config.Filters.Value.Remove(ToRemove);
 
-                Config.Filters.Add(DataTransfer.cFilter);
+                Config.Filters.Value.Add(DataTransfer.cFilter);
                 Config.SaveFilters();
                 DataTransfer.ShouldReloadFilters = true;
             }
             else
             {
-                Config.GlobalFilter = DataTransfer.cFilter;
+                Config.GlobalFilter.Value = DataTransfer.cFilter;
             }
             NavigationService.GoBack();
         }

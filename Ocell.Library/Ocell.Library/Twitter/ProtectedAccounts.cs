@@ -18,7 +18,7 @@ namespace Ocell.Library.Twitter
         private static void InitializeIfNull()
         {
             if (_protectedAccounts == null)
-                _protectedAccounts = Config.ProtectedAccounts;
+                _protectedAccounts = Config.ProtectedAccounts.Value;
         }
 
         public static void ProtectAccount(UserToken User)

@@ -102,7 +102,7 @@ namespace Ocell.Settings
 
             editFilters = new DelegateCommand((obj) =>
                 {
-                    DataTransfer.cFilter = Config.GlobalFilter;
+                    DataTransfer.cFilter = Config.GlobalFilter.Value;
                     DataTransfer.IsGlobalFilter = true;
                     Navigator.Navigate(Uris.Filters);
                 });
@@ -123,8 +123,8 @@ namespace Ocell.Settings
                         if (response.Succeeded)
                         {
                             Notificator.ShowProgressIndicatorMessage(String.Format(Resources.CredentialsSaved, "Pocket"));
-                            Config.ReadLaterCredentials.Pocket = PocketPair;
-                            Config.ReadLaterCredentials = Config.ReadLaterCredentials;
+                            Config.ReadLaterCredentials.Value.Pocket = PocketPair;
+                            Config.ReadLaterCredentials.Value = Config.ReadLaterCredentials.Value;
                         }
                         else
                         {
@@ -134,8 +134,8 @@ namespace Ocell.Settings
                     }
                     else
                     {
-                        Config.ReadLaterCredentials.Pocket = null;
-                        Config.ReadLaterCredentials = Config.ReadLaterCredentials;
+                        Config.ReadLaterCredentials.Value.Pocket = null;
+                        Config.ReadLaterCredentials.Value = Config.ReadLaterCredentials.Value;
                     }
 
                     if (!string.IsNullOrWhiteSpace(InstapaperUser))
@@ -149,8 +149,8 @@ namespace Ocell.Settings
                         if (response.Succeeded)
                         {
                             Notificator.ShowProgressIndicatorMessage(String.Format(Resources.CredentialsSaved, "Instapaper"));
-                            Config.ReadLaterCredentials.Instapaper = InstapaperPair;
-                            Config.ReadLaterCredentials = Config.ReadLaterCredentials;
+                            Config.ReadLaterCredentials.Value.Instapaper = InstapaperPair;
+                            Config.ReadLaterCredentials.Value = Config.ReadLaterCredentials.Value;
                         }
                         else
                         {
@@ -160,8 +160,8 @@ namespace Ocell.Settings
                     }
                     else
                     {
-                        Config.ReadLaterCredentials.Pocket = null;
-                        Config.ReadLaterCredentials = Config.ReadLaterCredentials;
+                        Config.ReadLaterCredentials.Value.Pocket = null;
+                        Config.ReadLaterCredentials.Value = Config.ReadLaterCredentials.Value;
                     }
                 });
         }
@@ -192,32 +192,32 @@ namespace Ocell.Settings
         {
             SelectedFontSize = FontSizeToIndex(((GlobalSettings)App.Current.Resources["GlobalSettings"]).
                             TweetFontSize);
-            RetweetsAsMentions = Config.RetweetAsMentions == true;
-            BackgroundUpdateTiles = Config.BackgroundLoadColumns == true;
-            if (Config.TweetsPerRequest == null)
-                Config.TweetsPerRequest = 40;
-            TweetsPerRequest = Config.TweetsPerRequest.ToString();
-            Accounts = new SafeObservable<UserToken>(Config.Accounts);
+            RetweetsAsMentions = Config.RetweetAsMentions.Value == true;
+            BackgroundUpdateTiles = Config.BackgroundLoadColumns.Value == true;
+            if (Config.TweetsPerRequest.Value == null)
+                Config.TweetsPerRequest.Value = 40;
+            TweetsPerRequest = Config.TweetsPerRequest.Value.ToString();
+            Accounts = new SafeObservable<UserToken>(Config.Accounts.Value);
             NotifyOptions = new List<string> { Resources.None, Resources.OnlyTile, Resources.ToastAndTile };
-            SelectedMuteTime = TimeSpanToSelectedFilter((TimeSpan)Config.DefaultMuteTime);
-            ShowResumePositionButton = Config.RecoverReadPositions == true;
-            GeoTaggingEnabled = Config.EnabledGeolocation == true;
-            SelectedReloadOption = (int)Config.ReloadOptions;
+            SelectedMuteTime = TimeSpanToSelectedFilter((TimeSpan)Config.DefaultMuteTime.Value);
+            ShowResumePositionButton = Config.RecoverReadPositions.Value == true;
+            GeoTaggingEnabled = Config.EnabledGeolocation.Value == true;
+            SelectedReloadOption = (int)Config.ReloadOptions.Value;
 
             PushAvailable = TrialInformation.IsFullFeatured;
 
-            PushEnabled = PushAvailable && (Config.PushEnabled == true);
+            PushEnabled = PushAvailable && (Config.PushEnabled.Value == true);
 
-            if (Config.ReadLaterCredentials.Instapaper != null)
+            if (Config.ReadLaterCredentials.Value.Instapaper != null)
             {
-                InstapaperUser = Config.ReadLaterCredentials.Instapaper.User;
-                InstapaperPassword = Config.ReadLaterCredentials.Instapaper.Password;
+                InstapaperUser = Config.ReadLaterCredentials.Value.Instapaper.User;
+                InstapaperPassword = Config.ReadLaterCredentials.Value.Instapaper.Password;
             }
 
-            if (Config.ReadLaterCredentials.Pocket != null)
+            if (Config.ReadLaterCredentials.Value.Pocket != null)
             {
-                PocketUser = Config.ReadLaterCredentials.Pocket.User;
-                PocketPassword = Config.ReadLaterCredentials.Pocket.Password;
+                PocketUser = Config.ReadLaterCredentials.Value.Pocket.User;
+                PocketPassword = Config.ReadLaterCredentials.Value.Pocket.Password;
             }
 
             this.PropertyChanged += (sender, e) =>
@@ -225,32 +225,32 @@ namespace Ocell.Settings
                 switch (e.PropertyName)
                 {
                     case "RetweetsAsMentions":
-                        Config.RetweetAsMentions = RetweetsAsMentions;
+                        Config.RetweetAsMentions.Value = RetweetsAsMentions;
                         break;
 
                     case "BackgroundUpdateTiles":
-                        Config.BackgroundLoadColumns = BackgroundUpdateTiles;
+                        Config.BackgroundLoadColumns.Value = BackgroundUpdateTiles;
                         break;
 
                     case "TweetsPerRequest":
                         int number;
                         if (int.TryParse(TweetsPerRequest, out number))
-                            Config.TweetsPerRequest = number;
+                            Config.TweetsPerRequest.Value = number;
                         break;
 
                     case "SelectedAccount":
-                        if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Count)
+                        if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Value.Count)
                         {
                             int newOption;
 
-                            newOption = (int)Config.Accounts[SelectedAccount].Preferences.MentionsPreferences;
+                            newOption = (int)Config.Accounts.Value[SelectedAccount].Preferences.MentionsPreferences;
                             if (newOption != MentionNotifyOption)
                             {
                                 mentionFirstChange = true;
                                 MentionNotifyOption = newOption;
                             }
 
-                            newOption = (int)Config.Accounts[SelectedAccount].Preferences.MessagesPreferences;
+                            newOption = (int)Config.Accounts.Value[SelectedAccount].Preferences.MessagesPreferences;
                             if (newOption != MessageNotifyOption)
                             {
                                 messageFirstChange = true;
@@ -260,18 +260,18 @@ namespace Ocell.Settings
                         break;
 
                     case "MentionNotifyOption":
-                        if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Count)
+                        if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Value.Count)
                             SetMentionNotifyPref((NotificationType)MentionNotifyOption, SelectedAccount);
                         break;
 
                     case "MessageNotifyOption":
-                        if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Count)
+                        if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Value.Count)
                             SetMessageNotifyPref((NotificationType)MessageNotifyOption, SelectedAccount);
                         Config.SaveAccounts();
                         break;
 
                     case "SelectedMuteTime":
-                        Config.DefaultMuteTime = SelectedFilterToTimeSpan(SelectedMuteTime);
+                        Config.DefaultMuteTime.Value = SelectedFilterToTimeSpan(SelectedMuteTime);
                         break;
 
                     case "SelectedFontSize":
@@ -280,11 +280,11 @@ namespace Ocell.Settings
                         break;
 
                     case "ShowResumePositionButton":
-                        Config.RecoverReadPositions = ShowResumePositionButton;
+                        Config.RecoverReadPositions.Value = ShowResumePositionButton;
                         break;
 
                     case "GeoTaggingEnabled":
-                        Config.EnabledGeolocation = GeoTaggingEnabled;
+                        Config.EnabledGeolocation.Value = GeoTaggingEnabled;
                         break;
 
                     case "PushEnabled":
@@ -306,13 +306,13 @@ namespace Ocell.Settings
                         break;
 
                     case "SelectedReloadOption":
-                        Config.ReloadOptions = (ColumnReloadOptions)SelectedReloadOption;
+                        Config.ReloadOptions.Value = (ColumnReloadOptions)SelectedReloadOption;
                         break;
                 }
             };
 
             SelectedAccount = -1;
-            if (Config.Accounts.Count > 0)
+            if (Config.Accounts.Value.Count > 0)
                 SelectedAccount = 0;
             SetCommands();
         }
@@ -326,10 +326,10 @@ namespace Ocell.Settings
                 return;
             }
 
-            Config.Accounts[account].Preferences.MentionsPreferences = type;
+            Config.Accounts.Value[account].Preferences.MentionsPreferences = type;
 
             if (type == NotificationType.None)
-                PushNotifications.UnregisterPushChannel(Config.Accounts[account], "mentions");
+                PushNotifications.UnregisterPushChannel(Config.Accounts.Value[account], "mentions");
             else
                 PushNotifications.AutoRegisterForNotifications();
         }
@@ -343,10 +343,10 @@ namespace Ocell.Settings
                 return;
             }
 
-            Config.Accounts[account].Preferences.MessagesPreferences = type;
+            Config.Accounts.Value[account].Preferences.MessagesPreferences = type;
 
             if (type == NotificationType.None)
-                PushNotifications.UnregisterPushChannel(Config.Accounts[account], "messages");
+                PushNotifications.UnregisterPushChannel(Config.Accounts.Value[account], "messages");
             else
                 PushNotifications.AutoRegisterForNotifications();
         }
@@ -377,13 +377,13 @@ namespace Ocell.Settings
 
         private int TimeSpanToSelectedFilter(TimeSpan span)
         {
-            if (Config.DefaultMuteTime == TimeSpan.FromHours(1))
+            if (Config.DefaultMuteTime.Value == TimeSpan.FromHours(1))
                 return 0;
-            else if (Config.DefaultMuteTime == TimeSpan.FromHours(8))
+            else if (Config.DefaultMuteTime.Value == TimeSpan.FromHours(8))
                 return 1;
-            else if (Config.DefaultMuteTime == TimeSpan.FromDays(1))
+            else if (Config.DefaultMuteTime.Value == TimeSpan.FromDays(1))
                 return 2;
-            else if (Config.DefaultMuteTime == TimeSpan.FromDays(7))
+            else if (Config.DefaultMuteTime.Value == TimeSpan.FromDays(7))
                 return 3;
             else
                 return 4;
@@ -391,7 +391,7 @@ namespace Ocell.Settings
 
         public void Navigated()
         {
-            Accounts = new SafeObservable<UserToken>(Config.Accounts);
+            Accounts = new SafeObservable<UserToken>(Config.Accounts.Value);
         }
     }
 }

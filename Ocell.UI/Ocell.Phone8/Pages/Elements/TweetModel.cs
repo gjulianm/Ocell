@@ -198,14 +198,14 @@ namespace Ocell.Pages.Elements
         {
             deleteTweet = new DelegateCommand(async (obj) =>
             {
-                var user = Config.Accounts.FirstOrDefault(item => item != null && item.ScreenName == Tweet.Author.ScreenName);
+                var user = Config.Accounts.Value.FirstOrDefault(item => item != null && item.ScreenName == Tweet.Author.ScreenName);
 
                 var response = await ServiceDispatcher.GetService(user).DeleteTweetAsync(new DeleteTweetOptions { Id = Tweet.Id });
                 if (response.RequestSucceeded)
                     Notificator.ShowMessage(Localization.Resources.TweetDeleted);
                 else
                     Notificator.ShowError(Localization.Resources.ErrorDeletingTweet);
-            }, (obj) => Tweet != null && Tweet.Author != null && Config.Accounts.Any(item => item != null && item.ScreenName == Tweet.Author.ScreenName));
+            }, (obj) => Tweet != null && Tweet.Author != null && Config.Accounts.Value.Any(item => item != null && item.ScreenName == Tweet.Author.ScreenName));
 
 
             share = new DelegateCommand((obj) => Deployment.Current.Dispatcher.BeginInvoke(() =>
@@ -223,7 +223,7 @@ namespace Ocell.Pages.Elements
             {
                 DataTransfer.Text = "RT @" + Tweet.Author.ScreenName + ": " + Tweet.Text;
                 Navigator.Navigate(Uris.WriteTweet);
-            }, obj => Config.Accounts.Any() && Tweet != null);
+            }, obj => Config.Accounts.Value.Any() && Tweet != null);
 
             // TODO: These are the same commands that are used globally. WTF.
             // TODO: And responses aren't checked again. Holy shit.
@@ -242,7 +242,7 @@ namespace Ocell.Pages.Elements
                     Notificator.ShowProgressIndicatorMessage(Localization.Resources.Favorited);
                     IsFavorited = true;
                 }
-            }, parameter => (parameter is TwitterStatus) && Config.Accounts.Count > 0 && DataTransfer.CurrentAccount != null);
+            }, parameter => (parameter is TwitterStatus) && Config.Accounts.Value.Count > 0 && DataTransfer.CurrentAccount != null);
 
             sendTweet = new DelegateCommand(async (parameter) =>
             {

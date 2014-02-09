@@ -23,26 +23,26 @@ namespace Ocell.Pages.Columns
 
         void ManageColumns_Loaded(object sender, RoutedEventArgs e)
         {
-            MainList.DataContext = Config.Columns;
-            MainList.ItemsSource = Config.Columns;
+            MainList.DataContext = Config.Columns.Value;
+            MainList.ItemsSource = Config.Columns.Value;
         }
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             Image img = sender as Image;
 
-            foreach (var item in Config.Columns)
+            foreach (var item in Config.Columns.Value)
             {
                 if (item.String == (string)img.Tag)
                 {
-                    Config.Columns.Remove(item);
+                    Config.Columns.Value.Remove(item);
                     DataTransfer.ShouldReloadColumns = true;
                     break;
                 }
             }
 
-            MainList.DataContext = Config.Columns;
-            MainList.ItemsSource = Config.Columns;
+            MainList.DataContext = Config.Columns.Value;
+            MainList.ItemsSource = Config.Columns.Value;
 
             Config.SaveColumns();
         }
@@ -60,7 +60,7 @@ namespace Ocell.Pages.Columns
                 TwitterResource resource = (TwitterResource)item.Tag;
                 try
                 {
-                    Config.Columns.Remove(resource);
+                    Config.Columns.Value.Remove(resource);
                 }
                 catch (Exception)
                 {

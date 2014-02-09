@@ -46,7 +46,7 @@ namespace Ocell.Pages.Settings
 
             saveBackground = new DelegateCommand((param) =>
             {
-                Config.Background = theme;
+                Config.Background.Value = theme;
                 Notificator.ShowMessage(Localization.Resources.BackgroundChangeOnRestart);
                 Navigator.GoBack();
             });

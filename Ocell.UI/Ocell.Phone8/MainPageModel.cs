@@ -53,7 +53,7 @@ namespace Ocell
         {
             var temp = ReloadLists;
             if (temp != null)
-                temp(this, new BroadcastArgs(Config.Columns.FirstOrDefault(), true));
+                temp(this, new BroadcastArgs(Config.Columns.Value.FirstOrDefault(), true));
         }
 
         public event BroadcastEventHandler CheckIfCanResumePosition;
@@ -65,7 +65,7 @@ namespace Ocell
         }
         #endregion
 
-        public bool HasLoggedIn { get { return Config.Accounts.Any(); } }
+        public bool HasLoggedIn { get { return Config.Accounts.Value.Any(); } }
 
         public void RaiseLoggedInChange()
         {
@@ -145,7 +145,7 @@ namespace Ocell
             filterColumn = new DelegateCommand((obj) =>
             {
                 var column = (TwitterResource)SelectedPivot;
-                DataTransfer.cFilter = Config.Filters.FirstOrDefault(item => item.Resource == column);
+                DataTransfer.cFilter = Config.Filters.Value.FirstOrDefault(item => item.Resource == column);
 
                 if (DataTransfer.cFilter == null)
                     DataTransfer.cFilter = new ColumnFilter { Resource = column };
@@ -164,7 +164,7 @@ namespace Ocell
             {
                 IsSearching = false;
                 Navigator.Navigate("/Pages/Elements/User.xaml?user=" + UserSearch);
-            }, obj => Config.Accounts.Any());
+            }, obj => Config.Accounts.Value.Any());
 
             feedback = new DelegateCommand((obj) =>
                 {
@@ -184,21 +184,21 @@ namespace Ocell
 
         public MainPageModel()
         {
-            if (Config.RetweetAsMentions == null)
-                Config.RetweetAsMentions = true;
-            if (Config.TweetsPerRequest == null)
-                Config.TweetsPerRequest = 40;
-            if (Config.DefaultMuteTime == null || Config.DefaultMuteTime == TimeSpan.FromHours(0))
-                Config.DefaultMuteTime = TimeSpan.FromHours(8);
+            if (Config.RetweetAsMentions.Value == null)
+                Config.RetweetAsMentions.Value = true;
+            if (Config.TweetsPerRequest.Value == null)
+                Config.TweetsPerRequest.Value = 40;
+            if (Config.DefaultMuteTime.Value == null || Config.DefaultMuteTime.Value == TimeSpan.FromHours(0))
+                Config.DefaultMuteTime.Value = TimeSpan.FromHours(8);
 
             lastAutoReload = DateTime.MinValue;
             Pivots = new ObservableCollection<TwitterResource>();
             collectionChangedArgs = new Queue<NotifyCollectionChangedEventArgs>();
 
-            foreach (var pivot in Config.Columns)
+            foreach (var pivot in Config.Columns.Value)
                 Pivots.Add(pivot);
 
-            Config.Columns.CollectionChanged += (sender, e) =>
+            Config.Columns.Value.CollectionChanged += (sender, e) =>
             {
                 Dispatcher.InvokeIfRequired(() =>
                     {
@@ -260,13 +260,13 @@ namespace Ocell
                 {
                     column = Uri.UnescapeDataString(column);
 
-                    if (Config.Columns.Any(item => item.String == column))
-                        SelectedPivot = Config.Columns.First(item => item.String == column);
+                    if (Config.Columns.Value.Any(item => item.String == column))
+                        SelectedPivot = Config.Columns.Value.First(item => item.String == column);
                 }
                 else
                 {
-                    if (Config.Columns.Any())
-                        SelectedPivot = Config.Columns.First();
+                    if (Config.Columns.Value.Any())
+                        SelectedPivot = Config.Columns.Value.First();
                 }
                 firstNavigation = false;
             }

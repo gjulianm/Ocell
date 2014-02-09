@@ -74,14 +74,16 @@ namespace Ocell
 
             PushNotifications.WPVersion = OSVersion.WP8;
 
+            Config.InitConfig();
+
             bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
 
-            if (Config.Background.Type == LightOrDark.Light)
+            if (Ocell.Library.Config.Background.Value.Type == LightOrDark.Light)
                 ThemeManager.ToLightTheme();
-            else if (Config.Background.Type == LightOrDark.Dark)
+            else if (Ocell.Library.Config.Background.Value.Type == LightOrDark.Dark)
                 ThemeManager.ToDarkTheme();
 
-            RootFrame.Background = Config.Background.GetBrush();
+            RootFrame.Background = Ocell.Library.Config.Background.Value.GetBrush();
         }
 
         // Código para ejecutar cuando la aplicación se inicia (p.ej. a partir de Inicio)

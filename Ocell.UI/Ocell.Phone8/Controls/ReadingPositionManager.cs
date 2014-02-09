@@ -41,7 +41,7 @@ namespace Ocell.Controls
 
         public bool CanRecoverPosition()
         {
-            return Bound && lb != null && Config.ReadPositions.ContainsKey(resource.String);
+            return Bound && lb != null && Config.ReadPositions.Value.ContainsKey(resource.String);
         }
 
         private ITweetable GetFirstVisibleItem()
@@ -70,14 +70,14 @@ namespace Ocell.Controls
 
             if (first != null && resource != null)
             {
-                Config.ReadPositions[resource.String] = first.Id;
+                Config.ReadPositions.Value[resource.String] = first.Id;
                 Debug.WriteLine("Saved tweet from {0}", first.AuthorName);
             }
         }
 
         public void RecoverPosition()
         {
-            long tweetId = Config.ReadPositions[resource.String];
+            long tweetId = Config.ReadPositions.Value[resource.String];
             var tweet = lb.Loader.Source.FirstOrDefault(x => x.Id == tweetId);
 
             Dependency.Resolve<IDispatcher>().InvokeIfRequired(() =>

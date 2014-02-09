@@ -105,10 +105,10 @@ namespace Ocell.Pages
         public NewTweetModel()
         {
             SelectedAccounts = new List<object>();
-            AccountList = Config.Accounts.ToList();
-            IsGeotagged = Config.EnabledGeolocation == true &&
-                (Config.TweetGeotagging == true || Config.TweetGeotagging == null);
-            GeotagEnabled = Config.EnabledGeolocation == true;
+            AccountList = Config.Accounts.Value.ToList();
+            IsGeotagged = Config.EnabledGeolocation.Value == true &&
+                (Config.TweetGeotagging.Value == true || Config.TweetGeotagging.Value == null);
+            GeotagEnabled = Config.EnabledGeolocation.Value == true;
 
             SetupCommands();
 
@@ -133,7 +133,7 @@ namespace Ocell.Pages
                         break;
 
                     case "IsGeotagged":
-                        Config.TweetGeotagging = IsGeotagged;
+                        Config.TweetGeotagging.Value = IsGeotagged;
                         break;
 
                     case "Completer":
@@ -151,7 +151,7 @@ namespace Ocell.Pages
 
             TryLoadDraft();
 
-            if (Config.EnabledGeolocation == true)
+            if (Config.EnabledGeolocation.Value == true)
                 geoWatcher.Start();
         }
 
@@ -250,7 +250,7 @@ namespace Ocell.Pages
                 return;
             }
 
-            if (Config.BufferProfiles.Count == 0)
+            if (Config.BufferProfiles.Value.Count == 0)
             {
                 AskBufferLogin();
                 return;
@@ -260,7 +260,7 @@ namespace Ocell.Pages
 
             foreach (var account in SelectedAccounts.Cast<UserToken>())
             {
-                var profile = Config.BufferProfiles.Where(x => x.ServiceUsername == account.ScreenName).FirstOrDefault();
+                var profile = Config.BufferProfiles.Value.Where(x => x.ServiceUsername == account.ScreenName).FirstOrDefault();
 
                 if (profile != null)
                     profiles.Add(profile.Id);
@@ -338,8 +338,8 @@ namespace Ocell.Pages
 
             if (DataTransfer.Draft != null)
             {
-                if (Config.Drafts.Contains(DataTransfer.Draft))
-                    Config.Drafts.Remove(DataTransfer.Draft);
+                if (Config.Drafts.Value.Contains(DataTransfer.Draft))
+                    Config.Drafts.Value.Remove(DataTransfer.Draft);
 
                 DataTransfer.Draft = null;
                 Config.SaveDrafts();
@@ -509,7 +509,7 @@ namespace Ocell.Pages
             foreach (var user in SelectedAccounts.OfType<UserToken>())
                 task.Accounts.Add(user);
 
-            Config.TweetTasks.Add(task);
+            Config.TweetTasks.Value.Add(task);
             Config.SaveTweetTasks();
 
             Notificator.ShowMessage(Resources.MessageScheduled);
@@ -569,8 +569,8 @@ namespace Ocell.Pages
         {
             TwitterDraft draft = CreateDraft();
 
-            Config.Drafts.Add(draft);
-            Config.Drafts = Config.Drafts;
+            Config.Drafts.Value.Add(draft);
+            Config.Drafts.Value = Config.Drafts.Value;
 
             Notificator.ShowMessage(Resources.DraftSaved);
         }

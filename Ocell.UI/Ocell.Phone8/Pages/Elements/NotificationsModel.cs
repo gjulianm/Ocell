@@ -49,7 +49,7 @@ namespace Ocell.Pages.Elements
 
             IEnumerable<ITweetable> statuses = null;
 
-            foreach (var account in Config.Accounts)
+            foreach (var account in Config.Accounts.Value)
             {
                 if (account.Preferences.MentionsPreferences != Library.Notifications.NotificationType.None)
                 {

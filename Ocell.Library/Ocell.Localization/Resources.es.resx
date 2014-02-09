@@ -1141,7 +1141,7 @@
     <value>¡Tweet enviado a Buffer!</value>
   </data>
   <data name="NoBufferConfigured" xml:space="preserve">
-    <value>Parece que no tienes ninguna cuenta configurada con Buffer. ¿Quieres añadirla ahora?</value>
+    <value>Parece que no tienes ninguna cuenta Config.rada.Value.Value con Buffer. ¿Quieres añadirla ahora?</value>
   </data>
   <data name="ScheduleError" xml:space="preserve">
     <value>Error programando el tweet de {0}.</value>

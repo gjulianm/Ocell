@@ -52,9 +52,9 @@ namespace Ocell.Library.Twitter
 
         public static ITwitterService GetDefaultService()
         {
-            if (Config.Accounts.Count > 0)
+            if (Config.Accounts.Value.Count > 0)
             {
-                UserToken account = Config.Accounts[0];
+                UserToken account = Config.Accounts.Value[0];
                 return GetService(account);
             }
             else
@@ -80,8 +80,8 @@ namespace Ocell.Library.Twitter
 
         public static BufferService GetBufferService()
         {
-            if (Config.BufferAccessToken != null)
-                return new BufferService(Config.BufferAccessToken);
+            if (Config.BufferAccessToken.Value != null)
+                return new BufferService(Config.BufferAccessToken.Value);
             else
                 return null;
         }
@@ -90,7 +90,7 @@ namespace Ocell.Library.Twitter
         {
             get
             {
-                return Config.Accounts.Count > 0;
+                return Config.Accounts.Value.Count > 0;
             }
         }
 

@@ -1135,7 +1135,7 @@
     <value>Errore nel creare l'aggiornamento Buffer.</value>
   </data>
   <data name="NoBufferProfilesAdded" xml:space="preserve">
-    <value>Non hai un profilo Buffer per nessuno degli account Twitter configurati con Ocell.</value>
+    <value>Non hai un profilo Buffer per nessuno degli account Twitter Config.rati.Value.Value con Ocell.</value>
   </data>
   <data name="BufferUpdateSent" xml:space="preserve">
     <value>Tweet inviato a Buffer!</value>

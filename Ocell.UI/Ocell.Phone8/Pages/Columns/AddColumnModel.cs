@@ -169,9 +169,9 @@ namespace Ocell.Pages.Columns
 
         private void SaveColumn(TwitterResource toAdd)
         {
-            if (!Config.Columns.Contains(toAdd))
+            if (!Config.Columns.Value.Contains(toAdd))
             {
-                Config.Columns.Add(toAdd);
+                Config.Columns.Value.Add(toAdd);
                 Config.SaveColumns();
                 DataTransfer.ShouldReloadColumns = true;
             }

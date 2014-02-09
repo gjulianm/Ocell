@@ -59,7 +59,7 @@ namespace Ocell.Pages.Settings
             }
             else
             {
-                Config.CouponCodeValidated = true;
+                Config.CouponCodeValidated.Value = true;
                 Notificator.ShowMessage(Resources.CodeValid);
                 Navigator.GoBack();
             }

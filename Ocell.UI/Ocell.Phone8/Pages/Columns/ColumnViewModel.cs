@@ -47,7 +47,7 @@ namespace Ocell.Pages.Columns
                             p.FastAddMode = FastAddMode;
                 };
 
-            foreach (var account in Config.Accounts)
+            foreach (var account in Config.Accounts.Value)
             {
                 var pivot = new ColumnViewPivotModel(account);
 
@@ -128,11 +128,11 @@ namespace Ocell.Pages.Columns
 
         void AddResource(TwitterResource resource)
         {
-            if (Config.Columns.Contains(resource))
+            if (Config.Columns.Value.Contains(resource))
                 Notificator.ShowError(Localization.Resources.ColumnAlreadyPinned);
             else if (Notificator.Prompt(String.Format(Localization.Resources.AskAddColumn, resource.Title)))
             {
-                Config.Columns.Add(resource);
+                Config.Columns.Value.Add(resource);
                 Config.SaveColumns();
                 DataTransfer.ShouldReloadColumns = true;
             }

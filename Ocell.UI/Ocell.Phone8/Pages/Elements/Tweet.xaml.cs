@@ -348,23 +348,23 @@ namespace Ocell.Pages.Elements
 
         private ITweetableFilter CreateNewFilter(FilterType type, string data)
         {
-            if (Config.GlobalFilter == null)
-                Config.GlobalFilter = new ColumnFilter();
+            if (Config.GlobalFilter.Value == null)
+                Config.GlobalFilter.Value = new ColumnFilter();
 
-            if (Config.DefaultMuteTime == null)
-                Config.DefaultMuteTime = TimeSpan.FromHours(8);
+            if (Config.DefaultMuteTime.Value == null)
+                Config.DefaultMuteTime.Value = TimeSpan.FromHours(8);
 
             ITweetableFilter filter = new ITweetableFilter();
             filter.Type = type;
             filter.Filter = data;
-            if (Config.DefaultMuteTime == TimeSpan.MaxValue)
+            if (Config.DefaultMuteTime.Value == TimeSpan.MaxValue)
                 filter.IsValidUntil = DateTime.MaxValue;
             else
-                filter.IsValidUntil = DateTime.Now + (TimeSpan)Config.DefaultMuteTime;
+                filter.IsValidUntil = DateTime.Now + (TimeSpan)Config.DefaultMuteTime.Value;
             filter.Inclusion = IncludeOrExclude.Exclude;
 
-            Config.GlobalFilter.AddFilter(filter);
-            Config.GlobalFilter = Config.GlobalFilter;
+            Config.GlobalFilter.Value.AddFilter(filter);
+            Config.GlobalFilter.Value = Config.GlobalFilter.Value;
 
             return filter;
         }

@@ -34,8 +34,8 @@ namespace Ocell
         {
             if (IsFull)
             {
-                if (Config.TrialStart == DateTime.MaxValue)
-                    Config.TrialStart = DateTime.Now;
+                if (Config.TrialStart.Value == DateTime.MaxValue)
+                    Config.TrialStart.Value = DateTime.Now;
 
                 IsTrial = RequestTrialInfo();
             }
@@ -49,7 +49,7 @@ namespace Ocell
         {
             get
             {
-                return IsFull && (!IsTrial || !TrialExpired || Config.CouponCodeValidated == true);
+                return IsFull && (!IsTrial || !TrialExpired || Config.CouponCodeValidated.Value == true);
             }
         }
 
@@ -57,10 +57,10 @@ namespace Ocell
         {
             get
             {
-                if (Config.TrialStart == DateTime.MaxValue)
-                    Config.TrialStart = DateTime.Now;
+                if (Config.TrialStart.Value == DateTime.MaxValue)
+                    Config.TrialStart.Value = DateTime.Now;
 
-                return Config.TrialStart.Value.AddDays(TrialDays) < DateTime.Now;
+                return Config.TrialStart.Value.Value.AddDays(TrialDays) < DateTime.Now;
             }
         }
 

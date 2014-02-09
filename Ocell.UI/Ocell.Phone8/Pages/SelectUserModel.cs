@@ -53,7 +53,7 @@ namespace Ocell.Pages
 
             Collection.SortDescriptions.Add(new SortDescription("ScreenName", System.ComponentModel.ListSortDirection.Ascending));
 
-            Accounts = Config.Accounts;
+            Accounts = Config.Accounts.Value;
 
             goNext = new DelegateCommand((obj) =>
             {
@@ -78,7 +78,7 @@ namespace Ocell.Pages
 
         public void Loaded()
         {
-            Sender = Config.Accounts.FirstOrDefault();
+            Sender = Config.Accounts.Value.FirstOrDefault();
         }
 
         private void DestinataryUpdated()

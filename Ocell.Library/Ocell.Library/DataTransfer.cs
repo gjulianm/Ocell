@@ -21,7 +21,7 @@ namespace Ocell.Library
             get
             {
                 if (_account == null)
-                    return Config.Accounts.FirstOrDefault();
+                    return Config.Accounts.Value.FirstOrDefault();
                 return _account;
             }
             set

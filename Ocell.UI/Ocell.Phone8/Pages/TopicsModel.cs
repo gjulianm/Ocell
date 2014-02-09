@@ -64,7 +64,7 @@ namespace Ocell.Pages
                 };
 
             geoWatcher = new GeoCoordinateWatcher();
-            if (Config.EnabledGeolocation == true)
+            if (Config.EnabledGeolocation.Value == true)
                 geoWatcher.Start();
 
             Locations = new ObservableCollection<string>();
@@ -76,12 +76,12 @@ namespace Ocell.Pages
             GetLocations();
 
             Progress.IsLoading = true;
-            if (Config.EnabledGeolocation == true && (Config.TopicPlaceId == -1 || Config.TopicPlaceId == null))
+            if (Config.EnabledGeolocation.Value == true && (Config.TopicPlaceId.Value == -1 || Config.TopicPlaceId.Value == null))
                 GetMyLocation();
             else
             {
-                currentLocation = Config.TopicPlaceId.HasValue ? (long)Config.TopicPlaceId : 1;
-                PlaceName = Config.TopicPlace;
+                currentLocation = Config.TopicPlaceId.Value.HasValue ? (long)Config.TopicPlaceId.Value : 1;
+                PlaceName = Config.TopicPlace.Value;
                 GetTopics();
             }
         }
@@ -103,8 +103,8 @@ namespace Ocell.Pages
                 var loc = locs.First();
                 PlaceName = loc.Name;
                 currentLocation = loc.WoeId;
-                Config.TopicPlace = PlaceName;
-                Config.TopicPlaceId = currentLocation;
+                Config.TopicPlace.Value = PlaceName;
+                Config.TopicPlaceId.Value = currentLocation;
                 GetTopics();
             }
         }
@@ -161,8 +161,8 @@ namespace Ocell.Pages
         {
             PlaceName = SelectedLocation;
             LocationMap.TryGetValue(SelectedLocation, out currentLocation);
-            Config.TopicPlace = PlaceName;
-            Config.TopicPlaceId = currentLocation;
+            Config.TopicPlace.Value = PlaceName;
+            Config.TopicPlaceId.Value = currentLocation;
             GetTopics();
         }
 

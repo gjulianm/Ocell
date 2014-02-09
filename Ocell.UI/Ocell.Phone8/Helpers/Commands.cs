@@ -21,7 +21,7 @@ namespace Ocell.Commands
     {
         public bool CanExecute(object parameter)
         {
-            return parameter is ITweetable && Config.Accounts.Any();
+            return parameter is ITweetable && Config.Accounts.Value.Any();
         }
 
         public void Execute(object parameter)
@@ -63,7 +63,7 @@ namespace Ocell.Commands
 
         public bool CanExecute(object parameter)
         {
-            return parameter is ITweetable && Config.Accounts.Any() && DataTransfer.CurrentAccount != null;
+            return parameter is ITweetable && Config.Accounts.Value.Any() && DataTransfer.CurrentAccount != null;
         }
 
         public void Execute(object parameter)
@@ -85,7 +85,7 @@ namespace Ocell.Commands
         public bool CanExecute(object parameter)
         {
             return (parameter is TwitterStatus) &&
-                Config.Accounts.Count > 0 &&
+                Config.Accounts.Value.Count > 0 &&
                 DataTransfer.CurrentAccount != null;
         }
 
@@ -105,7 +105,7 @@ namespace Ocell.Commands
         public bool CanExecute(object parameter)
         {
             return (parameter is TwitterStatus) &&
-                Config.Accounts.Count > 0 &&
+                Config.Accounts.Value.Count > 0 &&
                 DataTransfer.CurrentAccount != null;
         }
 
@@ -145,12 +145,12 @@ namespace Ocell.Commands
                     if (Result == MessageBoxResult.OK)
                     {
                         // Make a copy: removing while iterating causes an error.
-                        var copy = new List<TwitterResource>(Config.Columns.Where(item => item.User == User));
+                        var copy = new List<TwitterResource>(Config.Columns.Value.Where(item => item.User == User));
                         foreach (var item in copy)
-                            Config.Columns.Remove(item);
+                            Config.Columns.Value.Remove(item);
 
                         Config.SaveColumns();
-                        Config.Accounts.Remove(User);
+                        Config.Accounts.Value.Remove(User);
                         Config.SaveAccounts();
                         PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
                         if (service.CanGoBack)
@@ -253,7 +253,7 @@ namespace Ocell.Commands
 
         public bool CanExecute(object parameter)
         {
-            var creds = Config.ReadLaterCredentials;
+            var creds = Config.ReadLaterCredentials.Value;
             return parameter is TwitterStatus && (creds.Instapaper != null || creds.Pocket != null);
         }
 
@@ -261,7 +261,7 @@ namespace Ocell.Commands
         {
             TwitterStatus tweet = parameter as TwitterStatus;
             _pendingCalls = 0;
-            var credentials = Config.ReadLaterCredentials;
+            var credentials = Config.ReadLaterCredentials.Value;
 
             if (tweet == null)
                 return;

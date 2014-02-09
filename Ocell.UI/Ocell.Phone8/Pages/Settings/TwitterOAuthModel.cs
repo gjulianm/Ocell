@@ -95,33 +95,33 @@ namespace Ocell.Pages.Settings
             TwitterResource Messages = new TwitterResource { Type = ResourceType.Messages, User = user };
             Dispatcher.InvokeIfRequired(() =>
             {
-                if (!Config.Columns.Contains(Home))
-                    Config.Columns.Add(Home);
-                if (!Config.Columns.Contains(Mentions))
-                    Config.Columns.Add(Mentions);
-                if (!Config.Columns.Contains(Messages))
-                    Config.Columns.Add(Messages);
+                if (!Config.Columns.Value.Contains(Home))
+                    Config.Columns.Value.Add(Home);
+                if (!Config.Columns.Value.Contains(Mentions))
+                    Config.Columns.Value.Add(Mentions);
+                if (!Config.Columns.Value.Contains(Messages))
+                    Config.Columns.Value.Add(Messages);
                 Config.SaveColumns();
             });
         }
 
         private static void CheckIfExistsAndInsert(UserToken Token)
         {
-            foreach (var item in Config.Accounts)
+            foreach (var item in Config.Accounts.Value)
             {
                 if (item.Key == Token.Key && item.ScreenName == Token.ScreenName)
                 {
                     if (item.Secret != Token.Secret)
                     {
-                        Config.Accounts.Remove(item);
-                        Config.Accounts.Add(Token);
+                        Config.Accounts.Value.Remove(item);
+                        Config.Accounts.Value.Add(Token);
                         Config.SaveAccounts();
                     }
                     return;
                 }
             }
 
-            Config.Accounts.Add(Token);
+            Config.Accounts.Value.Add(Token);
             Config.SaveAccounts();
         }
     }

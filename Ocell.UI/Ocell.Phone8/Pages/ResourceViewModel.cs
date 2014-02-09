@@ -36,14 +36,14 @@ namespace Ocell.Pages.Search
 
             addCommand = new DelegateCommand((param) =>
                 {
-                    if (!Config.Columns.Contains(Resource))
-                        Config.Columns.Add(Resource);
+                    if (!Config.Columns.Value.Contains(Resource))
+                        Config.Columns.Value.Add(Resource);
                     Config.SaveColumns();
                     Notificator.ShowMessage(Localization.Resources.ColumnAdded);
                     DataTransfer.ShouldReloadColumns = true;
                     addCommand.RaiseCanExecuteChanged();
                 },
-                (param) => Resource != null && !Config.Columns.Contains(Resource));
+                (param) => Resource != null && !Config.Columns.Value.Contains(Resource));
         }
 
         public void UpdateTweetLoader()

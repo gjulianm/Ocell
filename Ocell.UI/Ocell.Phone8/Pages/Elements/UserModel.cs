@@ -130,7 +130,7 @@ namespace Ocell.Pages.Elements
 
             pinUser = new DelegateCommand((obj) =>
                 {
-                    Config.Columns.Add(new TwitterResource
+                    Config.Columns.Value.Add(new TwitterResource
                     {
                         Data = User.ScreenName,
                         Type = ResourceType.Tweets,
@@ -141,7 +141,7 @@ namespace Ocell.Pages.Elements
                     pinUser.RaiseCanExecuteChanged();
 
                 }, item => GenericCanExecute.Invoke(null)
-                    && !Config.Columns.Any(o => o.Type == ResourceType.Tweets && o.Data == User.ScreenName));
+                    && !Config.Columns.Value.Any(o => o.Type == ResourceType.Tweets && o.Data == User.ScreenName));
 
             block = new DelegateCommand((obj) =>
                 {
@@ -218,7 +218,7 @@ namespace Ocell.Pages.Elements
         void task_Completed(object sender, PhotoResult e)
         {
             UserToken usr;
-            usr = Config.Accounts.FirstOrDefault(item => item != null && item.ScreenName == User.ScreenName);
+            usr = Config.Accounts.Value.FirstOrDefault(item => item != null && item.ScreenName == User.ScreenName);
             if (e.TaskResult == TaskResult.OK && User != null)
             {
                 Progress.Text = Resources.UploadingPicture;
@@ -334,7 +334,7 @@ namespace Ocell.Pages.Elements
             Followers = User.FollowersCount.ToString();
             Following = User.FriendsCount.ToString();
             WebsiteEnabled = Uri.IsWellFormedUriString(User.Url, UriKind.Absolute);
-            IsOwner = Config.Accounts.Any(item => item.Id == User.Id);
+            IsOwner = Config.Accounts.Value.Any(item => item.Id == User.Id);
 
             GetFriendshipInformation();
 

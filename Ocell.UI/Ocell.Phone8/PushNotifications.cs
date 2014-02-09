@@ -28,7 +28,7 @@ namespace Ocell
 
         public static void AutoRegisterForNotifications()
         {
-            if (Config.PushEnabled != true || !TrialInformation.IsFullFeatured)
+            if (Config.PushEnabled.Value != true || !TrialInformation.IsFullFeatured)
                 return;
 
             HttpNotificationChannel channel;
@@ -49,7 +49,7 @@ namespace Ocell
             string channelUri = channel.ChannelUri.ToString();
             List<RegistrationInfo> regs = new List<RegistrationInfo>();
 
-            foreach (var user in Config.Accounts)
+            foreach (var user in Config.Accounts.Value)
             {
                 if (user.Preferences.MentionsPreferences != NotificationType.None &&
                     user.Preferences.MessagesPreferences != NotificationType.None)
@@ -102,7 +102,7 @@ namespace Ocell
 
         public static void UnregisterAll()
         {
-            foreach (var user in Config.Accounts)
+            foreach (var user in Config.Accounts.Value)
                 UnregisterPushChannel(user, "mm");
         }
 

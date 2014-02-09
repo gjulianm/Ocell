@@ -17,7 +17,7 @@ namespace Ocell
 
         public ManageDraftsModel()
         {
-            Collection = new ObservableCollection<TwitterDraft>(Config.Drafts);
+            Collection = new ObservableCollection<TwitterDraft>(Config.Drafts.Value);
 
             this.PropertyChanged += (sender, e) =>
                 {
@@ -30,7 +30,7 @@ namespace Ocell
         {
             base.OnNavigating(e);
 
-            Config.Drafts = new List<TwitterDraft>(Collection);
+            Config.Drafts.Value = new List<TwitterDraft>(Collection);
         }
 
         public void GridHold(object sender, System.Windows.Input.GestureEventArgs e)
@@ -40,7 +40,7 @@ namespace Ocell
                 return;
 
             TwitterDraft draft = grid.Tag as TwitterDraft;
-            if (draft != null && Config.Drafts.Contains(draft))
+            if (draft != null && Config.Drafts.Value.Contains(draft))
             {
                 var accepts = Notificator.Prompt(Resources.AskDeleteDraft);
                 if (accepts)
