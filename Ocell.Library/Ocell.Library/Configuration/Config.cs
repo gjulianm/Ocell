@@ -48,7 +48,8 @@ namespace Ocell.Library
 
         public readonly static ConfigItem<List<UserToken>> Accounts = new ConfigItem<List<UserToken>>
         {
-            Key = "ACCOUNTS"
+            Key = "ACCOUNTS",
+            DefaultValue = new List<UserToken>()
         };
 
 
@@ -59,7 +60,8 @@ namespace Ocell.Library
 
         public readonly static ConfigItem<ObservableCollection<TwitterResource>> Columns = new ConfigItem<ObservableCollection<TwitterResource>>
         {
-            Key = "COLUMNS"
+            Key = "COLUMNS",
+            DefaultValue = new ObservableCollection<TwitterResource>()
         };
 
 
@@ -70,7 +72,8 @@ namespace Ocell.Library
 
         public readonly static ConfigItem<List<TwitterStatusTask>> TweetTasks = new ConfigItem<List<TwitterStatusTask>>
         {
-            Key = "TWEETTASKS"
+            Key = "TWEETTASKS",
+            DefaultValue = new List<TwitterStatusTask>()
         };
 
 
@@ -99,7 +102,8 @@ namespace Ocell.Library
 
         public readonly static ConfigItem<List<UserToken>> ProtectedAccounts = new ConfigItem<List<UserToken>>
         {
-            Key = "PROTECTEDACC"
+            Key = "PROTECTEDACC",
+            DefaultValue = new List<UserToken>()
         };
 
 
@@ -110,7 +114,8 @@ namespace Ocell.Library
 
         public readonly static ConfigItem<List<ColumnFilter>> Filters = new ConfigItem<List<ColumnFilter>>
         {
-            Key = "FILTERS"
+            Key = "FILTERS",
+            DefaultValue = new List<ColumnFilter>()
         };
 
 
@@ -141,7 +146,8 @@ namespace Ocell.Library
 
         public readonly static ConfigItem<TimeSpan?> DefaultMuteTime = new ConfigItem<TimeSpan?>
         {
-            Key = "DEFAULTMUTETIME"
+            Key = "DEFAULTMUTETIME",
+            DefaultValue = TimeSpan.FromHours(6)
         };
 
 
@@ -183,7 +189,8 @@ namespace Ocell.Library
 
         public readonly static ConfigItem<Dictionary<string, long>> ReadPositions = new ConfigItem<Dictionary<string, long>>
         {
-            Key = "READPOSITIONS"
+            Key = "READPOSITIONS",
+            DefaultValue = new Dictionary<string,long>()
         };
 
 
@@ -214,7 +221,8 @@ namespace Ocell.Library
 
         public readonly static ConfigItem<List<BufferProfile>> BufferProfiles = new ConfigItem<List<BufferProfile>>
         {
-            Key = "BUFFER_PROFILES"
+            Key = "BUFFER_PROFILES",
+            DefaultValue = new List<BufferProfile>()
         };
 
 

@@ -63,13 +63,13 @@
 
         <!--ContentPanel: coloque aquí el contenido adicional-->
 
-        <appbar:Bindable.ApplicationBar>
-            <appbar:BindableAppBar>
-                <appbar:BindableAppBarButton x:Name="add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="{Binding Strings.AddNew, Source={StaticResource LocalizedResources}}" Tap="add_Click"/>
-                <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.save.rest.png" Text="{Binding Strings.Save, Source={StaticResource LocalizedResources}}" Tap="ApplicationBarIconButton_Click"/>
-            </appbar:BindableAppBar>
-        </appbar:Bindable.ApplicationBar>
+        
     </Grid>
 
-
+    <appbar:Bindable.ApplicationBar>
+        <appbar:BindableAppBar>
+            <appbar:BindableAppBarButton x:Name="add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="{Binding Strings.AddNew, Source={StaticResource LocalizedResources}}" Tap="add_Click"/>
+            <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.save.rest.png" Text="{Binding Strings.Save, Source={StaticResource LocalizedResources}}" Tap="ApplicationBarIconButton_Click"/>
+        </appbar:BindableAppBar>
+    </appbar:Bindable.ApplicationBar>
 </phone:PhoneApplicationPage>

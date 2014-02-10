@@ -62,15 +62,15 @@
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>
         
-        <appbar:Bindable.ApplicationBar>
-            <appbar:BindableAppBar>
-                <appbar:BindableAppBar.Buttons>
-                    <appbar:BindableAppBarToggleButton   IconUri1="/Images/Icons_White/appbar.add.rest.png" Text1="{Binding Strings.EnableQuickAdd, Source={StaticResource LocalizedResources}}" Command1="{Binding EnableQuickAdd}"
+        
+    </Grid>
+    <appbar:Bindable.ApplicationBar>
+        <appbar:BindableAppBar>
+            <appbar:BindableAppBar.Buttons>
+                <appbar:BindableAppBarToggleButton   IconUri1="/Images/Icons_White/appbar.add.rest.png" Text1="{Binding Strings.EnableQuickAdd, Source={StaticResource LocalizedResources}}" Command1="{Binding EnableQuickAdd}"
                                     IconUri2="/Images/Icons_White/appbar.check.rest.png" Text2="{Binding Strings.DisableQuickAdd, Source={StaticResource LocalizedResources}}" Command2="{Binding DisableQuickAdd}"
                                     Toggled="{Binding FastAddMode}" />
-                </appbar:BindableAppBar.Buttons>
-            </appbar:BindableAppBar>
-        </appbar:Bindable.ApplicationBar>
-    </Grid>
-
+            </appbar:BindableAppBar.Buttons>
+        </appbar:BindableAppBar>
+    </appbar:Bindable.ApplicationBar>
 </phone:PhoneApplicationPage>

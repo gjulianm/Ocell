@@ -195,7 +195,7 @@ namespace Ocell
             Pivots = new ObservableCollection<TwitterResource>();
             collectionChangedArgs = new Queue<NotifyCollectionChangedEventArgs>();
 
-            foreach (var pivot in Config.Columns.Value)
+            foreach (var pivot in Ocell.Library.Config.Columns.Value)
                 Pivots.Add(pivot);
 
             Config.Columns.Value.CollectionChanged += (sender, e) =>

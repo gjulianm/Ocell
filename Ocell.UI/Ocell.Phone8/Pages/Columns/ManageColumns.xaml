@@ -80,11 +80,13 @@
     		</Grid>
     	</Grid>
 
-       <appbar:Bindable.ApplicationBar><appbar:BindableAppBar>
-                <appbar:BindableAppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.new.rest.png" Text="{Binding Strings.Add, Source={StaticResource LocalizedResources}}" Uri="/Pages/Columns/ColumnView.xaml"/>
-        </appbar:BindableAppBar></appbar:Bindable.ApplicationBar>
+     
     </Grid>
- 
-    
+    <appbar:Bindable.ApplicationBar>
+        <appbar:BindableAppBar>
+            <appbar:BindableAppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.new.rest.png" Text="{Binding Strings.Add, Source={StaticResource LocalizedResources}}" Uri="/Pages/Columns/ColumnView.xaml"/>
+        </appbar:BindableAppBar>
+    </appbar:Bindable.ApplicationBar>
+
 
 </phone:PhoneApplicationPage>

@@ -61,14 +61,13 @@
             <custom:ExtendedListBox  toolkit:TiltEffect.IsTiltEnabled="True" x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" Loaded="TweetList_Loaded"/>
         </Grid>
 
-        <appbar:Bindable.ApplicationBar>
-            <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
-                <appbar:BindableAppBarButton x:Name="Add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="{Binding Strings.AddColumn, Source={StaticResource LocalizedResources}}" Command="{Binding AddCommand}" />
-            </appbar:BindableAppBar>
-        </appbar:Bindable.ApplicationBar>
+        
     </Grid>
 
-    <!--Código de ejemplo que muestra el uso de ApplicationBar-->
-
+    <appbar:Bindable.ApplicationBar>
+        <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
+            <appbar:BindableAppBarButton x:Name="Add" IconUri="/Images/Icons_White/appbar.add.rest.png" Text="{Binding Strings.AddColumn, Source={StaticResource LocalizedResources}}" Command="{Binding AddCommand}" />
+        </appbar:BindableAppBar>
+    </appbar:Bindable.ApplicationBar>
 
 </phone:PhoneApplicationPage>

@@ -114,12 +114,12 @@
             <ListBox Margin="33,256,8,8" ItemTemplate="{StaticResource ListTemplate}" ItemsSource="{Binding Lists}" SelectedItem="{Binding ListSelection, Mode=TwoWay}" ItemContainerStyle="{StaticResource ListBoxItemStyle1}"/>
         </Grid>
 
-        <appbar:Bindable.ApplicationBar>
-            <appbar:BindableAppBar>
-                <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.refresh.rest.png" Text="{Binding Strings.Refresh, Source={StaticResource LocalizedResources}}" Command="{Binding ReloadLists}"/>
-            </appbar:BindableAppBar>
-        </appbar:Bindable.ApplicationBar>
+        
     </Grid>
-
+    <appbar:Bindable.ApplicationBar>
+        <appbar:BindableAppBar>
+            <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.refresh.rest.png" Text="{Binding Strings.Refresh, Source={StaticResource LocalizedResources}}" Command="{Binding ReloadLists}"/>
+        </appbar:BindableAppBar>
+    </appbar:Bindable.ApplicationBar>
 
 </phone:PhoneApplicationPage>

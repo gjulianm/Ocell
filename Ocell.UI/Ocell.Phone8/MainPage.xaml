@@ -95,27 +95,27 @@
         <Grid x:Name="RecoverDialog" Tap="RecoverDialog_Tap" Height="65" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,-484,72" local:MetroInMotion.Tilt="2" Width="480" HorizontalAlignment="Right">
             <TextBlock Margin="8" Text="{Binding Strings.RecoverReadPosition, Source={StaticResource LocalizedResources}}"  VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe WP Light" FontSize="26.667" />
         </Grid>
-        <appbar:Bindable.ApplicationBar>
-            <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
-                <appbar:BindableAppBar.MenuItems>
-                    <appbar:BindableAppBarMenuItem Text="{Binding Strings.PinColumnStart, Source={StaticResource LocalizedResources}}" Command="{Binding PinToStart}"/>
-                    <appbar:BindableAppBarMenuItem Text="{Binding Strings.FilterColumn, Source={StaticResource LocalizedResources}}" Command="{Binding FilterColumn}"/>
-                    <appbar:BindableAppBarHyperlinkMenuItem x:Name="Trending" IsEnabled="{Binding HasLoggedIn}" Text="{Binding Strings.TrendingTopics, Source={StaticResource LocalizedResources}}" Uri="/Pages/Topics.xaml"/>
-                    <appbar:BindableAppBarMenuItem Text="{Binding Strings.MyProfile, Source={StaticResource LocalizedResources}}" Command="{Binding ToMyProfile}"/>
-                    <appbar:BindableAppBarMenuItem Text="{Binding Strings.GoToUser, Source={StaticResource LocalizedResources}}" Tap="AppBarMenuItem_Click"/>
-                    <appbar:BindableAppBarHyperlinkMenuItem Text="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" Uri="/Pages/Settings/Default.xaml"/>
-                    <appbar:BindableAppBarHyperlinkMenuItem Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" Uri="/Pages/Columns/ManageColumns.xaml" />
-                    <appbar:BindableAppBarMenuItem Text="feedback" Command="{Binding Feedback}" />
-                </appbar:BindableAppBar.MenuItems>
-                <appbar:BindableAppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="{Binding Strings.Compose, Source={StaticResource LocalizedResources}}" Uri="/Pages/NewTweet.xaml" />
-                <appbar:BindableAppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.camera.flash.png" Text="{Binding Strings.QuickView, Source={StaticResource LocalizedResources}}" Uri="/Pages/Columns/ColumnView.xaml" />
-                <appbar:BindableAppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="{Binding Strings.SendDM, Source={StaticResource LocalizedResources}}" Uri="/Pages/SelectUser.xaml"/>
-                <appbar:BindableAppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="{Binding Strings.Search, Source={StaticResource LocalizedResources}}" Uri="/Pages/Search/EnterSearch.xaml" />
-
-            </appbar:BindableAppBar>
-        </appbar:Bindable.ApplicationBar>
+        
 
 		
 	</Grid>
+    <appbar:Bindable.ApplicationBar>
+        <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
+            <appbar:BindableAppBar.MenuItems>
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.PinColumnStart, Source={StaticResource LocalizedResources}}" Command="{Binding PinToStart}"/>
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.FilterColumn, Source={StaticResource LocalizedResources}}" Command="{Binding FilterColumn}"/>
+                <appbar:BindableAppBarHyperlinkMenuItem x:Name="Trending" IsEnabled="{Binding HasLoggedIn}" Text="{Binding Strings.TrendingTopics, Source={StaticResource LocalizedResources}}" Uri="/Pages/Topics.xaml"/>
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.MyProfile, Source={StaticResource LocalizedResources}}" Command="{Binding ToMyProfile}"/>
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.GoToUser, Source={StaticResource LocalizedResources}}" Tap="AppBarMenuItem_Click"/>
+                <appbar:BindableAppBarHyperlinkMenuItem Text="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" Uri="/Pages/Settings/Default.xaml"/>
+                <appbar:BindableAppBarHyperlinkMenuItem Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" Uri="/Pages/Columns/ManageColumns.xaml" />
+                <appbar:BindableAppBarMenuItem Text="feedback" Command="{Binding Feedback}" />
+            </appbar:BindableAppBar.MenuItems>
+            <appbar:BindableAppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="{Binding Strings.Compose, Source={StaticResource LocalizedResources}}" Uri="/Pages/NewTweet.xaml" />
+            <appbar:BindableAppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.camera.flash.png" Text="{Binding Strings.QuickView, Source={StaticResource LocalizedResources}}" Uri="/Pages/Columns/ColumnView.xaml" />
+            <appbar:BindableAppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.feature.email.rest.png" Text="{Binding Strings.SendDM, Source={StaticResource LocalizedResources}}" Uri="/Pages/SelectUser.xaml"/>
+            <appbar:BindableAppBarHyperlinkButton IconUri="/Images/Icons_White/appbar.feature.search.rest.png" Text="{Binding Strings.Search, Source={StaticResource LocalizedResources}}" Uri="/Pages/Search/EnterSearch.xaml" />
 
+        </appbar:BindableAppBar>
+    </appbar:Bindable.ApplicationBar>
 </phone:PhoneApplicationPage>

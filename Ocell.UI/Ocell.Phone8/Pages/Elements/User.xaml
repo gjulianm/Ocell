@@ -70,7 +70,11 @@
             </controls:PivotItem>
         </controls:Pivot>
 
-       <appbar:Bindable.ApplicationBar><appbar:BindableAppBar>
+       
+
+    </Grid>
+    <appbar:Bindable.ApplicationBar>
+        <appbar:BindableAppBar>
             <appbar:BindableAppBarToggleButton 
                 Command1="{Binding FollowUser}" IconUri1="/Images/Icons_White/appbar.add.rest.png" Text1="{Binding Strings.Follow, Source={StaticResource LocalizedResources}}"
                 Command2="{Binding UnfollowUser}" IconUri2="/Images/Icons_White/appbar.minus.rest.png" Text2="{Binding Strings.Unfollow, Source={StaticResource LocalizedResources}}"
@@ -85,7 +89,6 @@
                 <appbar:BindableAppBarMenuItem Text="{Binding Strings.ManageListsForUser, Source={StaticResource LocalizedResources}}" Command="{Binding ManageLists}"/>
                 <appbar:BindableAppBarMenuItem Text="{Binding Strings.ChangeAvatar, Source={StaticResource LocalizedResources}}" Command="{Binding ChangeAvatar}"/>
             </appbar:BindableAppBar.MenuItems>
-        </appbar:BindableAppBar></appbar:Bindable.ApplicationBar>
-
-    </Grid>
+        </appbar:BindableAppBar>
+    </appbar:Bindable.ApplicationBar>
 </phone:PhoneApplicationPage>

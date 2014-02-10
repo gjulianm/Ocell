@@ -53,14 +53,14 @@
         </Grid>
 
 
-        <appbar:Bindable.ApplicationBar>
-            <appbar:BindableAppBar>
-                <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.check.rest.png" Text="{Binding Strings.Done, Source={StaticResource LocalizedResources}}" Tap="ApplicationBarIconButton_Click"/>
-            </appbar:BindableAppBar>
-        </appbar:Bindable.ApplicationBar>
+        
         <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
 
         <!--ContentPanel: coloque aquí el contenido adicional-->
     </Grid>
-
+<appbar:Bindable.ApplicationBar>
+            <appbar:BindableAppBar>
+                <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.check.rest.png" Text="{Binding Strings.Done, Source={StaticResource LocalizedResources}}" Tap="ApplicationBarIconButton_Click"/>
+            </appbar:BindableAppBar>
+        </appbar:Bindable.ApplicationBar>
 </phone:PhoneApplicationPage>

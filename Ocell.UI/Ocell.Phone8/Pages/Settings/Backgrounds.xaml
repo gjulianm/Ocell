@@ -46,11 +46,11 @@
             <ListBox Margin="8,8,8,83" ItemTemplate="{StaticResource ItemTemplate2}" ItemsSource="{Binding BackgroundNames}" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"/>
         </Grid>
 
-        <appbar:Bindable.ApplicationBar>
-            <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
-                <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.save.rest.png" Text="{Binding Strings.Save, Source={StaticResource LocalizedResources}}" Command="{Binding SaveBackground}" />
-            </appbar:BindableAppBar>
-        </appbar:Bindable.ApplicationBar>
+        
     </Grid>
-
+    <appbar:Bindable.ApplicationBar>
+        <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
+            <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.save.rest.png" Text="{Binding Strings.Save, Source={StaticResource LocalizedResources}}" Command="{Binding SaveBackground}" />
+        </appbar:BindableAppBar>
+    </appbar:Bindable.ApplicationBar>
 </phone:PhoneApplicationPage>

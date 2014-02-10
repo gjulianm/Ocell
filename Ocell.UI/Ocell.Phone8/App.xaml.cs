@@ -2,6 +2,7 @@
 using AncoraMVVM.Phone;
 using AsyncOAuth;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Marketplace;
 using Microsoft.Phone.Shell;
 using Ocell.Compatibility;
 using Ocell.Controls;
@@ -84,6 +85,12 @@ namespace Ocell
                 ThemeManager.ToDarkTheme();
 
             RootFrame.Background = Ocell.Library.Config.Background.Value.GetBrush();
+
+            TrialInformation.RequestTrialInfo = () =>
+            {
+                var info = new LicenseInformation();
+                return info.IsTrial();
+            };
         }
 
         // Código para ejecutar cuando la aplicación se inicia (p.ej. a partir de Inicio)

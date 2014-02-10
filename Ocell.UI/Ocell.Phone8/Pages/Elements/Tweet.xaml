@@ -181,23 +181,23 @@
             <TextBlock HorizontalAlignment="Left" Margin="16,8,0,0" TextWrapping="Wrap" Text="{Binding Strings.WhatToMute, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" FontFamily="Segoe WP Light"/>
         </Grid>
 
-        <appbar:Bindable.ApplicationBar>
-            <appbar:BindableAppBar Mode="{Binding AppBarMode}">
-                <appbar:BindableAppBar.MenuItems>
-                    <appbar:BindableAppBarMenuItem Text="{Binding Strings.RetweetWithComments, Source={StaticResource LocalizedResources}}" x:Name="quoteButton" Command="{Binding Quote}"/>
-                    <appbar:BindableAppBarMenuItem Text="{Binding Strings.Share, Source={StaticResource LocalizedResources}}" x:Name="shareButton" Command="{Binding Share}"/>
-                    <appbar:BindableAppBarMenuItem Text="{Binding Strings.Mute, Source={StaticResource LocalizedResources}}" Tap="MuteBtn_Click"/>
-                    <appbar:BindableAppBarMenuItem Text="{Binding Strings.ReadLater, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding Tweet}" />
-                    <appbar:BindableAppBarMenuItem Text="{Binding Strings.DeleteTweet, Source={StaticResource LocalizedResources}}" Command="{Binding DeleteTweet}" />
-                </appbar:BindableAppBar.MenuItems>
-                <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.reply.rest.png" Text="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" x:Name="replyButton" Command="{StaticResource ReplyCommand}" CommandParameter="{Binding Tweet}" />
-                <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.replyall.rest.png" Text="{Binding Strings.ReplyAll, Source={StaticResource LocalizedResources}}" x:Name="replyAllButton" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding Tweet}"/>
-                <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.retweet.rest.png" Text="{Binding Strings.Retweet, Source={StaticResource LocalizedResources}}" x:Name="retweetButton" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding Tweet}"/>
-                <appbar:BindableAppBarToggleButton Toggled="{Binding IsFavorited}"
+        
+    </Grid>
+    <appbar:Bindable.ApplicationBar>
+        <appbar:BindableAppBar Mode="{Binding AppBarMode}">
+            <appbar:BindableAppBar.MenuItems>
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.RetweetWithComments, Source={StaticResource LocalizedResources}}" x:Name="quoteButton" Command="{Binding Quote}"/>
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.Share, Source={StaticResource LocalizedResources}}" x:Name="shareButton" Command="{Binding Share}"/>
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.Mute, Source={StaticResource LocalizedResources}}" Tap="MuteBtn_Click"/>
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.ReadLater, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding Tweet}" />
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.DeleteTweet, Source={StaticResource LocalizedResources}}" Command="{Binding DeleteTweet}" />
+            </appbar:BindableAppBar.MenuItems>
+            <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.reply.rest.png" Text="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" x:Name="replyButton" Command="{StaticResource ReplyCommand}" CommandParameter="{Binding Tweet}" />
+            <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.replyall.rest.png" Text="{Binding Strings.ReplyAll, Source={StaticResource LocalizedResources}}" x:Name="replyAllButton" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding Tweet}"/>
+            <appbar:BindableAppBarButton IconUri="/Images/Icons_White/appbar.retweet.rest.png" Text="{Binding Strings.Retweet, Source={StaticResource LocalizedResources}}" x:Name="retweetButton" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding Tweet}"/>
+            <appbar:BindableAppBarToggleButton Toggled="{Binding IsFavorited}"
                                    IconUri2="/Images/Icons_White/appbar.favs.remove.rest.png" Command2="{Binding Favorite}" CommandParameter2="{Binding Tweet}" Text2="{Binding Strings.RemoveFavorite, Source={StaticResource LocalizedResources}}"
                                    IconUri1="/Images/Icons_White/appbar.favs.addto.rest.png" Command1="{Binding Favorite}" CommandParameter1="{Binding Tweet}" Text1="{Binding Strings.AddFavorite, Source={StaticResource LocalizedResources}}" />
-            </appbar:BindableAppBar>
-        </appbar:Bindable.ApplicationBar>
-    </Grid>
-
+        </appbar:BindableAppBar>
+    </appbar:Bindable.ApplicationBar>
 </phone:PhoneApplicationPage>

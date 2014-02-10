@@ -69,15 +69,15 @@
     			<ListBox x:Name="UserList" Margin="12,211,20,8" ItemsSource="{Binding Collection.View}" SelectedItem="{Binding Destinatary, Mode=TwoWay}" ItemTemplate="{StaticResource UserTemplate}" />
     		</Grid>
 
-            <appbar:Bindable.ApplicationBar>
-                <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
-                    <appbar:BindableAppBarButton Text="{Binding Strings.Next, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.next.rest.png" Command="{Binding GoNext}" />
-                </appbar:BindableAppBar>
-            </appbar:Bindable.ApplicationBar>
+            
         </Grid>
 
 <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
 <!--ContentPanel. Colocar aquí el contenido adicional-->
     </Grid>
-
+    <appbar:Bindable.ApplicationBar>
+        <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
+            <appbar:BindableAppBarButton Text="{Binding Strings.Next, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.next.rest.png" Command="{Binding GoNext}" />
+        </appbar:BindableAppBar>
+    </appbar:Bindable.ApplicationBar>
 </phone:PhoneApplicationPage>
