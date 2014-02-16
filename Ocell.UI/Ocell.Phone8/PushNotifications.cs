@@ -2,6 +2,7 @@
 using AncoraMVVM.Base.IoC;
 using Microsoft.Phone.Notification;
 using Ocell.Library;
+using Ocell.Library.Crypto;
 using Ocell.Library.Notifications;
 using Ocell.Library.Twitter;
 using System;
@@ -10,6 +11,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Linq;
 
 namespace Ocell
 {
@@ -109,6 +111,9 @@ namespace Ocell
         [Conditional("OCELL_FULL")]
         private static async void SendRegistrationToServer(IEnumerable<RegistrationInfo> regs)
         {
+            if (!regs.Any())
+                return;
+
             // I'm just so sorry about all this crap.
             string separator = "¬";
             string urls = "", tokens = "", names = "", types = "";
@@ -118,8 +123,7 @@ namespace Ocell
             {
                 urls += reg.ChannelUri + separator;
                 names += reg.User.ScreenName + separator;
-                // TODO: Encryption tokens.
-                // tokens += Library.Encrypting.EncodeTokens(reg.User.Key, reg.User.Secret) + separator;
+                tokens += TokenCombinator.EncodeTokens(reg.User.Key, reg.User.Secret) + separator;
                 types += reg.Type + separator;
             }
 

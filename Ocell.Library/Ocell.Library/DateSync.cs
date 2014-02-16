@@ -1,4 +1,5 @@
-﻿using AncoraMVVM.Base.Files;
+﻿using AncoraMVVM.Base.Diagnostics;
+using AncoraMVVM.Base.Files;
 using AncoraMVVM.Base.IoC;
 using System;
 using System.Threading.Tasks;
@@ -11,9 +12,16 @@ namespace Ocell.Library
     {
         private const string FileName = "DateFile";
 
-        private static void WriteDate(DateTime date, string file)
+        private static async void WriteDate(DateTime date, string file)
         {
-            Dependency.Resolve<IFileManager>().WriteContents(date.ToString("s"), file);
+            try
+            {
+                await Dependency.Resolve<IFileManager>().WriteContents(file, date.ToString("s"));
+            }
+            catch (Exception e)
+            {
+                AncoraLogger.Instance.LogException("Error writing date", e);
+            }
         }
 
         private async static Task<DateTime> GetDate(string file)

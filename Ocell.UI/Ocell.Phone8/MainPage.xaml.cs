@@ -70,15 +70,15 @@ namespace Ocell
             viewModel.OnLoad();
 
             GeolocationPrompt();
-
             CreateStoryboards();
+            ShowFollowMessage();
 
+            if (Config.PushEnabled == true || (Config.PushEnabled == null && AskForPushPermission()))
+                PushNotifications.AutoRegisterForNotifications();
+            
             ThreadPool.QueueUserWorkItem((threadContext) =>
             {
                 CreateTile();
-                ShowFollowMessage();
-                if (Config.PushEnabled.Value == true || (Config.PushEnabled.Value == null && AskForPushPermission()))
-                    PushNotifications.AutoRegisterForNotifications();
                 UsernameProvider.FillUserNames(Config.Accounts.Value);
 #if DEBUG && AVARIJUSTINVENTEDTOAVOIDCOMPILINGTHISSHIT
                 //var contents = FileAbstractor.ReadContentsOfFile("BA_DEBUG");

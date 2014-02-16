@@ -63,7 +63,6 @@ namespace Ocell
 
             Dependency.RegisterModule(new PhoneDependencyModule());
 
-            // TODO: solve this.
             Dependency.Register<IUserProvider, UserProvider>();
             Dependency.Register<IScrollController, DummyScrollController>();
             Dependency.Register<IReadingPositionManager, WP8ReadingPositionManager>();

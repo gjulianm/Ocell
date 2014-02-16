@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Ocell.Compatibility
 {
-    public class WP8TileManager //: TileManager
+    public class WP8TileManager : TileManager
     {
-        /*public override void ClearMainTileCount()
+        public override void ClearMainTileCount()
         {
             IconicTileData data = new IconicTileData()
             {
@@ -118,6 +118,24 @@ namespace Ocell.Compatibility
 
             ShellTile.Create(ComposeUri, ComposeTile);
 #endif
-        }*/
+        }
+
+        public bool ComposeTileIsCreated()
+        {
+            if (ShellTile.ActiveTiles.Count() == 0)
+                return false;
+            ShellTile ComposeTile = ShellTile.ActiveTiles.FirstOrDefault(item => item != null
+                && !string.IsNullOrWhiteSpace(item.NavigationUri.ToString()) &&
+                item.NavigationUri.ToString().Contains("NewTweet.xaml"));
+            return ComposeTile != null;
+        }
+
+        public bool ColumnTileIsCreated(TwitterResource Resource)
+        {
+            ShellTile ColumnTile = ShellTile.ActiveTiles.FirstOrDefault(item => item != null
+                && !string.IsNullOrWhiteSpace(item.NavigationUri.ToString()) &&
+                item.NavigationUri.ToString().Contains(Uri.EscapeDataString(Resource.String)));
+            return ColumnTile != null;
+        }
     }
 }
