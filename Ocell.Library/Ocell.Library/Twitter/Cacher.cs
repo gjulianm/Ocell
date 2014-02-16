@@ -40,7 +40,7 @@ namespace Ocell.Library.Twitter
             var fileManager = Dependency.Resolve<IFileManager>();
 
             foreach (var tweet in list)
-                tweet.CreatedDate = new DateTime(tweet.CreatedDate.Ticks, DateTimeKind.Local);
+                tweet.CreatedDate = tweet.CreatedDate.ToLocalTime();
 
             var serializer = new SharpSerializer(SerializerSettings);
             MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
