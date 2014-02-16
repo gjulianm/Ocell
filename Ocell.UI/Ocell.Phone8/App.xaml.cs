@@ -1,6 +1,8 @@
 ﻿using AncoraMVVM.Base.Diagnostics;
+using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
 using AncoraMVVM.Phone;
+using AncoraMVVM.Phone.Implementations;
 using AsyncOAuth;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Marketplace;
@@ -72,6 +74,8 @@ namespace Ocell
             Dependency.Register<TileManager, WP8TileManager>();
 
             Dependency.Register<ICryptoManager, CryptoManager>();
+
+            ((GlobalProgress)Dependency.Resolve<IProgressIndicator>()).Initialize(RootFrame);
 
             PushNotifications.WPVersion = OSVersion.WP8;
 

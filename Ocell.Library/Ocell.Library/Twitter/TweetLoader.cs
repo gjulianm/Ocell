@@ -28,7 +28,7 @@ namespace Ocell.Library.Twitter
 
             set
             {
-                bool propertyChanges = value > 0 == IsLoading;
+                bool propertyChanges = value > 0 != IsLoading;
 
                 requestsInProgress = value;
 

@@ -184,12 +184,7 @@ namespace Ocell
                 {
                     // TODO: Check this.
                     if (e1.PropertyName == "IsLoading")
-                    {
-                        if (list.Loader.IsLoading)
-                            viewModel.LoadingCount++;
-                        else
-                            viewModel.LoadingCount--;
-                    }
+                        Dependency.Resolve<IProgressIndicator>().IsLoading = list.Loader.IsLoading;
                 };
 
                 viewModel.ScrollToTop += (sender1, e1) =>
