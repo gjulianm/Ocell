@@ -87,6 +87,7 @@ namespace Ocell.Library.Twitter
         public TweetLoader()
         {
             Source = new SortedFilteredObservable<ITweetable>(new TweetComparer());
+            Source.SortOrder = SortOrder.Descending;
             RequestsInProgress = 0;
 
             if (rateResetTime == null)
@@ -371,7 +372,7 @@ namespace Ocell.Library.Twitter
                 return;
             }
 
-            GenericReceive(toITweetable(response.Content));
+            GenericReceive(toITweetable(response.Content).ToList());
         }
 
         private void GenericReceive(IEnumerable<ITweetable> list)
@@ -419,8 +420,11 @@ namespace Ocell.Library.Twitter
 
             list = list.Except(Source);
 
-            foreach (var status in list)
-                Source.Add(status);
+            Dependency.Resolve<IDispatcher>().InvokeIfRequired(() =>
+            {
+                foreach (var status in list)
+                    Source.Add(status);
+            });
         }
 
         private void LoadMessages(IEnumerable<TwitterDirectMessage> messages)
@@ -435,10 +439,12 @@ namespace Ocell.Library.Twitter
                     Source.Add(new GroupedDM(msg, Resource.User));
                 else if (!group.Messages.Contains(msg))
                 {
-                    // Force reordering.
-                    Source.Remove(group);
-                    group.Messages.Add(msg);
-                    Source.Add(group);
+                    Dependency.Resolve<IDispatcher>().InvokeIfRequired(() =>
+                   {// Force reordering.
+                       Source.Remove(group);
+                       group.Messages.Add(msg);
+                       Source.Add(group);
+                   });
                 }
             }
         }

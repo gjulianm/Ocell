@@ -6,6 +6,7 @@ using Ocell.Library;
 using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -165,7 +166,7 @@ namespace Ocell.Controls
 
         private void SetupCollectionViewSource()
         {
-            ItemsSource = Loader.Source;
+            ItemsSource = (IList)Loader.Source;
         }
 
         private void SetTag()
