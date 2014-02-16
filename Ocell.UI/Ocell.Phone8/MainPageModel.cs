@@ -31,7 +31,7 @@ namespace Ocell
     {
         DateTime lastAutoReload;
         const int secondsBetweenReloads = 25;
-
+        
         #region Events
         public event BroadcastEventHandler ScrollToTop;
         public void RaiseScrollToTop(TwitterResource resource)
@@ -66,38 +66,18 @@ namespace Ocell
         #endregion
 
         public bool HasLoggedIn { get { return Config.Accounts.Value.Any(); } }
-
+        public ObservableCollection<TwitterResource> Pivots { get; set; }
+        public object SelectedPivot { get; set; }
+        public string CurrentAccountName { get; set; }
+        public bool IsSearching { get; set; }
+        public string UserSearch { get; set; }
+        public int PreloadedLists { get; set; }
+        public bool PreloadComplete { get { return PreloadedLists == Config.Columns.Value.Count; } }
+        
         public void RaiseLoggedInChange()
         {
             RaisePropertyChanged("HasLoggedIn");
         }
-
-        int loadingCount;
-        public int LoadingCount
-        {
-            get { return loadingCount; }
-            set
-            {
-                loadingCount = value;
-                if (loadingCount <= 0)
-                    Progress.IsLoading = false;
-                else
-                    Progress.IsLoading = true;
-            }
-
-        }
-
-        Queue<NotifyCollectionChangedEventArgs> collectionChangedArgs;
-
-        public ObservableCollection<TwitterResource> Pivots { get; set; }
-
-        public object SelectedPivot { get; set; }
-
-        public string CurrentAccountName { get; set; }
-
-        public bool IsSearching { get; set; }
-
-        public string UserSearch { get; set; }
 
         #region Commands
         DelegateCommand pinToStart;
@@ -207,7 +187,6 @@ namespace Ocell
 
             lastAutoReload = DateTime.MinValue;
             Pivots = new ObservableCollection<TwitterResource>();
-            collectionChangedArgs = new Queue<NotifyCollectionChangedEventArgs>();
 
             foreach (var pivot in Ocell.Library.Config.Columns.Value)
                 Pivots.Add(pivot);
@@ -285,5 +264,6 @@ namespace Ocell
                 firstNavigation = false;
             }
         }
+
     }
 }

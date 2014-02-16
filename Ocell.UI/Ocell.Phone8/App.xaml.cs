@@ -95,6 +95,9 @@ namespace Ocell
                 var info = new LicenseInformation();
                 return info.IsTrial();
             };
+
+            foreach (var column in Config.Columns.Value)
+                Cacher.PreloadCache(column);
         }
 
         // Código para ejecutar cuando la aplicación se inicia (p.ej. a partir de Inicio)

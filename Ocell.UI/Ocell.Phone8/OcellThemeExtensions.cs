@@ -14,7 +14,7 @@ namespace Ocell
             else
             {
                 var bi = new BitmapImage(new Uri(theme.BackgroundUrl, UriKind.Relative));
-                bi.CreateOptions = BitmapCreateOptions.None;
+                bi.CreateOptions = BitmapCreateOptions.BackgroundCreation;
                 var ib = new ImageBrush { ImageSource = bi };
                 return ib;
             }

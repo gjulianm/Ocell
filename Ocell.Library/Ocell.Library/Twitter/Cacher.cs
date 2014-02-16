@@ -12,6 +12,8 @@ namespace Ocell.Library.Twitter
 {
     public static class Cacher
     {
+        private static Dictionary<TwitterResource, IEnumerable<TwitterStatus>> memCache = new Dictionary<TwitterResource, IEnumerable<TwitterStatus>>();
+
         private static SharpSerializerBinarySettings SerializerSettings = new SharpSerializerBinarySettings
         {
             Mode = BinarySerializationMode.SizeOptimized
@@ -54,17 +56,22 @@ namespace Ocell.Library.Twitter
                 }
                 catch (Exception ex)
                 {
-                    AncoraLogger.Instance.LogException("Error getting cache to " + resource.ToString(), ex);
+                    AncoraLogger.Instance.LogException("Error saving cache for " + resource.ToString(), ex);
                 }
             });
         }
 
         public static IEnumerable<TwitterStatus> GetFromCache(TwitterResource resource)
         {
+            IEnumerable<TwitterStatus> statuses = null;
+
+            if (memCache.TryGetValue(resource, out statuses))
+                return statuses;
+
             string fileName = GetCacheName(resource);
             var serializer = new SharpSerializer(SerializerSettings);
             var fileManager = Dependency.Resolve<IFileManager>();
-            IEnumerable<TwitterStatus> statuses = null;
+            
 
             MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
             {
@@ -83,6 +90,11 @@ namespace Ocell.Library.Twitter
             });
 
             return statuses ?? new List<TwitterStatus>();
+        }
+
+        public static void PreloadCache(TwitterResource resource)
+        {
+            memCache[resource] = GetFromCache(resource);
         }
     }
 }

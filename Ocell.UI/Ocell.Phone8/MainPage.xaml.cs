@@ -75,7 +75,7 @@ namespace Ocell
 
             if (Config.PushEnabled == true || (Config.PushEnabled == null && AskForPushPermission()))
                 PushNotifications.AutoRegisterForNotifications();
-            
+
             ThreadPool.QueueUserWorkItem((threadContext) =>
             {
                 CreateTile();
@@ -162,78 +162,78 @@ namespace Ocell
             ExtendedListBox list = sender as ExtendedListBox;
             if (list == null)
                 return;
+
             var tag = list.Tag;
 
-            ThreadPool.QueueUserWorkItem((threadcontext) =>
+            TwitterResource Resource = new TwitterResource();
+
+            if (tag is TwitterResource)
             {
-                TwitterResource Resource = new TwitterResource();
+                Resource = (TwitterResource)tag;
+                list.Resource = Resource;
+            }
 
-                if (tag is TwitterResource)
+            list.Loader.LoadCache();
+
+            FilterManager.SetupFilter(list);
+
+            list.Loader.ActivateLoadMoreButton = true;
+            list.Loader.TweetsToLoadPerRequest = (int)Config.TweetsPerRequest.Value;
+            list.Loader.LoadRetweetsAsMentions = (bool)Config.RetweetAsMentions.Value;
+
+            list.Loader.PropertyChanged += (sender1, e1) =>
+            {
+                if (e1.PropertyName == "IsLoading")
+                    Dependency.Resolve<IProgressIndicator>().IsLoading = list.Loader.IsLoading;
+            };
+
+            viewModel.ScrollToTop += (sender1, e1) =>
+            {
+                if (e1.BroadcastAll || e1.Resource == Resource)
+                    list.ScrollToTop();
+            };
+
+            viewModel.ReloadLists += (sender1, e1) =>
+            {
+                if (e1.BroadcastAll || e1.Resource == Resource)
+                    ThreadPool.QueueUserWorkItem((context) => list.AutoReload());
+            };
+
+            viewModel.CheckIfCanResumePosition += (sender1, e1) =>
+            {
+                if (e1.Resource == list.Loader.Resource && Config.ReloadOptions.Value == ColumnReloadOptions.AskPosition)
+                    list.TryTriggerResumeReading();
+            };
+
+            list.ReadyToResumePosition += (sender1, e1) =>
+            {
+                var selectedPivot = (TwitterResource)viewModel.SelectedPivot;
+                if (list.Loader.Resource == selectedPivot)
                 {
-                    Resource = (TwitterResource)tag;
-                    list.Resource = Resource;
-                }
-
-                Dispatcher.BeginInvoke(() => FilterManager.SetupFilter(list));
-
-                list.Loader.ActivateLoadMoreButton = true;
-                list.Loader.TweetsToLoadPerRequest = (int)Config.TweetsPerRequest.Value;
-                list.Loader.LoadRetweetsAsMentions = (bool)Config.RetweetAsMentions.Value;
-
-                list.Loader.PropertyChanged += (sender1, e1) =>
-                {
-                    // TODO: Check this.
-                    if (e1.PropertyName == "IsLoading")
-                        Dependency.Resolve<IProgressIndicator>().IsLoading = list.Loader.IsLoading;
-                };
-
-                viewModel.ScrollToTop += (sender1, e1) =>
-                {
-                    if (e1.BroadcastAll || e1.Resource == Resource)
-                        list.ScrollToTop();
-                };
-
-                viewModel.ReloadLists += (sender1, e1) =>
-                {
-                    if (e1.BroadcastAll || e1.Resource == Resource)
-                        ThreadPool.QueueUserWorkItem((context) => list.AutoReload());
-                };
-
-                viewModel.CheckIfCanResumePosition += (sender1, e1) =>
-                {
-                    if (e1.Resource == list.Loader.Resource && Config.ReloadOptions.Value == ColumnReloadOptions.AskPosition)
-                        list.TryTriggerResumeReading();
-                };
-
-                list.ReadyToResumePosition += (sender1, e1) =>
-                {
-                    var selectedPivot = (TwitterResource)viewModel.SelectedPivot;
-                    if (list.Loader.Resource == selectedPivot)
+                    Dispatcher.BeginInvoke(() =>
                     {
-                        Dispatcher.BeginInvoke(() =>
+                        long id;
+                        if (Config.ReadPositions.Value.TryGetValue(selectedPivot.String, out id)
+                            && !list.VisibleItems.Any(x => x.Id == id))
                         {
-                            long id;
-                            if (Config.ReadPositions.Value.TryGetValue(selectedPivot.String, out id)
-                                && !list.VisibleItems.Any(x => x.Id == id))
-                            {
-                                ShowResumePositionPrompt(list);
-                            }
-                        });
-                    }
-                };
+                            ShowResumePositionPrompt(list);
+                        }
+                    });
+                }
+            };
 
-                list.Loader.LoadCacheAsync();
 
-                list.AutoReload();
+            list.AutoReload();
 
-                Dispatcher.BeginInvoke(() =>
-                {
-                    list.Loaded -= ListBox_Loaded;
-                    list.Loaded += new RoutedEventHandler(CheckForFilterUpdate);
-                });
-
-                GlobalEvents.FiltersChanged += (sender1, e1) => Dispatcher.BeginInvoke(() => FilterManager.SetupFilter(list));
+            Dispatcher.BeginInvoke(() =>
+            {
+                list.Loaded -= ListBox_Loaded;
+                list.Loaded += new RoutedEventHandler(CheckForFilterUpdate);
             });
+
+            GlobalEvents.FiltersChanged += (sender1, e1) => Dispatcher.BeginInvoke(() => FilterManager.SetupFilter(list));
+
+            viewModel.PreloadedLists++;
         }
 
         private void CheckForFilterUpdate(object sender, RoutedEventArgs e)
