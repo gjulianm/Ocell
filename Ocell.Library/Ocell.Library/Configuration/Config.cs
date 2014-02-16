@@ -164,7 +164,8 @@ namespace Ocell.Library
 
         public readonly static ConfigItem<ReadLaterCredentials> ReadLaterCredentials = new ConfigItem<ReadLaterCredentials>
         {
-            Key = "READLATERCREDS"
+            Key = "READLATERCREDS",
+            DefaultValue = new ReadLaterCredentials()
         };
 
         public readonly static ConfigItem<OcellTheme> Background = new ConfigItem<OcellTheme>

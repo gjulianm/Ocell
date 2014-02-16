@@ -526,9 +526,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AncoraMVVM.Base.0.1.22-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
     </Reference>
-    <Reference Include="AncoraMVVM.Phone7, Version=0.1.22.35605, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AncoraMVVM.Phone7, Version=0.1.23.41664, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AncoraMVVM.Phone7.0.1.22-alpha\lib\wp71\AncoraMVVM.Phone7.dll</HintPath>
+      <HintPath>..\..\packages\AncoraMVVM.Phone7.0.1.23-alpha\lib\wp71\AncoraMVVM.Phone7.dll</HintPath>
     </Reference>
     <Reference Include="AncoraMVVM.Rest">
       <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.13-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Rest.dll</HintPath>

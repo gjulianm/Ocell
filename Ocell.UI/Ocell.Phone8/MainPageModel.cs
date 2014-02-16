@@ -98,6 +98,7 @@ namespace Ocell
         public bool IsSearching { get; set; }
 
         public string UserSearch { get; set; }
+
         #region Commands
         DelegateCommand pinToStart;
         public ICommand PinToStart
@@ -142,6 +143,9 @@ namespace Ocell
                     // TODO: Column manager.
                 }, (obj) => SelectedPivot != null);
 
+
+            pinToStart.BindCanExecuteToProperty(this, "SelectedPivot");
+
             filterColumn = new DelegateCommand((obj) =>
             {
                 var column = (TwitterResource)SelectedPivot;
@@ -155,10 +159,14 @@ namespace Ocell
 
             }, (obj) => SelectedPivot != null);
 
+            filterColumn.BindCanExecuteToProperty(this, "SelectedPivot");
+
             toMyProfile = new DelegateCommand((obj) =>
                 {
                     Navigator.Navigate("/Pages/Elements/User.xaml?user=" + CurrentAccountName);
                 }, (obj) => !string.IsNullOrWhiteSpace(CurrentAccountName));
+
+            toMyProfile.BindCanExecuteToProperty(this, "CurrentAccountName");
 
             goToUser = new DelegateCommand((obj) =>
             {
@@ -180,6 +188,12 @@ namespace Ocell
         public override void OnLoad()
         {
             RaisePropertyChanged("Pivots");
+        }
+
+        public override void OnNavigating(System.ComponentModel.CancelEventArgs e)
+        {
+            Config.SaveReadPositions();
+            base.OnNavigating(e);
         }
 
         public MainPageModel()

@@ -30,7 +30,7 @@
             <toolkit:PerformanceProgressBar HorizontalAlignment="Center" VerticalAlignment="Center" 
                                             Width="344" Height="30" Margin="58,343,54,360" 
                                             IsIndeterminate="True"  
-                                            Visibility="{Binding BrowserVisible, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Collapsed}" />
+                                            Visibility="{Binding BrowserVisible, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='Collapsed'}" />
             <phone:WebBrowser x:Name="wb" 
                               HorizontalAlignment="Left" VerticalAlignment="Top" 
                               Height="717" Width="456" 

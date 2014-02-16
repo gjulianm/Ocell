@@ -249,18 +249,15 @@ namespace Ocell.Commands
 
     public class ReadLaterCommand : ICommand
     {
-        private int _pendingCalls;
-
         public bool CanExecute(object parameter)
         {
             var creds = Config.ReadLaterCredentials.Value;
-            return parameter is TwitterStatus && (creds.Instapaper != null || creds.Pocket != null);
+            return parameter is TwitterStatus && (creds != null && creds.Instapaper != null || creds.Pocket != null);
         }
 
         public async void Execute(object parameter)
         {
             TwitterStatus tweet = parameter as TwitterStatus;
-            _pendingCalls = 0;
             var credentials = Config.ReadLaterCredentials.Value;
 
             if (tweet == null)
