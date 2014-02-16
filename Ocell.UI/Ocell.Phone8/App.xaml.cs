@@ -1,4 +1,5 @@
-﻿using AncoraMVVM.Base.IoC;
+﻿using AncoraMVVM.Base.Diagnostics;
+using AncoraMVVM.Base.IoC;
 using AncoraMVVM.Phone;
 using AsyncOAuth;
 using Microsoft.Phone.Controls;
@@ -164,8 +165,7 @@ namespace Ocell
                 System.Diagnostics.Debugger.Break();
             }
 
-            // TODO: Exception checking.
-            // LittleWatson.ReportException(e.Exception, "Ocell App Error");
+            AncoraLogger.Instance.LogException(String.Format("Navigation failed exception for {0}", e.Uri), e.Exception);
         }
 
         // Código para ejecutar en excepciones no controladas
@@ -177,8 +177,7 @@ namespace Ocell
                 System.Diagnostics.Debugger.Break();
             }
 
-            // TODO: Exception checking.
-            // LittleWatson.ReportException(e.ExceptionObject, "Ocell App Error");
+            AncoraLogger.Instance.LogException("Unhandled exception", e.ExceptionObject);
         }
 
         #region Inicialización de la aplicación telefónica
