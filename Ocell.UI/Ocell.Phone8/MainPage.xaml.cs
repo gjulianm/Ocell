@@ -181,10 +181,14 @@ namespace Ocell
             list.Loader.TweetsToLoadPerRequest = (int)Config.TweetsPerRequest.Value;
             list.Loader.LoadRetweetsAsMentions = (bool)Config.RetweetAsMentions.Value;
 
+            bool isListLoading = false;
             list.Loader.PropertyChanged += (sender1, e1) =>
             {
-                if (e1.PropertyName == "IsLoading")
+                if (e1.PropertyName == "IsLoading" && list.Loader.IsLoading != isListLoading)
+                {
+                    isListLoading = list.Loader.IsLoading;
                     Dependency.Resolve<IProgressIndicator>().IsLoading = list.Loader.IsLoading;
+                }
             };
 
             viewModel.ScrollToTop += (sender1, e1) =>

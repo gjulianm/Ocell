@@ -328,6 +328,7 @@
     <None Include="Endpoints\_TwitterService.8.SuggestedUsers.json" />
     <None Include="Endpoints\_TwitterService.9.Favorites.json" />
     <None Include="Fody.targets" />
+    <None Include="Ocell.Phone8_2014_02_17_20_45_24.sap" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">
@@ -522,13 +523,13 @@
     <Resource Include="Images\BirdGray.png" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AncoraMVVM.Base, Version=0.1.22.40031, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AncoraMVVM.Base, Version=0.1.24.36483, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AncoraMVVM.Base.0.1.22-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
+      <HintPath>..\..\packages\AncoraMVVM.Base.0.1.24-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
     </Reference>
-    <Reference Include="AncoraMVVM.Phone7, Version=0.1.23.41664, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AncoraMVVM.Phone7, Version=0.1.25.36490, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AncoraMVVM.Phone7.0.1.23-alpha\lib\wp71\AncoraMVVM.Phone7.dll</HintPath>
+      <HintPath>..\..\packages\AncoraMVVM.Phone7.0.1.25-alpha\lib\wp71\AncoraMVVM.Phone7.dll</HintPath>
     </Reference>
     <Reference Include="AncoraMVVM.Rest">
       <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.13-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Rest.dll</HintPath>

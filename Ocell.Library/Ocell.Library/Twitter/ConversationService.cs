@@ -121,7 +121,7 @@ namespace Ocell.Library.Twitter
             var result = response.Content;
 
             okResponse = response;
-            searchCache.BulkAdd(result.Statuses.Except(searchCache));
+            searchCache.AddListRange(result.Statuses.Except(searchCache));
 
             if (result.Statuses.Count() >= 90)
             {

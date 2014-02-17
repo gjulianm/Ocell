@@ -36,6 +36,8 @@ namespace Ocell
             // Controlador global para excepciones no detectadas.
             UnhandledException += Application_UnhandledException;
 
+            Dependency.RegisterModule(new PhoneDependencyModule());
+
             // Inicialización de Silverlight estándar
             InitializeComponent();
 
@@ -63,8 +65,6 @@ namespace Ocell
             }
 
             OAuthUtility.ComputeHash = (key, buffer) => { using (var hmac = new HMACSHA1(key)) { return hmac.ComputeHash(buffer); } };
-
-            Dependency.RegisterModule(new PhoneDependencyModule());
 
             Dependency.Register<IUserProvider, UserProvider>();
             Dependency.Register<IScrollController, DummyScrollController>();

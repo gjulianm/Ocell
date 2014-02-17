@@ -26,11 +26,9 @@ namespace Ocell
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            var hasImage = innerConverter.Convert(value, targetType, parameter, culture) != null;
-
-            if (hasImage && IsDarkTheme)
+            if (IsDarkTheme)
                 return transparentBlack;
-            else if (hasImage && !IsDarkTheme)
+            else if (!IsDarkTheme)
                 return transparentWhite;
             else
                 return transparent;

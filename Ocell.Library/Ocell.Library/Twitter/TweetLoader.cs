@@ -1,6 +1,7 @@
 ﻿using AncoraMVVM.Base.Collections;
 using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
+using AncoraMVVM.Base;
 using Ocell.Library.Twitter.Comparers;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TweetSharp;
+using AncoraMVVM.Base.Diagnostics;
 
 namespace Ocell.Library.Twitter
 {
@@ -202,8 +204,7 @@ namespace Ocell.Library.Twitter
             IEnumerable<TwitterStatus> cacheList = Cacher.GetFromCache(Resource);
             var toAdd = AddLoadMoreButtons(cacheList.OrderByDescending(x => x.Id).Cast<ITweetable>()).Except(Source);
 
-            foreach (var item in toAdd)
-                Source.Add(item);
+            Source.AddRange(toAdd);
 
             if (CacheLoad != null)
                 CacheLoad(this, new EventArgs());
@@ -383,7 +384,7 @@ namespace Ocell.Library.Twitter
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error receiving object: {0}", ex);
+                AncoraLogger.Instance.LogException("Error adding tweetables to app", ex);
             }
         }
 
@@ -420,33 +421,31 @@ namespace Ocell.Library.Twitter
 
             list = list.Except(Source);
 
-            Dependency.Resolve<IDispatcher>().InvokeIfRequired(() =>
-            {
-                foreach (var status in list)
-                    Source.Add(status);
-            });
+            Dependency.Resolve<IDispatcher>().InvokeIfRequired(() => Source.AddListRange(list));
         }
 
         private void LoadMessages(IEnumerable<TwitterDirectMessage> messages)
         {
             var groups = Source.OfType<GroupedDM>();
-            foreach (var msg in messages)
+            Dependency.Resolve<IDispatcher>().InvokeIfRequired(() =>
             {
-                var pairId = msg.GetPairName(Resource.User);
-                var group = groups.FirstOrDefault(x => x.ConverserNames.Item1 == pairId || x.ConverserNames.Item2 == pairId);
-
-                if (group == null)
-                    Source.Add(new GroupedDM(msg, Resource.User));
-                else if (!group.Messages.Contains(msg))
+                foreach (var msg in messages)
                 {
-                    Dependency.Resolve<IDispatcher>().InvokeIfRequired(() =>
-                   {// Force reordering.
-                       Source.Remove(group);
-                       group.Messages.Add(msg);
-                       Source.Add(group);
-                   });
+                    var pairId = msg.GetPairName(Resource.User);
+                    var group = groups.FirstOrDefault(x => x.ConverserNames.Item1 == pairId || x.ConverserNames.Item2 == pairId);
+
+                    if (group == null)
+                        Source.Add(new GroupedDM(msg, Resource.User));
+                    else if (!group.Messages.Contains(msg))
+                    {
+                        // Force reordering.
+                        Source.Remove(group);
+                        group.Messages.Add(msg);
+                        Source.Add(group);
+
+                    }
                 }
-            }
+            });
         }
 
         private void ReceiveConversation(IEnumerable<TwitterStatus> statuses, TwitterResponse response)

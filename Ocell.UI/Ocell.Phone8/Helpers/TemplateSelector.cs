@@ -33,6 +33,8 @@ namespace Ocell
 
     public class TweetTemplateSelector : DataTemplateSelector
     {
+        public static TextToMediaConverter mediaConverter = new TextToMediaConverter();
+
         public DataTemplate UsualTemplate
         {
             get;
@@ -45,11 +47,19 @@ namespace Ocell
             set;
         }
 
+        public DataTemplate ImageTemplate
+        {
+            get;
+            set;
+        }
+
         public override DataTemplate SelectTemplate(
             object item, DependencyObject container)
         {
             if (item is LoadMoreTweetable)
                 return LoadMoreTemplate;
+            else if (mediaConverter.Convert(item, null, null, null) != null)
+                return ImageTemplate;
             else
                 return UsualTemplate;
         }

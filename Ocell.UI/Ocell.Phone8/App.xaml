@@ -24,7 +24,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/StyleDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
+        
+            <!-- TODO: Check commands to remove and place in specific pages. -->
             <global:LocalizedResources x:Key="LocalizedResources"/>
             <local:ListConverter x:Key="ListConverter"/>
             <local:RelativeDateTimeConverter x:Key="RelativeDateTimeConverter"/>
@@ -55,8 +56,22 @@
             <local:TextToMediaConverter x:Key="TextToMediaConverter" />
             <local:HasMediaToBackgroundConverter x:Key="HasMediaToBackgroundConverter" />
 
+            <toolkit:ContextMenu Background="White" BorderBrush="Black" Foreground="Black" x:Name="ContextMenu" x:Key="TweetContextMenu">
+                <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding}" />
+                <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Retweet, Source={StaticResource LocalizedResources}}" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding}" />
+                <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Favorite, Source={StaticResource LocalizedResources}}" Command="{StaticResource FavoriteCommand}" CommandParameter="{Binding}" />
+                <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.MuteUser, Source={StaticResource LocalizedResources}}" Command="{StaticResource MuteCommand}" CommandParameter="{Binding}" />
+                <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.ReadLater, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding}" />
+            </toolkit:ContextMenu>
+
+            <LinearGradientBrush MappingMode="RelativeToBoundingBox" StartPoint="0.0,0.5" EndPoint="1,0.8" x:Key="ImageGradientBrush">
+                <GradientStop Color="#00000000" Offset="0.0" />
+                <GradientStop Color="#80000000" Offset="0.55" />
+                <GradientStop Color="#FF000000" Offset="0.8" />
+            </LinearGradientBrush>
+
             <DataTemplate x:Key="TweetTemplate">
-                <local:TweetTemplateSelector Content="{Binding}" Margin="0" Width="Auto" HorizontalContentAlignment="Stretch" >
+                <local:TweetTemplateSelector Content="{Binding}" Margin="0" Width="Auto" HorizontalContentAlignment="Stretch" toolkit:ContextMenuService.ContextMenu="{StaticResource TweetContextMenu}">
                     <local:TweetTemplateSelector.UsualTemplate>
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch" Width="Auto" Tag="{Binding Id}" Margin="0,3,0,12" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache">
@@ -67,27 +82,44 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                <toolkit:ContextMenuService.ContextMenu>
-                                    <toolkit:ContextMenu Background="White" BorderBrush="Black" Foreground="Black" x:Name="ContextMenu">
-                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReplyAllCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Retweet, Source={StaticResource LocalizedResources}}" Command="{StaticResource RetweetCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.Favorite, Source={StaticResource LocalizedResources}}" Command="{StaticResource FavoriteCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.MuteUser, Source={StaticResource LocalizedResources}}" Command="{StaticResource MuteCommand}" CommandParameter="{Binding}" />
-                                        <toolkit:MenuItem Foreground="Black" Header="{Binding Strings.ReadLater, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding}" />
-                                    </toolkit:ContextMenu>
-                                </toolkit:ContextMenuService.ContextMenu>
 
+                                <Grid Grid.Row="0" Grid.Column="0" Margin="0,15,15,0" Background="Transparent">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.611*"/>
+                                        <ColumnDefinition Width="0.389*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
 
-                                <Image Source="{Binding Converter={StaticResource TextToMediaConverter}}" Stretch="UniformToFill" Grid.RowSpan="2" Width="Auto" MaxHeight="200">
-                                    <Image.OpacityMask>
-                                        <LinearGradientBrush MappingMode="RelativeToBoundingBox" StartPoint="0.0,0.5" EndPoint="1,0.8">
-                                            <GradientStop Color="#00000000" Offset="0.0" />
-                                            <GradientStop Color="#80000000" Offset="0.55" />
-                                            <GradientStop Color="#FF000000" Offset="0.8" />
-                                        </LinearGradientBrush>
-                                    </Image.OpacityMask>
-                                </Image>
+                                    <TextBlock Grid.Row="0" Text="{Binding CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}" VerticalAlignment="Top" Margin="0,5.753,8,0" Foreground="#FF707070" Grid.Column="1" HorizontalAlignment="Right" UseLayoutRounding="False" FontFamily="Segoe WP Light"/>
+                                    <Image HorizontalAlignment="Left" Width="{Binding Converter={StaticResource SizeConverter}}" Margin="{Binding Converter={StaticResource MarginConverter}}" d:LayoutOverrides="HorizontalAlignment, Height" Height="{Binding Converter={StaticResource SizeConverter}}" UseLayoutRounding="False" VerticalAlignment="Top">
+                                        <Image.Source>
+                                            <BitmapImage UriSource="{Binding ConverterParameter=false, Converter={StaticResource AvatarConverter}}" CreateOptions="BackgroundCreation,DelayCreation"/>
+                                        </Image.Source>
+                                    </Image>
+                                    <Image  Source="{Binding ConverterParameter=true, Converter={StaticResource AvatarConverter}}" HorizontalAlignment="Left" Width="30" Margin="8,54,0,0" d:LayoutOverrides="HorizontalAlignment, Height" Height="30" UseLayoutRounding="False" VerticalAlignment="Top"/>
+                                    <TextBlock Grid.Row="0" Text="{Binding CleanText}" Margin="86,32.356,8,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Grid.ColumnSpan="2" UseLayoutRounding="False" FontFamily="Segoe WP SemiLight" FontSize="{Binding TweetFontSize, Source={StaticResource GlobalSettings}}"/>
+                                    <TextBlock Grid.Row="0" Margin="86,0,0,0" TextWrapping="Wrap" Text="{Binding AuthorName}" Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top" FontSize="24" UseLayoutRounding="False" HorizontalAlignment="Left" Width="258"/>
+                                    <TextBlock Grid.Row="1" Margin="86,5,0,0" Foreground="#FF707070" Visibility="{Binding IsRetweeted, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Segoe WP SemiLight"><Run Text="{Binding Strings.RTBy, Source={StaticResource LocalizedResources}}" /><Run Text="{Binding Author.ScreenName}" /></TextBlock>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </local:TweetTemplateSelector.UsualTemplate>
+                    <local:TweetTemplateSelector.ImageTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch" Width="Auto" Tag="{Binding Id}" Margin="0,3,0,12" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache"  toolkit:ContextMenuService.ContextMenu="{StaticResource TweetContextMenu}">
+                                <i:Interaction.Behaviors>
+                                    <tr:OnLoadedOpacityTransitionBehavior/>
+                                </i:Interaction.Behaviors>
+                                
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
 
+                                <Image Source="{Binding Converter={StaticResource TextToMediaConverter}}" Stretch="UniformToFill" Grid.RowSpan="2" Width="Auto" MaxHeight="200" OpacityMask="{StaticResource ImageGradientBrush}" />
 
                                 <Grid Grid.Row="0" Grid.Column="0" Margin="0,15,15,0" Background="{Binding Converter={StaticResource HasMediaToBackgroundConverter}}">
                                     <Grid.ColumnDefinitions>
@@ -112,7 +144,8 @@
                                 </Grid>
                             </Grid>
                         </DataTemplate>
-                    </local:TweetTemplateSelector.UsualTemplate>
+                    </local:TweetTemplateSelector.ImageTemplate>
+                    
                     <local:TweetTemplateSelector.LoadMoreTemplate>
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch" Margin="0,3,0,12" Tag="{Binding Id}" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache" Height="53" d:LayoutOverrides="VerticalMargin">
@@ -140,7 +173,6 @@
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>
-        <!--Objeto requerido que controla los eventos de duraciÃ³n de la aplicaciÃ³n-->
         <shell:PhoneApplicationService 
     		Launching="Application_Launching" Closing="Application_Closing" 
     		Activated="Application_Activated" Deactivated="Application_Deactivated"/>

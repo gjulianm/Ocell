@@ -60,7 +60,7 @@ namespace Ocell.Library.Twitter
         public GroupedDM(IEnumerable<TwitterDirectMessage> list, UserToken mainUser)
             : this(mainUser)
         {
-            Messages.BulkAdd(list);
+            Messages.AddListRange(list);
         }
 
         public GroupedDM(TwitterDirectMessage element, UserToken mainUser)
