@@ -1,5 +1,7 @@
-﻿using AncoraMVVM.Testing;
+﻿using AncoraMVVM.Base.Files;
+using AncoraMVVM.Testing;
 using NSubstitute;
+using Ocell.Tests.Mocks;
 
 namespace Ocell.Tests
 {
@@ -7,7 +9,10 @@ namespace Ocell.Tests
     {
         public override T GetSubstituteFor<T>()
         {
-            return Substitute.For<T>();
+            if (typeof(T) == typeof(IFileManager))
+                return (T)(object)new MockFileManager();
+            else
+                return Substitute.For<T>();
         }
 
         public MockProvider()
