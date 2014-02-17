@@ -108,6 +108,9 @@ namespace Ocell
             {
                 await VoiceCommandService.InstallCommandSetsFromFileAsync(new Uri("ms-appx:///VoiceReco/VoiceCommandDefinition.xml"));
                 TrialInformation.ReloadTrialInfo();
+
+                ((PhoneApplicationFrame)App.Current.RootVisual).Background = Config.Background.Value.GetBrush();
+
             }
             catch (Exception ex)
             {

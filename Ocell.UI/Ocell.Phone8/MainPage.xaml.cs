@@ -52,6 +52,7 @@ namespace Ocell
             string column;
             NavigationContext.QueryString.TryGetValue("column", out column);
             viewModel.RaiseNavigatedTo(this, e, column);
+
             base.OnNavigatedTo(e);
         }
 
@@ -62,9 +63,6 @@ namespace Ocell
 
             if (!CheckForLogin())
                 return;
-
-            var frame = Application.Current.RootVisual as PhoneApplicationFrame;
-            frame.Background = Config.Background.Value.GetBrush();
 
             viewModel.RaiseLoggedInChange();
             viewModel.OnLoad();
