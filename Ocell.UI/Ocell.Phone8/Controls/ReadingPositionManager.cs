@@ -20,6 +20,9 @@ namespace Ocell.Controls
         public bool Bound { get; protected set; }
         public void Bind(ExtendedListBox listbox)
         {
+            if (listbox.Loader == null)
+                return;
+
             lb = listbox;
             resource = listbox.Loader.Resource;
             lb.ManipulationStateChanged += lb_ManipulationStateChanged;
@@ -41,7 +44,9 @@ namespace Ocell.Controls
 
         public bool CanRecoverPosition()
         {
-            return Bound && lb != null && Config.ReadPositions.Value.ContainsKey(resource.String);
+            long id;
+            return Bound && lb != null && Config.ReadPositions.Value.TryGetValue(resource.String, out id)
+                            && !lb.VisibleItems.Any(x => x.Id == id);
         }
 
         private ITweetable GetFirstVisibleItem()

@@ -200,6 +200,7 @@
     <Compile Include="MetroInMotion.cs" />
     <Compile Include="Notificator.cs" />
     <Compile Include="OcellThemeExtensions.cs" />
+    <Compile Include="Pages\ColumnModel.cs" />
     <Compile Include="Pages\Columns\AddColumn.xaml.cs">
       <DependentUpon>AddColumn.xaml</DependentUpon>
     </Compile>

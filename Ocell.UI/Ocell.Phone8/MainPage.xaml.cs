@@ -6,6 +6,7 @@ using Ocell.Compatibility;
 using Ocell.Controls;
 using Ocell.Library;
 using Ocell.Library.Twitter;
+using Ocell.Pages;
 using Ocell.Settings;
 using System;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace Ocell
 
             viewModel = new MainPageModel();
             DataContext = viewModel;
-            this.Loaded += new RoutedEventHandler(CallLoadFunctions);
+            this.Loaded += CallLoadFunctions;
 
             LastErrorTime = DateTime.MinValue;
             LastReloadTime = DateTime.MinValue;
@@ -51,7 +52,7 @@ namespace Ocell
         {
             string column;
             NavigationContext.QueryString.TryGetValue("column", out column);
-            viewModel.RaiseNavigatedTo(this, e, column);
+            viewModel.OnNavigation( column);
 
             base.OnNavigatedTo(e);
         }
@@ -161,70 +162,15 @@ namespace Ocell
             if (list == null)
                 return;
 
-            var tag = list.Tag;
+            var context = list.DataContext as ColumnModel;
 
-            TwitterResource Resource = new TwitterResource();
+            if (context == null)
+                return;
 
-            if (tag is TwitterResource)
-            {
-                Resource = (TwitterResource)tag;
-                list.Resource = Resource;
-            }
-
-            list.Loader.LoadCache();
+            context.Listbox = list;
 
             FilterManager.SetupFilter(list);
-
-            list.Loader.ActivateLoadMoreButton = true;
-            list.Loader.TweetsToLoadPerRequest = (int)Config.TweetsPerRequest.Value;
-            list.Loader.LoadRetweetsAsMentions = (bool)Config.RetweetAsMentions.Value;
-
-            bool isListLoading = false;
-            list.Loader.PropertyChanged += (sender1, e1) =>
-            {
-                if (e1.PropertyName == "IsLoading" && list.Loader.IsLoading != isListLoading)
-                {
-                    isListLoading = list.Loader.IsLoading;
-                    Dependency.Resolve<IProgressIndicator>().IsLoading = list.Loader.IsLoading;
-                }
-            };
-
-            viewModel.ScrollToTop += (sender1, e1) =>
-            {
-                if (e1.BroadcastAll || e1.Resource == Resource)
-                    list.ScrollToTop();
-            };
-
-            viewModel.ReloadLists += (sender1, e1) =>
-            {
-                if (e1.BroadcastAll || e1.Resource == Resource)
-                    ThreadPool.QueueUserWorkItem((context) => list.AutoReload());
-            };
-
-            viewModel.CheckIfCanResumePosition += (sender1, e1) =>
-            {
-                if (e1.Resource == list.Loader.Resource && Config.ReloadOptions.Value == ColumnReloadOptions.AskPosition)
-                    list.TryTriggerResumeReading();
-            };
-
-            list.ReadyToResumePosition += (sender1, e1) =>
-            {
-                var selectedPivot = (TwitterResource)viewModel.SelectedPivot;
-                if (list.Loader.Resource == selectedPivot)
-                {
-                    Dispatcher.BeginInvoke(() =>
-                    {
-                        long id;
-                        if (Config.ReadPositions.Value.TryGetValue(selectedPivot.String, out id)
-                            && !list.VisibleItems.Any(x => x.Id == id))
-                        {
-                            ShowResumePositionPrompt(list);
-                        }
-                    });
-                }
-            };
-
-
+                       
             list.AutoReload();
 
             Dispatcher.BeginInvoke(() =>
@@ -284,19 +230,19 @@ namespace Ocell
             SbHideDialog.Children.Add(hideAnim);
         }
 
-        private ExtendedListBox currentShowingList;
+        private ColumnModel currentShowingList;
         private void RecoverDialog_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             HideResumePositionPrompt();
 
             if (currentShowingList != null)
-                currentShowingList.ResumeReading();
+                currentShowingList.RecoverPosition();
         }
 
         private bool recoverDialogShown = false;
-        private void ShowResumePositionPrompt(ExtendedListBox list)
+        private void ShowResumePositionPrompt(ColumnModel model)
         {
-            currentShowingList = list;
+            currentShowingList = model;
 
             if (recoverDialogShown)
                 return;
@@ -383,11 +329,17 @@ namespace Ocell
             Dependency.Resolve<TileManager>().ClearMainTileCount();
         }
 
-        private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void TextBlock_Loaded(object sender, RoutedEventArgs e)
         {
-            var box = sender as TextBlock;
-            if (box != null && box.Tag is TwitterResource)
-                viewModel.RaiseScrollToTop((TwitterResource)box.Tag);
+            var textblock = sender as TextBlock;
+
+            if (textblock == null)
+                return;
+
+            var context = textblock.DataContext as ColumnModel;
+
+            if (context != null)
+                textblock.Tap += (s, r) => context.ScrollToTop();
         }
     }
 }

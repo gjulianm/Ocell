@@ -12,9 +12,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using TweetSharp;
 using AncoraMVVM.Base.Diagnostics;
+using PropertyChanged;
 
 namespace Ocell.Library.Twitter
 {
+    [ImplementPropertyChanged]
     public class TweetLoader : INotifyPropertyChanged
     {
         #region Properties
@@ -526,39 +528,6 @@ namespace Ocell.Library.Twitter
         {
             if (response.RateLimitStatus.RemainingHits <= 0)
                 rateResetTime = response.RateLimitStatus.ResetTime;
-        }
-        #endregion
-
-        #region Refresh handlers
-        Queue<ITweetable> _deferredItems = new Queue<ITweetable>();
-        bool allowOneRefresh = false;
-        object deferSync = new object();
-        bool deferringRefresh = false;
-
-        public void StopSourceRefresh()
-        {
-            lock (deferSync)
-                deferringRefresh = true;
-        }
-
-        public void ResumeSourceRefresh()
-        {
-            lock (deferSync)
-            {
-                deferringRefresh = false;
-
-                var list = _deferredItems.AsEnumerable().Except(Source);
-                TryAddLoadMoreButton(list);
-
-                foreach (var element in list)
-                    Source.Add(element);
-            }
-        }
-
-        public void AllowNextRefresh()
-        {
-            lock (deferSync)
-                allowOneRefresh = true;
         }
         #endregion
 

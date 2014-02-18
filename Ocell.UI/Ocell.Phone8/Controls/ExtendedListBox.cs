@@ -18,7 +18,32 @@ namespace Ocell.Controls
 {
     public class ExtendedListBox : LongListSelector
     {
-        public TweetLoader Loader;
+        public TweetLoader Loader
+        {
+            get { return (TweetLoader)GetValue(LoaderProperty); }
+            set { SetValue(LoaderProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Loader.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty LoaderProperty =
+            DependencyProperty.Register("Loader", typeof(TweetLoader), typeof(ExtendedListBox), new PropertyMetadata(null, OnLoaderChanged));
+
+        private static void OnLoaderChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var list = (ExtendedListBox)d;
+
+            list.OnLoaderChanged();
+        }
+
+        private void OnLoaderChanged()
+        {
+            if (Loader == null)
+                return;
+
+            Loader.Error += Loader_Error;
+            SetupCollectionViewSource();
+        }
+
         protected bool isLoading;
         protected bool selectionChangeFired;
         protected DateTime lastAutoReload;
@@ -84,7 +109,10 @@ namespace Ocell.Controls
         {
             get
             {
-                return Loader.Resource;
+                if (Loader != null)
+                    return Loader.Resource;
+                else
+                    return null;
             }
             set
             {
@@ -94,7 +122,8 @@ namespace Ocell.Controls
                     readingPosManager.Bind(this);
                 }
 
-                Loader.Resource = value;
+                if (Loader != null)
+                    Loader.Resource = value;
             }
         }
 
@@ -120,11 +149,6 @@ namespace Ocell.Controls
             this.ItemUnrealized += OnItemUnrealized;
 
             ExtendedListBox.SaveViewports += this.SaveInstanceViewport;
-
-            Loader.Error += new TweetLoader.OnError(Loader_Error);
-            Loader.CacheLoad += new EventHandler(Loader_CacheLoad);
-            Loader.LoadFinished += Loader_LoadFinished;
-            SetupCollectionViewSource();
 
             this.Background = new SolidColorBrush(Colors.Transparent);
 
@@ -178,12 +202,14 @@ namespace Ocell.Controls
         #region Tweetloader communication
         public void Load()
         {
-            Loader.Load();
+            if (Loader != null)
+                Loader.Load();
         }
 
         public void LoadOld()
         {
-            Loader.Load(true);
+            if (Loader != null)
+                Loader.Load(true);
         }
 
 
@@ -202,25 +228,9 @@ namespace Ocell.Controls
             }
         }
 
-
-        void Loader_CacheLoad(object sender, EventArgs e)
+        public bool CanRecoverPosition()
         {
-            if (Config.ReloadOptions.Value == ColumnReloadOptions.AskPosition)
-                TryTriggerResumeReading();
-            else if (Config.ReloadOptions.Value == ColumnReloadOptions.KeepPosition && readingPosManager.CanRecoverPosition())
-                readingPosManager.RecoverPosition();
-            else
-                goTopOnNextLoad = true;
-
-        }
-
-        public void TryTriggerResumeReading()
-        {
-            if (readingPosManager.CanRecoverPosition())
-            {
-                if (ReadyToResumePosition != null)
-                    ReadyToResumePosition(this, new EventArgs());
-            }
+            return readingPosManager.CanRecoverPosition();
         }
 
         public void ResumeReading()
@@ -229,14 +239,6 @@ namespace Ocell.Controls
                 readingPosManager.RecoverPosition();
         }
 
-        void Loader_LoadFinished(object sender, EventArgs e)
-        {
-            if (goTopOnNextLoad)
-            {
-                goTopOnNextLoad = false;
-                ScrollToTop();
-            }
-        }
 
         public event EventHandler ReadyToResumePosition;
         #endregion
@@ -263,13 +265,15 @@ namespace Ocell.Controls
         #region Scroll to top
         public void ScrollToTop()
         {
+            if (Loader == null)
+                return;
+
             var dispatcher = Deployment.Current.Dispatcher;
             if (dispatcher.CheckAccess())
                 DoScrollToTop();
             else
                 dispatcher.BeginInvoke(DoScrollToTop);
 
-            Loader.ResumeSourceRefresh();
         }
 
         private void DoScrollToTop()
@@ -284,7 +288,6 @@ namespace Ocell.Controls
         #region Load More
         public void LoadIntermediate(LoadMoreTweetable trigger)
         {
-            Loader.AllowNextRefresh();
             Loader.LoadFrom(trigger.Id + 1);
         }
 
@@ -307,7 +310,7 @@ namespace Ocell.Controls
         {
             var viewport = VisibleItems.ToList();
 
-            if (viewport.Count == 0)
+            if (viewport.Count == 0 || Loader == null)
                 return;
 
             var vpMaxId = viewport.Max(x => x.Id);

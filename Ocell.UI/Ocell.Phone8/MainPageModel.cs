@@ -1,8 +1,10 @@
 ﻿using AncoraMVVM.Base;
 using Microsoft.Phone.Tasks;
+using Ocell.Controls;
 using Ocell.Library;
 using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
+using Ocell.Pages;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,70 +15,40 @@ using System.Windows.Input;
 
 namespace Ocell
 {
-    public class BroadcastArgs : EventArgs
-    {
-        public TwitterResource Resource { get; set; }
-        public bool BroadcastAll { get; set; }
-
-        public BroadcastArgs(TwitterResource resource, bool broadcastToAll = false)
-        {
-            Resource = resource;
-            BroadcastAll = broadcastToAll;
-        }
-    }
-
-    public delegate void BroadcastEventHandler(object sender, BroadcastArgs e);
-
     public class MainPageModel : ExtendedViewModelBase
     {
         DateTime lastAutoReload;
         const int secondsBetweenReloads = 25;
-        
+
         #region Events
-        public event BroadcastEventHandler ScrollToTop;
         public void RaiseScrollToTop(TwitterResource resource)
         {
-            var temp = ScrollToTop;
-            if (temp != null)
-                temp(this, new BroadcastArgs(resource));
-        }
+            var pivot = Pivots.FirstOrDefault(x => x.Resource == resource);
 
-        public event BroadcastEventHandler ReloadLists;
-        private void RaiseReload(TwitterResource resource)
-        {
-            var temp = ReloadLists;
-            if (temp != null)
-                temp(this, new BroadcastArgs(resource, false));
+            if (pivot != null)
+                pivot.ScrollToTop();
         }
-
-        private void RaiseReloadAll()
-        {
-            var temp = ReloadLists;
-            if (temp != null)
-                temp(this, new BroadcastArgs(Config.Columns.Value.FirstOrDefault(), true));
-        }
-
-        public event BroadcastEventHandler CheckIfCanResumePosition;
-        private void RaiseCheckIfCanResumePosition(TwitterResource resource)
-        {
-            var temp = CheckIfCanResumePosition;
-            if (temp != null)
-                temp(this, new BroadcastArgs(resource, false));
-        }
+        public Action<ColumnModel> ShowRecoverPositionPrompt;
         #endregion
 
         public bool HasLoggedIn { get { return Config.Accounts.Value.Any(); } }
-        public ObservableCollection<TwitterResource> Pivots { get; set; }
-        public object SelectedPivot { get; set; }
+        public ObservableCollection<ColumnModel> Pivots { get; set; }
+        public ColumnModel SelectedPivot { get; set; }
         public string CurrentAccountName { get; set; }
         public bool IsSearching { get; set; }
         public string UserSearch { get; set; }
         public int PreloadedLists { get; set; }
         public bool PreloadComplete { get { return PreloadedLists == Config.Columns.Value.Count; } }
-        
+
         public void RaiseLoggedInChange()
         {
             RaisePropertyChanged("HasLoggedIn");
+        }
+
+        public void ReloadAll()
+        {
+            foreach (var pivot in Pivots)
+                pivot.AutoLoad();
         }
 
         #region Commands
@@ -115,7 +87,7 @@ namespace Ocell
         {
             pinToStart = new DelegateCommand((obj) =>
                 {
-                    var column = (TwitterResource)SelectedPivot;
+                    var column = SelectedPivot.Resource;
                     /*if (Dependency.Resolve<TileManager>().ColumnTileIsCreated(column))
                         Notificator.ShowError("This column is already pinned.");
                     else
@@ -128,7 +100,7 @@ namespace Ocell
 
             filterColumn = new DelegateCommand((obj) =>
             {
-                var column = (TwitterResource)SelectedPivot;
+                var column = SelectedPivot.Resource;
                 DataTransfer.cFilter = Config.Filters.Value.FirstOrDefault(item => item.Resource == column);
 
                 if (DataTransfer.cFilter == null)
@@ -186,10 +158,9 @@ namespace Ocell
                 Config.DefaultMuteTime.Value = TimeSpan.FromHours(8);
 
             lastAutoReload = DateTime.MinValue;
-            Pivots = new ObservableCollection<TwitterResource>();
+            Pivots = new ObservableCollection<ColumnModel>();
 
-            foreach (var pivot in Ocell.Library.Config.Columns.Value)
-                Pivots.Add(pivot);
+            Pivots.AddListRange(Config.Columns.Value.Select(x => new ColumnModel(x)));
 
             Config.Columns.Value.CollectionChanged += (sender, e) =>
             {
@@ -199,8 +170,8 @@ namespace Ocell
                         {
                             foreach (var item in e.NewItems)
                             {
-                                if ((item is TwitterResource) && !Pivots.Contains((TwitterResource)item))
-                                    Pivots.Add((TwitterResource)item);
+                                if ((item is TwitterResource) && !Pivots.Any(x => x.Resource == (TwitterResource)item))
+                                    Pivots.Add(new ColumnModel((TwitterResource)item));
                             }
                         }
 
@@ -208,8 +179,12 @@ namespace Ocell
                         {
                             foreach (var item in e.OldItems)
                             {
-                                if ((item is TwitterResource) && Pivots.Contains((TwitterResource)item))
-                                    Pivots.Remove((TwitterResource)item);
+                                if (item is TwitterResource)
+                                {
+                                    var pivot = Pivots.FirstOrDefault(x => x.Resource == (TwitterResource)item);
+                                    if (pivot != null)
+                                        Pivots.Remove(pivot);
+                                }
                             }
                         }
                     });
@@ -228,24 +203,24 @@ namespace Ocell
 
         void UpdatePivot()
         {
-            if (SelectedPivot is TwitterResource)
-            {
-                var resource = (TwitterResource)SelectedPivot;
 
-                if (resource.User == null)
-                    return;
+            var resource = SelectedPivot.Resource;
 
-                CurrentAccountName = resource.User.ScreenName.ToUpperInvariant();
-                ThreadPool.QueueUserWorkItem((context) => RaiseReload(resource));
-                DataTransfer.CurrentAccount = resource.User;
-                RaiseCheckIfCanResumePosition(resource);
-            }
+            if (resource.User == null)
+                return;
+
+            CurrentAccountName = resource.User.ScreenName.ToUpperInvariant();
+            ThreadPool.QueueUserWorkItem((context) => SelectedPivot.AutoLoad());
+            DataTransfer.CurrentAccount = resource.User;
+
+            if (SelectedPivot.CanRecoverPosition())
+                ShowRecoverPositionPrompt(SelectedPivot);
         }
 
         bool firstNavigation = true;
-        public void RaiseNavigatedTo(object sender, System.Windows.Navigation.NavigationEventArgs e, string column)
+        public void OnNavigation(string column)
         {
-            ThreadPool.QueueUserWorkItem((context) => RaiseReloadAll());
+            ThreadPool.QueueUserWorkItem((context) => ReloadAll());
 
             if (firstNavigation)
             {
@@ -253,13 +228,12 @@ namespace Ocell
                 {
                     column = Uri.UnescapeDataString(column);
 
-                    if (Config.Columns.Value.Any(item => item.String == column))
-                        SelectedPivot = Config.Columns.Value.First(item => item.String == column);
+                    SelectedPivot = Pivots.FirstOrDefault(item => item.Resource != null && item.Resource.String == column);
+                    SelectedPivot = SelectedPivot ?? Pivots.FirstOrDefault();
                 }
                 else
                 {
-                    if (Config.Columns.Value.Any())
-                        SelectedPivot = Config.Columns.Value.First();
+                    SelectedPivot = Pivots.FirstOrDefault();
                 }
                 firstNavigation = false;
             }
