@@ -67,7 +67,6 @@ namespace Ocell
             OAuthUtility.ComputeHash = (key, buffer) => { using (var hmac = new HMACSHA1(key)) { return hmac.ComputeHash(buffer); } };
 
             Dependency.Register<IUserProvider, UserProvider>();
-            Dependency.Register<IScrollController, DummyScrollController>();
             Dependency.Register<IReadingPositionManager, WP8ReadingPositionManager>();
             Dependency.Register<IInfiniteScroller, WP8InfiniteScroller>();
             Dependency.Register<IListboxCompressionDetector, WP8PullDetector>();

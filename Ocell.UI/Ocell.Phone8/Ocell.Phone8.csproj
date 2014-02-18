@@ -171,9 +171,7 @@
     <Compile Include="Controls\Interfaces\IInfiniteScroller.cs" />
     <Compile Include="Controls\Interfaces\IPullDetector.cs" />
     <Compile Include="Controls\Interfaces\IReadingPositionManager.cs" />
-    <Compile Include="Controls\Interfaces\IScrollController.cs" />
     <Compile Include="Controls\ReadingPositionManager.cs" />
-    <Compile Include="Controls\ScrollController.cs" />
     <Compile Include="Controls\WP8InfiniteScroller.cs" />
     <Compile Include="Controls\WP8PullDetector.cs" />
     <Compile Include="Crypto\CryptoManager.cs" />

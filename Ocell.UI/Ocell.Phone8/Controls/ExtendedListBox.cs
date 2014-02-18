@@ -18,15 +18,12 @@ namespace Ocell.Controls
 {
     public class ExtendedListBox : LongListSelector
     {
-        // Compression states: Thanks to http://blogs.msdn.com/b/slmperf/archive/2011/06/30/windows-phone-mango-change-listbox-how-to-detect-compression-end-of-scroll-states.aspx
         public TweetLoader Loader;
-        private ColumnFilter filter;
         protected bool isLoading;
         protected bool selectionChangeFired;
         protected DateTime lastAutoReload;
         protected TimeSpan autoReloadInterval = TimeSpan.FromSeconds(60);
         protected static DateTime lastErrorFired;
-        protected IScrollController scrollController;
         protected IReadingPositionManager readingPosManager;
         protected IListboxCompressionDetector pullDetector;
         private bool goTopOnNextLoad = false;
@@ -50,6 +47,7 @@ namespace Ocell.Controls
         public string NavigationUri { get; set; }
         public bool AutoManageErrors { get; set; }
 
+        private ColumnFilter filter;
         public ColumnFilter Filter
         {
             get
@@ -81,7 +79,6 @@ namespace Ocell.Controls
                     return viewportItems.Keys.ToList();
             }
         }
-
 
         public TwitterResource Resource
         {
@@ -131,7 +128,6 @@ namespace Ocell.Controls
 
             this.Background = new SolidColorBrush(Colors.Transparent);
 
-            scrollController = Dependency.Resolve<IScrollController>();
             readingPosManager = Dependency.Resolve<IReadingPositionManager>();
             pullDetector = Dependency.Resolve<IListboxCompressionDetector>();
         }
@@ -182,13 +178,11 @@ namespace Ocell.Controls
         #region Tweetloader communication
         public void Load()
         {
-            scrollController.LoadCalled(-1);
             Loader.Load();
         }
 
         public void LoadOld()
         {
-            scrollController.LoadCalled(-2);
             Loader.Load(true);
         }
 
@@ -211,9 +205,6 @@ namespace Ocell.Controls
 
         void Loader_CacheLoad(object sender, EventArgs e)
         {
-            if (!scrollController.Bound)
-                Dependency.Resolve<IDispatcher>().InvokeIfRequired(() => scrollController.Bind(this));
-
             if (Config.ReloadOptions.Value == ColumnReloadOptions.AskPosition)
                 TryTriggerResumeReading();
             else if (Config.ReloadOptions.Value == ColumnReloadOptions.KeepPosition && readingPosManager.CanRecoverPosition())
@@ -283,24 +274,16 @@ namespace Ocell.Controls
 
         private void DoScrollToTop()
         {
-#if WP8
             var first = Loader.Source.FirstOrDefault();
 
             if (first != null)
                 ScrollTo(first);
-#elif WP7
-            if(scrollViewer != null)
-            {
-                scrollViewer.ScrollToVerticalOffset(0);
-            }
-#endif
         }
         #endregion
 
         #region Load More
         public void LoadIntermediate(LoadMoreTweetable trigger)
         {
-            scrollController.LoadCalled();
             Loader.AllowNextRefresh();
             Loader.LoadFrom(trigger.Id + 1);
         }
