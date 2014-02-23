@@ -274,7 +274,7 @@ namespace Ocell.Library.Twitter
             foreach (var task in tasks)
             {
                 RequestsInProgress++;
-                task.ContinueWith((t) => ReceiveResponse(task, toITweetableFunc));
+                task.ContinueWith((t) => ReceiveResponse(t, toITweetableFunc));
             }
         }
 
@@ -353,6 +353,20 @@ namespace Ocell.Library.Twitter
                 yield return service.SearchAsync(new SearchOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true, Q = Resource.Data, MaxId = last });
             }
         }
+
+        protected async Task<T> ExceptionControlWrap<T>(Task<T> task)
+        {
+            try
+            {
+                return await task;
+            }
+            catch(Exception e)
+            {
+                AncoraLogger.Instance.LogException("Exception wrapped and controlled", e);
+                throw e;
+            }
+        }
+
         #endregion
 
         #region Receivers
@@ -362,7 +376,7 @@ namespace Ocell.Library.Twitter
 
             if (task.IsFaulted)
             {
-                Debug.WriteLine("Task faulted: {0}", task.Exception);
+                AncoraLogger.Instance.LogException("Error on task execution", task.Exception);
                 return;
             }
 

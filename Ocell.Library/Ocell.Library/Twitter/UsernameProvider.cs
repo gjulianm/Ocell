@@ -1,9 +1,11 @@
 ﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Diagnostics;
 using AncoraMVVM.Base.Files;
 using AncoraMVVM.Base.IoC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using TweetSharp;
 
@@ -117,7 +119,19 @@ namespace Ocell.Library.Twitter
 
         protected static async void FillUserNamesFor(UserToken user, long cursor)
         {
-            var response = await ServiceDispatcher.GetService(user).ListFriendsAsync(new ListFriendsOptions { ScreenName = user.ScreenName, Cursor = cursor });
+            TwitterResponse<TwitterCursorList<TwitterUser>> response;
+
+            try
+            {
+                response = await ServiceDispatcher.GetService(user).ListFriendsAsync(new ListFriendsOptions { ScreenName = user.ScreenName, Cursor = cursor });
+            }
+            catch (Exception ex)
+            {
+                AncoraLogger.Instance.LogException("Web exception trying to retrieve usernames.", ex);
+                TaskEx.Delay(500).ContinueWith((t) => FillUserNamesFor(user, cursor));
+                return;
+            }
+
 
             if (!response.RequestSucceeded)
                 return;
@@ -136,7 +150,7 @@ namespace Ocell.Library.Twitter
             else
             {
                 finishedUsers[user] = true;
-                SaveUserCache(user, dicUsers[user]);
+                await SaveUserCache(user, dicUsers[user]);
             }
         }
 
