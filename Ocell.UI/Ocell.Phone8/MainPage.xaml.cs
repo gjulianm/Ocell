@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using TweetSharp;
@@ -38,6 +39,9 @@ namespace Ocell
             LastErrorTime = DateTime.MinValue;
             LastReloadTime = DateTime.MinValue;
 
+            CreateStoryboards();
+            viewModel.ShowRecoverPositionPrompt = ShowResumePositionPrompt;
+
             SetupRecoverDialogGestures();
         }
 
@@ -52,7 +56,7 @@ namespace Ocell
         {
             string column;
             NavigationContext.QueryString.TryGetValue("column", out column);
-            viewModel.OnNavigation( column);
+            viewModel.OnNavigation(column);
 
             base.OnNavigatedTo(e);
         }
@@ -69,7 +73,6 @@ namespace Ocell
             viewModel.OnLoad();
 
             GeolocationPrompt();
-            CreateStoryboards();
             ShowFollowMessage();
 
             if (Config.PushEnabled == true || (Config.PushEnabled == null && AskForPushPermission()))
@@ -247,8 +250,12 @@ namespace Ocell
             if (recoverDialogShown)
                 return;
 
-            SbShowDialog.BeginTime = TimeSpan.FromSeconds(2);
-            SbShowDialog.Begin();
+
+            Dispatcher.BeginInvoke(() =>
+            {
+                SbShowDialog.BeginTime = TimeSpan.FromSeconds(2);
+                SbShowDialog.Begin();
+            });
 
             recoverDialogShown = true;
         }
@@ -264,7 +271,7 @@ namespace Ocell
                 return;
 
             if (delay)
-                SbHideDialog.BeginTime = TimeSpan.FromSeconds(6);
+                SbHideDialog.BeginTime = TimeSpan.FromSeconds(8);
             else
                 SbHideDialog.BeginTime = TimeSpan.FromSeconds(0);
 
@@ -274,23 +281,22 @@ namespace Ocell
         private void SetupRecoverDialogGestures()
         {
             // TODO: solve deprecation.
-            var gestureListener = GestureService.GetGestureListener(RecoverDialog);
-            gestureListener.DragDelta += RecoverDiag_DragDelta;
-            gestureListener.DragCompleted += RecoverDiag_DragEnd;
+            RecoverDialog.ManipulationDelta += RecoverDiag_DragDelta;
+            RecoverDialog.ManipulationCompleted += RecoverDiag_DragEnd;
         }
 
-        private void RecoverDiag_DragDelta(object sender, DragDeltaGestureEventArgs e)
+        private void RecoverDiag_DragDelta(object sender, ManipulationDeltaEventArgs e)
         {
-            ((TranslateTransform)RecoverDialog.RenderTransform).X += e.HorizontalChange;
+            ((TranslateTransform)RecoverDialog.RenderTransform).X += e.DeltaManipulation.Translation.X;
         }
 
-        private void RecoverDiag_DragEnd(object sender, DragCompletedGestureEventArgs e)
+        private void RecoverDiag_DragEnd(object sender, ManipulationCompletedEventArgs e)
         {
-            if (e.Direction == System.Windows.Controls.Orientation.Horizontal && e.HorizontalChange > 0)
+            if (e.TotalManipulation.Translation.X != 0)
             {
-                // Nice, it was a flick which moved the dialog to the right. Now, let's see if the user moved it enough to hide it.
+                // Nice, it was a flick which moved the dialog laterally. Now, let's see if the user moved it enough to hide it.
                 var moveNeeded = 0.40; // 40% of the dialog must have been moved to the right.
-                var actualMove = e.HorizontalChange / RecoverDialog.Width;
+                var actualMove = e.TotalManipulation.Translation.X / RecoverDialog.Width;
 
                 if (actualMove >= moveNeeded)
                     HideResumePositionPrompt(false);

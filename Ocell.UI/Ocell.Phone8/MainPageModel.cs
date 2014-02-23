@@ -28,7 +28,7 @@ namespace Ocell
             if (pivot != null)
                 pivot.ScrollToTop();
         }
-        public Action<ColumnModel> ShowRecoverPositionPrompt;
+        public Action<ColumnModel> ShowRecoverPositionPrompt { get; set; }
         #endregion
 
         public bool HasLoggedIn { get { return Config.Accounts.Value.Any(); } }
@@ -162,6 +162,14 @@ namespace Ocell
 
             Pivots.AddListRange(Config.Columns.Value.Select(x => new ColumnModel(x)));
 
+            foreach (var p in Pivots)
+            {
+                p.RequestRecoverPositionPopup += (sender, e) =>
+                {
+                    ShowRecoverPositionPrompt(sender as ColumnModel);
+                };
+            }
+
             Config.Columns.Value.CollectionChanged += (sender, e) =>
             {
                 Dispatcher.InvokeIfRequired(() =>
@@ -191,19 +199,16 @@ namespace Ocell
             };
 
             this.PropertyChanged += (sender, e) =>
-                {
-                    if (e.PropertyName == "SelectedPivot")
-                        UpdatePivot();
-                };
-
-
+            {
+                if (e.PropertyName == "SelectedPivot")
+                    UpdatePivot();
+            };
 
             SetUpCommands();
         }
 
         void UpdatePivot()
         {
-
             var resource = SelectedPivot.Resource;
 
             if (resource.User == null)
