@@ -22,7 +22,7 @@ namespace Ocell.Settings
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
             
             
-            DataContext = new DefaultModel();
+            DataContext = new SetingsModel();
         }
         
 
@@ -45,7 +45,7 @@ namespace Ocell.Settings
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            (DataContext as DefaultModel).Navigated();
+            (DataContext as SetingsModel).Navigated();
             base.OnNavigatedTo(e);
         }
     }

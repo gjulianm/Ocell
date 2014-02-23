@@ -13,7 +13,7 @@ using System.Windows.Input;
 namespace Ocell.Settings
 {
     [ImplementPropertyChanged]
-    public class DefaultModel : ExtendedViewModelBase
+    public class SetingsModel : ExtendedViewModelBase
     {
         public string InstapaperUser { get; set; }
         public string InstapaperPassword { get; set; }
@@ -188,7 +188,7 @@ namespace Ocell.Settings
                 return 20;
         }
 
-        public DefaultModel()
+        public SetingsModel()
         {
             SelectedFontSize = FontSizeToIndex(((GlobalSettings)App.Current.Resources["GlobalSettings"]).
                             TweetFontSize);
