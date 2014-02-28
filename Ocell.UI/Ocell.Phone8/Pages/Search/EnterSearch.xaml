@@ -5,6 +5,7 @@
 	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ac="clr-namespace:AncoraMVVM.Phone;assembly=AncoraMVVM.Phone7"
 	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
 	x:Class="Ocell.Pages.Search.EnterSearch"
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -33,7 +34,7 @@
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 			<Grid x:Name="ContentPanel" Margin="4,144,8,0" d:LayoutOverrides="GridBox">
                 <TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment"><Run Text="{Binding Strings.EnterQuery, Source={StaticResource LocalizedResources}}"/></TextBlock>
-                <TextBox x:Name="SearchQuery" Text="{Binding Query, Mode=TwoWay, UpdateSourceTrigger=Explicit}"  Margin="0,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" d:LayoutOverrides="Width"/>
+                <TextBox ac:TextBoxUpdater.UpdateBindingOnChange="True" Text="{Binding Query, Mode=TwoWay, UpdateSourceTrigger=Explicit}"  Margin="0,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" d:LayoutOverrides="Width"/>
 				<Button Content="{Binding Strings.Search_CapitalFirst, Source={StaticResource LocalizedResources}}" Margin="104,111,104,0" VerticalAlignment="Top" Command="{Binding ButtonClick}"/>
 			</Grid>
 		</Grid>

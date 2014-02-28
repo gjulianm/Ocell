@@ -17,19 +17,17 @@ namespace Ocell
     public partial class UserList : PhoneApplicationPage
     {
         UserListModel viewModel;
-
         public UserList()
         {
             InitializeComponent();
-            viewModel = new UserListModel();
-            DataContext = viewModel;
-
             
             this.Loaded += (sender, e) =>
             {
+                viewModel = DataContext as UserListModel;
                 string resource, user;
                 if (!NavigationContext.QueryString.TryGetValue("resource", out resource) || !NavigationContext.QueryString.TryGetValue("user", out user))
                 {
+                    // TODO: Move this to messages.
                     Dispatcher.BeginInvoke(() => {
                         MessageBox.Show("An error has occurred.", "Error", MessageBoxButton.OK);
                         NavigationService.GoBack();

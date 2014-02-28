@@ -5,25 +5,21 @@ using Microsoft.Phone.Controls;
 using TweetSharp;
 using Ocell.Library;
 using Ocell.Library.Twitter;
+using AncoraMVVM.Base.ViewModelLocator;
 
 namespace Ocell.Pages.Search
 {
+    [ViewModel(typeof(ResourceViewModel))]
     public partial class Search : PhoneApplicationPage
     {
-        private ResourceViewModel viewModel;
-
         public Search()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            viewModel = new ResourceViewModel();
-            DataContext = viewModel;
-
-            
         }
 
         private void TweetList_Loaded(object sender, RoutedEventArgs e)
         {
-            viewModel.Listbox = TweetList;
+            (DataContext as ResourceViewModel).Listbox = TweetList;
 
             TweetList.AutoManageNavigation = true;
             TweetList.ActivatePullToRefresh = true;

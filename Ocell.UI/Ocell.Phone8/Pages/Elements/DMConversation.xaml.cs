@@ -1,21 +1,21 @@
 ﻿using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
+using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Pages.Elements;
 using System.Linq;
 using System.Windows;
+using TweetSharp;
 
 namespace Ocell
 {
+    [ViewModel(typeof(DMConversationModel))]
     public partial class DMConversation : PhoneApplicationPage
     {
-        DMConversationModel viewModel = new DMConversationModel();
         public DMConversation()
         {
-            InitializeComponent();
-
             InitializeComponent();
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
 
@@ -26,8 +26,6 @@ namespace Ocell
                     if (e.PropertyName == "IsLoading")
                         Dependency.Resolve<IProgressIndicator>().IsLoading = List.Loader.IsLoading;
                 };
-
-            DataContext = viewModel;
         }
 
         void DMConversation_Loaded(object sender, RoutedEventArgs e)
@@ -38,8 +36,7 @@ namespace Ocell
                 return;
             }
 
-            // TODO: Add range to DM.
-            // List.Loader.Source.AddRange(DataTransfer.DMGroup.Messages.Cast<ITweetable>());
+            List.Loader.Source.AddRange(DataTransfer.DMGroup.Messages.Cast<ITweetable>());
 
             string pairName = DataTransfer.DMGroup.Messages.First().GetPairName(DataTransfer.CurrentAccount);
 
@@ -51,7 +48,7 @@ namespace Ocell
             };
 
             List.Loader.Resource = resource;
-            viewModel.PairName = pairName;
+            (DataContext as DMConversationModel).PairName = pairName;
         }
     }
 }

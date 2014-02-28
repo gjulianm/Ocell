@@ -38,11 +38,6 @@ namespace Ocell.Pages.Elements
             viewSource.Source = list;
             viewSource.View.SortDescriptions.Add(new System.ComponentModel.SortDescription("ScreenName", System.ComponentModel.ListSortDirection.Ascending));
 
-
-
-
-
-
             this.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == "SelectedUser")
@@ -56,7 +51,7 @@ namespace Ocell.Pages.Elements
                 }
             };
         }
-
+        
         public void Loaded(string resource, string userName)
         {
             whatUserList = resource;

@@ -10,13 +10,12 @@ using Ocell.Library.Twitter;
 
 namespace Ocell.Pages.Columns
 {
+    // TODO: Come on...
     public partial class ManageColumns : PhoneApplicationPage
     {
         public ManageColumns()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
-            
-            
 
             this.Loaded += new RoutedEventHandler(ManageColumns_Loaded);
         }

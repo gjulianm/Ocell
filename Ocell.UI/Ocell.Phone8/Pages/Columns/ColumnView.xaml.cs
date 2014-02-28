@@ -10,18 +10,17 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using AncoraMVVM.Base.ViewModelLocator;
 
 namespace Ocell.Pages.Columns
 {
+    [ViewModel(typeof(ColumnViewModel))]
     public partial class ColumnView : PhoneApplicationPage
     {
         public ColumnView()
         {
             InitializeComponent(); 
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            
-
-            DataContext = new ColumnViewModel();
         }
     }
 }

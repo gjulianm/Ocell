@@ -8,6 +8,7 @@ using System.Windows.Controls;
 
 namespace Ocell.Pages.Filtering
 {
+    // TODO: HOLY FUCKING SHIT. were you drunk?
     public partial class Filters : PhoneApplicationPage
     {
         public Filters()

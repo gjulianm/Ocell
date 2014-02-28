@@ -10,16 +10,16 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using AncoraMVVM.Base.ViewModelLocator;
 
 namespace Ocell.Pages.Settings
 {
+    [ViewModel(typeof(BackgroundsModel))]
     public partial class Backgrounds : PhoneApplicationPage
     {
         public Backgrounds()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
-
-            DataContext = new BackgroundsModel();
         }
     }
 }

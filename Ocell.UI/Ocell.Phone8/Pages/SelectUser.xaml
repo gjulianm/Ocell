@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
+    xmlns:ac="clr-namespace:AncoraMVVM.Phone;assembly=AncoraMVVM.Phone7"
     x:Class="Ocell.Pages.SelectUser"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
@@ -65,7 +66,7 @@
                 <TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" TextWrapping="Wrap" Text="{Binding Strings.From, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
                 <toolkit:ListPicker x:Name="AccountsPicker" FullModeItemTemplate="{StaticResource FullModeItemTemplate}" ExpansionMode="FullScreenOnly" Margin="12,39,20,0" VerticalAlignment="Top" ItemsSource="{Binding Accounts}" SelectedItem="{Binding Sender, Mode=TwoWay}" ItemTemplate="{StaticResource UserFromTemplate}"/>
                 <TextBlock HorizontalAlignment="Left" Margin="8,117,0,0" TextWrapping="Wrap" Text="{Binding Strings.To, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" RenderTransformOrigin="0.667,0.926" Foreground="{StaticResource PhoneSubtleBrush}"/>
-                <TextBox x:Name="UserFilter" Margin="0,139,8,0" Text="{Binding UserFilter, Mode=TwoWay, UpdateSourceTrigger=Explicit}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                <TextBox x:Name="UserFilter" ac:TextBoxUpdater.UpdateBindingOnChange="True" Margin="0,139,8,0" Text="{Binding UserFilter, Mode=TwoWay, UpdateSourceTrigger=Explicit}" TextWrapping="Wrap" VerticalAlignment="Top"/>
     			<ListBox x:Name="UserList" Margin="12,211,20,8" ItemsSource="{Binding Collection.View}" SelectedItem="{Binding Destinatary, Mode=TwoWay}" ItemTemplate="{StaticResource UserTemplate}" />
     		</Grid>
 

@@ -7,13 +7,12 @@ using Ocell.Library.Twitter;
 
 namespace Ocell
 {
+    // TODO: Where am I using this?
     public partial class SelectAccount : PhoneApplicationPage
     {
         public SelectAccount()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-             
-            
 
             this.Loaded += new RoutedEventHandler(SelectAccount_Loaded);
         }

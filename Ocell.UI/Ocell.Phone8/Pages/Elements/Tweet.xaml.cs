@@ -1,8 +1,7 @@
 ﻿
 using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
-
-
+using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
@@ -22,6 +21,7 @@ using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
+    [ViewModel(typeof(TweetModel))]
     public partial class Tweet : PhoneApplicationPage
     {
         TweetModel viewModel;
@@ -33,19 +33,8 @@ namespace Ocell.Pages.Elements
         {
             InitializeComponent();
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-
-            viewModel = new TweetModel();
-            DataContext = viewModel;
-
+            
             this.Loaded += new RoutedEventHandler(Tweet_Loaded);
-
-            viewModel.TweetSent += (s, e) =>
-            {
-                conversation.Loader.Source.Insert(0, e.Payload);
-                TBNoFocus();
-            };
-
-
 
             panorama.SelectionChanged += (sender, e) =>
             {
@@ -67,6 +56,13 @@ namespace Ocell.Pages.Elements
 
         void Tweet_Loaded(object sender, RoutedEventArgs e)
         {
+            viewModel = DataContext as TweetModel;
+            viewModel.TweetSent += (s, ev) =>
+            {
+                conversation.Loader.Source.Insert(0, ev.Payload);
+                TBNoFocus();
+            };
+
             sbShow = this.Resources["sbShow"] as Storyboard;
             sbHide = this.Resources["sbHide"] as Storyboard;
 

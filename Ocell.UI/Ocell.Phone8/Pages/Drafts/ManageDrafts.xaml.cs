@@ -12,14 +12,15 @@ using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Ocell.Library;
 using Ocell.Library.Twitter;
+using AncoraMVVM.Base.ViewModelLocator;
 
 namespace Ocell
 {
+    [ViewModel(typeof(ManageDraftsModel))]
     public partial class ManageDrafts : PhoneApplicationPage
     {
         private bool _selectionChangeFired;
 
-        private ManageDraftsModel viewModel;
 
         public ManageDrafts()
         {
@@ -27,8 +28,6 @@ namespace Ocell
             
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
              
-            viewModel = new ManageDraftsModel();
-            DataContext = viewModel;
             _selectionChangeFired = false;
         }
 
@@ -53,7 +52,8 @@ namespace Ocell
 
         private void Grid_Hold(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            viewModel.GridHold(sender, e);
+            // TODO: WTF.
+            (DataContext as ManageDraftsModel).GridHold(sender, e);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
+using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Ocell.Library;
@@ -9,19 +10,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-#if WP8
-
-#endif
-
 namespace Ocell.Pages
 {
+    [ViewModel(typeof(NewTweetModel))]
     public partial class NewTweet : PhoneApplicationPage
     {
         protected bool SendingDM;
         public ApplicationBarIconButton SendButton;
         private Autocompleter _completer;
-        NewTweetModel viewModel = new NewTweetModel();
-
+        NewTweetModel viewModel;
 
         public NewTweet()
         {
@@ -33,28 +30,14 @@ namespace Ocell.Pages
                 viewModel.TryLoadDraft();
             };
 
-
-            DataContext = viewModel;
-
             Loaded += NewTweet_Loaded;
             Unloaded += NewTweet_Unloaded;
             TweetBox.TextChanged += OnTextBoxTextChanged;
 
             GeolocImg.Tap += (sender, e) =>
-                {
-                    viewModel.IsGeotagged = !viewModel.IsGeotagged;
-                };
-
-            viewModel.PropertyChanged += (sender, e) =>
-                {
-                    if (e.PropertyName == "IsGeotagged")
-                    {
-                        if (viewModel.IsGeotagged)
-                            Dependency.Resolve<IDispatcher>().InvokeIfRequired(EnableGeoloc.Begin);
-                        else
-                            Dependency.Resolve<IDispatcher>().InvokeIfRequired(DisableGeoloc.Begin);
-                    }
-                };
+            {
+                viewModel.IsGeotagged = !viewModel.IsGeotagged;
+            };
         }
 
         private void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)
@@ -79,6 +62,18 @@ namespace Ocell.Pages
 
         void NewTweet_Loaded(object sender, RoutedEventArgs e)
         {
+            viewModel = DataContext as NewTweetModel;
+            viewModel.PropertyChanged += (s, ev) =>
+            {
+                if (ev.PropertyName == "IsGeotagged")
+                {
+                    if (viewModel.IsGeotagged)
+                        Dependency.Resolve<IDispatcher>().InvokeIfRequired(EnableGeoloc.Begin);
+                    else
+                        Dependency.Resolve<IDispatcher>().InvokeIfRequired(DisableGeoloc.Begin);
+                }
+            };
+
             string RemoveBack;
             if (NavigationContext.QueryString.TryGetValue("removeBack", out RemoveBack) || RemoveBack == "1")
             {

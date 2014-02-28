@@ -137,21 +137,23 @@
                 </Grid>
             </ScrollViewer>
 
-            <appbar:Bindable.ApplicationBar>
-                <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
-                    <appbar:BindableAppBar.MenuItems>
-                        <appbar:BindableAppBarHyperlinkMenuItem Text="{Binding Strings.Drafts, Source={StaticResource LocalizedResources}}" Uri="/Pages/Drafts/ManageDrafts.xaml" />
-                    </appbar:BindableAppBar.MenuItems>
-                    <appbar:BindableAppBarToggleButton Toggled="{Binding IsScheduled}"
-                    Text1="{Binding Strings.Send, Source={StaticResource LocalizedResources}}" IconUri1="/Images/Icons_White/appbar.sendmail.rest.png" Command1="{Binding SendTweet}"
-                    Text2="{Binding Strings.Schedule, Source={StaticResource LocalizedResources}}" IconUri2="/Images/Icons_White/appbar.alarm.rest.png" Command2="{Binding ScheduleTweet}" />
-                    <appbar:BindableAppBarButton Text="{Binding Strings.SendWithBuffer, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.bufferapp.rest.png" Command="{Binding SendWithBuffer}" />
-                    <appbar:BindableAppBarButton Text="{Binding Strings.AddImage, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.feature.camera.rest.png" Command="{Binding SelectImage}" />
-                    <appbar:BindableAppBarButton Text="{Binding Strings.SaveDraft, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.save.rest.png" Command="{Binding SaveDraft}" />
-                </appbar:BindableAppBar>
-            </appbar:Bindable.ApplicationBar>
+            
         </Grid>
 
     </Grid>
+
+    <appbar:Bindable.ApplicationBar>
+        <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
+            <appbar:BindableAppBar.MenuItems>
+                <appbar:BindableAppBarHyperlinkMenuItem Text="{Binding Strings.Drafts, Source={StaticResource LocalizedResources}}" Uri="/Pages/Drafts/ManageDrafts.xaml" />
+            </appbar:BindableAppBar.MenuItems>
+            <appbar:BindableAppBarToggleButton Toggled="{Binding IsScheduled}"
+                    Text1="{Binding Strings.Send, Source={StaticResource LocalizedResources}}" IconUri1="/Images/Icons_White/appbar.sendmail.rest.png" Command1="{Binding SendTweet}"
+                    Text2="{Binding Strings.Schedule, Source={StaticResource LocalizedResources}}" IconUri2="/Images/Icons_White/appbar.alarm.rest.png" Command2="{Binding ScheduleTweet}" />
+            <appbar:BindableAppBarButton Text="{Binding Strings.SendWithBuffer, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.bufferapp.rest.png" Command="{Binding SendWithBuffer}" />
+            <appbar:BindableAppBarButton Text="{Binding Strings.AddImage, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.feature.camera.rest.png" Command="{Binding SelectImage}" />
+            <appbar:BindableAppBarButton Text="{Binding Strings.SaveDraft, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.save.rest.png" Command="{Binding SaveDraft}" />
+        </appbar:BindableAppBar>
+    </appbar:Bindable.ApplicationBar>
 
 </phone:PhoneApplicationPage>

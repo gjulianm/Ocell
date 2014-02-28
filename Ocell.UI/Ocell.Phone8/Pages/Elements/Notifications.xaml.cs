@@ -9,21 +9,16 @@ using Ocell.Library;
 using Ocell.Library.Twitter;
 using TweetSharp;
 using System.Collections.Generic;
+using AncoraMVVM.Base.ViewModelLocator;
 
 namespace Ocell.Pages.Elements
 {
+    [ViewModel(typeof(NotificationsModel))]
     public partial class Notifications : PhoneApplicationPage
     {
-        NotificationsModel viewModel;
-
         public Notifications()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };  
-            
-
-            viewModel  = new NotificationsModel();
-            this.DataContext = viewModel;
-            this.Loaded += (s, e) => viewModel.OnLoad(); 
         }
     }
 }

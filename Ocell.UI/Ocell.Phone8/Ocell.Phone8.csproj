@@ -196,19 +196,19 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPageModel.cs" />
-    <Compile Include="MetroInMotion.cs" />
+    <Compile Include="ViewModels\MainPageModel.cs" />
+    <Compile Include="ViewModels\MetroInMotion.cs" />
     <Compile Include="Notificator.cs" />
     <Compile Include="OcellThemeExtensions.cs" />
-    <Compile Include="Pages\ColumnModel.cs" />
+    <Compile Include="ViewModels\ColumnModel.cs" />
     <Compile Include="Pages\Columns\AddColumn.xaml.cs">
       <DependentUpon>AddColumn.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Columns\AddColumnModel.cs" />
+    <Compile Include="ViewModels\AddColumnModel.cs" />
     <Compile Include="Pages\Columns\ColumnView.xaml.cs">
       <DependentUpon>ColumnView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Columns\ColumnViewModel.cs" />
+    <Compile Include="ViewModels\ColumnViewModel.cs" />
     <Compile Include="Pages\Columns\ManageColumns.xaml.cs">
       <DependentUpon>ManageColumns.xaml</DependentUpon>
     </Compile>
@@ -218,30 +218,30 @@
     <Compile Include="Pages\Drafts\ManageDrafts.xaml.cs">
       <DependentUpon>ManageDrafts.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Drafts\ManageDraftsModel.cs" />
+    <Compile Include="ViewModels\ManageDraftsModel.cs" />
     <Compile Include="Pages\Elements\DMConversation.xaml.cs">
       <DependentUpon>DMConversation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Elements\DMConversationModel.cs" />
+    <Compile Include="ViewModels\DMConversationModel.cs" />
     <Compile Include="Pages\Elements\DMView.xaml.cs">
       <DependentUpon>DMView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Elements\Notifications.xaml.cs">
       <DependentUpon>Notifications.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Elements\NotificationsModel.cs" />
+    <Compile Include="ViewModels\NotificationsModel.cs" />
     <Compile Include="Pages\Elements\Tweet.xaml.cs">
       <DependentUpon>Tweet.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Elements\TweetModel.cs" />
+    <Compile Include="ViewModels\TweetModel.cs" />
     <Compile Include="Pages\Elements\User.xaml.cs">
       <DependentUpon>User.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Elements\UserList.xaml.cs">
       <DependentUpon>UserList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Elements\UserListModel.cs" />
-    <Compile Include="Pages\Elements\UserModel.cs" />
+    <Compile Include="ViewModels\UserListModel.cs" />
+    <Compile Include="ViewModels\UserModel.cs" />
     <Compile Include="Pages\Filtering\Filters.xaml.cs">
       <DependentUpon>Filters.xaml</DependentUpon>
     </Compile>
@@ -257,42 +257,42 @@
     <Compile Include="Pages\NewTweet.xaml.cs">
       <DependentUpon>NewTweet.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\NewTweetModel.cs" />
+    <Compile Include="ViewModels\NewTweetModel.cs" />
     <Compile Include="Pages\Pages.cs" />
     <Compile Include="Pages\ResourceView.xaml.cs">
       <DependentUpon>ResourceView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ResourceViewModel.cs" />
+    <Compile Include="ViewModels\ResourceViewModel.cs" />
     <Compile Include="Pages\Search\EnterSearch.xaml.cs">
       <DependentUpon>EnterSearch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Search\EnterSearchModel.cs" />
+    <Compile Include="ViewModels\EnterSearchModel.cs" />
     <Compile Include="Pages\SelectUser.xaml.cs">
       <DependentUpon>SelectUser.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SelectUserModel.cs" />
+    <Compile Include="ViewModels\SelectUserModel.cs" />
     <Compile Include="Pages\Settings\Backgrounds.xaml.cs">
       <DependentUpon>Backgrounds.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Settings\BackgroundsModel.cs" />
-    <Compile Include="Pages\Settings\BufferOAuthModel.cs" />
+    <Compile Include="ViewModels\Settings\BackgroundsModel.cs" />
+    <Compile Include="ViewModels\Settings\BufferOAuthModel.cs" />
     <Compile Include="Pages\Settings\CouponCodes.xaml.cs">
       <DependentUpon>CouponCodes.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Settings\CouponCodesModel.cs" />
+    <Compile Include="ViewModels\Settings\CouponCodesModel.cs" />
     <Compile Include="Pages\Settings\Default.xaml.cs">
       <DependentUpon>Default.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Settings\DefaultModel.cs" />
+    <Compile Include="ViewModels\Settings\SettingsModel.cs" />
     <Compile Include="Pages\Settings\OAuth.xaml.cs">
       <DependentUpon>OAuth.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Settings\OAuthModel.cs" />
-    <Compile Include="Pages\Settings\TwitterOAuthModel.cs" />
+    <Compile Include="ViewModels\Settings\OAuthModel.cs" />
+    <Compile Include="ViewModels\Settings\TwitterOAuthModel.cs" />
     <Compile Include="Pages\Topics.xaml.cs">
       <DependentUpon>Topics.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\TopicsModel.cs" />
+    <Compile Include="ViewModels\TopicsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PushNotifications.cs" />
     <Compile Include="SampleCollections.cs" />
@@ -639,10 +639,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Filtering\Filters.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\Filtering\ImageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

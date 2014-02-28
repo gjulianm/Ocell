@@ -30,7 +30,7 @@ namespace Ocell.Pages.Search
 
             this.PropertyChanged += (sender, property) =>
                 {
-                    if (property.PropertyName == "Listbox")
+                    if (property.PropertyName == "Listbox" && Listbox != null)
                         UpdateTweetLoader();
                 };
 

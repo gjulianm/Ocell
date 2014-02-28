@@ -61,22 +61,22 @@ namespace Ocell.Pages
                 Navigator.Navigate(new Uri("/Pages/NewTweet.xaml?removeBack=1", UriKind.Relative));
 
             }, (obj) =>
-                {
-                    return Destinatary != null && Sender != null;
-                });
+            {
+                return Destinatary != null && Sender != null;
+            });
 
             this.PropertyChanged += (sender, e) =>
-                {
-                    if (e.PropertyName == "Destinatary")
-                        DestinataryUpdated();
-                    else if (e.PropertyName == "Sender")
-                        SenderUpdated();
-                    else if (e.PropertyName == "UserFilter")
-                        UserFilterUpdated();
-                };
+            {
+                if (e.PropertyName == "Destinatary")
+                    DestinataryUpdated();
+                else if (e.PropertyName == "Sender")
+                    SenderUpdated();
+                else if (e.PropertyName == "UserFilter")
+                    UserFilterUpdated();
+            };
         }
 
-        public void Loaded()
+        public override void OnLoad()
         {
             Sender = Config.Accounts.Value.FirstOrDefault();
         }

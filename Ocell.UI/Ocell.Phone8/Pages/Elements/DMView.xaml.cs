@@ -16,6 +16,7 @@ using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
+    // TODO: WTH is this.
     public partial class DMView : PhoneApplicationPage
     {
         public TweetSharp.TwitterDirectMessage status;

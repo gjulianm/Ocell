@@ -11,18 +11,17 @@ using Ocell.Library.Notifications;
 using Ocell.Library.ReadLater.Pocket;
 using Ocell.Library.ReadLater.Instapaper;
 using Ocell.Library.ReadLater;
+using AncoraMVVM.Base.ViewModelLocator;
 
 namespace Ocell.Settings
 {
+    [ViewModel(typeof(SettingsModel))]
     public partial class Default : PhoneApplicationPage
     {
         public Default()
         {
             InitializeComponent(); 
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            
-            
-            DataContext = new SetingsModel();
         }
         
 
@@ -45,7 +44,7 @@ namespace Ocell.Settings
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            (DataContext as SetingsModel).Navigated();
+            (DataContext as SettingsModel).Navigated();
             base.OnNavigatedTo(e);
         }
     }

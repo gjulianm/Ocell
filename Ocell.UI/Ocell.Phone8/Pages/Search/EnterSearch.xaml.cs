@@ -20,18 +20,6 @@ namespace Ocell.Pages.Search
         public EnterSearch()
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); }; 
-                        
-            DataContext = new EnterSearchModel();
-            SearchQuery.TextChanged += OnTextBoxTextChanged;
-            
-        }
-
-        private void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            // Update the binding source
-            BindingExpression bindingExpr = textBox.GetBindingExpression(TextBox.TextProperty);
-            bindingExpr.UpdateSource();
         }
     }
 }

@@ -17,16 +17,13 @@ namespace Ocell.Pages.Elements
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
 
-
-
-            viewModel = new UserModel();
-            DataContext = viewModel;
-
             this.Loaded += (sender, e) =>
                 {
+                    viewModel = DataContext as UserModel;
                     string userName;
                     if (!NavigationContext.QueryString.TryGetValue("user", out userName))
                     {
+                        // TODO: Move this to messaging.
                         NavigationService.GoBack();
                         return;
                     }
