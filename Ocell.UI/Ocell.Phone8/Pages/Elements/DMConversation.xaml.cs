@@ -11,6 +11,7 @@ using TweetSharp;
 
 namespace Ocell
 {
+    // Probably this doesn't work pretty good.
     [ViewModel(typeof(DMConversationModel))]
     public partial class DMConversation : PhoneApplicationPage
     {
@@ -19,13 +20,12 @@ namespace Ocell
             InitializeComponent();
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
 
-
             Loaded += new RoutedEventHandler(DMConversation_Loaded);
             List.Loader.PropertyChanged += (sender, e) =>
-                {
-                    if (e.PropertyName == "IsLoading")
-                        Dependency.Resolve<IProgressIndicator>().IsLoading = List.Loader.IsLoading;
-                };
+            {
+                if (e.PropertyName == "IsLoading")
+                    Dependency.Resolve<IProgressIndicator>().IsLoading = List.Loader.IsLoading;
+            };
         }
 
         void DMConversation_Loaded(object sender, RoutedEventArgs e)

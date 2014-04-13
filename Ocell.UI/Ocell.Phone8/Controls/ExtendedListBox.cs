@@ -5,6 +5,7 @@ using Microsoft.Phone.Controls;
 using Ocell.Library;
 using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
+using Ocell.Pages.Elements;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -355,14 +356,14 @@ namespace Ocell.Controls
                 selectionChangeFired = true;
                 SelectedItem = null;
 
+                // TODO: Solve this navigation.
+
                 if (e.AddedItems[0] is TwitterStatus)
                     NavigationService.Navigate(new Uri("/Pages/Elements/Tweet.xaml?id=" + DataTransfer.Status.Id.ToString(), UriKind.Relative));
-                else if (e.AddedItems[0] is TwitterDirectMessage)
-                    NavigationService.Navigate(Uris.ViewDM);
                 else if (e.AddedItems[0] is GroupedDM)
                 {
                     DataTransfer.DMGroup = e.AddedItems[0] as GroupedDM;
-                    NavigationService.Navigate(Uris.DMConversation);
+                    NavigationService.Navigate<DMConversationModel>();
                 }
                 else if (e.AddedItems[0] is LoadMoreTweetable)
                 {

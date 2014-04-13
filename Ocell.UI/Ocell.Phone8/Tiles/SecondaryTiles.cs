@@ -1,16 +1,7 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Microsoft.Phone.Shell;
-using System.Linq;
+﻿using Microsoft.Phone.Shell;
 using Ocell.Library.Twitter;
+using System;
+using System.Linq;
 
 
 namespace Ocell
@@ -21,16 +12,16 @@ namespace Ocell
         {
             if (ShellTile.ActiveTiles.Count() == 0)
                 return false;
-            ShellTile ComposeTile = ShellTile.ActiveTiles.FirstOrDefault(item => item != null 
-                && !string.IsNullOrWhiteSpace(item.NavigationUri.ToString()) && 
+            ShellTile ComposeTile = ShellTile.ActiveTiles.FirstOrDefault(item => item != null
+                && !string.IsNullOrWhiteSpace(item.NavigationUri.ToString()) &&
                 item.NavigationUri.ToString().Contains("NewTweet.xaml"));
             return ComposeTile != null;
         }
 
         public static bool ColumnTileIsCreated(TwitterResource Resource)
         {
-            ShellTile ColumnTile = ShellTile.ActiveTiles.FirstOrDefault(item => item != null 
-                && !string.IsNullOrWhiteSpace(item.NavigationUri.ToString()) && 
+            ShellTile ColumnTile = ShellTile.ActiveTiles.FirstOrDefault(item => item != null
+                && !string.IsNullOrWhiteSpace(item.NavigationUri.ToString()) &&
                 item.NavigationUri.ToString().Contains(Uri.EscapeDataString(Resource.String)));
             return ColumnTile != null;
         }
@@ -46,9 +37,7 @@ namespace Ocell
                 BackgroundImage = new Uri("/Images/ComposeTile.png", UriKind.Relative)
             };
 
-            Uri ComposeUri = Uris.WriteTweet;
-
-            ShellTile.Create(ComposeUri, ComposeTile);
+            ShellTile.Create(new Uri("/Pages/NewTweet.xaml", UriKind.Relative), ComposeTile);
         }
 
         private static string GetTitle(TwitterResource Resource)

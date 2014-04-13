@@ -213,9 +213,6 @@
     <Compile Include="Pages\Columns\ManageColumns.xaml.cs">
       <DependentUpon>ManageColumns.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Columns\SelectAccount.xaml.cs">
-      <DependentUpon>SelectAccount.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Drafts\ManageDrafts.xaml.cs">
       <DependentUpon>ManageDrafts.xaml</DependentUpon>
     </Compile>
@@ -243,18 +240,6 @@
     </Compile>
     <Compile Include="ViewModels\UserListModel.cs" />
     <Compile Include="ViewModels\UserModel.cs" />
-    <Compile Include="Pages\Filtering\Filters.xaml.cs">
-      <DependentUpon>Filters.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Filtering\ManageFilter.xaml.cs">
-      <DependentUpon>ManageFilter.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Lists\CreateList.xaml.cs">
-      <DependentUpon>CreateList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Lists\ListManager.xaml.cs">
-      <DependentUpon>ListManager.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\NewTweet.xaml.cs">
       <DependentUpon>NewTweet.xaml</DependentUpon>
     </Compile>
@@ -599,10 +584,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Columns\SelectAccount.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Pages\Drafts\ManageDrafts.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -628,22 +609,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Elements\UserList.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\Filtering\Filters.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\Filtering\ManageFilter.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\Lists\CreateList.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\Lists\ListManager.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

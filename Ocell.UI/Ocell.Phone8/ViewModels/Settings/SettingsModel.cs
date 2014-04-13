@@ -101,69 +101,67 @@ namespace Ocell.Settings
             });
 
             editFilters = new DelegateCommand((obj) =>
-                {
-                    DataTransfer.cFilter = Config.GlobalFilter.Value;
-                    DataTransfer.IsGlobalFilter = true;
-                    Navigator.Navigate(Uris.Filters);
-                });
+            {
+                Notificator.ShowError("Deprecated!!!!!");
+            });
 
             saveCredentials = new DelegateCommand(async (obj) =>
+            {
+                AuthPair PocketPair = null;
+                AuthPair InstapaperPair = null;
+
+                if (!string.IsNullOrWhiteSpace(PocketUser))
                 {
-                    AuthPair PocketPair = null;
-                    AuthPair InstapaperPair = null;
+                    Progress.Text = Resources.VerifyingCredentials;
+                    Progress.IsLoading = true;
+                    PocketPair = new AuthPair { User = PocketUser, Password = PocketPassword };
+                    var service = new PocketService(PocketPair.User, PocketPair.Password);
+                    var response = await service.CheckCredentials();
 
-                    if (!string.IsNullOrWhiteSpace(PocketUser))
+                    if (response.Succeeded)
                     {
-                        Progress.Text = Resources.VerifyingCredentials;
-                        Progress.IsLoading = true;
-                        PocketPair = new AuthPair { User = PocketUser, Password = PocketPassword };
-                        var service = new PocketService(PocketPair.User, PocketPair.Password);
-                        var response = await service.CheckCredentials();
-
-                        if (response.Succeeded)
-                        {
-                            Notificator.ShowProgressIndicatorMessage(String.Format(Resources.CredentialsSaved, "Pocket"));
-                            Config.ReadLaterCredentials.Value.Pocket = PocketPair;
-                            Config.ReadLaterCredentials.Value = Config.ReadLaterCredentials.Value;
-                        }
-                        else
-                        {
-                            Progress.IsLoading = false;
-                            Notificator.ShowError(String.Format(Resources.InvalidCredentials, "Pocket"));
-                        }
+                        Notificator.ShowProgressIndicatorMessage(String.Format(Resources.CredentialsSaved, "Pocket"));
+                        Config.ReadLaterCredentials.Value.Pocket = PocketPair;
+                        Config.ReadLaterCredentials.Value = Config.ReadLaterCredentials.Value;
                     }
                     else
                     {
-                        Config.ReadLaterCredentials.Value.Pocket = null;
-                        Config.ReadLaterCredentials.Value = Config.ReadLaterCredentials.Value;
+                        Progress.IsLoading = false;
+                        Notificator.ShowError(String.Format(Resources.InvalidCredentials, "Pocket"));
                     }
+                }
+                else
+                {
+                    Config.ReadLaterCredentials.Value.Pocket = null;
+                    Config.ReadLaterCredentials.Value = Config.ReadLaterCredentials.Value;
+                }
 
-                    if (!string.IsNullOrWhiteSpace(InstapaperUser))
+                if (!string.IsNullOrWhiteSpace(InstapaperUser))
+                {
+                    Progress.Text = Resources.VerifyingCredentials;
+                    Progress.IsLoading = true;
+                    InstapaperPair = new AuthPair { User = InstapaperUser, Password = InstapaperPassword };
+                    var service = new InstapaperService(InstapaperPair.User, InstapaperPair.Password);
+                    var response = await service.CheckCredentials();
+
+                    if (response.Succeeded)
                     {
-                        Progress.Text = Resources.VerifyingCredentials;
-                        Progress.IsLoading = true;
-                        InstapaperPair = new AuthPair { User = InstapaperUser, Password = InstapaperPassword };
-                        var service = new InstapaperService(InstapaperPair.User, InstapaperPair.Password);
-                        var response = await service.CheckCredentials();
-
-                        if (response.Succeeded)
-                        {
-                            Notificator.ShowProgressIndicatorMessage(String.Format(Resources.CredentialsSaved, "Instapaper"));
-                            Config.ReadLaterCredentials.Value.Instapaper = InstapaperPair;
-                            Config.ReadLaterCredentials.Value = Config.ReadLaterCredentials.Value;
-                        }
-                        else
-                        {
-                            Progress.IsLoading = false;
-                            Notificator.ShowError(String.Format(Resources.InvalidCredentials, "Instapaper"));
-                        }
+                        Notificator.ShowProgressIndicatorMessage(String.Format(Resources.CredentialsSaved, "Instapaper"));
+                        Config.ReadLaterCredentials.Value.Instapaper = InstapaperPair;
+                        Config.ReadLaterCredentials.Value = Config.ReadLaterCredentials.Value;
                     }
                     else
                     {
-                        Config.ReadLaterCredentials.Value.Pocket = null;
-                        Config.ReadLaterCredentials.Value = Config.ReadLaterCredentials.Value;
+                        Progress.IsLoading = false;
+                        Notificator.ShowError(String.Format(Resources.InvalidCredentials, "Instapaper"));
                     }
-                });
+                }
+                else
+                {
+                    Config.ReadLaterCredentials.Value.Pocket = null;
+                    Config.ReadLaterCredentials.Value = Config.ReadLaterCredentials.Value;
+                }
+            });
         }
 
         #endregion Commands

@@ -1,14 +1,10 @@
 ﻿using AncoraMVVM.Base;
 using Microsoft.Phone.Tasks;
-using Ocell.Controls;
 using Ocell.Library;
-using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
 using Ocell.Pages;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using System.Windows.Input;
@@ -97,19 +93,6 @@ namespace Ocell
 
 
             pinToStart.BindCanExecuteToProperty(this, "SelectedPivot");
-
-            filterColumn = new DelegateCommand((obj) =>
-            {
-                var column = SelectedPivot.Resource;
-                DataTransfer.cFilter = Config.Filters.Value.FirstOrDefault(item => item.Resource == column);
-
-                if (DataTransfer.cFilter == null)
-                    DataTransfer.cFilter = new ColumnFilter { Resource = column };
-
-                DataTransfer.IsGlobalFilter = false;
-                Navigator.Navigate(Uris.Filters);
-
-            }, (obj) => SelectedPivot != null);
 
             filterColumn.BindCanExecuteToProperty(this, "SelectedPivot");
 

@@ -222,7 +222,7 @@ namespace Ocell.Pages.Elements
             quote = new DelegateCommand((obj) =>
             {
                 DataTransfer.Text = "RT @" + Tweet.Author.ScreenName + ": " + Tweet.Text;
-                Navigator.Navigate(Uris.WriteTweet);
+                Notificator.ShowError("Fix this,."); // TODO: Exactly that.
             }, obj => Config.Accounts.Value.Any() && Tweet != null);
 
             // TODO: These are the same commands that are used globally. WTF.

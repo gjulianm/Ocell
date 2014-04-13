@@ -8,6 +8,7 @@ using Ocell.Library.ReadLater.Instapaper;
 using Ocell.Library.ReadLater.Pocket;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using Ocell.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,7 @@ namespace Ocell.Commands
                 DataTransfer.ReplyingDM = true;
             }
 
-            Dependency.Resolve<INavigationService>().Navigate(Uris.WriteTweet);
+            Dependency.Resolve<INavigationService>().Navigate<NewTweetModel>();
         }
 
         public event EventHandler CanExecuteChanged;
@@ -72,7 +73,7 @@ namespace Ocell.Commands
             DataTransfer.ReplyId = tweet.Id;
             DataTransfer.Text = GetReplied(tweet);
 
-            Dependency.Resolve<INavigationService>().Navigate(Uris.WriteTweet);
+            Dependency.Resolve<INavigationService>().Navigate<NewTweetModel>();
         }
 
         public event EventHandler CanExecuteChanged;
@@ -185,40 +186,6 @@ namespace Ocell.Commands
             {
                 Dependency.Resolve<INotificationService>().ShowError(Resources.ErrorMessage);
             }
-        }
-
-        public event EventHandler CanExecuteChanged;
-    }
-
-    public class ModifyFilterCommand : ICommand
-    {
-        public bool CanExecute(object parameter)
-        {
-            return parameter is ITweetableFilter;
-        }
-
-        public void Execute(object parameter)
-        {
-            DataTransfer.Filter = parameter as ITweetableFilter;
-            PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
-            service.Navigate(Uris.SingleFilter);
-        }
-
-        public event EventHandler CanExecuteChanged;
-    }
-
-    public class RemoveFilterCommand : ICommand
-    {
-        public bool CanExecute(object parameter)
-        {
-            return parameter is ITweetableFilter;
-        }
-
-        public void Execute(object parameter)
-        {
-            DataTransfer.cFilter.RemoveFilter(parameter as ITweetableFilter);
-            PhoneApplicationFrame service = ((PhoneApplicationFrame)Application.Current.RootVisual);
-            service.Navigate(Uris.Filters);
         }
 
         public event EventHandler CanExecuteChanged;

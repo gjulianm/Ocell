@@ -125,11 +125,6 @@ namespace Ocell.Pages.Elements
             }
         }
 
-        private void Replies_Tap(object sender, EventArgs e)
-        {
-            NavigationService.Navigate(Uris.Conversation);
-        }
-
         private ITweetableFilter CreateNewFilter(FilterType type, string data)
         {
             if (Config.GlobalFilter.Value == null)
