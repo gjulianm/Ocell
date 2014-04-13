@@ -1,4 +1,5 @@
 ﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Interfaces;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Pages.Search;
@@ -8,7 +9,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Device.Location;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using TweetSharp;
 
@@ -19,17 +19,11 @@ namespace Ocell.Pages
     public class TopicsModel : ExtendedViewModelBase
     {
         GeoCoordinateWatcher geoWatcher;
-
         public string PlaceName { get; set; }
-
         public object ListSelection { get; set; }
-
         public IEnumerable<TwitterTrend> Collection { get; set; }
-
         public ObservableCollection<string> Locations { get; set; }
-
         public string SelectedLocation { get; set; }
-
         Dictionary<string, long> LocationMap;
 
         DelegateCommand refresh;
@@ -176,13 +170,14 @@ namespace Ocell.Pages
             ListSelection = null;
 
             var resource = new TwitterResource
-               {
-                   Data = trend.Name,
-                   Type = ResourceType.Search,
-                   User = DataTransfer.CurrentAccount
-               };
-            ResourceViewModel.Resource = resource;
-            Navigator.Navigate(Uris.ResourceView);
+            {
+                Data = trend.Name,
+                Type = ResourceType.Search,
+                User = DataTransfer.CurrentAccount
+            };
+
+            Navigator.MessageAndNavigate<ResourceViewModel, TwitterResource>(resource);
         }
     }
 }
+

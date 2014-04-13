@@ -93,9 +93,7 @@ namespace Ocell.Pages.Elements
 
         private void Grid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + status.Author.ScreenName, UriKind.Relative));
+            Dependency.Resolve<INavigationService>().MessageAndNavigate<UserModel, string>(status.Author.ScreenName);
         }
-
     }
-
 }

@@ -1,4 +1,5 @@
 ﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Interfaces;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using PropertyChanged;
@@ -30,17 +31,16 @@ namespace Ocell.Pages.Search
             };
 
             buttonClick = new DelegateCommand((obj) =>
+            {
+                var resource = new TwitterResource
                 {
-                    var resource = new TwitterResource
-                    {
-                        User = DataTransfer.CurrentAccount ?? Config.Accounts.Value.FirstOrDefault(),
-                        Type = ResourceType.Search,
-                        Data = Query
-                    };
+                    User = DataTransfer.CurrentAccount ?? Config.Accounts.Value.FirstOrDefault(),
+                    Type = ResourceType.Search,
+                    Data = Query
+                };
 
-                    ResourceViewModel.Resource = resource;
-                    Navigator.Navigate(Uris.ResourceView);
-                }, (obj) => !string.IsNullOrWhiteSpace(Query));
+                Navigator.MessageAndNavigate<ResourceViewModel, TwitterResource>(resource);
+            }, (obj) => !string.IsNullOrWhiteSpace(Query));
         }
     }
 }

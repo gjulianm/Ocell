@@ -1,4 +1,5 @@
 ﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Interfaces;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Pages.Search;
@@ -138,8 +139,7 @@ namespace Ocell.Pages.Columns
 
         void NavigateToResource(TwitterResource resource)
         {
-            ResourceViewModel.Resource = resource;
-            Navigator.Navigate<ResourceViewModel>();
+            Navigator.MessageAndNavigate<ResourceViewModel, TwitterResource>(resource);
         }
 
         void GetLists()
