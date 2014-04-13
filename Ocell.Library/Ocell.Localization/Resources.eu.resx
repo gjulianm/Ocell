@@ -1179,4 +1179,7 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="ErrorRetweeting" xml:space="preserve">
+    <value>Errore bat gertatu bitartean retweet bidali nahian.</value>
+  </data>
 </root>

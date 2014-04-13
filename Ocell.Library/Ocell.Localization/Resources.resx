@@ -1227,4 +1227,7 @@
   <data name="NoNewNotifications" xml:space="preserve">
     <value>No new notifications.</value>
   </data>
+  <data name="ErrorRetweeting" xml:space="preserve">
+    <value>An error happened while trying to send the retweet.</value>
+  </data>
 </root>

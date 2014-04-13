@@ -1225,4 +1225,7 @@
   <data name="NoNewNotifications" xml:space="preserve">
     <value>No tienes notificaciones.</value>
   </data>
+  <data name="ErrorRetweeting" xml:space="preserve">
+    <value>Ha ocurrido un error al retuitear.</value>
+  </data>
 </root>

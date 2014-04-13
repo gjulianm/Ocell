@@ -69,6 +69,7 @@ namespace Ocell.Commands
 
         public void Execute(object parameter)
         {
+            // TODO: BAD
             ITweetable tweet = (ITweetable)parameter;
             DataTransfer.ReplyId = tweet.Id;
             DataTransfer.Text = GetReplied(tweet);
@@ -78,8 +79,6 @@ namespace Ocell.Commands
 
         public event EventHandler CanExecuteChanged;
     }
-
-    // TODO: Man, check the responses. That was lazy.
 
     public class RetweetCommand : ICommand
     {
@@ -93,9 +92,13 @@ namespace Ocell.Commands
         public async void Execute(object parameter)
         {
             Dependency.Resolve<IProgressIndicator>().IsLoading = true;
-            Dependency.Resolve<IProgressIndicator>().IsLoading = true;
-            await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).RetweetAsync(new RetweetOptions { Id = ((ITweetable)parameter).Id });
-            Dependency.Resolve<INotificationService>().ShowProgressIndicatorMessage(Resources.Retweeted);
+            var response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).RetweetAsync(new RetweetOptions { Id = ((ITweetable)parameter).Id });
+            var notificator = Dependency.Resolve<INotificationService>();
+
+            if (response.RequestSucceeded)
+                notificator.ShowProgressIndicatorMessage(Resources.Retweeted);
+            else
+                notificator.ShowError(Resources.ErrorRetweeting);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -115,13 +118,22 @@ namespace Ocell.Commands
             TwitterStatus param = (TwitterStatus)parameter;
             if (param.IsFavorited)
             {
-                await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
-                Dependency.Resolve<INotificationService>().ShowProgressIndicatorMessage(Resources.Unfavorited);
+                var response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
+                var notificator = Dependency.Resolve<INotificationService>();
+
+                if (response.RequestSucceeded)
+                    notificator.ShowProgressIndicatorMessage(Resources.Unfavorited);
+                else
+                    notificator.ShowError(Resources.ErrorMessage);
             }
             else
             {
-                await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
-                Dependency.Resolve<INotificationService>().ShowProgressIndicatorMessage(Resources.Favorited);
+                var response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
+                var notificator = Dependency.Resolve<INotificationService>();
+                if (response.RequestSucceeded)
+                    notificator.ShowProgressIndicatorMessage(Resources.Favorited);
+                else
+                    notificator.ShowError(Resources.ErrorMessage);
             }
         }
 

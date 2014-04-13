@@ -65,9 +65,7 @@ namespace Ocell.Pages.Columns
         object resourcesSync = new object();
         public SafeObservable<TwitterResource> Resources { get; set; }
 
-
         UserToken user;
-        int loading = 0;
         object loadingSync = new object();
 
         public string Username { get; set; }
@@ -159,8 +157,10 @@ namespace Ocell.Pages.Columns
             {
                 var service = ServiceDispatcher.GetService(user);
 
-                loading += 2;
+                Progress.IsLoading = true;
                 service.ListListsForAsync(new ListListsForOptions { ScreenName = user.ScreenName }).ContinueWith(ReceiveLists);
+
+                Progress.IsLoading = true;
                 service.ListSubscriptionsAsync(new ListSubscriptionsOptions { ScreenName = user.ScreenName }).ContinueWith(ReceiveSubscriptions);
             }
         }
@@ -169,10 +169,7 @@ namespace Ocell.Pages.Columns
         {
             var response = task.Result;
 
-            loading--;
-
-            if (loading <= 0)
-                Progress.IsLoading = false;
+            Progress.IsLoading = false;
 
             if (!response.RequestSucceeded)
                 Notificator.ShowError(Localization.Resources.ErrorLoadingLists);
@@ -184,10 +181,7 @@ namespace Ocell.Pages.Columns
         {
             var response = task.Result;
 
-            loading--;
-
-            if (loading <= 0)
-                Progress.IsLoading = false;
+            Progress.IsLoading = false;
 
             if (!response.RequestSucceeded)
                 Notificator.ShowError(Localization.Resources.ErrorLoadingLists);
@@ -243,14 +237,9 @@ namespace Ocell.Pages.Columns
         {
             var service = ServiceDispatcher.GetService(user);
 
-            loading++;
-
+            Progress.IsLoading = true;
             var response = await service.ListSavedSearchesAsync();
-
-            loading--;
-
-            if (loading <= 0)
-                Progress.IsLoading = false; // TODO: Refactor this.
+            Progress.IsLoading = false;
 
             if (!response.RequestSucceeded)
             {

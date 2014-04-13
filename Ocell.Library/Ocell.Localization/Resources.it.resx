@@ -1209,4 +1209,7 @@
   <data name="NoNewNotifications" xml:space="preserve">
     <value>Non ci sono notifiche.</value>
   </data>
+  <data name="ErrorRetweeting" xml:space="preserve">
+    <value>Un errore è accaduto durante il tentativo di inviare il tweet.</value>
+  </data>
 </root>
