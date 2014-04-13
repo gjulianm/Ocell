@@ -202,9 +202,6 @@
     <Compile Include="Notificator.cs" />
     <Compile Include="OcellThemeExtensions.cs" />
     <Compile Include="ViewModels\ColumnModel.cs" />
-    <Compile Include="Pages\Columns\AddColumn.xaml.cs">
-      <DependentUpon>AddColumn.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\AddColumnModel.cs" />
     <Compile Include="Pages\Columns\ColumnView.xaml.cs">
       <DependentUpon>ColumnView.xaml</DependentUpon>
@@ -221,9 +218,6 @@
       <DependentUpon>DMConversation.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\DMConversationModel.cs" />
-    <Compile Include="Pages\Elements\DMView.xaml.cs">
-      <DependentUpon>DMView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Elements\Notifications.xaml.cs">
       <DependentUpon>Notifications.xaml</DependentUpon>
     </Compile>
@@ -572,10 +566,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Columns\AddColumn.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Pages\Columns\ColumnView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -589,10 +579,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Elements\DMConversation.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\Elements\DMView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
