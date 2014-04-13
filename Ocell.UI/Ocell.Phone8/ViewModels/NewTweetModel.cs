@@ -1,4 +1,5 @@
 ﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Diagnostics;
 using Microsoft.Phone.Tasks;
 using Ocell.Library;
 using Ocell.Library.Tasks;
@@ -397,9 +398,9 @@ namespace Ocell.Pages
                 lock (dicLock)
                     TwitlongerIds.Add(account.ScreenName, post.Post.Id);
             }
-            catch
+            catch (Exception e)
             {
-                // TODO: Sometimes, this gives a weird OutOfRange exception. Don't know why, investigate it.
+                AncoraLogger.Instance.LogException("Unkown exception saving Twitlonger Ids", e);
             }
 
             SendTweetToTwitter(post.Post.Content, account);

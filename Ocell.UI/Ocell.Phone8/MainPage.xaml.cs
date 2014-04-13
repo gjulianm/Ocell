@@ -279,7 +279,6 @@ namespace Ocell
 
         private void SetupRecoverDialogGestures()
         {
-            // TODO: solve deprecation.
             RecoverDialog.ManipulationDelta += RecoverDiag_DragDelta;
             RecoverDialog.ManipulationCompleted += RecoverDiag_DragEnd;
         }

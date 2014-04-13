@@ -1,4 +1,5 @@
-﻿using AncoraMVVM.Base.Interfaces;
+﻿using AncoraMVVM.Base.Diagnostics;
+using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
 using Microsoft.Phone.Notification;
 using Ocell.Library;
@@ -8,10 +9,10 @@ using Ocell.Library.Twitter;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Linq;
 
 namespace Ocell
 {
@@ -172,8 +173,7 @@ namespace Ocell
         [Conditional("OCELL_FULL")]
         private static async void SendRemoveRequestToServer(UserToken token, string type)
         {
-            // TODO: TOkens.
-            string encoded = null; /*Library.Encrypting.EncodeTokens(token.Key, token.Secret); */
+            string encoded = TokenCombinator.EncodeTokens(token.Key, token.Secret);
             string url = string.Format(Library.SensitiveData.PushUnregisterUriFormat, Uri.EscapeDataString(encoded), type);
 
             var request = (HttpWebRequest)WebRequest.Create(url);
@@ -182,8 +182,9 @@ namespace Ocell
             {
                 var response = await request.GetResponseAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                AncoraLogger.Instance.LogException("Error sending delete request to server", ex);
             }
         }
     }

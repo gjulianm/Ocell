@@ -12,6 +12,7 @@ using Ocell.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TweetSharp;
@@ -113,28 +114,35 @@ namespace Ocell.Commands
                 DataTransfer.CurrentAccount != null;
         }
 
-        public async void Execute(object parameter)
+        public void Execute(object parameter)
+        {
+            var task = ExecuteAsync(parameter);
+        }
+
+        public async Task<bool> ExecuteAsync(object parameter)
         {
             TwitterStatus param = (TwitterStatus)parameter;
+            TwitterResponse<TwitterStatus> response;
+            var notificator = Dependency.Resolve<INotificationService>();
+            string successString = "";
+
             if (param.IsFavorited)
             {
-                var response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
-                var notificator = Dependency.Resolve<INotificationService>();
-
-                if (response.RequestSucceeded)
-                    notificator.ShowProgressIndicatorMessage(Resources.Unfavorited);
-                else
-                    notificator.ShowError(Resources.ErrorMessage);
+                response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
+                successString = Resources.Unfavorited;
             }
             else
             {
-                var response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
-                var notificator = Dependency.Resolve<INotificationService>();
-                if (response.RequestSucceeded)
-                    notificator.ShowProgressIndicatorMessage(Resources.Favorited);
-                else
-                    notificator.ShowError(Resources.ErrorMessage);
+                response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
+                successString = Resources.Favorited;
             }
+
+            if (response.RequestSucceeded)
+                notificator.ShowProgressIndicatorMessage(successString);
+            else
+                notificator.ShowError(Resources.ErrorMessage);
+
+            return response.RequestSucceeded;
         }
 
         public event EventHandler CanExecuteChanged;

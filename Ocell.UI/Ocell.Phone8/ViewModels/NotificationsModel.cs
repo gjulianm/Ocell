@@ -114,8 +114,7 @@ namespace Ocell.Pages.Elements
 
         private void FilterAndAddStatuses(IEnumerable<ITweetable> tweets)
         {
-            // TODO: AddRange.
-            //Tweets.BulkAdd(tweets.Where(x => x.CreatedDate > lastCheckTime));
+            Tweets.AddRange(tweets.Where(x => x.CreatedDate > lastCheckTime));
 
             if (Interlocked.Decrement(ref requestsPending) <= 0)
             {

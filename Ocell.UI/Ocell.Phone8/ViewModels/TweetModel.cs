@@ -225,23 +225,14 @@ namespace Ocell.Pages.Elements
                 Notificator.ShowError("Fix this,."); // TODO: Exactly that.
             }, obj => Config.Accounts.Value.Any() && Tweet != null);
 
-            // TODO: These are the same commands that are used globally. WTF.
-            // TODO: And responses aren't checked again. Holy shit.
             favorite = new DelegateCommand(async (parameter) =>
             {
-                TwitterStatus param = (TwitterStatus)parameter;
-                if (IsFavorited)
-                {
-                    await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
-                    Notificator.ShowProgressIndicatorMessage(Localization.Resources.Unfavorited);
-                    IsFavorited = false;
-                }
-                else
-                {
-                    await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
-                    Notificator.ShowProgressIndicatorMessage(Localization.Resources.Favorited);
-                    IsFavorited = true;
-                }
+                var favCmd = new FavoriteCommand();
+                var result = await favCmd.ExecuteAsync(parameter);
+
+                if (result)
+                    IsFavorited = !IsFavorited;
+
             }, parameter => (parameter is TwitterStatus) && Config.Accounts.Value.Count > 0 && DataTransfer.CurrentAccount != null);
 
             sendTweet = new DelegateCommand(async (parameter) =>
