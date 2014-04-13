@@ -210,9 +210,6 @@
     <Compile Include="Pages\Columns\ManageColumns.xaml.cs">
       <DependentUpon>ManageColumns.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Drafts\ManageDrafts.xaml.cs">
-      <DependentUpon>ManageDrafts.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\ManageDraftsModel.cs" />
     <Compile Include="Pages\Elements\DMConversation.xaml.cs">
       <DependentUpon>DMConversation.xaml</DependentUpon>
@@ -577,10 +574,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Drafts\ManageDrafts.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Pages\Elements\DMConversation.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -648,6 +641,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\Icons_Black\" />
+    <Folder Include="Pages\Drafts\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Ocell.APIs\Ocell.ReadLater\Ocell.ReadLater.csproj">

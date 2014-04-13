@@ -106,11 +106,15 @@ namespace Ocell.Pages.Elements
                 ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FollowUserAsync(new FollowUserOptions { UserId = User.Id }).ContinueWith(ReceiveFollow);
             }, x => FriendshipRetrieved && GenericCanExecute.Invoke(null));
 
+            followUser.BindCanExecuteToProperty(this, "User", "Followed", "FriendshipRetrieved");
+
             unfollowUser = new DelegateCommand((obj) =>
             {
                 Progress.IsLoading = true;
                 ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfollowUserAsync(new UnfollowUserOptions { UserId = User.Id }).ContinueWith(ReceiveFollow);
             }, x => FriendshipRetrieved && GenericCanExecute.Invoke(null));
+
+            unfollowUser.BindCanExecuteToProperty(this, "User", "Followed", "FriendshipRetrieved");
 
             pinUser = new DelegateCommand((obj) =>
                 {
@@ -127,17 +131,23 @@ namespace Ocell.Pages.Elements
                 }, item => GenericCanExecute.Invoke(null)
                     && !Config.Columns.Value.Any(o => o.Type == ResourceType.Tweets && o.Data == User.ScreenName));
 
+            pinUser.BindCanExecuteToProperty(this, "User");
+
             block = new DelegateCommand((obj) =>
-                {
-                    Progress.IsLoading = true;
-                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).BlockUserAsync(new BlockUserOptions { UserId = User.Id }).ContinueWith(ReceiveBlock);
-                }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
+            {
+                Progress.IsLoading = true;
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).BlockUserAsync(new BlockUserOptions { UserId = User.Id }).ContinueWith(ReceiveBlock);
+            }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
+
+            block.BindCanExecuteToProperty(this, "Blocked", "User");
 
             unblock = new DelegateCommand((obj) =>
-                {
-                    Progress.IsLoading = true;
-                    ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnblockUserAsync(new UnblockUserOptions { UserId = User.Id }).ContinueWith(ReceiveBlock);
-                }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
+            {
+                Progress.IsLoading = true;
+                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnblockUserAsync(new UnblockUserOptions { UserId = User.Id }).ContinueWith(ReceiveBlock);
+            }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
+
+            unblock.BindCanExecuteToProperty(this, "Blocked", "User");
 
             reportSpam = new DelegateCommand(async (obj) =>
             {
@@ -152,23 +162,31 @@ namespace Ocell.Pages.Elements
 
             }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
 
+            reportSpam.BindCanExecuteToProperty(this, "User");
+
             changeAvatar = new DelegateCommand((obj) =>
-                {
-                    PhotoChooserTask task = new PhotoChooserTask();
-                    task.ShowCamera = true;
-                    task.Completed += new EventHandler<PhotoResult>(PhotoSelected);
-                    task.Show();
-                }, (obj) => GenericCanExecute.Invoke(null) && IsOwner);
+            {
+                PhotoChooserTask task = new PhotoChooserTask();
+                task.ShowCamera = true;
+                task.Completed += new EventHandler<PhotoResult>(PhotoSelected);
+                task.Show();
+            }, (obj) => GenericCanExecute.Invoke(null) && IsOwner);
+
+            changeAvatar.BindCanExecuteToProperty(this, "User");
 
             navigateTo = new DelegateCommand((url) =>
-                {
-                    var task = new WebBrowserTask();
-                    task.Uri = new Uri((string)url, UriKind.Absolute);
-                    task.Show();
-                }, (url) => url is string && Uri.IsWellFormedUriString(url as string, UriKind.Absolute));
+            {
+                var task = new WebBrowserTask();
+                task.Uri = new Uri((string)url, UriKind.Absolute);
+                task.Show();
+            }, (url) => url is string && Uri.IsWellFormedUriString(url as string, UriKind.Absolute));
+
+            navigateTo.BindCanExecuteToProperty(this, "Website", "WebsiteEnabled");
 
             manageLists = new DelegateCommand((obj) => Navigator.Navigate("/Pages/Lists/ListManager.xaml?user=" + User.ScreenName),
                 GenericCanExecute);
+
+            manageLists.BindCanExecuteToProperty(this, "User");
 
             this.PropertyChanged += (sender, e) =>
             {
@@ -260,8 +278,6 @@ namespace Ocell.Pages.Elements
             {
                 Notificator.ShowProgressIndicatorMessage(successMsg);
                 Followed = !Followed;
-                followUser.RaiseCanExecuteChanged();
-                unfollowUser.RaiseCanExecuteChanged(); ;
             }
             else
                 Notificator.ShowError(errorMsg);
@@ -290,8 +306,6 @@ namespace Ocell.Pages.Elements
             {
                 Notificator.ShowProgressIndicatorMessage(successMsg);
                 Blocked = !Blocked;
-                block.RaiseCanExecuteChanged();
-                unblock.RaiseCanExecuteChanged(); // TODO: Implement AncoraMVVM here and avoid all those RaiseCanExecuteChanged.
             }
             else
                 Notificator.ShowError(errorMsg);
@@ -328,16 +342,6 @@ namespace Ocell.Pages.Elements
             IsOwner = Config.Accounts.Value.Any(item => item.Id == User.Id);
 
             GetFriendshipInformation();
-
-            // TODO: Come on.
-            followUser.RaiseCanExecuteChanged();
-            unfollowUser.RaiseCanExecuteChanged();
-            block.RaiseCanExecuteChanged();
-            unblock.RaiseCanExecuteChanged();
-            pinUser.RaiseCanExecuteChanged();
-            reportSpam.RaiseCanExecuteChanged();
-            manageLists.RaiseCanExecuteChanged();
-            changeAvatar.RaiseCanExecuteChanged();
         }
 
         private void GetFriendshipInformation()
