@@ -18,39 +18,23 @@ namespace Ocell.Pages.Elements
     [ImplementPropertyChanged]
     public class UserModel : ExtendedViewModelBase
     {
-        public TwitterUser User { get; set; } // Not a property, don't need Assign().
+        public TwitterUser User { get; set; }
 
         public bool FriendshipRetrieved { get; set; }
-
         public bool Followed { get; set; }
-
         public bool FollowsMe { get; set; }
-
         public string RelationshipText { get; set; }
-
         public bool Blocked { get; set; }
-
         public bool IsOwner { get; set; }
-
-        #region Fields.
         public string Avatar { get; set; }
-
         public string Name { get; set; }
-
         public string ScreenName { get; set; }
-
         public string Website { get; set; }
-
         public string Biography { get; set; }
-
         public string Tweets { get; set; }
-
         public string Following { get; set; }
-
         public string Followers { get; set; }
-
         public bool WebsiteEnabled { get; set; }
-        #endregion
 
         #region Commands
         Func<object, bool> GenericCanExecute;
@@ -172,7 +156,7 @@ namespace Ocell.Pages.Elements
                 {
                     PhotoChooserTask task = new PhotoChooserTask();
                     task.ShowCamera = true;
-                    task.Completed += new EventHandler<PhotoResult>(task_Completed);
+                    task.Completed += new EventHandler<PhotoResult>(PhotoSelected);
                     task.Show();
                 }, (obj) => GenericCanExecute.Invoke(null) && IsOwner);
 
@@ -205,17 +189,27 @@ namespace Ocell.Pages.Elements
                 RelationshipText = String.Format(Resources.XNotFollowsY, ScreenName, DataTransfer.CurrentAccount.ScreenName);
         }
 
-        public void Loaded(string userName)
+        public override void OnLoad()
         {
+            var userName = ReceiveMessage<string>();
+
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                Notificator.ShowError(Resources.ErrorGettingProfile);
+                Navigator.GoBack();
+                return;
+            }
+
             Regex remove = new Regex("@|:");
             userName = remove.Replace(userName, "");
 
             ScreenName = userName;
 
             GetUser(userName);
+            base.OnLoad();
         }
 
-        void task_Completed(object sender, PhotoResult e)
+        async void PhotoSelected(object sender, PhotoResult e)
         {
             UserToken usr;
             usr = Config.Accounts.Value.FirstOrDefault(item => item != null && item.ScreenName == User.ScreenName);
@@ -223,21 +217,18 @@ namespace Ocell.Pages.Elements
             {
                 Progress.Text = Resources.UploadingPicture;
                 Progress.IsLoading = true;
-                ITwitterService srv = ServiceDispatcher.GetService(usr);
-                // TODO: When image uploads are ready.
-                // srv.UpdateProfileImage(new UpdateProfileImageOptions { ImagePath = e.OriginalFileName }, ReceivePhotoUpload);
+
+                var response = await ServiceDispatcher.GetService(usr).UpdateProfileImageAsync(new UpdateProfileImageOptions { ImagePath = e.OriginalFileName });
+
+                Progress.Text = "";
+                Progress.IsLoading = false;
+                if (response.StatusCode == HttpStatusCode.OK)
+                    Notificator.ShowProgressIndicatorMessage(Resources.ProfileImageChanged);
+                else
+                    Notificator.ShowError(Resources.ErrorUploadingProfileImage);
             }
         }
 
-        private void ReceivePhotoUpload(TwitterUser user, TwitterResponse response)
-        {
-            Progress.Text = "";
-            Progress.IsLoading = false;
-            if (response.StatusCode == HttpStatusCode.OK)
-                Notificator.ShowProgressIndicatorMessage(Resources.ProfileImageChanged);
-            else
-                Notificator.ShowError(Resources.ErrorUploadingProfileImage);
-        }
 
         void ReceiveFollow(Task<TwitterResponse<TwitterUser>> task)
         {
@@ -337,7 +328,6 @@ namespace Ocell.Pages.Elements
             IsOwner = Config.Accounts.Value.Any(item => item.Id == User.Id);
 
             GetFriendshipInformation();
-
 
             // TODO: Come on.
             followUser.RaiseCanExecuteChanged();

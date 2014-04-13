@@ -17,19 +17,6 @@ namespace Ocell.Pages.Elements
         {
             InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
 
-            this.Loaded += (sender, e) =>
-                {
-                    viewModel = DataContext as UserModel;
-                    string userName;
-                    if (!NavigationContext.QueryString.TryGetValue("user", out userName))
-                    {
-                        // TODO: Move this to messaging.
-                        NavigationService.GoBack();
-                        return;
-                    }
-                    viewModel.Loaded(userName);
-                };
-
             viewModel.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == "ScreenName")
@@ -42,10 +29,10 @@ namespace Ocell.Pages.Elements
             };
 
             TweetList.Loader.PropertyChanged += (sender, e) =>
-                {
-                    if (e.PropertyName == "IsLoading")
-                        Dependency.Resolve<IProgressIndicator>().IsLoading = TweetList.Loader.IsLoading;
-                };
+            {
+                if (e.PropertyName == "IsLoading")
+                    Dependency.Resolve<IProgressIndicator>().IsLoading = TweetList.Loader.IsLoading;
+            };
 
             MentionsList.Loader.PropertyChanged += (sender, e) =>
             {
@@ -59,13 +46,14 @@ namespace Ocell.Pages.Elements
 
         private void Following_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
+            // TODO: Refactor this.
             NavigationService.Navigate(new Uri("/Pages/Elements/UserList.xaml?resource=following&user=" + viewModel.ScreenName, UriKind.Relative));
         }
 
         private void TextBlock_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
         {
+            // TODO: And this.
             NavigationService.Navigate(new Uri("/Pages/Elements/UserList.xaml?resource=followers&user=" + viewModel.ScreenName, UriKind.Relative));
-
         }
 
         private void Avatar_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
