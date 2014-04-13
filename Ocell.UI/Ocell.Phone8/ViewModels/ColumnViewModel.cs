@@ -31,8 +31,6 @@ namespace Ocell.Pages.Columns
             get { return disableQuickAdd; }
         }
 
-        int pivotsLoading = 0;
-
         public ColumnViewModel()
         {
             Pivots = new SafeObservable<ColumnViewPivotModel>();
