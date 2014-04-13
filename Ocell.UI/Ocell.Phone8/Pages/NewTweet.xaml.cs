@@ -17,7 +17,7 @@ namespace Ocell.Pages
     {
         protected bool SendingDM;
         public ApplicationBarIconButton SendButton;
-        private Autocompleter _completer;
+        private Autocompleter completer;
         NewTweetModel viewModel;
 
         public NewTweet()
@@ -94,13 +94,20 @@ namespace Ocell.Pages
                 }
             }
 
+            // TODO: Test this is fized.
+            completer = new Autocompleter(new UsernameProvider(Config.Accounts.Value));
+            completer.Trigger = '@';
 
-            // TODO: Fix this with autocompleter.
-            //_completer = new Autocompleter();
-            //_completer.User = DataTransfer.CurrentAccount;
-            //_completer.Textbox = TweetBox;
-            _completer.Trigger = '@';
-            viewModel.Completer = _completer;
+            completer.PropertyChanged += (snd, ev) =>
+            {
+                if (ev.PropertyName == "InputText" && completer.InputText != TweetBox.Text)
+                    TweetBox.Text = completer.InputText;
+                else if (ev.PropertyName == "SelectionStart" && completer.SelectionStart != TweetBox.SelectionStart)
+                    TweetBox.SelectionStart = completer.SelectionStart;
+            };
+
+            TweetBox.TextChanged += (snd, ev) => completer.TextChanged(TweetBox.Text, TweetBox.SelectionStart);
+            viewModel.Completer = completer;
 
             // Update the UI.
             if (viewModel.IsGeotagged)
@@ -122,8 +129,6 @@ namespace Ocell.Pages
 
             if (img.Opacity == 1)
             {
-                // TODO: Fix.
-                //_completer.User = user;
                 if (!viewModel.SelectedAccounts.Contains(user))
                     viewModel.SelectedAccounts.Add(user);
             }
@@ -196,7 +201,7 @@ namespace Ocell.Pages
             if (string.IsNullOrWhiteSpace(selected))
                 return;
 
-            _completer.UserChoseElement(selected);
+            completer.UserChoseElement(selected);
 
             UserSuggestions.SelectedItem = null;
         }

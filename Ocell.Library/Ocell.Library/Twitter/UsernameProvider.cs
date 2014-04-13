@@ -5,119 +5,27 @@ using AncoraMVVM.Base.IoC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using TweetSharp;
 
 namespace Ocell.Library.Twitter
 {
-    public class UserProvider : IUserProvider
+    public class UsernameProvider : IDataProvider<string>
     {
-        public SafeObservable<TwitterUser> Users { get; set; }
-        public UserToken User { get; set; }
-        public bool GetFollowers { get; set; }
-        public bool GetFollowing { get; set; }
-        private ITwitterService service;
+        private static bool downloadStarted = false;
+        private static SafeObservable<string> userCache = new SafeObservable<string>();
+        public SafeObservable<string> DataList { get { return userCache; } }
+        public IEnumerable<UserToken> Users { get; private set; }
 
-        public UserProvider()
+        public static async Task DownloadAndCacheFriends(IEnumerable<UserToken> users)
         {
-            GetFollowers = true;
-            GetFollowing = true;
-            Users = new SafeObservable<TwitterUser>();
+            var cacheTask = GetUserCache();
+            var tasks = users.Select(user => DownloadUsernamesFor(user, -1));
+            await TaskEx.WhenAll(tasks);
+            await cacheTask;
         }
 
-        private void GetService()
-        {
-            if (User == null)
-                service = ServiceDispatcher.GetDefaultService();
-            else
-                service = ServiceDispatcher.GetService(User);
-        }
-
-        public void Start()
-        {
-            if (service == null)
-                GetService();
-
-            GetUsers(-1);
-        }
-
-        private void GetUsers(long cursor)
-        {
-            if (GetFollowing)
-                service.ListFriendsAsync(new ListFriendsOptions { ScreenName = User.ScreenName, Cursor = cursor }).ContinueWith(ReceiveList);
-            if (GetFollowers)
-                service.ListFollowersAsync(new ListFollowersOptions { ScreenName = User.ScreenName, Cursor = cursor }).ContinueWith(ReceiveList);
-        }
-
-        private void ReceiveList(Task<TwitterResponse<TwitterCursorList<TwitterUser>>> task)
-        {
-            var response = task.Result;
-
-            bool finished = false;
-
-            if (!response.RequestSucceeded)
-            {
-                if (Error != null)
-                    Error(this, response);
-
-                return;
-            }
-
-            var users = response.Content;
-
-            if (users.NextCursor != null && users.NextCursor != 0 && service != null)
-                GetUsers((long)users.NextCursor); // TODO: This is not efficient if we are searching for both following and followers.
-            else
-                finished = true;
-
-            if (Users == null)
-                Users = new SafeObservable<TwitterUser>();
-
-            foreach (var user in users)
-                if (!Users.Contains(user))
-                    Users.Add(user);
-
-            if (finished && Finished != null)
-                Finished(this, new EventArgs());
-        }
-
-        public event OnError Error;
-
-        public event EventHandler Finished;
-    }
-
-    public class UsernameProvider
-    {
-        private static Dictionary<UserToken, IList<string>> dicUsers = new Dictionary<UserToken, IList<string>>();
-        private static Dictionary<UserToken, bool> finishedUsers = new Dictionary<UserToken, bool>();
-
-        public IList<string> Usernames
-        {
-            get
-            {
-                IList<string> list;
-                if (dicUsers.TryGetValue(User, out list))
-                    return list;
-                else
-                    return new List<string>();
-            }
-        }
-
-        public UserToken User { get; set; }
-
-        public static async void FillUserNames(IEnumerable<UserToken> users)
-        {
-            foreach (var user in users)
-            {
-                var temp = user;
-                finishedUsers[temp] = false;
-                dicUsers[temp] = (await GetUserCache(temp)).ToList();
-                FillUserNamesFor(temp, -1);
-            }
-        }
-
-        protected static async void FillUserNamesFor(UserToken user, long cursor)
+        protected static async Task DownloadUsernamesFor(UserToken user, long cursor = -1)
         {
             TwitterResponse<TwitterCursorList<TwitterUser>> response;
 
@@ -128,57 +36,43 @@ namespace Ocell.Library.Twitter
             catch (Exception ex)
             {
                 AncoraLogger.Instance.LogException("Web exception trying to retrieve usernames.", ex);
-                TaskEx.Delay(500).ContinueWith((t) => FillUserNamesFor(user, cursor));
                 return;
             }
-
 
             if (!response.RequestSucceeded)
                 return;
 
             var friends = response.Content;
 
-            if (dicUsers.ContainsKey(user))
-                dicUsers[user] = dicUsers[user].Union(friends.Select(x => x.ScreenName)).ToList();
-            else
-                dicUsers[user] = friends.Select(x => x.ScreenName).ToList();
+            userCache.AddListRange(friends.Select(x => x.ScreenName).Except(userCache));
 
             if (friends.NextCursor != null && friends.NextCursor != 0)
-            {
-                FillUserNamesFor(user, (long)friends.NextCursor);
-            }
+                await DownloadUsernamesFor(user, (long)friends.NextCursor);
             else
-            {
-                finishedUsers[user] = true;
-                await SaveUserCache(user, dicUsers[user]);
-            }
+                await SaveUserCache(userCache);
         }
 
-        public UsernameProvider()
+        public UsernameProvider(IEnumerable<UserToken> users)
         {
+            Users = users.ToList();
         }
 
-        public void Start()
+        public async void StartRetrieval()
         {
-            bool userFinished;
-            if (!finishedUsers.TryGetValue(User, out userFinished) || !userFinished)
-                UsernameProvider.FillUserNames(new List<UserToken> { User });
+            if (!downloadStarted)
+                await DownloadAndCacheFriends(Users);
         }
 
-
-
-        private async static Task<IEnumerable<string>> GetUserCache(UserToken user)
+        private async static Task<IEnumerable<string>> GetUserCache()
         {
-            string filename = "AUTOCOMPLETECACHE" + user.ScreenName;
+            string filename = "AUTOCOMPLETECACHE";
             return await Dependency.Resolve<IFileManager>().ReadLines(filename);
         }
 
-        private async static Task SaveUserCache(UserToken user, IEnumerable<string> names)
+        private async static Task SaveUserCache(IEnumerable<string> names)
         {
-            string filename = "AUTOCOMPLETECACHE" + user.ScreenName;
+            string filename = "AUTOCOMPLETECACHE";
             await Dependency.Resolve<IFileManager>().WriteLines(filename, names);
         }
-
-        public event OnError Error;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Tasks;
 using Ocell.Compatibility;
 using Ocell.Controls;
 using Ocell.Library;
@@ -81,7 +80,7 @@ namespace Ocell
             ThreadPool.QueueUserWorkItem((threadContext) =>
             {
                 CreateTile();
-                UsernameProvider.FillUserNames(Config.Accounts.Value);
+                var task = UsernameProvider.DownloadAndCacheFriends(Config.Accounts.Value);
 #if DEBUG && AVARIJUSTINVENTEDTOAVOIDCOMPILINGTHISSHIT
                 //var contents = FileAbstractor.ReadContentsOfFile("BA_DEBUG");
                 if (!string.IsNullOrEmpty(contents))
@@ -173,7 +172,7 @@ namespace Ocell
             context.Listbox = list;
 
             FilterManager.SetupFilter(list);
-                       
+
             list.AutoReload();
 
             Dispatcher.BeginInvoke(() =>
