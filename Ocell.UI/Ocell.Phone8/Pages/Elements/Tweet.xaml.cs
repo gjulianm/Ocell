@@ -1,39 +1,33 @@
 ﻿
 using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
-using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using Microsoft.Phone.Tasks;
+using Ocell.Helpers;
 using Ocell.Library;
 using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
 using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
-    [ViewModel(typeof(TweetModel))]
     public partial class Tweet : PhoneApplicationPage
     {
-        TweetModel viewModel;
         Storyboard sbShow;
         Storyboard sbHide;
         bool conversationLoaded = false;
+
+        private TweetModel ViewModel { get { return DataContext as TweetModel; } }
 
         public Tweet()
         {
             InitializeComponent();
             Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
-            
+
             this.Loaded += new RoutedEventHandler(Tweet_Loaded);
 
             panorama.SelectionChanged += (sender, e) =>
@@ -50,14 +44,11 @@ namespace Ocell.Pages.Elements
                     conversationLoaded = true;
                 }
             };
-
-
         }
 
         void Tweet_Loaded(object sender, RoutedEventArgs e)
         {
-            viewModel = DataContext as TweetModel;
-            viewModel.TweetSent += (s, ev) =>
+            ViewModel.TweetSent += (s, ev) =>
             {
                 conversation.Loader.Source.Insert(0, ev.Payload);
                 TBNoFocus();
@@ -67,7 +58,7 @@ namespace Ocell.Pages.Elements
             sbHide = this.Resources["sbHide"] as Storyboard;
 
             Initialize();
-            viewModel.OnLoad();
+            ViewModel.OnLoad();
             if (ApplicationBar != null)
                 ApplicationBar.MatchOverriddenTheme();
 
@@ -80,8 +71,8 @@ namespace Ocell.Pages.Elements
 
         void Initialize()
         {
-            CreateText(viewModel.Tweet);
-            viewModel.Completed = true;
+            CreateText(ViewModel.Tweet);
+            ViewModel.Completed = true;
 
             if (DataTransfer.Status == null)
             {
@@ -116,224 +107,21 @@ namespace Ocell.Pages.Elements
             if (Status == null)
                 return;
 
-            var paragraph = new Paragraph();
-            var runs = new List<Inline>();
-
-            Text.Blocks.Clear();
-
-            string TweetText = Status.Text;
-            string PreviousText;
-            int i = 0;
-
-            if (viewModel.Tweet.Entities != null)
-            {
-                foreach (var Entity in viewModel.Tweet.Entities)
-                {
-                    if (Entity.StartIndex > i)
-                    {
-                        PreviousText = TweetText.Substring(i, Entity.StartIndex - i);
-                        runs.Add(new Run { Text = HttpUtility.HtmlDecode(PreviousText) });
-                    }
-
-                    i = Entity.EndIndex;
-
-                    switch (Entity.EntityType)
-                    {
-                        case TwitterEntityType.HashTag:
-                            runs.Add(CreateHashtagLink((TwitterHashTag)Entity));
-                            break;
-
-                        case TwitterEntityType.Mention:
-                            runs.Add(CreateMentionLink((TwitterMention)Entity));
-                            break;
-
-                        case TwitterEntityType.Url:
-                            runs.Add(CreateUrlLink((TwitterUrl)Entity));
-                            break;
-                        case TwitterEntityType.Media:
-                            runs.Add(CreateMediaLink((TwitterMedia)Entity));
-                            break;
-                    }
-                }
-            }
-
-            if (i < TweetText.Length)
-                runs.Add(new Run
-                {
-                    Text = HttpUtility.HtmlDecode(TweetText.Substring(i))
-                });
-
-            foreach (var run in runs)
-                paragraph.Inlines.Add(run);
-
-            Text.Blocks.Add(paragraph);
-
-            Text.UpdateLayout();
-        }
-
-        Inline CreateBaseLink(string content, string contextHeader, string contextTag, MenuItem customButton = null)
-        {
-            var link = new HyperlinkButton
-            {
-                Content = content,
-                FontSize = Text.FontSize,
-                FontWeight = Text.FontWeight,
-                FontStretch = Text.FontStretch,
-                FontFamily = Text.FontFamily,
-                TargetName = contextTag,
-                Margin = new Thickness(-10, -5, -10, -8)
-            };
-
-            link.Click += new RoutedEventHandler(link_Click);
-
-
-            MenuItem item = new MenuItem
-            {
-                Header = contextHeader,
-                Tag = contextTag,
-                Foreground = new SolidColorBrush(Colors.Black)
-            };
-            item.Click += new RoutedEventHandler(CopyLink);
-
-            ContextMenu menu = new ContextMenu();
-            menu.Items.Add(item);
-            if (customButton != null)
-                menu.Items.Add(customButton);
-
-            ContextMenuService.SetContextMenu(link, menu);
-
-            InlineUIContainer container = new InlineUIContainer();
-            container.Child = link;
-            return container;
-        }
-
-        // TODO: Dejavu?
-        Inline CreateHashtagLink(TwitterHashTag Hashtag)
-        {
-            MenuItem item = new MenuItem
-            {
-                Header = Localization.Resources.MuteHashtag,
-                Foreground = new SolidColorBrush(Colors.Black)
-            };
-            item.Click += (sender, e) =>
-                {
-                    var filter = FilterManager.SetupMute(FilterType.Text, "#" + Hashtag.Text);
-                    Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")));
-                };
-            return CreateBaseLink("#" + Hashtag.Text, Localization.Resources.CopyHashtag, "#" + Hashtag.Text, item);
-        }
-
-        Inline CreateMentionLink(TwitterMention Mention)
-        {
-            MenuItem item = new MenuItem
-            {
-                Header = Localization.Resources.MuteUser,
-                Foreground = new SolidColorBrush(Colors.Black)
-            };
-            item.Click += (sender, e) =>
-            {
-                var filter = FilterManager.SetupMute(FilterType.User, Mention.ScreenName);
-                Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")));
-            };
-            return CreateBaseLink("@" + Mention.ScreenName, Localization.Resources.CopyUsername, "@" + Mention.ScreenName, item);
-        }
-
-        Inline CreateUrlLink(TwitterUrl URL)
-        {
-            MenuItem item = new MenuItem
-            {
-                Header = Localization.Resources.MuteDomain,
-                Foreground = new SolidColorBrush(Colors.Black)
-            };
-            item.Click += (sender, e) =>
-            {
-                Uri uri;
-                if (Uri.TryCreate(URL.ExpandedValue, UriKind.Absolute, out uri))
-                {
-                    var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
-                    Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")));
-                }
-                else
-                    Dependency.Resolve<INotificationService>().ShowError(Localization.Resources.NotValidURL);
-            };
-
-            string value = string.IsNullOrWhiteSpace(URL.ExpandedValue) ? URL.Value : URL.ExpandedValue;
-
-            return CreateBaseLink(TweetTextConverter.TrimUrl(value), Localization.Resources.CopyLink, value, item);
-        }
-
-        Inline CreateMediaLink(TwitterMedia Media)
-        {
-            MenuItem item = new MenuItem
-            {
-                Header = Localization.Resources.MuteDomain,
-                Foreground = new SolidColorBrush(Colors.Black)
-            };
-            item.Click += (sender, e) =>
-            {
-                Uri uri;
-                if (Uri.TryCreate(Media.DisplayUrl, UriKind.Absolute, out uri))
-                {
-                    var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
-                    Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")));
-                }
-                else
-                    Dependency.Resolve<INotificationService>().ShowError(Localization.Resources.NotValidURL);
-            };
-
-            return CreateBaseLink(Media.DisplayUrl, Localization.Resources.CopyLink, Media.DisplayUrl, item);
-        }
-
-        void CopyLink(object sender, RoutedEventArgs e)
-        {
-            MenuItem item = sender as MenuItem;
-            if (item != null && item.Tag is string && !(string.IsNullOrWhiteSpace(item.Tag as string)))
-                Clipboard.SetText(item.Tag as string);
-        }
-
-        void link_Click(object sender, RoutedEventArgs e)
-        {
-            HyperlinkButton link = sender as HyperlinkButton;
-            Uri uri;
-            WebBrowserTask browser;
-
-            if (link == null || string.IsNullOrWhiteSpace(link.TargetName))
-                return;
-
-            if (Uri.TryCreate(link.TargetName, UriKind.Absolute, out uri) ||
-                (link.TargetName.StartsWith("www.") && Uri.TryCreate("http://" + link.TargetName, UriKind.Absolute, out uri)))
-            {
-                browser = new WebBrowserTask();
-                browser.Uri = uri;
-                browser.Show();
-            }
-            else if (link.TargetName[0] == '@')
-                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + link.TargetName.Substring(0), UriKind.Relative));
-            else if (link.TargetName[0] == '#')
-            {
-                Ocell.Pages.Search.ResourceViewModel.Resource = new TwitterResource
-                {
-                    User = DataTransfer.CurrentAccount,
-                    Type = ResourceType.Search,
-                    Data = link.TargetName
-                };
-
-                NavigationService.Navigate(Uris.ResourceView);
-            }
-
+            var formatter = new TweetRTBFormatter(Status, Text);
+            formatter.Format();
         }
 
         private void Grid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (viewModel != null && viewModel.Tweet != null)
-                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + viewModel.Tweet.AuthorName, UriKind.Relative));
+            if (ViewModel != null && ViewModel.Tweet != null)
+                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + ViewModel.Tweet.AuthorName, UriKind.Relative));
         }
 
         private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (viewModel.Tweet != null && viewModel.Tweet.Author != null)
+            if (ViewModel.Tweet != null && ViewModel.Tweet.Author != null)
             {
-                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + viewModel.Tweet.Author.ScreenName, UriKind.Relative));
+                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + ViewModel.Tweet.Author.ScreenName, UriKind.Relative));
             }
         }
 
@@ -367,17 +155,17 @@ namespace Ocell.Pages.Elements
 
         private void MuteUser_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            var filter = FilterManager.SetupMute(FilterType.User, viewModel.Tweet.Author.ScreenName);
+            var filter = FilterManager.SetupMute(FilterType.User, ViewModel.Tweet.Author.ScreenName);
             Dependency.Resolve<INotificationService>().
-                ShowMessage(String.Format(Localization.Resources.UserIsMutedUntil, viewModel.Tweet.Author.ScreenName, filter.IsValidUntil.ToString("f")));
-            viewModel.IsMuting = false;
+                ShowMessage(String.Format(Localization.Resources.UserIsMutedUntil, ViewModel.Tweet.Author.ScreenName, filter.IsValidUntil.ToString("f")));
+            ViewModel.IsMuting = false;
         }
 
         private void MuteHashtags_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             ITweetableFilter filter = null;
             string message = "";
-            foreach (var entity in viewModel.Tweet.Entities)
+            foreach (var entity in ViewModel.Tweet.Entities)
             {
                 if (entity.EntityType == TwitterEntityType.HashTag)
                 {
@@ -390,44 +178,44 @@ namespace Ocell.Pages.Elements
             else
                 Dependency.Resolve<INotificationService>().
                 ShowMessage(String.Format(Localization.Resources.HashtagsMutedUntil, message.Substring(0, message.Length - 2), filter.IsValidUntil.ToString("f")));
-            viewModel.IsMuting = false;
+            ViewModel.IsMuting = false;
         }
 
         private void Source_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             RemoveHTML conv = new RemoveHTML();
-            string source = conv.Convert(viewModel.Tweet.Source, null, null, null) as string;
+            string source = conv.Convert(ViewModel.Tweet.Source, null, null, null) as string;
             var filter = FilterManager.SetupMute(FilterType.Source, source);
             Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.SourceMutedUntil, source, filter.IsValidUntil.ToString("f"))); // TODO: Refactor this already.
-            viewModel.IsMuting = false;
+            ViewModel.IsMuting = false;
         }
 
         void HideMuteGrid(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
-            viewModel.IsMuting = false;
+            ViewModel.IsMuting = false;
             this.BackKeyPress -= HideMuteGrid;
         }
 
         private void MuteBtn_Click(object sender, EventArgs e)
         {
             this.BackKeyPress += HideMuteGrid;
-            viewModel.IsMuting = true;
+            ViewModel.IsMuting = true;
         }
 
         private void ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            viewModel.ImageFailed(sender, e);
+            ViewModel.ImageFailed(sender, e);
         }
 
         private void ImageOpened(object sender, RoutedEventArgs e)
         {
-            viewModel.ImageOpened(sender, e);
+            ViewModel.ImageOpened(sender, e);
         }
 
         private void ImageTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            viewModel.ImageTapped(sender, e);
+            ViewModel.ImageTapped(sender, e);
         }
 
         private void textBox_GotFocus(object sender, RoutedEventArgs e)
@@ -438,7 +226,7 @@ namespace Ocell.Pages.Elements
         public void TBFocus()
         {
             sbShow.Begin();
-            viewModel.ReplyBoxGotFocus();
+            ViewModel.ReplyBoxGotFocus();
             textBox.SelectionStart = textBox.Text.Length;
         }
 

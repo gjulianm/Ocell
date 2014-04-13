@@ -180,6 +180,7 @@
     <Compile Include="Helpers\FilterManager.cs" />
     <Compile Include="Helpers\StringManipulator.cs" />
     <Compile Include="Helpers\TemplateSelector.cs" />
+    <Compile Include="Helpers\TweetRTBFormatter.cs" />
     <Compile Include="Helpers\ValueConverters\AvatarImageManager.cs" />
     <Compile Include="Helpers\ValueConverters\FirstToUpper.cs" />
     <Compile Include="Helpers\ValueConverters\HasMediaToBackgroundConverter.cs" />
@@ -525,9 +526,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AncoraMVVM.Base.0.1.25-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
     </Reference>
-    <Reference Include="AncoraMVVM.Phone7, Version=0.1.26.39960, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AncoraMVVM.Phone7, Version=0.1.28.34196, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AncoraMVVM.Phone7.0.1.26-alpha\lib\wp71\AncoraMVVM.Phone7.dll</HintPath>
+      <HintPath>..\..\packages\AncoraMVVM.Phone7.0.1.28-alpha\lib\wp71\AncoraMVVM.Phone7.dll</HintPath>
     </Reference>
     <Reference Include="AncoraMVVM.Rest">
       <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.13-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Rest.dll</HintPath>
