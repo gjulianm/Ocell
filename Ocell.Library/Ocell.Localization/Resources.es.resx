@@ -1228,4 +1228,7 @@
   <data name="ErrorRetweeting" xml:space="preserve">
     <value>Ha ocurrido un error al retuitear.</value>
   </data>
+  <data name="CouldntGetYourPosition" xml:space="preserve">
+    <value>No hemos podido obtener tu posición.</value>
+  </data>
 </root>

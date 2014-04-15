@@ -628,6 +628,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a We couldn&apos;t get your GPS position..
+        /// </summary>
+        public static string CouldntGetYourPosition {
+            get {
+                return ResourceManager.GetString("CouldntGetYourPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a We couldn&apos;t load this filter..
         /// </summary>
         public static string CouldntLoadFilter {

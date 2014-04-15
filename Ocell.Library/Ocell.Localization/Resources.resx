@@ -1230,4 +1230,7 @@
   <data name="ErrorRetweeting" xml:space="preserve">
     <value>An error happened while trying to send the retweet.</value>
   </data>
+  <data name="CouldntGetYourPosition" xml:space="preserve">
+    <value>We couldn't get your GPS position.</value>
+  </data>
 </root>

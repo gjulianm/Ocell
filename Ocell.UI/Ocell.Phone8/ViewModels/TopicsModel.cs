@@ -2,6 +2,7 @@
 using AncoraMVVM.Base.Interfaces;
 using Ocell.Library;
 using Ocell.Library.Twitter;
+using Ocell.Localization;
 using Ocell.Pages.Search;
 using PropertyChanged;
 using System;
@@ -89,6 +90,12 @@ namespace Ocell.Pages
                 Lat = geoWatcher.Position.Location.Latitude,
                 Long = geoWatcher.Position.Location.Longitude
             });
+
+            if (!response.RequestSucceeded)
+            {
+                Notificator.ShowError(Resources.CouldntGetYourPosition);
+                showGlobal.Execute(null);
+            }
 
             var locs = response.Content;
 
