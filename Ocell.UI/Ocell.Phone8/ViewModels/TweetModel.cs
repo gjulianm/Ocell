@@ -21,30 +21,17 @@ namespace Ocell.Pages.Elements
     public class TweetModel : ExtendedViewModelBase
     {
         public ApplicationBarMode AppBarMode { get; set; }
-
         public bool Completed { get; set; }
-
         public bool IsMuting { get; set; }
-
         public TwitterStatus Tweet { get; set; }
-
         public bool HasReplies { get; set; }
-
         public bool IsFavorited { get; set; }
-
         public bool HasImage { get; set; }
-
         public ObservableCollection<ITweeter> UsersWhoRetweeted { get; set; }
-
         public int RetweetCount { get; set; }
-
-
         public bool HasRetweets { get; set; }
-
         public string WhoRetweeted { get; set; }
-
         public string Avatar { get; set; }
-
         public string ReplyText { get; set; }
 
         DelegateCommand deleteTweet;
