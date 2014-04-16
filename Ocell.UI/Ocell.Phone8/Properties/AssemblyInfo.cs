@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+﻿using AncoraMVVM.Base;
+using System.Reflection;
 using System.Resources;
+using System.Runtime.InteropServices;
 
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie los valores de estos atributos para modificar la información
@@ -35,3 +35,4 @@ using System.Resources;
 [assembly: AssemblyVersion("4.4.3.1")]
 [assembly: AssemblyFileVersion("4.4.3.1")]
 [assembly: NeutralResourcesLanguageAttribute("en")]
+[assembly: RootNamespace("Ocell")]

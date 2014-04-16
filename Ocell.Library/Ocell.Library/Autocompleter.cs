@@ -83,6 +83,9 @@ namespace Ocell.Library
         {
             int wordStart, wordEnd;
 
+            if (cursorPosition > text.Length)
+                cursorPosition = text.Length;
+
             for (wordStart = cursorPosition; wordStart >= 0 && (wordStart == cursorPosition || text[wordStart] != ' '); wordStart--) ;
             for (wordEnd = cursorPosition; wordEnd < text.Length && text[wordEnd] != ' '; wordEnd++) ;
 

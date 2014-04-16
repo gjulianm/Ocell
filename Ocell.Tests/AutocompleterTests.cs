@@ -72,9 +72,10 @@ namespace Ocell.Tests
             {
                 yield return new TestCaseData("Lorem @ipsu", -1).Returns("ipsu")
                     .SetName("GetTextWrittenByUser_AtEndOfString_ReturnsTextAfterTrigger");
-
                 yield return new TestCaseData("Lorem @ipsu dolor", 11).Returns("ipsu")
                     .SetName("GetTextWrittenByUser_TextInMiddleOfString_ReturnsUntilSpace");
+                yield return new TestCaseData("Lorem @ipsum", 13).Returns("ipsum")
+                    .SetName("GetTextWrittenByUser_CursorBeyondEndOfString_ReturnsCorrectString");
             }
         }
 

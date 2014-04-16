@@ -119,11 +119,32 @@
         <Grid x:Name="ContentPanel" Margin="12,0,12,0" Grid.Row="1" >
             <ScrollViewer d:LayoutOverrides="Width, Height" HorizontalScrollBarVisibility="Disabled">
                 <Grid>
-                    <Image x:Name="GeolocImg" HorizontalAlignment="Left" Visibility="{Binding GeotagEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" Height="48" Source="/Images/Icons_White/appbar.map.position.rest.png" Stretch="Fill" Width="48" VerticalAlignment="Top" d:LayoutOverrides="Height" Margin="0,-4,0,0"/>
+                    <!-- I'm sorry about this code -->
+                    <ToggleButton IsChecked="{Binding GeotagEnabled}" HorizontalAlignment="Left" Height="48" Width="48" Margin="0,-4,0,0" VerticalAlignment="Top" BorderThickness="0" Background="{StaticResource PhoneSubtleBrush}">
+                        <ToggleButton.OpacityMask>
+                            <ImageBrush ImageSource="/Images/Icons_White/appbar.map.position.rest.png" />
+                        </ToggleButton.OpacityMask>
+                        
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="Background" To="{StaticResource PhoneAccentColor}" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="UnChecked">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="Background" To="{StaticResource PhoneSubtleColor}" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </ToggleButton>
+                    
                     <ListBox x:Name="UserSuggestions" ItemsSource="{Binding Suggestions}" SelectionMode="Multiple" Visibility="{Binding IsSuggestingUsers, ConverterParameter=Visible, Converter={StaticResource BooleanToVisibilityConverter}}" SelectionChanged="UserSuggestions_SelectionChanged" Margin="12,171,12,0" ItemTemplate="{StaticResource ItemTemplate1}" ItemsPanel="{StaticResource PanelTemplate}" Height="54" VerticalAlignment="Top" Background="{StaticResource PhoneChromeBrush}" Canvas.ZIndex="1" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
-                    <TextBox Text="{Binding TweetText, Mode=TwoWay}" x:Name="TweetBox" TextWrapping="Wrap" VerticalAlignment="Top" Height="205" InputScope="Text" Margin="0,31,0,0" d:LayoutOverrides="VerticalAlignment"/>
+                    <TextBox Text="{Binding TweetText, Mode=TwoWay}" x:Name="TweetBox" TextWrapping="Wrap" VerticalAlignment="Top" Height="205" InputScope="Text" SelectionStart="{Binding TextboxSelectionStart, Mode=TwoWay}" Margin="0,31,0,0" d:LayoutOverrides="VerticalAlignment"/>
                     <TextBlock Margin="0,4,9,0" TextWrapping="Wrap" Text="{Binding RemainingCharsStr}" VerticalAlignment="Top" Foreground="{Binding RemainingCharsColor}" HorizontalAlignment="Right" FontFamily="Segoe WP Light"/>
-                    <ListBox x:Name="ListAccounts" ItemsSource="{Binding AccountList}" SelectionMode="Multiple" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="12,272,12,252" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}" SelectionChanged="ListBox_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
+                    <ListBox x:Name="ListAccounts" ItemsSource="{Binding AccountList}" SelectionMode="Multiple" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="12,272,12,252" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
                     <TextBlock Text="{Binding Strings.Accounts, Source={StaticResource LocalizedResources}, StringFormat=\{0\}:}" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Left" Margin="12,236,0,0" TextWrapping="Wrap"  Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top"/>
                     <CheckBox IsChecked="{Binding IsScheduled, Mode=TwoWay}" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" Content="{Binding Strings.ScheduledQuestion, Source={StaticResource LocalizedResources}}" Margin="8,357,216,0" VerticalAlignment="Top" />
                     <Grid Margin="8,433,20,0" x:Name="schedGrid" Height="131" VerticalAlignment="Top" Visibility="{Binding IsScheduled, Converter={StaticResource BooleanToVisibilityConverter}}">

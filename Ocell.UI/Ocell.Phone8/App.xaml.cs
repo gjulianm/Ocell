@@ -1,4 +1,5 @@
-﻿using AncoraMVVM.Base.Diagnostics;
+﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Diagnostics;
 using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
 using AncoraMVVM.Phone;
@@ -75,6 +76,16 @@ namespace Ocell
             Dependency.Register<ICryptoManager, CryptoManager>();
 
             ((GlobalProgress)Dependency.Resolve<IProgressIndicator>()).Initialize(RootFrame);
+
+            var locator = new PhoneViewModelLocator();
+            locator.InitializeAndFindPages(RootFrame);
+
+            var navigator = Dependency.Resolve<INavigationService>() as ViewModelNavigationService;
+
+            if (navigator == null)
+                Debug.WriteLine("The INavigationService configured is not a ViewModelNavigationService (or there isn't a INavigationService registered).");
+            else
+                navigator.Initialize();
 
             PushNotifications.WPVersion = OSVersion.WP8;
 

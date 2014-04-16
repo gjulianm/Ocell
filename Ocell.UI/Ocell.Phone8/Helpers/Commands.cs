@@ -32,19 +32,22 @@ namespace Ocell.Commands
                 return;
 
             ITweetable tweet = (ITweetable)parameter;
-            DataTransfer.Text = "@" + tweet.Author.ScreenName + " ";
+            var args = new NewTweetArgs();
+
             if (parameter is TwitterStatus)
             {
-                DataTransfer.ReplyId = tweet.Id;
-                DataTransfer.ReplyingDM = false;
+                args.ReplyToId = tweet.Id;
+                args.Type = TweetType.Tweet;
+                args.Text = String.Format("@{0} ", tweet.Author.ScreenName);
             }
             else if (parameter is TwitterDirectMessage)
             {
-                DataTransfer.DMDestinationId = (parameter as TwitterDirectMessage).SenderId;
-                DataTransfer.ReplyingDM = true;
+                args.ReplyToId = (parameter as TwitterDirectMessage).SenderId;
+                args.Type = TweetType.DirectMessage;
+                args.Text = "";
             }
 
-            Dependency.Resolve<INavigationService>().Navigate<NewTweetModel>();
+            Dependency.Resolve<INavigationService>().MessageAndNavigate<NewTweetModel, NewTweetArgs>(args);
         }
 
         public event EventHandler CanExecuteChanged;
@@ -70,12 +73,14 @@ namespace Ocell.Commands
 
         public void Execute(object parameter)
         {
-            // TODO: BAD
             ITweetable tweet = (ITweetable)parameter;
-            DataTransfer.ReplyId = tweet.Id;
-            DataTransfer.Text = GetReplied(tweet);
+            var args = new NewTweetArgs
+            {
+                ReplyToId = tweet.Id,
+                Text = GetReplied(tweet)
+            };
 
-            Dependency.Resolve<INavigationService>().Navigate<NewTweetModel>();
+            Dependency.Resolve<INavigationService>().MessageAndNavigate<NewTweetModel, NewTweetArgs>(args);
         }
 
         public event EventHandler CanExecuteChanged;

@@ -94,6 +94,8 @@ namespace Ocell
 
             pinToStart.BindCanExecuteToProperty(this, "SelectedPivot");
 
+            filterColumn = new DelegateCommand(() => { });
+
             filterColumn.BindCanExecuteToProperty(this, "SelectedPivot");
 
             toMyProfile = new DelegateCommand((obj) =>
@@ -208,7 +210,7 @@ namespace Ocell
         bool firstNavigation = true;
         public void OnNavigation(string column)
         {
-            ThreadPool.QueueUserWorkItem((context) => ReloadAll());
+            ReloadAll();
 
             if (firstNavigation)
             {

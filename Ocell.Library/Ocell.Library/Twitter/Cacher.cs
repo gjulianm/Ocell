@@ -41,9 +41,6 @@ namespace Ocell.Library.Twitter
 
             var fileManager = Dependency.Resolve<IFileManager>();
 
-            foreach (var tweet in list)
-                tweet.CreatedDate = tweet.CreatedDate.ToLocalTime();
-
             var serializer = new SharpSerializer(SerializerSettings);
             MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
             {
@@ -71,7 +68,7 @@ namespace Ocell.Library.Twitter
             string fileName = GetCacheName(resource);
             var serializer = new SharpSerializer(SerializerSettings);
             var fileManager = Dependency.Resolve<IFileManager>();
-            
+
 
             MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
             {
@@ -89,7 +86,13 @@ namespace Ocell.Library.Twitter
                 }
             });
 
-            return statuses ?? new List<TwitterStatus>();
+            statuses = statuses ?? new List<TwitterStatus>();
+
+            foreach (var tweet in statuses)
+                tweet.CreatedDate = tweet.CreatedDate.ToLocalTime();
+
+            return statuses;
+
         }
 
         public static void PreloadCache(TwitterResource resource)

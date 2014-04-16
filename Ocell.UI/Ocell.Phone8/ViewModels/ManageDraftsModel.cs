@@ -1,6 +1,7 @@
 ﻿using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using Ocell.Pages;
 using PropertyChanged;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -58,7 +59,7 @@ namespace Ocell
             if (draft == null)
                 return;
 
-            DataTransfer.Draft = draft;
+            Messager.SendTo<NewTweetModel, TwitterDraft>(draft);
             ListSelection = null;
             Navigator.GoBack();
         }

@@ -7,7 +7,6 @@ using Ocell.Library.Twitter;
 using Ocell.Localization;
 using PropertyChanged;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Device.Location;
 using System.Linq;
@@ -18,39 +17,36 @@ using TweetSharp;
 
 namespace Ocell.Pages
 {
+    public enum TweetType { Tweet, DirectMessage };
+
+    public class NewTweetArgs
+    {
+        public string Text { get; set; }
+        public TweetType Type { get; set; }
+        public long? ReplyToId { get; set; }
+    }
+
     [ImplementPropertyChanged]
     public class NewTweetModel : ExtendedViewModelBase
     {
         #region Fields
         public IEnumerable<UserToken> AccountList { get; set; }
-
         public bool IsDM { get; set; }
-
         public string TweetText { get; set; }
-
         public int RemainingChars { get; set; }
-
         public string RemainingCharsStr { get; set; }
-
         public Brush RemainingCharsColor { get; set; }
-
         public bool UsesTwitlonger { get; set; }
-
         public bool IsScheduled { get; set; }
-
         public DateTime ScheduledDate { get; set; }
-
         public DateTime ScheduledTime { get; set; }
-
         public bool SendingDM { get; set; }
-
-        public IList SelectedAccounts { get; set; }
-
+        public SafeObservable<UserToken> SelectedAccounts { get; set; }
         public bool IsGeotagged { get; set; }
-
         public bool GeotagEnabled { get; set; }
-
         public bool IsSuggestingUsers { get; set; }
+        public Autocompleter Completer { get; set; }
+        public int TextboxSelectionStart { get; set; }
 
         public SafeObservable<string> Suggestions
         {
@@ -62,8 +58,6 @@ namespace Ocell.Pages
                     return new SafeObservable<string>();
             }
         }
-
-        public Autocompleter Completer { get; set; }
 
         #endregion Fields
 
@@ -102,16 +96,23 @@ namespace Ocell.Pages
 
         private GeoCoordinateWatcher geoWatcher = new GeoCoordinateWatcher();
         private int requestsLeft;
+        private NewTweetArgs args;
+        private const int ShortUrlLength = 20;
+        private Brush redBrush = new SolidColorBrush(Colors.Red);
+        private static string savedText = "";
+        private TwitterDraft draft;
 
         public NewTweetModel()
         {
-            SelectedAccounts = new List<object>();
+            SelectedAccounts = new SafeObservable<UserToken>();
             AccountList = Config.Accounts.Value.ToList();
             IsGeotagged = Config.EnabledGeolocation.Value == true &&
                 (Config.TweetGeotagging.Value == true || Config.TweetGeotagging.Value == null);
             GeotagEnabled = Config.EnabledGeolocation.Value == true;
 
             SetupCommands();
+
+            args = ReceiveMessage<NewTweetArgs>() ?? new NewTweetArgs();
 
             this.PropertyChanged += (sender, e) =>
             {
@@ -143,21 +144,101 @@ namespace Ocell.Pages
                 }
             };
 
-            IsDM = DataTransfer.ReplyingDM;
+            IsDM = args.Type == TweetType.DirectMessage;
 
             // Avoid that ugly 01/01/0001 by default.
             var date = DateTime.Now.AddHours(1);
             ScheduledDate = date;
             ScheduledTime = date;
 
-            TryLoadDraft();
+            draft = ReceiveMessage<TwitterDraft>();
+
+            FillTweetText();
+
+            if (draft != null)
+            {
+                foreach (var account in draft.Accounts)
+                    SelectedAccounts.Add(account);
+            }
+            else
+            {
+                SelectedAccounts.Add(DataTransfer.CurrentAccount);
+            }
 
             if (Config.EnabledGeolocation.Value == true)
                 geoWatcher.Start();
+
+            SetUpAutocompleter();
         }
 
-        private const int ShortUrlLength = 20;
-        private Brush redBrush = new SolidColorBrush(Colors.Red);
+        private void SetUpAutocompleter()
+        {
+            Completer = new Autocompleter(new UsernameProvider(Config.Accounts.Value));
+            Completer.Trigger = '@';
+
+            Completer.PropertyChanged += (snd, ev) =>
+            {
+                if (ev.PropertyName == "InputText" && Completer.InputText != TweetText)
+                    TweetText = Completer.InputText;
+                else if (ev.PropertyName == "SelectionStart" && Completer.SelectionStart != TextboxSelectionStart)
+                    TextboxSelectionStart = Completer.SelectionStart;
+            };
+
+            this.PropertyChanged += (snd, ev) =>
+            {
+                if (ev.PropertyName == "TweetText")
+                    Completer.TextChanged(TweetText, TextboxSelectionStart);
+            };
+        }
+
+        public override void OnLoad()
+        {
+            FillTweetText();
+            base.OnLoad();
+        }
+
+        private void FillTweetText()
+        {
+            if (draft != null)
+                LoadDraft(draft);
+            else if (args.Text != null)
+                TweetText = args.Text;
+            else
+                TweetText = savedText;
+        }
+
+        private void LoadDraft(TwitterDraft draft)
+        {
+            TweetText = draft.Text;
+
+            if (draft.Scheduled != null)
+            {
+                IsScheduled = true;
+                ScheduledTime = draft.Scheduled.GetValueOrDefault();
+                ScheduledDate = draft.Scheduled.GetValueOrDefault();
+            }
+
+            foreach (var account in draft.Accounts.Where(x => x != null))
+                SelectedAccounts.Add(account);
+        }
+
+        public override void OnNavigating(System.ComponentModel.CancelEventArgs e)
+        {
+            TrySaveDraft();
+            base.OnNavigating(e);
+        }
+
+        private void TrySaveDraft()
+        {
+            savedText = TweetText;
+
+            if (draft != null)
+            {
+                draft.Text = TweetText;
+                Config.SaveDrafts();
+            }
+        }
+
         private void SetRemainingChars()
         {
             var txtLen = TweetText == null ? 0 : TweetText.Length;
@@ -188,25 +269,6 @@ namespace Ocell.Pages
             }
         }
 
-        public void TryLoadDraft()
-        {
-            TwitterDraft draft = DataTransfer.Draft;
-            if (draft != null)
-            {
-                TweetText = draft.Text;
-
-                if (draft.Scheduled != null)
-                {
-                    IsScheduled = true;
-                    ScheduledTime = draft.Scheduled.GetValueOrDefault();
-                    ScheduledDate = draft.Scheduled.GetValueOrDefault();
-                }
-            }
-            else
-            {
-                TweetText = DataTransfer.Text == null ? "" : DataTransfer.Text;
-            }
-        }
 
         private bool commandsSet = false;
         private void SetupCommands()
@@ -288,7 +350,6 @@ namespace Ocell.Pages
             }
 
             TweetText = "";
-            DataTransfer.Text = "";
             Notificator.ShowMessage(Resources.BufferUpdateSent);
             Navigator.GoBack();
         }
@@ -337,12 +398,11 @@ namespace Ocell.Pages
                 }
             }
 
-            if (DataTransfer.Draft != null)
+            if (draft != null)
             {
-                if (Config.Drafts.Value.Contains(DataTransfer.Draft))
-                    Config.Drafts.Value.Remove(DataTransfer.Draft);
+                if (Config.Drafts.Value.Contains(draft))
+                    Config.Drafts.Value.Remove(draft);
 
-                DataTransfer.Draft = null;
                 Config.SaveDrafts();
             }
         }
@@ -350,7 +410,7 @@ namespace Ocell.Pages
         private async void SendDirectMessage()
         {
             var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
-            var response = await service.SendDirectMessageAsync(new SendDirectMessageOptions { UserId = (int)DataTransfer.DMDestinationId, Text = TweetText });
+            var response = await service.SendDirectMessageAsync(new SendDirectMessageOptions { UserId = (int)args.ReplyToId, Text = TweetText });
 
             Progress.IsLoading = false;
             Progress.Text = "";
@@ -362,9 +422,8 @@ namespace Ocell.Pages
             else
             {
                 TweetText = "";
-                DataTransfer.Text = "";
+                savedText = "";
                 Navigator.GoBack();
-                DataTransfer.ReplyingDM = false;
             }
         }
 
@@ -420,7 +479,7 @@ namespace Ocell.Pages
             var sendOptions = new SendTweetOptions
             {
                 Status = post,
-                InReplyToStatusId = DataTransfer.ReplyId,
+                InReplyToStatusId = args.ReplyToId,
                 Lat = latitude,
                 Long = longitude
             };
@@ -450,7 +509,7 @@ namespace Ocell.Pages
                 if (requestsLeft <= 0)
                 {
                     TweetText = "";
-                    DataTransfer.Text = "";
+                    savedText = "";
                     Navigator.GoBack();
                 }
             }
@@ -492,7 +551,7 @@ namespace Ocell.Pages
         {
             TwitterStatusTask task = new TwitterStatusTask
             {
-                InReplyTo = DataTransfer.ReplyId
+                InReplyTo = args.ReplyToId ?? 0
             };
 
             task.Text = TweetText;
@@ -600,7 +659,7 @@ namespace Ocell.Pages
             foreach (var acc in SelectedAccounts.OfType<UserToken>())
                 draft.Accounts.Add(acc as UserToken);
 
-            draft.ReplyId = DataTransfer.ReplyId;
+            draft.ReplyId = args.ReplyToId;
 
             return draft;
         }

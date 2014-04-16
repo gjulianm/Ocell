@@ -1,4 +1,5 @@
 ﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Interfaces;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using Ocell.Commands;
@@ -208,9 +209,13 @@ namespace Ocell.Pages.Elements
 
             quote = new DelegateCommand((obj) =>
             {
-                DataTransfer.Text = "RT @" + Tweet.Author.ScreenName + ": " + Tweet.Text;
-                Notificator.ShowError("Fix this,."); // TODO: Exactly that.
-            }, obj => Config.Accounts.Value.Any() && Tweet != null);
+                Navigator.MessageAndNavigate<NewTweetModel, NewTweetArgs>(new NewTweetArgs
+                {
+                    Text = String.Format("RT @{0}: {1}", Tweet.Author.ScreenName, Tweet.Text),
+                    ReplyToId = Tweet.Id
+                });
+            },
+            obj => Config.Accounts.Value.Any() && Tweet != null);
 
             favorite = new DelegateCommand(async (parameter) =>
             {
