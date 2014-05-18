@@ -21,9 +21,12 @@ namespace Ocell.Library.Twitter
 
         private static string RemoveSymbols(string str)
         {
+            string invalid = ";:/@";
             string copy = "";
-            foreach (char c in str)
-                if (c != ';' && c != ':' && c != '/' && c != '@')
+
+            // The alternative is using regexes, and I think this is more simple.
+            foreach (var c in str)
+                if (!invalid.Contains(c))
                     copy += c;
 
             return copy;
@@ -38,10 +41,9 @@ namespace Ocell.Library.Twitter
         public static void SaveToCache(TwitterResource resource, IEnumerable<TwitterStatus> list)
         {
             string fileName = GetCacheName(resource);
-
             var fileManager = Dependency.Resolve<IFileManager>();
-
             var serializer = new SharpSerializer(SerializerSettings);
+
             MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
             {
                 try
@@ -69,7 +71,6 @@ namespace Ocell.Library.Twitter
             var serializer = new SharpSerializer(SerializerSettings);
             var fileManager = Dependency.Resolve<IFileManager>();
 
-
             MutexUtil.DoWork("OCELL_FILE_MUTEX" + fileName, () =>
             {
                 try
@@ -88,11 +89,7 @@ namespace Ocell.Library.Twitter
 
             statuses = statuses ?? new List<TwitterStatus>();
 
-            foreach (var tweet in statuses)
-                tweet.CreatedDate = tweet.CreatedDate.ToLocalTime();
-
             return statuses;
-
         }
 
         public static void PreloadCache(TwitterResource resource)
