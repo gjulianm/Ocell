@@ -1219,4 +1219,7 @@
   <data name="NoNewNotifications" xml:space="preserve">
     <value>Sie haben keine Meldungen.</value>
   </data>
+  <data name="ErrorUnexpected" xml:space="preserve">
+    <value>Ein unerwarteter Fehler passiert, sorry. Wenn diese Meldung häufig ist, benachrichtigen Sie bitte @OcellApp, damit wir es beheben können.</value>
+  </data>
 </root>

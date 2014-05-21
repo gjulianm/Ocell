@@ -1,7 +1,9 @@
 ﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Diagnostics;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
 using PropertyChanged;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Data;
@@ -9,17 +11,23 @@ using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
+    [Flags]
+    public enum UserListResource { Following, Followers }
+
+    public class UserListParams
+    {
+        public UserListResource Resource { get; set; }
+        public string User { get; set; }
+    }
+
     [ImplementPropertyChanged]
     public class UserListModel : ExtendedViewModelBase
     {
-        string whatUserList;
-        string user;
+        SafeObservable<TwitterUser> list;
+        CollectionViewSource viewSource;
+        UserListParams toShow;
 
         public string PageTitle { get; set; }
-
-        SafeObservable<TwitterUser> list;
-
-        CollectionViewSource viewSource;
 
         public System.ComponentModel.ICollectionView List
         {
@@ -30,9 +38,6 @@ namespace Ocell.Pages.Elements
 
         public UserListModel()
         {
-            whatUserList = "";
-            user = "";
-            PageTitle = whatUserList;
             list = new SafeObservable<TwitterUser>();
             viewSource = new CollectionViewSource();
             viewSource.Source = list;
@@ -51,21 +56,28 @@ namespace Ocell.Pages.Elements
                 }
             };
         }
-        
-        public void Loaded(string resource, string userName)
-        {
-            whatUserList = resource;
-            user = userName;
 
-            if (whatUserList == "followers")
+        public override void OnLoad()
+        {
+            toShow = ReceiveMessage<UserListParams>();
+
+            if (toShow == null)
             {
-                ServiceDispatcher.GetCurrentService().ListFollowersAsync(new ListFollowersOptions { ScreenName = user, IncludeUserEntities = true }).ContinueWith(ReceiveUsers);
+                AncoraLogger.Instance.LogEvent("Loaded UserList but didn't receive parameters of what to show", LogLevel.Error);
+                Notificator.ShowError(Resources.ErrorUnexpected);
+                Navigator.GoBack();
+                return;
+            }
+
+            if (toShow.Resource == UserListResource.Followers)
+            {
+                ServiceDispatcher.GetCurrentService().ListFollowersAsync(new ListFollowersOptions { ScreenName = toShow.User, IncludeUserEntities = true }).ContinueWith(ReceiveUsers);
                 Progress.Text = Resources.DownloadingFollowers;
                 PageTitle = Resources.Followers;
             }
-            else if (whatUserList == "following")
+            else if (toShow.Resource == UserListResource.Following)
             {
-                ServiceDispatcher.GetCurrentService().ListFriendsAsync(new ListFriendsOptions { ScreenName = user, IncludeUserEntities = true }).ContinueWith(ReceiveUsers);
+                ServiceDispatcher.GetCurrentService().ListFriendsAsync(new ListFriendsOptions { ScreenName = toShow.User, IncludeUserEntities = true }).ContinueWith(ReceiveUsers);
                 Progress.Text = Resources.DownloadingFollowing;
                 PageTitle = Resources.Following;
             }
@@ -105,10 +117,10 @@ namespace Ocell.Pages.Elements
 
             if (users.NextCursor != null && users.NextCursor != 0)
             {
-                if (whatUserList == "followers")
-                    ServiceDispatcher.GetCurrentService().ListFollowersAsync(new ListFollowersOptions { ScreenName = user, Cursor = users.NextCursor }).ContinueWith(ReceiveUsers);
-                else if (whatUserList == "following")
-                    ServiceDispatcher.GetCurrentService().ListFriendsAsync(new ListFriendsOptions { ScreenName = user, Cursor = users.NextCursor }).ContinueWith(ReceiveUsers);
+                if (toShow.Resource == UserListResource.Followers)
+                    ServiceDispatcher.GetCurrentService().ListFollowersAsync(new ListFollowersOptions { ScreenName = toShow.User, Cursor = users.NextCursor }).ContinueWith(ReceiveUsers);
+                else if (toShow.Resource == UserListResource.Following)
+                    ServiceDispatcher.GetCurrentService().ListFriendsAsync(new ListFriendsOptions { ScreenName = toShow.User, Cursor = users.NextCursor }).ContinueWith(ReceiveUsers);
             }
             else
             {

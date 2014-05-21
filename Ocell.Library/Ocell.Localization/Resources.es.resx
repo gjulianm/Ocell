@@ -1231,4 +1231,7 @@
   <data name="CouldntGetYourPosition" xml:space="preserve">
     <value>No hemos podido obtener tu posición.</value>
   </data>
+  <data name="ErrorUnexpected" xml:space="preserve">
+    <value>Ha ocurrido un error inesperado. Por favor, notifica a @OcellApp si ocurre con frecuencia para que podamos arreglarlo. ¡Gracias!</value>
+  </data>
 </root>

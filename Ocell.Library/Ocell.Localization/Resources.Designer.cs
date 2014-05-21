@@ -1132,6 +1132,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a An unexpected error happened, sorry. If this message is frequent, please notify @OcellApp so we can fix it..
+        /// </summary>
+        public static string ErrorUnexpected {
+            get {
+                return ResourceManager.GetString("ErrorUnexpected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Error uploading the image. Please try again..
         /// </summary>
         public static string ErrorUploadingImage {

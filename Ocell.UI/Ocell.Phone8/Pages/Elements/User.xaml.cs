@@ -1,5 +1,6 @@
 ﻿using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
+using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
@@ -9,13 +10,15 @@ using System;
 
 namespace Ocell.Pages.Elements
 {
+    [ViewModel(typeof(UserModel))]
     public partial class User : PhoneApplicationPage
     {
-        UserModel viewModel;
+        UserModel viewModel { get { return DataContext as UserModel; } }
 
         public User()
         {
-            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
+            InitializeComponent();
+            Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
 
             viewModel.PropertyChanged += (sender, e) =>
             {
@@ -46,14 +49,24 @@ namespace Ocell.Pages.Elements
 
         private void Following_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            // TODO: Refactor this.
-            NavigationService.Navigate(new Uri("/Pages/Elements/UserList.xaml?resource=following&user=" + viewModel.ScreenName, UriKind.Relative));
+            var target = new UserListParams
+            {
+                Resource = UserListResource.Following,
+                User = viewModel.ScreenName
+            };
+
+            Dependency.Resolve<INavigationService>().MessageAndNavigate<UserListModel, UserListParams>(target);
         }
 
         private void TextBlock_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            // TODO: And this.
-            NavigationService.Navigate(new Uri("/Pages/Elements/UserList.xaml?resource=followers&user=" + viewModel.ScreenName, UriKind.Relative));
+            var target = new UserListParams
+            {
+                Resource = UserListResource.Followers,
+                User = viewModel.ScreenName
+            };
+
+            Dependency.Resolve<INavigationService>().MessageAndNavigate<UserListModel, UserListParams>(target);
         }
 
         private void Avatar_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)

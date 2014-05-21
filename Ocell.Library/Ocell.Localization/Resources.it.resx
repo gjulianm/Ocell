@@ -1212,4 +1212,7 @@
   <data name="ErrorRetweeting" xml:space="preserve">
     <value>Un errore è accaduto durante il tentativo di inviare il tweet.</value>
   </data>
+  <data name="ErrorUnexpected" xml:space="preserve">
+    <value>È accaduto un errore imprevisto, mi dispiace. Se questo messaggio è frequente, si prega di avvisare @OcellApp in modo che possiamo risolvere il problema.</value>
+  </data>
 </root>

@@ -1182,4 +1182,7 @@
   <data name="ErrorRetweeting" xml:space="preserve">
     <value>Errore bat gertatu bitartean retweet bidali nahian.</value>
   </data>
+  <data name="ErrorUnexpected" xml:space="preserve">
+    <value>Ustekabeko errorea gertatu da, barkatu. Mezu hau maiz badago, mesedez, jakinarazi @OcellApp, guk konpondu ahal izango dugu.</value>
+  </data>
 </root>
