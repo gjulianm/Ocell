@@ -1,6 +1,7 @@
 ﻿
 using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
+using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Ocell.Helpers;
@@ -15,6 +16,7 @@ using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
+    [ViewModel(typeof(TweetModel))]
     public partial class Tweet : PhoneApplicationPage
     {
         Storyboard sbShow;
