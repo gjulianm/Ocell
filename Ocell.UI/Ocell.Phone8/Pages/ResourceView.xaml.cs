@@ -1,20 +1,17 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;
-using TweetSharp;
-using Ocell.Library;
-using Ocell.Library.Twitter;
-using AncoraMVVM.Base.ViewModelLocator;
+using Ocell.Pages.Search;
+using System.Windows;
 
-namespace Ocell.Pages.Search
+namespace Ocell.Pages
 {
     [ViewModel(typeof(ResourceViewModel))]
-    public partial class Search : PhoneApplicationPage
+    public partial class ResourceView : PhoneApplicationPage
     {
-        public Search()
+        public ResourceView()
         {
-            InitializeComponent(); Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
+            InitializeComponent();
+            Loaded += (sender, e) => { if (ApplicationBar != null) ApplicationBar.MatchOverriddenTheme(); };
         }
 
         private void TweetList_Loaded(object sender, RoutedEventArgs e)
