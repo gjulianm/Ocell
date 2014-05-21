@@ -60,7 +60,7 @@ namespace Ocell.Pages.Elements
             sbHide = this.Resources["sbHide"] as Storyboard;
 
             Initialize();
-            ViewModel.OnLoad();
+
             if (ApplicationBar != null)
                 ApplicationBar.MatchOverriddenTheme();
 

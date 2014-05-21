@@ -10,7 +10,6 @@ using PropertyChanged;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -78,7 +77,7 @@ namespace Ocell.Pages.Elements
         public void Initialize()
         {
             AppBarMode = ApplicationBarMode.Default;
-            
+
             if (DataTransfer.Status == null)
             {
                 Notificator.ShowError(Localization.Resources.ErrorLoadingTweet);
@@ -173,13 +172,10 @@ namespace Ocell.Pages.Elements
 
         public override void OnLoad()
         {
-            ThreadPool.QueueUserWorkItem((c) =>
-            {
-                GetRetweets();
-                GetReplies();
-                CreateCommands();
-                SetImage();
-            });
+            GetRetweets();
+            GetReplies();
+            CreateCommands();
+            SetImage();
         }
 
         private void CreateCommands()
@@ -298,7 +294,6 @@ namespace Ocell.Pages.Elements
 
             }
 
-
             if (Tweet.Entities.Urls != null && Tweet.Entities.Urls.Any())
             {
                 var parser = new MediaLinkParser();
@@ -310,7 +305,7 @@ namespace Ocell.Pages.Elements
                         if (url != null && !string.IsNullOrWhiteSpace(url.ExpandedValue))
                         {
                             string photoUrl;
-                            if (parser.TryGetMediaUrl(url.ExpandedValue, out photoUrl))
+                            if (parser.TryGetMediaUrl(url.ExpandedValue, out photoUrl) && !Images.Contains(photoUrl))
                                 Images.Add(photoUrl);
                         }
                     }
