@@ -30,7 +30,6 @@ namespace Ocell.Library
         public static ITweetableFilter Filter;
         public static ColumnFilter cFilter;
         public static bool IsGlobalFilter;
-        public static bool ShouldReloadColumns;
         public static bool ShouldReloadFilters = false;
         public static GroupedDM DMGroup;
     }

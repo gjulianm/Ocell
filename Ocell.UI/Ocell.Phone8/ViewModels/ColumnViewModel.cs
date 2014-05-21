@@ -131,7 +131,6 @@ namespace Ocell.Pages.Columns
             {
                 Config.Columns.Value.Add(resource);
                 Config.SaveColumns();
-                DataTransfer.ShouldReloadColumns = true;
             }
         }
 

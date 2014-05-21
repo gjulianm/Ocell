@@ -113,6 +113,7 @@
     <Compile Include="Compatibility\ITileManager.cs" />
     <Compile Include="MediaLinkParser.cs" />
     <Compile Include="Notifications\NotificationPreferences.cs" />
+    <Compile Include="ObservableCollectionReplayer.cs" />
     <Compile Include="Security\MutexExtensions.cs" />
     <Compile Include="Tasks\TwitterStatusTask.cs" />
     <Compile Include="Twitter\TwitterResource.cs" />

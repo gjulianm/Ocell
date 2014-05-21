@@ -78,7 +78,7 @@ namespace Ocell.Pages.Elements
         public void Initialize()
         {
             AppBarMode = ApplicationBarMode.Default;
-
+            
             if (DataTransfer.Status == null)
             {
                 Notificator.ShowError(Localization.Resources.ErrorLoadingTweet);

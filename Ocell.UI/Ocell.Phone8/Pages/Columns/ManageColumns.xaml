@@ -4,56 +4,29 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Ocell" 
 	xmlns:controls="clr-namespace:Ocell.Controls"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
-    FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
-    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
+    xmlns:rlb="clr-namespace:ReorderListBox;assembly=ReorderListBox"
+    Style="{StaticResource ModalPageStyle}"
     >
-	
-	<toolkit:TransitionService.NavigationInTransition>
-	    <toolkit:NavigationInTransition>
-	        <toolkit:NavigationInTransition.Backward>
-	            <toolkit:SlideTransition Mode="SlideRightFadeIn"/>
-	        </toolkit:NavigationInTransition.Backward>
-	        <toolkit:NavigationInTransition.Forward>
-	            <toolkit:TurnstileTransition Mode="ForwardIn"/>
-	        </toolkit:NavigationInTransition.Forward>
-	    </toolkit:NavigationInTransition>
-	</toolkit:TransitionService.NavigationInTransition>
-	<toolkit:TransitionService.NavigationOutTransition>
-	    <toolkit:NavigationOutTransition>
-	        <toolkit:NavigationOutTransition.Backward>
-                <toolkit:SlideTransition Mode="SlideLeftFadeOut"/>
-            </toolkit:NavigationOutTransition.Backward>
-	        <toolkit:NavigationOutTransition.Forward>
-	            <toolkit:TurnstileTransition Mode="ForwardOut"/>
-	        </toolkit:NavigationOutTransition.Forward>
-	    </toolkit:NavigationOutTransition>
-	</toolkit:TransitionService.NavigationOutTransition>
     
 	<phone:PhoneApplicationPage.Resources>
-		<DataTemplate x:Key="ItemTemplate" toolkit:TiltEffect.IsTiltEnabled="True">
-			<Grid Height="80" Width="450">
-                <TextBlock Text="{Binding Converter={StaticResource ToColumnConverter}}" FontSize="24" Margin="83,23,0,0" HorizontalAlignment="Left" Width="308" VerticalAlignment="Top"/>
-                <Image HorizontalAlignment="Left" Margin="8,8,0,8" Width="64" Height="64">
-                    <Image.Source>
-                        <BitmapImage UriSource="{Binding User.AvatarUrl}" CreateOptions="BackgroundCreation"/>
-                    </Image.Source>
-                </Image>
-				<toolkit:ContextMenuService.ContextMenu>
-                    <toolkit:ContextMenu  Background="White" BorderBrush="Black" Foreground="Black" >
-						<toolkit:MenuItem Foreground="Black" Click="menuItemClick" Tag="{Binding}" Header="{Binding Strings.Delete, Source={StaticResource LocalizedResources}}" />
-					</toolkit:ContextMenu>
-				</toolkit:ContextMenuService.ContextMenu>
-			</Grid>
+		<DataTemplate x:Key="ColumnItemTemplate">
+			<StackPanel Orientation="Horizontal" x:Name="ColumnPanel">
+                <Button Tap="ColumnItemTap" BorderThickness="0" Margin="-20,0,-12,0">
+                    <Rectangle Fill="{StaticResource PhoneForegroundBrush}" Width="40" Height="40">
+                        <Rectangle.OpacityMask>
+                            <ImageBrush ImageSource="/Images/Icons_White/appbar.close.rest.png"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </Button>
+                <Image HorizontalAlignment="Left" Margin="8,8,20,8" Width="64" Height="64" Source="{Binding User.AvatarUrl}" />
+                <TextBlock Text="{Binding Converter={StaticResource ToColumnConverter}}" FontSize="28" FontFamily="Segoe WP SemiLight"
+                           HorizontalAlignment="Left" Width="308" VerticalAlignment="Center"/>
+			</StackPanel>
 		</DataTemplate>
 	</phone:PhoneApplicationPage.Resources>
 
@@ -74,10 +47,10 @@
     		</StackPanel>
 
         <!--ContentPanel. Colocar aquí el contenido adicional-->
-    		<Grid x:Name="ContentPanel" Margin="8,119,-8,-16" d:LayoutOverrides="VerticalAlignment">
-    			<ListBox x:Name="MainList" ItemTemplate="{StaticResource ItemTemplate}" Margin="8,0,16,8" SelectionChanged="MainList_SelectionChanged" toolkit:TiltEffect.IsTiltEnabled="True"/>			
-				
-    		</Grid>
+    		<Grid x:Name="ContentPanel" Margin="8,119,-8,-16">
+                <rlb:ReorderListBox Margin="8,0,16,8" toolkit:TiltEffect.IsTiltEnabled="True" IsReorderEnabled="True"
+                    ItemTemplate="{StaticResource ColumnItemTemplate}" ItemsSource="{Binding Columns}" SelectedIndex="{Binding SelectedColumn, Mode=TwoWay}" />
+            </Grid>
     	</Grid>
 
      

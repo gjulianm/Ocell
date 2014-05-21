@@ -198,6 +198,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MainPageModel.cs" />
+    <Compile Include="ViewModels\ManageColumnsModel.cs" />
     <Compile Include="ViewModels\MetroInMotion.cs" />
     <Compile Include="Notificator.cs" />
     <Compile Include="OcellThemeExtensions.cs" />
@@ -539,6 +540,9 @@
     <Reference Include="PropertyChanged">
       <HintPath>..\..\packages\PropertyChanged.Fody.1.48.1.0\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\PropertyChanged.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="ReorderListBox">
+      <HintPath>..\..\packages\ReorderListBox.1.2.0.0\lib\wp80\ReorderListBox.dll</HintPath>
     </Reference>
     <Reference Include="Sharplonger">
       <HintPath>..\..\packages\Sharplonger.0.1.0-alpha\lib\portable-net45+sl50+wp80+win\Sharplonger.dll</HintPath>

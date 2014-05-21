@@ -39,7 +39,6 @@ namespace Ocell.Pages.Search
 
                 Config.SaveColumns();
                 Notificator.ShowMessage(Localization.Resources.ColumnAdded);
-                DataTransfer.ShouldReloadColumns = true;
                 addCommand.RaiseCanExecuteChanged();
             }, (param) => Resource != null && !Config.Columns.Value.Contains(Resource));
         }

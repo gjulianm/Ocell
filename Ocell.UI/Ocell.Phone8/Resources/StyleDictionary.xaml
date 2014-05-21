@@ -4,14 +4,54 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
 	xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
-    >  
-    
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    >
+
     <Style x:Key="PageHeaderStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe WP Light" />
         <Setter Property="FontSize" Value="60" />
     </Style>
-    
+
     <Style x:Key="AppBarStyle" TargetType="appbar:BindableAppBar">
-        <Setter Property="BindableOpacity" Value="0.8" />        
+        <Setter Property="BindableOpacity" Value="0.8" />
+    </Style>
+
+    <Style x:Key="BasePageStyle" TargetType="phone:PhoneApplicationPage">
+        <Setter Property="SupportedOrientations" Value="PortraitOrLandscape" />
+        <Setter Property="Orientation" Value="Portrait" />
+        <Setter Property="shell:SystemTray.IsVisible" Value="True" />
+        <Setter Property="shell:SystemTray.Opacity" Value="0.0" />
+        <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilyNormal}" />
+        <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeNormal}" />
+        <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}" />
+        <Setter Property="CacheMode" Value="BitmapCache" />
+    </Style>
+
+    <Style x:Key="ModalPageStyle" BasedOn="{StaticResource BasePageStyle}" TargetType="phone:PhoneApplicationPage">
+        <Setter Property="toolkit:TransitionService.NavigationInTransition">
+            <Setter.Value>
+                <toolkit:NavigationInTransition>
+                    <toolkit:NavigationInTransition.Backward>
+                        <toolkit:SlideTransition Mode="SlideRightFadeIn"/>
+                    </toolkit:NavigationInTransition.Backward>
+                    <toolkit:NavigationInTransition.Forward>
+                        <toolkit:TurnstileTransition Mode="ForwardIn"/>
+                    </toolkit:NavigationInTransition.Forward>
+                </toolkit:NavigationInTransition>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="toolkit:TransitionService.NavigationOutTransition">
+            <Setter.Value>
+                <toolkit:NavigationOutTransition>
+                    <toolkit:NavigationOutTransition.Backward>
+                        <toolkit:SlideTransition Mode="SlideLeftFadeOut"/>
+                    </toolkit:NavigationOutTransition.Backward>
+                    <toolkit:NavigationOutTransition.Forward>
+                        <toolkit:TurnstileTransition Mode="ForwardOut"/>
+                    </toolkit:NavigationOutTransition.Forward>
+                </toolkit:NavigationOutTransition>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>
