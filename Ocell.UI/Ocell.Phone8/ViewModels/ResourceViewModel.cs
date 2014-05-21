@@ -3,7 +3,6 @@ using Ocell.Controls;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using PropertyChanged;
-using System.Windows.Input;
 
 namespace Ocell.Pages.Search
 {
@@ -15,11 +14,7 @@ namespace Ocell.Pages.Search
         public ExtendedListBox Listbox { get; set; }
         public TwitterResource Resource { get; set; }
 
-        DelegateCommand addCommand;
-        public ICommand AddCommand
-        {
-            get { return addCommand; }
-        }
+        public DelegateCommand AddCommand { get; set; }
 
         public ResourceViewModel()
         {
@@ -32,20 +27,20 @@ namespace Ocell.Pages.Search
                     UpdateTweetLoader();
             };
 
-            addCommand = new DelegateCommand((param) =>
+            AddCommand = new DelegateCommand((param) =>
             {
                 if (!Config.Columns.Value.Contains(Resource))
                     Config.Columns.Value.Add(Resource);
 
                 Config.SaveColumns();
                 Notificator.ShowMessage(Localization.Resources.ColumnAdded);
-                addCommand.RaiseCanExecuteChanged();
+                AddCommand.RaiseCanExecuteChanged();
             }, (param) => Resource != null && !Config.Columns.Value.Contains(Resource));
         }
 
         public void UpdateTweetLoader()
         {
-            addCommand.RaiseCanExecuteChanged();
+            AddCommand.RaiseCanExecuteChanged();
             Listbox.Resource = Resource;
             Listbox.Load();
         }
