@@ -8,6 +8,7 @@ using Ocell.Library.Twitter;
 using Ocell.Localization;
 using PropertyChanged;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -26,12 +27,17 @@ namespace Ocell.Pages.Elements
         public bool HasReplies { get; set; }
         public bool IsFavorited { get; set; }
         public bool HasImage { get; set; }
-        public ObservableCollection<ITweeter> UsersWhoRetweeted { get; set; }
+        public ObservableCollection<ITweeter> UserList { get; set; }
         public int RetweetCount { get; set; }
-        public bool HasRetweets { get; set; }
+        public int FavoriteCount { get; set; }
+        public bool ShowRetweeters { get; set; }
+        public bool ShowFavoriters { get; set; } // Hey, I'm sorry dictionary.
         public string WhoRetweeted { get; set; }
         public string Avatar { get; set; }
         public string ReplyText { get; set; }
+        public string ImageSource { get; set; }
+        public SafeObservable<ITweetable> Replies { get; set; }
+        public SafeObservable<string> Images { get; set; }
 
         public DelegateCommand DeleteTweet { get; set; }
         public DelegateCommand Share { get; set; }
@@ -39,16 +45,9 @@ namespace Ocell.Pages.Elements
         public DelegateCommand Favorite { get; set; }
         public DelegateCommand SendTweet { get; set; }
         public DelegateCommand NavigateToAuthor { get; set; }
-
-        public string ImageSource { get; set; }
-
-        public SafeObservable<ITweetable> Replies { get; set; }
-
-        public SafeObservable<string> Images { get; set; }
-
         public event EventHandler<EventArgs<ITweetable>> TweetSent;
 
-        Uri ImageNavigationUri;
+        public List<ITweeter> RetweetingUsers { get; set; }
 
         private void SetAvatar()
         {
@@ -79,24 +78,16 @@ namespace Ocell.Pages.Elements
             if (service != null && Tweet != null)
             {
                 var response = await service.RetweetsAsync(new RetweetsOptions { Id = Tweet.Id });
-
                 var statuses = response.Content;
 
-                if (response.RequestSucceeded && statuses.Any())
-                {
-                    HasRetweets = true;
-                    Deployment.Current.Dispatcher.BeginInvoke(() =>
-                    {
-                        foreach (var rt in statuses)
-                            UsersWhoRetweeted.Add(rt.Author);
-                    });
-                }
+                if (response.RequestSucceeded)
+                    RetweetingUsers = statuses.Select(x => x.Author).ToList();
             }
         }
 
         public TweetModel()
         {
-            UsersWhoRetweeted = new ObservableCollection<ITweeter>();
+            UserList = new ObservableCollection<ITweeter>();
             Replies = new SafeObservable<ITweetable>();
             Images = new SafeObservable<string>();
 
@@ -109,20 +100,47 @@ namespace Ocell.Pages.Elements
                 return;
             }
 
+            this.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == "ShowRetweeters")
+                {
+                    if (ShowRetweeters)
+                    {
+                        ShowFavoriters = false;
+                        UserList = new ObservableCollection<ITweeter>(RetweetingUsers ?? new List<ITweeter>());
+                        this.PropertyChanged += UpdateRetweetingUsers;
+                    }
+                    else
+                    {
+                        UserList = null;
+                        this.PropertyChanged -= UpdateRetweetingUsers;
+                    }
+                }
+                else if (e.PropertyName == "ShowFavoriters")
+                {
+                    if (ShowFavoriters)
+                        ShowFavoriters = false; // Change this whenever Twitter lets us get the users favoriting a tweet.
+                }
+            };
+
             SetRetweetedStatus();
             SetAvatar();
             SetupCommands();
 
             HasReplies = (Tweet.InReplyToStatusId != null);
             HasImage = (Tweet.Entities != null && Tweet.Entities.Media.Any());
-            IsFavorited = !Tweet.IsFavorited;
             IsFavorited = Tweet.IsFavorited;
             RetweetCount = Tweet.RetweetCount;
+            FavoriteCount = Tweet.FavoriteCount;
 
             if (Tweet.User == null || Tweet.User.Name == null)
                 FillUser();
+        }
 
-            UsersWhoRetweeted.CollectionChanged += (s, e) => RetweetCount = UsersWhoRetweeted.Count;
+        private void UpdateRetweetingUsers(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "RetweetingUsers")
+                UserList = new ObservableCollection<ITweeter>(RetweetingUsers ?? new List<ITweeter>());
         }
 
         private void SetRetweetedStatus()
@@ -131,7 +149,6 @@ namespace Ocell.Pages.Elements
             {
                 Tweet = DataTransfer.Status.RetweetedStatus;
                 WhoRetweeted = " " + String.Format(Localization.Resources.RetweetBy, DataTransfer.Status.Author.ScreenName);
-                HasRetweets = true;
             }
             else
             {

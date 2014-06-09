@@ -234,7 +234,7 @@
       <HintPath>..\..\packages\Microsoft.Bcl.1.1.8\lib\portable-net40+sl5+win8+wp8+wpa81\System.Threading.Tasks.dll</HintPath>
     </Reference>
     <Reference Include="Tweetsharp.PCL">
-      <HintPath>..\..\packages\Tweetsharp.PCL.3.0.7-alpha\lib\portable-net45+sl50+wp80+win\Tweetsharp.PCL.dll</HintPath>
+      <HintPath>..\..\packages\Tweetsharp.PCL.3.0.8-alpha\lib\portable-net45+sl50+wp80+win\Tweetsharp.PCL.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

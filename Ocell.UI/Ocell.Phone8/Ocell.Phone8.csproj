@@ -562,9 +562,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Ocell.ThirdParty\lib_dll\System.Windows.Interactivity.dll</HintPath>
     </Reference>
-    <Reference Include="Tweetsharp.PCL, Version=3.0.4.30432, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Tweetsharp.PCL, Version=3.0.4.34662, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Tweetsharp.PCL.3.0.7-alpha\lib\portable-net45+sl50+wp80+win\Tweetsharp.PCL.dll</HintPath>
+      <HintPath>..\..\packages\Tweetsharp.PCL.3.0.8-alpha\lib\portable-net45+sl50+wp80+win\Tweetsharp.PCL.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

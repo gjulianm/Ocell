@@ -21,6 +21,8 @@ namespace Ocell.Pages.Elements
     {
         Storyboard sbShow;
         Storyboard sbHide;
+        Storyboard UserListShow;
+        Storyboard UserListHide;
         bool conversationLoaded = false;
 
         private TweetModel ViewModel { get { return DataContext as TweetModel; } }
@@ -58,6 +60,19 @@ namespace Ocell.Pages.Elements
 
             sbShow = this.Resources["sbShow"] as Storyboard;
             sbHide = this.Resources["sbHide"] as Storyboard;
+            UserListShow = this.Resources["UserListShow"] as Storyboard;
+            UserListHide = this.Resources["UserListHide"] as Storyboard;
+
+            ViewModel.PropertyChanged += (s, ev) =>
+            {
+                if (ev.PropertyName == "UserList")
+                {
+                    if (ViewModel.UserList != null)
+                        Dispatcher.BeginInvoke(() => UserListShow.Begin());
+                    else
+                        Dispatcher.BeginInvoke(() => UserListHide.Begin());
+                }
+            };
 
             Initialize();
 

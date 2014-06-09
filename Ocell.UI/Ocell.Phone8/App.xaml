@@ -169,6 +169,8 @@
                     <Image Margin="8,8,0,0" HorizontalAlignment="Left" Width="64" Height="64" VerticalAlignment="Top" Source="{Binding AvatarUrl}"/>
                 </Grid>
             </DataTemplate>
+
+            <SolidColorBrush Color="{StaticResource PhoneSubtleColor}" Opacity="0.5" x:Key="SubtleTransparentBrush" />
         </ResourceDictionary>
     </Application.Resources>
 
