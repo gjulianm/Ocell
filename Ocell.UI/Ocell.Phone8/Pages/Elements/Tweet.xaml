@@ -70,7 +70,8 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Grid Margin="8,0,0,0" Visibility="{Binding Completed, Converter={StaticResource BooleanToVisibilityConverter}}" Height="170" local:MetroInMotion.Tilt="3" Tap="AuthorTap">
+                    
+                    <Grid Margin="8,0,0,0" Visibility="{Binding Completed, Converter={StaticResource BooleanToVisibilityConverter}}" Height="Auto" local:MetroInMotion.Tilt="3" Tap="AuthorTap">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="45*" />
                             <ColumnDefinition Width="55*"/>
@@ -78,14 +79,16 @@
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Image Source="{Binding Avatar}" Margin="8,8,8,8" Grid.Column="0" Grid.RowSpan="4"/>
-                        <TextBlock TextWrapping="Wrap" FontSize="32" Margin="10,0,0,0" HorizontalAlignment="Left" Text="{Binding Tweet.User.Name}" Grid.Column="1" Grid.Row="0"  />
-                        <TextBlock TextWrapping="Wrap" FontSize="21" Margin="10,0,0,0" FontFamily="Segoe WP SemiLight" Text="{Binding Tweet.AuthorName,StringFormat='@{0}'}" Grid.Column="1"  Grid.Row="1"  />
-
+                        <Border Background="Transparent" Margin="8" BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2"  Grid.Column="0" Grid.RowSpan="2">
+                            <Image Source="{Binding Avatar}" Margin="2" Stretch="UniformToFill" />
+                        </Border>
+                        <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0">
+                            <TextBlock TextWrapping="Wrap" FontSize="32" HorizontalAlignment="Left" Text="{Binding Tweet.User.Name}" />
+                            <TextBlock TextWrapping="Wrap" FontSize="21" FontFamily="Segoe WP SemiLight" Text="{Binding Tweet.AuthorName,StringFormat='@{0}'}" />
+                        </StackPanel>
                     </Grid>
 
                     <RichTextBox Grid.Row="1" x:Name="Text" FontSize="30" TextWrapping="Wrap" Margin="0,15,0,0" FontFamily="Segoe WP SemiLight"/>
