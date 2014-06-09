@@ -129,7 +129,10 @@ namespace Ocell.Commands
             TwitterStatus param = (TwitterStatus)parameter;
             TwitterResponse<TwitterStatus> response;
             var notificator = Dependency.Resolve<INotificationService>();
+            var progress = Dependency.Resolve<IProgressIndicator>();
             string successString = "";
+
+            progress.IsLoading = true;
 
             if (param.IsFavorited)
             {
@@ -142,10 +145,12 @@ namespace Ocell.Commands
                 successString = Resources.Favorited;
             }
 
+            progress.IsLoading = false;
+
             if (response.RequestSucceeded)
                 notificator.ShowProgressIndicatorMessage(successString);
             else
-                notificator.ShowError(Resources.ErrorMessage);
+                notificator.ShowError(Resources.ErrorMessage + response.Error.Message);
 
             return response.RequestSucceeded;
         }
@@ -243,6 +248,9 @@ namespace Ocell.Commands
     {
         public bool CanExecute(object parameter)
         {
+            if (System.ComponentModel.DesignerProperties.IsInDesignTool)
+                return true; // Avoid XAML design view errors when not able to resolve dependencies.
+
             var creds = Config.ReadLaterCredentials.Value;
             return parameter is TwitterStatus && (creds != null && creds.Instapaper != null || creds.Pocket != null);
         }

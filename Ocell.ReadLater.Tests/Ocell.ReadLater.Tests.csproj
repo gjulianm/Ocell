@@ -35,8 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AncoraMVVM.Base">
-      <HintPath>..\packages\AncoraMVVM.Base.0.1.27-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
+    <Reference Include="AncoraMVVM.Base, Version=0.1.25.28676, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AncoraMVVM.Base.0.1.28-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
     </Reference>
     <Reference Include="AncoraMVVM.Rest">
       <HintPath>..\packages\AncoraMVVM.Rest.0.1.14-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Rest.dll</HintPath>

@@ -15,7 +15,7 @@
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
+    Style="{StaticResource TurnstilePageStyle}"
     >
     <phone:PhoneApplicationPage.Resources>
         <ItemsPanelTemplate x:Key="PanelTemplate">
@@ -51,55 +51,17 @@
 					Storyboard.TargetProperty="Height"
 					From="75" To="0" Duration="0:0:0.2" />
         </Storyboard>
-
-
     </phone:PhoneApplicationPage.Resources>
-    <!--<d:DataContext>
-    <Binding Source="{StaticResource TweetSampleData}"/>
-  </d:DataContext>-->
-
-    <phone:PhoneApplicationPage.FontFamily>
-        <StaticResource ResourceKey="PhoneFontFamilyNormal"/>
-    </phone:PhoneApplicationPage.FontFamily>
-    <phone:PhoneApplicationPage.FontSize>
-        <StaticResource ResourceKey="PhoneFontSizeNormal"/>
-    </phone:PhoneApplicationPage.FontSize>
-    <phone:PhoneApplicationPage.Foreground>
-        <StaticResource ResourceKey="PhoneForegroundBrush"/>
-    </phone:PhoneApplicationPage.Foreground>
-
-    <toolkit:TransitionService.NavigationInTransition>
-        <toolkit:NavigationInTransition>
-            <toolkit:NavigationInTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardIn"/>
-            </toolkit:NavigationInTransition.Backward>
-            <toolkit:NavigationInTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardIn"/>
-            </toolkit:NavigationInTransition.Forward>
-        </toolkit:NavigationInTransition>
-    </toolkit:TransitionService.NavigationInTransition>
-    <toolkit:TransitionService.NavigationOutTransition>
-        <toolkit:NavigationOutTransition>
-            <toolkit:NavigationOutTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardOut"/>
-            </toolkit:NavigationOutTransition.Backward>
-            <toolkit:NavigationOutTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardOut"/>
-            </toolkit:NavigationOutTransition.Forward>
-        </toolkit:NavigationOutTransition>
-    </toolkit:TransitionService.NavigationOutTransition>
 
     <Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
         <controls:Panorama x:Name="panorama"  Title="{Binding Tweet.AuthorName, StringFormat='@{0} tweet:'}"  DefaultItem="1">
             <controls:Panorama.TitleTemplate>
                 <DataTemplate>
                     <Grid>
-                        <TextBlock Text="{Binding}" FontSize="40" Margin="0,100,0,0"/>
+                        <TextBlock Text="{Binding}" FontSize="40" Margin="0,100,0,0" />
                     </Grid>
                 </DataTemplate>
             </controls:Panorama.TitleTemplate>
-
-
 
             <controls:PanoramaItem Header="tweet" Tag="tweet" HeaderTemplate="{StaticResource HeaderTemplate}">
                 <Grid>
@@ -108,7 +70,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Grid Margin="8,0,0,0" Visibility="{Binding Completed, Converter={StaticResource BooleanToVisibilityConverter}}" Height="170" local:MetroInMotion.Tilt="3" Tap="Image_Tap">
+                    <Grid Margin="8,0,0,0" Visibility="{Binding Completed, Converter={StaticResource BooleanToVisibilityConverter}}" Height="170" local:MetroInMotion.Tilt="3" Tap="AuthorTap">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="45*" />
                             <ColumnDefinition Width="55*"/>
@@ -129,9 +91,9 @@
                     <RichTextBox Grid.Row="1" x:Name="Text" FontSize="30" TextWrapping="Wrap" Margin="0,15,0,0" FontFamily="Segoe WP SemiLight"/>
 
                     <TextBlock HorizontalAlignment="Right" FontSize="20" Foreground="#FFABABAB" FontFamily="Segoe WP Light" Grid.Row="2" TextAlignment="Right" Margin="0,20,0,0">
-            <Run Text="{Binding Tweet.CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}"/>
-            <Run Text="{Binding Strings.Via, Source={StaticResource LocalizedResources}}" />
-            <Run Text="{Binding Tweet.Source, Converter={StaticResource RemoveHTMLConverter}}" />
+                        <Run Text="{Binding Tweet.CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}"/>
+                        <Run Text="{Binding Strings.Via, Source={StaticResource LocalizedResources}}" />
+                        <Run Text="{Binding Tweet.Source, Converter={StaticResource RemoveHTMLConverter}}" />
                     </TextBlock>
                 </Grid>
             </controls:PanoramaItem>
@@ -155,19 +117,16 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <toolkit:PhoneTextBox x:Name="textBox" Grid.Row="0" Text="{Binding ReplyText, Mode=TwoWay}" Height="75" GotFocus="textBox_GotFocus" Hint="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" TextWrapping="Wrap"  InputScope="Chat">
-
-
-
-                    </toolkit:PhoneTextBox>
+                    
+                    <toolkit:PhoneTextBox x:Name="textBox" Grid.Row="0" Text="{Binding ReplyText, Mode=TwoWay}" Height="75" GotFocus="textBox_GotFocus" Hint="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" TextWrapping="Wrap"  InputScope="Chat" />
                     <Button x:Name="button" Click="button_Click" Content="{Binding Strings.Send, Source={StaticResource LocalizedResources}}" Command="{Binding SendTweet}" Grid.Row="1" Width="150" HorizontalAlignment="Right" Height="0"/>
                     <lc:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True"  x:Name="conversation" ItemTemplate="{StaticResource TweetTemplate}" Grid.Row="2" />
-
+                    
                     <TextBlock Visibility="{Binding HasRetweets, Converter={StaticResource BooleanToVisibilityConverter}}"  Foreground="{StaticResource PhoneSubtleBrush}" Height="27" Grid.Row="3">
-            <Run Text="{Binding Strings.UsersWhoRetweeted, Source={StaticResource LocalizedResources}}"/>
-            <Run Text=" ("/>
-            <Run Text="{Binding RetweetCount}"/>
-            <Run Text="):"/>
+                        <Run Text="{Binding Strings.UsersWhoRetweeted, Source={StaticResource LocalizedResources}}"/>
+                        <Run Text=" ("/>
+                        <Run Text="{Binding RetweetCount}"/>
+                        <Run Text="):"/>
                     </TextBlock>
                     <ListBox ItemsSource="{Binding UsersWhoRetweeted}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ItemsPanel="{StaticResource PanelTemplate}" ItemTemplate="{StaticResource RetweetUserTemplate}"
 						Visibility="{Binding HasRetweets, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="4" Margin="0,0,0,8"/>
@@ -181,7 +140,7 @@
             <TextBlock HorizontalAlignment="Left" Margin="16,8,0,0" TextWrapping="Wrap" Text="{Binding Strings.WhatToMute, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" FontFamily="Segoe WP Light"/>
         </Grid>
 
-        
+
     </Grid>
     <appbar:Bindable.ApplicationBar>
         <appbar:BindableAppBar Mode="{Binding AppBarMode}">

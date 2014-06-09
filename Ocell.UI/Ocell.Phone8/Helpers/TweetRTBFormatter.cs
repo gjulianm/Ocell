@@ -161,8 +161,7 @@ namespace Ocell.Helpers
             }
             else if (link.TargetName[0] == '@')
             {
-                messager.SendTo<UserModel, string>(link.TargetName);
-                navigator.Navigate<UserModel>();
+                navigator.MessageAndNavigate<UserModel, TargetUser>(new TargetUser { Username = link.TargetName });
             }
             else if (link.TargetName[0] == '#')
             {

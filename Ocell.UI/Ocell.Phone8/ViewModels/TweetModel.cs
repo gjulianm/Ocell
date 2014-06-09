@@ -12,7 +12,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using TweetSharp;
 
 namespace Ocell.Pages.Elements
@@ -34,35 +33,12 @@ namespace Ocell.Pages.Elements
         public string Avatar { get; set; }
         public string ReplyText { get; set; }
 
-        DelegateCommand deleteTweet;
-        public ICommand DeleteTweet
-        {
-            get { return deleteTweet; }
-        }
-
-        DelegateCommand share;
-        public ICommand Share
-        {
-            get { return share; }
-        }
-
-        DelegateCommand quote;
-        public ICommand Quote
-        {
-            get { return quote; }
-        }
-
-        DelegateCommand favorite;
-        public ICommand Favorite
-        {
-            get { return favorite; }
-        }
-
-        DelegateCommand sendTweet;
-        public ICommand SendTweet
-        {
-            get { return sendTweet; }
-        }
+        public DelegateCommand DeleteTweet { get; set; }
+        public DelegateCommand Share { get; set; }
+        public DelegateCommand Quote { get; set; }
+        public DelegateCommand Favorite { get; set; }
+        public DelegateCommand SendTweet { get; set; }
+        public DelegateCommand NavigateToAuthor { get; set; }
 
         public string ImageSource { get; set; }
 
@@ -74,54 +50,8 @@ namespace Ocell.Pages.Elements
 
         Uri ImageNavigationUri;
 
-        public void Initialize()
-        {
-            AppBarMode = ApplicationBarMode.Default;
-
-            if (DataTransfer.Status == null)
-            {
-                Notificator.ShowError(Localization.Resources.ErrorLoadingTweet);
-                Navigator.GoBack();
-                return;
-            }
-
-            if (DataTransfer.Status.RetweetedStatus != null)
-            {
-                Tweet = DataTransfer.Status.RetweetedStatus;
-                WhoRetweeted = " " + String.Format(Localization.Resources.RetweetBy, DataTransfer.Status.Author.ScreenName);
-                HasRetweets = true;
-            }
-            else
-            {
-                Tweet = DataTransfer.Status;
-                WhoRetweeted = "";
-            }
-            SetAvatar();
-
-            HasReplies = (Tweet.InReplyToStatusId != null);
-            HasImage = (Tweet.Entities != null && Tweet.Entities.Media.Any());
-            IsFavorited = Tweet.IsFavorited;
-            RetweetCount = Tweet.RetweetCount;
-
-            if (Tweet.User == null || Tweet.User.Name == null)
-                FillUser();
-
-
-            UsersWhoRetweeted = new ObservableCollection<ITweeter>();
-            Replies = new SafeObservable<ITweetable>();
-            Images = new SafeObservable<string>();
-
-            UsersWhoRetweeted.CollectionChanged += (s, e) =>
-            {
-                RetweetCount = UsersWhoRetweeted.Count;
-            };
-
-            CreateCommands();
-        }
-
         private void SetAvatar()
         {
-
             if (Tweet.User != null && Tweet.User.ProfileImageUrl != null)
                 Avatar = Tweet.User.ProfileImageUrl.Replace("_normal", "");
         }
@@ -161,26 +91,65 @@ namespace Ocell.Pages.Elements
                             UsersWhoRetweeted.Add(rt.Author);
                     });
                 }
-
             }
         }
 
         public TweetModel()
         {
-            Initialize();
+            UsersWhoRetweeted = new ObservableCollection<ITweeter>();
+            Replies = new SafeObservable<ITweetable>();
+            Images = new SafeObservable<string>();
+
+            AppBarMode = ApplicationBarMode.Default;
+
+            if (DataTransfer.Status == null)
+            {
+                Notificator.ShowError(Localization.Resources.ErrorLoadingTweet);
+                Navigator.GoBack();
+                return;
+            }
+
+            SetRetweetedStatus();
+            SetAvatar();
+            SetupCommands();
+
+            HasReplies = (Tweet.InReplyToStatusId != null);
+            HasImage = (Tweet.Entities != null && Tweet.Entities.Media.Any());
+            IsFavorited = !Tweet.IsFavorited;
+            IsFavorited = Tweet.IsFavorited;
+            RetweetCount = Tweet.RetweetCount;
+
+            if (Tweet.User == null || Tweet.User.Name == null)
+                FillUser();
+
+            UsersWhoRetweeted.CollectionChanged += (s, e) => RetweetCount = UsersWhoRetweeted.Count;
+        }
+
+        private void SetRetweetedStatus()
+        {
+            if (DataTransfer.Status.RetweetedStatus != null)
+            {
+                Tweet = DataTransfer.Status.RetweetedStatus;
+                WhoRetweeted = " " + String.Format(Localization.Resources.RetweetBy, DataTransfer.Status.Author.ScreenName);
+                HasRetweets = true;
+            }
+            else
+            {
+                Tweet = DataTransfer.Status;
+                WhoRetweeted = "";
+            }
         }
 
         public override void OnLoad()
         {
             GetRetweets();
             GetReplies();
-            CreateCommands();
             SetImage();
         }
 
-        private void CreateCommands()
+        private void SetupCommands()
         {
-            deleteTweet = new DelegateCommand(async (obj) =>
+            DeleteTweet = new DelegateCommand(async (obj) =>
             {
                 var user = Config.Accounts.Value.FirstOrDefault(item => item != null && item.ScreenName == Tweet.Author.ScreenName);
 
@@ -192,7 +161,7 @@ namespace Ocell.Pages.Elements
             }, (obj) => Tweet != null && Tweet.Author != null && Config.Accounts.Value.Any(item => item != null && item.ScreenName == Tweet.Author.ScreenName));
 
 
-            share = new DelegateCommand((obj) => Deployment.Current.Dispatcher.BeginInvoke(() =>
+            Share = new DelegateCommand((obj) => Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
                 EmailComposeTask emailComposeTask = new EmailComposeTask();
 
@@ -203,7 +172,7 @@ namespace Ocell.Pages.Elements
                 emailComposeTask.Show();
             }), obj => Tweet != null);
 
-            quote = new DelegateCommand((obj) =>
+            Quote = new DelegateCommand((obj) =>
             {
                 Navigator.MessageAndNavigate<NewTweetModel, NewTweetArgs>(new NewTweetArgs
                 {
@@ -213,17 +182,21 @@ namespace Ocell.Pages.Elements
             },
             obj => Config.Accounts.Value.Any() && Tweet != null);
 
-            favorite = new DelegateCommand(async (parameter) =>
+            Favorite = new DelegateCommand(async () =>
             {
                 var favCmd = new FavoriteCommand();
-                var result = await favCmd.ExecuteAsync(parameter);
+                var result = await favCmd.ExecuteAsync(Tweet);
 
                 if (result)
+                {
                     IsFavorited = !IsFavorited;
+                    Tweet.IsFavorited = IsFavorited;
+                }
+            }, () => Tweet != null && Config.Accounts.Value.Count > 0 && DataTransfer.CurrentAccount != null);
 
-            }, parameter => (parameter is TwitterStatus) && Config.Accounts.Value.Count > 0 && DataTransfer.CurrentAccount != null);
+            Favorite.BindCanExecuteToProperty(this, "Tweet", "IsFavorited");
 
-            sendTweet = new DelegateCommand(async (parameter) =>
+            SendTweet = new DelegateCommand(async (parameter) =>
             {
                 Progress.IsLoading = true;
                 Progress.Text = Resources.SendingTweet;
@@ -237,6 +210,13 @@ namespace Ocell.Pages.Elements
                     TweetSent(this, new EventArgs<ITweetable>(response.Content));
 
             });
+
+            NavigateToAuthor = new DelegateCommand((param) =>
+            {
+                Navigator.MessageAndNavigate<UserModel, TargetUser>(new TargetUser { Username = Tweet.AuthorName, User = Tweet.Author as TwitterUser });
+            }, p => Tweet != null && (Tweet.Author != null || !string.IsNullOrWhiteSpace(Tweet.AuthorName)));
+
+            NavigateToAuthor.BindCanExecuteToProperty(this, "Tweet");
         }
 
         async void FillUser()

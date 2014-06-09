@@ -113,18 +113,10 @@ namespace Ocell.Pages.Elements
             formatter.Format();
         }
 
-        private void Grid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void AuthorTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (ViewModel != null && ViewModel.Tweet != null)
-                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + ViewModel.Tweet.AuthorName, UriKind.Relative));
-        }
-
-        private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            if (ViewModel.Tweet != null && ViewModel.Tweet.Author != null)
-            {
-                NavigationService.Navigate(new Uri("/Pages/Elements/User.xaml?user=" + ViewModel.Tweet.Author.ScreenName, UriKind.Relative));
-            }
+            if (ViewModel != null)
+                ViewModel.NavigateToAuthor.Execute(null);
         }
 
         private ITweetableFilter CreateNewFilter(FilterType type, string data)

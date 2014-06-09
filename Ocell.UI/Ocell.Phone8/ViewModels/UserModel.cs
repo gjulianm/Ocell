@@ -1,4 +1,5 @@
 ﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Diagnostics;
 using Microsoft.Phone.Tasks;
 using Ocell.Library;
 using Ocell.Library.Twitter;
@@ -15,6 +16,12 @@ using TweetSharp;
 
 namespace Ocell.Pages.Elements
 {
+    public class TargetUser
+    {
+        public string Username { get; set; }
+        public TwitterUser User { get; set; }
+    }
+
     [ImplementPropertyChanged]
     public class UserModel : ExtendedViewModelBase
     {
@@ -35,6 +42,9 @@ namespace Ocell.Pages.Elements
         public string Following { get; set; }
         public string Followers { get; set; }
         public bool WebsiteEnabled { get; set; }
+
+        public TweetLoader TweetLoader { get; set; }
+        public TweetLoader MentionLoader { get; set; }
 
         #region Commands
         Func<object, bool> GenericCanExecute;
@@ -97,7 +107,64 @@ namespace Ocell.Pages.Elements
 
         public UserModel()
         {
-            User = null;
+            SetupCommands();
+
+            var target = ReceiveMessage<TargetUser>();
+
+            if (target == null)
+            {
+                AncoraLogger.Instance.LogEvent("Something weird happened: navigated to UserModel without target", AncoraMVVM.Base.Diagnostics.LogLevel.Error);
+                Notificator.ShowError(Resources.ErrorUnexpected);
+                Navigator.GoBack();
+                return;
+            }
+
+            GetUserInfo(target);
+
+            this.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == "FollowsMe")
+                {
+                    UpdateRelationshipText();
+                }
+                if (e.PropertyName == "ScreenName")
+                {
+                    UpdateRelationshipText();
+                    UpdateLoaders();
+                }
+            };
+        }
+
+        private void UpdateLoaders()
+        {
+            TweetLoader = new TweetLoader(new TwitterResource { String = "Tweets:" + ScreenName, User = DataTransfer.CurrentAccount }, false);
+            MentionLoader = new TweetLoader(new TwitterResource { Data = "@" + ScreenName, Type = ResourceType.Search, User = DataTransfer.CurrentAccount }, false);
+
+            TweetLoader.Load();
+            MentionLoader.Load();
+        }
+
+        private void GetUserInfo(TargetUser target)
+        {
+            Regex remove = new Regex("@|:");
+
+            if (target.User != null)
+                ScreenName = target.User.ScreenName;
+            else if (!string.IsNullOrWhiteSpace(target.Username))
+                ScreenName = remove.Replace(target.Username, "");
+            else
+            {
+                AncoraLogger.Instance.LogEvent("Received target without parameteres.", AncoraMVVM.Base.Diagnostics.LogLevel.Error);
+                Notificator.ShowError(Resources.ErrorGettingProfile);
+                Navigator.GoBack();
+                return;
+            }
+
+            GetUser(ScreenName);
+        }
+
+        private void SetupCommands()
+        {
             GenericCanExecute = (obj) => User != null && DataTransfer.CurrentAccount != null;
 
             followUser = new DelegateCommand((obj) =>
@@ -117,18 +184,18 @@ namespace Ocell.Pages.Elements
             unfollowUser.BindCanExecuteToProperty(this, "User", "Followed", "FriendshipRetrieved");
 
             pinUser = new DelegateCommand((obj) =>
+            {
+                Config.Columns.Value.Add(new TwitterResource
                 {
-                    Config.Columns.Value.Add(new TwitterResource
-                    {
-                        Data = User.ScreenName,
-                        Type = ResourceType.Tweets,
-                        User = DataTransfer.CurrentAccount
-                    });
-                    Config.SaveColumns();
-                    Notificator.ShowProgressIndicatorMessage(Resources.UserPinned);
-                    pinUser.RaiseCanExecuteChanged();
+                    Data = User.ScreenName,
+                    Type = ResourceType.Tweets,
+                    User = DataTransfer.CurrentAccount
+                });
+                Config.SaveColumns();
+                Notificator.ShowProgressIndicatorMessage(Resources.UserPinned);
+                pinUser.RaiseCanExecuteChanged();
 
-                }, item => GenericCanExecute.Invoke(null)
+            }, item => GenericCanExecute.Invoke(null)
                     && !Config.Columns.Value.Any(o => o.Type == ResourceType.Tweets && o.Data == User.ScreenName));
 
             pinUser.BindCanExecuteToProperty(this, "User");
@@ -187,14 +254,6 @@ namespace Ocell.Pages.Elements
                 GenericCanExecute);
 
             manageLists.BindCanExecuteToProperty(this, "User");
-
-            this.PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == "FollowsMe")
-                    UpdateRelationshipText();
-                if (e.PropertyName == "ScreenName")
-                    UpdateRelationshipText();
-            };
         }
 
         private void UpdateRelationshipText()
@@ -205,26 +264,6 @@ namespace Ocell.Pages.Elements
                 RelationshipText = String.Format(Resources.XFollowsY, ScreenName, DataTransfer.CurrentAccount.ScreenName);
             else
                 RelationshipText = String.Format(Resources.XNotFollowsY, ScreenName, DataTransfer.CurrentAccount.ScreenName);
-        }
-
-        public override void OnLoad()
-        {
-            var userName = ReceiveMessage<string>();
-
-            if (string.IsNullOrWhiteSpace(userName))
-            {
-                Notificator.ShowError(Resources.ErrorGettingProfile);
-                Navigator.GoBack();
-                return;
-            }
-
-            Regex remove = new Regex("@|:");
-            userName = remove.Replace(userName, "");
-
-            ScreenName = userName;
-
-            GetUser(userName);
-            base.OnLoad();
         }
 
         async void PhotoSelected(object sender, PhotoResult e)

@@ -58,14 +58,12 @@
             </controls:PivotItem>
             <controls:PivotItem x:Name="pvTweets" Header="{Binding Strings.Tweets, Source={StaticResource LocalizedResources}}">
                 <Grid>
-                    <custom:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True" 
-                                            x:Name="TweetList" ItemTemplate="{StaticResource TweetTemplate}" />
+                    <custom:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True" Loader="{Binding TweetLoader}" ItemTemplate="{StaticResource TweetTemplate}" />
                 </Grid>
             </controls:PivotItem>
             <controls:PivotItem Header="{Binding Strings.Mentions, Source={StaticResource LocalizedResources}, Converter={StaticResource FirstToLowerConverter}}">
                 <Grid>
-                    <custom:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True" 
-                                           x:Name="MentionsList" ItemTemplate="{StaticResource TweetTemplate}" />
+                    <custom:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True" Loader="{Binding MentionLoader}"  ItemTemplate="{StaticResource TweetTemplate}" />
                 </Grid>
             </controls:PivotItem>
         </controls:Pivot>

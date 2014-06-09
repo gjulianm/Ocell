@@ -266,7 +266,7 @@ namespace Ocell.Controls
         #region Scroll to top
         public void ScrollToTop()
         {
-            if (Loader == null)
+            if (Loader == null || System.ComponentModel.DesignerProperties.IsInDesignTool)
                 return;
 
             var dispatcher = Deployment.Current.Dispatcher;
