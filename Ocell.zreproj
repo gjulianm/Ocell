@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project>
+  <configuration createBackupFiles="False" hideEmptyRows="False" hideTranslatedRows="False" useSpellChecker="True" neutralLanguageCode="en-US" languagesToDisplay="">
+    <globalSetting name="Project-TranslationDelayMilliseconds">2000</globalSetting>
+    <globalSetting name="Project-TranslationContinueOnErrors">True</globalSetting>
+    <globalSetting name="Project-TranslationEngineUniqueInternalName">b5c87f9c-e3cd-4963-a3a2-559d3e69e961</globalSetting>
+    <globalSetting name="Project-TranslationWordsToProtect">{0}
+{1}
+{2}
+{3}
+{4}
+{5}
+{6}
+{7}
+{8}
+{9}
+{10}
+"{0}"
+"{1}"
+"{2}"
+"{3}"
+"{4}"
+"{5}"
+"{6}"
+"{7}"
+"{8}"
+"{9}"
+"{10}"
+'{0}'
+'{1}'
+'{2}'
+'{3}'
+'{4}'
+'{5}'
+'{6}'
+'{7}'
+'{8}'
+'{9}'
+'{10}'</globalSetting>
+    <globalSetting name="Project-TranslationWordsToRemove">
+    </globalSetting>
+    <globalSetting name="Project-TranslationAppIDs">b5c87f9c-e3cd-4963-a3a2-559d3e69e961=&lt;&gt;=ZetaResurce~~~~b5c87f9c-e3cd-4963-a3a2-559d3e69e961-2=&lt;&gt;=ffa30GbPkRw82dJhFMDtk4+Yk/zoFexiGBYpuUgOsN8=</globalSetting>
+    <globalSetting name="Filter-ResourceEditorGrid">&lt;XtraSerializer version="1.0" application="View"&gt;
+  &lt;property name="#LayoutVersion" /&gt;
+  &lt;property name="ActiveFilterString" /&gt;
+&lt;/XtraSerializer&gt;</globalSetting>
+    <globalSetting name="Sort-ResourceEditorGrid">&lt;XtraSerializer version="1.0" application="View"&gt;
+  &lt;property name="#LayoutVersion" /&gt;
+&lt;/XtraSerializer&gt;</globalSetting>
+    <globalSetting name="autoTranslateForm.prefixTextBox.Text">####</globalSetting>
+    <globalSetting name="autoTranslateForm.prefixCheckBox.Checked">False</globalSetting>
+    <globalSetting name="autoTranslateForm.referenceLanguageComboBoxEdit.SelectedIndex">2</globalSetting>
+    <globalSetting name="autoTranslateForm.languagesToTranslateCheckListBox">0;1;2</globalSetting>
+    <userSetting name="Guillermo@WIN8.filesInitialDir">C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization</userSetting>
+    <userSetting name="Guillermo@WIN8.FindText">
+    </userSetting>
+    <description>
+    </description>
+  </configuration>
+  <fileGroups>
+    <fileGroup name="" projectFolderUniqueID="00000000-0000-0000-0000-000000000000" orderPosition="0" ignoreDuringExportAndImport="False" uniqueID="00000000-0000-0000-0000-000000000000">
+      <file filePath="Ocell.Library\Ocell.Localization\Resources.resx" absoluteFilePath="C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.resx" uniqueID="00000000-0000-0000-0000-000000000000" />
+      <file filePath="Ocell.Library\Ocell.Localization\Resources.de.resx" absoluteFilePath="C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.de.resx" uniqueID="00000000-0000-0000-0000-000000000000" />
+      <file filePath="Ocell.Library\Ocell.Localization\Resources.es.resx" absoluteFilePath="C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.es.resx" uniqueID="00000000-0000-0000-0000-000000000000" />
+      <file filePath="Ocell.Library\Ocell.Localization\Resources.it.resx" absoluteFilePath="C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.it.resx" uniqueID="00000000-0000-0000-0000-000000000000" />
+      <remarks>
+      </remarks>
+    </fileGroup>
+  </fileGroups>
+  <projectFolders />
+</project>

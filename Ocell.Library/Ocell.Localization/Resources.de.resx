@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
+	<!-- 
     Microsoft ResX Schema 
     
     Version 2.0
@@ -59,1167 +59,1182 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="AMinuteAgo" xml:space="preserve">
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" />
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string" />
+							<xsd:attribute name="name" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="AMinuteAgo" xml:space="preserve">
     <value>Vor einer Minute</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="AnHourAgo" xml:space="preserve">
+	<data name="AnHourAgo" xml:space="preserve">
     <value>Vor einer Stunde</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="ASecondAgo" xml:space="preserve">
+	<data name="ASecondAgo" xml:space="preserve">
     <value>Vor einer Sekunde</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="ButtonGo" xml:space="preserve">
+	<data name="ButtonGo" xml:space="preserve">
     <value>Los</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="ColumnAlreadyPinned" xml:space="preserve">
+	<data name="ColumnAlreadyPinned" xml:space="preserve">
     <value>Diese Spalte ist bereits angepinnt..</value>
     <comment>MainPageModel.cs</comment>
   </data>
-  <data name="Columns" xml:space="preserve">
+	<data name="Columns" xml:space="preserve">
     <value>Spalten</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\ManageColumns.xaml</comment>
   </data>
-  <data name="Compose" xml:space="preserve">
+	<data name="Compose" xml:space="preserve">
     <value>Verfassen</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="Conversation" xml:space="preserve">
+	<data name="Conversation" xml:space="preserve">
     <value>Unterhaltung</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Conversation.xaml</comment>
   </data>
-  <data name="Error" xml:space="preserve">
+	<data name="Error" xml:space="preserve">
     <value>Fehler</value>
     <comment>ListConverter.cs</comment>
   </data>
-  <data name="Favorite" xml:space="preserve">
+	<data name="Favorite" xml:space="preserve">
     <value>Favorit</value>
     <comment>TweetTemplate - App.xaml</comment>
   </data>
-  <data name="Favorites" xml:space="preserve">
+	<data name="Favorites" xml:space="preserve">
     <value>Favoriten</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\AddColumn.xaml</comment>
   </data>
-  <data name="FilterColumn" xml:space="preserve">
+	<data name="FilterColumn" xml:space="preserve">
     <value>Diese Spalte filtern</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="GoToUser" xml:space="preserve">
+	<data name="GoToUser" xml:space="preserve">
     <value>Zu Benutzer wechseln...</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="Home" xml:space="preserve">
+	<data name="Home" xml:space="preserve">
     <value>Home</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\AddColumn.xaml</comment>
   </data>
-  <data name="LastMonth" xml:space="preserve">
+	<data name="LastMonth" xml:space="preserve">
     <value>Letzten Monat</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="LastYear" xml:space="preserve">
+	<data name="LastYear" xml:space="preserve">
     <value>Letztes Jahr</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="Mentions" xml:space="preserve">
+	<data name="Mentions" xml:space="preserve">
     <value>Erwähnungen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\AddColumn.xaml</comment>
   </data>
-  <data name="Messages" xml:space="preserve">
+	<data name="Messages" xml:space="preserve">
     <value>Nachrichten</value>
     <comment>TwitterResource.cs</comment>
   </data>
-  <data name="MuteUser" xml:space="preserve">
+	<data name="MuteUser" xml:space="preserve">
     <value>Benutzer muten</value>
     <comment>TweetTemplate - App.xaml</comment>
   </data>
-  <data name="MyProfile" xml:space="preserve">
+	<data name="MyProfile" xml:space="preserve">
     <value>Mein Profil</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="PinColumnStart" xml:space="preserve">
+	<data name="PinColumnStart" xml:space="preserve">
     <value>Spalte an Start anheften</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="ReadLater" xml:space="preserve">
+	<data name="ReadLater" xml:space="preserve">
     <value>Später lesen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="Reply" xml:space="preserve">
+	<data name="Reply" xml:space="preserve">
     <value>antworten</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="Retweet" xml:space="preserve">
+	<data name="Retweet" xml:space="preserve">
     <value>retweeten</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="Search" xml:space="preserve">
+	<data name="Search" xml:space="preserve">
     <value>suchen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Search\EnterSearch.xaml</comment>
   </data>
-  <data name="SendDM" xml:space="preserve">
+	<data name="SendDM" xml:space="preserve">
     <value>DM senden</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="Settings" xml:space="preserve">
+	<data name="Settings" xml:space="preserve">
     <value>Einstellungen</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="TrendingTopics" xml:space="preserve">
+	<data name="TrendingTopics" xml:space="preserve">
     <value>Trending Topics</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="UnknownValue" xml:space="preserve">
+	<data name="UnknownValue" xml:space="preserve">
     <value>Unbekannt</value>
     <comment>TwitterResource.cs</comment>
   </data>
-  <data name="Username" xml:space="preserve">
+	<data name="Username" xml:space="preserve">
     <value>Benuztername</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="XDaysAgo" xml:space="preserve">
+	<data name="XDaysAgo" xml:space="preserve">
     <value>Vor {0} Tagen</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="XHoursAgo" xml:space="preserve">
+	<data name="XHoursAgo" xml:space="preserve">
     <value>Vor {0} Stunden</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="XMinutesAgo" xml:space="preserve">
+	<data name="XMinutesAgo" xml:space="preserve">
     <value>Vor {0} Minuten</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="XMonthsAgo" xml:space="preserve">
+	<data name="XMonthsAgo" xml:space="preserve">
     <value>Vor {0} Monaten</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="XSecondsAgo" xml:space="preserve">
+	<data name="XSecondsAgo" xml:space="preserve">
     <value>Vor {0} Sekunden</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="XYearsAgo" xml:space="preserve">
+	<data name="XYearsAgo" xml:space="preserve">
     <value>Vor {0} Jahren</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="Yesterday" xml:space="preserve">
+	<data name="Yesterday" xml:space="preserve">
     <value>Gestern</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="TapToModify" xml:space="preserve">
+	<data name="TapToModify" xml:space="preserve">
     <value>Filter antippen zum anpassen, antippen und halten zum löschen.</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\Filters.xaml</comment>
   </data>
-  <data name="Save" xml:space="preserve">
+	<data name="Save" xml:space="preserve">
     <value>Speichern</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\Filters.xaml</comment>
   </data>
-  <data name="Done" xml:space="preserve">
+	<data name="Done" xml:space="preserve">
     <value>Fertig</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="CreateFilter" xml:space="preserve">
+	<data name="CreateFilter" xml:space="preserve">
     <value>Filter erstellen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="User" xml:space="preserve">
+	<data name="User" xml:space="preserve">
     <value>Benutzer</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="Source" xml:space="preserve">
+	<data name="Source" xml:space="preserve">
     <value>Quelle</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="Contains" xml:space="preserve">
+	<data name="Contains" xml:space="preserve">
     <value>Enthält</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="DoesNotContain" xml:space="preserve">
+	<data name="DoesNotContain" xml:space="preserve">
     <value>Enthält nicht</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="Drafts" xml:space="preserve">
+	<data name="Drafts" xml:space="preserve">
     <value>Entwürfe</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Drafts\ManageDrafts.xaml</comment>
   </data>
-  <data name="Next" xml:space="preserve">
+	<data name="Next" xml:space="preserve">
     <value>weiter</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\SelectUser.xaml</comment>
   </data>
-  <data name="Trending" xml:space="preserve">
+	<data name="Trending" xml:space="preserve">
     <value>Trending</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Topics.xaml</comment>
   </data>
-  <data name="Refresh" xml:space="preserve">
+	<data name="Refresh" xml:space="preserve">
     <value>Aktualisieren</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Topics.xaml</comment>
   </data>
-  <data name="AddColumn" xml:space="preserve">
+	<data name="AddColumn" xml:space="preserve">
     <value>Spalte hinzufügen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Search\Search.xaml</comment>
   </data>
-  <data name="DirectMessages" xml:space="preserve">
+	<data name="DirectMessages" xml:space="preserve">
     <value>Direktnachrichten</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\AddColumn.xaml</comment>
   </data>
-  <data name="Core" xml:space="preserve">
+	<data name="Core" xml:space="preserve">
     <value>Kern</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\AddColumn.xaml</comment>
   </data>
-  <data name="Lists" xml:space="preserve">
+	<data name="Lists" xml:space="preserve">
     <value>Listen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\AddColumn.xaml</comment>
   </data>
-  <data name="Add" xml:space="preserve">
+	<data name="Add" xml:space="preserve">
     <value>Hinzufügen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\ManageColumns.xaml</comment>
   </data>
-  <data name="Accounts" xml:space="preserve">
+	<data name="Accounts" xml:space="preserve">
     <value>Accounts</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="SelectAccount" xml:space="preserve">
+	<data name="SelectAccount" xml:space="preserve">
     <value>Wähle einen Account aus</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\SelectAccount.xaml</comment>
   </data>
-  <data name="Via" xml:space="preserve">
+	<data name="Via" xml:space="preserve">
     <value>per</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="Conversation_CapitalFirst" xml:space="preserve">
+	<data name="Conversation_CapitalFirst" xml:space="preserve">
     <value>Unterhaltung</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="Hashtags" xml:space="preserve">
+	<data name="Hashtags" xml:space="preserve">
     <value>Hashtags</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="RetweetWithComments" xml:space="preserve">
+	<data name="RetweetWithComments" xml:space="preserve">
     <value>Mit Kommentar retweeten</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="DeleteTweet" xml:space="preserve">
+	<data name="DeleteTweet" xml:space="preserve">
     <value>Tweet löschen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="ReplyAll" xml:space="preserve">
+	<data name="ReplyAll" xml:space="preserve">
     <value>Allen antworten</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="Tweets" xml:space="preserve">
+	<data name="Tweets" xml:space="preserve">
     <value>Tweets</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\User.xaml</comment>
   </data>
-  <data name="Followers" xml:space="preserve">
+	<data name="Followers" xml:space="preserve">
     <value>Follower</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\User.xaml</comment>
   </data>
-  <data name="Following" xml:space="preserve">
+	<data name="Following" xml:space="preserve">
     <value>folgt</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\User.xaml</comment>
   </data>
-  <data name="PinToMainPage" xml:space="preserve">
+	<data name="PinToMainPage" xml:space="preserve">
     <value>An Hauptseite anheften</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\User.xaml</comment>
   </data>
-  <data name="ChangeAvatar" xml:space="preserve">
+	<data name="ChangeAvatar" xml:space="preserve">
     <value>Avatar ändern</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\User.xaml</comment>
   </data>
-  <data name="Filters" xml:space="preserve">
+	<data name="Filters" xml:space="preserve">
     <value>Filter</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\Filters.xaml</comment>
   </data>
-  <data name="Text" xml:space="preserve">
+	<data name="Text" xml:space="preserve">
     <value>Text</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="CreateList" xml:space="preserve">
+	<data name="CreateList" xml:space="preserve">
     <value>Liste erstellen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\CreateList.xaml</comment>
   </data>
-  <data name="Description" xml:space="preserve">
+	<data name="Description" xml:space="preserve">
     <value>Beschreibung</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\CreateList.xaml</comment>
   </data>
-  <data name="Public" xml:space="preserve">
+	<data name="Public" xml:space="preserve">
     <value>Öffentlich</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\CreateList.xaml</comment>
   </data>
-  <data name="Private" xml:space="preserve">
+	<data name="Private" xml:space="preserve">
     <value>Privat</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\CreateList.xaml</comment>
   </data>
-  <data name="ManageLists" xml:space="preserve">
+	<data name="ManageLists" xml:space="preserve">
     <value>Listen verwalten</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\ListManager.xaml</comment>
   </data>
-  <data name="YourLists" xml:space="preserve">
+	<data name="YourLists" xml:space="preserve">
     <value>Deine Listen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\ListManager.xaml</comment>
   </data>
-  <data name="CreateNewList" xml:space="preserve">
+	<data name="CreateNewList" xml:space="preserve">
     <value>Neue Liste erstellen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\ListManager.xaml</comment>
   </data>
-  <data name="Search_CapitalFirst" xml:space="preserve">
+	<data name="Search_CapitalFirst" xml:space="preserve">
     <value>Suche</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Search\EnterSearch.xaml</comment>
   </data>
-  <data name="About" xml:space="preserve">
+	<data name="About" xml:space="preserve">
     <value>Über</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\About.xaml</comment>
   </data>
-  <data name="Backgrounds" xml:space="preserve">
+	<data name="Backgrounds" xml:space="preserve">
     <value>Hintergründe</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Backgrounds.xaml</comment>
   </data>
-  <data name="SavePreferences" xml:space="preserve">
+	<data name="SavePreferences" xml:space="preserve">
     <value>Einstellungen speichern</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Backgrounds.xaml</comment>
   </data>
-  <data name="PinComposeToStart" xml:space="preserve">
+	<data name="PinComposeToStart" xml:space="preserve">
     <value>"Erstellen" an Start anheften</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="Tiles" xml:space="preserve">
+	<data name="Tiles" xml:space="preserve">
     <value>Tiles</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="TweetsPerRequest" xml:space="preserve">
+	<data name="TweetsPerRequest" xml:space="preserve">
     <value>Tweets laden pro Abfrage</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="Backgrounds_CapitalFirst" xml:space="preserve">
+	<data name="Backgrounds_CapitalFirst" xml:space="preserve">
     <value>Hintergründe</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="SetCustomBackground" xml:space="preserve">
+	<data name="SetCustomBackground" xml:space="preserve">
     <value>Eigenen Hintergrund wählen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="AddAccount" xml:space="preserve">
+	<data name="AddAccount" xml:space="preserve">
     <value>Account hinzufügen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="EditMutedTweets" xml:space="preserve">
+	<data name="EditMutedTweets" xml:space="preserve">
     <value>Gemutete Tweets bearbeiten</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="OneHour" xml:space="preserve">
+	<data name="OneHour" xml:space="preserve">
     <value>1 Stunde</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="EightHours" xml:space="preserve">
+	<data name="EightHours" xml:space="preserve">
     <value>8 Stunden</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="OneDay" xml:space="preserve">
+	<data name="OneDay" xml:space="preserve">
     <value>1 Tag</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="OneWeek" xml:space="preserve">
+	<data name="OneWeek" xml:space="preserve">
     <value>1 Woche</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="Forever" xml:space="preserve">
+	<data name="Forever" xml:space="preserve">
     <value>Immer</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="SaveCredentials" xml:space="preserve">
+	<data name="SaveCredentials" xml:space="preserve">
     <value>Login-Daten speichern</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="SendMessage" xml:space="preserve">
+	<data name="SendMessage" xml:space="preserve">
     <value>Nachricht schicken</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\SelectUser.xaml</comment>
   </data>
-  <data name="AddedToList" xml:space="preserve">
+	<data name="AddedToList" xml:space="preserve">
     <value>@{0} wurde zur Liste {1} hinzugefügt.</value>
     <comment>ListManager</comment>
   </data>
-  <data name="AskDeleteDraft" xml:space="preserve">
+	<data name="AskDeleteDraft" xml:space="preserve">
     <value>Diesen Entwurf wirklich löschen?</value>
     <comment>ManageDraftsModel</comment>
   </data>
-  <data name="AskFilterDelete" xml:space="preserve">
+	<data name="AskFilterDelete" xml:space="preserve">
     <value>Diesen Filter wirklich löschen?</value>
     <comment>Filters.xaml.cs</comment>
   </data>
-  <data name="CopyHashtag" xml:space="preserve">
+	<data name="CopyHashtag" xml:space="preserve">
     <value>Hashtag kopieren</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="CopyLink" xml:space="preserve">
+	<data name="CopyLink" xml:space="preserve">
     <value>Link kopieren</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="CopyUsername" xml:space="preserve">
+	<data name="CopyUsername" xml:space="preserve">
     <value>Benutzername kopieren</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="CouldntBlock" xml:space="preserve">
+	<data name="CouldntBlock" xml:space="preserve">
     <value>@{0} konnte nicht geblockt werden.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="CouldntFindUser" xml:space="preserve">
+	<data name="CouldntFindUser" xml:space="preserve">
     <value>Benutzer nicht gefunden.</value>
     <comment>UserListModel</comment>
   </data>
-  <data name="CouldntFollow" xml:space="preserve">
+	<data name="CouldntFollow" xml:space="preserve">
     <value>@{0} konnte nicht gefolgt werden.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="CouldntGetRelationship" xml:space="preserve">
+	<data name="CouldntGetRelationship" xml:space="preserve">
     <value>Benutzerverhältnis konnte nicht geladen werden.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="CouldntLoadFilter" xml:space="preserve">
+	<data name="CouldntLoadFilter" xml:space="preserve">
     <value>Filter konnte nicht geladen werden.</value>
     <comment>ManageFilter.xaml.cs</comment>
   </data>
-  <data name="CouldntReport" xml:space="preserve">
+	<data name="CouldntReport" xml:space="preserve">
     <value>@{0} konnte nicht gemeldet werden.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="CouldntUnblock" xml:space="preserve">
+	<data name="CouldntUnblock" xml:space="preserve">
     <value>@{0} konnte nicht freigegeben werden.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="CouldntUnfollow" xml:space="preserve">
+	<data name="CouldntUnfollow" xml:space="preserve">
     <value>@{0} konnte nicht entfolgt werden.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="DownloadingFollowers" xml:space="preserve">
+	<data name="DownloadingFollowers" xml:space="preserve">
     <value>Follower werden runterladen...</value>
     <comment>UserListModel</comment>
   </data>
-  <data name="DownloadingFollowing" xml:space="preserve">
+	<data name="DownloadingFollowing" xml:space="preserve">
     <value>Folge ich wird runterladen...</value>
     <comment>UserListModel</comment>
   </data>
-  <data name="DownloadingImage" xml:space="preserve">
+	<data name="DownloadingImage" xml:space="preserve">
     <value>Bild wird runtergeladen...</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="DraftDeleted" xml:space="preserve">
+	<data name="DraftDeleted" xml:space="preserve">
     <value>Entwurf gelöscht.</value>
     <comment>ManageDraftsModel</comment>
   </data>
-  <data name="ErrorCreatingList" xml:space="preserve">
+	<data name="ErrorCreatingList" xml:space="preserve">
     <value>Fehler beim erstellen der Liste</value>
     <comment>CreateList</comment>
   </data>
-  <data name="ErrorDeletingTweet" xml:space="preserve">
+	<data name="ErrorDeletingTweet" xml:space="preserve">
     <value>Tweet konnte nicht gelöscht werden.</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="ErrorDownloadingImage" xml:space="preserve">
+	<data name="ErrorDownloadingImage" xml:space="preserve">
     <value>Bild konnte nicht heruntergeladen werden.</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="ErrorGettingProfile" xml:space="preserve">
+	<data name="ErrorGettingProfile" xml:space="preserve">
     <value>Profil konnte nicht geladen werden.</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="ErrorLoadingLists" xml:space="preserve">
+	<data name="ErrorLoadingLists" xml:space="preserve">
     <value>Fehler beim laden der Listen</value>
     <comment>ListManager</comment>
   </data>
-  <data name="ErrorLoadingTweet" xml:space="preserve">
+	<data name="ErrorLoadingTweet" xml:space="preserve">
     <value>Fehler beim laden des Tweets.</value>
   </data>
-  <data name="ErrorMessage" xml:space="preserve">
+	<data name="ErrorMessage" xml:space="preserve">
     <value>Ein Fehler ist aufgetreten.</value>
   </data>
-  <data name="ErrorReport" xml:space="preserve">
+	<data name="ErrorReport" xml:space="preserve">
     <value>Fehlerbericht</value>
     <comment>LittleWatson</comment>
   </data>
-  <data name="ErrorReportMessage" xml:space="preserve">
+	<data name="ErrorReportMessage" xml:space="preserve">
     <value>Beim letzten öffnen trat ein Fehler auf. Möchtest du einen Bericht per E-Mail senden (bitte in Englisch)? Der Bericht enthält nur Daten, die mir zur Fehlerbehebung dienen. Es werden KEINE persönlichen Daten verschickt.</value>
     <comment>LittleWatson</comment>
   </data>
-  <data name="ErrorSavingFilter" xml:space="preserve">
+	<data name="ErrorSavingFilter" xml:space="preserve">
     <value>Fehler beim speichern des Filters.</value>
     <comment>ManageFilter.xaml.cs</comment>
   </data>
-  <data name="ErrorUploadingProfileImage" xml:space="preserve">
+	<data name="ErrorUploadingProfileImage" xml:space="preserve">
     <value>Ein Fehler beim Bildupload trat auf. Stelle sicher, dass die Datei weniger als 700kb groß ist.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="Favorited" xml:space="preserve">
+	<data name="Favorited" xml:space="preserve">
     <value>Favorisiert!</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="FollowOcellAppMessage" xml:space="preserve">
+	<data name="FollowOcellAppMessage" xml:space="preserve">
     <value>Möchtest du @OcellApp auf Twitter folgen, um Update-News zu erhalten?</value>
     <comment>MainPage.xaml.cs</comment>
   </data>
-  <data name="HashtagsMutedUntil" xml:space="preserve">
+	<data name="HashtagsMutedUntil" xml:space="preserve">
     <value>Der/die Hashtag(s) {0} sind {1} gemutet.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="List" xml:space="preserve">
+	<data name="List" xml:space="preserve">
     <value>Liste</value>
     <comment>ToColumn</comment>
   </data>
-  <data name="ListCreated" xml:space="preserve">
+	<data name="ListCreated" xml:space="preserve">
     <value>Liste erstellt!</value>
     <comment>CreateList</comment>
   </data>
-  <data name="MuteDomain" xml:space="preserve">
+	<data name="MuteDomain" xml:space="preserve">
     <value>Tweets mit dieser Domain muten</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="MutedUntil" xml:space="preserve">
+	<data name="MutedUntil" xml:space="preserve">
     <value>{0} gemutet.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="MuteHashtag" xml:space="preserve">
+	<data name="MuteHashtag" xml:space="preserve">
     <value>Hashtag muten</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="NoHashtagsToMute" xml:space="preserve">
+	<data name="NoHashtagsToMute" xml:space="preserve">
     <value>Keine Hashtags zum muten.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="NotValidResource" xml:space="preserve">
+	<data name="NotValidResource" xml:space="preserve">
     <value>Das ist keine gültige Quelle</value>
     <comment>UserListModel</comment>
   </data>
-  <data name="NotValidURL" xml:space="preserve">
+	<data name="NotValidURL" xml:space="preserve">
     <value>Das ist keine gültige URL.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="NowYouFollow" xml:space="preserve">
+	<data name="NowYouFollow" xml:space="preserve">
     <value>Du folgst jetzt @{0}.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="NowYouUnfollow" xml:space="preserve">
+	<data name="NowYouUnfollow" xml:space="preserve">
     <value>Du folgst @{0} jetzt nicht mehr.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="ProfileImageChanged" xml:space="preserve">
+	<data name="ProfileImageChanged" xml:space="preserve">
     <value>Dein Profilbild wurde geändert.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="Protect" xml:space="preserve">
+	<data name="Protect" xml:space="preserve">
     <value>schützen</value>
     <comment>ProtectedConverter</comment>
   </data>
-  <data name="RemovedFromList" xml:space="preserve">
+	<data name="RemovedFromList" xml:space="preserve">
     <value>@{0} wurde von der Liste {1} entfernt.</value>
     <comment>ListManager</comment>
   </data>
-  <data name="ReportedAndBlocked" xml:space="preserve">
+	<data name="ReportedAndBlocked" xml:space="preserve">
     <value>Du hast @{0} refolgreich gemeldet und geblockt.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="RetrievingUser" xml:space="preserve">
+	<data name="RetrievingUser" xml:space="preserve">
     <value>Benutzer abrufen...</value>
     <comment>UserModel</comment>
   </data>
-  <data name="RetweetBy" xml:space="preserve">
+	<data name="RetweetBy" xml:space="preserve">
     <value>(RT von @{0})</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="SourceMutedUntil" xml:space="preserve">
+	<data name="SourceMutedUntil" xml:space="preserve">
     <value>Die Quelle {0} ist {1} gemutet.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="TweetDeleted" xml:space="preserve">
+	<data name="TweetDeleted" xml:space="preserve">
     <value>Tweet gelöscht! (Es kann einige Minuten dauern, bis er in deinen Streams nicht mehr angezeigt wird)</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="TweetFrom" xml:space="preserve">
+	<data name="TweetFrom" xml:space="preserve">
     <value>Tweet von @{0}</value>
     <comment>DMView</comment>
   </data>
-  <data name="TweetText" xml:space="preserve">
+	<data name="TweetText" xml:space="preserve">
     <value>Tweet text</value>
     <comment>ITweetableFilterConverter</comment>
   </data>
-  <data name="Unfavorited" xml:space="preserve">
+	<data name="Unfavorited" xml:space="preserve">
     <value>Favorit entfernt!</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="Unprotect" xml:space="preserve">
+	<data name="Unprotect" xml:space="preserve">
     <value>Schutz entfernen</value>
     <comment>ProtectedConverter</comment>
   </data>
-  <data name="UntilDate" xml:space="preserve">
+	<data name="UntilDate" xml:space="preserve">
     <value>bis {0}.</value>
     <comment>ITweetableFilterConverter</comment>
   </data>
-  <data name="UploadingPicture" xml:space="preserve">
+	<data name="UploadingPicture" xml:space="preserve">
     <value>Bild hochladen...</value>
     <comment>UserModel</comment>
   </data>
-  <data name="UserIsMutedUntil" xml:space="preserve">
+	<data name="UserIsMutedUntil" xml:space="preserve">
     <value>Der Benutzer {0} ist {1} gemutet.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="UserIsNowBlocked" xml:space="preserve">
+	<data name="UserIsNowBlocked" xml:space="preserve">
     <value>@{0} ist jetzt geblockt.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="UserIsNowUnblocked" xml:space="preserve">
+	<data name="UserIsNowUnblocked" xml:space="preserve">
     <value>@{0} ist nicht mehr geblockt.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="UserPinned" xml:space="preserve">
+	<data name="UserPinned" xml:space="preserve">
     <value>Benutzer erfolgreich gepinnt.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="YouHaveToLogin" xml:space="preserve">
+	<data name="YouHaveToLogin" xml:space="preserve">
     <value>Um Ocell zu nutzen, musst du dich bei Twitter anmelden.</value>
     <comment>MainPage.xaml.cs</comment>
   </data>
-  <data name="AccountProtected" xml:space="preserve">
+	<data name="AccountProtected" xml:space="preserve">
     <value>Account geschützt!</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="AccountUnprotected" xml:space="preserve">
+	<data name="AccountUnprotected" xml:space="preserve">
     <value>Account nicht mehr geschützt!</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="AskAccountDelete" xml:space="preserve">
+	<data name="AskAccountDelete" xml:space="preserve">
     <value>Den Account @{0} wirklich entfernen?</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="BackgroundChangeOnRestart" xml:space="preserve">
+	<data name="BackgroundChangeOnRestart" xml:space="preserve">
     <value>Der Hintergrund wird nach einem Neustart der App geändert.</value>
     <comment>BackgroundsModel</comment>
   </data>
-  <data name="CredentialsSaved" xml:space="preserve">
+	<data name="CredentialsSaved" xml:space="preserve">
     <value>Daten für {0} gespeichert.</value>
     <comment>DefaultModel, eg: Credentials for Instapaper saved.</comment>
   </data>
-  <data name="ErrorAuthURL" xml:space="preserve">
+	<data name="ErrorAuthURL" xml:space="preserve">
     <value>Beim Versuch die Auth-URL abzurufen ist ein Fehler aufgetreten. Bitte stell sicher, dass die Zeit deines Handys korrekt eingestellt ist und der Internetzugriff funktioniert. Bitte kontaktiere @OcellApp, falls dieser Fehler weiterhin auftritt.</value>
     <comment>OAuth.xaml.cs</comment>
   </data>
-  <data name="ErrorClientTokens" xml:space="preserve">
+	<data name="ErrorClientTokens" xml:space="preserve">
     <value>Beim Abruf der Client-Token ist ein Fehler aufgetreten. Bitte versuche es erneut und kontaktiere @OcellApp, falls dieser Fehler weiterhin auftritt.</value>
     <comment>OAuth.xaml.cs</comment>
   </data>
-  <data name="ErrorDownloadingUsers" xml:space="preserve">
+	<data name="ErrorDownloadingUsers" xml:space="preserve">
     <value>Beim Abruf der Benutzerliste ist ein Fehler aufgetreten.</value>
     <comment>SelectUserModel</comment>
   </data>
-  <data name="ErrorLoadingTT" xml:space="preserve">
+	<data name="ErrorLoadingTT" xml:space="preserve">
     <value>Beim Abruf der Trending Topics ist ein Fehler aufgetreten.</value>
   </data>
-  <data name="ErrorLoadingTweets" xml:space="preserve">
+	<data name="ErrorLoadingTweets" xml:space="preserve">
     <value>Fehler beim laden der Tweets: {0}</value>
     <comment>ExtendedLixtbos</comment>
   </data>
-  <data name="ErrorSavingLater" xml:space="preserve">
+	<data name="ErrorSavingLater" xml:space="preserve">
     <value>Fehler beim speichern dieses Objektes.</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="Filtered" xml:space="preserve">
+	<data name="Filtered" xml:space="preserve">
     <value>Gefiltert!</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="InvalidCredentials" xml:space="preserve">
+	<data name="InvalidCredentials" xml:space="preserve">
     <value>Falsche {0} Daten</value>
     <comment>DefaultModel, eg: Invalid Pocket credentials.</comment>
   </data>
-  <data name="NewTweet" xml:space="preserve">
+	<data name="NewTweet" xml:space="preserve">
     <value>Neuer Tweet</value>
   </data>
-  <data name="None" xml:space="preserve">
+	<data name="None" xml:space="preserve">
     <value>Deaktiviert</value>
     <comment>DefaultModel</comment>
   </data>
-  <data name="OnlyTile" xml:space="preserve">
+	<data name="OnlyTile" xml:space="preserve">
     <value>Nur Tile</value>
     <comment>DefaultModel</comment>
   </data>
-  <data name="RateLimitHit" xml:space="preserve">
+	<data name="RateLimitHit" xml:space="preserve">
     <value>Ups! Du hast die Abrufzeiten von Twitter überschritten. Du musst warten bis {0}</value>
     <comment>ExtendedListbox</comment>
   </data>
-  <data name="Retweeted" xml:space="preserve">
+	<data name="Retweeted" xml:space="preserve">
     <value>Retweeted</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="SavedForLater" xml:space="preserve">
+	<data name="SavedForLater" xml:space="preserve">
     <value>Für später gespeichert!</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="SavingForLater" xml:space="preserve">
+	<data name="SavingForLater" xml:space="preserve">
     <value>Für später speichern...</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="SearchColumnAdded" xml:space="preserve">
+	<data name="SearchColumnAdded" xml:space="preserve">
     <value>Suchspalte zur Hauptseite hinzugefügt</value>
     <comment>SearchModel</comment>
   </data>
-  <data name="ToastAndTile" xml:space="preserve">
+	<data name="ToastAndTile" xml:space="preserve">
     <value>Toast und Tile</value>
     <comment>DefaultModel</comment>
   </data>
-  <data name="VerifyingCredentials" xml:space="preserve">
+	<data name="VerifyingCredentials" xml:space="preserve">
     <value>Daten werden verifiziert...</value>
     <comment>DefaultModel</comment>
   </data>
-  <data name="And" xml:space="preserve">
+	<data name="And" xml:space="preserve">
     <value>und</value>
     <comment>That's it.</comment>
   </data>
-  <data name="ForX" xml:space="preserve">
+	<data name="ForX" xml:space="preserve">
     <value>für {0}</value>
     <comment>ScheduledAgent. Eg: for @ocellapp, @user2.</comment>
   </data>
-  <data name="NewMention" xml:space="preserve">
+	<data name="NewMention" xml:space="preserve">
     <value>@{0} hat dich erwähnt</value>
     <comment>ScheduledAgent. Eg: new mention from @ocellapp.</comment>
   </data>
-  <data name="NewMentions" xml:space="preserve">
+	<data name="NewMentions" xml:space="preserve">
     <value>Neue Erwähnungen</value>
     <comment>ScheduledAgent. Eg: new mentions for ocellapp.</comment>
   </data>
-  <data name="NewMentionsMessages" xml:space="preserve">
+	<data name="NewMentionsMessages" xml:space="preserve">
     <value>Neue Erwähnungen und Nachrichten</value>
     <comment>ScheduledAgent.</comment>
   </data>
-  <data name="NewMessage" xml:space="preserve">
+	<data name="NewMessage" xml:space="preserve">
     <value>@{0} hat die eine Nachricht geschickt</value>
     <comment>ScheduledAgent. Eg: new message from @ocellapp.</comment>
   </data>
-  <data name="NewMessages" xml:space="preserve">
+	<data name="NewMessages" xml:space="preserve">
     <value>Neue Nachrichten</value>
     <comment>SchedueldAgent.</comment>
   </data>
-  <data name="NewXMentions" xml:space="preserve">
+	<data name="NewXMentions" xml:space="preserve">
     <value>{0} neue Erwähnungen</value>
     <comment>ScheduledAgent. Eg: 10 new mentions.</comment>
   </data>
-  <data name="NewXMessages" xml:space="preserve">
+	<data name="NewXMessages" xml:space="preserve">
     <value>{0} neue Nachrichten</value>
     <comment>ScheduledAgent. Eg: 10 new messages.</comment>
   </data>
-  <data name="Mute" xml:space="preserve">
+	<data name="Mute" xml:space="preserve">
     <value>muten...</value>
   </data>
-  <data name="Share" xml:space="preserve">
+	<data name="Share" xml:space="preserve">
     <value>teilen...</value>
   </data>
-  <data name="AboutScheduling" xml:space="preserve">
+	<data name="AboutScheduling" xml:space="preserve">
     <value>Über geplante Tweets...</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="AboutSchedulingMessage" xml:space="preserve">
+	<data name="AboutSchedulingMessage" xml:space="preserve">
     <value>Aufgrund von Systembschränkungen können geplante Tweets nur alle 30 Minuten gesendet werden. Daher ist es möglich, dass dein Tweet nicht zu der von dir ausgewählten Zeit gesendet wird. Bitte denke daran, dass der Tweet nicht gesendet werden kann, wenn sich dein Handy im Stromsparmodus befindet oder ausgeschaltet ist.</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="AddImage" xml:space="preserve">
+	<data name="AddImage" xml:space="preserve">
     <value>Bild hinzufügen</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="AskTweetProtectedAccount" xml:space="preserve">
+	<data name="AskTweetProtectedAccount" xml:space="preserve">
     <value>Bist du sicher, dass du vom geschützten Account @{0} aus tweeten willst??</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="Date" xml:space="preserve">
+	<data name="Date" xml:space="preserve">
     <value>Datum</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="DraftSaved" xml:space="preserve">
+	<data name="DraftSaved" xml:space="preserve">
     <value>Entwurf gespeichert!</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="ErrorDuplicateTweet" xml:space="preserve">
+	<data name="ErrorDuplicateTweet" xml:space="preserve">
     <value>Dieser Tweet wurde dupliziert.</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="ErrorUploadingImage" xml:space="preserve">
+	<data name="ErrorUploadingImage" xml:space="preserve">
     <value>Fehler beim Bilderupload. Bitte erneut versuchen.</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="MessageScheduled" xml:space="preserve">
+	<data name="MessageScheduled" xml:space="preserve">
     <value>Nachricht geplant!</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="SaveDraft" xml:space="preserve">
+	<data name="SaveDraft" xml:space="preserve">
     <value>Entwurf speichern</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="Schedule" xml:space="preserve">
+	<data name="Schedule" xml:space="preserve">
     <value>Planer</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="SelectDateTimeToSchedule" xml:space="preserve">
+	<data name="SelectDateTimeToSchedule" xml:space="preserve">
     <value>Bitte wähle ein Datum und eine Zeit, um deinen Tweet zu veröffentlichen.</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="Send" xml:space="preserve">
+	<data name="Send" xml:space="preserve">
     <value>Senden</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="SendingTweet" xml:space="preserve">
+	<data name="SendingTweet" xml:space="preserve">
     <value>Tweet wird gesendet...</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="Time" xml:space="preserve">
+	<data name="Time" xml:space="preserve">
     <value>Zeit</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="AboutP1" xml:space="preserve">
+	<data name="AboutP1" xml:space="preserve">
     <value>Ocell ist ein Open Source (ASL) Twitter Client für Windows Phone, entwickelt von Guillermo Julián. Du kannst @OcellApp auf Twitter folgen, um über Neuigkeiten und Updates informiert zu werden.</value>
   </data>
-  <data name="AboutP2" xml:space="preserve">
+	<data name="AboutP2" xml:space="preserve">
     <value>Hintergründe Credits: Danke an Paul Phönixweiß (Egg), Dimitar Karaytchev (Diamond), Lauren (Floral), Sam Feyaerts (Map) und Wilmotte Bastien (Tire) für das Zugänglich machen der Bilder auf subtlepattern.com.</value>
   </data>
-  <data name="AddFavorite" xml:space="preserve">
+	<data name="AddFavorite" xml:space="preserve">
     <value>Favorit hinzufügen</value>
   </data>
-  <data name="Authenticating" xml:space="preserve">
+	<data name="Authenticating" xml:space="preserve">
     <value>Authentifizierung...</value>
   </data>
-  <data name="BlockAndReport" xml:space="preserve">
+	<data name="BlockAndReport" xml:space="preserve">
     <value>Blocken und Spam melden</value>
   </data>
-  <data name="DontShowTweetsWhere" xml:space="preserve">
+	<data name="DontShowTweetsWhere" xml:space="preserve">
     <value>Keine Tweets anzeigen, die</value>
   </data>
-  <data name="DownloadingTopics" xml:space="preserve">
+	<data name="DownloadingTopics" xml:space="preserve">
     <value>Trending Topics werden heruntergeladen...</value>
   </data>
-  <data name="DownloadingUserList" xml:space="preserve">
+	<data name="DownloadingUserList" xml:space="preserve">
     <value>Benutzerliste wird heruntergeladen...</value>
   </data>
-  <data name="EnterQuery" xml:space="preserve">
+	<data name="EnterQuery" xml:space="preserve">
     <value>Suchbegriff eingeben:</value>
   </data>
-  <data name="From" xml:space="preserve">
+	<data name="From" xml:space="preserve">
     <value>Von:</value>
   </data>
-  <data name="IsMemberOfLists" xml:space="preserve">
+	<data name="IsMemberOfLists" xml:space="preserve">
     <value>Ist in folgenden Listen:</value>
   </data>
-  <data name="LoadingLists" xml:space="preserve">
+	<data name="LoadingLists" xml:space="preserve">
     <value>Listen werden geladen...</value>
   </data>
-  <data name="LoadMore" xml:space="preserve">
+	<data name="LoadMore" xml:space="preserve">
     <value>Mehr laden...</value>
   </data>
-  <data name="Login" xml:space="preserve">
+	<data name="Login" xml:space="preserve">
     <value>Login:</value>
   </data>
-  <data name="ManageListsForUser" xml:space="preserve">
+	<data name="ManageListsForUser" xml:space="preserve">
     <value>Zur Liste hinzufügen oder entfernen...</value>
   </data>
-  <data name="Name" xml:space="preserve">
+	<data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
-  <data name="NotifyMentions" xml:space="preserve">
+	<data name="NotifyMentions" xml:space="preserve">
     <value>Über Erwähnungen benachrichtigen:</value>
   </data>
-  <data name="NotifyMessages" xml:space="preserve">
+	<data name="NotifyMessages" xml:space="preserve">
     <value>Über neue DM benachrichtigen:</value>
   </data>
-  <data name="Password" xml:space="preserve">
+	<data name="Password" xml:space="preserve">
     <value>Passwort:</value>
   </data>
-  <data name="PasswordIfYouHave" xml:space="preserve">
+	<data name="PasswordIfYouHave" xml:space="preserve">
     <value>Passwort (falls vorhanden):</value>
   </data>
-  <data name="RemoveFavorite" xml:space="preserve">
+	<data name="RemoveFavorite" xml:space="preserve">
     <value>Favorit entfernen</value>
   </data>
-  <data name="ShowRetweetsAsMentions" xml:space="preserve">
+	<data name="ShowRetweetsAsMentions" xml:space="preserve">
     <value>Retweets als Erwähnungen anzeigen</value>
   </data>
-  <data name="SilenceTime" xml:space="preserve">
+	<data name="SilenceTime" xml:space="preserve">
     <value>Gemutete Tweets stummschalten für:</value>
   </data>
-  <data name="TapFilter" xml:space="preserve">
+	<data name="TapFilter" xml:space="preserve">
     <value>Filter antippen zum anpassen, antippen und halten zum löschen.</value>
   </data>
-  <data name="TapList" xml:space="preserve">
+	<data name="TapList" xml:space="preserve">
     <value>Um einen User zu einer Liste hinzuzufügen oder zu entfernen, einfach die Liste antippen.</value>
   </data>
-  <data name="To" xml:space="preserve">
+	<data name="To" xml:space="preserve">
     <value>An:</value>
   </data>
-  <data name="ToAddColumnTiles" xml:space="preserve">
+	<data name="ToAddColumnTiles" xml:space="preserve">
     <value>Um Tiles für Spalten hinzuzufügen, drücke "Spalte an Start anhelfen" am unteren Rand der Hauptseite.</value>
   </data>
-  <data name="Until" xml:space="preserve">
+	<data name="Until" xml:space="preserve">
     <value>Bis</value>
   </data>
-  <data name="UpdateTilesInBackground" xml:space="preserve">
+	<data name="UpdateTilesInBackground" xml:space="preserve">
     <value>Tiles im Hintergrund aktualisieren</value>
   </data>
-  <data name="UserOrMail" xml:space="preserve">
+	<data name="UserOrMail" xml:space="preserve">
     <value>Benutzername oder E-Mail:</value>
   </data>
-  <data name="UsersWhoRetweeted" xml:space="preserve">
+	<data name="UsersWhoRetweeted" xml:space="preserve">
     <value>Retweeted von</value>
   </data>
-  <data name="WhatToMute" xml:space="preserve">
+	<data name="WhatToMute" xml:space="preserve">
     <value>Was möchtest du muten?</value>
   </data>
-  <data name="AccountsPivot" xml:space="preserve">
+	<data name="AccountsPivot" xml:space="preserve">
     <value>Accounts</value>
   </data>
-  <data name="Block" xml:space="preserve">
+	<data name="Block" xml:space="preserve">
     <value>blocken</value>
   </data>
-  <data name="ComposeTile" xml:space="preserve">
+	<data name="ComposeTile" xml:space="preserve">
     <value>"Erstellen"-Tile</value>
   </data>
-  <data name="Delete" xml:space="preserve">
+	<data name="Delete" xml:space="preserve">
     <value>löschen</value>
   </data>
-  <data name="Follow" xml:space="preserve">
+	<data name="Follow" xml:space="preserve">
     <value>folgen</value>
   </data>
-  <data name="PinToStart" xml:space="preserve">
+	<data name="PinToStart" xml:space="preserve">
     <value>An Start anheften</value>
   </data>
-  <data name="Profile" xml:space="preserve">
+	<data name="Profile" xml:space="preserve">
     <value>Profil</value>
   </data>
-  <data name="ScheduledQuestion" xml:space="preserve">
+	<data name="ScheduledQuestion" xml:space="preserve">
     <value>Geplant?</value>
   </data>
-  <data name="Unblock" xml:space="preserve">
+	<data name="Unblock" xml:space="preserve">
     <value>Entblocken</value>
   </data>
-  <data name="Unfollow" xml:space="preserve">
+	<data name="Unfollow" xml:space="preserve">
     <value>Entfolgen</value>
   </data>
-  <data name="AnotherString" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Big" xml:space="preserve">
+	<data name="Big" xml:space="preserve">
     <value>Groß</value>
   </data>
-  <data name="FontSize" xml:space="preserve">
+	<data name="FontSize" xml:space="preserve">
     <value>Schriftgröße:</value>
   </data>
-  <data name="Medium" xml:space="preserve">
+	<data name="Medium" xml:space="preserve">
     <value>Mittel</value>
   </data>
-  <data name="RTBy" xml:space="preserve">
+	<data name="RTBy" xml:space="preserve">
     <value>RT von </value>
   </data>
-  <data name="Small" xml:space="preserve">
+	<data name="Small" xml:space="preserve">
     <value>Klein</value>
   </data>
-  <data name="RecoverReadPosition" xml:space="preserve">
+	<data name="RecoverReadPosition" xml:space="preserve">
     <value>Von letzter Position fortsetzen?</value>
   </data>
-  <data name="Accept" xml:space="preserve">
+	<data name="Accept" xml:space="preserve">
     <value>Akzeptieren</value>
   </data>
-  <data name="AskAccessGrantGeolocation" xml:space="preserve">
+	<data name="AskAccessGrantGeolocation" xml:space="preserve">
     <value>Möchtest du Ocell Zugriff auf deinen Standort erlauben? Damit werden die Positionsbestimmung für Tweets und lokalisierte Trending Topics aktiviert.</value>
   </data>
-  <data name="ChangeGeolocSetting" xml:space="preserve">
+	<data name="ChangeGeolocSetting" xml:space="preserve">
     <value>Du kannst diese Funktion jederzeit in den Einstellungen ändern.</value>
   </data>
-  <data name="Deny" xml:space="preserve">
+	<data name="Deny" xml:space="preserve">
     <value>Verweigern</value>
   </data>
-  <data name="Geolocation" xml:space="preserve">
+	<data name="Geolocation" xml:space="preserve">
     <value>Positionsbestimmung</value>
   </data>
-  <data name="Geotagging" xml:space="preserve">
+	<data name="Geotagging" xml:space="preserve">
     <value>Positionsbestimmung aktivieren</value>
   </data>
-  <data name="Global" xml:space="preserve">
+	<data name="Global" xml:space="preserve">
     <value>Global</value>
   </data>
-  <data name="PrivacyPolicy" xml:space="preserve">
+	<data name="PrivacyPolicy" xml:space="preserve">
     <value>Datenschutzrichtlinie: Ocell wird deinen Standort niemals in einer Liste oder Datei auf deinem Handy speichern. Ocell wird deinen Standort an keine Internetserver senden, mit Ausnahme von Twitter.com und nur für die oben genannten Zwecke (Positionsbestimmung für Tweets und lokalisierte Trending Topics).</value>
   </data>
-  <data name="ShowGlobalTopics" xml:space="preserve">
+	<data name="ShowGlobalTopics" xml:space="preserve">
     <value>Zeige globale Trending Topics...</value>
   </data>
-  <data name="ShowResumeButton" xml:space="preserve">
+	<data name="ShowResumeButton" xml:space="preserve">
     <value>Zeige "Lesen fortsetzen"-Button</value>
   </data>
-  <data name="AskEnablePush" xml:space="preserve">
+	<data name="AskEnablePush" xml:space="preserve">
     <value>Möchtest du Push-Benachrichtigungen in Ocell aktivieren?</value>
   </data>
-  <data name="PushEnabled" xml:space="preserve">
+	<data name="PushEnabled" xml:space="preserve">
     <value>Push-Benachrichtigungen</value>
   </data>
-  <data name="ErrorNoAccount" xml:space="preserve">
+	<data name="ErrorNoAccount" xml:space="preserve">
     <value>Kein Account ausgewählt.</value>
   </data>
-  <data name="AskTwitlonger" xml:space="preserve">
+	<data name="AskTwitlonger" xml:space="preserve">
     <value>Da dieser Tweet mehr als 140 Zeichen enthält, wird Twitlonger zum senden genutzt. Fortfahren?</value>
   </data>
-  <data name="ErrorCreatingTwitlonger" xml:space="preserve">
+	<data name="ErrorCreatingTwitlonger" xml:space="preserve">
     <value>Fehler beim erstellen des Twitlonger-Posts</value>
   </data>
-  <data name="UploadingTwitlonger" xml:space="preserve">
+	<data name="UploadingTwitlonger" xml:space="preserve">
     <value>Senden an Twitlonger...</value>
   </data>
-  <data name="XFollowsY" xml:space="preserve">
+	<data name="XFollowsY" xml:space="preserve">
     <value>{0} folgt dir</value>
   </data>
-  <data name="XNotFollowsY" xml:space="preserve">
+	<data name="XNotFollowsY" xml:space="preserve">
     <value>{0} folgt dir nicht</value>
   </data>
-  <data name="ErrorBufferProfiles" xml:space="preserve">
+	<data name="ErrorBufferProfiles" xml:space="preserve">
     <value>Error retrieving Buffer profiles.</value>
   </data>
-  <data name="ErrorCreatingBuffer" xml:space="preserve">
+	<data name="ErrorCreatingBuffer" xml:space="preserve">
     <value>Error creating Buffer update.</value>
   </data>
-  <data name="NoBufferProfilesAdded" xml:space="preserve">
+	<data name="NoBufferProfilesAdded" xml:space="preserve">
     <value>Du hast kein Buffer-Profil für eines der in Ocell gespeicherten Twitter-Accounts.</value>
   </data>
-  <data name="BufferUpdateSent" xml:space="preserve">
+	<data name="BufferUpdateSent" xml:space="preserve">
     <value>Tweet an Buffer gesendet!</value>
   </data>
-  <data name="NoBufferConfigured" xml:space="preserve">
+	<data name="NoBufferConfigured" xml:space="preserve">
     <value>Es scheint es wurde kein buffer-Account konfiguriert. Möchtest du dies nun tun?</value>
   </data>
-  <data name="ScheduleError" xml:space="preserve">
+	<data name="ScheduleError" xml:space="preserve">
     <value>Fehler beim planen des Tweets für {0}.</value>
   </data>
-  <data name="AskAddColumn" xml:space="preserve">
+	<data name="AskAddColumn" xml:space="preserve">
     <value>Die Spalte {0} zur Hauptseite hinzufügen?</value>
   </data>
-  <data name="ColumnAdded" xml:space="preserve">
+	<data name="ColumnAdded" xml:space="preserve">
     <value>Spalte hinzugefügt.</value>
   </data>
-  <data name="DisableQuickAdd" xml:space="preserve">
+	<data name="DisableQuickAdd" xml:space="preserve">
     <value>Schnelles hinzufügen von Spalten deaktivieren</value>
   </data>
-  <data name="EnableQuickAdd" xml:space="preserve">
+	<data name="EnableQuickAdd" xml:space="preserve">
     <value>Schnelles hinzufügen von Spalten aktivieren</value>
   </data>
-  <data name="ErrorDownloadingSearches" xml:space="preserve">
+	<data name="ErrorDownloadingSearches" xml:space="preserve">
     <value>Gespeicherte Suchenn konnten nicht heruntergeladen werden.</value>
   </data>
-  <data name="QuickView" xml:space="preserve">
+	<data name="QuickView" xml:space="preserve">
     <value>Schnellansicht</value>
   </data>
-  <data name="AskBuyFullVersion" xml:space="preserve">
+	<data name="AskBuyFullVersion" xml:space="preserve">
     <value>Ups! Diese Funktion ist nur in der Vollversion von Ocell Pro verfügbar. Zum erwerben im Store drücke OK. Danke!</value>
   </data>
-  <data name="SendWithBuffer" xml:space="preserve">
+	<data name="SendWithBuffer" xml:space="preserve">
     <value>An Buffer gesendet</value>
   </data>
-  <data name="Code" xml:space="preserve">
+	<data name="Code" xml:space="preserve">
     <value>Code</value>
   </data>
-  <data name="CodeInvalid" xml:space="preserve">
+	<data name="CodeInvalid" xml:space="preserve">
     <value>Der Code konnte nicht verifiziert werden. Stelle sicher, dass eine Verbindung zum Internet besteht und der Code korrekt kopiert/eingegeben wurde.</value>
   </data>
-  <data name="CodeValid" xml:space="preserve">
+	<data name="CodeValid" xml:space="preserve">
     <value>Der Code ist gültig. Glückwunsch, du hast Ocell Pro freigeschaltet. Viel Spaß!</value>
   </data>
-  <data name="CouponCodes" xml:space="preserve">
+	<data name="CouponCodes" xml:space="preserve">
     <value>Codes einlösen</value>
   </data>
-  <data name="Privacy_Policy" xml:space="preserve">
+	<data name="Privacy_Policy" xml:space="preserve">
     <value>Datenschutzrichtlinie</value>
   </data>
-  <data name="Validate" xml:space="preserve">
+	<data name="Validate" xml:space="preserve">
     <value>Verifizierung</value>
   </data>
-  <data name="ListDeleted" xml:space="preserve">
+	<data name="ListDeleted" xml:space="preserve">
     <value>Es scheint, dass die Liste {0} auf Twitter gelöscht wurde. Wenn du sie auch in Ocell löschen möchtest, gehe auf "Spalten" und drücke die Liste lange zum löschen.</value>
   </data>
-  <data name="AskPosition" xml:space="preserve">
+	<data name="AskPosition" xml:space="preserve">
     <value>Nachfragen</value>
   </data>
-  <data name="AvailableLocations" xml:space="preserve">
+	<data name="AvailableLocations" xml:space="preserve">
     <value>Verfügbare Standorte</value>
   </data>
-  <data name="ShowLastTweet" xml:space="preserve">
+	<data name="ShowLastTweet" xml:space="preserve">
     <value>Weiter, wo ich war</value>
   </data>
-  <data name="ToNewTweets" xml:space="preserve">
+	<data name="ToNewTweets" xml:space="preserve">
     <value>Letzten Tweet anzeigen</value>
   </data>
-  <data name="WhenAppStart" xml:space="preserve">
+	<data name="WhenAppStart" xml:space="preserve">
     <value>Wenn die App startet...</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
+	<data name="Cancel" xml:space="preserve">
     <value>stornieren</value>
   </data>
-  <data name="Repeat" xml:space="preserve">
+	<data name="Repeat" xml:space="preserve">
     <value>wiederholen</value>
     <comment>wiederholen</comment>
   </data>
-  <data name="Notifications" xml:space="preserve">
+	<data name="Notifications" xml:space="preserve">
     <value>meldungen</value>
   </data>
-  <data name="NoNewNotifications" xml:space="preserve">
+	<data name="NoNewNotifications" xml:space="preserve">
     <value>Sie haben keine Meldungen.</value>
   </data>
-  <data name="ErrorUnexpected" xml:space="preserve">
+	<data name="ErrorUnexpected" xml:space="preserve">
     <value>Ein unerwarteter Fehler passiert, sorry. Wenn diese Meldung häufig ist, benachrichtigen Sie bitte @OcellApp, damit wir es beheben können.</value>
   </data>
+	<data name="NewXMentionsMessages" xml:space="preserve">
+		<value>{0} neue Erwähnungen und Nachrichten</value>
+	</data>
+	<data name="Pictures" xml:space="preserve">
+		<value>Bilder</value>
+	</data>
+	<data name="Yes" xml:space="preserve">
+		<value>Ja</value>
+	</data>
+	<data name="ErrorRetweeting" xml:space="preserve">
+		<value>Beim Senden der Retweet ist ein Fehler aufgetreten.</value>
+	</data>
+	<data name="CouldntGetYourPosition" xml:space="preserve">
+		<value>Wir konnten Ihre GPS-Position nicht bekommen.</value>
+	</data>
+	<data name="NoItemsHere" xml:space="preserve">
+		<value>Es gibt nichts, hier zeigen...</value>
+	</data>
 </root>

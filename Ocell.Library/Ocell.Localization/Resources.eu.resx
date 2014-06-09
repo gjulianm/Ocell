@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
+	<!-- 
     Microsoft ResX Schema 
     
     Version 2.0
@@ -59,1130 +59,1127 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="AMinuteAgo" xml:space="preserve">
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" />
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string" />
+							<xsd:attribute name="name" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="AMinuteAgo" xml:space="preserve">
     <value>orain dela minutu bat</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="AnHourAgo" xml:space="preserve">
+	<data name="AnHourAgo" xml:space="preserve">
     <value>orain dela ordu bat</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="ASecondAgo" xml:space="preserve">
+	<data name="ASecondAgo" xml:space="preserve">
     <value>orain dela segundu bat</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="ButtonGo" xml:space="preserve">
+	<data name="ButtonGo" xml:space="preserve">
     <value>Joan</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="ColumnAlreadyPinned" xml:space="preserve">
+	<data name="ColumnAlreadyPinned" xml:space="preserve">
     <value>Zutabea jadanik gehituta dago</value>
     <comment>MainPageModel.cs</comment>
   </data>
-  <data name="Columns" xml:space="preserve">
+	<data name="Columns" xml:space="preserve">
     <value>zutabeak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\ManageColumns.xaml</comment>
   </data>
-  <data name="Compose" xml:space="preserve">
+	<data name="Compose" xml:space="preserve">
     <value>idatzi</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="Conversation" xml:space="preserve">
+	<data name="Conversation" xml:space="preserve">
     <value>elkarrizketa</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Conversation.xaml</comment>
   </data>
-  <data name="Error" xml:space="preserve">
+	<data name="Error" xml:space="preserve">
     <value>errorea</value>
     <comment>ListConverter.cs</comment>
   </data>
-  <data name="Favorite" xml:space="preserve">
+	<data name="Favorite" xml:space="preserve">
     <value>gogokoa</value>
     <comment>TweetTemplate - App.xaml</comment>
   </data>
-  <data name="Favorites" xml:space="preserve">
+	<data name="Favorites" xml:space="preserve">
     <value>Gogokoak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\AddColumn.xaml</comment>
   </data>
-  <data name="FilterColumn" xml:space="preserve">
+	<data name="FilterColumn" xml:space="preserve">
     <value>zutabe hau iragaztu</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="GoToUser" xml:space="preserve">
+	<data name="GoToUser" xml:space="preserve">
     <value>erabiltzailera joan...</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="Home" xml:space="preserve">
+	<data name="Home" xml:space="preserve">
     <value>Hasi</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\AddColumn.xaml</comment>
   </data>
-  <data name="LastMonth" xml:space="preserve">
+	<data name="LastMonth" xml:space="preserve">
     <value>orain dela hilabate bat</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="LastYear" xml:space="preserve">
+	<data name="LastYear" xml:space="preserve">
     <value>orain dela urte bat</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="Mentions" xml:space="preserve">
+	<data name="Mentions" xml:space="preserve">
     <value>Aipamenak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\AddColumn.xaml</comment>
   </data>
-  <data name="Messages" xml:space="preserve">
+	<data name="Messages" xml:space="preserve">
     <value>Mezuak</value>
     <comment>TwitterResource.cs</comment>
   </data>
-  <data name="MuteUser" xml:space="preserve">
+	<data name="MuteUser" xml:space="preserve">
     <value>erabiltzailea isilarazi</value>
     <comment>TweetTemplate - App.xaml</comment>
   </data>
-  <data name="MyProfile" xml:space="preserve">
+	<data name="MyProfile" xml:space="preserve">
     <value>nire profila</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="PinColumnStart" xml:space="preserve">
+	<data name="PinColumnStart" xml:space="preserve">
     <value>zutabe hau hasierara ainguratu</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="ReadLater" xml:space="preserve">
+	<data name="ReadLater" xml:space="preserve">
     <value>gero irakurri</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="Reply" xml:space="preserve">
+	<data name="Reply" xml:space="preserve">
     <value>erantzun</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="Retweet" xml:space="preserve">
+	<data name="Retweet" xml:space="preserve">
     <value>bertxiotu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="Search" xml:space="preserve">
+	<data name="Search" xml:space="preserve">
     <value>bilatu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Search\EnterSearch.xaml</comment>
   </data>
-  <data name="SendDM" xml:space="preserve">
+	<data name="SendDM" xml:space="preserve">
     <value>mezua bidali</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="Settings" xml:space="preserve">
+	<data name="Settings" xml:space="preserve">
     <value>hobespenak</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="TrendingTopics" xml:space="preserve">
+	<data name="TrendingTopics" xml:space="preserve">
     <value>pil-pileko gaiak</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="UnknownValue" xml:space="preserve">
+	<data name="UnknownValue" xml:space="preserve">
     <value>Ezezaguna</value>
     <comment>TwitterResource.cs</comment>
   </data>
-  <data name="Username" xml:space="preserve">
+	<data name="Username" xml:space="preserve">
     <value>Erabiltzaile izena.</value>
     <comment>MainPage.xaml</comment>
   </data>
-  <data name="XDaysAgo" xml:space="preserve">
+	<data name="XDaysAgo" xml:space="preserve">
     <value>orain dela {0} egun</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="XHoursAgo" xml:space="preserve">
+	<data name="XHoursAgo" xml:space="preserve">
     <value>orain dela {0} ordu</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="XMinutesAgo" xml:space="preserve">
+	<data name="XMinutesAgo" xml:space="preserve">
     <value>orain dela {0} minutu</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="XMonthsAgo" xml:space="preserve">
+	<data name="XMonthsAgo" xml:space="preserve">
     <value>orain dela {0} hilabete</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="XSecondsAgo" xml:space="preserve">
+	<data name="XSecondsAgo" xml:space="preserve">
     <value>orain dela {0} segundu</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="XYearsAgo" xml:space="preserve">
+	<data name="XYearsAgo" xml:space="preserve">
     <value>orain dela {0} urte</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="Yesterday" xml:space="preserve">
+	<data name="Yesterday" xml:space="preserve">
     <value>atzo</value>
     <comment>RelativeDateTimeConverter.cs</comment>
   </data>
-  <data name="TapToModify" xml:space="preserve">
+	<data name="TapToModify" xml:space="preserve">
     <value>Sakatu iragazkia aldatzeko, sakatu eta mantendu ezabatzeko.</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\Filters.xaml</comment>
   </data>
-  <data name="Save" xml:space="preserve">
+	<data name="Save" xml:space="preserve">
     <value>gorde</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\Filters.xaml</comment>
   </data>
-  <data name="Done" xml:space="preserve">
+	<data name="Done" xml:space="preserve">
     <value>eginda</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="CreateFilter" xml:space="preserve">
+	<data name="CreateFilter" xml:space="preserve">
     <value>iragazkia sortu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="User" xml:space="preserve">
+	<data name="User" xml:space="preserve">
     <value>Erabiltzailea</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="Source" xml:space="preserve">
+	<data name="Source" xml:space="preserve">
     <value>Bidez</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="Contains" xml:space="preserve">
+	<data name="Contains" xml:space="preserve">
     <value>Dauka</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="DoesNotContain" xml:space="preserve">
+	<data name="DoesNotContain" xml:space="preserve">
     <value>Ez dauka</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="Drafts" xml:space="preserve">
+	<data name="Drafts" xml:space="preserve">
     <value>zirriborroak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Drafts\ManageDrafts.xaml</comment>
   </data>
-  <data name="Next" xml:space="preserve">
+	<data name="Next" xml:space="preserve">
     <value>hurrengoa</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\SelectUser.xaml</comment>
   </data>
-  <data name="Trending" xml:space="preserve">
+	<data name="Trending" xml:space="preserve">
     <value>Pil-Pileko Gaiak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Topics.xaml</comment>
   </data>
-  <data name="Refresh" xml:space="preserve">
+	<data name="Refresh" xml:space="preserve">
     <value>freskatu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Topics.xaml</comment>
   </data>
-  <data name="AddColumn" xml:space="preserve">
+	<data name="AddColumn" xml:space="preserve">
     <value>zutabea gehitu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Search\Search.xaml</comment>
   </data>
-  <data name="DirectMessages" xml:space="preserve">
+	<data name="DirectMessages" xml:space="preserve">
     <value>Mezu Zuzenak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\AddColumn.xaml</comment>
   </data>
-  <data name="Core" xml:space="preserve">
+	<data name="Core" xml:space="preserve">
     <value>Nagusia</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\AddColumn.xaml</comment>
   </data>
-  <data name="Lists" xml:space="preserve">
+	<data name="Lists" xml:space="preserve">
     <value>Zerrendak | Listas</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\AddColumn.xaml</comment>
   </data>
-  <data name="Add" xml:space="preserve">
+	<data name="Add" xml:space="preserve">
     <value>gehitu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\ManageColumns.xaml</comment>
   </data>
-  <data name="Accounts" xml:space="preserve">
+	<data name="Accounts" xml:space="preserve">
     <value>Kontuak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="SelectAccount" xml:space="preserve">
+	<data name="SelectAccount" xml:space="preserve">
     <value>Kontu bat hautatu.</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Columns\SelectAccount.xaml</comment>
   </data>
-  <data name="Via" xml:space="preserve">
+	<data name="Via" xml:space="preserve">
     <value>{0} bidez</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="Conversation_CapitalFirst" xml:space="preserve">
+	<data name="Conversation_CapitalFirst" xml:space="preserve">
     <value>Elkarrizketa</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="Hashtags" xml:space="preserve">
+	<data name="Hashtags" xml:space="preserve">
     <value>Hash-etiketak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="RetweetWithComments" xml:space="preserve">
+	<data name="RetweetWithComments" xml:space="preserve">
     <value>iruzkinekin bertxiotu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="DeleteTweet" xml:space="preserve">
+	<data name="DeleteTweet" xml:space="preserve">
     <value>txioa ezabatu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="ReplyAll" xml:space="preserve">
+	<data name="ReplyAll" xml:space="preserve">
     <value>guztiei erantzun</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\Tweet.xaml</comment>
   </data>
-  <data name="Tweets" xml:space="preserve">
+	<data name="Tweets" xml:space="preserve">
     <value>txioak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\User.xaml</comment>
   </data>
-  <data name="Followers" xml:space="preserve">
+	<data name="Followers" xml:space="preserve">
     <value>jarraitzaileak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\User.xaml</comment>
   </data>
-  <data name="Following" xml:space="preserve">
+	<data name="Following" xml:space="preserve">
     <value>jarraitzen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\User.xaml</comment>
   </data>
-  <data name="PinToMainPage" xml:space="preserve">
+	<data name="PinToMainPage" xml:space="preserve">
     <value>Orri nagusira ainguratu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\User.xaml</comment>
   </data>
-  <data name="ChangeAvatar" xml:space="preserve">
+	<data name="ChangeAvatar" xml:space="preserve">
     <value>irudia aldatu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Elements\User.xaml</comment>
   </data>
-  <data name="Filters" xml:space="preserve">
+	<data name="Filters" xml:space="preserve">
     <value>iragazkiak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\Filters.xaml</comment>
   </data>
-  <data name="Text" xml:space="preserve">
+	<data name="Text" xml:space="preserve">
     <value>Testua</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Filtering\ManageFilter.xaml</comment>
   </data>
-  <data name="CreateList" xml:space="preserve">
+	<data name="CreateList" xml:space="preserve">
     <value>zerrenda sortu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\CreateList.xaml</comment>
   </data>
-  <data name="Description" xml:space="preserve">
+	<data name="Description" xml:space="preserve">
     <value>Deskribapena</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\CreateList.xaml</comment>
   </data>
-  <data name="Public" xml:space="preserve">
+	<data name="Public" xml:space="preserve">
     <value>Publikoa</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\CreateList.xaml</comment>
   </data>
-  <data name="Private" xml:space="preserve">
+	<data name="Private" xml:space="preserve">
     <value>Pribatua</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\CreateList.xaml</comment>
   </data>
-  <data name="ManageLists" xml:space="preserve">
+	<data name="ManageLists" xml:space="preserve">
     <value>zerrendak kudeatu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\ListManager.xaml</comment>
   </data>
-  <data name="YourLists" xml:space="preserve">
+	<data name="YourLists" xml:space="preserve">
     <value>Zure zerrendak.</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\ListManager.xaml</comment>
   </data>
-  <data name="CreateNewList" xml:space="preserve">
+	<data name="CreateNewList" xml:space="preserve">
     <value>zerrenda berria sortu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Lists\ListManager.xaml</comment>
   </data>
-  <data name="Search_CapitalFirst" xml:space="preserve">
+	<data name="Search_CapitalFirst" xml:space="preserve">
     <value>Bilatu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Search\EnterSearch.xaml</comment>
   </data>
-  <data name="About" xml:space="preserve">
+	<data name="About" xml:space="preserve">
     <value>honi buruz</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\About.xaml</comment>
   </data>
-  <data name="Backgrounds" xml:space="preserve">
+	<data name="Backgrounds" xml:space="preserve">
     <value>hormirudiak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Backgrounds.xaml</comment>
   </data>
-  <data name="SavePreferences" xml:space="preserve">
+	<data name="SavePreferences" xml:space="preserve">
     <value>hobespenak gorde</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Backgrounds.xaml</comment>
   </data>
-  <data name="PinComposeToStart" xml:space="preserve">
+	<data name="PinComposeToStart" xml:space="preserve">
     <value>ainguratu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="Tiles" xml:space="preserve">
+	<data name="Tiles" xml:space="preserve">
     <value>Tile-ak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="TweetsPerRequest" xml:space="preserve">
+	<data name="TweetsPerRequest" xml:space="preserve">
     <value>Karga bakoitzagatiko txio kopurua</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="Backgrounds_CapitalFirst" xml:space="preserve">
+	<data name="Backgrounds_CapitalFirst" xml:space="preserve">
     <value>Hormirudiak</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="SetCustomBackground" xml:space="preserve">
+	<data name="SetCustomBackground" xml:space="preserve">
     <value>Hormirudia aukeratu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="AddAccount" xml:space="preserve">
+	<data name="AddAccount" xml:space="preserve">
     <value>kontua gehitu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="EditMutedTweets" xml:space="preserve">
+	<data name="EditMutedTweets" xml:space="preserve">
     <value>Isilarazitako txioak aldatu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="OneHour" xml:space="preserve">
+	<data name="OneHour" xml:space="preserve">
     <value>ordu bat</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="EightHours" xml:space="preserve">
+	<data name="EightHours" xml:space="preserve">
     <value>zortzi ordu</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="OneDay" xml:space="preserve">
+	<data name="OneDay" xml:space="preserve">
     <value>egun bat</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="OneWeek" xml:space="preserve">
+	<data name="OneWeek" xml:space="preserve">
     <value>aste bat</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="Forever" xml:space="preserve">
+	<data name="Forever" xml:space="preserve">
     <value>betiko</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="SaveCredentials" xml:space="preserve">
+	<data name="SaveCredentials" xml:space="preserve">
     <value>Gorde</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
-  <data name="SendMessage" xml:space="preserve">
+	<data name="SendMessage" xml:space="preserve">
     <value>mezua bidali</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\SelectUser.xaml</comment>
   </data>
-  <data name="AddedToList" xml:space="preserve">
+	<data name="AddedToList" xml:space="preserve">
     <value>@{0} {1} zerrendara gehitu da</value>
     <comment>ListManager</comment>
   </data>
-  <data name="AskDeleteDraft" xml:space="preserve">
+	<data name="AskDeleteDraft" xml:space="preserve">
     <value>Zirriborroa ezabatu nahi duzu?</value>
     <comment>ManageDraftsModel</comment>
   </data>
-  <data name="AskFilterDelete" xml:space="preserve">
+	<data name="AskFilterDelete" xml:space="preserve">
     <value>Iragazkia ezabatu nahi duzu?</value>
     <comment>Filters.xaml.cs</comment>
   </data>
-  <data name="CopyHashtag" xml:space="preserve">
+	<data name="CopyHashtag" xml:space="preserve">
     <value>hash-etiketa kopiatu</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="CopyLink" xml:space="preserve">
+	<data name="CopyLink" xml:space="preserve">
     <value>lotura kopiatu</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="CopyUsername" xml:space="preserve">
+	<data name="CopyUsername" xml:space="preserve">
     <value>erabiltzaile izena kopiatu</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="CouldntBlock" xml:space="preserve">
+	<data name="CouldntBlock" xml:space="preserve">
     <value>Ezin izan dugu @{0} blokeatu</value>
     <comment>UserModel</comment>
   </data>
-  <data name="CouldntFindUser" xml:space="preserve">
+	<data name="CouldntFindUser" xml:space="preserve">
     <value>Ezin dugu erabiltzaile hori aurkitu.</value>
     <comment>UserListModel</comment>
   </data>
-  <data name="CouldntFollow" xml:space="preserve">
+	<data name="CouldntFollow" xml:space="preserve">
     <value>Ezin izan dugu @{0} jarraitu.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="CouldntGetRelationship" xml:space="preserve">
+	<data name="CouldntGetRelationship" xml:space="preserve">
     <value>Ezin izan dugu eskuratu erabiltzaile horrekiko erlazioa.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="CouldntLoadFilter" xml:space="preserve">
+	<data name="CouldntLoadFilter" xml:space="preserve">
     <value>Ezin dugu iragazkia kargatu.</value>
     <comment>ManageFilter.xaml.cs</comment>
   </data>
-  <data name="CouldntReport" xml:space="preserve">
+	<data name="CouldntReport" xml:space="preserve">
     <value>Ezin izan dugu @{0} salatu.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="CouldntUnblock" xml:space="preserve">
+	<data name="CouldntUnblock" xml:space="preserve">
     <value>Ezin izan diogu @{0}-(r)i blokeoa kendu.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="CouldntUnfollow" xml:space="preserve">
+	<data name="CouldntUnfollow" xml:space="preserve">
     <value>Ezin izan dugu @{0} jarraitzeari utzi.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="DownloadingFollowers" xml:space="preserve">
+	<data name="DownloadingFollowers" xml:space="preserve">
     <value>jarraitzaileak deskargatzen...</value>
     <comment>UserListModel</comment>
   </data>
-  <data name="DownloadingFollowing" xml:space="preserve">
+	<data name="DownloadingFollowing" xml:space="preserve">
     <value>lagunak deskargatzen...</value>
     <comment>UserListModel</comment>
   </data>
-  <data name="DownloadingImage" xml:space="preserve">
+	<data name="DownloadingImage" xml:space="preserve">
     <value>irudia deskargatzen...</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="DraftDeleted" xml:space="preserve">
+	<data name="DraftDeleted" xml:space="preserve">
     <value>Zirriborroa ezabatuta.</value>
     <comment>ManageDraftsModel</comment>
   </data>
-  <data name="ErrorCreatingList" xml:space="preserve">
+	<data name="ErrorCreatingList" xml:space="preserve">
     <value>Errorea zerrenda sortzerakoan.</value>
     <comment>CreateList</comment>
   </data>
-  <data name="ErrorDeletingTweet" xml:space="preserve">
+	<data name="ErrorDeletingTweet" xml:space="preserve">
     <value>Ezin izan dugu txioa ezabatu.</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="ErrorDownloadingImage" xml:space="preserve">
+	<data name="ErrorDownloadingImage" xml:space="preserve">
     <value>Errorea irudia deskargatzean.</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="ErrorGettingProfile" xml:space="preserve">
+	<data name="ErrorGettingProfile" xml:space="preserve">
     <value>Ezin izan dugu erabiltzailearen profil osoa eskuratu.</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="ErrorLoadingLists" xml:space="preserve">
+	<data name="ErrorLoadingLists" xml:space="preserve">
     <value>Errorea zerrendak kargatzerakoan.</value>
     <comment>ListManager</comment>
   </data>
-  <data name="ErrorLoadingTweet" xml:space="preserve">
+	<data name="ErrorLoadingTweet" xml:space="preserve">
     <value>Errorea txioa kargatzean.</value>
   </data>
-  <data name="ErrorMessage" xml:space="preserve">
+	<data name="ErrorMessage" xml:space="preserve">
     <value>Errorea egon da.</value>
   </data>
-  <data name="ErrorReport" xml:space="preserve">
+	<data name="ErrorReport" xml:space="preserve">
     <value>Errore txostena</value>
     <comment>LittleWatson</comment>
   </data>
-  <data name="ErrorReportMessage" xml:space="preserve">
+	<data name="ErrorReportMessage" xml:space="preserve">
     <value>Aplikazioa bat-batean itxi zen azken aldian. Errore txosten bat bidali nahi duzu? Errore txostenak errorea konpontzeko beharrezko diren datuak dauzka, informazio pertsonalik gabe.</value>
     <comment>LittleWatson</comment>
   </data>
-  <data name="ErrorSavingFilter" xml:space="preserve">
+	<data name="ErrorSavingFilter" xml:space="preserve">
     <value>Errorea iragazkia gordetzerakoan.</value>
     <comment>ManageFilter.xaml.cs</comment>
   </data>
-  <data name="ErrorUploadingProfileImage" xml:space="preserve">
+	<data name="ErrorUploadingProfileImage" xml:space="preserve">
     <value>Errorea gertatu da irudia igotzerakoan. Egiaztatu 700KB baino gutxiago okupatzen duela.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="Favorited" xml:space="preserve">
+	<data name="Favorited" xml:space="preserve">
     <value>gogoko gisa markatuta!</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="FollowOcellAppMessage" xml:space="preserve">
+	<data name="FollowOcellAppMessage" xml:space="preserve">
     <value>@OcellApp jarraitu nahi duzu eguneraketak eskuratzeko?</value>
     <comment>MainPage.xaml.cs</comment>
   </data>
-  <data name="HashtagsMutedUntil" xml:space="preserve">
+	<data name="HashtagsMutedUntil" xml:space="preserve">
     <value>{0} hash-etiketak {1} arte isilarazita daude.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="List" xml:space="preserve">
+	<data name="List" xml:space="preserve">
     <value>Zerrenda</value>
     <comment>ToColumn</comment>
   </data>
-  <data name="ListCreated" xml:space="preserve">
+	<data name="ListCreated" xml:space="preserve">
     <value>Zerrenda sortuta!</value>
     <comment>CreateList</comment>
   </data>
-  <data name="MuteDomain" xml:space="preserve">
+	<data name="MuteDomain" xml:space="preserve">
     <value>isilarazi txioak domeinu honekin</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="MutedUntil" xml:space="preserve">
+	<data name="MutedUntil" xml:space="preserve">
     <value>Isilarazita {0} arte.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="MuteHashtag" xml:space="preserve">
+	<data name="MuteHashtag" xml:space="preserve">
     <value>hash-etiketa isilarazi</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="NoHashtagsToMute" xml:space="preserve">
+	<data name="NoHashtagsToMute" xml:space="preserve">
     <value>Ez daude isilarazteko txioak.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="NotValidResource" xml:space="preserve">
+	<data name="NotValidResource" xml:space="preserve">
     <value>Hau ez da baliozko baliabidea.</value>
     <comment>UserListModel</comment>
   </data>
-  <data name="NotValidURL" xml:space="preserve">
+	<data name="NotValidURL" xml:space="preserve">
     <value>Hau ez da baliozko URL-a.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="NowYouFollow" xml:space="preserve">
+	<data name="NowYouFollow" xml:space="preserve">
     <value>Orain @{0} jarraitzen duzu.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="NowYouUnfollow" xml:space="preserve">
+	<data name="NowYouUnfollow" xml:space="preserve">
     <value>Orain ez duzu @{0} jarraitzen.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="ProfileImageChanged" xml:space="preserve">
+	<data name="ProfileImageChanged" xml:space="preserve">
     <value>Zure profil irudia aldatu dugu.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="Protect" xml:space="preserve">
+	<data name="Protect" xml:space="preserve">
     <value>babestu</value>
     <comment>ProtectedConverter</comment>
   </data>
-  <data name="RemovedFromList" xml:space="preserve">
+	<data name="RemovedFromList" xml:space="preserve">
     <value>Orain @{0} ez dago {1} zerrendan.</value>
     <comment>ListManager</comment>
   </data>
-  <data name="ReportedAndBlocked" xml:space="preserve">
+	<data name="ReportedAndBlocked" xml:space="preserve">
     <value>@{0} blokeatu eta salatu duzu.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="RetrievingUser" xml:space="preserve">
+	<data name="RetrievingUser" xml:space="preserve">
     <value>erabiltzailea eskuratzen</value>
     <comment>UserModel</comment>
   </data>
-  <data name="RetweetBy" xml:space="preserve">
+	<data name="RetweetBy" xml:space="preserve">
     <value>(@{0} BT)</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="SourceMutedUntil" xml:space="preserve">
+	<data name="SourceMutedUntil" xml:space="preserve">
     <value>{0} bezeroa isilarazita dago {1} arte.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="TweetDeleted" xml:space="preserve">
+	<data name="TweetDeleted" xml:space="preserve">
     <value>Txioa ezabatuta! (Ocell-etik desagertzeko baliteke pixka bat luzatzea, nahiz eta Twitter-eko zerbitzarian jadanik ez egon)</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="TweetFrom" xml:space="preserve">
+	<data name="TweetFrom" xml:space="preserve">
     <value>@{0}-(r)en txioa</value>
     <comment>DMView</comment>
   </data>
-  <data name="TweetText" xml:space="preserve">
+	<data name="TweetText" xml:space="preserve">
     <value>txioaren testua</value>
     <comment>ITweetableFilterConverter</comment>
   </data>
-  <data name="Unfavorited" xml:space="preserve">
+	<data name="Unfavorited" xml:space="preserve">
     <value>gogoko gisa kenduta!</value>
     <comment>TweetModel</comment>
   </data>
-  <data name="Unprotect" xml:space="preserve">
+	<data name="Unprotect" xml:space="preserve">
     <value>babesa kendu</value>
     <comment>ProtectedConverter</comment>
   </data>
-  <data name="UntilDate" xml:space="preserve">
+	<data name="UntilDate" xml:space="preserve">
     <value>{0} arte.</value>
     <comment>ITweetableFilterConverter</comment>
   </data>
-  <data name="UploadingPicture" xml:space="preserve">
+	<data name="UploadingPicture" xml:space="preserve">
     <value>irudia igotzen...</value>
     <comment>UserModel</comment>
   </data>
-  <data name="UserIsMutedUntil" xml:space="preserve">
+	<data name="UserIsMutedUntil" xml:space="preserve">
     <value>{0} erabiltzailea isilarazita dago {1} arte.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
-  <data name="UserIsNowBlocked" xml:space="preserve">
+	<data name="UserIsNowBlocked" xml:space="preserve">
     <value>Orain @{0} blokeatuta dago.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="UserIsNowUnblocked" xml:space="preserve">
+	<data name="UserIsNowUnblocked" xml:space="preserve">
     <value>Orain ez dago @{0} blokeatuta.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="UserPinned" xml:space="preserve">
+	<data name="UserPinned" xml:space="preserve">
     <value>Erabiltzailea ainguratuta.</value>
     <comment>UserModel</comment>
   </data>
-  <data name="YouHaveToLogin" xml:space="preserve">
+	<data name="YouHaveToLogin" xml:space="preserve">
     <value>Twitterrekin sartu behar zara Ocell erabiltzeko.</value>
     <comment>MainPage.xaml.cs</comment>
   </data>
-  <data name="AccountProtected" xml:space="preserve">
+	<data name="AccountProtected" xml:space="preserve">
     <value>babestutako kontua!</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="AccountUnprotected" xml:space="preserve">
+	<data name="AccountUnprotected" xml:space="preserve">
     <value>babestu gabeko kontua!</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="AskAccountDelete" xml:space="preserve">
+	<data name="AskAccountDelete" xml:space="preserve">
     <value>@{0} kontua ezabatu nahi duzu?</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="BackgroundChangeOnRestart" xml:space="preserve">
+	<data name="BackgroundChangeOnRestart" xml:space="preserve">
     <value>Hormirudia Ocell berrabiaraztean aldatuko da.</value>
     <comment>BackgroundsModel</comment>
   </data>
-  <data name="CredentialsSaved" xml:space="preserve">
+	<data name="CredentialsSaved" xml:space="preserve">
     <value>{0}-ren kredentzialak gordeta.</value>
     <comment>DefaultModel, eg: Credentials for Instapaper saved.</comment>
   </data>
-  <data name="ErrorAuthURL" xml:space="preserve">
+	<data name="ErrorAuthURL" xml:space="preserve">
     <value>Errorea gertatu da kautotutako URL-a eskuratzean. Arazoa errepikatuz gero @OcellApp-rekin harremanetan jarri mesedez.</value>
     <comment>OAuth.xaml.cs</comment>
   </data>
-  <data name="ErrorClientTokens" xml:space="preserve">
+	<data name="ErrorClientTokens" xml:space="preserve">
     <value>Errorea gertatu da kautotutako datuak eskuratzean. Arazoa errepikatuz gero @OcellApp-rekin harremanetan jarri mesedez.</value>
     <comment>OAuth.xaml.cs</comment>
   </data>
-  <data name="ErrorDownloadingUsers" xml:space="preserve">
+	<data name="ErrorDownloadingUsers" xml:space="preserve">
     <value>Errorea gertatu da erabiltzaile zerrenda deskargatzerakoan.</value>
     <comment>SelectUserModel</comment>
   </data>
-  <data name="ErrorLoadingTT" xml:space="preserve">
+	<data name="ErrorLoadingTT" xml:space="preserve">
     <value>Errorea joerak kargatzerakoan.</value>
   </data>
-  <data name="ErrorLoadingTweets" xml:space="preserve">
+	<data name="ErrorLoadingTweets" xml:space="preserve">
     <value>Errorea {0} txioak kargatzean.</value>
     <comment>ExtendedLixtbos</comment>
   </data>
-  <data name="ErrorSavingLater" xml:space="preserve">
+	<data name="ErrorSavingLater" xml:space="preserve">
     <value>Errorea gertatu da elementua gerorako gordetzean.</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="Filtered" xml:space="preserve">
+	<data name="Filtered" xml:space="preserve">
     <value>iragaztuta!</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="InvalidCredentials" xml:space="preserve">
+	<data name="InvalidCredentials" xml:space="preserve">
     <value>{0}-en kredentzialak baliogabekoak dira.</value>
     <comment>DefaultModel, eg: Invalid Pocket credentials.</comment>
   </data>
-  <data name="NewTweet" xml:space="preserve">
+	<data name="NewTweet" xml:space="preserve">
     <value>Txio berria</value>
   </data>
-  <data name="None" xml:space="preserve">
+	<data name="None" xml:space="preserve">
     <value>Bat ere ez.</value>
     <comment>DefaultModel</comment>
   </data>
-  <data name="OnlyTile" xml:space="preserve">
+	<data name="OnlyTile" xml:space="preserve">
     <value>Bakarrik Tile-an</value>
     <comment>DefaultModel</comment>
   </data>
-  <data name="RateLimitHit" xml:space="preserve">
+	<data name="RateLimitHit" xml:space="preserve">
     <value>Ups! Twitter duen dei mugara heldu zara. {0} arte itxaron behar duzu muga berrezarri arte.</value>
     <comment>ExtendedListbox</comment>
   </data>
-  <data name="Retweeted" xml:space="preserve">
+	<data name="Retweeted" xml:space="preserve">
     <value>bertxiotuta</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="SavedForLater" xml:space="preserve">
+	<data name="SavedForLater" xml:space="preserve">
     <value>Gerorako gordeta!</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="SavingForLater" xml:space="preserve">
+	<data name="SavingForLater" xml:space="preserve">
     <value>gerorako gordetzen...</value>
     <comment>Commands.cs</comment>
   </data>
-  <data name="SearchColumnAdded" xml:space="preserve">
+	<data name="SearchColumnAdded" xml:space="preserve">
     <value>Bilaketa zutabea orri nagusira gehituta.</value>
     <comment>SearchModel</comment>
   </data>
-  <data name="ToastAndTile" xml:space="preserve">
+	<data name="ToastAndTile" xml:space="preserve">
     <value>Toast eta Tile</value>
     <comment>DefaultModel</comment>
   </data>
-  <data name="VerifyingCredentials" xml:space="preserve">
+	<data name="VerifyingCredentials" xml:space="preserve">
     <value>kredentzialak egiaztatzen...</value>
     <comment>DefaultModel</comment>
   </data>
-  <data name="And" xml:space="preserve">
+	<data name="And" xml:space="preserve">
     <value>eta</value>
     <comment>That's it.</comment>
   </data>
-  <data name="ForX" xml:space="preserve">
+	<data name="ForX" xml:space="preserve">
     <value>{0}</value>
     <comment>ScheduledAgent. Eg: for @ocellapp, @user2.</comment>
   </data>
-  <data name="NewMention" xml:space="preserve">
+	<data name="NewMention" xml:space="preserve">
     <value>@{0} aipatu zaitu</value>
     <comment>ScheduledAgent. Eg: new mention from @ocellapp.</comment>
   </data>
-  <data name="NewMentions" xml:space="preserve">
+	<data name="NewMentions" xml:space="preserve">
     <value>aipamen berriak</value>
     <comment>ScheduledAgent. Eg: new mentions for ocellapp.</comment>
   </data>
-  <data name="NewMentionsMessages" xml:space="preserve">
+	<data name="NewMentionsMessages" xml:space="preserve">
     <value>aipamen eta mezu berriak</value>
     <comment>ScheduledAgent.</comment>
   </data>
-  <data name="NewMessage" xml:space="preserve">
+	<data name="NewMessage" xml:space="preserve">
     <value>@{0} mezu bat bidali dizu</value>
     <comment>ScheduledAgent. Eg: new message from @ocellapp.</comment>
   </data>
-  <data name="NewMessages" xml:space="preserve">
+	<data name="NewMessages" xml:space="preserve">
     <value>mezu berriak</value>
     <comment>SchedueldAgent.</comment>
   </data>
-  <data name="NewXMentions" xml:space="preserve">
+	<data name="NewXMentions" xml:space="preserve">
     <value>{0} aipamen berriak</value>
     <comment>ScheduledAgent. Eg: 10 new mentions.</comment>
   </data>
-  <data name="NewXMessages" xml:space="preserve">
+	<data name="NewXMessages" xml:space="preserve">
     <value>{0} mezu berriak</value>
     <comment>ScheduledAgent. Eg: 10 new messages.</comment>
   </data>
-  <data name="Mute" xml:space="preserve">
+	<data name="Mute" xml:space="preserve">
     <value>isilarazi...</value>
   </data>
-  <data name="Share" xml:space="preserve">
+	<data name="Share" xml:space="preserve">
     <value>partekatu...</value>
   </data>
-  <data name="AboutScheduling" xml:space="preserve">
+	<data name="AboutScheduling" xml:space="preserve">
     <value>Txioen programazioari buruz...</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="AboutSchedulingMessage" xml:space="preserve">
+	<data name="AboutSchedulingMessage" xml:space="preserve">
     <value>Windows Phone-ko mugak direla eta bakarrik ordu erdiro baieztatu dezakegu programatutako txioak. Hori dela eta txioa ezarrietako orduan ez bidaltzea gerta daiteke. Gogoratu mugikorra itzalita edo energia aurrezte moduan badaukazu ezin izango dugula txioa bidali.</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="AddImage" xml:space="preserve">
+	<data name="AddImage" xml:space="preserve">
     <value>irudia gehitu</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="AskTweetProtectedAccount" xml:space="preserve">
+	<data name="AskTweetProtectedAccount" xml:space="preserve">
     <value>Zihur zaude @{0} babestutako kontutik txiokatu nahi duzula?</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="Date" xml:space="preserve">
+	<data name="Date" xml:space="preserve">
     <value>Data</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="DraftSaved" xml:space="preserve">
+	<data name="DraftSaved" xml:space="preserve">
     <value>Zirriborroa gordeta! </value>
     <comment>NewTweet</comment>
   </data>
-  <data name="ErrorDuplicateTweet" xml:space="preserve">
+	<data name="ErrorDuplicateTweet" xml:space="preserve">
     <value>Txioa bikoiztuta dago.</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="ErrorUploadingImage" xml:space="preserve">
+	<data name="ErrorUploadingImage" xml:space="preserve">
     <value>Errorea irudia igotzerakoan. Saiatu berriro mesedez.</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="MessageScheduled" xml:space="preserve">
+	<data name="MessageScheduled" xml:space="preserve">
     <value>Txioa programatuta!</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="SaveDraft" xml:space="preserve">
+	<data name="SaveDraft" xml:space="preserve">
     <value>zirriborroa gorde</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="Schedule" xml:space="preserve">
+	<data name="Schedule" xml:space="preserve">
     <value>programatu</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="SelectDateTimeToSchedule" xml:space="preserve">
+	<data name="SelectDateTimeToSchedule" xml:space="preserve">
     <value>Hautatu data eta ordua txioa programatzeko mesedez.</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="Send" xml:space="preserve">
+	<data name="Send" xml:space="preserve">
     <value>bidali</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="SendingTweet" xml:space="preserve">
+	<data name="SendingTweet" xml:space="preserve">
     <value>bidaltzen...</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="Time" xml:space="preserve">
+	<data name="Time" xml:space="preserve">
     <value>Ordua</value>
     <comment>NewTweet</comment>
   </data>
-  <data name="AboutP1" xml:space="preserve">
+	<data name="AboutP1" xml:space="preserve">
     <value>Ocell Guillermo Julianek garatutako kode irekidun (ASL lizentzia) Twitter bezeroa da. @OcellApp jarraitu dezakezu aplikazioaren azken eguneraketak jasotzeko.</value>
   </data>
-  <data name="AboutP2" xml:space="preserve">
+	<data name="AboutP2" xml:space="preserve">
     <value>Hormirudiak: Eskerrik asko Paul Phönixweiß (Egg), Dimitar Karaytchev (Diamond), Lauren (Floral), Sam Feyaerts (Map) eta Wilmotte Bastien (Tire)-ri beraien patroiak subtlepatterns.com-en uzteagatik.</value>
   </data>
-  <data name="AddFavorite" xml:space="preserve">
+	<data name="AddFavorite" xml:space="preserve">
     <value>gogokoa gehitu</value>
   </data>
-  <data name="Authenticating" xml:space="preserve">
+	<data name="Authenticating" xml:space="preserve">
     <value>Kautotzen...</value>
   </data>
-  <data name="BlockAndReport" xml:space="preserve">
+	<data name="BlockAndReport" xml:space="preserve">
     <value>blokeatu eta spam gisa salatu</value>
   </data>
-  <data name="DontShowTweetsWhere" xml:space="preserve">
+	<data name="DontShowTweetsWhere" xml:space="preserve">
     <value>Ez erakutsi txioak non</value>
   </data>
-  <data name="DownloadingTopics" xml:space="preserve">
+	<data name="DownloadingTopics" xml:space="preserve">
     <value>pil-pileko gaiak deskargatzen...</value>
   </data>
-  <data name="DownloadingUserList" xml:space="preserve">
+	<data name="DownloadingUserList" xml:space="preserve">
     <value>lagun zerrenda deskargatzen...</value>
   </data>
-  <data name="EnterQuery" xml:space="preserve">
+	<data name="EnterQuery" xml:space="preserve">
     <value>Bilaketa hitza sartu</value>
   </data>
-  <data name="From" xml:space="preserve">
+	<data name="From" xml:space="preserve">
     <value>Igorlea:</value>
   </data>
-  <data name="IsMemberOfLists" xml:space="preserve">
+	<data name="IsMemberOfLists" xml:space="preserve">
     <value>Hurrengo zerrenden kidea da:</value>
   </data>
-  <data name="LoadingLists" xml:space="preserve">
+	<data name="LoadingLists" xml:space="preserve">
     <value>zerrendak kargatzen...</value>
   </data>
-  <data name="LoadMore" xml:space="preserve">
+	<data name="LoadMore" xml:space="preserve">
     <value>Gehiago kargatu...</value>
   </data>
-  <data name="Login" xml:space="preserve">
+	<data name="Login" xml:space="preserve">
     <value>Erabiltzaile izena:</value>
   </data>
-  <data name="ManageListsForUser" xml:space="preserve">
+	<data name="ManageListsForUser" xml:space="preserve">
     <value>gehitu/kendu erabiltzailea zerrendetatik...</value>
   </data>
-  <data name="Name" xml:space="preserve">
+	<data name="Name" xml:space="preserve">
     <value>Izena</value>
   </data>
-  <data name="NotifyMentions" xml:space="preserve">
+	<data name="NotifyMentions" xml:space="preserve">
     <value>Aipamen jakinarazpenak:</value>
   </data>
-  <data name="NotifyMessages" xml:space="preserve">
+	<data name="NotifyMessages" xml:space="preserve">
     <value>Mezu jakinarazpenak:</value>
   </data>
-  <data name="Password" xml:space="preserve">
+	<data name="Password" xml:space="preserve">
     <value>Pasahitza:</value>
   </data>
-  <data name="PasswordIfYouHave" xml:space="preserve">
+	<data name="PasswordIfYouHave" xml:space="preserve">
     <value>Pasahitza (izanez gero):</value>
   </data>
-  <data name="RemoveFavorite" xml:space="preserve">
+	<data name="RemoveFavorite" xml:space="preserve">
     <value>gogokoa kendu</value>
   </data>
-  <data name="ShowRetweetsAsMentions" xml:space="preserve">
+	<data name="ShowRetweetsAsMentions" xml:space="preserve">
     <value>Bertxioak aipamen gisa erakutsi</value>
   </data>
-  <data name="SilenceTime" xml:space="preserve">
+	<data name="SilenceTime" xml:space="preserve">
     <value>Txioak isiltzerakoan lehenetsizko denbora:</value>
   </data>
-  <data name="TapFilter" xml:space="preserve">
+	<data name="TapFilter" xml:space="preserve">
     <value>Sakatu iragazkia aldatzeko, sakatu eta mantendu ezabatzeko.</value>
   </data>
-  <data name="TapList" xml:space="preserve">
+	<data name="TapList" xml:space="preserve">
     <value>Erabiltzaileak gehitu edo kentzeko zerrendan sakatu.</value>
   </data>
-  <data name="To" xml:space="preserve">
+	<data name="To" xml:space="preserve">
     <value>Hartzailea:</value>
   </data>
-  <data name="ToAddColumnTiles" xml:space="preserve">
+	<data name="ToAddColumnTiles" xml:space="preserve">
     <value>Tile zutabeak gehitzeko orri nagusira joan eta "hasierara ainguratu" hautatu beheko menuan.</value>
   </data>
-  <data name="Until" xml:space="preserve">
+	<data name="Until" xml:space="preserve">
     <value>Noiz arte</value>
   </data>
-  <data name="UpdateTilesInBackground" xml:space="preserve">
+	<data name="UpdateTilesInBackground" xml:space="preserve">
     <value>Tile-ak atzeko planoan eguneratu</value>
   </data>
-  <data name="UserOrMail" xml:space="preserve">
+	<data name="UserOrMail" xml:space="preserve">
     <value>Erabiltzaile izena edo posta:</value>
   </data>
-  <data name="UsersWhoRetweeted" xml:space="preserve">
+	<data name="UsersWhoRetweeted" xml:space="preserve">
     <value>Bertxiotu duten erabiltzaileak:</value>
   </data>
-  <data name="WhatToMute" xml:space="preserve">
+	<data name="WhatToMute" xml:space="preserve">
     <value>Zer isilarazi nahi duzu?</value>
   </data>
-  <data name="AccountsPivot" xml:space="preserve">
+	<data name="AccountsPivot" xml:space="preserve">
     <value>kontuak</value>
   </data>
-  <data name="Block" xml:space="preserve">
+	<data name="Block" xml:space="preserve">
     <value>blokeatu</value>
   </data>
-  <data name="ComposeTile" xml:space="preserve">
+	<data name="ComposeTile" xml:space="preserve">
     <value>Txioak idazteko sarbide azkarra</value>
   </data>
-  <data name="Delete" xml:space="preserve">
+	<data name="Delete" xml:space="preserve">
     <value>ezabatu</value>
   </data>
-  <data name="Follow" xml:space="preserve">
+	<data name="Follow" xml:space="preserve">
     <value>jarraitu</value>
   </data>
-  <data name="PinToStart" xml:space="preserve">
+	<data name="PinToStart" xml:space="preserve">
     <value>Hasierara ainguratu</value>
   </data>
-  <data name="Profile" xml:space="preserve">
+	<data name="Profile" xml:space="preserve">
     <value>profila</value>
   </data>
-  <data name="ScheduledQuestion" xml:space="preserve">
+	<data name="ScheduledQuestion" xml:space="preserve">
     <value>Programatua?</value>
   </data>
-  <data name="Unblock" xml:space="preserve">
+	<data name="Unblock" xml:space="preserve">
     <value>blokeoa kendu</value>
   </data>
-  <data name="Unfollow" xml:space="preserve">
+	<data name="Unfollow" xml:space="preserve">
     <value>jarraitzen utzi</value>
   </data>
-  <data name="AnotherThingy" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Big" xml:space="preserve">
+	<data name="Big" xml:space="preserve">
     <value>Handia</value>
   </data>
-  <data name="FontSize" xml:space="preserve">
+	<data name="FontSize" xml:space="preserve">
     <value>Letra tamaina:</value>
   </data>
-  <data name="Medium" xml:space="preserve">
+	<data name="Medium" xml:space="preserve">
     <value>Ertaina</value>
   </data>
-  <data name="RTBy" xml:space="preserve">
+	<data name="RTBy" xml:space="preserve">
     <value>BT</value>
   </data>
-  <data name="Small" xml:space="preserve">
+	<data name="Small" xml:space="preserve">
     <value>Txikia</value>
   </data>
-  <data name="RecoverReadPosition" xml:space="preserve">
+	<data name="RecoverReadPosition" xml:space="preserve">
     <value>Irakurtzen jarraitu utzi zenuen lekutik?</value>
   </data>
-  <data name="Accept" xml:space="preserve">
+	<data name="Accept" xml:space="preserve">
     <value>Onartu</value>
   </data>
-  <data name="AskAccessGrantGeolocation" xml:space="preserve">
+	<data name="AskAccessGrantGeolocation" xml:space="preserve">
     <value>Ocell zure kokapenera sarbideratzea baimentzen duzu? Hau txio eta pil-pileko gaien geolokalizazioa gaituko du.</value>
   </data>
-  <data name="ChangeGeolocSetting" xml:space="preserve">
+	<data name="ChangeGeolocSetting" xml:space="preserve">
     <value>Edozein momentutan aukera aldatu dezakezu hobespenetan.</value>
   </data>
-  <data name="Deny" xml:space="preserve">
+	<data name="Deny" xml:space="preserve">
     <value>Ukatu</value>
   </data>
-  <data name="Geolocation" xml:space="preserve">
+	<data name="Geolocation" xml:space="preserve">
     <value>Geolokalizazioa</value>
   </data>
-  <data name="Geotagging" xml:space="preserve">
+	<data name="Geotagging" xml:space="preserve">
     <value>Geolokalizazioa gaitu</value>
   </data>
-  <data name="Global" xml:space="preserve">
+	<data name="Global" xml:space="preserve">
     <value>mundu osoa</value>
   </data>
-  <data name="PrivacyPolicy" xml:space="preserve">
+	<data name="PrivacyPolicy" xml:space="preserve">
     <value>Pribatutasun Politika: zure kokapena edo fitxategiak ez dira inoiz gordeko zure telefonoan. Ocell-ek ez du zure kokapena interneteko edozein zerbitzarira bidaliko, soilik Twitter.com-era lehenago zehaztutako asmoentzat (txio geoetiketaketa eta pil-pileko gaiak).</value>
   </data>
-  <data name="ShowGlobalTopics" xml:space="preserve">
+	<data name="ShowGlobalTopics" xml:space="preserve">
     <value>mundu osoko pil-pileko gaiak erakutsi</value>
   </data>
-  <data name="ShowResumeButton" xml:space="preserve">
+	<data name="ShowResumeButton" xml:space="preserve">
     <value>"Jarraitu utzi zenuen lekutik" gaitu </value>
   </data>
-  <data name="AskEnablePush" xml:space="preserve">
+	<data name="AskEnablePush" xml:space="preserve">
     <value>Push jakinarazpenak aktibatu nahi dituzu?</value>
   </data>
-  <data name="PushEnabled" xml:space="preserve">
+	<data name="PushEnabled" xml:space="preserve">
     <value>Push jakinarazpenak</value>
   </data>
-  <data name="ErrorNoAccount" xml:space="preserve">
+	<data name="ErrorNoAccount" xml:space="preserve">
     <value>Ez dago aukeratutako konturik.</value>
   </data>
-  <data name="AskTwitlonger" xml:space="preserve">
+	<data name="AskTwitlonger" xml:space="preserve">
     <value>Twitlonger erabiliko dugu mezua bidaltzeko 140 karaktere baino gehiago neurtzen duelako. Ados zaude?</value>
   </data>
-  <data name="ErrorCreatingTwitlonger" xml:space="preserve">
+	<data name="ErrorCreatingTwitlonger" xml:space="preserve">
     <value>Errorea txioa Twitlonger-ren sortzerakoan.</value>
   </data>
-  <data name="UploadingTwitlonger" xml:space="preserve">
+	<data name="UploadingTwitlonger" xml:space="preserve">
     <value>Twitlonger-ra bildaltzen...</value>
   </data>
-  <data name="XFollowsY" xml:space="preserve">
+	<data name="XFollowsY" xml:space="preserve">
     <value>{0} jarraitzen zaitu</value>
   </data>
-  <data name="XNotFollowsY" xml:space="preserve">
+	<data name="XNotFollowsY" xml:space="preserve">
     <value>{0} ez zaitu jarraitzen</value>
   </data>
-  <data name="ErrorBufferProfiles" xml:space="preserve">
+	<data name="ErrorBufferProfiles" xml:space="preserve">
     <value>Errorea Buffer-en profilak lortzean.</value>
   </data>
-  <data name="ErrorCreatingBuffer" xml:space="preserve">
+	<data name="ErrorCreatingBuffer" xml:space="preserve">
     <value>Errorea Buffer-eko eguneraketa sortzean.</value>
   </data>
-  <data name="NoBufferProfilesAdded" xml:space="preserve">
+	<data name="NoBufferProfilesAdded" xml:space="preserve">
     <value>Ez dago Ocell-en dituzun Twitter kontuekin bat datozen Buffer profilik.</value>
   </data>
-  <data name="BufferUpdateSent" xml:space="preserve">
+	<data name="BufferUpdateSent" xml:space="preserve">
     <value>Txioa Buffer-era bidalita!</value>
   </data>
-  <data name="NoBufferConfigured" xml:space="preserve">
+	<data name="NoBufferConfigured" xml:space="preserve">
     <value>Itxuraz, ez duzu Buffer-ekin inolako konturik konfiguratuta. Orain gehitu nahi duzu?</value>
   </data>
-  <data name="ScheduleError" xml:space="preserve">
+	<data name="ScheduleError" xml:space="preserve">
     <value>Errorea {0}-(r)en txioa programatzerakoan.</value>
   </data>
-  <data name="AskAddColumn" xml:space="preserve">
+	<data name="AskAddColumn" xml:space="preserve">
     <value>{0} zutabea orri nagusira gehitu nahi duzu?</value>
   </data>
-  <data name="ColumnAdded" xml:space="preserve">
+	<data name="ColumnAdded" xml:space="preserve">
     <value>Zutabea gehituta.</value>
   </data>
-  <data name="DisableQuickAdd" xml:space="preserve">
+	<data name="DisableQuickAdd" xml:space="preserve">
     <value>gehigarri azkarra desgaitu</value>
   </data>
-  <data name="EnableQuickAdd" xml:space="preserve">
+	<data name="EnableQuickAdd" xml:space="preserve">
     <value>gehigarri azkarra gaitu</value>
   </data>
-  <data name="ErrorDownloadingSearches" xml:space="preserve">
+	<data name="ErrorDownloadingSearches" xml:space="preserve">
     <value>Ezin izan dugu gordetako bilaketak deskargatu.</value>
   </data>
-  <data name="QuickView" xml:space="preserve">
+	<data name="QuickView" xml:space="preserve">
     <value>aurrebista</value>
   </data>
-  <data name="AskBuyFullVersion" xml:space="preserve">
+	<data name="AskBuyFullVersion" xml:space="preserve">
     <value>Badirudi ezaugarri hau bakarrik Ocell Pro-en bertsio osoan eskuragarri dagoela. Dendara joan nahi duzu? Eskerrik Asko</value>
   </data>
-  <data name="SendWithBuffer" xml:space="preserve">
+	<data name="SendWithBuffer" xml:space="preserve">
     <value>Buffer-era bidali</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
+	<data name="Cancel" xml:space="preserve">
     <value>bertan behera</value>
   </data>
-  <data name="Repeat" xml:space="preserve">
+	<data name="Repeat" xml:space="preserve">
     <value>errepikatu</value>
   </data>
-  <data name="Yes" xml:space="preserve">
+	<data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
-  <data name="ErrorRetweeting" xml:space="preserve">
+	<data name="ErrorRetweeting" xml:space="preserve">
     <value>Errore bat gertatu bitartean retweet bidali nahian.</value>
   </data>
-  <data name="ErrorUnexpected" xml:space="preserve">
+	<data name="ErrorUnexpected" xml:space="preserve">
     <value>Ustekabeko errorea gertatu da, barkatu. Mezu hau maiz badago, mesedez, jakinarazi @OcellApp, guk konpondu ahal izango dugu.</value>
   </data>
 </root>
