@@ -1237,4 +1237,10 @@
 	<data name="NoItemsHere" xml:space="preserve">
 		<value>No hay nada que enseñar aquí.</value>
 	</data>
+	<data name="Web" xml:space="preserve">
+		<value>web</value>
+	</data>
+	<data name="NoConversation" xml:space="preserve">
+		<value>No hay ninguna conversación sobre este tweet.</value>
+	</data>
 </root>

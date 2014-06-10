@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="Configuration\Config.cs">
     </Compile>
+    <Compile Include="EmbeddedWebOptions.cs" />
     <Compile Include="Crypto\TokenCombinator.cs" />
     <Compile Include="DataTransfer.cs">
     </Compile>

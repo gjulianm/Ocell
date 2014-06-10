@@ -1240,4 +1240,7 @@
 	<data name="NoConversation" xml:space="preserve">
 		<value>Es gibt kein Gespräch für diesen Tweet.</value>
 	</data>
+	<data name="Web" xml:space="preserve">
+		<value>web</value>
+	</data>
 </root>

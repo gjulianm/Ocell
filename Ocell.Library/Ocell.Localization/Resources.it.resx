@@ -1143,9 +1143,6 @@
 	<data name="ScheduleError" xml:space="preserve">
     <value>Errore nello schedulare il tweet per {0}.</value>
   </data>
-	<data name="Privacy_policy" xml:space="preserve">
-    <value>Politica sulla privacy</value>
-  </data>
 	<data name="Code" xml:space="preserve">
     <value>Codici:</value>
   </data>
@@ -1241,5 +1238,8 @@
 	</data>
 	<data name="NoConversation" xml:space="preserve">
 		<value>Non non c'è nessuna conversazione per questo tweet.</value>
+	</data>
+	<data name="Web" xml:space="preserve">
+		<value>web</value>
 	</data>
 </root>

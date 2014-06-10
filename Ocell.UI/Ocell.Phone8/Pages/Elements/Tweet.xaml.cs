@@ -74,6 +74,12 @@ namespace Ocell.Pages.Elements
                 }
             };
 
+            if (ViewModel.ShowWebLink && Uri.IsWellFormedUriString(ViewModel.WebUrl, UriKind.Absolute))
+            {
+                Dependency.Resolve<IProgressIndicator>().IsLoading = true;
+                WebBrowser.Navigate(new Uri(ViewModel.WebUrl, UriKind.Absolute));
+            }
+
             Initialize();
 
             if (ApplicationBar != null)
@@ -261,6 +267,19 @@ namespace Ocell.Pages.Elements
         private void button_Click(object sender, RoutedEventArgs e)
         {
             suppressTBFocusLost = true;
+        }
+
+        private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            Dependency.Resolve<IProgressIndicator>().IsLoading = false;
+        }
+
+        private void panorama_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (panorama.SelectedItem == TweetPano)
+                ViewModel.AppBarMode = ApplicationBarMode.Default;
+            else
+                ViewModel.AppBarMode = ApplicationBarMode.Minimized;
         }
     }
 }

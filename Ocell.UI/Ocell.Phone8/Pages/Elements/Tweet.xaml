@@ -71,7 +71,7 @@
     </phone:PhoneApplicationPage.Resources>
 
     <Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
-        <controls:Panorama x:Name="panorama" Title="{Binding Tweet.AuthorName, StringFormat='@{0} tweet:'}"  DefaultItem="1">
+        <controls:Panorama x:Name="panorama" Title="{Binding Tweet.AuthorName, StringFormat='@{0} tweet:'}"  DefaultItem="1" SelectionChanged="panorama_SelectionChanged">
             <controls:Panorama.TitleTemplate>
                 <DataTemplate>
                     <Grid>
@@ -80,7 +80,7 @@
                 </DataTemplate>
             </controls:Panorama.TitleTemplate>
 
-            <controls:PanoramaItem Header="tweet" Tag="tweet" HeaderTemplate="{StaticResource HeaderTemplate}">
+            <controls:PanoramaItem Header="tweet" Tag="tweet" x:Name="TweetPano" HeaderTemplate="{StaticResource HeaderTemplate}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -126,6 +126,10 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+            </controls:PanoramaItem>
+            
+            <controls:PanoramaItem Header="{Binding Strings.Web, Source={StaticResource LocalizedResources}}" HeaderTemplate="{StaticResource HeaderTemplate}" Visibility="{Binding ShowWebLink, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <phone:WebBrowser x:Name="WebBrowser" LoadCompleted="WebBrowser_LoadCompleted" />
             </controls:PanoramaItem>
 
             <controls:PanoramaItem Header="{Binding Strings.Conversation, Source={StaticResource LocalizedResources}}" Tag="conversation" HeaderTemplate="{StaticResource HeaderTemplate}">

@@ -6,7 +6,6 @@ using Ocell.Library.Twitter;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 
 namespace Ocell.Library
@@ -191,7 +190,7 @@ namespace Ocell.Library
         public readonly static ConfigItem<Dictionary<string, long>> ReadPositions = new ConfigItem<Dictionary<string, long>>
         {
             Key = "READPOSITIONS",
-            DefaultValue = new Dictionary<string,long>()
+            DefaultValue = new Dictionary<string, long>()
         };
 
 
@@ -269,6 +268,12 @@ namespace Ocell.Library
         {
             Key = "TOPICS_ID",
             DefaultValue = -1
+        };
+
+        public readonly static ConfigItem<EmbeddedWebOptions?> WebOptions = new ConfigItem<EmbeddedWebOptions?>
+        {
+            Key = "WEB_OPS",
+            DefaultValue = EmbeddedWebOptions.FullWeb
         };
 
 #endif

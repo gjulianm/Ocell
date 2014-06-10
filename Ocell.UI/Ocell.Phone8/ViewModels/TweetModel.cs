@@ -30,6 +30,7 @@ namespace Ocell.Pages.Elements
         public ObservableCollection<ITweeter> UserList { get; set; }
         public int RetweetCount { get; set; }
         public int FavoriteCount { get; set; }
+        public List<ITweeter> RetweetingUsers { get; set; }
         public bool ShowRetweeters { get; set; }
         public bool ShowFavoriters { get; set; } // Hey, I'm sorry dictionary.
         public string WhoRetweeted { get; set; }
@@ -38,6 +39,8 @@ namespace Ocell.Pages.Elements
         public string ImageSource { get; set; }
         public SafeObservable<ITweetable> Replies { get; set; }
         public SafeObservable<string> Images { get; set; }
+        public string WebUrl { get; set; }
+        public bool ShowWebLink { get; set; }
 
         public DelegateCommand DeleteTweet { get; set; }
         public DelegateCommand Share { get; set; }
@@ -47,44 +50,9 @@ namespace Ocell.Pages.Elements
         public DelegateCommand NavigateToAuthor { get; set; }
         public event EventHandler<EventArgs<ITweetable>> TweetSent;
 
-        public List<ITweeter> RetweetingUsers { get; set; }
+        private List<string> ImagesOriginalUrls = new List<string>();
 
-        private void SetAvatar()
-        {
-            if (Tweet.User != null && Tweet.User.ProfileImageUrl != null)
-                Avatar = Tweet.User.ProfileImageUrl.Replace("_normal", "");
-        }
-
-        private void GetReplies()
-        {
-            var convService = new ConversationService(DataTransfer.CurrentAccount);
-            convService.Finished += (sender, e) => Progress.IsLoading = false;
-            convService.GetConversationForStatus(Tweet, (statuses, response) =>
-            {
-                if (statuses != null)
-                {
-                    var statuses_noRepeat = statuses.Cast<ITweetable>().Except(Replies).ToList();
-                    foreach (var status in statuses_noRepeat)
-                        Replies.Add(status);
-                }
-            });
-
-        }
-
-        private async void GetRetweets()
-        {
-            var service = ServiceDispatcher.GetCurrentService();
-
-            if (service != null && Tweet != null)
-            {
-                var response = await service.RetweetsAsync(new RetweetsOptions { Id = Tweet.Id });
-                var statuses = response.Content;
-
-                if (response.RequestSucceeded)
-                    RetweetingUsers = statuses.Select(x => x.Author).ToList();
-            }
-        }
-
+        #region Initialization and parsing
         public TweetModel()
         {
             UserList = new ObservableCollection<ITweeter>();
@@ -123,9 +91,11 @@ namespace Ocell.Pages.Elements
                 }
             };
 
-            SetRetweetedStatus();
+            SetStatus();
             SetAvatar();
+            SetImage();
             SetupCommands();
+            ParseForWebLinks();
 
             HasReplies = (Tweet.InReplyToStatusId != null);
             HasImage = (Tweet.Entities != null && Tweet.Entities.Media.Any());
@@ -139,13 +109,58 @@ namespace Ocell.Pages.Elements
             Replies.CollectionChanged += (s, e) => HasReplies = Replies.Any();
         }
 
-        private void UpdateRetweetingUsers(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void SetAvatar()
         {
-            if (e.PropertyName == "RetweetingUsers")
-                UserList = new ObservableCollection<ITweeter>(RetweetingUsers ?? new List<ITweeter>());
+            if (Tweet.User != null && Tweet.User.ProfileImageUrl != null)
+                Avatar = Tweet.User.ProfileImageUrl.Replace("_normal", "");
         }
 
-        private void SetRetweetedStatus()
+        private void GetReplies()
+        {
+            var convService = new ConversationService(DataTransfer.CurrentAccount);
+            convService.Finished += (sender, e) => Progress.IsLoading = false;
+            convService.GetConversationForStatus(Tweet, (statuses, response) =>
+            {
+                if (statuses != null)
+                {
+                    var statuses_noRepeat = statuses.Cast<ITweetable>().Except(Replies).ToList();
+                    foreach (var status in statuses_noRepeat)
+                        Replies.Add(status);
+                }
+            });
+
+        }
+
+        private async void GetRetweets()
+        {
+            var service = ServiceDispatcher.GetCurrentService();
+
+            if (service != null && Tweet != null)
+            {
+                var response = await service.RetweetsAsync(new RetweetsOptions { Id = Tweet.Id });
+                var statuses = response.Content;
+
+                if (response.RequestSucceeded)
+                    RetweetingUsers = statuses.Select(x => x.Author).ToList();
+            }
+        }
+
+        private void ParseForWebLinks()
+        {
+            if (Config.WebOptions.Value == EmbeddedWebOptions.None)
+                return;
+
+            var candidateLink = Tweet.Entities.Urls.Select(x => x.ExpandedValue).Except(ImagesOriginalUrls).FirstOrDefault();
+
+            ShowWebLink = candidateLink != null;
+
+            if (Config.WebOptions.Value == EmbeddedWebOptions.FullWeb)
+                WebUrl = candidateLink;
+            else if (Config.WebOptions.Value == EmbeddedWebOptions.Readability)
+                WebUrl = "http://www.readability.com/m?url=" + candidateLink;
+        }
+
+        private void SetStatus()
         {
             if (DataTransfer.Status.RetweetedStatus != null)
             {
@@ -157,13 +172,6 @@ namespace Ocell.Pages.Elements
                 Tweet = DataTransfer.Status;
                 WhoRetweeted = "";
             }
-        }
-
-        public override void OnLoad()
-        {
-            GetRetweets();
-            GetReplies();
-            SetImage();
         }
 
         private void SetupCommands()
@@ -251,6 +259,20 @@ namespace Ocell.Pages.Elements
             SetAvatar();
         }
 
+        public override void OnLoad()
+        {
+            GetRetweets();
+            GetReplies();
+        }
+        #endregion
+
+        private void UpdateRetweetingUsers(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "RetweetingUsers")
+                UserList = new ObservableCollection<ITweeter>(RetweetingUsers ?? new List<ITweeter>());
+        }
+
+        #region Image management
         public void ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
             Progress.IsLoading = false;
@@ -296,16 +318,16 @@ namespace Ocell.Pages.Elements
             if (Tweet.Entities.Urls != null && Tweet.Entities.Urls.Any())
             {
                 var parser = new MediaLinkParser();
-                foreach (var i in Tweet.Entities.Urls)
+
+                foreach (var url in Tweet.Entities.Urls)
                 {
-                    if (i.EntityType == TwitterEntityType.Url)
+                    if (url != null && !string.IsNullOrWhiteSpace(url.ExpandedValue))
                     {
-                        var url = i as TwitterUrl;
-                        if (url != null && !string.IsNullOrWhiteSpace(url.ExpandedValue))
+                        string photoUrl;
+                        if (parser.TryGetMediaUrl(url.ExpandedValue, out photoUrl) && !Images.Contains(photoUrl))
                         {
-                            string photoUrl;
-                            if (parser.TryGetMediaUrl(url.ExpandedValue, out photoUrl) && !Images.Contains(photoUrl))
-                                Images.Add(photoUrl);
+                            Images.Add(photoUrl);
+                            ImagesOriginalUrls.Add(url.ExpandedValue);
                         }
                     }
                 }
@@ -318,6 +340,7 @@ namespace Ocell.Pages.Elements
                 Progress.Text = Localization.Resources.DownloadingImage;
             }
         }
+        #endregion
 
         public void ReplyBoxGotFocus()
         {
