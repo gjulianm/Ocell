@@ -21,17 +21,17 @@
         <ItemsPanelTemplate x:Key="PanelTemplate">
             <StackPanel Orientation="Horizontal"/>
         </ItemsPanelTemplate>
-        
+
         <DataTemplate x:Key="RetweetUserTemplate">
             <Grid Width="65" Height="60"  toolkit:TiltEffect.IsTiltEnabled="True">
                 <Image Margin="1,0,1,0" Tag="{Binding}" Source="{Binding ProfileImageUrl}" Tap="ImageTap" ImageFailed="ImageFailed" ImageOpened="ImageOpened"/>
             </Grid>
         </DataTemplate>
-        
+
         <DataTemplate x:Key="HeaderTemplate">
             <TextBlock Text="{Binding}" FontFamily="Segoe WP Light" FontSize="60" Margin="0,-8,0,0" />
         </DataTemplate>
-        
+
         <Storyboard x:Key="sbShow">
             <DoubleAnimation 
 					Storyboard.TargetName="textBox"
@@ -54,7 +54,7 @@
 					From="75" To="0" Duration="0:0:0.2" />
         </Storyboard>
 
-		<Storyboard x:Key="UserListShow">
+        <Storyboard x:Key="UserListShow">
             <DoubleAnimation 
 					Storyboard.TargetName="UserListBorder"
 					Storyboard.TargetProperty="Height"
@@ -140,6 +140,12 @@
 
                     <toolkit:PhoneTextBox x:Name="textBox" Grid.Row="0" Text="{Binding ReplyText, Mode=TwoWay}" Height="75" GotFocus="textBox_GotFocus" Hint="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" TextWrapping="Wrap"  InputScope="Chat" />
                     <Button Content="{Binding Strings.Send, Source={StaticResource LocalizedResources}}" Command="{Binding SendTweet}" Grid.Row="1" Width="150" HorizontalAlignment="Right" Height="0"/>
+
+                    <TextBlock Style="{StaticResource EmptyMarkerStyle}" 
+                               Visibility="{Binding HasReplies, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Collapsed}" 
+                               Grid.Row="2"
+                               Text="{Binding Strings.NoConversation, Source={StaticResource LocalizedResources}}"
+                               TextWrapping="Wrap" />
                     <lc:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True"  x:Name="conversation" ItemTemplate="{StaticResource TweetTemplate}" Grid.Row="2" />
 
                     <Grid Grid.Row="3" Height="100">
@@ -162,7 +168,7 @@
                             </StackPanel>
                         </ToggleButton>
                     </Grid>
-                    
+
                     <Border x:Name="UserListBorder" Grid.Row="4" Height="0" Background="{StaticResource SubtleTransparentBrush}">
                         <ListBox ItemsSource="{Binding UserList}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ItemsPanel="{StaticResource PanelTemplate}"
                                  ItemTemplate="{StaticResource RetweetUserTemplate}" Margin="8"/>

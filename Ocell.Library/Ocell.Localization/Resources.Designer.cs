@@ -232,15 +232,6 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a .
-        /// </summary>
-        public static string AnotherString {
-            get {
-                return ResourceManager.GetString("AnotherString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a a second ago.
         /// </summary>
         public static string ASecondAgo {
@@ -1672,11 +1663,29 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a There&apos;s no conversation for this tweet..
+        /// </summary>
+        public static string NoConversation {
+            get {
+                return ResourceManager.GetString("NoConversation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No hashtags to mute..
         /// </summary>
         public static string NoHashtagsToMute {
             get {
                 return ResourceManager.GetString("NoHashtagsToMute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a There&apos;s nothing to show here....
+        /// </summary>
+        public static string NoItemsHere {
+            get {
+                return ResourceManager.GetString("NoItemsHere", resourceCulture);
             }
         }
         

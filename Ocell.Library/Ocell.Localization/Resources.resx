@@ -1236,4 +1236,7 @@
 	<data name="NoItemsHere" xml:space="preserve">
 		<value>There's nothing to show here...</value>
 	</data>
+	<data name="NoConversation" xml:space="preserve">
+		<value>There's no conversation for this tweet.</value>
+	</data>
 </root>

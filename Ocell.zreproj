@@ -50,19 +50,21 @@
     <globalSetting name="autoTranslateForm.prefixTextBox.Text">####</globalSetting>
     <globalSetting name="autoTranslateForm.prefixCheckBox.Checked">False</globalSetting>
     <globalSetting name="autoTranslateForm.referenceLanguageComboBoxEdit.SelectedIndex">2</globalSetting>
-    <globalSetting name="autoTranslateForm.languagesToTranslateCheckListBox">0;1;2</globalSetting>
+    <globalSetting name="autoTranslateForm.languagesToTranslateCheckListBox">0;2</globalSetting>
+    <globalSetting name="projectMruItems">&lt;?xml version='1.0' encoding='utf-8'?&gt;&lt;items&gt;&lt;item type="2" checksum="4678297025" /&gt;&lt;/items&gt;</globalSetting>
     <userSetting name="Guillermo@WIN8.filesInitialDir">C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization</userSetting>
     <userSetting name="Guillermo@WIN8.FindText">
     </userSetting>
+    <userSetting name="Guillermo@WIN8.RecentFiles">C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.resx;C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.de.resx;C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.es.resx;C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.it.resx</userSetting>
     <description>
     </description>
   </configuration>
   <fileGroups>
-    <fileGroup name="" projectFolderUniqueID="00000000-0000-0000-0000-000000000000" orderPosition="0" ignoreDuringExportAndImport="False" uniqueID="00000000-0000-0000-0000-000000000000">
-      <file filePath="Ocell.Library\Ocell.Localization\Resources.resx" absoluteFilePath="C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.resx" uniqueID="00000000-0000-0000-0000-000000000000" />
-      <file filePath="Ocell.Library\Ocell.Localization\Resources.de.resx" absoluteFilePath="C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.de.resx" uniqueID="00000000-0000-0000-0000-000000000000" />
-      <file filePath="Ocell.Library\Ocell.Localization\Resources.es.resx" absoluteFilePath="C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.es.resx" uniqueID="00000000-0000-0000-0000-000000000000" />
-      <file filePath="Ocell.Library\Ocell.Localization\Resources.it.resx" absoluteFilePath="C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.it.resx" uniqueID="00000000-0000-0000-0000-000000000000" />
+    <fileGroup name="" projectFolderUniqueID="00000000-0000-0000-0000-000000000000" orderPosition="0" ignoreDuringExportAndImport="False" uniqueID="dfd5c88d-5cde-454a-a24f-d70a95d90cbc">
+      <file filePath="Ocell.Library\Ocell.Localization\Resources.resx" absoluteFilePath="C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.resx" uniqueID="4d3f52c9-505d-402f-8c62-268b22bbada8" />
+      <file filePath="Ocell.Library\Ocell.Localization\Resources.de.resx" absoluteFilePath="C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.de.resx" uniqueID="4e72e438-67c4-4111-b0e5-3d082dd0268f" />
+      <file filePath="Ocell.Library\Ocell.Localization\Resources.es.resx" absoluteFilePath="C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.es.resx" uniqueID="a1ddb43b-406f-4713-9a11-fb9ed269676e" />
+      <file filePath="Ocell.Library\Ocell.Localization\Resources.it.resx" absoluteFilePath="C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization\Resources.it.resx" uniqueID="48edfe13-46e5-40e0-888a-3053aeffefc9" />
       <remarks>
       </remarks>
     </fileGroup>

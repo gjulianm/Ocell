@@ -82,6 +82,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+       
     <ControlTemplate x:Key="SubtleToggleButton" TargetType="ToggleButton">
     	<Grid Background="Transparent" >
     		<VisualStateManager.VisualStateGroups>
@@ -137,4 +138,8 @@
     		</Border>
     	</Grid>
     </ControlTemplate>
+    
+    <Style TargetType="TextBlock" x:Key="EmptyMarkerStyle" BasedOn="{StaticResource EmptyListHeaderStyle}">
+        <Setter Property="FontSize" Value="25" />
+    </Style>
 </ResourceDictionary>
