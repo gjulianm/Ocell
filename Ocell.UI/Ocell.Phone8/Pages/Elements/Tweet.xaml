@@ -29,7 +29,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="HeaderTemplate">
-            <TextBlock Text="{Binding}" FontFamily="Segoe WP Light" FontSize="60" Margin="0,-8,0,0" />
+            <TextBlock Text="{Binding}" FontFamily="Segoe WP Light" FontSize="60" Margin="0,-8,0,0" toolkit:TurnstileFeatherEffect.FeatheringIndex="0" />
         </DataTemplate>
 
         <Storyboard x:Key="sbShow">
@@ -71,11 +71,11 @@
     </phone:PhoneApplicationPage.Resources>
 
     <Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
-        <controls:Panorama x:Name="panorama" Title="{Binding Tweet.AuthorName, StringFormat='@{0} tweet:'}"  DefaultItem="1" SelectionChanged="panorama_SelectionChanged">
+        <controls:Panorama x:Name="panorama" Title="{Binding Tweet.AuthorName, StringFormat='@{0} tweet:'}" DefaultItem="1" SelectionChanged="panorama_SelectionChanged">
             <controls:Panorama.TitleTemplate>
                 <DataTemplate>
                     <Grid>
-                        <TextBlock Text="{Binding}" FontSize="40" Margin="0,100,0,0" />
+                        <TextBlock Text="{Binding}" FontSize="40" Margin="0,100,0,0" toolkit:TurnstileFeatherEffect.FeatheringIndex="0" />
                     </Grid>
                 </DataTemplate>
             </controls:Panorama.TitleTemplate>
@@ -99,18 +99,21 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Border Background="Transparent" Margin="8" BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2"  Grid.Column="0" Grid.RowSpan="2">
+                        <Border Background="Transparent" Margin="8" BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" 
+                                Grid.Column="0" Grid.RowSpan="2" toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
                             <Image Source="{Binding Avatar}" Margin="2" Stretch="UniformToFill" />
                         </Border>
-                        <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0">
+                        <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0" toolkit:TurnstileFeatherEffect.FeatheringIndex="2">
                             <TextBlock TextWrapping="Wrap" FontSize="32" HorizontalAlignment="Left" Text="{Binding Tweet.User.Name}" />
                             <TextBlock TextWrapping="Wrap" FontSize="21" FontFamily="Segoe WP SemiLight" Text="{Binding Tweet.AuthorName,StringFormat='@{0}'}" />
                         </StackPanel>
                     </Grid>
 
-                    <RichTextBox Grid.Row="1" x:Name="Text" FontSize="30" TextWrapping="Wrap" Margin="0,15,0,0" FontFamily="Segoe WP SemiLight"/>
+                    <RichTextBox Grid.Row="1" x:Name="Text" FontSize="30" TextWrapping="Wrap" Margin="0,15,0,0" FontFamily="Segoe WP SemiLight"
+                                 toolkit:TurnstileFeatherEffect.FeatheringIndex="3" />
 
-                    <TextBlock HorizontalAlignment="Right" FontSize="20" Foreground="#FFABABAB" FontFamily="Segoe WP Light" Grid.Row="2" TextAlignment="Right" Margin="0,20,0,0">
+                    <TextBlock HorizontalAlignment="Right" FontSize="20" Foreground="#FFABABAB" FontFamily="Segoe WP Light" Grid.Row="2" 
+                               TextAlignment="Right" Margin="0,20,0,0" toolkit:TurnstileFeatherEffect.FeatheringIndex="3" >
                         <Run Text="{Binding Tweet.CreatedDate, Converter={StaticResource RelativeDateTimeConverter}}"/>
                         <Run Text="{Binding Strings.Via, Source={StaticResource LocalizedResources}}" />
                         <Run Text="{Binding Tweet.Source, Converter={StaticResource RemoveHTMLConverter}}" />
@@ -119,7 +122,7 @@
             </controls:PanoramaItem>
 
             <controls:PanoramaItem Header="{Binding Strings.Pictures, Source={StaticResource LocalizedResources}}" HeaderTemplate="{StaticResource HeaderTemplate}" Visibility="{Binding HasImage, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <ListBox x:Name="images" ItemsSource="{Binding Images}">
+                <ListBox x:Name="images" ItemsSource="{Binding Images}" toolkit:TurnstileFeatherEffect.FeatheringIndex="3">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Image Source="{Binding}" Tag="{Binding}" Tap="ImageTap" ImageOpened="ImageOpened" ImageFailed="ImageFailed" Margin="8,8,8,8"  local:MetroInMotion.Tilt="3" />
@@ -127,9 +130,9 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </controls:PanoramaItem>
-            
+
             <controls:PanoramaItem Header="{Binding Strings.Web, Source={StaticResource LocalizedResources}}" HeaderTemplate="{StaticResource HeaderTemplate}" Visibility="{Binding ShowWebLink, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <phone:WebBrowser x:Name="WebBrowser" LoadCompleted="WebBrowser_LoadCompleted" />
+                <phone:WebBrowser x:Name="WebBrowser" LoadCompleted="WebBrowser_LoadCompleted" toolkit:TurnstileFeatherEffect.FeatheringIndex="3" />
             </controls:PanoramaItem>
 
             <controls:PanoramaItem Header="{Binding Strings.Conversation, Source={StaticResource LocalizedResources}}" Tag="conversation" HeaderTemplate="{StaticResource HeaderTemplate}">
@@ -142,15 +145,19 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <toolkit:PhoneTextBox x:Name="textBox" Grid.Row="0" Text="{Binding ReplyText, Mode=TwoWay}" Height="75" GotFocus="textBox_GotFocus" Hint="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" TextWrapping="Wrap"  InputScope="Chat" />
-                    <Button Content="{Binding Strings.Send, Source={StaticResource LocalizedResources}}" Command="{Binding SendTweet}" Grid.Row="1" Width="150" HorizontalAlignment="Right" Height="0"/>
+                    <toolkit:PhoneTextBox x:Name="textBox" Grid.Row="0" Text="{Binding ReplyText, Mode=TwoWay}" Height="75" 
+                                          GotFocus="textBox_GotFocus" Hint="{Binding Strings.Reply, Source={StaticResource LocalizedResources}}" 
+                                          TextWrapping="Wrap"  InputScope="Chat" toolkit:TurnstileFeatherEffect.FeatheringIndex="2" />
+                    <Button Content="{Binding Strings.Send, Source={StaticResource LocalizedResources}}" Command="{Binding SendTweet}" 
+                            Grid.Row="1" Width="150" HorizontalAlignment="Right" Height="0" toolkit:TurnstileFeatherEffect.FeatheringIndex="2" />
 
                     <TextBlock Style="{StaticResource EmptyMarkerStyle}" 
                                Visibility="{Binding HasReplies, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Collapsed}" 
                                Grid.Row="2"
                                Text="{Binding Strings.NoConversation, Source={StaticResource LocalizedResources}}"
-                               TextWrapping="Wrap" />
-                    <lc:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True"  x:Name="conversation" ItemTemplate="{StaticResource TweetTemplate}" Grid.Row="2" />
+                               TextWrapping="Wrap"  toolkit:TurnstileFeatherEffect.FeatheringIndex="3"  />
+                    <lc:ExtendedListBox toolkit:TiltEffect.IsTiltEnabled="True"  x:Name="conversation" ItemTemplate="{StaticResource TweetTemplate}" 
+                                        Grid.Row="2" toolkit:TurnstileFeatherEffect.FeatheringIndex="3"  />
 
                     <Grid Grid.Row="3" Height="100">
                         <Grid.ColumnDefinitions>
@@ -158,14 +165,19 @@
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
 
-                        <ToggleButton IsChecked="{Binding ShowRetweeters, Mode=TwoWay}" Grid.Column="0" Margin="-12" toolkit:TiltEffect.IsTiltEnabled="True" BorderThickness="0" Template="{StaticResource SubtleToggleButton}">
+                        <ToggleButton IsChecked="{Binding ShowRetweeters, Mode=TwoWay}" Grid.Column="0" Margin="-12" 
+                                      toolkit:TiltEffect.IsTiltEnabled="True" BorderThickness="0" Template="{StaticResource SubtleToggleButton}"
+                                      toolkit:TurnstileFeatherEffect.FeatheringIndex="2" >
                             <StackPanel Margin="-10" Width="150">
                                 <TextBlock Text="{Binding Strings.Retweeted, Source={StaticResource LocalizedResources}, Converter={StaticResource FirstToLowerConverter}}" FontSize="24" FontFamily="Segoe WP Light" Foreground="{StaticResource PhoneSubtleBrush}" />
                                 <TextBlock Text="{Binding RetweetCount, StringFormat='{}{0:N0}'}" FontSize="27" FontFamily="Segoe WP SemiLight" Foreground="{StaticResource PhoneAccentBrush}" />
                             </StackPanel>
                         </ToggleButton>
 
-                        <ToggleButton IsChecked="{Binding ShowFavoriters, Mode=TwoWay}" Grid.Column="1" Margin="-12"  toolkit:TiltEffect.IsTiltEnabled="True" BorderThickness="0" Template="{StaticResource SubtleToggleButton}">
+                        <ToggleButton IsChecked="{Binding ShowFavoriters, Mode=TwoWay}" Grid.Column="1" Margin="-12" 
+                                      toolkit:TiltEffect.IsTiltEnabled="True" BorderThickness="0" 
+                                      Template="{StaticResource SubtleToggleButton}"
+                                      toolkit:TurnstileFeatherEffect.FeatheringIndex="2" >
                             <StackPanel Margin="-10" Width="150">
                                 <TextBlock Text="{Binding Strings.Favorites, Source={StaticResource LocalizedResources}, Converter={StaticResource FirstToLowerConverter}}" FontSize="24" FontFamily="Segoe WP Light" Foreground="{StaticResource PhoneSubtleBrush}" />
                                 <TextBlock Text="{Binding FavoriteCount, StringFormat='{}{0:N0}'}" FontSize="27" FontFamily="Segoe WP SemiLight" Foreground="{StaticResource PhoneAccentBrush}" />
@@ -180,6 +192,7 @@
                 </Grid>
             </controls:PanoramaItem>
         </controls:Panorama>
+
         <Grid x:Name="MuteGrid" Height="0" VerticalAlignment="Bottom" Margin="-12,0,-8,-11" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsMuting, Converter={StaticResource BooleanToVisibilityConverter}}">
             <TextBlock toolkit:TiltEffect.IsTiltEnabled="True" x:Name="MuteUser" TextWrapping="Wrap" Text="{Binding Strings.User, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="32,40,0,8" Foreground="{StaticResource PhoneAccentBrush}" FontSize="26.667" FontFamily="Segoe WP SemiLight" Width="94" Tap="MuteUser_Tap"/>
             <TextBlock toolkit:TiltEffect.IsTiltEnabled="True" x:Name="MuteHashtags" TextWrapping="Wrap" Text="{Binding Strings.Hashtags, Source={StaticResource LocalizedResources}}" Margin="184,40,182,8" Foreground="{StaticResource PhoneAccentBrush}" FontSize="26.667" FontFamily="Segoe WP SemiLight" Tap="MuteHashtags_Tap"/>
