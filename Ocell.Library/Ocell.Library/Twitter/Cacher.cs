@@ -38,6 +38,17 @@ namespace Ocell.Library.Twitter
             return Key;
         }
 
+        private static TwitterStatus CorrectDateForSerialization(TwitterStatus status)
+        {
+            return status;
+        }
+
+        private static TwitterStatus CorrectDateForDeserialization(TwitterStatus status)
+        {
+            status.CreatedDate = status.CreatedDate.ToLocalTime();
+            return status;
+        }
+
         public static void SaveToCache(TwitterResource resource, IEnumerable<TwitterStatus> list)
         {
             string fileName = GetCacheName(resource);
@@ -48,10 +59,11 @@ namespace Ocell.Library.Twitter
             {
                 try
                 {
+                    var toSave = list.Distinct().OfType<TwitterStatus>().Select(CorrectDateForSerialization).ToList();
                     using (var file = fileManager.OpenFile(fileName, FilePermissions.Write, FileOpenMode.Create))
-                    {
-                        serializer.Serialize(list.Distinct().OfType<TwitterStatus>().ToList(), file.FileStream);
-                    }
+                        serializer.Serialize(toSave, file.FileStream);
+
+                    AncoraLogger.Instance.LogEvent("Saved " + toSave.Count.ToString() + " items to cache for resource " + resource.ToString(), AncoraMVVM.Base.Diagnostics.LogLevel.Message);
                 }
                 catch (Exception ex)
                 {
@@ -89,7 +101,7 @@ namespace Ocell.Library.Twitter
 
             statuses = statuses ?? new List<TwitterStatus>();
 
-            return statuses;
+            return statuses.Select(CorrectDateForDeserialization).ToList();
         }
 
         public static void PreloadCache(TwitterResource resource)
