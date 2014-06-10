@@ -135,6 +135,8 @@ namespace Ocell.Pages.Elements
 
             if (Tweet.User == null || Tweet.User.Name == null)
                 FillUser();
+
+            Replies.CollectionChanged += (s, e) => HasReplies = Replies.Any();
         }
 
         private void UpdateRetweetingUsers(object sender, System.ComponentModel.PropertyChangedEventArgs e)
