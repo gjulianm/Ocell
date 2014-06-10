@@ -122,7 +122,7 @@
                 <ListBox x:Name="images" ItemsSource="{Binding Images}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding}" Tag="{Binding}" Tap="ImageTap" Margin="8,8,8,8" local:MetroInMotion.Tilt="3" />
+                            <Image Source="{Binding}" Tag="{Binding}" Tap="ImageTap" ImageOpened="ImageOpened" ImageFailed="ImageFailed" Margin="8,8,8,8"  local:MetroInMotion.Tilt="3" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
