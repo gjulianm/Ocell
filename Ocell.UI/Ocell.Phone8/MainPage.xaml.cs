@@ -1,5 +1,6 @@
 ﻿using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
+using BugSense;
 using Microsoft.Phone.Controls;
 using Ocell.Compatibility;
 using Ocell.Controls;
@@ -68,6 +69,8 @@ namespace Ocell
             if (!CheckForLogin())
                 return;
 
+            BugSenseHandler.Instance.RegisterAsyncHandlerContext();
+
             viewModel.RaiseLoggedInChange();
             viewModel.OnLoad();
 
@@ -81,19 +84,6 @@ namespace Ocell
             {
                 CreateTile();
                 var task = UsernameProvider.DownloadAndCacheFriends(Config.Accounts.Value);
-#if DEBUG && AVARIJUSTINVENTEDTOAVOIDCOMPILINGTHISSHIT
-                //var contents = FileAbstractor.ReadContentsOfFile("BA_DEBUG");
-                if (!string.IsNullOrEmpty(contents))
-                {
-                    EmailComposeTask email = new EmailComposeTask();
-                    email.To = "gjulian93@gmail.com";
-                    email.Subject = "Ocell Background Agent Report";
-                    email.Body = contents;
-                    Dispatcher.BeginInvoke(() => email.Show());
-                }
-#endif
-                // TODO: Exception control.
-                // LittleWatson.CheckForPreviousException();
             });
 
             _initialised = true;

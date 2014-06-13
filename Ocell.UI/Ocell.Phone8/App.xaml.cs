@@ -5,6 +5,8 @@ using AncoraMVVM.Base.IoC;
 using AncoraMVVM.Phone7;
 using AncoraMVVM.Phone7.Implementations;
 using AsyncOAuth;
+using BugSense;
+using BugSense.Core.Model;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Marketplace;
 using Microsoft.Phone.Shell;
@@ -35,7 +37,9 @@ namespace Ocell
         public App()
         {
             // Controlador global para excepciones no detectadas.
+#if DEBUG
             UnhandledException += Application_UnhandledException;
+#endif
 
             Dependency.RegisterModule(new PhoneDependencyModule());
 
@@ -65,6 +69,11 @@ namespace Ocell
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
 
+            BugSenseHandler.Instance.InitAndStartSession(new ExceptionManager(Current), RootFrame, SensitiveData.BugSenseApiKey);
+
+            AncoraLogger.Instance.LoggedEvent += (sender, e) => BugSenseHandler.Instance.LogEventAsync(e.LogEntry.ToString());
+            AncoraLogger.Instance.LoggedException += (sender, e) => BugSenseHandler.Instance.LogExceptionAsync(e.Exception);
+
             OAuthUtility.ComputeHash = (key, buffer) => { using (var hmac = new HMACSHA1(key)) { return hmac.ComputeHash(buffer); } };
 
             Dependency.Register<IUserProvider, UserProvider>();
@@ -83,7 +92,7 @@ namespace Ocell
             var navigator = Dependency.Resolve<INavigationService>() as ViewModelNavigationService;
 
             if (navigator == null)
-                Debug.WriteLine("The INavigationService configured is not a ViewModelNavigationService (or there isn't a INavigationService registered).");
+                AncoraLogger.Instance.LogEvent("The INavigationService configured is not a ViewModelNavigationService (or there isn't a INavigationService registered).");
             else
                 navigator.Initialize();
 
