@@ -1,4 +1,5 @@
 ﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.AutoSettings;
 using Ocell.Library;
 using Ocell.Library.Notifications;
 using Ocell.Library.ReadLater.Instapaper;
@@ -21,21 +22,12 @@ namespace Ocell.Settings
         public string PocketPassword { get; set; }
 
         #region Fields
-        public int SelectedFontSize { get; set; }
-        public bool RetweetsAsMentions { get; set; }
-        public bool PushAvailable { get; set; }
-        public bool PushEnabled { get; set; }
-        public bool BackgroundUpdateTiles { get; set; }
-        public string TweetsPerRequest { get; set; }
         public List<string> NotifyOptions { get; set; }
         public int MentionNotifyOption { get; set; }
         public int MessageNotifyOption { get; set; }
         public int SelectedAccount { get; set; }
         public int SelectedMuteTime { get; set; }
         public SafeObservable<UserToken> Accounts { get; set; }
-        public bool ShowResumePositionButton { get; set; }
-        public bool GeoTaggingEnabled { get; set; }
-        public int SelectedReloadOption { get; set; }
 
         #endregion Fields
 
@@ -165,46 +157,47 @@ namespace Ocell.Settings
         }
 
         #endregion Commands
-
-        private int FontSizeToIndex(int size)
+        public override void OnNavigating(System.ComponentModel.CancelEventArgs e)
         {
-            if (size == 18)
-                return 0;
-            else if (size == 26)
-                return 2;
-            else
-                return 1;
-        }
+            ((GlobalSettings)App.Current.Resources["GlobalSettings"]).TweetFontSize = (int)Config.FontSize.Value;
 
-        private int IndexToFontSize(int index)
-        {
-            if (index == 0)
-                return 18;
-            else if (index == 2)
-                return 26;
+            if (Config.PushEnabled == false)
+                PushNotifications.UnregisterAll();
             else
-                return 20;
+                PushNotifications.AutoRegisterForNotifications();
+
+            base.OnNavigating(e);
         }
 
         public SettingsModel()
         {
-            SelectedFontSize = FontSizeToIndex(((GlobalSettings)App.Current.Resources["GlobalSettings"]).
-                            TweetFontSize);
-            RetweetsAsMentions = Config.RetweetAsMentions.Value == true;
-            BackgroundUpdateTiles = Config.BackgroundLoadColumns.Value == true;
-            if (Config.TweetsPerRequest.Value == null)
-                Config.TweetsPerRequest.Value = 40;
-            TweetsPerRequest = Config.TweetsPerRequest.Value.ToString();
+            Settings = new SafeObservable<Setting>
+            {
+                new NumericSetting(Resources.TweetsPerRequest, Config.TweetsPerRequest),
+                new MultipleChoiceSetting<int?>(Resources.FontSize, Config.FontSize, new Dictionary<int?,string>
+                    {
+                        { 18, Resources.Small },
+                        { 20, Resources.Medium },
+                        { 26, Resources.Big }
+                    }),
+                new MultipleChoiceSetting<ColumnReloadOptions?>(Resources.WhenAppStart, Config.ReloadOptions, new Dictionary<ColumnReloadOptions?,string>
+                    {
+                        { ColumnReloadOptions.GoToStart, Resources.ToNewTweets },
+                        { ColumnReloadOptions.KeepPosition, Resources.ShowLastTweet },
+                        { ColumnReloadOptions.AskPosition, Resources.AskPosition }
+                    }),
+                new BoolSetting(Resources.ShowRetweetsAsMentions, Config.RetweetAsMentions),
+                new BoolSetting(Resources.Geotagging, Config.EnabledGeolocation),
+#if OCELL_FULL
+                new BoolSetting(Resources.PushEnabled, Config.PushEnabledConfigItem),
+#endif
+                new SeparatorSetting(Resources.Tiles),
+                new BoolSetting(Resources.UpdateTilesInBackground, Config.BackgroundLoadColumns)
+            };
+
             Accounts = new SafeObservable<UserToken>(Config.Accounts.Value);
             NotifyOptions = new List<string> { Resources.None, Resources.OnlyTile, Resources.ToastAndTile };
             SelectedMuteTime = TimeSpanToSelectedFilter((TimeSpan)Config.DefaultMuteTime.Value);
-            ShowResumePositionButton = Config.RecoverReadPositions.Value == true;
-            GeoTaggingEnabled = Config.EnabledGeolocation.Value == true;
-            SelectedReloadOption = (int)Config.ReloadOptions.Value;
-
-            PushAvailable = TrialInformation.IsFullFeatured;
-
-            PushEnabled = PushAvailable && (Config.PushEnabled.Value == true);
 
             if (Config.ReadLaterCredentials.Value.Instapaper != null)
             {
@@ -222,20 +215,6 @@ namespace Ocell.Settings
             {
                 switch (e.PropertyName)
                 {
-                    case "RetweetsAsMentions":
-                        Config.RetweetAsMentions.Value = RetweetsAsMentions;
-                        break;
-
-                    case "BackgroundUpdateTiles":
-                        Config.BackgroundLoadColumns.Value = BackgroundUpdateTiles;
-                        break;
-
-                    case "TweetsPerRequest":
-                        int number;
-                        if (int.TryParse(TweetsPerRequest, out number))
-                            Config.TweetsPerRequest.Value = number;
-                        break;
-
                     case "SelectedAccount":
                         if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Value.Count)
                         {
@@ -256,55 +235,17 @@ namespace Ocell.Settings
                             }
                         }
                         break;
-
                     case "MentionNotifyOption":
                         if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Value.Count)
                             SetMentionNotifyPref((NotificationType)MentionNotifyOption, SelectedAccount);
                         break;
-
                     case "MessageNotifyOption":
                         if (SelectedAccount >= 0 && SelectedAccount < Config.Accounts.Value.Count)
                             SetMessageNotifyPref((NotificationType)MessageNotifyOption, SelectedAccount);
                         Config.SaveAccounts();
                         break;
-
                     case "SelectedMuteTime":
                         Config.DefaultMuteTime.Value = SelectedFilterToTimeSpan(SelectedMuteTime);
-                        break;
-
-                    case "SelectedFontSize":
-                        ((GlobalSettings)App.Current.Resources["GlobalSettings"]).
-                            TweetFontSize = IndexToFontSize(SelectedFontSize);
-                        break;
-
-                    case "ShowResumePositionButton":
-                        Config.RecoverReadPositions.Value = ShowResumePositionButton;
-                        break;
-
-                    case "GeoTaggingEnabled":
-                        Config.EnabledGeolocation.Value = GeoTaggingEnabled;
-                        break;
-
-                    case "PushEnabled":
-                        if (!TrialInformation.IsFullFeatured)
-                        {
-                            if (PushEnabled)
-                            {
-                                TrialInformation.ShowBuyDialog();
-                                PushEnabled = false;
-                            }
-                            return;
-                        }
-
-                        Config.PushEnabled = PushEnabled;
-                        if (PushEnabled == false)
-                            PushNotifications.UnregisterAll();
-                        else
-                            PushNotifications.AutoRegisterForNotifications();
-                        break;
-
-                    case "SelectedReloadOption":
-                        Config.ReloadOptions.Value = (ColumnReloadOptions)SelectedReloadOption;
                         break;
                 }
             };
@@ -312,6 +253,7 @@ namespace Ocell.Settings
             SelectedAccount = -1;
             if (Config.Accounts.Value.Count > 0)
                 SelectedAccount = 0;
+
             SetCommands();
         }
 
@@ -391,5 +333,7 @@ namespace Ocell.Settings
         {
             Accounts = new SafeObservable<UserToken>(Config.Accounts.Value);
         }
+
+        public SafeObservable<Setting> Settings { get; set; }
     }
 }

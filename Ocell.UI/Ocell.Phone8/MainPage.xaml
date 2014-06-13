@@ -65,18 +65,21 @@
     <!--LayoutRoot es la cuadrÃ­cula raÃ­z donde se coloca todo el contenido de la pÃ¡gina-->
     <Grid x:Name="LayoutRoot" CacheMode="BitmapCache" Margin="0,-32,0,0">
         <!--Control Pivot-->
-        <controls:Pivot Title="{Binding CurrentAccountName, StringFormat='OCELL - {0}'}" x:Name="MainPivot" ItemsSource="{Binding Pivots}" SelectedItem="{Binding SelectedPivot, Mode=TwoWay}" Margin="0,50,0,0">
+        <controls:Pivot Title="{Binding CurrentAccountName, StringFormat='OCELL - {0}'}" TitleTemplate="{StaticResource PivotTitleTemplate}"
+			x:Name="MainPivot" ItemsSource="{Binding Pivots}" SelectedItem="{Binding SelectedPivot, Mode=TwoWay}" Margin="0,50,0,0">
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Style="{StaticResource PageHeaderStyle}"  Margin="0,0,0,0" Text="{Binding Title, Converter={StaticResource ListConverter}, FallbackValue=error}"  Loaded="TextBlock_Loaded" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
                 </DataTemplate>
             </controls:Pivot.HeaderTemplate>
+			
             <controls:Pivot.ItemTemplate>
                 <DataTemplate>
                     <custom:ExtendedListBox Loader="{Binding Loader}" HorizontalContentAlignment="Stretch" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" Loaded="ListBox_Loaded"/>
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>
+
         <Grid x:Name="GoToUserGrid" Height="176" Margin="0,0,0,0" VerticalAlignment="Bottom" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

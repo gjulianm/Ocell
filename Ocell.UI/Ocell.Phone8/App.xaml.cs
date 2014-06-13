@@ -2,8 +2,8 @@
 using AncoraMVVM.Base.Diagnostics;
 using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
-using AncoraMVVM.Phone;
-using AncoraMVVM.Phone.Implementations;
+using AncoraMVVM.Phone7;
+using AncoraMVVM.Phone7.Implementations;
 using AsyncOAuth;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Marketplace;

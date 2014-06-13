@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
-    xmlns:ac="clr-namespace:AncoraMVVM.Phone;assembly=AncoraMVVM.Phone7"
+    xmlns:ac="clr-namespace:AncoraMVVM.Phone7;assembly=AncoraMVVM.Phone7"
     x:Class="Ocell.Pages.SelectUser"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"

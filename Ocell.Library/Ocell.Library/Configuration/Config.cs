@@ -18,7 +18,7 @@ namespace Ocell.Library
 
 
 #if OCELL_FULL
-        readonly static ConfigItem<bool?> PushEnabledConfigItem = new ConfigItem<bool?>
+        public readonly static ConfigItem<bool?> PushEnabledConfigItem = new ConfigItem<bool?>
         {
             Key = pushEnabledKey,
             DefaultValue = null

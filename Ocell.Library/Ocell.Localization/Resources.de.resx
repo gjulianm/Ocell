@@ -426,7 +426,7 @@
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Search\EnterSearch.xaml</comment>
   </data>
 	<data name="About" xml:space="preserve">
-    <value>Über</value>
+    <value>über</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\About.xaml</comment>
   </data>
 	<data name="Backgrounds" xml:space="preserve">
@@ -454,15 +454,15 @@
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
 	<data name="SetCustomBackground" xml:space="preserve">
-    <value>Eigenen Hintergrund wählen</value>
+    <value>eigenen hintergrund wählen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
 	<data name="AddAccount" xml:space="preserve">
-    <value>Account hinzufügen</value>
+    <value>account hinzufügen</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
 	<data name="EditMutedTweets" xml:space="preserve">
-    <value>Gemutete Tweets bearbeiten</value>
+    <value>gemutete Tweets bearbeiten</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
 	<data name="OneHour" xml:space="preserve">
@@ -486,7 +486,7 @@
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
 	<data name="SaveCredentials" xml:space="preserve">
-    <value>Login-Daten speichern</value>
+    <value>login-Daten speichern</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
 	<data name="SendMessage" xml:space="preserve">

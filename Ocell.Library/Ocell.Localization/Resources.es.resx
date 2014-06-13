@@ -454,7 +454,7 @@
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
 	<data name="SetCustomBackground" xml:space="preserve">
-    <value>Elegir fondo</value>
+    <value>elegir fondo</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
 	<data name="AddAccount" xml:space="preserve">
@@ -486,7 +486,7 @@
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
 	<data name="SaveCredentials" xml:space="preserve">
-    <value>Guardar</value>
+    <value>guardar</value>
     <comment>C:\Users\Guillermo\Dropbox\Ocell\Ocell\Pages\Settings\Default.xaml</comment>
   </data>
 	<data name="SendMessage" xml:space="preserve">
