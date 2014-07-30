@@ -1,8 +1,8 @@
-﻿using AncoraMVVM.Base.Interfaces;
+﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
 using LinqToVisualTree;
 using Microsoft.Phone.Controls;
-using Ocell.Library;
 using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
 using Ocell.Pages.Elements;
@@ -348,24 +348,18 @@ namespace Ocell.Controls
 
             INavigationService NavigationService = Dependency.Resolve<INavigationService>();
 
-            if (!selectionChangeFired)
+            if (!selectionChangeFired && e.AddedItems.Count > 0 && e.AddedItems[0] != null)
             {
-                DataTransfer.Status = e.AddedItems[0] as TwitterStatus;
-                DataTransfer.DM = e.AddedItems[0] as TwitterDirectMessage;
+                var selectedItem = e.AddedItems[0];
 
                 selectionChangeFired = true;
                 SelectedItem = null;
 
-                // TODO: Solve this navigation.
-
-                if (e.AddedItems[0] is TwitterStatus)
-                    NavigationService.Navigate(new Uri("/Pages/Elements/Tweet.xaml?id=" + DataTransfer.Status.Id.ToString(), UriKind.Relative));
-                else if (e.AddedItems[0] is GroupedDM)
-                {
-                    DataTransfer.DMGroup = e.AddedItems[0] as GroupedDM;
-                    NavigationService.Navigate<DMConversationModel>();
-                }
-                else if (e.AddedItems[0] is LoadMoreTweetable)
+                if (selectedItem is TwitterStatus)
+                    NavigationService.MessageAndNavigate<TweetModel, TwitterStatus>(selectedItem as TwitterStatus);
+                else if (selectedItem is GroupedDM)
+                    NavigationService.MessageAndNavigate<DMConversationModel, GroupedDM>(selectedItem as GroupedDM);
+                else if (selectedItem is LoadMoreTweetable)
                 {
                     LoadIntermediate(e.AddedItems[0] as LoadMoreTweetable);
                     RemoveLoadMore(e.AddedItems[0] as LoadMoreTweetable);

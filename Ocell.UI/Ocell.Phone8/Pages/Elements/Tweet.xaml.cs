@@ -97,15 +97,9 @@ namespace Ocell.Pages.Elements
             CreateText(ViewModel.Tweet);
             ViewModel.Completed = true;
 
-            if (DataTransfer.Status == null)
-            {
-                NavigationService.GoBack();
-                return;
-            }
-
             TwitterResource resource = new TwitterResource
             {
-                Data = DataTransfer.Status.Id.ToString(),
+                Data = ViewModel.Tweet.Id.ToString(),
                 Type = ResourceType.Conversation,
                 User = DataTransfer.CurrentAccount
             };

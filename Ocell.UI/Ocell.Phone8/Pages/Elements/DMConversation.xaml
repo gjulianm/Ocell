@@ -8,12 +8,13 @@
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:custom="clr-namespace:Ocell.Controls"
 	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
-	x:Class="Ocell.DMConversation"
+	x:Class="Ocell.Pages.Elements.DMConversation"
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"
 	FontSize="{StaticResource PhoneFontSizeNormal}"
 	Foreground="{StaticResource PhoneForegroundBrush}"
 	Orientation="Portrait"
-	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0">
+	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0"
+    Style="{StaticResource ModalPageStyle}">
 	
 	<!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
 	<Grid x:Name="LayoutRoot" Margin="0,0,0,0" Background="Transparent">
@@ -30,7 +31,7 @@
 
 		<!--ContentPanel: coloque aquí el contenido adicional-->
 		<Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,8,12,0">
-			<custom:ExtendedListBox x:Name="List" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" />
+			<custom:ExtendedListBox Loader="{Binding Loader}" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" />
 		</Grid>
 	</Grid>
 </phone:PhoneApplicationPage>

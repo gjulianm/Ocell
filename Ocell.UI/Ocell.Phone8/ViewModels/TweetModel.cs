@@ -1,5 +1,4 @@
 ﻿using AncoraMVVM.Base;
-using AncoraMVVM.Base.Interfaces;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using Ocell.Commands;
@@ -61,7 +60,9 @@ namespace Ocell.Pages.Elements
 
             AppBarMode = ApplicationBarMode.Default;
 
-            if (DataTransfer.Status == null)
+            Tweet = ReceiveMessage<TwitterStatus>();
+
+            if (Tweet == null)
             {
                 Notificator.ShowError(Localization.Resources.ErrorLoadingTweet);
                 Navigator.GoBack();
@@ -91,7 +92,7 @@ namespace Ocell.Pages.Elements
                 }
             };
 
-            SetStatus();
+            CheckRetweeted();
             SetAvatar();
             SetImage();
             SetupCommands();
@@ -160,17 +161,12 @@ namespace Ocell.Pages.Elements
                 WebUrl = "http://www.readability.com/m?url=" + candidateLink;
         }
 
-        private void SetStatus()
+        private void CheckRetweeted()
         {
-            if (DataTransfer.Status.RetweetedStatus != null)
+            if (Tweet.RetweetedStatus != null)
             {
-                Tweet = DataTransfer.Status.RetweetedStatus;
-                WhoRetweeted = " " + String.Format(Localization.Resources.RetweetBy, DataTransfer.Status.Author.ScreenName);
-            }
-            else
-            {
-                Tweet = DataTransfer.Status;
-                WhoRetweeted = "";
+                Tweet = Tweet.RetweetedStatus;
+                WhoRetweeted = " " + String.Format(Localization.Resources.RetweetBy, Tweet.Author.ScreenName);
             }
         }
 

@@ -1,11 +1,11 @@
 ﻿using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
 using System.Linq;
+
 namespace Ocell.Library
 {
     public static class DataTransfer
     {
-        public static TweetSharp.TwitterStatus Status;
         public static string Search;
         public static string User;
         public static TweetSharp.TwitterDirectMessage DM;
@@ -31,6 +31,5 @@ namespace Ocell.Library
         public static ColumnFilter cFilter;
         public static bool IsGlobalFilter;
         public static bool ShouldReloadFilters = false;
-        public static GroupedDM DMGroup;
     }
 }
