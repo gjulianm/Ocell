@@ -1,5 +1,4 @@
 ﻿using AncoraMVVM.Base;
-using AncoraMVVM.Base.Interfaces;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
@@ -80,8 +79,6 @@ namespace Ocell.Pages
                 GetTopics();
             }
         }
-
-        // TODO: Check API return values, for what?
 
         private async void GetMyLocation()
         {

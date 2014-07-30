@@ -711,10 +711,6 @@ namespace Microsoft.Phone.Controls
                             // Don't do anything with the exception, it just 
                             // means the key isn't in both the 
                             // ResourceDictionary and standard set of styles.
-
-                            // TODO: Consider just catching the specific 
-                            // exception when the key is not found rather than
-                            // a scary untyped catch.
                         }
 
                         var itemToAdd = new ThemeValue(keyName, new DualColorValue(ColorToUInt(c), ColorToUInt(c)));
