@@ -11,158 +11,77 @@
     xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
     xmlns:Ocell_Transitions="clr-namespace:Ocell.Transitions"
     x:Class="Ocell.Pages.NewTweet"
-    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
-    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
+    mc:Ignorable="d"
     >
     <phone:PhoneApplicationPage.Resources>
         <DataTemplate x:Key="HZAccountsList">
-            <Grid>
-                <Image Source="{Binding AvatarUrl}" Width="64" Height="64" Tap="Image_Tap" Opacity="0.55" Tag="{Binding}" Loaded="Image_Loaded"/>
-            </Grid>
+        	<Grid>
+        		<Image Source="{Binding AvatarUrl}" Width="64" Height="64" Tap="Image_Tap" Opacity="0.55" Tag="{Binding}" Loaded="Image_Loaded"/>
+        	</Grid>
         </DataTemplate>
         <Style x:Key="ListBoxStyle1" TargetType="ListBox">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBox">
-                        <ScrollViewer x:Name="ScrollViewer" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}">
-                            <ItemsPresenter/>
-                        </ScrollViewer>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        	<Setter Property="Background" Value="Transparent"/>
+        	<Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
+        	<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        	<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        	<Setter Property="BorderThickness" Value="0"/>
+        	<Setter Property="BorderBrush" Value="Transparent"/>
+        	<Setter Property="Padding" Value="0"/>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="ListBox">
+        				<ScrollViewer x:Name="ScrollViewer" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}">
+        					<ItemsPresenter/>
+        				</ScrollViewer>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
         </Style>
         <ItemsPanelTemplate x:Key="PanelTemplate">
-            <StackPanel Orientation="Horizontal"/>
+        	<StackPanel Orientation="Horizontal"/>
         </ItemsPanelTemplate>
 
         <Storyboard x:Name="EnableGeoloc">
-            <DoubleAnimation Storyboard.TargetName="GeolocImg" Storyboard.TargetProperty="Opacity"
-    			To="1.0" Duration="0:0:0.5" />
+        	<DoubleAnimation Storyboard.TargetName="GeolocImg" Storyboard.TargetProperty="Opacity"
+        		To="1.0" Duration="0:0:0.5" />
         </Storyboard>
 
         <Storyboard x:Name="DisableGeoloc">
-            <DoubleAnimation Storyboard.TargetName="GeolocImg" Storyboard.TargetProperty="Opacity"
-    			To="0.5" Duration="0:0:0.5" />
+        	<DoubleAnimation Storyboard.TargetName="GeolocImg" Storyboard.TargetProperty="Opacity"
+        		To="0.5" Duration="0:0:0.5" />
         </Storyboard>
 
         <DataTemplate x:Key="SuggestionTemplate">
-            <Grid/>
+        	<Grid/>
         </DataTemplate>
         <DataTemplate x:Key="ItemTemplate">
-            <StackPanel>
-                <TextBlock Text="{Binding}" Height="33" VerticalAlignment="Top" Width="124" FontFamily="Segoe WP Light" Margin="8,8,2,0" HorizontalAlignment="Left"/>
-            </StackPanel>
+        	<StackPanel>
+        		<TextBlock Text="{Binding}" Height="33" VerticalAlignment="Top" Width="124" FontFamily="Segoe WP Light" Margin="8,8,2,0" HorizontalAlignment="Left"/>
+        	</StackPanel>
         </DataTemplate>
-        <DataTemplate x:Key="ItemTemplate1">
-            <StackPanel>
-                <TextBlock Text="{Binding}" Margin="8,9,4,0" FontSize="24" FontFamily="Segoe WP SemiLight"/>
-            </StackPanel>
+        <DataTemplate x:Key="UserSuggestionsTemplate">
+        	<StackPanel>
+        		<TextBlock Text="{Binding}" Margin="8,9,4,0" FontSize="24" FontFamily="Segoe WP SemiLight"/>
+        	</StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="ImagesItemTemplate">
+        	<StackPanel Orientation="Horizontal">
+        		<Button BorderThickness="0" Margin="-20,0,-12,0" VerticalAlignment="Center" Command="{Binding ElementName=ListAccounts, Path=DataContext.RemoveImage}" CommandParameter="{Binding}">
+        			<Rectangle Fill="{StaticResource PhoneForegroundBrush}" Width="40" Height="40">
+        				<Rectangle.OpacityMask>
+        					<ImageBrush ImageSource="/Images/Icons_White/appbar.close.rest.png"/>
+        				</Rectangle.OpacityMask>
+        			</Rectangle>
+        		</Button>
+                <Image Source="{Binding Filename}" HorizontalAlignment="Left" Height="100" Width="100" />
+        	</StackPanel>
         </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
-
-    <phone:PhoneApplicationPage.FontFamily>
-        <StaticResource ResourceKey="PhoneFontFamilyNormal"/>
-    </phone:PhoneApplicationPage.FontFamily>
-    <phone:PhoneApplicationPage.FontSize>
-        <StaticResource ResourceKey="PhoneFontSizeNormal"/>
-    </phone:PhoneApplicationPage.FontSize>
-    <phone:PhoneApplicationPage.Foreground>
-        <StaticResource ResourceKey="PhoneForegroundBrush"/>
-    </phone:PhoneApplicationPage.Foreground>
-
-    <toolkit:TransitionService.NavigationInTransition>
-        <toolkit:NavigationInTransition>
-            <toolkit:NavigationInTransition.Backward>
-                <toolkit:SlideTransition Mode="SlideDownFadeIn"/>
-            </toolkit:NavigationInTransition.Backward>
-            <toolkit:NavigationInTransition.Forward>
-                <toolkit:SlideTransition Mode="SlideUpFadeIn"/>
-            </toolkit:NavigationInTransition.Forward>
-        </toolkit:NavigationInTransition>
-    </toolkit:TransitionService.NavigationInTransition>
-    <toolkit:TransitionService.NavigationOutTransition>
-        <toolkit:NavigationOutTransition>
-            <toolkit:NavigationOutTransition.Backward>
-                <toolkit:SlideTransition Mode="SlideDownFadeOut"/>
-            </toolkit:NavigationOutTransition.Backward>
-            <toolkit:NavigationOutTransition.Forward>
-                <toolkit:SlideTransition Mode="SlideUpFadeOut"/>
-            </toolkit:NavigationOutTransition.Forward>
-        </toolkit:NavigationOutTransition>
-    </toolkit:TransitionService.NavigationOutTransition>
-
-    <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
-    <Grid x:Name="LayoutRoot" Margin="0,-32,0,0" d:DataContext="{Binding Source={StaticResource SampleNames}}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <Grid.Background>
-            <ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
-        </Grid.Background>
-
-        <!--ContentPanel. Colocar aquí el contenido adicional-->
-
-        <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
-        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,64,0,28">
-            <TextBlock x:Name="ApplicationTitle" Style="{StaticResource PhoneTextNormalStyle}"><Run Text="OCELL"/></TextBlock>
-        </StackPanel>
-        <Grid x:Name="ContentPanel" Margin="12,0,12,0" Grid.Row="1" >
-            <ScrollViewer d:LayoutOverrides="Width, Height" HorizontalScrollBarVisibility="Disabled">
-                <Grid>
-                    <!-- I'm sorry about this code -->
-                    <ToggleButton IsChecked="{Binding GeotagEnabled}" HorizontalAlignment="Left" Height="48" Width="48" Margin="0,-4,0,0" VerticalAlignment="Top" BorderThickness="0" Background="{StaticResource PhoneSubtleBrush}">
-                        <ToggleButton.OpacityMask>
-                            <ImageBrush ImageSource="/Images/Icons_White/appbar.map.position.rest.png" />
-                        </ToggleButton.OpacityMask>
-                        
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Checked">
-                                    <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="Background" To="{StaticResource PhoneAccentColor}" Duration="0:0:0.2" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="UnChecked">
-                                    <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="Background" To="{StaticResource PhoneSubtleColor}" Duration="0:0:0.2" />
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                    </ToggleButton>
-                    
-                    <ListBox x:Name="UserSuggestions" ItemsSource="{Binding Suggestions}" SelectionMode="Multiple" Visibility="{Binding IsSuggestingUsers, ConverterParameter=Visible, Converter={StaticResource BooleanToVisibilityConverter}}" SelectionChanged="UserSuggestions_SelectionChanged" Margin="12,171,12,0" ItemTemplate="{StaticResource ItemTemplate1}" ItemsPanel="{StaticResource PanelTemplate}" Height="54" VerticalAlignment="Top" Background="{StaticResource PhoneChromeBrush}" Canvas.ZIndex="1" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
-                    <TextBox Text="{Binding TweetText, Mode=TwoWay}" x:Name="TweetBox" TextWrapping="Wrap" VerticalAlignment="Top" Height="205" InputScope="Text" SelectionStart="{Binding TextboxSelectionStart, Mode=TwoWay}" Margin="0,31,0,0" d:LayoutOverrides="VerticalAlignment"/>
-                    <TextBlock Margin="0,4,9,0" TextWrapping="Wrap" Text="{Binding RemainingCharsStr}" VerticalAlignment="Top" Foreground="{Binding RemainingCharsColor}" HorizontalAlignment="Right" FontFamily="Segoe WP Light"/>
-                    <ListBox x:Name="ListAccounts" ItemsSource="{Binding AccountList}" SelectionMode="Multiple" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="12,272,12,252" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
-                    <TextBlock Text="{Binding Strings.Accounts, Source={StaticResource LocalizedResources}, StringFormat=\{0\}:}" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Left" Margin="12,236,0,0" TextWrapping="Wrap"  Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top"/>
-                    <CheckBox IsChecked="{Binding IsScheduled, Mode=TwoWay}" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" Content="{Binding Strings.ScheduledQuestion, Source={StaticResource LocalizedResources}}" Margin="8,357,216,0" VerticalAlignment="Top" />
-                    <Grid Margin="8,433,20,0" x:Name="schedGrid" Height="131" VerticalAlignment="Top" Visibility="{Binding IsScheduled, Converter={StaticResource BooleanToVisibilityConverter}}">
-
-                        <toolkit:DatePicker Value="{Binding ScheduledDate, Mode=TwoWay}" Margin="0,27,0,31" HorizontalAlignment="Left" Width="208" d:LayoutOverrides="Height"/>
-                        <toolkit:TimePicker Value="{Binding ScheduledTime, Mode=TwoWay}" HorizontalAlignment="Right" Margin="0,27,0,31" Width="208" d:LayoutOverrides="Height"/>
-                        <TextBlock Text="{Binding Strings.Date, Source={StaticResource LocalizedResources}, StringFormat=\{0\}:}" HorizontalAlignment="Left" Margin="14,0,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
-                        <TextBlock Text="{Binding Strings.Time, Source={StaticResource LocalizedResources}, StringFormat=\{0\}:}" Margin="0,0,147,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" HorizontalAlignment="Right" RenderTransformOrigin="0.128,0.422"/>
-                        <TextBlock Text="{Binding Strings.AboutScheduling, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Bottom" Margin="14,0,0,8" TextDecorations="Underline" Foreground="{StaticResource PhoneAccentBrush}" Tap="aboutScheduling_Tap"/>
-                    </Grid>
-                </Grid>
-            </ScrollViewer>
-
-            
-        </Grid>
-
-    </Grid>
-
+	
+	<phone:PhoneApplicationPage.Style>
+		<StaticResource ResourceKey="ModalPageStyle"/>
+	</phone:PhoneApplicationPage.Style>
+	
     <appbar:Bindable.ApplicationBar>
         <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
             <appbar:BindableAppBar.MenuItems>
@@ -176,5 +95,95 @@
             <appbar:BindableAppBarButton Text="{Binding Strings.SaveDraft, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.save.rest.png" Command="{Binding SaveDraft}" />
         </appbar:BindableAppBar>
     </appbar:Bindable.ApplicationBar>
+
+	<Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<Grid.Background>
+			<ImageBrush Stretch="Fill" ImageSource="/BackgroundFabric.png"/>
+		</Grid.Background>
+
+		<!--ContentPanel. Colocar aquí el contenido adicional-->
+
+        <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
+		<StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,64,0,28">
+			<TextBlock x:Name="ApplicationTitle" Style="{StaticResource PhoneTextNormalStyle}"><Run Text="OCELL"/></TextBlock>
+		</StackPanel>
+		<Grid x:Name="ContentPanel" Margin="12,0,12,0" Grid.Row="1" >
+			<ScrollViewer d:LayoutOverrides="Width, Height" HorizontalScrollBarVisibility="Disabled">
+				<StackPanel>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<ToggleButton IsChecked="{Binding IsGeotagged, Mode=TwoWay}" HorizontalAlignment="Left" Height="48" Width="48" VerticalAlignment="Top" 
+							BorderThickness="0" Background="{StaticResource PhoneSubtleBrush}" Visibility="{Binding GeotagEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+							<ToggleButton.OpacityMask>
+								<ImageBrush ImageSource="/Images/Icons_White/appbar.map.position.rest.png" />
+							</ToggleButton.OpacityMask>
+                        
+							<VisualStateManager.VisualStateGroups>
+								<VisualStateGroup x:Name="CommonStates">
+									<VisualState x:Name="Checked">
+										<Storyboard>
+											<ColorAnimation Storyboard.TargetProperty="Background" To="{StaticResource PhoneAccentColor}" Duration="0:0:0.2" />
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="UnChecked">
+										<Storyboard>
+											<ColorAnimation Storyboard.TargetProperty="Background" To="{StaticResource PhoneSubtleColor}" Duration="0:0:0.2" />
+										</Storyboard>
+									</VisualState>
+								</VisualStateGroup>
+							</VisualStateManager.VisualStateGroups>
+						</ToggleButton>
+						<TextBlock TextWrapping="Wrap" Text="{Binding RemainingCharsStr}" VerticalAlignment="Top" Foreground="{Binding RemainingCharsColor}" HorizontalAlignment="Right" FontFamily="Segoe WP Light" Margin="0,0,0,0" Grid.Column="2"/>
+					</Grid>
+                    
+					<Grid Width="456">
+                        <ListBox x:Name="UserSuggestions" ItemsSource="{Binding Suggestions}" SelectionMode="Multiple" Visibility="{Binding IsSuggestingUsers, ConverterParameter=Visible, Converter={StaticResource BooleanToVisibilityConverter}}" SelectionChanged="UserSuggestions_SelectionChanged" ItemTemplate="{StaticResource UserSuggestionsTemplate}" ItemsPanel="{StaticResource PanelTemplate}" Height="54" VerticalAlignment="Top" Background="{StaticResource PhoneChromeBrush}" Canvas.ZIndex="1" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="12,139,12,0"/>
+						<TextBox Text="{Binding TweetText, Mode=TwoWay}" x:Name="TweetBox" TextWrapping="Wrap" VerticalAlignment="Top" Height="205" InputScope="Text" SelectionStart="{Binding TextboxSelectionStart, Mode=TwoWay}" Margin="0"/>
+					</Grid>
+					
+                    <TextBlock Text="{Binding Strings.Accounts, Source={StaticResource LocalizedResources}, StringFormat=\{0\}:}" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Left" TextWrapping="Wrap"  Foreground="{StaticResource PhoneSubtleBrush}" VerticalAlignment="Top" Margin="12,0,0,0"/>
+					<ListBox x:Name="ListAccounts" ItemsSource="{Binding AccountList}" SelectionMode="Multiple" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" ItemTemplate="{StaticResource HZAccountsList}" ItemsPanel="{StaticResource PanelTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="432"/>
+                    <ListBox ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                             ItemTemplate="{StaticResource ImagesItemTemplate}" ItemsSource="{Binding Images}" 
+                             Width="432" Margin="8">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ScrollViewer.HorizontalScrollBarVisibility>
+                                    Auto
+                                </ScrollViewer.HorizontalScrollBarVisibility>
+                                <ScrollViewer.VerticalScrollBarVisibility>
+                                    Disabled
+                                </ScrollViewer.VerticalScrollBarVisibility>
+                                <VirtualizingStackPanel Orientation="Horizontal" CanVerticallyScroll="False" CanHorizontallyScroll="True"></VirtualizingStackPanel>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+					
+                    <CheckBox IsChecked="{Binding IsScheduled, Mode=TwoWay}" Visibility="{Binding IsDM, ConverterParameter=Collapsed, Converter={StaticResource BooleanToVisibilityConverter}}" Content="{Binding Strings.ScheduledQuestion, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" Width="232" HorizontalAlignment="Left" />
+					<Grid x:Name="schedGrid" VerticalAlignment="Top" Visibility="{Binding IsScheduled, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+						<toolkit:DatePicker Value="{Binding ScheduledDate, Mode=TwoWay}" Margin="0,27,0,31" HorizontalAlignment="Left" Width="208" d:LayoutOverrides="Height"/>
+						<toolkit:TimePicker Value="{Binding ScheduledTime, Mode=TwoWay}" HorizontalAlignment="Right" Margin="0,27,0,31" Width="208" d:LayoutOverrides="Height"/>
+						<TextBlock Text="{Binding Strings.Date, Source={StaticResource LocalizedResources}, StringFormat=\{0\}:}" HorizontalAlignment="Left" Margin="14,0,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}"/>
+						<TextBlock Text="{Binding Strings.Time, Source={StaticResource LocalizedResources}, StringFormat=\{0\}:}" Margin="0,0,147,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" HorizontalAlignment="Right" RenderTransformOrigin="0.128,0.422"/>
+						<TextBlock Text="{Binding Strings.AboutScheduling, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Bottom" Margin="14,0,0,8" TextDecorations="Underline" Foreground="{StaticResource PhoneAccentBrush}" Tap="aboutScheduling_Tap"/>
+					</Grid>
+				</StackPanel>
+			</ScrollViewer>
+
+            
+		</Grid>
+
+	</Grid>
 
 </phone:PhoneApplicationPage>

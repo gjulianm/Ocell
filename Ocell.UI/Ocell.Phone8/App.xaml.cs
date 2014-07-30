@@ -16,6 +16,7 @@ using Ocell.Library;
 using Ocell.Library.Twitter;
 using System;
 using System.Diagnostics;
+using System.IO.IsolatedStorage;
 using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Navigation;
@@ -40,7 +41,6 @@ namespace Ocell
 #if DEBUG
             UnhandledException += Application_UnhandledException;
 #endif
-
             Dependency.RegisterModule(new PhoneDependencyModule());
 
             // Inicialización de Silverlight estándar
@@ -73,6 +73,9 @@ namespace Ocell
 
             AncoraLogger.Instance.LoggedEvent += (sender, e) => BugSenseHandler.Instance.LogEventAsync(e.LogEntry.ToString());
             AncoraLogger.Instance.LoggedException += (sender, e) => BugSenseHandler.Instance.LogExceptionAsync(e.Exception);
+
+            if (Debugger.IsAttached)
+                BugSenseHandler.Instance.HandleWhileDebugging = false;
 
             OAuthUtility.ComputeHash = (key, buffer) => { using (var hmac = new HMACSHA1(key)) { return hmac.ComputeHash(buffer); } };
 
@@ -178,6 +181,15 @@ namespace Ocell
                 Config.SaveReadPositions();
                 Config.SaveAccounts();
                 Config.SaveColumns();
+
+                using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    if (store.DirectoryExists("img_cache"))
+                    {
+                        foreach (var file in store.GetFileNames("img_cache\\*"))
+                            store.DeleteFile("img_cache\\" + file);
+                    }
+                }
             }
             catch (Exception ex)
             {

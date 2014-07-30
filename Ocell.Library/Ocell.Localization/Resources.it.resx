@@ -1242,4 +1242,13 @@
 	<data name="Web" xml:space="preserve">
 		<value>web</value>
 	</data>
+	<data name="ImageAlreadySelected" xml:space="preserve">
+		<value>Hai già selezionato quell'immagine.</value>
+	</data>
+	<data name="ImageUploadOnSend" xml:space="preserve">
+		<value>L'immagine verrà caricata quando si inviano tweet.</value>
+	</data>
+	<data name="SendingToTwitlonger" xml:space="preserve">
+		<value>invio a Twitlonger...</value>
+	</data>
 </root>

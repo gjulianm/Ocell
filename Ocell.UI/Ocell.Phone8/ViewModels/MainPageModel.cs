@@ -130,6 +130,7 @@ namespace Ocell
         public override void OnNavigating(System.ComponentModel.CancelEventArgs e)
         {
             Config.SaveReadPositions();
+            Progress.ClearIndicator();
             base.OnNavigating(e);
         }
 

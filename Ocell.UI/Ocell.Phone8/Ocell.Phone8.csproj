@@ -27,7 +27,7 @@
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <Utf8Output>true</Utf8Output>
-    <ExpressionBlendVersion>5.0.30924.0</ExpressionBlendVersion>
+    <ExpressionBlendVersion>12.0.41212.0</ExpressionBlendVersion>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <NuGetPackageImportStamp>11e6a652</NuGetPackageImportStamp>
   </PropertyGroup>
@@ -313,6 +313,7 @@
   <ItemGroup>
     <Content Include="assembly.ico" />
     <Content Include="BindableAppBar\README.txt" />
+    <Content Include="BugSense\BugSense - SDK License Agreement.txt" />
     <Content Include="FodyWeavers.xml" />
     <Content Include="Images\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -498,13 +499,13 @@
     <Resource Include="Images\BirdGray.png" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AncoraMVVM.Base, Version=0.1.25.28189, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AncoraMVVM.Base, Version=0.1.25.31416, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AncoraMVVM.Base.0.1.29-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
+      <HintPath>..\..\packages\AncoraMVVM.Base.0.1.32-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Base.dll</HintPath>
     </Reference>
-    <Reference Include="AncoraMVVM.Phone7, Version=0.1.29.29247, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AncoraMVVM.Phone7, Version=0.1.29.24102, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AncoraMVVM.Phone7.0.1.33-alpha\lib\wp71\AncoraMVVM.Phone7.dll</HintPath>
+      <HintPath>..\..\packages\AncoraMVVM.Phone7.0.1.34-alpha\lib\wp71\AncoraMVVM.Phone7.dll</HintPath>
     </Reference>
     <Reference Include="AncoraMVVM.Rest">
       <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.14-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Rest.dll</HintPath>
@@ -515,6 +516,9 @@
     </Reference>
     <Reference Include="BufferAPI">
       <HintPath>..\..\packages\BufferAPI.0.1.0-alpha\lib\portable-net45+sl50+wp80+win\BufferAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="BugSense-WP8">
+      <HintPath>..\..\packages\BugSense.WP8.3.6.7.0\lib\wp8\BugSense-WP8.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Phone.Controls, Version=8.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Controls.Toolkit">
@@ -685,4 +689,5 @@
     <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
     <Error Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
+  <Import Project="$(XamlSpyInstallPath)MSBuild\FirstFloor.XamlSpy.WindowsPhone.targets" Condition="'$(XamlSpyInstallPath)' != '' and '$(Configuration)' == 'Debug'" />
 </Project>

@@ -1,4 +1,5 @@
-﻿using AncoraMVVM.Base.Interfaces;
+﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
 using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;

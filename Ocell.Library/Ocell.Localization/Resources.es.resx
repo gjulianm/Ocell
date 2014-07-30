@@ -1243,4 +1243,13 @@
 	<data name="NoConversation" xml:space="preserve">
 		<value>No hay ninguna conversación sobre este tweet.</value>
 	</data>
+	<data name="ImageAlreadySelected" xml:space="preserve">
+		<value>Ya has seleccionado esa imagen para subir.</value>
+	</data>
+	<data name="ImageUploadOnSend" xml:space="preserve">
+		<value>Cargaremos la imagen cuando envíes el tweet.</value>
+	</data>
+	<data name="SendingToTwitlonger" xml:space="preserve">
+		<value>enviando a Twitlonger...</value>
+	</data>
 </root>

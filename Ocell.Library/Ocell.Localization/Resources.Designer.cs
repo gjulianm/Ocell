@@ -61,7 +61,7 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a About.
+        ///   Busca una cadena traducida similar a about.
         /// </summary>
         public static string About {
             get {
@@ -160,7 +160,7 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Add account.
+        ///   Busca una cadena traducida similar a add account.
         /// </summary>
         public static string AddAccount {
             get {
@@ -871,7 +871,7 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Edit muted tweets.
+        ///   Busca una cadena traducida similar a edit muted tweets.
         /// </summary>
         public static string EditMutedTweets {
             get {
@@ -1335,6 +1335,24 @@ namespace Ocell.Localization {
         public static string Home {
             get {
                 return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You&apos;ve already selected that image..
+        /// </summary>
+        public static string ImageAlreadySelected {
+            get {
+                return ResourceManager.GetString("ImageAlreadySelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a The image will be uploaded when you send the tweet..
+        /// </summary>
+        public static string ImageUploadOnSend {
+            get {
+                return ResourceManager.GetString("ImageUploadOnSend", resourceCulture);
             }
         }
         
@@ -2104,7 +2122,7 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Save credentials.
+        ///   Busca una cadena traducida similar a save credentials.
         /// </summary>
         public static string SaveCredentials {
             get {
@@ -2239,6 +2257,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a sending to Twitlonger....
+        /// </summary>
+        public static string SendingToTwitlonger {
+            get {
+                return ResourceManager.GetString("SendingToTwitlonger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a sending tweet....
         /// </summary>
         public static string SendingTweet {
@@ -2266,7 +2293,7 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Set custom background.
+        ///   Busca una cadena traducida similar a set custom background.
         /// </summary>
         public static string SetCustomBackground {
             get {

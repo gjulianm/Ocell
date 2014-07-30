@@ -9,8 +9,11 @@ using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Device.Location;
+using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using TweetSharp;
@@ -24,6 +27,20 @@ namespace Ocell.Pages
         public string Text { get; set; }
         public TweetType Type { get; set; }
         public long? ReplyToId { get; set; }
+    }
+
+    public class TweetImage
+    {
+        public TweetImage(string filename, Stream file)
+        {
+            this.Name = filename.Split('\\').Last();
+            this.Filename = filename;
+            this.File = file;
+        }
+
+        public string Name { get; set; }
+        public string Filename { get; set; }
+        public Stream File { get; set; }
     }
 
     [ImplementPropertyChanged]
@@ -47,7 +64,7 @@ namespace Ocell.Pages
         public bool IsSuggestingUsers { get; set; }
         public Autocompleter Completer { get; set; }
         public int TextboxSelectionStart { get; set; }
-
+        public SafeObservable<TweetImage> Images { get; set; } // I don't want to create a SafeObservableDictionary.
         public SafeObservable<string> Suggestions
         {
             get
@@ -92,19 +109,23 @@ namespace Ocell.Pages
             get { return sendWithBuffer; }
         }
 
+        public DelegateCommand RemoveImage { get; set; }
+
         #endregion Commands
 
         private GeoCoordinateWatcher geoWatcher = new GeoCoordinateWatcher();
-        private int requestsLeft;
         private NewTweetArgs args;
         private const int ShortUrlLength = 20;
         private Brush redBrush = new SolidColorBrush(Colors.Red);
         private static string savedText = "";
+        private static IEnumerable<TweetImage> savedImages = null;
         private TwitterDraft draft;
 
+        #region Constructor and event managers
         public NewTweetModel()
         {
             SelectedAccounts = new SafeObservable<UserToken>();
+            Images = new SafeObservable<TweetImage>();
             AccountList = Config.Accounts.Value.ToList();
             IsGeotagged = Config.EnabledGeolocation.Value == true &&
                 (Config.TweetGeotagging.Value == true || Config.TweetGeotagging.Value == null);
@@ -171,6 +192,30 @@ namespace Ocell.Pages
             SetUpAutocompleter();
         }
 
+        public override void OnLoad()
+        {
+            FillTweetText();
+
+            if (savedImages != null)
+                Images = new SafeObservable<TweetImage>(savedImages);
+
+            base.OnLoad();
+        }
+
+
+        public override void OnNavigating(System.ComponentModel.CancelEventArgs e)
+        {
+            TrySaveDraft();
+
+            if (Images != null && Images.Any())
+                savedImages = Images;
+            else
+                savedImages = null;
+
+            base.OnNavigating(e);
+        }
+        #endregion
+
         private void SetUpAutocompleter()
         {
             Completer = new Autocompleter(new UsernameProvider(Config.Accounts.Value));
@@ -191,12 +236,6 @@ namespace Ocell.Pages
             };
         }
 
-        public override void OnLoad()
-        {
-            FillTweetText();
-            base.OnLoad();
-        }
-
         private void FillTweetText()
         {
             if (draft != null)
@@ -205,38 +244,6 @@ namespace Ocell.Pages
                 TweetText = args.Text;
             else
                 TweetText = savedText;
-        }
-
-        private void LoadDraft(TwitterDraft draft)
-        {
-            TweetText = draft.Text;
-
-            if (draft.Scheduled != null)
-            {
-                IsScheduled = true;
-                ScheduledTime = draft.Scheduled.GetValueOrDefault();
-                ScheduledDate = draft.Scheduled.GetValueOrDefault();
-            }
-
-            foreach (var account in draft.Accounts.Where(x => x != null))
-                SelectedAccounts.Add(account);
-        }
-
-        public override void OnNavigating(System.ComponentModel.CancelEventArgs e)
-        {
-            TrySaveDraft();
-            base.OnNavigating(e);
-        }
-
-        private void TrySaveDraft()
-        {
-            savedText = TweetText;
-
-            if (draft != null)
-            {
-                draft.Text = TweetText;
-                Config.SaveDrafts();
-            }
         }
 
         private void SetRemainingChars()
@@ -269,15 +276,32 @@ namespace Ocell.Pages
             }
         }
 
-
         private bool commandsSet = false;
         private void SetupCommands()
         {
             sendTweet = new DelegateCommand(Send, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !Progress.IsLoading);
             scheduleTweet = new DelegateCommand(Schedule, (param) => (RemainingChars >= 0 || UsesTwitlonger) && SelectedAccounts.Count > 0 && !Progress.IsLoading);
-            selectImage = new DelegateCommand(StartImageChooser, (param) => SelectedAccounts.Count > 0 && !Progress.IsLoading);
+            selectImage = new DelegateCommand(StartImageChooser, (param) => !Progress.IsLoading);
             saveDraft = new DelegateCommand(SaveAsDraft, (param) => !Progress.IsLoading);
             sendWithBuffer = new DelegateCommand(SendBufferUpdate, (param) => !Progress.IsLoading && SelectedAccounts.Count > 0);
+            RemoveImage = new DelegateCommand((param) =>
+            {
+                if (param is TweetImage)
+                    Images.Remove(param as TweetImage);
+            });
+
+            sendTweet.BindCanExecuteToProperty(this, "RemainingChars", "UsesTwitlonger");
+            sendTweet.BindCanExecuteToProperty(Progress, "IsLoading");
+            scheduleTweet.BindCanExecuteToProperty(this, "RemainingChars", "UsesTwitlonger");
+            scheduleTweet.BindCanExecuteToProperty(Progress, "IsLoading");
+            sendWithBuffer.BindCanExecuteToProperty(Progress, "IsLoading");
+
+            SelectedAccounts.CollectionChanged += (sender, e) =>
+            {
+                sendTweet.RaiseCanExecuteChanged();
+                scheduleTweet.RaiseCanExecuteChanged();
+                sendWithBuffer.RaiseCanExecuteChanged();
+            };
 
             commandsSet = true;
         }
@@ -294,6 +318,7 @@ namespace Ocell.Pages
             sendWithBuffer.RaiseCanExecuteChanged();
         }
 
+        #region Buffer
         private void AskBufferLogin()
         {
             var result = Notificator.Prompt(Resources.NoBufferConfigured);
@@ -353,80 +378,9 @@ namespace Ocell.Pages
             Notificator.ShowMessage(Resources.BufferUpdateSent);
             Navigator.GoBack();
         }
+        #endregion Buffer
 
-        private void Send(object param)
-        {
-            if (!CheckProtectedAccounts())
-                return;
-
-            requestsLeft = 0;
-
-            if (SelectedAccounts.Count == 0)
-            {
-                Notificator.ShowError(Resources.SelectAccount);
-                return;
-            }
-
-            Progress.Text = Resources.SendingTweet;
-            Progress.IsLoading = true;
-
-            if (IsDM)
-            {
-                SendDirectMessage();
-            }
-            else
-            {
-
-                if (UsesTwitlonger)
-                {
-                    if (!EnsureTwitlonger())
-                    {
-                        Progress.IsLoading = false;
-                        return;
-                    }
-
-                    Progress.Text = Resources.UploadingTwitlonger;
-                    foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
-                    {
-                        SendTwitlongerPost(account);
-                    }
-                }
-                else
-                {
-                    foreach (UserToken account in SelectedAccounts.Cast<UserToken>())
-                        SendTweetToTwitter(TweetText, account);
-                }
-            }
-
-            if (draft != null)
-            {
-                if (Config.Drafts.Value.Contains(draft))
-                    Config.Drafts.Value.Remove(draft);
-
-                Config.SaveDrafts();
-            }
-        }
-
-        private async void SendDirectMessage()
-        {
-            var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
-            var response = await service.SendDirectMessageAsync(new SendDirectMessageOptions { UserId = (int)args.ReplyToId, Text = TweetText });
-
-            Progress.IsLoading = false;
-            Progress.Text = "";
-
-            if (response.StatusCode == HttpStatusCode.Forbidden)
-                Notificator.ShowError(Resources.ErrorDuplicateTweet);
-            else if (response.StatusCode != HttpStatusCode.OK)
-                Notificator.ShowError(Resources.ErrorMessage);
-            else
-            {
-                TweetText = "";
-                savedText = "";
-                Navigator.GoBack();
-            }
-        }
-
+        #region Twitlonger
         private bool EnsureTwitlonger()
         {
             return Notificator.Prompt(Resources.AskTwitlonger);
@@ -435,22 +389,19 @@ namespace Ocell.Pages
         private object dicLock = new object();
         private Dictionary<string, string> TwitlongerIds = new Dictionary<string, string>();
 
-        private async void SendTwitlongerPost(UserToken account)
+        private async Task<bool> SendTwitlongerPost(UserToken account)
         {
-            requestsLeft++;
+            Progress.Loading(Resources.SendingToTwitlonger);
             var response = await ServiceDispatcher.GetTwitlongerService(account).PostUpdate(TweetText);
-            requestsLeft--;
+            Progress.Finished();
 
             if (!response.Succeeded)
             {
-                Progress.IsLoading = false;
                 Notificator.ShowError(Resources.ErrorCreatingTwitlonger);
-                return;
+                return false;
             }
 
             var post = response.Content;
-
-            Progress.Text = Resources.SendingTweet;
 
             try
             {
@@ -462,57 +413,7 @@ namespace Ocell.Pages
                 AncoraLogger.Instance.LogException("Unkown exception saving Twitlonger Ids", e);
             }
 
-            SendTweetToTwitter(post.Post.Content, account);
-        }
-
-        private async void SendTweetToTwitter(string post, UserToken account)
-        {
-            double? latitude = null, longitude = null;
-
-            if (IsGeotagged)
-            {
-                GeoCoordinate location = IsGeotagged ? geoWatcher.Position.Location : null;
-                latitude = location.Latitude;
-                longitude = location.Longitude;
-            }
-
-            var sendOptions = new SendTweetOptions
-            {
-                Status = post,
-                InReplyToStatusId = args.ReplyToId,
-                Lat = latitude,
-                Long = longitude
-            };
-
-            requestsLeft++;
-
-            var response = await ServiceDispatcher.GetService(account).SendTweetAsync(sendOptions);
-            var status = response.Content;
-
-            requestsLeft--;
-
-            if (requestsLeft <= 0)
-                Progress.IsLoading = false;
-
-            if (response == null)
-                Notificator.ShowError(Resources.Error);
-            else if (response.StatusCode == HttpStatusCode.Forbidden)
-                Notificator.ShowError(Resources.ErrorDuplicateTweet);
-            else if (!response.RequestSucceeded)
-            {
-                var errorMsg = response.Error != null ? response.Error.Message : "";
-                Notificator.ShowError(String.Format("{0}: {1} ({2})", Resources.ErrorMessage, errorMsg, response.StatusCode));
-            }
-            else
-            {
-                TryAssociateWithTLId(status.Author.ScreenName, status.Id);
-                if (requestsLeft <= 0)
-                {
-                    TweetText = "";
-                    savedText = "";
-                    Navigator.GoBack();
-                }
-            }
+            return await SendTweetToTwitter(post.Post.Content, account);
         }
 
         private void TryAssociateWithTLId(string name, long tweetId)
@@ -528,6 +429,142 @@ namespace Ocell.Pages
                 ServiceDispatcher.GetTwitlongerService(name).SetId(id, tweetId);
         }
 
+        #endregion
+
+        #region Tweet sending
+        private async void Send(object param)
+        {
+            if (!CheckProtectedAccounts())
+                return;
+
+            if (SelectedAccounts.Count == 0)
+            {
+                Notificator.ShowError(Resources.SelectAccount);
+                return;
+            }
+
+            var accounts = SelectedAccounts.Cast<UserToken>();
+            IEnumerable<Task<bool>> tasks;
+
+            if (IsDM)
+            {
+                tasks = new List<Task<bool>> { SendDirectMessage() };
+            }
+            else if (UsesTwitlonger)
+            {
+                if (!EnsureTwitlonger())
+                    return;
+
+                tasks = accounts.Select(a => SendTwitlongerPost(a)).ToList();
+            }
+            else
+            {
+                tasks = accounts.Select(a => SendTweetToTwitter(TweetText, a)).ToList();
+            }
+
+
+            var success = (await TaskEx.WhenAll(tasks)).All(x => x);
+
+            Progress.ClearIndicator();
+
+            if (success)
+            {
+                TweetText = "";
+                savedText = "";
+                Navigator.GoBack();
+
+                if (draft != null)
+                {
+                    if (Config.Drafts.Value.Contains(draft))
+                        Config.Drafts.Value.Remove(draft);
+
+                    Config.SaveDrafts();
+                }
+            }
+        }
+
+        private async Task<bool> SendDirectMessage()
+        {
+            Progress.Loading(Resources.SendingTweet);
+
+            var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+            var response = await service.SendDirectMessageAsync(new SendDirectMessageOptions { UserId = (int)args.ReplyToId, Text = TweetText });
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                if (response.StatusCode == HttpStatusCode.Forbidden)
+                    Notificator.ShowError(Resources.ErrorDuplicateTweet);
+                else
+                    Notificator.ShowError(Resources.ErrorMessage);
+
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private async Task<bool> SendTweetToTwitter(string post, UserToken account)
+        {
+            double? latitude = null, longitude = null;
+
+            if (IsGeotagged && !geoWatcher.Position.Location.IsUnknown)
+            {
+                GeoCoordinate location = geoWatcher.Position.Location;
+                latitude = location.Latitude;
+                longitude = location.Longitude;
+            }
+
+            var sendOptions = new SendTweetOptions
+            {
+                Status = post,
+                InReplyToStatusId = args.ReplyToId,
+                Lat = latitude,
+                Long = longitude
+            };
+
+            var mediaOptions = new SendTweetWithMediaOptions
+            {
+                Status = post,
+                InReplyToStatusId = args.ReplyToId,
+                Lat = latitude,
+                Long = longitude,
+                Images = Images.ToDictionary(x => x.Name, x => x.File)
+            };
+
+            Progress.Loading(Resources.SendingTweet);
+
+            TwitterResponse<TwitterStatus> response;
+            if (Images.Any())
+                response = await ServiceDispatcher.GetService(account).SendTweetWithMediaAsync(mediaOptions);
+            else
+                response = await ServiceDispatcher.GetService(account).SendTweetAsync(sendOptions);
+
+            var status = response.Content;
+
+            if (!response.RequestSucceeded)
+            {
+                if (response.StatusCode == HttpStatusCode.Forbidden)
+                    Notificator.ShowError(Resources.ErrorDuplicateTweet);
+                else
+                {
+                    var errorMsg = response.Error != null ? response.Error.Message : "";
+                    Notificator.ShowError(String.Format("{0}: {1} ({2})", Resources.ErrorMessage, errorMsg, response.StatusCode));
+                }
+
+                return false;
+            }
+            else
+            {
+                TryAssociateWithTLId(status.Author.ScreenName, status.Id);
+
+                return true;
+            }
+        }
+        #endregion Tweet sending
+
+        #region Tweet scheduling
         private void Schedule(object param)
         {
             if (!CheckProtectedAccounts())
@@ -579,50 +616,109 @@ namespace Ocell.Pages
         private bool error;
         private void ScheduleWithServer(DateTime scheduleTime)
         {
-            requestsLeft = 0;
-            error = false;
             foreach (var user in SelectedAccounts.OfType<UserToken>())
             {
                 Progress.IsLoading = true;
-                requestsLeft++;
 
                 var scheduler = new Scheduler(user.Key, user.Secret);
 
                 scheduler.ScheduleTweet(TweetText, scheduleTime, (sender, response) =>
                 {
-                    requestsLeft--;
                     if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.NoContent)
                     {
                         error = true;
                         Notificator.ShowError(string.Format(Resources.ScheduleError, user.ScreenName));
                     }
 
-                    if (requestsLeft <= 0)
+                    // TODO: To task.
+                    Progress.IsLoading = false;
+                    if (!error)
                     {
-                        Progress.IsLoading = false;
-                        if (!error)
-                        {
-                            Notificator.ShowMessage(Resources.MessageScheduled);
-                            Navigator.GoBack();
-                        }
+                        Notificator.ShowMessage(Resources.MessageScheduled);
+                        Navigator.GoBack();
                     }
                 });
             }
         }
+        #endregion
 
+        #region Pictures
         private void StartImageChooser(object param)
         {
             PhotoChooserTask chooser = new PhotoChooserTask();
             chooser.ShowCamera = true;
-            chooser.Completed += new EventHandler<PhotoResult>(ChooserCompleted);
+            chooser.Completed += ChooserCompleted;
             chooser.Show();
         }
 
-        private void ChooserCompleted(object sender, PhotoResult e)
+        private async void ChooserCompleted(object sender, PhotoResult e)
         {
-            // TODO: Complete.
+            if (e.TaskResult != TaskResult.OK || string.IsNullOrWhiteSpace(e.OriginalFileName))
+                return;
 
-            Notificator.ShowError("Woops, not supported.");
+            var name = e.OriginalFileName.Split('\\').Last();
+            string filePath = "";
+            string img_dir = "img_cache";
+
+            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                try
+                {
+                    if (!store.DirectoryExists(img_dir))
+                        store.CreateDirectory(img_dir);
+
+                    using (var file = store.OpenFile(img_dir + "\\" + name, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.ReadWrite))
+                    {
+                        await e.ChosenPhoto.CopyToAsync(file);
+                        filePath = file.Name;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    AncoraLogger.Instance.LogException("Error copying image", ex);
+                    Notificator.ShowError(Resources.ErrorUploadingImage);
+                    return;
+                }
+            }
+
+            if (Images.Any(x => x.Filename == filePath) || string.IsNullOrEmpty(filePath))
+            {
+                AncoraLogger.Instance.LogEvent("Repeated image");
+                Notificator.ShowError(Resources.ImageAlreadySelected);
+                return;
+            }
+
+            Images.Add(new TweetImage(filePath, e.ChosenPhoto));
+
+            Notificator.ShowMessage(Resources.ImageUploadOnSend);
+        }
+        #endregion Pictures
+
+        #region Drafts
+        private void TrySaveDraft()
+        {
+            savedText = TweetText;
+
+            if (draft != null)
+            {
+                draft.Text = TweetText;
+                Config.SaveDrafts();
+            }
+        }
+
+        private void LoadDraft(TwitterDraft draft)
+        {
+            TweetText = draft.Text;
+
+            if (draft.Scheduled != null)
+            {
+                IsScheduled = true;
+                ScheduledTime = draft.Scheduled.GetValueOrDefault();
+                ScheduledDate = draft.Scheduled.GetValueOrDefault();
+            }
+
+            foreach (var account in draft.Accounts.Where(x => x != null))
+                SelectedAccounts.Add(account);
         }
 
         public void SaveAsDraft(object param)
@@ -663,6 +759,23 @@ namespace Ocell.Pages
 
             return draft;
         }
+        #endregion Drafts
+
+        #region User suggestions
+        private void UpdateAutocompleter()
+        {
+            RaisePropertyChanged("Suggestions");
+            if (Completer != null)
+            {
+                Completer.PropertyChanged += (sender, e) =>
+                {
+                    if (e.PropertyName == "IsAutocompleting")
+                        IsSuggestingUsers = Completer.IsAutocompleting;
+                };
+            }
+        }
+
+        #endregion User suggestions
 
         private IEnumerable<string> GetUrls(string text)
         {
@@ -688,21 +801,5 @@ namespace Ocell.Pages
 
             return true;
         }
-
-        #region User suggestions
-        private void UpdateAutocompleter()
-        {
-            RaisePropertyChanged("Suggestions");
-            if (Completer != null)
-            {
-                Completer.PropertyChanged += (sender, e) =>
-                {
-                    if (e.PropertyName == "IsAutocompleting")
-                        IsSuggestingUsers = Completer.IsAutocompleting;
-                };
-            }
-        }
-
-        #endregion User suggestions
     }
 }
