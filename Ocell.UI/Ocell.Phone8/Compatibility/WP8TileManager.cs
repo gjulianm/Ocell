@@ -4,8 +4,6 @@ using Ocell.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ocell.Compatibility
 {
@@ -64,9 +62,9 @@ namespace Ocell.Compatibility
 
             if (Tile != null)
             {
-                string line1 = RemoveMention(content), line2 ="";
+                string line1 = RemoveMention(content), line2 = "";
 
-                if(line1.Length > 33)
+                if (line1.Length > 33)
                 {
                     line2 = line1.Substring(33);
                     line1 = line1.Substring(0, 33);
@@ -83,24 +81,32 @@ namespace Ocell.Compatibility
             }
         }
 
-        public override void CreateColumnTile(TwitterResource Resource)
+        private Uri GetNavigationUriFor(TwitterResource resource)
+        {
+            return new Uri("/MainPage.xaml?column=" + Uri.EscapeDataString(resource.String), UriKind.Relative);
+        }
+
+
+        public override void CreateColumnTile(TwitterResource resource)
         {
 #if !BACKGROUND_AGENT
-            if (Resource == null || ColumnTileIsCreated(Resource))
+            if (resource == null || ColumnTileIsCreated(resource))
                 return;
 
-            IconicTileData ColumnTile = new IconicTileData
+            IconicTileData columnTile = new IconicTileData
             {
-                Title = GetTitle(Resource),
+                Title = GetTitle(resource),
                 IconImage = new Uri("/Images/ColumnTile.png", UriKind.Relative)
             };
 
-            Uri ColumnUri = new Uri("/MainPage.xaml?column=" + Uri.EscapeDataString(Resource.String), UriKind.Relative);
-
-            ShellTile.Create(ColumnUri, ColumnTile);
+            ShellTile.Create(GetNavigationUriFor(resource), columnTile);
 #endif
         }
 
+        public override bool ColumnTileIsCreated(TwitterResource resource)
+        {
+            return ShellTile.ActiveTiles.Any(x => x.NavigationUri != null && x.NavigationUri.ToString() == GetNavigationUriFor(resource).ToString());
+        }
 
         public override void CreateComposeTile()
         {
@@ -128,14 +134,6 @@ namespace Ocell.Compatibility
                 && !string.IsNullOrWhiteSpace(item.NavigationUri.ToString()) &&
                 item.NavigationUri.ToString().Contains("NewTweet.xaml"));
             return ComposeTile != null;
-        }
-
-        public bool ColumnTileIsCreated(TwitterResource Resource)
-        {
-            ShellTile ColumnTile = ShellTile.ActiveTiles.FirstOrDefault(item => item != null
-                && !string.IsNullOrWhiteSpace(item.NavigationUri.ToString()) &&
-                item.NavigationUri.ToString().Contains(Uri.EscapeDataString(Resource.String)));
-            return ColumnTile != null;
         }
     }
 }

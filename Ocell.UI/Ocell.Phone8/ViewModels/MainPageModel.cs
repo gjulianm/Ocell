@@ -1,5 +1,7 @@
 ﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.IoC;
 using Microsoft.Phone.Tasks;
+using Ocell.Compatibility;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Pages;
@@ -84,11 +86,10 @@ namespace Ocell
             pinToStart = new DelegateCommand((obj) =>
                 {
                     var column = SelectedPivot.Resource;
-                    /*if (Dependency.Resolve<TileManager>().ColumnTileIsCreated(column))
-                        Notificator.ShowError("This column is already pinned.");
+                    if (Dependency.Resolve<TileManager>().ColumnTileIsCreated(column))
+                        Notificator.ShowError(Localization.Resources.ColumnAlreadyPinned);
                     else
-                        SecondaryTiles.CreateColumnTile(column);*/
-                    // TODO: Column manager.
+                        SecondaryTiles.CreateColumnTile(column);
                 }, (obj) => SelectedPivot != null);
 
 

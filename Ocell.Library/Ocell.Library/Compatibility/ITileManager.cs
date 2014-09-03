@@ -20,7 +20,9 @@ namespace Ocell.Compatibility
         public abstract void ClearMainTileCount();
         public abstract void SetNotifications(IEnumerable<TileNotification> notifications);
         public abstract void SetColumnTweet(string tileString, string content, string author);
-        public abstract void CreateColumnTile(TwitterResource Resource);
+        public abstract void CreateColumnTile(TwitterResource resource);
+        public abstract void CreateComposeTile(); // Avoid Store complaints about "mehhh can't use ShellTile.Create in backgroundAgent"
+        public abstract bool ColumnTileIsCreated(TwitterResource resource);
 
         protected string GetChainOfNames(List<string> names)
         {
@@ -48,8 +50,6 @@ namespace Ocell.Compatibility
             return Tweet;
         }
 
-        public abstract void CreateComposeTile(); // Avoid Store complaints about "mehhh can't use ShellTile.Create in backgroundAgent"
-
         protected string GetTitle(TwitterResource Resource)
         {
             string title = Resource.Title.ToLowerInvariant();
@@ -58,6 +58,5 @@ namespace Ocell.Compatibility
 
             return title;
         }
-
     }
 }

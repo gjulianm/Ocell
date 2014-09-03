@@ -12,8 +12,6 @@
     <RootNamespace>Ocell</RootNamespace>
     <AssemblyName>Ocell</AssemblyName>
     <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
-    <SilverlightVersion>
-    </SilverlightVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <TargetFrameworkIdentifier>WindowsPhone</TargetFrameworkIdentifier>
