@@ -11,6 +11,7 @@ namespace Ocell.Library.Twitter
         public UserToken User { get; set; }
         public bool GetFollowers { get; set; }
         public bool GetFollowing { get; set; }
+
         private ITwitterService service;
 
         public UserProvider()
@@ -61,7 +62,7 @@ namespace Ocell.Library.Twitter
             var users = response.Content;
 
             if (users.NextCursor != null && users.NextCursor != 0 && service != null)
-                GetUsers((long)users.NextCursor); // TODO: This is not efficient if we are searching for both following and followers.
+                GetUsers((long)users.NextCursor);
             else
                 finished = true;
 
