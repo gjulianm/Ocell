@@ -110,7 +110,6 @@ namespace Ocell.Pages
         }
 
         public DelegateCommand RemoveImage { get; set; }
-
         #endregion Commands
 
         private GeoCoordinateWatcher geoWatcher = new GeoCoordinateWatcher();
@@ -565,7 +564,7 @@ namespace Ocell.Pages
         #endregion Tweet sending
 
         #region Tweet scheduling
-        private void Schedule(object param)
+        private async void Schedule(object param)
         {
             if (!CheckProtectedAccounts())
                 return;
@@ -579,7 +578,7 @@ namespace Ocell.Pages
                 0);
 
             if (TrialInformation.IsFullFeatured)
-                ScheduleWithServer(ScheduledTime);
+                await ScheduleWithServer(scheduleTime);
             else
                 ScheduleWithBackgroundAgent(scheduleTime);
         }
@@ -614,31 +613,38 @@ namespace Ocell.Pages
         }
 
         private bool error;
-        private void ScheduleWithServer(DateTime scheduleTime)
+        private async Task ScheduleWithServer(DateTime scheduleTime)
         {
+#if OCELL_FULL
+            var responses = new List<Task<HttpWebResponse>>();
+
             foreach (var user in SelectedAccounts.OfType<UserToken>())
             {
                 Progress.IsLoading = true;
 
                 var scheduler = new Scheduler(user.Key, user.Secret);
 
-                scheduler.ScheduleTweet(TweetText, scheduleTime, (sender, response) =>
-                {
-                    if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.NoContent)
-                    {
-                        error = true;
-                        Notificator.ShowError(string.Format(Resources.ScheduleError, user.ScreenName));
-                    }
+                responses.Add(scheduler.ScheduleTweet(TweetText, scheduleTime));
 
-                    // TODO: To task.
-                    Progress.IsLoading = false;
-                    if (!error)
-                    {
-                        Notificator.ShowMessage(Resources.MessageScheduled);
-                        Navigator.GoBack();
-                    }
-                });
             }
+
+            await TaskEx.WhenAll(responses);
+            Progress.IsLoading = false;
+
+            var faultedTasks = responses.Where(x => x.IsFaulted || (x.Result.StatusCode != HttpStatusCode.OK && x.Result.StatusCode != HttpStatusCode.NoContent));
+
+            if (faultedTasks.Any())
+            {
+                Notificator.ShowError(String.Format(Resources.ScheduleError, String.Join(", ", SelectedAccounts.OfType<UserToken>().Select(x => x.ScreenName))));
+            }
+            else
+            {
+                Notificator.ShowMessage(Resources.MessageScheduled);
+                Navigator.GoBack();
+            }
+#else
+            await TaskEx.Delay(0);
+#endif
         }
         #endregion
 
@@ -776,6 +782,7 @@ namespace Ocell.Pages
         }
 
         #endregion User suggestions
+
 
         private IEnumerable<string> GetUrls(string text)
         {

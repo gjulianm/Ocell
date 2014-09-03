@@ -1,7 +1,7 @@
 ﻿using Ocell.Library.Crypto;
 using System;
-using System.Diagnostics;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Ocell.Library.Tasks
 {
@@ -14,8 +14,8 @@ namespace Ocell.Library.Tasks
             accessToken = TokenCombinator.EncodeTokens(token, secret);
         }
 
-        [Conditional("OCELL_FULL")]
-        public async void ScheduleTweet(string text, DateTime dueTime, RequestCallback callback)
+#if OCELL_FULL
+        public async Task<HttpWebResponse> ScheduleTweet(string text, DateTime dueTime)
         {
             TimeSpan diff = dueTime - DateTime.Now;
             long delay = (long)diff.TotalMilliseconds;
@@ -34,10 +34,8 @@ namespace Ocell.Library.Tasks
                 response = (HttpWebResponse)e.Response;
             }
 
-            if (callback != null)
-                callback(this, response);
+            return response;
         }
+#endif
     }
-
-    public delegate void RequestCallback(object sender, HttpWebResponse response);
 }
