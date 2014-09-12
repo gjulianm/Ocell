@@ -236,9 +236,7 @@ namespace Ocell.Commands
             if (tweet == null)
                 return;
 
-            ITweeter author = tweet.Author;
-
-            FilterManager.SetupMute(FilterType.User, author.ScreenName);
+            FilterManager.CreateAndAddGlobalFilter(tweet.AuthorName, UserFilter.Creator);
             Dependency.Resolve<INotificationService>().ShowProgressIndicatorMessage(Resources.Filtered);
         }
 

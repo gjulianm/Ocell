@@ -41,7 +41,7 @@ namespace Ocell.Pages.Search
         public void UpdateTweetLoader()
         {
             AddCommand.RaiseCanExecuteChanged();
-            Listbox.Resource = Resource;
+            Listbox.Loader.Resource = Resource;
             Listbox.Load();
         }
     }

@@ -1,5 +1,4 @@
-﻿using Ocell.Library.Filtering;
-using Ocell.Library.Twitter;
+﻿using Ocell.Library.Twitter;
 using System.Linq;
 
 namespace Ocell.Library
@@ -27,8 +26,6 @@ namespace Ocell.Library
             }
         }
         public static long DMDestinationId;
-        public static ITweetableFilter Filter;
-        public static ColumnFilter cFilter;
         public static bool IsGlobalFilter;
         public static bool ShouldReloadFilters = false;
     }

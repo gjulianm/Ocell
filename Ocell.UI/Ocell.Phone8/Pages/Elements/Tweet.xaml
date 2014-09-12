@@ -67,6 +67,15 @@
 					Storyboard.TargetProperty="Height"
 					From="80" To="0" Duration="0:0:0.2" />
         </Storyboard>
+        
+        <Style x:Key="MuteButtonStyle" BasedOn="{StaticResource TextButtonStyle}" TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value ="Center" />
+            <Setter Property="VerticalAlignment" Value ="Top"  />
+            <Setter Property="Grid.Row" Value="1"  />
+            <Setter Property="Grid.Column" Value="0"  />
+            <Setter Property="FontSize" Value="26.667"  />
+            <Setter Property="FontFamily" Value="Segoe WP SemiLight" />
+        </Style>
 
     </phone:PhoneApplicationPage.Resources>
 
@@ -193,11 +202,27 @@
             </controls:PanoramaItem>
         </controls:Panorama>
 
-        <Grid x:Name="MuteGrid" Height="0" VerticalAlignment="Bottom" Margin="-12,0,-8,-11" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsMuting, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <TextBlock toolkit:TiltEffect.IsTiltEnabled="True" x:Name="MuteUser" TextWrapping="Wrap" Text="{Binding Strings.User, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Left" Margin="32,40,0,8" Foreground="{StaticResource PhoneAccentBrush}" FontSize="26.667" FontFamily="Segoe WP SemiLight" Width="94" Tap="MuteUser_Tap"/>
-            <TextBlock toolkit:TiltEffect.IsTiltEnabled="True" x:Name="MuteHashtags" TextWrapping="Wrap" Text="{Binding Strings.Hashtags, Source={StaticResource LocalizedResources}}" Margin="184,40,182,8" Foreground="{StaticResource PhoneAccentBrush}" FontSize="26.667" FontFamily="Segoe WP SemiLight" Tap="MuteHashtags_Tap"/>
-            <TextBlock toolkit:TiltEffect.IsTiltEnabled="True" x:Name="Source" TextWrapping="Wrap" Text="{Binding Strings.Source, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Right" Margin="0,40,45,16" Foreground="{StaticResource PhoneAccentBrush}" FontSize="26.667" FontFamily="Segoe WP SemiLight" Width="91" Tap="Source_Tap"/>
-            <TextBlock HorizontalAlignment="Left" Margin="16,8,0,0" TextWrapping="Wrap" Text="{Binding Strings.WhatToMute, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" FontFamily="Segoe WP Light"/>
+        <Grid x:Name="MuteGrid" Height="Auto" VerticalAlignment="Bottom" Margin="0" Background="{StaticResource PhoneChromeBrush}" Visibility="{Binding IsMuting, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="8" />
+            </Grid.RowDefinitions>
+            
+            <Button Style="{StaticResource MuteButtonStyle}" toolkit:TiltEffect.IsTiltEnabled="True" Content="{Binding Strings.User, Source={StaticResource LocalizedResources}}" 
+                    Grid.Row="1" Grid.Column="0" Command="{Binding MuteUser}"/>
+            <Button Style="{StaticResource MuteButtonStyle}" toolkit:TiltEffect.IsTiltEnabled="True" Content="{Binding Strings.Hashtags, Source={StaticResource LocalizedResources}}"  
+                    Grid.Row="1" Grid.Column="1" Command="{Binding MuteHashtags}" />
+            <Button Style="{StaticResource MuteButtonStyle}" toolkit:TiltEffect.IsTiltEnabled="True" Content="{Binding Strings.Source, Source={StaticResource LocalizedResources}}"
+                    Grid.Row="1" Grid.Column="2" Command="{Binding MuteSource}" />
+            <TextBlock Margin="8" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" TextWrapping="Wrap" Text="{Binding Strings.WhatToMute, Source={StaticResource LocalizedResources}}" VerticalAlignment="Top" FontFamily="Segoe WP Light"
+                       FontSize="22" Foreground="{StaticResource PhoneContrastBackgroundBrush}"/>
         </Grid>
 
 
@@ -207,7 +232,7 @@
             <appbar:BindableAppBar.MenuItems>
                 <appbar:BindableAppBarMenuItem Text="{Binding Strings.RetweetWithComments, Source={StaticResource LocalizedResources}}" x:Name="quoteButton" Command="{Binding Quote}"/>
                 <appbar:BindableAppBarMenuItem Text="{Binding Strings.Share, Source={StaticResource LocalizedResources}}" x:Name="shareButton" Command="{Binding Share}"/>
-                <appbar:BindableAppBarMenuItem Text="{Binding Strings.Mute, Source={StaticResource LocalizedResources}}" Tap="MuteBtn_Click"/>
+                <appbar:BindableAppBarMenuItem Text="{Binding Strings.Mute, Source={StaticResource LocalizedResources}}" Command="{Binding MuteDialogToggle}"/>
                 <appbar:BindableAppBarMenuItem Text="{Binding Strings.ReadLater, Source={StaticResource LocalizedResources}}" Command="{StaticResource ReadLaterCommand}" CommandParameter="{Binding Tweet}" />
                 <appbar:BindableAppBarMenuItem Text="{Binding Strings.DeleteTweet, Source={StaticResource LocalizedResources}}" Command="{Binding DeleteTweet}" />
             </appbar:BindableAppBar.MenuItems>

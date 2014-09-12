@@ -1,7 +1,6 @@
 ﻿using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using Ocell.Library;
 using Ocell.Library.Twitter;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +13,6 @@ namespace Ocell.Pages
     {
         protected bool SendingDM;
         public ApplicationBarIconButton SendButton;
-        private Autocompleter completer;
         NewTweetModel viewModel;
 
         public NewTweet()

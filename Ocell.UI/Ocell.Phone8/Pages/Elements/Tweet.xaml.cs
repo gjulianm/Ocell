@@ -6,7 +6,6 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Ocell.Helpers;
 using Ocell.Library;
-using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
 using System;
 using System.Threading;
@@ -72,6 +71,13 @@ namespace Ocell.Pages.Elements
                     else
                         Dispatcher.BeginInvoke(() => UserListHide.Begin());
                 }
+                else if (ev.PropertyName == "IsMuting")
+                {
+                    if (ViewModel.IsMuting)
+                        this.BackKeyPress += HideMuteGrid;
+                    else
+                        this.BackKeyPress -= HideMuteGrid;
+                }
             };
 
             if (ViewModel.ShowWebLink && Uri.IsWellFormedUriString(ViewModel.WebUrl, UriKind.Absolute))
@@ -112,7 +118,7 @@ namespace Ocell.Pages.Elements
             if (conversation.Loader.Resource != resource)
             {
                 conversation.Loader.Source.Clear();
-                conversation.Resource = resource;
+                conversation.Loader.Resource = resource;
             }
 
             conversation.Loader.Cached = false;
@@ -134,77 +140,10 @@ namespace Ocell.Pages.Elements
                 ViewModel.NavigateToAuthor.Execute(null);
         }
 
-        private ITweetableFilter CreateNewFilter(FilterType type, string data)
-        {
-            if (Config.GlobalFilter.Value == null)
-                Config.GlobalFilter.Value = new ColumnFilter();
-
-            if (Config.DefaultMuteTime.Value == null)
-                Config.DefaultMuteTime.Value = TimeSpan.FromHours(8);
-
-            ITweetableFilter filter = new ITweetableFilter();
-            filter.Type = type;
-            filter.Filter = data;
-            if (Config.DefaultMuteTime.Value == TimeSpan.MaxValue)
-                filter.IsValidUntil = DateTime.MaxValue;
-            else
-                filter.IsValidUntil = DateTime.Now + (TimeSpan)Config.DefaultMuteTime.Value;
-            filter.Inclusion = IncludeOrExclude.Exclude;
-
-            Config.GlobalFilter.Value.AddFilter(filter);
-            Config.GlobalFilter.Value = Config.GlobalFilter.Value;
-
-            return filter;
-        }
-
-        private void MuteUser_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            var filter = FilterManager.SetupMute(FilterType.User, ViewModel.Tweet.Author.ScreenName);
-            Dependency.Resolve<INotificationService>().
-                ShowMessage(String.Format(Localization.Resources.UserIsMutedUntil, ViewModel.Tweet.Author.ScreenName, filter.IsValidUntil.ToString("f")));
-            ViewModel.IsMuting = false;
-        }
-
-        private void MuteHashtags_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            ITweetableFilter filter = null;
-            string message = "";
-            foreach (var entity in ViewModel.Tweet.Entities)
-            {
-                if (entity.EntityType == TwitterEntityType.HashTag)
-                {
-                    filter = FilterManager.SetupMute(FilterType.Text, ((TwitterHashTag)entity).Text);
-                    message += ((TwitterHashTag)entity).Text + ", ";
-                }
-            }
-            if (message == "")
-                Dependency.Resolve<INotificationService>().ShowMessage(Localization.Resources.NoHashtagsToMute);
-            else
-                Dependency.Resolve<INotificationService>().
-                ShowMessage(String.Format(Localization.Resources.HashtagsMutedUntil, message.Substring(0, message.Length - 2), filter.IsValidUntil.ToString("f")));
-            ViewModel.IsMuting = false;
-        }
-
-        private void Source_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            RemoveHTML conv = new RemoveHTML();
-            string source = conv.Convert(ViewModel.Tweet.Source, null, null, null) as string;
-            var filter = FilterManager.SetupMute(FilterType.Source, source);
-            Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.SourceMutedUntil, source, filter.IsValidUntil.ToString("f"))); // TODO: Refactor this already.
-            ViewModel.IsMuting = false;
-        }
-
         void HideMuteGrid(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
             ViewModel.IsMuting = false;
-            this.BackKeyPress -= HideMuteGrid;
-        }
-
-        private void MuteBtn_Click(object sender, EventArgs e)
-        {
-            this.BackKeyPress += HideMuteGrid;
-            ViewModel.IsMuting = true;
         }
 
         private void ImageFailed(object sender, ExceptionRoutedEventArgs e)

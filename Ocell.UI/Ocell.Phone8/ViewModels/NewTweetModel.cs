@@ -612,7 +612,6 @@ namespace Ocell.Pages
             Navigator.GoBack();
         }
 
-        private bool error;
         private async Task ScheduleWithServer(DateTime scheduleTime)
         {
 #if OCELL_FULL

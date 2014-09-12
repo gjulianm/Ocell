@@ -182,7 +182,7 @@ namespace Ocell.Helpers
 
             RoutedEventHandler clickHandler = (sender, e) =>
             {
-                var filter = FilterManager.SetupMute(FilterType.Text, "#" + hashtag.Text);
+                var filter = FilterManager.CreateAndAddGlobalFilter("#" + hashtag.Text, HashtagFilter.Creator);
                 Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")));
             };
 
@@ -199,7 +199,7 @@ namespace Ocell.Helpers
                 Uri uri;
                 if (Uri.TryCreate(media.DisplayUrl, UriKind.Absolute, out uri))
                 {
-                    var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
+                    var filter = FilterManager.CreateAndAddGlobalFilter(uri.Host, TextFilter.Creator);
                     Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")));
                 }
                 else
@@ -217,7 +217,7 @@ namespace Ocell.Helpers
                 Uri uri;
                 if (Uri.TryCreate(url.ExpandedValue, UriKind.Absolute, out uri))
                 {
-                    var filter = FilterManager.SetupMute(FilterType.Text, uri.Host);
+                    var filter = FilterManager.CreateAndAddGlobalFilter(uri.Host, TextFilter.Creator);
                     Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")));
                 }
                 else
@@ -235,7 +235,7 @@ namespace Ocell.Helpers
 
             RoutedEventHandler clickHandler = (sender, e) =>
             {
-                var filter = FilterManager.SetupMute(FilterType.User, mention.ScreenName);
+                var filter = FilterManager.CreateAndAddGlobalFilter(mention.ScreenName, UserFilter.Creator);
                 Dependency.Resolve<INotificationService>().ShowMessage(String.Format(Localization.Resources.MutedUntil, filter.IsValidUntil.ToString("f")));
             };
 

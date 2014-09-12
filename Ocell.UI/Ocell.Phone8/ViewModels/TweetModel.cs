@@ -3,6 +3,7 @@ using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using Ocell.Commands;
 using Ocell.Library;
+using Ocell.Library.Filtering;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
 using PropertyChanged;
@@ -47,6 +48,10 @@ namespace Ocell.Pages.Elements
         public DelegateCommand Favorite { get; set; }
         public DelegateCommand SendTweet { get; set; }
         public DelegateCommand NavigateToAuthor { get; set; }
+        public DelegateCommand MuteUser { get; set; }
+        public DelegateCommand MuteHashtags { get; set; }
+        public DelegateCommand MuteSource { get; set; }
+        public DelegateCommand MuteDialogToggle { get; set; }
         public event EventHandler<EventArgs<ITweetable>> TweetSent;
 
         private List<string> ImagesOriginalUrls = new List<string>();
@@ -240,6 +245,8 @@ namespace Ocell.Pages.Elements
             }, p => Tweet != null && (Tweet.Author != null || !string.IsNullOrWhiteSpace(Tweet.AuthorName)));
 
             NavigateToAuthor.BindCanExecuteToProperty(this, "Tweet");
+
+            SetupMuteCommands();
         }
 
         async void FillUser()
@@ -342,5 +349,38 @@ namespace Ocell.Pages.Elements
         {
             ReplyText = ReplyAllCommand.GetReplied(Tweet);
         }
+
+
+        #region Filters and muting
+        private void CreateAndSetupFilter(Func<TimeSpan, ElementFilter<ITweetable>> filterCreator)
+        {
+            var filter = filterCreator((TimeSpan)Config.DefaultMuteTime.Value);
+
+            Config.GlobalFilter.Value.Add(filter);
+            Config.SaveGlobalFilter();
+
+            Notificator.ShowMessage(string.Format(Resources.MutedUntil, filter.Filter, filter.IsValidUntil.ToString("f")));
+            IsMuting = false;
+        }
+
+        private void SetupMuteCommands()
+        {
+            MuteHashtags = new DelegateCommand(() =>
+            {
+                foreach (var hashtag in Tweet.Entities.HashTags.Select(x => x.Text))
+                    CreateAndSetupFilter(ts => new HashtagFilter(hashtag, ts));
+            }, () => Tweet != null && Tweet.Entities != null && Tweet.Entities.HashTags != null && Tweet.Entities.HashTags.Any());
+
+            MuteHashtags.BindCanExecuteToProperty(this, "Tweet");
+
+            MuteSource = new DelegateCommand(() => CreateAndSetupFilter(ts => new SourceFilter(Tweet.Source, ts)), () => Tweet != null);
+            MuteSource.BindCanExecuteToProperty(this, "Tweet");
+
+            MuteUser = new DelegateCommand(() => CreateAndSetupFilter(ts => new UserFilter(Tweet.AuthorName, ts)), () => Tweet != null);
+            MuteUser.BindCanExecuteToProperty(this, "Tweet");
+
+            MuteDialogToggle = new DelegateCommand(() => IsMuting = !IsMuting);
+        }
+        #endregion
     }
 }

@@ -42,6 +42,14 @@ namespace Ocell.Controls
                 return;
 
             Loader.Error += Loader_Error;
+            OnResourceChanged();
+
+            Loader.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == "Resource")
+                    OnResourceChanged();
+            };
+
             SetupCollectionViewSource();
         }
 
@@ -73,8 +81,8 @@ namespace Ocell.Controls
         public string NavigationUri { get; set; }
         public bool AutoManageErrors { get; set; }
 
-        private ColumnFilter filter;
-        public ColumnFilter Filter
+        private IEnumerable<ElementFilter<ITweetable>> filter;
+        public IEnumerable<ElementFilter<ITweetable>> Filter
         {
             get
             {
@@ -84,7 +92,7 @@ namespace Ocell.Controls
             {
                 filter = value;
                 if (filter != null)
-                    Loader.Source.Filter = filter.GetPredicate();
+                    Loader.Source.Discarder = filter.ExcludesElement;
             }
         }
 
@@ -106,25 +114,18 @@ namespace Ocell.Controls
             }
         }
 
-        public TwitterResource Resource
+        private void OnResourceChanged()
         {
-            get
+            if (readingPosManager != null && readingPosManager.Bound)
             {
-                if (Loader != null)
-                    return Loader.Resource;
-                else
-                    return null;
+                readingPosManager.Unbind();
+                readingPosManager.Bind(this);
             }
-            set
-            {
-                if (readingPosManager != null && readingPosManager.Bound)
-                {
-                    readingPosManager.Unbind();
-                    readingPosManager.Bind(this);
-                }
 
-                if (Loader != null)
-                    Loader.Resource = value;
+            if (Loader.Resource != null)
+            {
+                FilterManager.SubscribeToFilterChanges(Loader.Resource, (s, e) => Dispatcher.BeginInvoke(SetupFilters));
+                SetupFilters();
             }
         }
 
@@ -155,6 +156,8 @@ namespace Ocell.Controls
 
             readingPosManager = Dependency.Resolve<IReadingPositionManager>();
             pullDetector = Dependency.Resolve<IListboxCompressionDetector>();
+
+            SetupFilters();
         }
 
         bool viewportChanged = false;
@@ -193,9 +196,15 @@ namespace Ocell.Controls
         private void SetTag()
         {
             if (this.Tag != null && this.Tag is string)
-                Resource = new TwitterResource() { String = this.Tag as string };
+                Loader.Resource = new TwitterResource() { String = this.Tag as string };
             else if (this.Tag is TwitterResource)
-                Resource = (TwitterResource)this.Tag;
+                Loader.Resource = (TwitterResource)this.Tag;
+        }
+
+        private void SetupFilters()
+        {
+            if (Loader.Resource != null)
+                Filter = FilterManager.GetFiltersFor(Loader.Resource);
         }
 
         #endregion

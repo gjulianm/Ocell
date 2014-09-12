@@ -632,7 +632,7 @@
     <comment>Tweet.xaml.cs</comment>
   </data>
 	<data name="MutedUntil" xml:space="preserve">
-    <value>Silenziato fino a {0}.</value>
+    <value>{0} silenziato fino a {1}.</value>
     <comment>Tweet.xaml.cs</comment>
   </data>
 	<data name="MuteHashtag" xml:space="preserve">

@@ -6,6 +6,7 @@ using Ocell.Library.Twitter;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using TweetSharp;
 
 
 namespace Ocell.Library
@@ -111,23 +112,27 @@ namespace Ocell.Library
             ProtectedAccounts.Value = ProtectedAccounts.Value;
         }
 
-        public readonly static ConfigItem<List<ColumnFilter>> Filters = new ConfigItem<List<ColumnFilter>>
+        public readonly static ConfigItem<Dictionary<TwitterResource, ObservableCollection<ElementFilter<ITweetable>>>> Filters = new ConfigItem<Dictionary<TwitterResource, ObservableCollection<ElementFilter<ITweetable>>>>
         {
             Key = "FILTERS",
-            DefaultValue = new List<ColumnFilter>()
+            DefaultValue = new Dictionary<TwitterResource, ObservableCollection<ElementFilter<ITweetable>>>()
         };
-
 
         public static void SaveFilters()
         {
             Filters.Value = Filters.Value;
         }
 
-        public readonly static ConfigItem<ColumnFilter> GlobalFilter = new ConfigItem<ColumnFilter>
+        public readonly static ConfigItem<ObservableCollection<ElementFilter<ITweetable>>> GlobalFilter = new ConfigItem<ObservableCollection<ElementFilter<ITweetable>>>
         {
-            Key = "GLOBALFILTER"
+            Key = "GLOBALFILTER",
+            DefaultValue = new ObservableCollection<ElementFilter<ITweetable>>()
         };
 
+        public static void SaveGlobalFilter()
+        {
+            GlobalFilter.Value = GlobalFilter.Value;
+        }
 
         public readonly static ConfigItem<bool?> RetweetAsMentions = new ConfigItem<bool?>
         {
@@ -146,7 +151,7 @@ namespace Ocell.Library
         public readonly static ConfigItem<TimeSpan?> DefaultMuteTime = new ConfigItem<TimeSpan?>
         {
             Key = "DEFAULTMUTETIME",
-            DefaultValue = TimeSpan.FromHours(6)
+            DefaultValue = TimeSpan.FromHours(8)
         };
 
 

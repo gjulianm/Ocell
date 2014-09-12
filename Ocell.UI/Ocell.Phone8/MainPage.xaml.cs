@@ -161,31 +161,12 @@ namespace Ocell
 
             context.Listbox = list;
 
-            FilterManager.SetupFilter(list);
-
             list.AutoReload();
 
-            Dispatcher.BeginInvoke(() =>
-            {
-                list.Loaded -= ListBox_Loaded;
-                list.Loaded += new RoutedEventHandler(CheckForFilterUpdate);
-            });
-
-            GlobalEvents.FiltersChanged += (sender1, e1) => Dispatcher.BeginInvoke(() => FilterManager.SetupFilter(list));
+            Dispatcher.BeginInvoke(() => list.Loaded -= ListBox_Loaded);
 
             viewModel.PreloadedLists++;
         }
-
-        private void CheckForFilterUpdate(object sender, RoutedEventArgs e)
-        {
-            ExtendedListBox list = sender as ExtendedListBox;
-            if (list != null && ((DataTransfer.ShouldReloadFilters && DataTransfer.cFilter.Resource == list.Loader.Resource) || DataTransfer.IsGlobalFilter))
-            {
-                FilterManager.SetupFilter(list);
-                DataTransfer.ShouldReloadFilters = false;
-            }
-        }
-
         #endregion List management
 
         #region RecoverDialog
