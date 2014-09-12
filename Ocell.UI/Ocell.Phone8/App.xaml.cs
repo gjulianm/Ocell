@@ -103,7 +103,7 @@ namespace Ocell
 
             Config.InitConfig();
 
-            bool isDarkTheme = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
+            OcellTheme.IsDarkThemeSet = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
 
             if (Ocell.Library.Config.Background.Value.Type == LightOrDark.Light)
                 ThemeManager.ToLightTheme();
