@@ -2,13 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ocell.Tests.Mocks
 {
-    public class MockMemoryStream: MemoryStream
+    public class MockMemoryStream : MemoryStream
     {
         protected override void Dispose(bool disposing)
         {
@@ -44,7 +41,7 @@ namespace Ocell.Tests.Mocks
         public override AncoraMVVM.Base.Files.File OpenFile(string path, FilePermissions permissions, FileOpenMode mode)
         {
             MockMemoryStream stream;
-         
+
             if (!streams.TryGetValue(path, out stream))
             {
                 stream = new MockMemoryStream();
@@ -52,7 +49,7 @@ namespace Ocell.Tests.Mocks
             }
 
             stream.Seek(0, SeekOrigin.Begin);
-            
+
             return new AncoraMVVM.Base.Files.File
             {
                 CompletePath = path,

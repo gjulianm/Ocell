@@ -52,11 +52,18 @@
     <globalSetting name="autoTranslateForm.prefixCheckBox.Checked">False</globalSetting>
     <globalSetting name="autoTranslateForm.referenceLanguageComboBoxEdit.SelectedIndex">2</globalSetting>
     <globalSetting name="autoTranslateForm.languagesToTranslateCheckListBox">0;2</globalSetting>
-    <globalSetting name="projectMruItems">&lt;?xml version='1.0' encoding='utf-8'?&gt;&lt;items&gt;&lt;item type="2" checksum="4678297025" /&gt;&lt;/items&gt;</globalSetting>
+    <globalSetting name="projectMruItems">&lt;?xml version='1.0' encoding='utf-8'?&gt;&lt;items&gt;&lt;item type="2" checksum="4678297025" /&gt;&lt;item type="0" checksum="1495344443" /&gt;&lt;/items&gt;</globalSetting>
+    <globalSetting name="CreateNewFilesForm.prefixTextBox.Text">####</globalSetting>
+    <globalSetting name="CreateNewFilesForm.prefixCheckBox.Checked">False</globalSetting>
+    <globalSetting name="CreateNewFilesForm.referenceLanguageComboBox.SelectedIndex">0</globalSetting>
+    <globalSetting name="CreateNewFilesForm.destinationLanguagesListBox">
+    </globalSetting>
+    <globalSetting name="CreateNewFilesForm.copyTextsCheckBox.Checked">False</globalSetting>
+    <globalSetting name="CreateNewFilesForm.automaticallyTranslateCheckBox.Checked">False</globalSetting>
     <userSetting name="Guillermo@WIN8.filesInitialDir">C:\Users\Guillermo\Dropbox\Ocell\Ocell.Library\Ocell.Localization</userSetting>
     <userSetting name="Guillermo@WIN8.FindText">
     </userSetting>
-    <userSetting name="Guillermo@WIN8.RecentFiles">C:\Users\Guillermo\Dropbox\Desarrollo\Ocell\Ocell.Library\Ocell.Localization\Resources.resx;C:\Users\Guillermo\Dropbox\Desarrollo\Ocell\Ocell.Library\Ocell.Localization\Resources.de.resx;C:\Users\Guillermo\Dropbox\Desarrollo\Ocell\Ocell.Library\Ocell.Localization\Resources.es.resx;C:\Users\Guillermo\Dropbox\Desarrollo\Ocell\Ocell.Library\Ocell.Localization\Resources.it.resx</userSetting>
+    <userSetting name="Guillermo@WIN8.RecentFiles">C:\Users\Guillermo\Dropbox\Desarrollo\Ocell\Ocell.Library\Ocell.Localization\Resources.resx;C:\Users\Guillermo\Dropbox\Desarrollo\Ocell\Ocell.Library\Ocell.Localization\Resources.de.resx;C:\Users\Guillermo\Dropbox\Desarrollo\Ocell\Ocell.Library\Ocell.Localization\Resources.es.resx;C:\Users\Guillermo\Dropbox\Desarrollo\Ocell\Ocell.Library\Ocell.Localization\Resources.it.resx###***###C:\Users\Guillermo\Dropbox\Desarrollo\Ocell\Ocell.Library\Ocell.Localization\Resources.resx;C:\Users\Guillermo\Dropbox\Desarrollo\Ocell\Ocell.Library\Ocell.Localization\Resources.de.resx;C:\Users\Guillermo\Dropbox\Desarrollo\Ocell\Ocell.Library\Ocell.Localization\Resources.es.resx;C:\Users\Guillermo\Dropbox\Desarrollo\Ocell\Ocell.Library\Ocell.Localization\Resources.it.resx</userSetting>
     <description>
     </description>
   </configuration>

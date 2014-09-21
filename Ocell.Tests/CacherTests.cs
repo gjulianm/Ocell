@@ -2,11 +2,10 @@
 using AncoraMVVM.Base.IoC;
 using NUnit.Framework;
 using Ocell.Library.Twitter;
+using Ocell.Tests.TestHelpers.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TweetSharp;
 
 namespace Ocell.Tests
@@ -64,7 +63,7 @@ namespace Ocell.Tests
 
             var received = Cacher.GetFromCache(resource);
 
-            foreach(var pair in statuses.Zip(received))
+            foreach (var pair in statuses.Zip(received))
                 AssertEx.PropertyValuesAreEquals(pair.Item2, pair.Item1);
         }
     }

@@ -10,6 +10,7 @@
 
 namespace Ocell.Localization {
     using System;
+    using System.Reflection;
     
     
     /// <summary>
@@ -39,7 +40,7 @@ namespace Ocell.Localization {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Ocell.Localization.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Ocell.Localization.Resources", typeof(Resources).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -286,6 +287,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Are you sure you want to discard changes?.
+        /// </summary>
+        public static string AskDiscardFilter {
+            get {
+                return ResourceManager.GetString("AskDiscardFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Do you want to enable push notifications in Ocell?.
         /// </summary>
         public static string AskEnablePush {
@@ -336,6 +346,15 @@ namespace Ocell.Localization {
         public static string Authenticating {
             get {
                 return ResourceManager.GetString("Authenticating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a author.
+        /// </summary>
+        public static string author {
+            get {
+                return ResourceManager.GetString("author", resourceCulture);
             }
         }
         
@@ -709,6 +728,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a custom date.
+        /// </summary>
+        public static string CustomDate {
+            get {
+                return ResourceManager.GetString("CustomDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Date.
         /// </summary>
         public static string Date {
@@ -867,6 +895,15 @@ namespace Ocell.Localization {
         public static string DraftSaved {
             get {
                 return ResourceManager.GetString("DraftSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a during.
+        /// </summary>
+        public static string During {
+            get {
+                return ResourceManager.GetString("During", resourceCulture);
             }
         }
         
@@ -1312,6 +1349,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a hashtag.
+        /// </summary>
+        public static string hashtag {
+            get {
+                return ResourceManager.GetString("hashtag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Hashtags.
         /// </summary>
         public static string Hashtags {
@@ -1362,6 +1408,15 @@ namespace Ocell.Localization {
         public static string InvalidCredentials {
             get {
                 return ResourceManager.GetString("InvalidCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a is.
+        /// </summary>
+        public static string Is {
+            get {
+                return ResourceManager.GetString("Is", resourceCulture);
             }
         }
         
@@ -1528,7 +1583,7 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Muted until {0}..
+        ///   Busca una cadena traducida similar a Muted {0} until {1}..
         /// </summary>
         public static string MutedUntil {
             get {
@@ -2005,6 +2060,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a remove.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a @{0} was removed from the list {1}..
         /// </summary>
         public static string RemovedFromList {
@@ -2338,6 +2402,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a show only.
+        /// </summary>
+        public static string ShowOnly {
+            get {
+                return ResourceManager.GetString("ShowOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Show &quot;Resume reading&quot; button.
         /// </summary>
         public static string ShowResumeButton {
@@ -2379,6 +2452,15 @@ namespace Ocell.Localization {
         public static string Source {
             get {
                 return ResourceManager.GetString("Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a source.
+        /// </summary>
+        public static string Source_LC {
+            get {
+                return ResourceManager.GetString("Source_LC", resourceCulture);
             }
         }
         
@@ -2532,6 +2614,15 @@ namespace Ocell.Localization {
         public static string TweetsPerRequest {
             get {
                 return ResourceManager.GetString("TweetsPerRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a tweets where the {0}.
+        /// </summary>
+        public static string TweetsWhere {
+            get {
+                return ResourceManager.GetString("TweetsWhere", resourceCulture);
             }
         }
         

@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.Library.Tests", "Ocel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.ViewModels", "Ocell.ViewModels\Ocell.ViewModels.csproj", "{5D7666A9-0FCE-40E1-9591-3AEE788CFE81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocell.ViewModels.Tests", "Ocell.ViewModels.Tests\Ocell.ViewModels.Tests.csproj", "{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ClientProfiles|Any CPU = ClientProfiles|Any CPU
@@ -643,6 +645,62 @@ Global
 		{5D7666A9-0FCE-40E1-9591-3AEE788CFE81}.Staging|Mixed Platforms.Build.0 = Release|Any CPU
 		{5D7666A9-0FCE-40E1-9591-3AEE788CFE81}.Staging|PHP 5.3.ActiveCfg = Release|Any CPU
 		{5D7666A9-0FCE-40E1-9591-3AEE788CFE81}.Staging|x86.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.ClientProfiles|Any CPU.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.ClientProfiles|Any CPU.Build.0 = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.ClientProfiles|ARM.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.ClientProfiles|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.ClientProfiles|Mixed Platforms.Build.0 = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.ClientProfiles|PHP 5.3.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.ClientProfiles|x86.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug_Lite|Any CPU.ActiveCfg = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug_Lite|Any CPU.Build.0 = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug_Lite|ARM.ActiveCfg = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug_Lite|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug_Lite|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug_Lite|PHP 5.3.ActiveCfg = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug_Lite|x86.ActiveCfg = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug|PHP 5.3.ActiveCfg = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Local|Any CPU.Build.0 = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Local|ARM.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Local|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Local|Mixed Platforms.Build.0 = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Local|PHP 5.3.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Local|x86.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Production|Any CPU.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Production|Any CPU.Build.0 = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Production|ARM.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Production|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Production|Mixed Platforms.Build.0 = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Production|PHP 5.3.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Production|x86.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release_Lite|Any CPU.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release_Lite|Any CPU.Build.0 = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release_Lite|ARM.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release_Lite|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release_Lite|Mixed Platforms.Build.0 = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release_Lite|PHP 5.3.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release_Lite|x86.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release|ARM.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release|PHP 5.3.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Release|x86.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Staging|Any CPU.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Staging|Any CPU.Build.0 = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Staging|ARM.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Staging|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Staging|Mixed Platforms.Build.0 = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Staging|PHP 5.3.ActiveCfg = Release|Any CPU
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85}.Staging|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -657,5 +715,6 @@ Global
 		{BE5CB76C-F1D1-415F-A4E5-FC6EF6EE6914} = {C86EAC59-8F69-491B-A984-46BF9018242E}
 		{B059A6CE-90FC-4480-BE05-E46C978152D2} = {C86EAC59-8F69-491B-A984-46BF9018242E}
 		{5D7666A9-0FCE-40E1-9591-3AEE788CFE81} = {29334B7B-5C43-4C89-B4D8-DDFB94666CDC}
+		{D133E0D1-0CBF-4FDC-8405-0D3B58F57E85} = {C86EAC59-8F69-491B-A984-46BF9018242E}
 	EndGlobalSection
 EndGlobal

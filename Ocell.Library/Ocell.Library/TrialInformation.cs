@@ -34,10 +34,10 @@ namespace Ocell
         {
             if (IsFull)
             {
-                if (Config.TrialStart.Value == DateTime.MaxValue)
+                if (Config.TrialStart != null && Config.TrialStart.Value == DateTime.MaxValue)
                     Config.TrialStart.Value = DateTime.Now;
 
-                IsTrial = RequestTrialInfo();
+                IsTrial = RequestTrialInfo != null && RequestTrialInfo();
             }
             else
             {

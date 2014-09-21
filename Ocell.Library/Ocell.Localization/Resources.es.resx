@@ -1252,4 +1252,34 @@
 	<data name="SendingToTwitlonger" xml:space="preserve">
 		<value>enviando a Twitlonger...</value>
 	</data>
+	<data name="author" xml:space="preserve">
+		<value>autor</value>
+	</data>
+	<data name="hashtag" xml:space="preserve">
+		<value>hashtag</value>
+	</data>
+	<data name="Source_LC" xml:space="preserve">
+		<value>vía</value>
+	</data>
+	<data name="TweetsWhere" xml:space="preserve">
+		<value>tweets cuyo {0}</value>
+	</data>
+	<data name="ShowOnly" xml:space="preserve">
+		<value>mostrar sólo</value>
+	</data>
+	<data name="Remove" xml:space="preserve">
+		<value>eliminar</value>
+	</data>
+	<data name="Is" xml:space="preserve">
+		<value>es</value>
+	</data>
+	<data name="CustomDate" xml:space="preserve">
+		<value>fecha personalizada</value>
+	</data>
+	<data name="During" xml:space="preserve">
+		<value>durante</value>
+	</data>
+	<data name="AskDiscardFilter" xml:space="preserve">
+		<value>¿Estás seguro de querer descartar los cambios?</value>
+	</data>
 </root>

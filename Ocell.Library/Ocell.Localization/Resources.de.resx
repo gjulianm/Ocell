@@ -1252,4 +1252,10 @@
 	<data name="SendingToTwitlonger" xml:space="preserve">
 		<value>Senden an Twitlonger...</value>
 	</data>
+	<data name="hashtag" xml:space="preserve">
+		<value>hashtag</value>
+	</data>
+	<data name="Source_LC" xml:space="preserve">
+		<value>quelle</value>
+	</data>
 </root>

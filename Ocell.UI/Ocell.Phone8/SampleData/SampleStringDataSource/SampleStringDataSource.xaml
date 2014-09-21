@@ -1,0 +1,12 @@
+﻿<!--
+      *********    NO MODIFIQUE ESTE ARCHIVO     *********
+      Este archivo se regenera mediante una herramienta de diseño.
+       Si realiza cambios en este archivo, puede causar errores.
+-->
+<SampleData:SampleStringDataSource xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.SampleStringDataSource" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <SampleData:SampleStringDataSource.Collection>
+    <SampleData:Item Property1="Maecenas" />
+    <SampleData:Item Property1="Aenean" />
+    <SampleData:Item Property1="Praesent" />
+  </SampleData:SampleStringDataSource.Collection>
+</SampleData:SampleStringDataSource>
