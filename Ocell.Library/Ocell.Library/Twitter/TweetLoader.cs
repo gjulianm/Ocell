@@ -1,18 +1,16 @@
-﻿using AncoraMVVM.Base.Collections;
+﻿using AncoraMVVM.Base;
+using AncoraMVVM.Base.Collections;
+using AncoraMVVM.Base.Diagnostics;
 using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
-using AncoraMVVM.Base;
 using Ocell.Library.Twitter.Comparers;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using TweetSharp;
-using AncoraMVVM.Base.Diagnostics;
-using PropertyChanged;
 
 namespace Ocell.Library.Twitter
 {
@@ -153,7 +151,7 @@ namespace Ocell.Library.Twitter
 
         public void DeferredCacheLoad()
         {
-            new Timer((context) => LoadCache(), null, 1000, Timeout.Infinite);
+            TaskEx.Delay(1000).ContinueWith((t) => LoadCache());
         }
 
         public void SaveToCacheAsync(IList<ITweetable> viewport)
@@ -360,7 +358,7 @@ namespace Ocell.Library.Twitter
             {
                 return await task;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 AncoraLogger.Instance.LogException("Exception wrapped and controlled", e);
                 throw e;
