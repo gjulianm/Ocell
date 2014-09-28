@@ -222,7 +222,6 @@
     <Compile Include="Pages\Columns\ManageColumns.xaml.cs">
       <DependentUpon>ManageColumns.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\ManageDraftsModel.cs" />
     <Compile Include="Pages\Elements\DMConversation.xaml.cs">
       <DependentUpon>DMConversation.xaml</DependentUpon>
     </Compile>

@@ -1,5 +1,6 @@
 ﻿
 using AncoraMVVM.Base;
+using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Pages;
 namespace Ocell.ViewModels
@@ -12,12 +13,18 @@ namespace Ocell.ViewModels
 
         public DraftsModel()
         {
+            Drafts = new SafeObservable<TwitterDraft>();
+
             RemoveDraft = new DelegateCommand((param) =>
             {
                 var draft = param as TwitterDraft;
                 if (draft != null)
-                    Drafts.Remove(draft);
+                    Config.Drafts.Value.Remove(draft);
             });
+
+            var replayer = new ObservableCollectionReplayer();
+
+            replayer.ReplayTo(Config.Drafts.Value, Drafts);
 
             this.PropertyChanged += (s, e) =>
             {
