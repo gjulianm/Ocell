@@ -13,7 +13,7 @@ namespace Ocell.ViewModels
 
         public DraftsModel()
         {
-            Drafts = new SafeObservable<TwitterDraft>();
+            Drafts = new SafeObservable<TwitterDraft>(Config.Drafts.Value);
 
             RemoveDraft = new DelegateCommand((param) =>
             {
