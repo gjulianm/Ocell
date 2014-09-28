@@ -85,7 +85,7 @@
     <appbar:Bindable.ApplicationBar>
         <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
             <appbar:BindableAppBar.MenuItems>
-                <appbar:BindableAppBarHyperlinkMenuItem Text="{Binding Strings.Drafts, Source={StaticResource LocalizedResources}}" Uri="/Pages/Drafts/ManageDrafts.xaml" />
+                <appbar:BindableAppBarHyperlinkMenuItem Text="{Binding Strings.Drafts, Source={StaticResource LocalizedResources}}" Uri="/Pages/Drafts.xaml" />
             </appbar:BindableAppBar.MenuItems>
             <appbar:BindableAppBarToggleButton Toggled="{Binding IsScheduled}"
                     Text1="{Binding Strings.Send, Source={StaticResource LocalizedResources}}" IconUri1="/Images/Icons_White/appbar.sendmail.rest.png" Command1="{Binding SendTweet}"
