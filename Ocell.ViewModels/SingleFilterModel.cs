@@ -15,7 +15,7 @@ namespace Ocell.ViewModels
     {
         public ElementFilter<ITweetable> Filter { get; set; }
 
-        public List<string> FilterTypes = new List<string> { Resources.author, Resources.hashtag, Resources.Source_LC, Resources.TweetText };
+        public List<string> FilterTypes { get; set; }
         public string SelectedFilterType { get; set; }
         public string FilterDescription
         {
@@ -24,7 +24,7 @@ namespace Ocell.ViewModels
                 return String.Format(Resources.TweetsWhere, SelectedFilterType);
             }
         }
-        public List<string> InclusionStrings = new List<string> { Resources.ShowOnly, Resources.Remove };
+        public List<string> InclusionStrings { get; set; }
         public string SelectedInclusion { get; set; }
         public string FilterText { get; set; }
         public List<string> FilterTimes { get; set; }
@@ -32,7 +32,6 @@ namespace Ocell.ViewModels
         public DateTime CustomDate { get; set; }
         public DateTime CustomTime { get; set; }
         public DelegateCommand SaveCommand { get; set; }
-        public DelegateCommand DiscardCommand { get; set; }
 
         private Dictionary<string, Type> FilterTypeStrings = new Dictionary<string, Type>
         {
@@ -118,6 +117,10 @@ namespace Ocell.ViewModels
         {
             Filter = ReceiveMessage<ElementFilter<ITweetable>>();
 
+            FilterTimes = FilterTimespans.Keys.ToList();
+            FilterTypes = new List<string> { Resources.author, Resources.hashtag, Resources.Source_LC, Resources.TweetText };
+            InclusionStrings = new List<string> { Resources.Remove, Resources.ShowOnly };
+
             if (Filter == null)
             {
                 SelectedFilterType = FilterTypes[0];
@@ -133,20 +136,8 @@ namespace Ocell.ViewModels
                 CustomDateTime = Filter.IsValidUntil;
             }
 
-            FilterTimes = FilterTimespans.Keys.ToList();
-
             SaveCommand = new DelegateCommand(Save, () => !string.IsNullOrWhiteSpace(FilterText) && FilterTypes.Contains(SelectedFilterType) && (!CustomDateEnabled || CustomDateTime > DateTime.Now));
             SaveCommand.BindCanExecuteToProperty(this, "FilterText", "SelectedFilterType", "CustomDateEnabled", "CustomDateTime");
-
-            DiscardCommand = new DelegateCommand(Discard);
-        }
-
-        public override void OnNavigating(System.ComponentModel.CancelEventArgs e)
-        {
-            if (!Notificator.Prompt(Resources.AskDiscardFilter))
-                e.Cancel = true;
-            else
-                base.OnNavigating(e);
         }
 
         internal ElementFilter<ITweetable> GenerateFilter()
@@ -167,7 +158,7 @@ namespace Ocell.ViewModels
                     Filter.Filter = FilterText;
                     Filter.Mode = ExcludeMode;
 
-                    Messager.SendTo<FilterModel, ElementFilter<ITweetable>>(null); // FilterModel will infer that it just updated the filter, no need to do anything.
+                    Messager.SendTo<FiltersModel, ElementFilter<ITweetable>>(null); // FilterModel will infer that it just updated the filter, no need to do anything.
                     Navigator.GoBack();
                     return;
                 }
@@ -185,15 +176,8 @@ namespace Ocell.ViewModels
                 return;
             }
 
-
-            Messager.SendTo<FilterModel, ElementFilter<ITweetable>>(filter);
+            Messager.SendTo<FiltersModel, ElementFilter<ITweetable>>(filter);
             Navigator.GoBack();
-        }
-
-        private void Discard()
-        {
-            if (Notificator.Prompt(Resources.AskDiscardFilter))
-                Navigator.GoBack();
         }
     }
 }

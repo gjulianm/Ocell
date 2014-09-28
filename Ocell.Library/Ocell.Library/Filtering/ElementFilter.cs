@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AncoraMVVM.Base;
+using PropertyChanged;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -12,7 +14,8 @@ namespace Ocell.Library.Filtering
     KnownType(typeof(SourceFilter)),
     KnownType(typeof(TextFilter)),
     KnownType(typeof(UserFilter))]
-    public abstract class ElementFilter<T>
+    [ImplementPropertyChanged]
+    public abstract class ElementFilter<T> : ObservableObject
     {
         public string Filter { get; set; }
         public DateTime IsValidUntil { get; set; }

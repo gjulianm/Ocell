@@ -6,6 +6,7 @@ using Ocell.Library.ReadLater.Instapaper;
 using Ocell.Library.ReadLater.Pocket;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
+using Ocell.ViewModels;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -94,7 +95,7 @@ namespace Ocell.Settings
 
             editFilters = new DelegateCommand((obj) =>
             {
-                Notificator.ShowError("Deprecated!!!!!");
+                Navigator.MessageAndNavigate<FiltersModel, TwitterResource>(null);
             });
 
             saveCredentials = new DelegateCommand(async (obj) =>

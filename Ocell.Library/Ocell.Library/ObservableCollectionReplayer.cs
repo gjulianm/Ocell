@@ -16,7 +16,7 @@ namespace Ocell.Library
         private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count > 0)
-                target.Insert(e.NewStartingIndex, e.NewItems[0]);
+                target.Add(e.NewItems[0]);
             else if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count > 0)
                 target.RemoveAt(e.OldStartingIndex);
         }

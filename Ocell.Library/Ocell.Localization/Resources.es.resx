@@ -1282,4 +1282,7 @@
 	<data name="AskDiscardFilter" xml:space="preserve">
 		<value>¿Estás seguro de querer descartar los cambios?</value>
 	</data>
+	<data name="ForTheNext" xml:space="preserve">
+		<value>durante</value>
+	</data>
 </root>

@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
+﻿using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
+using Ocell.ViewModels;
 
 namespace Ocell.Pages.Filters
 {
+    [ViewModel(typeof(FiltersModel))]
     public partial class Filters : PhoneApplicationPage
     {
         public Filters()
         {
             InitializeComponent();
+
+            FilterList.SelectionChanged += (s, e) =>
+            {
+                (DataContext as FiltersModel).SelectedFilter = FilterList.SelectedItem; // LLS is crap and doesn't update the binding.
+            };
         }
     }
 }

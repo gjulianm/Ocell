@@ -1261,7 +1261,7 @@
 		<value>source</value>
 	</data>
 	<data name="TweetsWhere" xml:space="preserve">
-		<value>tweets where the {0}</value>
+		<value>tweets where the {0} contains</value>
 	</data>
 	<data name="ShowOnly" xml:space="preserve">
 		<value>show only</value>
@@ -1280,5 +1280,8 @@
 	</data>
 	<data name="AskDiscardFilter" xml:space="preserve">
 		<value>Are you sure you want to discard changes?</value>
+	</data>
+	<data name="ForTheNext" xml:space="preserve">
+		<value>for the next</value>
 	</data>
 </root>

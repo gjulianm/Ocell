@@ -5,6 +5,7 @@ using Ocell.Compatibility;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Pages;
+using Ocell.ViewModels;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -95,7 +96,7 @@ namespace Ocell
 
             pinToStart.BindCanExecuteToProperty(this, "SelectedPivot");
 
-            filterColumn = new DelegateCommand(() => { });
+            filterColumn = new DelegateCommand(() => { Navigator.MessageAndNavigate<FiltersModel, TwitterResource>(SelectedPivot.Resource); }, () => SelectedPivot != null);
 
             filterColumn.BindCanExecuteToProperty(this, "SelectedPivot");
 

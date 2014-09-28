@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
+﻿using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
+using Ocell.ViewModels;
 
-namespace Ocell
+namespace Ocell.Pages.Filters
 {
+    [ViewModel(typeof(SingleFilterModel))]
     public partial class SingleFilter : PhoneApplicationPage
     {
         public SingleFilter()

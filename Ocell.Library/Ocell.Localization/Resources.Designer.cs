@@ -1295,6 +1295,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a for the next.
+        /// </summary>
+        public static string ForTheNext {
+            get {
+                return ResourceManager.GetString("ForTheNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a for {0}.
         /// </summary>
         public static string ForX {

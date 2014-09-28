@@ -65,7 +65,7 @@
 					<TextBlock Text="{Binding Strings.Filters, Source={StaticResource LocalizedResources}}" Style="{StaticResource PageHeaderStyle}" />
 				</controls:PivotItem.Header>
                 <StackPanel>
-					<Button x:Name="filter_btn" Content="{Binding Strings.EditMutedTweets, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Center" Width="344" Command="{Binding EditFilters}" VerticalAlignment="Top" Style="{StaticResource MetroButtonStyle}"/>
+					<Button Content="{Binding Strings.EditMutedTweets, Source={StaticResource LocalizedResources}}" HorizontalAlignment="Center" Width="344" Command="{Binding EditFilters}" VerticalAlignment="Top" Style="{StaticResource MetroButtonStyle}"/>
 					<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{StaticResource PhoneSubtleBrush}" Margin="0,9,0,0"><Run Text="{Binding Strings.SilenceTime, Source={StaticResource LocalizedResources}}"/></TextBlock>
                     <toolkit:ListPicker x:Name="SilencePicker" Margin="8,0" VerticalAlignment="Top" SelectedIndex="{Binding SelectedMuteTime, Mode=TwoWay}">
                         <toolkit:ListPickerItem x:Name="hour" Content="{Binding Strings.OneHour, Source={StaticResource LocalizedResources}}" />
