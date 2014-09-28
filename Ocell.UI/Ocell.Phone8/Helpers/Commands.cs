@@ -18,6 +18,10 @@ using System.Windows;
 using System.Windows.Input;
 using TweetSharp;
 
+// I know there are unused events, I can't do anything. Stfu already.
+#pragma warning disable 0067
+
+
 namespace Ocell.Commands
 {
     public class ReplyCommand : ICommand
@@ -306,3 +310,5 @@ namespace Ocell.Commands
         public event EventHandler CanExecuteChanged;
     }
 }
+
+#pragma warning restore 0067
