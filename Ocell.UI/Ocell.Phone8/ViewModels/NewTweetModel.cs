@@ -731,7 +731,7 @@ namespace Ocell.Pages
             TwitterDraft draft = CreateDraft();
 
             Config.Drafts.Value.Add(draft);
-            Config.Drafts.Value = Config.Drafts.Value;
+            Config.SaveDrafts();
 
             Notificator.ShowMessage(Resources.DraftSaved);
         }

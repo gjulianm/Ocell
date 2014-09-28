@@ -194,12 +194,17 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Drafts.xaml.cs">
+      <DependentUpon>Drafts.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Filters\Filters.xaml.cs">
       <DependentUpon>Filters.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Filters\SingleFilter.xaml.cs">
       <DependentUpon>SingleFilter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\DraftsModel.cs" />
+    <Compile Include="ViewModels\NewTweetModel.cs" />
     <Compile Include="SampleData\SampleStringDataSource\SampleStringDataSource.xaml.cs">
       <DependentUpon>SampleStringDataSource.xaml</DependentUpon>
     </Compile>
@@ -217,7 +222,6 @@
     <Compile Include="Pages\Columns\ManageColumns.xaml.cs">
       <DependentUpon>ManageColumns.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\ManageDraftsModel.cs" />
     <Compile Include="Pages\Elements\DMConversation.xaml.cs">
       <DependentUpon>DMConversation.xaml</DependentUpon>
     </Compile>
@@ -241,7 +245,6 @@
     <Compile Include="Pages\NewTweet.xaml.cs">
       <DependentUpon>NewTweet.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\NewTweetModel.cs" />
     <Compile Include="Pages\Pages.cs" />
     <Compile Include="Pages\ResourceView.xaml.cs">
       <DependentUpon>ResourceView.xaml</DependentUpon>
@@ -605,6 +608,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\Drafts.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\Elements\DMConversation.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -682,9 +689,7 @@
       <SubType>Designer</SubType>
     </DesignTimeOnly>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\Drafts\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\Ocell.APIs\Ocell.ReadLater\Ocell.ReadLater.csproj">
       <Project>{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}</Project>

@@ -155,9 +155,10 @@ namespace Ocell.Library
         };
 
 
-        public readonly static ConfigItem<List<TwitterDraft>> Drafts = new ConfigItem<List<TwitterDraft>>
+        public readonly static ConfigItem<ObservableCollection<TwitterDraft>> Drafts = new ConfigItem<ObservableCollection<TwitterDraft>>
         {
-            Key = "DRAFTS"
+            Key = "DRAFTS",
+            DefaultValue = new ObservableCollection<TwitterDraft>()
         };
 
 
