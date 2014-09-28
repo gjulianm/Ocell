@@ -2,6 +2,7 @@
 using Microsoft.Phone.Controls;
 using Ocell.Library.Twitter;
 using Ocell.ViewModels;
+using System.Threading.Tasks;
 
 namespace Ocell.Pages
 {
@@ -14,8 +15,14 @@ namespace Ocell.Pages
 
             DraftList.SelectionChanged += (s, e) =>
             {
-                (DataContext as DraftsModel).SelectedDraft = DraftList.SelectedItem as TwitterDraft; // LLS is crap and doesn't update the binding.
+                // LLS is crap and doesn't update the binding.
+                // Also, delaying the selected item trigger allows the deletion of the item if the user pressed the button.
+                Task.Delay(200).ContinueWith((t) =>
+                {
+                    Dispatcher.BeginInvoke(() => (DataContext as DraftsModel).SelectedDraft = DraftList.SelectedItem as TwitterDraft);
+                });
             };
         }
+
     }
 }

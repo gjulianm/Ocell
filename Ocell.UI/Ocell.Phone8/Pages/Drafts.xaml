@@ -30,7 +30,7 @@
                 <TextBlock Grid.Row="1" Foreground="{StaticResource PhoneSubtleBrush}" FontFamily="Segoe WP Light" FontSize="20" Text="{Binding CreatedAt}" />
 
                 <Button Grid.RowSpan="2" Width="48" Height="48" Grid.Column="1" 
-                        BorderThickness="0" Background="{StaticResource PhoneForegroundBrush}"  Margin="12" Command="{Binding Path=DataContext.RemoveDraft, ElementName=FilterList}" 
+                        BorderThickness="0" Background="{StaticResource PhoneForegroundBrush}"  Margin="12" Command="{Binding Path=DataContext.RemoveDraft, ElementName=DraftList}" 
                         CommandParameter="{Binding}">
                     <Button.OpacityMask>
                         <ImageBrush ImageSource="/Images/Icons_Black/appbar.cancel.rest.png" />

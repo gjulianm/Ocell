@@ -19,7 +19,10 @@ namespace Ocell.ViewModels
             {
                 var draft = param as TwitterDraft;
                 if (draft != null)
+                {
                     Config.Drafts.Value.Remove(draft);
+                    Config.SaveDrafts();
+                }
             });
 
             var replayer = new ObservableCollectionReplayer();
