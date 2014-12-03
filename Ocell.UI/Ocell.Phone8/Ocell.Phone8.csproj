@@ -203,6 +203,12 @@
     <Compile Include="Pages\Filters\SingleFilter.xaml.cs">
       <DependentUpon>SingleFilter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Lists\List.xaml.cs">
+      <DependentUpon>List.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SampleData\ListsSampleDataSource\ListsSampleDataSource.xaml.cs">
+      <DependentUpon>ListsSampleDataSource.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\DraftsModel.cs" />
     <Compile Include="ViewModels\NewTweetModel.cs" />
     <Compile Include="SampleData\SampleStringDataSource\SampleStringDataSource.xaml.cs">
@@ -405,6 +411,7 @@
     <Content Include="VoiceReco\VoiceCommandDefinition.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\Icons_Black\appbar.add.rest.png" />
     <Resource Include="Images\RtBtn.png" />
     <Resource Include="Images\ReplyBtn.png" />
     <EmbeddedResource Include="Images\Icons_White\appbar.upload.rest.png">
@@ -508,6 +515,12 @@
     </EmbeddedResource>
     <Resource Include="Images\BirdGray.png" />
     <DesignTimeOnly Include="SampleData\SampleStringDataSource\SampleStringDataSource.xsd" />
+    <DesignTimeOnly Include="SampleData\ListsSampleDataSource\ListsSampleDataSource.xsd" />
+    <DesignTimeOnly Include="SampleData\ListsSampleDataSource\ListsSampleDataSource_Files\image01.png" />
+    <DesignTimeOnly Include="SampleData\ListsSampleDataSource\ListsSampleDataSource_Files\image02.png" />
+    <DesignTimeOnly Include="SampleData\ListsSampleDataSource\ListsSampleDataSource_Files\image03.png" />
+    <DesignTimeOnly Include="SampleData\ListsSampleDataSource\ListsSampleDataSource_Files\image04.png" />
+    <DesignTimeOnly Include="SampleData\ListsSampleDataSource\ListsSampleDataSource_Files\image05.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AncoraMVVM.Base, Version=0.1.25.32928, Culture=neutral, processorArchitecture=MSIL">
@@ -640,6 +653,10 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\Lists\List.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\NewTweet.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -685,6 +702,10 @@
       <SubType>Designer</SubType>
     </Page>
     <DesignTimeOnly Include="SampleData\SampleStringDataSource\SampleStringDataSource.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </DesignTimeOnly>
+    <DesignTimeOnly Include="SampleData\ListsSampleDataSource\ListsSampleDataSource.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </DesignTimeOnly>
