@@ -115,6 +115,7 @@
     <Compile Include="ObservableCollectionReplayer.cs" />
     <Compile Include="Security\MutexExtensions.cs" />
     <Compile Include="Tasks\TwitterStatusTask.cs" />
+    <Compile Include="Twitter\Comparers\TwitterResourceComparer.cs" />
     <Compile Include="Twitter\TwitterResource.cs" />
     <Compile Include="Twitter\UserProvider.cs" />
     <Compile Include="Twitter\UserToken.cs" />
