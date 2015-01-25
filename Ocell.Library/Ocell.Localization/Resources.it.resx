@@ -1257,4 +1257,43 @@
 	<data name="Source_LC" xml:space="preserve">
 		<value>sorgente</value>
 	</data>
+	<data name="author" xml:space="preserve">
+		<value>autore</value>
+	</data>
+	<data name="TweetsWhere" xml:space="preserve">
+		<value>Tweet dove contiene il {0}</value>
+	</data>
+	<data name="ShowOnly" xml:space="preserve">
+		<value>Visualizza solo</value>
+	</data>
+	<data name="Remove" xml:space="preserve">
+		<value>rimuovere</value>
+	</data>
+	<data name="Is" xml:space="preserve">
+		<value>è</value>
+	</data>
+	<data name="CustomDate" xml:space="preserve">
+		<value>data personalizzata</value>
+	</data>
+	<data name="During" xml:space="preserve">
+		<value>durante</value>
+	</data>
+	<data name="AskDiscardFilter" xml:space="preserve">
+		<value>Sei sicuro di che voler ignorare le modifiche?</value>
+	</data>
+	<data name="ForTheNext" xml:space="preserve">
+		<value>per il prossimo</value>
+	</data>
+	<data name="UserAddedToList" xml:space="preserve">
+		<value>Utente aggiunto all'elenco.</value>
+	</data>
+	<data name="ErrorAddingUserToList" xml:space="preserve">
+		<value>Errore durante l'aggiunta dell'utente alla lista: {0}</value>
+	</data>
+	<data name="UserRemovedFromList" xml:space="preserve">
+		<value>Utente rimosso dall'elenco.</value>
+	</data>
+	<data name="ErrorRemovingUser" xml:space="preserve">
+		<value>Errore rimuovendo utente: {0}</value>
+	</data>
 </root>
