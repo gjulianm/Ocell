@@ -13,8 +13,8 @@
 	>
 	
 	<phone:PhoneApplicationPage.Resources>
-		<SampleData:ListsSampleDataSource x:Key="ListsSampleDataSource" d:IsDataSource="True"/>
-		<DataTemplate x:Key="ListUserDataTemplate">
+        <SampleData:ListsSampleDataSource x:Key="ListsSampleDataSource" d:IsDataSource="True"/>
+        <DataTemplate x:Key="ListUserDataTemplate">
 			<Grid Margin="8">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*" />
@@ -81,7 +81,7 @@
 			</phone:Pivot.HeaderTemplate>
 			<phone:PivotItem Header="users" HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Top">
 				<Grid HorizontalAlignment="Stretch">
-					<phone:LongListSelector HorizontalAlignment="Stretch" Margin="12" VerticalAlignment="Stretch" ItemsSource="{Binding List}" ItemTemplate="{StaticResource ListUserDataTemplate}"/>
+					<phone:LongListSelector HorizontalAlignment="Stretch" Margin="12" VerticalAlignment="Stretch" ItemsSource="{Binding ListUsers}" ItemTemplate="{StaticResource ListUserDataTemplate}"/>
 				</Grid>
 			</phone:PivotItem>
 			<phone:PivotItem Header="tweets" HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch">
@@ -92,7 +92,7 @@
 			<phone:PivotItem Header="add..." HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Top">
 				<StackPanel>
 					<toolkit:PhoneTextBox Text="{Binding FilterText}" Hint="search..." AcceptsReturn="False" ac:TextBoxUpdater.UpdateBindingOnChange="True" />
-					<phone:LongListSelector HorizontalAlignment="Stretch" Margin="12" VerticalAlignment="Stretch" ItemsSource="{Binding AddUsers}" ItemTemplate="{StaticResource ListUserAddDataTemplate}">
+					<phone:LongListSelector HorizontalAlignment="Stretch" Margin="12" VerticalAlignment="Stretch" ItemsSource="{Binding UserSearchResult}" ItemTemplate="{StaticResource ListUserAddDataTemplate}">
 						<phone:LongListSelector.ListFooterTemplate>
 							<DataTemplate>
 								<Border BorderThickness="0" toolkit:TiltEffect.IsTiltEnabled="True">

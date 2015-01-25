@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
+﻿using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
+using Ocell.ViewModels;
 
 namespace Ocell.Pages.Lists
 {
+    [ViewModel(typeof(ListModel))]
     public partial class List : PhoneApplicationPage
     {
         public List()
