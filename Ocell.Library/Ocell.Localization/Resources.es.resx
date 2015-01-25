@@ -1285,4 +1285,16 @@
 	<data name="ForTheNext" xml:space="preserve">
 		<value>durante</value>
 	</data>
+	<data name="UserAddedToList" xml:space="preserve">
+		<value>Usuario añadido a la lista.</value>
+	</data>
+	<data name="ErrorAddingUserToList" xml:space="preserve">
+		<value>Error añadiendo el usuario a la lista: {0}</value>
+	</data>
+	<data name="UserRemovedFromList" xml:space="preserve">
+		<value>Usuario eliminado de la lista.</value>
+	</data>
+	<data name="ErrorRemovingUser" xml:space="preserve">
+		<value>Error eliminando al usuario: {0}</value>
+	</data>
 </root>
