@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ocell.ReadLater.Tests
 {
-    [Ignore]
+    [Ignore("Long run")]
     [TestFixture]
     public class InstapaperServiceTests
     {
