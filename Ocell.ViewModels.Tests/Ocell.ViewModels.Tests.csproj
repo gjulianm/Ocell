@@ -104,9 +104,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\SensitiveData.cs">
+      <Link>SensitiveData.cs</Link>
+    </Compile>
+    <Compile Include="GlobalSetup.cs" />
     <Compile Include="MockProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ManageListsModelTests.cs" />
     <Compile Include="SingleFilterModelTests.cs" />
+    <Compile Include="TestCredentials.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

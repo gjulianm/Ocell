@@ -11,7 +11,7 @@ using System;
 namespace Ocell.ViewModels.Tests
 {
     [TestFixture]
-    public class SingleFilterModelTestsrt
+    public class SingleFilterModelTests
     {
         [TestFixtureSetUp]
         public static void Setup()
