@@ -54,7 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FiltersModel.cs" />
-    <Compile Include="ITweetable.cs" />
     <Compile Include="ManageListsModel.cs" />
     <Compile Include="ListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
