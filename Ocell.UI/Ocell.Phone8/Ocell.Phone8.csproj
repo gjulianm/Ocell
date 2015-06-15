@@ -25,7 +25,7 @@
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <Utf8Output>true</Utf8Output>
-    <ExpressionBlendVersion>12.0.50716.0</ExpressionBlendVersion>
+    <ExpressionBlendVersion>12.0.51020.0</ExpressionBlendVersion>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <NuGetPackageImportStamp>aa740bfe</NuGetPackageImportStamp>
   </PropertyGroup>
@@ -206,8 +206,17 @@
     <Compile Include="Pages\Lists\List.xaml.cs">
       <DependentUpon>List.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Lists\ManageLists.xaml.cs">
+      <DependentUpon>ManageLists.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SampleData\FiltersSampleData\FiltersSampleData.xaml.cs">
+      <DependentUpon>FiltersSampleData.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SampleData\ListsSampleDataSource\ListsSampleDataSource.xaml.cs">
       <DependentUpon>ListsSampleDataSource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SampleData\TwitterResourceData\TwitterResourceData.xaml.cs">
+      <DependentUpon>TwitterResourceData.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\DraftsModel.cs" />
     <Compile Include="ViewModels\NewTweetModel.cs" />
@@ -521,6 +530,8 @@
     <DesignTimeOnly Include="SampleData\ListsSampleDataSource\ListsSampleDataSource_Files\image03.png" />
     <DesignTimeOnly Include="SampleData\ListsSampleDataSource\ListsSampleDataSource_Files\image04.png" />
     <DesignTimeOnly Include="SampleData\ListsSampleDataSource\ListsSampleDataSource_Files\image05.png" />
+    <DesignTimeOnly Include="SampleData\TwitterResourceData\TwitterResourceData.xsd" />
+    <DesignTimeOnly Include="SampleData\FiltersSampleData\FiltersSampleData.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AncoraMVVM.Base, Version=0.1.25.32928, Culture=neutral, processorArchitecture=MSIL">
@@ -657,6 +668,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Lists\ManageLists.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\NewTweet.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -709,8 +724,18 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </DesignTimeOnly>
+    <DesignTimeOnly Include="SampleData\TwitterResourceData\TwitterResourceData.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </DesignTimeOnly>
+    <DesignTimeOnly Include="SampleData\FiltersSampleData\FiltersSampleData.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </DesignTimeOnly>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="SampleData\StringsDataSource\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Ocell.APIs\Ocell.ReadLater\Ocell.ReadLater.csproj">
       <Project>{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}</Project>

@@ -1,0 +1,19 @@
+﻿<!--
+      *********    NO MODIFIQUE ESTE ARCHIVO     *********
+      Este archivo se regenera mediante una herramienta de diseño.
+       Si realiza cambios en este archivo, puede causar errores.
+-->
+<SampleData:FiltersSampleData xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.FiltersSampleData" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <SampleData:FiltersSampleData.Filters>
+    <SampleData:FiltersItem Duration="Nam aliquam" Filter="Maecenas class" IsValidUntil="Aliquam class integer" />
+    <SampleData:FiltersItem Duration="Integer quisque" Filter="Curae praesent cras nam" IsValidUntil="Aenean mauris quisque vivamus" />
+    <SampleData:FiltersItem Duration="Class vivamus" Filter="Accumsan bibendum" IsValidUntil="Maecenas aliquam" />
+    <SampleData:FiltersItem Duration="Aliquam cras" Filter="Aenean donec etiam" IsValidUntil="Curae cras" />
+    <SampleData:FiltersItem Duration="Curae aliquet" Filter="Sed mauris duis" IsValidUntil="Praesent nullam" />
+    <SampleData:FiltersItem Duration="Blandit donec maecenas aenean" Filter="Fusce lorem aliquam dictumst" IsValidUntil="Accumsan donec" />
+    <SampleData:FiltersItem Duration="Mauris commodo conubia praesent" Filter="Eleifend integer" IsValidUntil="Etiam aliquet nam" />
+    <SampleData:FiltersItem Duration="Nullam sed cubilia" Filter="Nunc nullam quisque aptent" IsValidUntil="Blandit duis aptent" />
+    <SampleData:FiltersItem Duration="Dis accumsan" Filter="Amet auctor vivamus" IsValidUntil="Nunc fusce" />
+    <SampleData:FiltersItem Duration="Duis est bibendum nunc" Filter="Morbi facilisi" IsValidUntil="Sed amet bibendum" />
+  </SampleData:FiltersSampleData.Filters>
+</SampleData:FiltersSampleData>
