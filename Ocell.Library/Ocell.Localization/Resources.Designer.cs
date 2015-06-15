@@ -1061,6 +1061,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Error getting your lists..
+        /// </summary>
+        public static string ErrorGettingLists {
+            get {
+                return ResourceManager.GetString("ErrorGettingLists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Couldn&apos;t get the full user profile..
         /// </summary>
         public static string ErrorGettingProfile {
