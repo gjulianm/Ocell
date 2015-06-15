@@ -85,6 +85,7 @@
     <Compile Include="..\..\SensitiveData.cs">
       <Link>SensitiveData.cs</Link>
     </Compile>
+    <Compile Include="ApplicationException.cs" />
     <Compile Include="Autocompleter.cs">
     </Compile>
     <Compile Include="ColumnReloadOptions.cs">
