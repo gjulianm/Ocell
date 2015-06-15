@@ -53,7 +53,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FiltersModel.cs" />
+    <Compile Include="Filters\FiltersModel.cs" />
     <Compile Include="Lists\ManageListsModel.cs" />
     <Compile Include="Lists\ListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
