@@ -10,11 +10,12 @@
 	xmlns:lc="clr-namespace:Ocell.Controls"
 	xmlns:ac="clr-namespace:AncoraMVVM.Phone7;assembly=AncoraMVVM.Phone7"
 	x:Class="Ocell.Pages.Lists.List"
+	mc:Ignorable="d"
 	>
 	
 	<phone:PhoneApplicationPage.Resources>
-        <SampleData:ListsSampleDataSource x:Key="ListsSampleDataSource" d:IsDataSource="True"/>
-        <DataTemplate x:Key="ListUserDataTemplate">
+		<SampleData:ListsSampleDataSource x:Key="ListsSampleDataSource" d:IsDataSource="True"/>
+		<DataTemplate x:Key="ListUserDataTemplate">
 			<Grid Margin="8">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*" />
