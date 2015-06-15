@@ -21,31 +21,7 @@ namespace Ocell.ViewModels
 
         public async override void OnLoad()
         {
-            var service = ServiceDispatcher.GetCurrentService();
-
-            var response = await service.ListListsForAsync(new ListListsForOptions
-            {
-                ScreenName = DataTransfer.CurrentAccount.ScreenName
-            });
-
-            if (!response.RequestSucceeded)
-            {
-                Notificator.ShowError(Resources.ErrorGettingLists);
-                return;
-            }
-
-            foreach (var list in response.Content)
-            {
-                var resource = new TwitterResource
-                {
-                    Type = ResourceType.List,
-                    User = DataTransfer.CurrentAccount,
-                    Data = list.Slug
-                };
-
-                if (!Lists.Contains(resource))
-                    Lists.Add(resource);
-            }
+            Lists.AddListRange(await GetListsForUser(DataTransfer.CurrentAccount));
 
             base.OnLoad();
         }
