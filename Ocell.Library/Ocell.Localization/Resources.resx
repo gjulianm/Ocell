@@ -1299,4 +1299,7 @@
   <data name="ErrorGettingLists" xml:space="preserve">
     <value>Error getting your lists.</value>
   </data>
+  <data name="ErrorDeletingList" xml:space="preserve">
+    <value>We couldn't delete that list</value>
+  </data>
 </root>

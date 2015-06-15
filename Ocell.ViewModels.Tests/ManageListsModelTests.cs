@@ -1,5 +1,6 @@
 ﻿using AncoraMVVM.Base.IoC;
 using NUnit.Framework;
+using Ocell.Library.Twitter;
 
 namespace Ocell.ViewModels.Tests
 {
@@ -37,6 +38,28 @@ namespace Ocell.ViewModels.Tests
             var lists = await model.GetListsForUser(TestCredentials.GetTwitterUser());
 
             Assert.IsNotEmpty(lists);
+        }
+
+        [Test]
+        [Ignore("Remote request")]
+        public async void RemoveList_ValidList_NoExceptionThrown()
+        {
+            var user = TestCredentials.GetTwitterUser();
+
+            var resource = new TwitterResource
+            {
+                Type = ResourceType.List,
+                User = user,
+                Data = "test-list"
+            };
+
+            var model = new ManageListsModel();
+
+            model.Lists.Add(resource);
+
+            await model.DeleteList(resource, user);
+
+            Assert.IsFalse(model.Lists.Contains(resource), "The list is still present.");
         }
     }
 }

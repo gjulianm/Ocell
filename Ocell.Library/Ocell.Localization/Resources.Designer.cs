@@ -1016,6 +1016,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a We couldn&apos;t delete that list.
+        /// </summary>
+        public static string ErrorDeletingList {
+            get {
+                return ResourceManager.GetString("ErrorDeletingList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a We couldn&apos;t delete this tweet..
         /// </summary>
         public static string ErrorDeletingTweet {

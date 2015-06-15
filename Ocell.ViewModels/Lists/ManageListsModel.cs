@@ -1,10 +1,10 @@
-﻿using AncoraMVVM.Base;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AncoraMVVM.Base;
 using Ocell.Library;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
 using PropertyChanged;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using TweetSharp;
 
 namespace Ocell.ViewModels
@@ -13,10 +13,27 @@ namespace Ocell.ViewModels
     public class ManageListsModel : ExtendedViewModelBase
     {
         public SafeObservable<TwitterResource> Lists { get; private set; }
+        public DelegateCommand RemoveList { get; set; }
+        public TwitterResource SelectedList { get; set; }
 
         public ManageListsModel()
         {
             Lists = new SafeObservable<TwitterResource>();
+            RemoveList = new DelegateCommand(async (param) => await DeleteList(param as TwitterResource, DataTransfer.CurrentAccount));
+
+            this.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == "SelectedList" && SelectedList != null)
+                {
+                    NavigateToList(SelectedList);
+                    SelectedList = null;
+                }
+            };
+        }
+
+        private void NavigateToList(TwitterResource list)
+        {
+            Navigator.MessageAndNavigate<ListModel, TwitterResource>(list);
         }
 
         public async override void OnLoad()
@@ -58,6 +75,25 @@ namespace Ocell.ViewModels
             return lists;
         }
 
+        public async Task DeleteList(TwitterResource list, UserToken user)
+        {
+            var service = ServiceDispatcher.GetService(user);
+
+            Progress.Loading();
+
+            var response = await service.DeleteListAsync(new DeleteListOptions
+            {
+                Slug = list.Data,
+                OwnerScreenName = user.ScreenName
+            });
+
+            Progress.Finished();
+
+            if (!response.RequestSucceeded)
+                throw new ApplicationException(Resources.ErrorDeletingList, response.Error);
+
+            Lists.Remove(list);
+        }
 
     }
 }
