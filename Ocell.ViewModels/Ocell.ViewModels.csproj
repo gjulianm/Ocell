@@ -54,10 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FiltersModel.cs" />
-    <Compile Include="ManageListsModel.cs" />
-    <Compile Include="ListModel.cs" />
+    <Compile Include="Lists\ManageListsModel.cs" />
+    <Compile Include="Lists\ListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SingleFilterModel.cs" />
+    <Compile Include="Filters\SingleFilterModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assembly.ico" />
