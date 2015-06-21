@@ -35,14 +35,11 @@ namespace Ocell.Library.Twitter
                 if (services.ContainsKey(account.Key))
                     return services[account.Key];
 
-                var _srv = new TwitterService();
-                _srv.AuthenticateWith(ApplicationKey, ApplicationSecret, account.Key, account.Secret);
-
-                srv = _srv;
+                srv = new TwitterService();
+                srv.AuthenticateWith(ApplicationKey, ApplicationSecret, account.Key, account.Secret);
 
                 try
                 {
-
                     services.Add(account.Key, srv);
                 }
                 catch
