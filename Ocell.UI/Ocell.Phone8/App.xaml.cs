@@ -43,6 +43,9 @@ namespace Ocell
 #endif
             Dependency.RegisterModule(new PhoneDependencyModule());
 
+            ServiceDispatcher.ApplicationKey = SensitiveData.ConsumerToken;
+            ServiceDispatcher.ApplicationSecret = SensitiveData.ConsumerSecret;
+
             // Inicialización de Silverlight estándar
             InitializeComponent();
 

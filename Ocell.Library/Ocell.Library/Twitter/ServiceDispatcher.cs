@@ -27,6 +27,9 @@ namespace Ocell.Library.Twitter
 
             ITwitterService srv;
 
+            if (ApplicationKey == null || ApplicationSecret == null)
+                throw new ApplicationException("ApplicationKey/ApplicationSecret are null. We can't create Twitter Services.");
+
             lock (lockFlag)
             {
                 if (services.ContainsKey(account.Key))
