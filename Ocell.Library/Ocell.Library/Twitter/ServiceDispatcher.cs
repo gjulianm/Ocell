@@ -1,6 +1,7 @@
 using BufferAPI;
 using Sharplonger;
 using System.Collections.Generic;
+using Ocell.Library.RuntimeData;
 using TweetSharp;
 
 
@@ -66,7 +67,7 @@ namespace Ocell.Library.Twitter
 
         public static ITwitterService GetCurrentService()
         {
-            return GetService(DataTransfer.CurrentAccount);
+            return GetService(ApplicationData.CurrentAccount);
         }
 
         public static TwitlongerService GetTwitlongerService(UserToken user)

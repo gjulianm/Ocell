@@ -94,7 +94,7 @@
     </Compile>
     <Compile Include="EmbeddedWebOptions.cs" />
     <Compile Include="Crypto\TokenCombinator.cs" />
-    <Compile Include="DataTransfer.cs">
+    <Compile Include="RuntimeData\ApplicationData.cs">
     </Compile>
     <Compile Include="DateSync.cs">
     </Compile>

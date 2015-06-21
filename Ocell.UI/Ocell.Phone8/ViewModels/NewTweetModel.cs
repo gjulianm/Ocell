@@ -16,6 +16,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using Ocell.Library.RuntimeData;
 using TweetSharp;
 
 namespace Ocell.Pages
@@ -182,7 +183,7 @@ namespace Ocell.Pages
             }
             else
             {
-                SelectedAccounts.Add(DataTransfer.CurrentAccount);
+                SelectedAccounts.Add(ApplicationData.CurrentAccount);
             }
 
             if (Config.EnabledGeolocation.Value == true)
@@ -486,7 +487,7 @@ namespace Ocell.Pages
         {
             Progress.Loading(Resources.SendingTweet);
 
-            var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+            var service = ServiceDispatcher.GetService(ApplicationData.CurrentAccount);
             var response = await service.SendDirectMessageAsync(new SendDirectMessageOptions { UserId = (int)args.ReplyToId, Text = TweetText });
 
             if (response.StatusCode != HttpStatusCode.OK)

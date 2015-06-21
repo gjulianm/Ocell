@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Device.Location;
 using System.Linq;
 using System.Windows.Input;
+using Ocell.Library.RuntimeData;
 using TweetSharp;
 
 
@@ -177,7 +178,7 @@ namespace Ocell.Pages
             {
                 Data = trend.Name,
                 Type = ResourceType.Search,
-                User = DataTransfer.CurrentAccount
+                User = ApplicationData.CurrentAccount
             };
 
             Navigator.MessageAndNavigate<ResourceViewModel, TwitterResource>(resource);

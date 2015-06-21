@@ -1,4 +1,10 @@
-﻿using AncoraMVVM.Base;
+﻿using System;
+using System.Diagnostics;
+using System.IO.IsolatedStorage;
+using System.Security.Cryptography;
+using System.Windows;
+using System.Windows.Navigation;
+using AncoraMVVM.Base;
 using AncoraMVVM.Base.Diagnostics;
 using AncoraMVVM.Base.Interfaces;
 using AncoraMVVM.Base.IoC;
@@ -13,13 +19,8 @@ using Microsoft.Phone.Shell;
 using Ocell.Compatibility;
 using Ocell.Controls;
 using Ocell.Library;
+using Ocell.Library.RuntimeData;
 using Ocell.Library.Twitter;
-using System;
-using System.Diagnostics;
-using System.IO.IsolatedStorage;
-using System.Security.Cryptography;
-using System.Windows;
-using System.Windows.Navigation;
 using Windows.Phone.Speech.VoiceCommands;
 
 namespace Ocell
@@ -105,6 +106,7 @@ namespace Ocell
             PushNotifications.WPVersion = OSVersion.WP8;
 
             Config.InitConfig();
+            ApplicationData.InitializeRuntimeData();
 
             OcellTheme.IsDarkThemeSet = ((Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible);
 

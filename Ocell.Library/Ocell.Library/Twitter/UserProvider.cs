@@ -1,6 +1,6 @@
-﻿using AncoraMVVM.Base;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using AncoraMVVM.Base;
 using TweetSharp;
 
 namespace Ocell.Library.Twitter

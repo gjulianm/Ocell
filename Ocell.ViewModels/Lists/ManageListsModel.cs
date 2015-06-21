@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AncoraMVVM.Base;
 using Ocell.Library;
+using Ocell.Library.RuntimeData;
 using Ocell.Library.Twitter;
 using Ocell.Localization;
 using PropertyChanged;
@@ -20,7 +21,7 @@ namespace Ocell.ViewModels.Lists
         public ManageListsModel()
         {
             Lists = new SafeObservable<TwitterResource>();
-            RemoveList = new DelegateCommand(async param => await DeleteList(param as TwitterResource, DataTransfer.CurrentAccount));
+            RemoveList = new DelegateCommand(async param => await DeleteList(param as TwitterResource, ApplicationData.CurrentAccount));
 
             PropertyChanged += (sender, e) =>
             {
@@ -40,7 +41,7 @@ namespace Ocell.ViewModels.Lists
 
         public async override void OnLoad()
         {
-            Lists.AddListRange(await GetListsForUser(DataTransfer.CurrentAccount));
+            Lists.AddListRange(await GetListsForUser(ApplicationData.CurrentAccount));
 
             base.OnLoad();
         }
@@ -66,7 +67,9 @@ namespace Ocell.ViewModels.Lists
 
             return response.Content.Select(list => new TwitterResource
             {
-                Type = ResourceType.List, User = user, Data = list.Slug
+                Type = ResourceType.List,
+                User = user,
+                Data = list.Slug
             }).ToList();
         }
 

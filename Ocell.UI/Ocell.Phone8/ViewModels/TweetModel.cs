@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Ocell.Library.RuntimeData;
 using TweetSharp;
 
 namespace Ocell.Pages.Elements
@@ -123,7 +124,7 @@ namespace Ocell.Pages.Elements
 
         private void GetReplies()
         {
-            var convService = new ConversationService(DataTransfer.CurrentAccount);
+            var convService = new ConversationService(ApplicationData.CurrentAccount);
             convService.Finished += (sender, e) => Progress.IsLoading = false;
             convService.GetConversationForStatus(Tweet, (statuses, response) =>
             {
@@ -220,7 +221,7 @@ namespace Ocell.Pages.Elements
                     IsFavorited = !IsFavorited;
                     Tweet.IsFavorited = IsFavorited;
                 }
-            }, () => Tweet != null && Config.Accounts.Value.Count > 0 && DataTransfer.CurrentAccount != null);
+            }, () => Tweet != null && Config.Accounts.Value.Count > 0 && ApplicationData.CurrentAccount != null);
 
             Favorite.BindCanExecuteToProperty(this, "Tweet", "IsFavorited");
 

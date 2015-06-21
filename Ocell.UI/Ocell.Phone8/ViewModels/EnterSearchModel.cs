@@ -5,6 +5,7 @@ using Ocell.Library.Twitter;
 using PropertyChanged;
 using System.Linq;
 using System.Windows.Input;
+using Ocell.Library.RuntimeData;
 
 namespace Ocell.Pages.Search
 {
@@ -34,7 +35,7 @@ namespace Ocell.Pages.Search
             {
                 var resource = new TwitterResource
                 {
-                    User = DataTransfer.CurrentAccount ?? Config.Accounts.Value.FirstOrDefault(),
+                    User = ApplicationData.CurrentAccount ?? Config.Accounts.Value.FirstOrDefault(),
                     Type = ResourceType.Search,
                     Data = Query
                 };

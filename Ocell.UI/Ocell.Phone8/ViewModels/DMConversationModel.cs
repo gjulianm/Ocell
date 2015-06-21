@@ -3,6 +3,7 @@ using Ocell.Library;
 using Ocell.Library.Twitter;
 using PropertyChanged;
 using System.Linq;
+using Ocell.Library.RuntimeData;
 using TweetSharp;
 
 namespace Ocell.Pages.Elements
@@ -25,12 +26,12 @@ namespace Ocell.Pages.Elements
                 return;
             }
 
-            PairName = DMGroup.Messages.First().GetPairName(DataTransfer.CurrentAccount);
+            PairName = DMGroup.Messages.First().GetPairName(ApplicationData.CurrentAccount);
 
             var resource = new TwitterResource
             {
                 Type = ResourceType.MessageConversation,
-                User = DataTransfer.CurrentAccount,
+                User = ApplicationData.CurrentAccount,
                 Data = PairName
             };
 

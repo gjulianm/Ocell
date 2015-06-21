@@ -1,15 +1,16 @@
-﻿using AncoraMVVM.Base;
-using AncoraMVVM.Base.IoC;
-using Ocell.Library;
-using Ocell.Library.Twitter;
-using PropertyChanged;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Windows.Data;
 using System.Windows.Input;
+using AncoraMVVM.Base;
+using AncoraMVVM.Base.IoC;
+using Ocell.Library;
+using Ocell.Library.RuntimeData;
+using Ocell.Library.Twitter;
+using PropertyChanged;
 using TweetSharp;
 
 namespace Ocell.Pages
@@ -57,13 +58,9 @@ namespace Ocell.Pages
 
             goNext = new DelegateCommand((obj) =>
             {
-                DataTransfer.ReplyingDM = true;
                 Navigator.Navigate(new Uri("/Pages/NewTweet.xaml?removeBack=1", UriKind.Relative));
 
-            }, (obj) =>
-            {
-                return Destinatary != null && Sender != null;
-            });
+            }, (obj) => Destinatary != null && Sender != null);
 
             this.PropertyChanged += (sender, e) =>
             {
@@ -85,7 +82,7 @@ namespace Ocell.Pages
         {
             TwitterUser user = Destinatary as TwitterUser;
             if (user != null)
-                DataTransfer.DMDestinationId = user.Id;
+                ;
             goNext.RaiseCanExecuteChanged();
         }
 
@@ -99,7 +96,7 @@ namespace Ocell.Pages
                 provider.Start();
             });
             goNext.RaiseCanExecuteChanged();
-            DataTransfer.CurrentAccount = Sender as UserToken;
+            ApplicationData.CurrentAccount = Sender as UserToken;
         }
 
         private void UserFilterUpdated()

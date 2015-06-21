@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Ocell.Library.RuntimeData;
 using TweetSharp;
 
 // I know there are unused events, I can't do anything. Stfu already.
@@ -65,7 +66,7 @@ namespace Ocell.Commands
             string textReplied = "";
             textReplied = "@" + tweet.Author.ScreenName + " ";
             foreach (string user in StringManipulator.GetUserNames(tweet.Text))
-                if (DataTransfer.CurrentAccount != null && user != "@" + DataTransfer.CurrentAccount.ScreenName)
+                if (ApplicationData.CurrentAccount != null && user != "@" + ApplicationData.CurrentAccount.ScreenName)
                     textReplied += user + " ";
 
             return textReplied;
@@ -73,7 +74,7 @@ namespace Ocell.Commands
 
         public bool CanExecute(object parameter)
         {
-            return parameter is ITweetable && Config.Accounts.Value.Any() && DataTransfer.CurrentAccount != null;
+            return parameter is ITweetable && Config.Accounts.Value.Any() && ApplicationData.CurrentAccount != null;
         }
 
         public void Execute(object parameter)
@@ -97,13 +98,13 @@ namespace Ocell.Commands
         {
             return (parameter is TwitterStatus) &&
                 Config.Accounts.Value.Count > 0 &&
-                DataTransfer.CurrentAccount != null;
+                ApplicationData.CurrentAccount != null;
         }
 
         public async void Execute(object parameter)
         {
             Dependency.Resolve<IProgressIndicator>().IsLoading = true;
-            var response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).RetweetAsync(new RetweetOptions { Id = ((ITweetable)parameter).Id });
+            var response = await ServiceDispatcher.GetService(ApplicationData.CurrentAccount).RetweetAsync(new RetweetOptions { Id = ((ITweetable)parameter).Id });
             var notificator = Dependency.Resolve<INotificationService>();
 
             if (response.RequestSucceeded)
@@ -121,7 +122,7 @@ namespace Ocell.Commands
         {
             return (parameter is TwitterStatus) &&
                 Config.Accounts.Value.Count > 0 &&
-                DataTransfer.CurrentAccount != null;
+                ApplicationData.CurrentAccount != null;
         }
 
         public void Execute(object parameter)
@@ -141,12 +142,12 @@ namespace Ocell.Commands
 
             if (param.IsFavorited)
             {
-                response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
+                response = await ServiceDispatcher.GetService(ApplicationData.CurrentAccount).UnfavoriteTweetAsync(new UnfavoriteTweetOptions { Id = param.Id });
                 successString = Resources.Unfavorited;
             }
             else
             {
-                response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
+                response = await ServiceDispatcher.GetService(ApplicationData.CurrentAccount).FavoriteTweetAsync(new FavoriteTweetOptions { Id = param.Id });
                 successString = Resources.Favorited;
             }
 
