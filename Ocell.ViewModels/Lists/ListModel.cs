@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AncoraMVVM.Base;
 using AncoraMVVM.Base.Collections;
 using AncoraMVVM.Base.Diagnostics;
@@ -40,6 +41,10 @@ namespace Ocell.ViewModels.Lists
             }
 
             Loader = new TweetLoader(resource, false);
+
+            Loader.LoadCacheAsync();
+            Loader.Load();
+
             CanFindMoreUsers = false;
             ListName = resource.Title.ToUpperInvariant();
             ListUsers = new SafeObservable<TwitterUser>();
@@ -70,8 +75,8 @@ namespace Ocell.ViewModels.Lists
 
             var response = await service.RemoveListMemberAsync(new RemoveListMemberOptions
             {
-                OwnerScreenName = resource.Data.Substring(1, resource.Data.IndexOf('/') - 1),
-                Slug = resource.Data.Substring(resource.Data.IndexOf('/') + 1),
+                OwnerScreenName = resource.User.ScreenName,
+                Slug = resource.Data,
                 UserId = user.Id
             });
 
@@ -100,8 +105,8 @@ namespace Ocell.ViewModels.Lists
 
             var response = await service.AddListMemberAsync(new AddListMemberOptions
             {
-                OwnerScreenName = resource.Data.Substring(1, resource.Data.IndexOf('/') - 1),
-                Slug = resource.Data.Substring(resource.Data.IndexOf('/') + 1),
+                OwnerScreenName = resource.User.ScreenName,
+                Slug = resource.Data,
                 UserId = user.Id
             });
 
@@ -122,7 +127,9 @@ namespace Ocell.ViewModels.Lists
 
         private void UpdateUserSearch()
         {
-            UserSearchResult.Discarder = user => !(user.ScreenName.Contains(FilterText) || user.Name.Contains(FilterText));
+            Func<TwitterUser, bool> matches = user => user.ScreenName.Contains(FilterText) || user.Name.Contains(FilterText);
+            UserSearchResult.Discarder =
+                user => (!string.IsNullOrWhiteSpace(FilterText) && !matches(user)) || ListUsers.Contains(user);
         }
 
         public override async void OnLoad()

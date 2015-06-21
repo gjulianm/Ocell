@@ -420,7 +420,9 @@
     <Content Include="VoiceReco\VoiceCommandDefinition.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Images\Icons_Black\appbar.add.rest.png" />
+    <Content Include="Images\Icons_Black\appbar.add.rest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Images\RtBtn.png" />
     <Resource Include="Images\ReplyBtn.png" />
     <EmbeddedResource Include="Images\Icons_White\appbar.upload.rest.png">
