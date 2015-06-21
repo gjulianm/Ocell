@@ -85,6 +85,8 @@ namespace Ocell.ViewModels.Lists
             if (response.RequestSucceeded)
             {
                 Notificator.ShowProgressIndicatorMessage(Resources.UserAddedToList);
+                ListUsers.Add(user);
+                UserSearchResult.Remove(user);
             }
             else
             {
@@ -92,7 +94,6 @@ namespace Ocell.ViewModels.Lists
                 Notificator.ShowError(string.Format(Resources.ErrorRemovingUser, errorMessage));
             }
 
-            ListUsers.Add(user);
         }
 
 
@@ -115,6 +116,8 @@ namespace Ocell.ViewModels.Lists
             if (response.RequestSucceeded)
             {
                 Notificator.ShowProgressIndicatorMessage(Resources.UserAddedToList);
+                ListUsers.Remove(user);
+                UserSearchResult.Add(user);
             }
             else
             {
@@ -122,7 +125,6 @@ namespace Ocell.ViewModels.Lists
                 Notificator.ShowError(string.Format(Resources.ErrorAddingUserToList, errorMessage));
             }
 
-            ListUsers.Remove(user);
         }
 
         private void UpdateUserSearch()
