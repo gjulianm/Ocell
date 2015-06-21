@@ -73,7 +73,7 @@
 		<StaticResource ResourceKey="ModalPageStyle"/>
 	</phone:PhoneApplicationPage.Style>
 	
-	<Grid x:Name="LayoutRoot" Margin="0,-32,0,0" d:DataContext="{Binding Source={StaticResource ListsSampleDataSource}}">
+	<Grid x:Name="LayoutRoot" Margin="0,18,0,0" d:DataContext="{Binding Source={StaticResource ListsSampleDataSource}}">
 		<phone:Pivot HorizontalAlignment="Stretch" Title="{Binding ListName, StringFormat=LIST - \{0\}}" VerticalAlignment="Stretch"  TitleTemplate="{StaticResource PivotTitleTemplate}">
 			<phone:Pivot.HeaderTemplate>
 				<DataTemplate>
@@ -86,13 +86,13 @@
 				</Grid>
 			</phone:PivotItem>
 			<phone:PivotItem Header="tweets" HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch">
-					<lc:ExtendedListBox x:Name="UserList" Margin="12" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" 
+					<lc:ExtendedListBox x:Name="UserList" Margin="20" toolkit:TiltEffect.IsTiltEnabled="True" ItemTemplate="{StaticResource TweetTemplate}" 
 										toolkit:TurnstileFeatherEffect.FeatheringIndex="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
 										Loader="{Binding Loader}" />
 			</phone:PivotItem>
 			<phone:PivotItem Header="add..." HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Top">
 				<StackPanel>
-					<toolkit:PhoneTextBox Text="{Binding FilterText}" Hint="search..." AcceptsReturn="False" ac:TextBoxUpdater.UpdateBindingOnChange="True" />
+					<toolkit:PhoneTextBox Margin="12,0" Text="{Binding FilterText, Mode=TwoWay}" Hint="search..." AcceptsReturn="False" ac:TextBoxUpdater.UpdateBindingOnChange="True" />
 					<phone:LongListSelector HorizontalAlignment="Stretch" Margin="12" VerticalAlignment="Stretch" ItemsSource="{Binding UserSearchResult}" ItemTemplate="{StaticResource ListUserAddDataTemplate}">
 						<phone:LongListSelector.ListFooterTemplate>
 							<DataTemplate>
