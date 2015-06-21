@@ -1,6 +1,7 @@
 ﻿using AncoraMVVM.Base.IoC;
 using NUnit.Framework;
 using Ocell.Library.Twitter;
+using Ocell.ViewModels.Lists;
 
 namespace Ocell.ViewModels.Tests
 {

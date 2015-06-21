@@ -1,6 +1,7 @@
 ﻿using AncoraMVVM.Base.ViewModelLocator;
 using Microsoft.Phone.Controls;
 using Ocell.ViewModels;
+using Ocell.ViewModels.Lists;
 
 namespace Ocell.Pages.Lists
 {

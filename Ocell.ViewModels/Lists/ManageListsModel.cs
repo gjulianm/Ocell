@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AncoraMVVM.Base;
 using Ocell.Library;
@@ -7,25 +8,26 @@ using Ocell.Localization;
 using PropertyChanged;
 using TweetSharp;
 
-namespace Ocell.ViewModels
+namespace Ocell.ViewModels.Lists
 {
     [ImplementPropertyChanged]
     public class ManageListsModel : ExtendedViewModelBase
     {
         public SafeObservable<TwitterResource> Lists { get; private set; }
         public DelegateCommand RemoveList { get; set; }
-        public TwitterResource SelectedList { get; set; }
+        public object SelectedList { get; set; }
 
         public ManageListsModel()
         {
             Lists = new SafeObservable<TwitterResource>();
-            RemoveList = new DelegateCommand(async (param) => await DeleteList(param as TwitterResource, DataTransfer.CurrentAccount));
+            RemoveList = new DelegateCommand(async param => await DeleteList(param as TwitterResource, DataTransfer.CurrentAccount));
 
-            this.PropertyChanged += (sender, e) =>
+            PropertyChanged += (sender, e) =>
             {
-                if (e.PropertyName == "SelectedList" && SelectedList != null)
+                var list = SelectedList as TwitterResource;
+                if (e.PropertyName == "SelectedList" && SelectedList != null && list != null)
                 {
-                    NavigateToList(SelectedList);
+                    NavigateToList(list);
                     SelectedList = null;
                 }
             };
@@ -45,10 +47,10 @@ namespace Ocell.ViewModels
 
         public async Task<IEnumerable<TwitterResource>> GetListsForUser(UserToken user)
         {
-            var lists = new List<TwitterResource>();
+            Progress.Loading();
 
             if (user == null)
-                return lists;
+                return new List<TwitterResource>();
 
             var service = ServiceDispatcher.GetService(user);
 
@@ -57,26 +59,22 @@ namespace Ocell.ViewModels
                 ScreenName = user.ScreenName
             });
 
+            Progress.Finished();
+
             if (!response.RequestSucceeded)
                 throw new ApplicationException(Resources.ErrorGettingLists, response.Error);
 
-            foreach (var list in response.Content)
+            return response.Content.Select(list => new TwitterResource
             {
-                var resource = new TwitterResource
-                {
-                    Type = ResourceType.List,
-                    User = user,
-                    Data = list.Slug
-                };
-
-                lists.Add(resource);
-            }
-
-            return lists;
+                Type = ResourceType.List, User = user, Data = list.Slug
+            }).ToList();
         }
 
         public async Task DeleteList(TwitterResource list, UserToken user)
         {
+            if (list == null)
+                return;
+
             var service = ServiceDispatcher.GetService(user);
 
             Progress.Loading();
