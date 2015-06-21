@@ -73,7 +73,7 @@ namespace Ocell.ViewModels.Lists
             Progress.IsLoading = true;
             var service = ServiceDispatcher.GetService(resource.User);
 
-            var response = await service.RemoveListMemberAsync(new RemoveListMemberOptions
+            var response = await service.AddListMemberAsync(new AddListMemberOptions
             {
                 OwnerScreenName = resource.User.ScreenName,
                 Slug = resource.Data,
@@ -84,7 +84,7 @@ namespace Ocell.ViewModels.Lists
 
             if (response.RequestSucceeded)
             {
-                Notificator.ShowProgressIndicatorMessage(Resources.UserRemovedFromList);
+                Notificator.ShowProgressIndicatorMessage(Resources.UserAddedToList);
             }
             else
             {
