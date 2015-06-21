@@ -1097,6 +1097,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Error loading this list&apos;s users..
+        /// </summary>
+        public static string ErrorLoadingListUsers {
+            get {
+                return ResourceManager.GetString("ErrorLoadingListUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Error loading Trending Topics..
         /// </summary>
         public static string ErrorLoadingTT {

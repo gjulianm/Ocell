@@ -1302,4 +1302,7 @@
   <data name="ErrorDeletingList" xml:space="preserve">
     <value>We couldn't delete that list</value>
   </data>
+  <data name="ErrorLoadingListUsers" xml:space="preserve">
+    <value>Error loading this list's users.</value>
+  </data>
 </root>

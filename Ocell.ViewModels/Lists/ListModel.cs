@@ -1,17 +1,20 @@
-﻿using AncoraMVVM.Base;
+﻿using System.Threading.Tasks;
+using AncoraMVVM.Base;
 using AncoraMVVM.Base.Collections;
 using AncoraMVVM.Base.Diagnostics;
+using Ocell.Library;
+using Ocell.Library.RuntimeData;
 using Ocell.Library.Twitter;
 using Ocell.Library.Twitter.Comparers;
 using Ocell.Localization;
 using PropertyChanged;
-using System.Threading.Tasks;
 using TweetSharp;
+using LogLevel = AncoraMVVM.Base.Diagnostics.LogLevel;
 
-namespace Ocell.ViewModels
+namespace Ocell.ViewModels.Lists
 {
     [ImplementPropertyChanged]
-    public class ListModel : ExtendedViewModelBase
+    public sealed class ListModel : ExtendedViewModelBase
     {
         public string ListName { get; set; }
         public SafeObservable<TwitterUser> ListUsers { get; private set; }
@@ -34,19 +37,24 @@ namespace Ocell.ViewModels
                 Navigator.GoBack();
                 Notificator.ShowError(Resources.ErrorUnexpected);
                 return;
-            };
+            }
 
             Loader = new TweetLoader(resource, false);
             CanFindMoreUsers = false;
-            ListName = resource.Title;
+            ListName = resource.Title.ToUpperInvariant();
             ListUsers = new SafeObservable<TwitterUser>();
             UserSearchResult = new SortedFilteredObservable<TwitterUser>(new TwitterUserComparer());
 
+            var userProvider = ApplicationData.UserProviders.GetForUser(resource.User);
+            UserSearchResult.AddRange(userProvider.Users);
+
+            var replayer = new ObservableCollectionReplayer();
+            replayer.ReplayTo(userProvider.Users, UserSearchResult);
 
             AddUser = new DelegateCommand(AddUserToList);
             RemoveUser = new DelegateCommand(RemoveUserFromList);
 
-            this.PropertyChanged += (sender, e) =>
+            PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == "FilterText")
                     UpdateUserSearch();
@@ -114,7 +122,7 @@ namespace Ocell.ViewModels
 
         private void UpdateUserSearch()
         {
-            UserSearchResult.Discarder = (user) => !(user.ScreenName.Contains(FilterText) || user.Name.Contains(FilterText));
+            UserSearchResult.Discarder = user => !(user.ScreenName.Contains(FilterText) || user.Name.Contains(FilterText));
         }
 
         public override async void OnLoad()
@@ -124,15 +132,18 @@ namespace Ocell.ViewModels
 
         private async Task LoadListUsers(long? nextCursor = null)
         {
+            Progress.Loading(Resources.LoadingLists);
             var service = ServiceDispatcher.GetService(resource.User);
 
             var response = await service.ListListMembersAsync(new ListListMembersOptions
             {
                 SkipStatus = true,
-                OwnerScreenName = resource.Data.Substring(1, resource.Data.IndexOf('/') - 1),
-                Slug = resource.Data.Substring(resource.Data.IndexOf('/') + 1),
+                OwnerScreenName = resource.User.ScreenName,
+                Slug = resource.Data,
                 Cursor = nextCursor
             });
+
+            Progress.Finished();
 
             if (response.RequestSucceeded)
             {
@@ -140,6 +151,10 @@ namespace Ocell.ViewModels
 
                 if (response.Content.NextCursor != 0)
                     await LoadListUsers(response.Content.NextCursor);
+            }
+            else
+            {
+                Notificator.ShowError(Resources.ErrorLoadingListUsers);
             }
         }
     }
