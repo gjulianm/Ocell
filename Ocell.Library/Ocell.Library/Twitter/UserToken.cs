@@ -1,19 +1,18 @@
-﻿using System.Windows.Input;
+﻿using System.Diagnostics;
 using Ocell.Library.Notifications;
-using System.Diagnostics;
 
 namespace Ocell.Library.Twitter
 {
     [DebuggerDisplay("{ScreenName}")]
     public class UserToken
     {
-        public string Key {get; set;}
+        public string Key { get; set; }
         public string Secret { get; set; }
         public string ScreenName { get; set; }
         public long? Id { get; set; }
         public string AvatarUrl { get; set; }
         public NotificationPreferences Preferences;
-      
+
 
         public static bool operator ==(UserToken a, UserToken b)
         {
@@ -46,6 +45,11 @@ namespace Ocell.Library.Twitter
         public override int GetHashCode()
         {
             return Key.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return ScreenName;
         }
     }
 }
