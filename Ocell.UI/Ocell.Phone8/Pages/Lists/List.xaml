@@ -11,6 +11,7 @@
 	xmlns:ac="clr-namespace:AncoraMVVM.Phone7;assembly=AncoraMVVM.Phone7"
 	x:Class="Ocell.Pages.Lists.List"
 	mc:Ignorable="d"
+    Style="{StaticResource ModalPageStyle}"
 	>
 	
 	<phone:PhoneApplicationPage.Resources>
@@ -69,9 +70,6 @@
 			</Grid>
 		</DataTemplate>
 	</phone:PhoneApplicationPage.Resources>
-	<phone:PhoneApplicationPage.Style>
-		<StaticResource ResourceKey="ModalPageStyle"/>
-	</phone:PhoneApplicationPage.Style>
 	
 	<Grid x:Name="LayoutRoot" Margin="0,18,0,0" d:DataContext="{Binding Source={StaticResource ListsSampleDataSource}}">
 		<phone:Pivot HorizontalAlignment="Stretch" Title="{Binding ListName, StringFormat=LIST - \{0\}}" VerticalAlignment="Stretch"  TitleTemplate="{StaticResource PivotTitleTemplate}">

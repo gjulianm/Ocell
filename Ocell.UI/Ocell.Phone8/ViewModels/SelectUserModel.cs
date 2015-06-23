@@ -83,7 +83,7 @@ namespace Ocell.Pages
             TwitterUser user = Destinatary as TwitterUser;
             if (user != null)
                 ;
-            goNext.RaiseCanExecuteChanged();
+                goNext.RaiseCanExecuteChanged();
         }
 
         private void SenderUpdated()

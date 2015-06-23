@@ -209,6 +209,9 @@
     <Compile Include="Pages\Lists\ManageLists.xaml.cs">
       <DependentUpon>ManageLists.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Lists\NewList.xaml.cs">
+      <DependentUpon>NewList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SampleData\FiltersSampleData\FiltersSampleData.xaml.cs">
       <DependentUpon>FiltersSampleData.xaml</DependentUpon>
     </Compile>
@@ -671,6 +674,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Lists\ManageLists.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Lists\NewList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

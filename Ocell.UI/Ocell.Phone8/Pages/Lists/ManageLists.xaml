@@ -58,7 +58,7 @@
 
 	<appbar:Bindable.ApplicationBar>
 		<appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
-			<appbar:BindableAppBarButton Text="{Binding Strings.Add, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.add.rest.png" Command="{Binding AddFilter}" />
+			<appbar:BindableAppBarButton Text="{Binding Strings.Add, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.add.rest.png" Command="{Binding AddList}" />
 		</appbar:BindableAppBar>
 	</appbar:Bindable.ApplicationBar>
 
