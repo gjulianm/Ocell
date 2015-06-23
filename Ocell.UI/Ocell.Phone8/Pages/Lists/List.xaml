@@ -8,7 +8,7 @@
 	xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.ListsSampleDataSource"
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
 	xmlns:lc="clr-namespace:Ocell.Controls"
-	xmlns:ac="clr-namespace:AncoraMVVM.Phone7;assembly=AncoraMVVM.Phone7"
+	xmlns:ac="clr-namespace:AncoraMVVM.Phone;assembly=AncoraMVVM.Phone"
 	x:Class="Ocell.Pages.Lists.List"
 	mc:Ignorable="d"
     Style="{StaticResource ModalPageStyle}"

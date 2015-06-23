@@ -10,7 +10,7 @@
     xmlns:local="clr-namespace:Ocell" 
 	mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
 	x:Class="Ocell.Pages.Elements.User"
-    xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
+    xmlns:appbar="clr-namespace:AncoraMVVM.Phone.BindableAppBar;assembly=AncoraMVVM.Phone"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:converters="clr-namespace:DanielVaughan.Windows.Converters;assembly=Calcium.Phone"
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"

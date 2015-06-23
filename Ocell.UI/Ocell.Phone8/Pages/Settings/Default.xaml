@@ -2,7 +2,7 @@
     x:Class="Ocell.Settings.Default"
     mc:Ignorable="d"
 	xmlns:custom="clr-namespace:Ocell.Controls"
-    xmlns:as="clr-namespace:AncoraMVVM.Phone7.AutoSettings;assembly=AncoraMVVM.Phone7"
+    xmlns:as="clr-namespace:AncoraMVVM.Phone.AutoSettings;assembly=AncoraMVVM.Phone"
     Style="{StaticResource ModalPageStyle}"
 	>
     <phone:PhoneApplicationPage.Resources>

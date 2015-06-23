@@ -10,7 +10,7 @@
 	xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
     xmlns:custom="clr-namespace:Ocell.Controls"
 	x:Class="Ocell.MainPage" 
-	xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
+	xmlns:appbar="clr-namespace:AncoraMVVM.Phone.BindableAppBar;assembly=AncoraMVVM.Phone"
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
 	SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
 	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"

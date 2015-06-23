@@ -12,7 +12,7 @@
 	xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
 	xmlns:tr="clr-namespace:Ocell.Transitions"
 	xmlns:navigation="clr-namespace:System.Windows.Navigation;assembly=Microsoft.Phone"
-	xmlns:ac="clr-namespace:AncoraMVVM.Phone7.Converters;assembly=AncoraMVVM.Phone7"
+	xmlns:ac="clr-namespace:AncoraMVVM.Phone.Converters;assembly=AncoraMVVM.Phone"
 	xmlns:global="clr-namespace:Ocell.Localization;assembly=Ocell.Localization"
 	xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.TwitterResourceData"
 	xmlns:SampleData1="clr-namespace:Expression.Blend.SampleData.FiltersSampleData"
