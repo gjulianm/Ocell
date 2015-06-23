@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ocell</RootNamespace>
     <AssemblyName>Ocell</AssemblyName>
-    <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <TargetFrameworkIdentifier>WindowsPhone</TargetFrameworkIdentifier>
@@ -19,15 +19,17 @@
     <SupportedCultures>es%3bit%3beu%3bde</SupportedCultures>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
-    <XapFilename>Ocell_$(Configuration)_$(Platform).xap</XapFilename>
+    <XapFilename>Ocell.Phone8_$(Configuration)_$(Platform).xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
     <SilverlightAppEntry>Ocell.App</SilverlightAppEntry>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <Utf8Output>true</Utf8Output>
     <ExpressionBlendVersion>12.0.51020.0</ExpressionBlendVersion>
-    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <NuGetPackageImportStamp>aa740bfe</NuGetPackageImportStamp>
+    <SilverlightVersion />
+    <DefaultLanguage>es-ES</DefaultLanguage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -329,6 +331,9 @@
     <None Include="Endpoints\_TwitterService.7.Users.json" />
     <None Include="Endpoints\_TwitterService.8.SuggestedUsers.json" />
     <None Include="Endpoints\_TwitterService.9.Favorites.json" />
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">
@@ -337,6 +342,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assembly.ico" />
+    <Content Include="Assets\BadgeLogo.png" />
+    <Content Include="Assets\Logo.png" />
+    <Content Include="Assets\SplashScreen.png" />
+    <Content Include="Assets\SquareTile150x150.png" />
+    <Content Include="Assets\SquareTile71x71.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\WideLogo.png" />
     <Content Include="BindableAppBar\README.txt" />
     <Content Include="BugSense\BugSense - SDK License Agreement.txt" />
     <Content Include="FodyWeavers.xml" />
@@ -539,9 +551,9 @@
     <DesignTimeOnly Include="SampleData\FiltersSampleData\FiltersSampleData.xsd" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AncoraMVVM.Base, Version=0.1.25.32928, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AncoraMVVM.Base, Version=0.1.25.40089, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AncoraMVVM.Base.0.1.37-alpha\lib\portable-net45+sl40+win+wp71\AncoraMVVM.Base.dll</HintPath>
+      <HintPath>..\..\packages\AncoraMVVM.Base.0.1.38-alpha\lib\portable-net45+sl50+win+wp80\AncoraMVVM.Base.dll</HintPath>
     </Reference>
     <Reference Include="AncoraMVVM.Phone7, Version=0.1.29.24102, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -549,7 +561,7 @@
     </Reference>
     <Reference Include="AncoraMVVM.Rest, Version=0.1.13.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.14-alpha\lib\portable-net45+sl40+wp71+win\AncoraMVVM.Rest.dll</HintPath>
+      <HintPath>..\..\packages\AncoraMVVM.Rest.0.1.15-alpha\lib\portable-net45+sl50+win+wp80\AncoraMVVM.Rest.dll</HintPath>
     </Reference>
     <Reference Include="AsyncOAuth, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -605,15 +617,15 @@
     </Reference>
     <Reference Include="System.Net.Http, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.28\lib\sl4-windowsphone71\System.Net.Http.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.29\lib\sl4-windowsphone71\System.Net.Http.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.28\lib\sl4-windowsphone71\System.Net.Http.Extensions.dll</HintPath>
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.29\lib\sl4-windowsphone71\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Primitives, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.28\lib\sl4-windowsphone71\System.Net.Http.Primitives.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.29\lib\sl4-windowsphone71\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Interactivity, Version=3.7.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
