@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AncoraMVVM.Base;
 using AncoraMVVM.Base.Collections;
 using AncoraMVVM.Base.Diagnostics;
 using Ocell.Library;
+using Ocell.Library.Extension;
 using Ocell.Library.RuntimeData;
 using Ocell.Library.Twitter;
 using Ocell.Library.Twitter.Comparers;
@@ -25,6 +27,7 @@ namespace Ocell.ViewModels.Lists
         public bool CanFindMoreUsers { get; set; }
         public DelegateCommand AddUser { get; set; }
         public DelegateCommand RemoveUser { get; set; }
+        public DelegateCommand FindMoreUsers { get; set; }
 
         TwitterResource resource;
 
@@ -45,7 +48,7 @@ namespace Ocell.ViewModels.Lists
             Loader.LoadCacheAsync();
             Loader.Load();
 
-            CanFindMoreUsers = false;
+            CanFindMoreUsers = true;
             ListName = resource.Title.ToUpperInvariant();
             ListUsers = new SafeObservable<TwitterUser>();
             UserSearchResult = new SortedFilteredObservable<TwitterUser>(new TwitterUserComparer());
@@ -58,12 +61,47 @@ namespace Ocell.ViewModels.Lists
 
             AddUser = new DelegateCommand(AddUserToList);
             RemoveUser = new DelegateCommand(RemoveUserFromList);
+            FindMoreUsers = new DelegateCommand(SearchUsers);
 
             PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == "FilterText")
                     UpdateUserSearch();
             };
+        }
+
+        private int? searchPage = 1;
+        private string previousSearchText = null;
+
+        private async void SearchUsers()
+        {
+            var service = ServiceDispatcher.GetCurrentService();
+
+            Progress.Loading();
+
+            if (previousSearchText != FilterText)
+                searchPage = 1;
+
+            var response = await service.SearchForUserAsync(new SearchForUserOptions
+            {
+                Count = 100,
+                Q = FilterText,
+                Page = searchPage
+            });
+
+            Progress.Finished();
+
+            if (!response.RequestSucceeded)
+            {
+                Notificator.ShowTwitterError(Resources.Error, response.Error);
+                return;
+            }
+
+            searchPage++;
+
+            var toAdd = response.Content.Where(x => UserSearchResult.All(y => x.ScreenName != y.ScreenName));
+
+            UserSearchResult.AddRange(toAdd);
         }
 
         private async void AddUserToList(object param)
