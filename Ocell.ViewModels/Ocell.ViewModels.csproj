@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Filters\FiltersModel.cs" />
+    <Compile Include="Lists\NewListModel.cs" />
     <Compile Include="Lists\ManageListsModel.cs" />
     <Compile Include="Lists\ListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -27,11 +27,6 @@
         <StackPanel x:Name="ContentPanel" Margin="12,0,12,0" Grid.Row="1">
             <TextBox Text="{Binding ListName, Mode=TwoWay}" />
             <toolkit:ListPicker SelectedItem="{Binding SelectedPrivacy, Mode=TwoWay}" ItemsSource="{Binding PrivacyOptions}">
-                <toolkit:ListPicker.ItemTemplate>
-                    <DataTemplate>
-                        <TextBox Text="{Binding Converter={StaticResource PhoneEnumToStringConverter}}"></TextBox>
-                    </DataTemplate>
-                </toolkit:ListPicker.ItemTemplate>
             </toolkit:ListPicker>
             <Button Style="{StaticResource MetroButtonStyle}" Content="{Binding Strings.CreateNewList, Source={StaticResource LocalizedResources}}"
                     Command="{Binding CreateList}" IsEnabled="{Binding CanCreateList}">
