@@ -7,11 +7,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:ac="clr-namespace:AncoraMVVM;assembly=AncoraMVVM.Base"
     SupportedOrientations="Portrait"
     mc:Ignorable="d"
     Style="{StaticResource ModalPageStyle}"
     shell:SystemTray.IsVisible="True">
-
+    
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -28,7 +29,7 @@
             <toolkit:ListPicker SelectedItem="{Binding SelectedPrivacy, Mode=TwoWay}" ItemsSource="{Binding PrivacyOptions}">
                 <toolkit:ListPicker.ItemTemplate>
                     <DataTemplate>
-                        <TextBox Text="{Binding}"></TextBox>
+                        <TextBox Text="{Binding Converter={StaticResource PhoneEnumToStringConverter}}"></TextBox>
                     </DataTemplate>
                 </toolkit:ListPicker.ItemTemplate>
             </toolkit:ListPicker>

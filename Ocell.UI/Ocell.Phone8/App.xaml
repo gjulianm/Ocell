@@ -50,6 +50,7 @@
             <local:ProtectedConverter x:Key="ProtectedConverter"/>
             <commands:MuteCommand x:Key="MuteCommand"/>
             <ac:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <ac:PhoneEnumToStringConverter x:Key="PhoneEnumToStringConverter" />
             <local:GlobalSettings x:Key="GlobalSettings" />
             <local:ResourceTypeConverter x:Key="ResourceTypeConverter" />
             <local:TextToMediaConverter x:Key="TextToMediaConverter" />
