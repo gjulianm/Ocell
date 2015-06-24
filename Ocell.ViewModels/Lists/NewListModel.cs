@@ -59,6 +59,7 @@ namespace Ocell.ViewModels.Lists
             };
 
             Navigator.MessageAndNavigate<ListModel, TwitterResource>(resource);
+            Navigator.ClearLastStackEntries(1);
         }
     }
 }

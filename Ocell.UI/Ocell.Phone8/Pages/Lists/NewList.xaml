@@ -7,7 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    xmlns:ac="clr-namespace:AncoraMVVM;assembly=AncoraMVVM.Base"
+    xmlns:ac="clr-namespace:AncoraMVVM.Phone;assembly=AncoraMVVM.Phone"
     SupportedOrientations="Portrait"
     mc:Ignorable="d"
     Style="{StaticResource ModalPageStyle}"
@@ -25,7 +25,7 @@
             <TextBlock x:Name="PageTitle" Text="{Binding Strings.CreateNewList, Source={StaticResource LocalizedResources}, Converter={StaticResource FirstToLowerConverter}}" Margin="9,-7,0,0" Style="{StaticResource PageHeaderStyle}" />
         </StackPanel>
         <StackPanel x:Name="ContentPanel" Margin="12,0,12,0" Grid.Row="1">
-            <TextBox Text="{Binding ListName, Mode=TwoWay}" />
+            <TextBox Text="{Binding ListName, Mode=TwoWay}" ac:TextBoxUpdater.UpdateBindingOnChange="True" />
             <toolkit:ListPicker SelectedItem="{Binding SelectedPrivacy, Mode=TwoWay}" ItemsSource="{Binding PrivacyOptions}">
             </toolkit:ListPicker>
             <Button Style="{StaticResource MetroButtonStyle}" Content="{Binding Strings.CreateNewList, Source={StaticResource LocalizedResources}}"
