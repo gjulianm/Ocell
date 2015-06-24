@@ -11,6 +11,7 @@ using System;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media.Animation;
+using Ocell.Library.RuntimeData;
 using TweetSharp;
 
 namespace Ocell.Pages.Elements
@@ -107,7 +108,7 @@ namespace Ocell.Pages.Elements
             {
                 Data = ViewModel.Tweet.Id.ToString(),
                 Type = ResourceType.Conversation,
-                User = DataTransfer.CurrentAccount
+                User = ApplicationData.CurrentAccount
             };
 
             if (conversation.Loader == null)

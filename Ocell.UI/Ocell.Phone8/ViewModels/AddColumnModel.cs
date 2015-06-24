@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Ocell.Library.RuntimeData;
 using TweetSharp;
 
 namespace Ocell.Pages.Columns
@@ -49,7 +50,7 @@ namespace Ocell.Pages.Columns
 
         public override void OnLoad()
         {
-            if (DataTransfer.CurrentAccount == null)
+            if (ApplicationData.CurrentAccount == null)
             {
                 Notificator.ShowError(Localization.Resources.ErrorNoAccount);
                 Navigator.GoBack();
@@ -63,14 +64,14 @@ namespace Ocell.Pages.Columns
 
         private void LoadLists()
         {
-            var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
+            var service = ServiceDispatcher.GetService(ApplicationData.CurrentAccount);
 
             Progress.IsLoading = true;
             Progress.Text = Localization.Resources.LoadingLists;
 
             loading = 2;
-            service.ListListsForAsync(new ListListsForOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }).ContinueWith(ReceiveLists);
-            service.ListSubscriptionsAsync(new ListSubscriptionsOptions { ScreenName = DataTransfer.CurrentAccount.ScreenName }).ContinueWith(ReceiveSubscriptions);
+            service.ListListsForAsync(new ListListsForOptions { ScreenName = ApplicationData.CurrentAccount.ScreenName }).ContinueWith(ReceiveLists);
+            service.ListSubscriptionsAsync(new ListSubscriptionsOptions { ScreenName = ApplicationData.CurrentAccount.ScreenName }).ContinueWith(ReceiveSubscriptions);
         }
 
 
@@ -79,25 +80,25 @@ namespace Ocell.Pages.Columns
         {
             Core.Add(new TwitterResource
             {
-                User = DataTransfer.CurrentAccount,
+                User = ApplicationData.CurrentAccount,
                 Type = ResourceType.Home
             });
 
             Core.Add(new TwitterResource
             {
-                User = DataTransfer.CurrentAccount,
+                User = ApplicationData.CurrentAccount,
                 Type = ResourceType.Mentions
             });
 
             Core.Add(new TwitterResource
             {
-                User = DataTransfer.CurrentAccount,
+                User = ApplicationData.CurrentAccount,
                 Type = ResourceType.Messages
             });
 
             Core.Add(new TwitterResource
             {
-                User = DataTransfer.CurrentAccount,
+                User = ApplicationData.CurrentAccount,
                 Type = ResourceType.Favorites
             });
         }
@@ -149,7 +150,7 @@ namespace Ocell.Pages.Columns
             {
                 Type = ResourceType.List,
                 Data = list.FullName,
-                User = DataTransfer.CurrentAccount
+                User = ApplicationData.CurrentAccount
             };
 
             SaveColumn(toAdd);

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+      *********    NO MODIFIQUE ESTE ARCHIVO     *********
+      Este archivo se regenera mediante una herramienta de diseño.
+       Si realiza cambios en este archivo, puede causar errores.
+-->
+<xs:schema xmlns:blend="http://schemas.microsoft.com/expression/blend/2008" xmlns:tns="Expression.Blend.SampleData.TwitterResourceData" targetNamespace="Expression.Blend.SampleData.TwitterResourceData" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="TwitterResourceData" type="tns:TwitterResourceData" />
+  <xs:complexType name="TwitterResourceData">
+    <xs:sequence>
+      <xs:element name="Lists" type="tns:Lists" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Lists">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="ListsItem" type="tns:ListsItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ListsItem">
+    <xs:attribute name="String" type="xs:string" />
+  </xs:complexType>
+</xs:schema>

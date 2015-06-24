@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using TweetSharp;
-using Ocell.Library;
-using Ocell.Library.Twitter;
 
 namespace Ocell.Library.Twitter.Comparers
 {
@@ -53,18 +51,6 @@ namespace Ocell.Library.Twitter.Comparers
                 return 1;
             else
                 return 0;
-        }
-    }
-
-    public class TwitterResourceCompare : IEqualityComparer<TwitterResource>
-    {
-        public bool Equals(TwitterResource a, TwitterResource b)
-        {
-            return (a.User.Key == b.User.Key) && (a.Type == b.Type) && (a.Data == b.Data);
-        }
-        public int GetHashCode(TwitterResource s)
-        {
-            return s.User.Key.GetHashCode() * s.String.GetHashCode();
         }
     }
 }

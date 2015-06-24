@@ -12,6 +12,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Ocell.Library.RuntimeData;
 using TweetSharp;
 
 namespace Ocell.Pages.Elements
@@ -137,8 +138,8 @@ namespace Ocell.Pages.Elements
 
         private void UpdateLoaders()
         {
-            TweetLoader = new TweetLoader(new TwitterResource { String = "Tweets:" + ScreenName, User = DataTransfer.CurrentAccount }, false);
-            MentionLoader = new TweetLoader(new TwitterResource { Data = "@" + ScreenName, Type = ResourceType.Search, User = DataTransfer.CurrentAccount }, false);
+            TweetLoader = new TweetLoader(new TwitterResource { String = "Tweets:" + ScreenName, User = ApplicationData.CurrentAccount }, false);
+            MentionLoader = new TweetLoader(new TwitterResource { Data = "@" + ScreenName, Type = ResourceType.Search, User = ApplicationData.CurrentAccount }, false);
 
             TweetLoader.Load();
             MentionLoader.Load();
@@ -165,12 +166,12 @@ namespace Ocell.Pages.Elements
 
         private void SetupCommands()
         {
-            GenericCanExecute = (obj) => User != null && DataTransfer.CurrentAccount != null;
+            GenericCanExecute = (obj) => User != null && ApplicationData.CurrentAccount != null;
 
             followUser = new DelegateCommand((obj) =>
             {
                 Progress.IsLoading = true;
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).FollowUserAsync(new FollowUserOptions { UserId = User.Id }).ContinueWith(ReceiveFollow);
+                ServiceDispatcher.GetService(ApplicationData.CurrentAccount).FollowUserAsync(new FollowUserOptions { UserId = User.Id }).ContinueWith(ReceiveFollow);
             }, x => FriendshipRetrieved && GenericCanExecute.Invoke(null));
 
             followUser.BindCanExecuteToProperty(this, "User", "Followed", "FriendshipRetrieved");
@@ -178,7 +179,7 @@ namespace Ocell.Pages.Elements
             unfollowUser = new DelegateCommand((obj) =>
             {
                 Progress.IsLoading = true;
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnfollowUserAsync(new UnfollowUserOptions { UserId = User.Id }).ContinueWith(ReceiveFollow);
+                ServiceDispatcher.GetService(ApplicationData.CurrentAccount).UnfollowUserAsync(new UnfollowUserOptions { UserId = User.Id }).ContinueWith(ReceiveFollow);
             }, x => FriendshipRetrieved && GenericCanExecute.Invoke(null));
 
             unfollowUser.BindCanExecuteToProperty(this, "User", "Followed", "FriendshipRetrieved");
@@ -189,7 +190,7 @@ namespace Ocell.Pages.Elements
                 {
                     Data = User.ScreenName,
                     Type = ResourceType.Tweets,
-                    User = DataTransfer.CurrentAccount
+                    User = ApplicationData.CurrentAccount
                 });
                 Config.SaveColumns();
                 Notificator.ShowProgressIndicatorMessage(Resources.UserPinned);
@@ -203,23 +204,23 @@ namespace Ocell.Pages.Elements
             block = new DelegateCommand((obj) =>
             {
                 Progress.IsLoading = true;
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).BlockUserAsync(new BlockUserOptions { UserId = User.Id }).ContinueWith(ReceiveBlock);
-            }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
+                ServiceDispatcher.GetService(ApplicationData.CurrentAccount).BlockUserAsync(new BlockUserOptions { UserId = User.Id }).ContinueWith(ReceiveBlock);
+            }, obj => GenericCanExecute(obj) && ApplicationData.CurrentAccount.ScreenName != User.ScreenName);
 
             block.BindCanExecuteToProperty(this, "Blocked", "User");
 
             unblock = new DelegateCommand((obj) =>
             {
                 Progress.IsLoading = true;
-                ServiceDispatcher.GetService(DataTransfer.CurrentAccount).UnblockUserAsync(new UnblockUserOptions { UserId = User.Id }).ContinueWith(ReceiveBlock);
-            }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
+                ServiceDispatcher.GetService(ApplicationData.CurrentAccount).UnblockUserAsync(new UnblockUserOptions { UserId = User.Id }).ContinueWith(ReceiveBlock);
+            }, obj => GenericCanExecute(obj) && ApplicationData.CurrentAccount.ScreenName != User.ScreenName);
 
             unblock.BindCanExecuteToProperty(this, "Blocked", "User");
 
             reportSpam = new DelegateCommand(async (obj) =>
             {
                 Progress.IsLoading = true;
-                var response = await ServiceDispatcher.GetService(DataTransfer.CurrentAccount).ReportSpamAsync(new ReportSpamOptions { UserId = User.Id });
+                var response = await ServiceDispatcher.GetService(ApplicationData.CurrentAccount).ReportSpamAsync(new ReportSpamOptions { UserId = User.Id });
                 Progress.IsLoading = false;
 
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -227,7 +228,7 @@ namespace Ocell.Pages.Elements
                 else
                     Notificator.ShowError(String.Format(Resources.CouldntReport, User.ScreenName));
 
-            }, obj => GenericCanExecute(obj) && DataTransfer.CurrentAccount.ScreenName != User.ScreenName);
+            }, obj => GenericCanExecute(obj) && ApplicationData.CurrentAccount.ScreenName != User.ScreenName);
 
             reportSpam.BindCanExecuteToProperty(this, "User");
 
@@ -261,9 +262,9 @@ namespace Ocell.Pages.Elements
             if (!FriendshipRetrieved || IsOwner)
                 RelationshipText = "";
             else if (FollowsMe)
-                RelationshipText = String.Format(Resources.XFollowsY, ScreenName, DataTransfer.CurrentAccount.ScreenName);
+                RelationshipText = String.Format(Resources.XFollowsY, ScreenName, ApplicationData.CurrentAccount.ScreenName);
             else
-                RelationshipText = String.Format(Resources.XNotFollowsY, ScreenName, DataTransfer.CurrentAccount.ScreenName);
+                RelationshipText = String.Format(Resources.XNotFollowsY, ScreenName, ApplicationData.CurrentAccount.ScreenName);
         }
 
         async void PhotoSelected(object sender, PhotoResult e)
@@ -385,10 +386,10 @@ namespace Ocell.Pages.Elements
 
         private void GetFriendshipInformation()
         {
-            if (DataTransfer.CurrentAccount != null)
+            if (ApplicationData.CurrentAccount != null)
             {
-                var service = ServiceDispatcher.GetService(DataTransfer.CurrentAccount);
-                service.GetFriendshipInfoAsync(new GetFriendshipInfoOptions { SourceScreenName = DataTransfer.CurrentAccount.ScreenName, TargetScreenName = User.ScreenName }).ContinueWith(ReceiveFriendshipInfo);
+                var service = ServiceDispatcher.GetService(ApplicationData.CurrentAccount);
+                service.GetFriendshipInfoAsync(new GetFriendshipInfoOptions { SourceScreenName = ApplicationData.CurrentAccount.ScreenName, TargetScreenName = User.ScreenName }).ContinueWith(ReceiveFriendshipInfo);
                 service.ListBlockedUserIdsAsync(new ListBlockedUserIdsOptions { Cursor = -1 }).ContinueWith(ReceiveBlockedUsers);
             }
         }

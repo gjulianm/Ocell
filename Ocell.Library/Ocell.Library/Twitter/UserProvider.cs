@@ -1,6 +1,6 @@
-﻿using AncoraMVVM.Base;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using AncoraMVVM.Base;
 using TweetSharp;
 
 namespace Ocell.Library.Twitter
@@ -11,6 +11,9 @@ namespace Ocell.Library.Twitter
         public UserToken User { get; set; }
         public bool GetFollowers { get; set; }
         public bool GetFollowing { get; set; }
+        public bool DownloadingFollowers { get; set; }
+        public bool DownloadingFollowing { get; set; }
+        public bool Downloading { get { return DownloadingFollowers || DownloadingFollowing; } }
 
         private ITwitterService service;
 
@@ -19,20 +22,19 @@ namespace Ocell.Library.Twitter
             GetFollowers = true;
             GetFollowing = true;
             Users = new SafeObservable<TwitterUser>();
+            DownloadingFollowing = false;
+            DownloadingFollowers = false;
         }
 
-        private void GetService()
+        private void CreateService()
         {
-            if (User == null)
-                service = ServiceDispatcher.GetDefaultService();
-            else
-                service = ServiceDispatcher.GetService(User);
+            service = User == null ? ServiceDispatcher.GetDefaultService() : ServiceDispatcher.GetService(User);
         }
 
         public void Start()
         {
             if (service == null)
-                GetService();
+                CreateService();
 
             GetUsers(-1);
         }
@@ -40,41 +42,82 @@ namespace Ocell.Library.Twitter
         private void GetUsers(long cursor)
         {
             if (GetFollowing)
-                service.ListFriendsAsync(new ListFriendsOptions { ScreenName = User.ScreenName, Cursor = cursor }).ContinueWith(ReceiveList);
+                GetFollowingUsers(cursor);
+
             if (GetFollowers)
-                service.ListFollowersAsync(new ListFollowersOptions { ScreenName = User.ScreenName, Cursor = cursor }).ContinueWith(ReceiveList);
+                GetFollowerUsers(cursor);
         }
 
-        private void ReceiveList(Task<TwitterResponse<TwitterCursorList<TwitterUser>>> task)
+        private void GetFollowerUsers(long cursor)
         {
-            var response = task.Result;
+            service.ListFollowersAsync(new ListFollowersOptions { ScreenName = User.ScreenName, Cursor = cursor })
+                .ContinueWith(ReceiveFollowerList);
+            DownloadingFollowers = true;
+        }
 
-            bool finished = false;
+        private void ReceiveFollowerList(Task<TwitterResponse<TwitterCursorList<TwitterUser>>> task)
+        {
+            long? cursor = ReceiveList(task);
+
+            if (cursor == null)
+            {
+                DownloadingFollowers = false;
+                OnDownloadFinalization();
+            }
+            else
+                GetFollowerUsers(cursor.Value);
+        }
+
+        private void OnDownloadFinalization()
+        {
+            if (!Downloading && Finished != null)
+                Finished(this, new EventArgs());
+        }
+
+        private void GetFollowingUsers(long cursor)
+        {
+            service.ListFriendsAsync(new ListFriendsOptions { ScreenName = User.ScreenName, Cursor = cursor })
+                .ContinueWith(ReceiveFollowingList);
+            DownloadingFollowing = true;
+        }
+
+        private void ReceiveFollowingList(Task<TwitterResponse<TwitterCursorList<TwitterUser>>> task)
+        {
+            long? cursor = ReceiveList(task);
+
+            if (cursor == null)
+            {
+                DownloadingFollowing = false;
+                OnDownloadFinalization();
+            }
+            else
+                GetFollowingUsers(cursor.Value);
+        }
+
+
+        private long? ReceiveList(Task<TwitterResponse<TwitterCursorList<TwitterUser>>> task)
+        {
+            long? nextCursor = null;
+            var response = task.Result;
 
             if (!response.RequestSucceeded)
             {
                 if (Error != null)
                     Error(this, response);
 
-                return;
+                return null;
             }
 
             var users = response.Content;
 
-            if (users.NextCursor != null && users.NextCursor != 0 && service != null)
-                GetUsers((long)users.NextCursor);
-            else
-                finished = true;
-
-            if (Users == null)
-                Users = new SafeObservable<TwitterUser>();
+            if (users.NextCursor != null && users.NextCursor != 0)
+                nextCursor = users.NextCursor;
 
             foreach (var user in users)
                 if (!Users.Contains(user))
                     Users.Add(user);
 
-            if (finished && Finished != null)
-                Finished(this, new EventArgs());
+            return nextCursor;
         }
 
         public event OnError Error;

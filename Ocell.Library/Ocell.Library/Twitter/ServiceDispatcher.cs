@@ -1,24 +1,26 @@
-using System.Collections.Generic;
-using TweetSharp;
 using BufferAPI;
 using Sharplonger;
+using System.Collections.Generic;
+using Ocell.Library.RuntimeData;
+using TweetSharp;
 
 
 namespace Ocell.Library.Twitter
 {
     public static class ServiceDispatcher
     {
-        private static object _lockFlag = new object();
-        private static Dictionary<string, ITwitterService> _services;
+        private static object lockFlag = new object();
+        private static Dictionary<string, ITwitterService> services;
 
-        public static bool TestSession { get; set; }
+        public static string ApplicationKey { get; set; }
+        public static string ApplicationSecret { get; set; }
 
         public static ITwitterService GetService(UserToken account)
         {
-            lock (_lockFlag)
+            lock (lockFlag)
             {
-                if (_services == null)
-                    _services = new Dictionary<string, ITwitterService>();
+                if (services == null)
+                    services = new Dictionary<string, ITwitterService>();
             }
 
             if (account == null || account.Key == null)
@@ -26,20 +28,20 @@ namespace Ocell.Library.Twitter
 
             ITwitterService srv;
 
-            lock (_lockFlag)
+            if (ApplicationKey == null || ApplicationSecret == null)
+                throw new ApplicationException("ApplicationKey/ApplicationSecret are null. We can't create Twitter Services.");
+
+            lock (lockFlag)
             {
-                if (_services.ContainsKey(account.Key))
-                    return _services[account.Key];
+                if (services.ContainsKey(account.Key))
+                    return services[account.Key];
 
-                var _srv = new TwitterService();
-                _srv.AuthenticateWith(SensitiveData.ConsumerToken, SensitiveData.ConsumerSecret, account.Key, account.Secret);
-
-                srv = _srv;
+                srv = new TwitterService();
+                srv.AuthenticateWith(ApplicationKey, ApplicationSecret, account.Key, account.Secret);
 
                 try
                 {
-
-                    _services.Add(account.Key, srv);
+                    services.Add(account.Key, srv);
                 }
                 catch
                 {
@@ -65,7 +67,7 @@ namespace Ocell.Library.Twitter
 
         public static ITwitterService GetCurrentService()
         {
-            return GetService(DataTransfer.CurrentAccount);
+            return GetService(ApplicationData.CurrentAccount);
         }
 
         public static TwitlongerService GetTwitlongerService(UserToken user)
@@ -96,7 +98,7 @@ namespace Ocell.Library.Twitter
 
         public static void Dispose()
         {
-            _services.Clear();
+            services.Clear();
         }
     }
 }

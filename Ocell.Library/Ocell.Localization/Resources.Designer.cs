@@ -953,6 +953,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Error adding user to the list: {0}.
+        /// </summary>
+        public static string ErrorAddingUserToList {
+            get {
+                return ResourceManager.GetString("ErrorAddingUserToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a An error happened while trying to get auth URL. Ensure that the time on your phone is correct, and try changing the network (Wifi or mobile). Please contact @OcellApp if this happens frequently..
         /// </summary>
         public static string ErrorAuthURL {
@@ -1007,6 +1016,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a We couldn&apos;t delete that list.
+        /// </summary>
+        public static string ErrorDeletingList {
+            get {
+                return ResourceManager.GetString("ErrorDeletingList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a We couldn&apos;t delete this tweet..
         /// </summary>
         public static string ErrorDeletingTweet {
@@ -1052,6 +1070,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Error getting your lists..
+        /// </summary>
+        public static string ErrorGettingLists {
+            get {
+                return ResourceManager.GetString("ErrorGettingLists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Couldn&apos;t get the full user profile..
         /// </summary>
         public static string ErrorGettingProfile {
@@ -1066,6 +1093,15 @@ namespace Ocell.Localization {
         public static string ErrorLoadingLists {
             get {
                 return ResourceManager.GetString("ErrorLoadingLists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Error loading this list&apos;s users..
+        /// </summary>
+        public static string ErrorLoadingListUsers {
+            get {
+                return ResourceManager.GetString("ErrorLoadingListUsers", resourceCulture);
             }
         }
         
@@ -1111,6 +1147,15 @@ namespace Ocell.Localization {
         public static string ErrorNoAccount {
             get {
                 return ResourceManager.GetString("ErrorNoAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Error removing user: {0}.
+        /// </summary>
+        public static string ErrorRemovingUser {
+            get {
+                return ResourceManager.GetString("ErrorRemovingUser", resourceCulture);
             }
         }
         
@@ -2627,7 +2672,7 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a tweets where the {0}.
+        ///   Busca una cadena traducida similar a tweets where the {0} contains.
         /// </summary>
         public static string TweetsWhere {
             get {
@@ -2744,6 +2789,15 @@ namespace Ocell.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a User added to the list..
+        /// </summary>
+        public static string UserAddedToList {
+            get {
+                return ResourceManager.GetString("UserAddedToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a The user {0} is muted until {1}..
         /// </summary>
         public static string UserIsMutedUntil {
@@ -2794,6 +2848,15 @@ namespace Ocell.Localization {
         public static string UserPinned {
             get {
                 return ResourceManager.GetString("UserPinned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a User removed from list..
+        /// </summary>
+        public static string UserRemovedFromList {
+            get {
+                return ResourceManager.GetString("UserRemovedFromList", resourceCulture);
             }
         }
         

@@ -8,7 +8,7 @@
 	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:ec="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-    xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
+    xmlns:appbar="clr-namespace:AncoraMVVM.Phone.BindableAppBar;assembly=AncoraMVVM.Phone"
     xmlns:Ocell_Transitions="clr-namespace:Ocell.Transitions"
     x:Class="Ocell.Pages.NewTweet"
     mc:Ignorable="d"

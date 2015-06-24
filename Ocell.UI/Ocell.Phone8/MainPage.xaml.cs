@@ -48,7 +48,6 @@ namespace Ocell
         #region Page events
         protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
         {
-            DataTransfer.IsGlobalFilter = false;
             base.OnNavigatedFrom(e);
         }
 

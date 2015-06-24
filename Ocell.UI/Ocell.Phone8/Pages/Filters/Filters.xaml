@@ -1,75 +1,78 @@
 ﻿<phone:PhoneApplicationPage
-    x:Class="Ocell.Pages.Filters.Filters"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
-    xmlns:convs="clr-namespace:Ocell.Converters"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-   
-    Style="{StaticResource ModalPageStyle}">
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:appbar="clr-namespace:AncoraMVVM.Phone.BindableAppBar;assembly=AncoraMVVM.Phone"
+	xmlns:convs="clr-namespace:Ocell.Converters"
+	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    mc:Ignorable="d"   
+	x:Class="Ocell.Pages.Filters.Filters" d:DataContext="{d:DesignData /SampleData/FiltersSampleData/FiltersSampleData.xaml}"
+	>
 
-    <phone:PhoneApplicationPage.Resources>
-        <convs:InclusionModeConverter x:Name="InclusionModeConverter" />
-        <DataTemplate x:Key="FilterTemplate">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+	<phone:PhoneApplicationPage.Resources>
+		<convs:InclusionModeConverter x:Name="InclusionModeConverter" />
+		<DataTemplate x:Key="FilterTemplate">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
 
 
-                <TextBlock FontFamily="Segoe WP SemiLight" FontSize="25" Grid.Row="0">
+				<TextBlock FontFamily="Segoe WP SemiLight" FontSize="25" Grid.Row="0">
 					<Run Text="{Binding Mode, Converter={StaticResource InclusionModeConverter}}" />
 					<Run Text="{Binding Filter}"  />
-                </TextBlock>
+				</TextBlock>
 
-                <TextBlock Grid.Row="1" Foreground="{StaticResource PhoneSubtleBrush}" FontFamily="Segoe WP Light" FontSize="22">
-                    <Run Text="{Binding Strings.Until, Source={StaticResource LocalizedResources}}" />
-                    <Run Text="{Binding IsValidUntil}" />
-                </TextBlock>
+				<TextBlock Grid.Row="1" Foreground="{StaticResource PhoneSubtleBrush}" FontFamily="Segoe WP Light" FontSize="22">
+					<Run Text="{Binding Strings.Until, Source={StaticResource LocalizedResources}}" />
+					<Run Text="{Binding IsValidUntil}" />
+				</TextBlock>
 
-                <Button Grid.RowSpan="2" Width="48" Height="48" Grid.Column="1" 
-                        BorderThickness="0" Background="{StaticResource PhoneForegroundBrush}"  Margin="12" Command="{Binding Path=DataContext.RemoveFilter, ElementName=FilterList}" 
-                        CommandParameter="{Binding}">
-                    <Button.OpacityMask>
-                        <ImageBrush ImageSource="/Images/Icons_Black/appbar.cancel.rest.png" />
-                    </Button.OpacityMask>
-                </Button>
-            </Grid>
-        </DataTemplate>
-    </phone:PhoneApplicationPage.Resources>
+				<Button Grid.RowSpan="2" Width="48" Height="48" Grid.Column="1" 
+					BorderThickness="0" Background="{StaticResource PhoneForegroundBrush}"  Margin="12" Command="{Binding DataContext.RemoveFilter, ElementName=FilterList}" 
+					CommandParameter="{Binding}">
+					<Button.OpacityMask>
+						<ImageBrush ImageSource="/Images/Icons_Black/appbar.cancel.rest.png" />
+					</Button.OpacityMask>
+				</Button>
+			</Grid>
+		</DataTemplate>
+	</phone:PhoneApplicationPage.Resources>
 
-    <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
-    <Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        
-        <!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
-        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,64,0,28">
-            <TextBlock x:Name="ApplicationTitle" Text="OCELL" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="{Binding Strings.Filters, Source={StaticResource LocalizedResources}}" Margin="9,-7,0,0" Style="{StaticResource PageHeaderStyle}" />
-        </StackPanel>
+	<phone:PhoneApplicationPage.Style>
+		<StaticResource ResourceKey="ModalPageStyle"/>
+	</phone:PhoneApplicationPage.Style>
+	<appbar:Bindable.ApplicationBar>
+		<appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
+			<appbar:BindableAppBarButton Text="{Binding Strings.Add, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.add.rest.png" Command="{Binding AddFilter}" />
+		</appbar:BindableAppBar>
+	</appbar:Bindable.ApplicationBar>
+<!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
+	<Grid x:Name="LayoutRoot" Margin="0,-32,0,0">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		
+		<!--TitlePanel contiene el nombre de la aplicación y el título de la página-->
+		<StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,64,0,28">
+			<TextBlock x:Name="ApplicationTitle" Text="OCELL" Style="{StaticResource PhoneTextNormalStyle}"/>
+			<TextBlock x:Name="PageTitle" Text="{Binding Strings.Filters, Source={StaticResource LocalizedResources}}" Margin="9,-7,0,0" Style="{StaticResource PageHeaderStyle}" />
+		</StackPanel>
 
-        <!--ContentPanel. Colocar aquí el contenido adicional-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <phone:LongListSelector Margin="12" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-                                    ItemsSource="{Binding Filters}" x:Name="FilterList" toolkit:TiltEffect.IsTiltEnabled="True"
-                                    ItemTemplate="{StaticResource FilterTemplate}" SelectedItem="{Binding SelectedFilter, Mode=TwoWay}" />
-        </Grid>
-    </Grid>
-    <appbar:Bindable.ApplicationBar>
-        <appbar:BindableAppBar Style="{StaticResource AppBarStyle}">
-            <appbar:BindableAppBarButton Text="{Binding Strings.Add, Source={StaticResource LocalizedResources}}" IconUri="/Images/Icons_White/appbar.add.rest.png" Command="{Binding AddFilter}" />
-        </appbar:BindableAppBar>
-    </appbar:Bindable.ApplicationBar>
+		<!--ContentPanel. Colocar aquí el contenido adicional-->
+		<Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+			<phone:LongListSelector Margin="12" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+				ItemsSource="{Binding Filters}" x:Name="FilterList" toolkit:TiltEffect.IsTiltEnabled="True"
+				ItemTemplate="{StaticResource FilterTemplate}" SelectedItem="{Binding SelectedFilter, Mode=TwoWay}" />
+		</Grid>
+	</Grid>
 </phone:PhoneApplicationPage>

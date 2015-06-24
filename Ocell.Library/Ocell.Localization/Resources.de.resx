@@ -1258,4 +1258,43 @@
 	<data name="Source_LC" xml:space="preserve">
 		<value>quelle</value>
 	</data>
+	<data name="author" xml:space="preserve">
+		<value>Autor</value>
+	</data>
+	<data name="TweetsWhere" xml:space="preserve">
+		<value>Tweets, in denen die {0} enthält</value>
+	</data>
+	<data name="ShowOnly" xml:space="preserve">
+		<value>nur anzeigen</value>
+	</data>
+	<data name="Remove" xml:space="preserve">
+		<value>Entfernen</value>
+	</data>
+	<data name="Is" xml:space="preserve">
+		<value>ist</value>
+	</data>
+	<data name="CustomDate" xml:space="preserve">
+		<value>Datum</value>
+	</data>
+	<data name="During" xml:space="preserve">
+		<value>während</value>
+	</data>
+	<data name="AskDiscardFilter" xml:space="preserve">
+		<value>Bist du sicher, dass Sie die Änderungen verwerfen möchten?</value>
+	</data>
+	<data name="ForTheNext" xml:space="preserve">
+		<value>für die nächsten</value>
+	</data>
+	<data name="UserAddedToList" xml:space="preserve">
+		<value>Benutzer der Liste hinzugefügt.</value>
+	</data>
+	<data name="ErrorAddingUserToList" xml:space="preserve">
+		<value>Fehler beim Hinzufügen der Benutzer zur Liste: {0}</value>
+	</data>
+	<data name="UserRemovedFromList" xml:space="preserve">
+		<value>Benutzer aus der Liste entfernt.</value>
+	</data>
+	<data name="ErrorRemovingUser" xml:space="preserve">
+		<value>Fehler beim Entfernen der Benutzer: {0}</value>
+	</data>
 </root>

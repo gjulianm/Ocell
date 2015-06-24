@@ -10,7 +10,7 @@
 	xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
     xmlns:custom="clr-namespace:Ocell.Controls"
 	x:Class="Ocell.MainPage" 
-	xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
+	xmlns:appbar="clr-namespace:AncoraMVVM.Phone.BindableAppBar;assembly=AncoraMVVM.Phone"
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
 	SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
 	shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0.0" CacheMode="BitmapCache"
@@ -101,10 +101,11 @@
                 <appbar:BindableAppBarMenuItem Text="{Binding Strings.PinColumnStart, Source={StaticResource LocalizedResources}}" Command="{Binding PinToStart}"/>
                 <appbar:BindableAppBarMenuItem Text="{Binding Strings.FilterColumn, Source={StaticResource LocalizedResources}}" Command="{Binding FilterColumn}"/>
                 <appbar:BindableAppBarHyperlinkMenuItem x:Name="Trending" IsEnabled="{Binding HasLoggedIn}" Text="{Binding Strings.TrendingTopics, Source={StaticResource LocalizedResources}}" Uri="/Pages/Topics.xaml"/>
+                <appbar:BindableAppBarHyperlinkMenuItem Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" Uri="/Pages/Columns/ManageColumns.xaml" />
                 <appbar:BindableAppBarMenuItem Text="{Binding Strings.MyProfile, Source={StaticResource LocalizedResources}}" Command="{Binding ToMyProfile}"/>
                 <appbar:BindableAppBarMenuItem Text="{Binding Strings.GoToUser, Source={StaticResource LocalizedResources}}" Tap="AppBarMenuItem_Click"/>
                 <appbar:BindableAppBarHyperlinkMenuItem Text="{Binding Strings.Settings, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" Uri="/Pages/Settings/Default.xaml"/>
-                <appbar:BindableAppBarHyperlinkMenuItem Text="{Binding Strings.Columns, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" Uri="/Pages/Columns/ManageColumns.xaml" />
+                <appbar:BindableAppBarHyperlinkMenuItem Text="{Binding Strings.Lists, Source={StaticResource LocalizedResources}}" IsEnabled="{Binding HasLoggedIn}" Uri="/Pages/Lists/ManageLists.xaml" />
                 <appbar:BindableAppBarMenuItem Text="feedback" Command="{Binding Feedback}" />
             </appbar:BindableAppBar.MenuItems>
             <appbar:BindableAppBarHyperlinkButton IsEnabled="{Binding HasLoggedIn}" IconUri="/Images/Icons_White/appbar.edit.rest.png" Text="{Binding Strings.Compose, Source={StaticResource LocalizedResources}}" Uri="/Pages/NewTweet.xaml" />

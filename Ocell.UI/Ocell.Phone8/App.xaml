@@ -1,22 +1,24 @@
 ﻿<Application
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
-    xmlns:img="clr-namespace:System.Windows.Media.Imaging;assembly=System.Windows"
+	xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+	xmlns:img="clr-namespace:System.Windows.Media.Imaging;assembly=System.Windows"
 	xmlns:local="clr-namespace:Ocell" 
 	xmlns:commands="clr-namespace:Ocell.Commands"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
-    xmlns:tr="clr-namespace:Ocell.Transitions"
-    xmlns:navigation="clr-namespace:System.Windows.Navigation;assembly=Microsoft.Phone"
-    xmlns:ac="clr-namespace:AncoraMVVM.Phone7.Converters;assembly=AncoraMVVM.Phone7"
-    xmlns:global="clr-namespace:Ocell.Localization;assembly=Ocell.Localization"
-    x:Class="Ocell.App"
-    mc:Ignorable="d"
-    >
+	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+	xmlns:tr="clr-namespace:Ocell.Transitions"
+	xmlns:navigation="clr-namespace:System.Windows.Navigation;assembly=Microsoft.Phone"
+	xmlns:ac="clr-namespace:AncoraMVVM.Phone.Converters;assembly=AncoraMVVM.Phone"
+	xmlns:global="clr-namespace:Ocell.Localization;assembly=Ocell.Localization"
+	xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.TwitterResourceData"
+	xmlns:SampleData1="clr-namespace:Expression.Blend.SampleData.FiltersSampleData"
+	x:Class="Ocell.App"
+	mc:Ignorable="d"
+	>
 
 
     <Application.Resources>
@@ -24,7 +26,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/StyleDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        
+
             <!-- TODO: Check commands to remove and place in specific pages. -->
             <global:LocalizedResources x:Key="LocalizedResources"/>
             <local:ListConverter x:Key="ListConverter"/>
@@ -48,6 +50,7 @@
             <local:ProtectedConverter x:Key="ProtectedConverter"/>
             <commands:MuteCommand x:Key="MuteCommand"/>
             <ac:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <ac:PhoneEnumToStringConverter x:Key="PhoneEnumToStringConverter" />
             <local:GlobalSettings x:Key="GlobalSettings" />
             <local:ResourceTypeConverter x:Key="ResourceTypeConverter" />
             <local:TextToMediaConverter x:Key="TextToMediaConverter" />
@@ -110,7 +113,7 @@
                                 <i:Interaction.Behaviors>
                                     <tr:OnLoadedOpacityTransitionBehavior/>
                                 </i:Interaction.Behaviors>
-                                
+
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
@@ -142,7 +145,7 @@
                             </Grid>
                         </DataTemplate>
                     </local:TweetTemplateSelector.ImageTemplate>
-                    
+
                     <local:TweetTemplateSelector.LoadMoreTemplate>
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch" Margin="0,3,0,12" Tag="{Binding Id}" VerticalAlignment="Top" Opacity="0.0" CacheMode="BitmapCache" Height="53" d:LayoutOverrides="VerticalMargin">
@@ -168,13 +171,15 @@
             </DataTemplate>
 
             <SolidColorBrush Color="{StaticResource PhoneSubtleColor}" Opacity="0.5" x:Key="SubtleTransparentBrush" />
+            <Style x:Key="LabelStyle" TargetType="TextBlock">
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>
         <shell:PhoneApplicationService 
-    		Launching="Application_Launching" Closing="Application_Closing" 
-    		Activated="Application_Activated" Deactivated="Application_Deactivated"/>
+			Launching="Application_Launching" Closing="Application_Closing" 
+			Activated="Application_Activated" Deactivated="Application_Deactivated"/>
     </Application.ApplicationLifetimeObjects>
 
 </Application>

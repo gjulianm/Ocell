@@ -1,0 +1,24 @@
+﻿<!--
+      *********    NO MODIFIQUE ESTE ARCHIVO     *********
+      Este archivo se regenera mediante una herramienta de diseño.
+       Si realiza cambios en este archivo, puede causar errores.
+-->
+<SampleData:ListsSampleDataSource xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.ListsSampleDataSource" ListName="Maecenas class curae" CanFindMoreUsers="True" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <SampleData:ListsSampleDataSource.ListUsers>
+    <SampleData:ListUsersItem ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image01.png" ScreenName="A. Datum Corporation" Name="Aaberg, Jesper" />
+    <SampleData:ListUsersItem ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image02.png" ScreenName="Adventure Works" Name="Adams, Ellen" />
+    <SampleData:ListUsersItem ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image03.png" ScreenName="Adventure Works" Name="Adams, Terry" />
+    <SampleData:ListUsersItem ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image04.png" ScreenName="Alpine Ski House" Name="Adams, Terry" />
+    <SampleData:ListUsersItem ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image05.png" ScreenName="Blue Yonder Airlines" Name="Pfeiffer, Michael" />
+    <SampleData:ListUsersItem ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image01.png" ScreenName="City Power &amp; Light" Name="Philips, Carol" />
+    <SampleData:ListUsersItem ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image02.png" ScreenName="Coho Vineyard" Name="Poe, Toni" />
+    <SampleData:ListUsersItem ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image03.png" ScreenName="Coho Winery" Name="Hicks, Cassie" />
+    <SampleData:ListUsersItem ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image04.png" ScreenName="Coho Vineyard &amp; Winery" Name="Argentiero, Luca" />
+    <SampleData:ListUsersItem ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image05.png" ScreenName="Contoso, Ltd" Name="Perry, Brian" />
+  </SampleData:ListsSampleDataSource.ListUsers>
+  <SampleData:ListsSampleDataSource.AddUsers>
+    <SampleData:AddUsersItem Name="Aaberg, Jesper" ScreenName="A. Datum Corporation" ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image01.png" />
+    <SampleData:AddUsersItem Name="Adams, Ellen" ScreenName="Adventure Works" ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image02.png" />
+    <SampleData:AddUsersItem Name="Adams, Terry" ScreenName="Adventure Works" ProfileImageUrl="/Ocell;component/SampleData/ListsSampleDataSource/ListsSampleDataSource_Files/image03.png" />
+  </SampleData:ListsSampleDataSource.AddUsers>
+</SampleData:ListsSampleDataSource>

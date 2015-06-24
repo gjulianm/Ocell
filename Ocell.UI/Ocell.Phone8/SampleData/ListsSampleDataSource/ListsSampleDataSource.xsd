@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+      *********    NO MODIFIQUE ESTE ARCHIVO     *********
+      Este archivo se regenera mediante una herramienta de diseño.
+       Si realiza cambios en este archivo, puede causar errores.
+-->
+<xs:schema xmlns:blend="http://schemas.microsoft.com/expression/blend/2008" xmlns:tns="Expression.Blend.SampleData.ListsSampleDataSource" targetNamespace="Expression.Blend.SampleData.ListsSampleDataSource" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ListsSampleDataSource" type="tns:ListsSampleDataSource" />
+  <xs:complexType name="ListsSampleDataSource">
+    <xs:sequence>
+      <xs:element name="ListUsers" type="tns:ListUsers" />
+      <xs:element name="AddUsers" type="tns:AddUsers" />
+    </xs:sequence>
+    <xs:attribute name="ListName" type="xs:string" />
+    <xs:attribute name="CanFindMoreUsers" type="xs:boolean" />
+  </xs:complexType>
+  <xs:complexType name="ListUsers">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="ListUsersItem" type="tns:ListUsersItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ListUsersItem">
+    <xs:attribute name="ProfileImageUrl" type="tns:Basic-Image" />
+    <xs:attribute blend:Format="Nombre de la empresa" name="ScreenName" type="xs:string" />
+    <xs:attribute blend:Format="Nombre" name="Name" type="xs:string" />
+  </xs:complexType>
+  <xs:simpleType name="Basic-Image">
+    <xs:restriction base="xs:anyURI" />
+  </xs:simpleType>
+  <xs:complexType name="AddUsers">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="AddUsersItem" type="tns:AddUsersItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AddUsersItem">
+    <xs:attribute blend:Format="Nombre" name="Name" type="xs:string" />
+    <xs:attribute blend:Format="Nombre de la empresa" name="ScreenName" type="xs:string" />
+    <xs:attribute name="ProfileImageUrl" type="tns:Basic-Image" />
+  </xs:complexType>
+</xs:schema>

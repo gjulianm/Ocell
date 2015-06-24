@@ -10,7 +10,7 @@
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
     xmlns:custom="clr-namespace:Ocell.Controls"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    xmlns:appbar="clr-namespace:AncoraMVVM.Phone7.BindableAppBar;assembly=AncoraMVVM.Phone7"
+    xmlns:appbar="clr-namespace:AncoraMVVM.Phone.BindableAppBar;assembly=AncoraMVVM.Phone"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"

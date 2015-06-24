@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
+<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2014/deployment" AppPlatformVersion="8.1">
   <DefaultLanguage xmlns="" code="en" />
   <Languages xmlns="">
     <Language code="es" />
@@ -34,18 +34,13 @@
           <Count>0</Count>
           <IconImageURI IsRelative="true" IsResource="false">Images\MediumTileIcon.png</IconImageURI>
           <Title>Ocell</Title>
-          <Message>
-          </Message>
-          <BackgroundColor>
-          </BackgroundColor>
+          <Message></Message>
+          <BackgroundColor></BackgroundColor>
           <HasLarge>True</HasLarge>
-          <LargeContent1>
-          </LargeContent1>
-          <LargeContent2>
-          </LargeContent2>
-          <LargeContent3>
-          </LargeContent3>
-           <DeviceLockImageURI IsRelative="true" IsResource="false">\Images\LockImage.png</DeviceLockImageURI>
+          <LargeContent1></LargeContent1>
+          <LargeContent2></LargeContent2>
+          <LargeContent3></LargeContent3>
+          <DeviceLockImageURI IsRelative="true" IsResource="false">\Images\LockImage.png</DeviceLockImageURI>
         </TemplateIconic>
       </PrimaryToken>
     </Tokens>

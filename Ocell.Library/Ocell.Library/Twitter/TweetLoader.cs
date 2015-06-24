@@ -117,11 +117,6 @@ namespace Ocell.Library.Twitter
                 LoadFinished(this, e);
         }
 
-        public void Dispose()
-        {
-            Source.Clear();
-        }
-
         #region Services
         protected ITwitterService service;
         protected ConversationService conversationService;
@@ -220,8 +215,8 @@ namespace Ocell.Library.Twitter
             {
                 if (!Source.Any())
                     return;
-                else
-                    lastId = Source.Min(item => item.Id);
+                
+                lastId = Source.Min(item => item.Id);
             }
 
             LoadFrom(lastId);
@@ -241,8 +236,8 @@ namespace Ocell.Library.Twitter
                 return;
             }
 
-            SetTaskReceivers(GetTweetTasks(Resource.Type, lastId), TweetsToITweetable);
-            SetTaskReceivers(GetSearchTasks(Resource.Type, lastId), SearchToITweetable);
+            SetTaskReceivers(GetTweetTasks(lastId), TweetsToITweetable);
+            SetTaskReceivers(GetSearchTasks(lastId), SearchToITweetable);
             SetTaskReceivers(GetDirectMessageTasks(Resource.Type, lastId), DMsToITweetable);
 
             if (Resource.Type == ResourceType.Conversation)
@@ -251,20 +246,20 @@ namespace Ocell.Library.Twitter
 
         protected IEnumerable<ITweetable> TweetsToITweetable(IEnumerable<TwitterStatus> statuses)
         {
-            return statuses.Cast<ITweetable>();
+            return statuses;
         }
 
         protected IEnumerable<ITweetable> DMsToITweetable(IEnumerable<TwitterDirectMessage> dms)
         {
             if (Resource.Type == ResourceType.Messages && !string.IsNullOrWhiteSpace(Resource.Data))
-                return dms.Where(x => x.SenderScreenName == Resource.Data || x.RecipientScreenName == Resource.Data).Cast<ITweetable>();
+                return dms.Where(x => x.SenderScreenName == Resource.Data || x.RecipientScreenName == Resource.Data);
             else
-                return dms.Cast<ITweetable>();
+                return dms;
         }
 
         protected IEnumerable<ITweetable> SearchToITweetable(TwitterSearchResult search)
         {
-            return search.Statuses.Cast<ITweetable>();
+            return search.Statuses;
         }
 
         protected void SetTaskReceivers<T>(IEnumerable<Task<TwitterResponse<T>>> tasks, Func<T, IEnumerable<ITweetable>> toITweetableFunc)
@@ -276,7 +271,7 @@ namespace Ocell.Library.Twitter
             }
         }
 
-        protected IEnumerable<Task<TwitterResponse<IEnumerable<TwitterStatus>>>> GetTweetTasks(ResourceType type, long? last)
+        protected IEnumerable<Task<TwitterResponse<IEnumerable<TwitterStatus>>>> GetTweetTasks(long? last)
         {
             switch (Resource.Type)
             {
@@ -318,8 +313,8 @@ namespace Ocell.Library.Twitter
                     {
                         IncludeRts = LoadRTsOnLists,
                         Count = TweetsToLoadPerRequest,
-                        OwnerScreenName = Resource.Data.Substring(1, Resource.Data.IndexOf('/') - 1),
-                        Slug = Resource.Data.Substring(Resource.Data.IndexOf('/') + 1),
+                        OwnerScreenName = Resource.User.ScreenName,
+                        Slug = Resource.Data,
                         MaxId = last
                     });
                     break;
@@ -344,24 +339,11 @@ namespace Ocell.Library.Twitter
             }
         }
 
-        protected IEnumerable<Task<TwitterResponse<TwitterSearchResult>>> GetSearchTasks(ResourceType type, long? last)
+        protected IEnumerable<Task<TwitterResponse<TwitterSearchResult>>> GetSearchTasks(long? last)
         {
-            if (type == ResourceType.Search)
+            if (Resource.Type == ResourceType.Search)
             {
                 yield return service.SearchAsync(new SearchOptions { Count = TweetsToLoadPerRequest, IncludeEntities = true, Q = Resource.Data, MaxId = last });
-            }
-        }
-
-        protected async Task<T> ExceptionControlWrap<T>(Task<T> task)
-        {
-            try
-            {
-                return await task;
-            }
-            catch (Exception e)
-            {
-                AncoraLogger.Instance.LogException("Exception wrapped and controlled", e);
-                throw e;
             }
         }
 

@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Windows.Input;
+using Ocell.Library.RuntimeData;
 
 namespace Ocell
 {
@@ -204,7 +205,7 @@ namespace Ocell
 
             CurrentAccountName = resource.User.ScreenName.ToUpperInvariant();
             ThreadPool.QueueUserWorkItem((context) => SelectedPivot.AutoLoad());
-            DataTransfer.CurrentAccount = resource.User;
+            ApplicationData.CurrentAccount = resource.User;
 
             if (SelectedPivot.CanRecoverPosition())
                 ShowRecoverPositionPrompt(SelectedPivot);
