@@ -762,7 +762,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Ocell.APIs\Ocell.ReadLater\Ocell.ReadLater.csproj">
-      <Project>{DBA3FA70-8F8F-41E7-8C4B-D9B8BF4C937B}</Project>
+      <Project>{dba3fa70-8f8f-41e7-8c4b-d9b8bf4c937b}</Project>
       <Name>Ocell.ReadLater</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ocell.Library\Ocell.Library\Ocell.Library.csproj">
