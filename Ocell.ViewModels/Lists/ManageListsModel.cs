@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using AncoraMVVM.Base;
 using Ocell.Library;
 using Ocell.Library.RuntimeData;
@@ -16,12 +17,14 @@ namespace Ocell.ViewModels.Lists
     {
         public SafeObservable<TwitterResource> Lists { get; private set; }
         public DelegateCommand RemoveList { get; set; }
+        public ICommand AddList { get; private set; }
         public object SelectedList { get; set; }
 
         public ManageListsModel()
         {
             Lists = new SafeObservable<TwitterResource>();
             RemoveList = new DelegateCommand(async param => await DeleteList(param as TwitterResource, ApplicationData.CurrentAccount));
+            AddList = new ViewModelNavigateCommand<NewListModel>();
 
             PropertyChanged += (sender, e) =>
             {
